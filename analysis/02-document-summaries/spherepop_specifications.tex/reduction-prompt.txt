@@ -1,0 +1,277 @@
+The following are analytical summaries of consecutive fragments
+of one research document.
+
+Reconstruct the document as a unified theoretical object.
+
+Produce a dense scholarly synthesis covering:
+
+- thesis;
+- primitives and definitions;
+- formalism;
+- mechanisms;
+- major arguments;
+- dependencies between concepts;
+- implications;
+- unresolved problems;
+- internal tensions;
+- connections likely to matter elsewhere in Spherepop.
+
+Remove repetition introduced by chunking.
+
+Do not flatten genuine distinctions.
+
+FRAGMENT SUMMARIES
+==================
+
+Below is a high‑level overview of the design presented in your snippet.  It[2D[K
+It explains what each part does, why it matters (in terms of the requiremen[10D[K
+requirements and remarks you provided), and how they fit together to give a[1D[K
+a formally stable protocol for committing events into a history while respe[5D[K
+respecting collapse rules.
+
+---
+
+## Core Concepts
+
+### Events & EventKind  
+
+- **EventKind** is an enum with exactly four variants: `Pop`, `Refuse`, `Bi[3D[K
+`Bind`, and `Collapse`.  
+  - Theorem \ref{thm:completeness} guarantees that no additional kinds will[4D[K
+will ever be added, which makes the layout ABI‑stable (i.e., backward compa[5D[K
+compatible across releases).  
+
+- Each event carries extra fields:
+  - **Pop** – removes an object from the *option space* Ω.  
+  - **Refuse** – records a documented inadmissibility; it does not remove o[1D[K
+objects but documents them.  
+  - **Bind** – couples two objects, optionally tagging the relation with `t[2D[K
+`tag`.  
+  - **Collapse** – records that a collapse operation has been observed unde[4D[K
+under a specific rule (but never stores the actual value of the collapse).
+
+### State Representation  
+
+`State` encapsulates three invariant sets:
+- **option_space**: currently available symbols in Ω.  
+- **committed**: objects that have been popped out of Ω.  
+- **bound** and **refused**, which are auxiliary to support rule semantics [K
+(e.g., `Refuse` can be used for *SetMeta* sugar).  
+
+### History & Replay  
+
+`History` is simply a vector of events (`Vec<Event>`). Because the layout i[1D[K
+is fixed, we can replay any history deterministically:
+
+```rust
+fn apply(s: &mut State, e: &Event) {
+    match e.kind {
+        EventKind::Pop => { … }
+        EventKind::Refuse => { … }
+        EventKind::Bind => { … }
+        EventKind::Collapse => { … }
+    }
+}
+```
+
+The `History::replay(&Self, omega_0)` method iterates over all events and c[1D[K
+calls `apply`, producing a new `State` that reflects the entire history up [K
+to a given Ω₀.
+
+### Collapse Rules  
+
+Three pure functions (`collapse_quotient`, `collapse_meta`, `collapse_ident[15D[K
+`collapse_identity`) provide different ways of “quotienting” objects:
+
+- **collapse_quotient** merges all Bind‑connected objects into equivalence [K
+classes (the basis for *Merge* sugar).  
+- **collapse_meta** isolates metadata bindings marked with the special tag [K
+`"__meta__"` (used by *SetMeta* sugar).  
+- **collapse_identity** simply returns the full history (`&[Event]`), repre[5D[K
+representing the finest possible quotient.
+
+Only events that reference a rule registered in `self.rules` are allowed to[2D[K
+to be committed; otherwise we raise an error matching Requirement \ref{req:[21D[K
+Requirement \ref{req:view} (no view of collapse results is stored).
+
+### Arbiter & Proposal Management  
+
+The **Arbiter** holds both the history and the set of admissible rules. Its[3D[K
+Its API consists primarily of:
+
+- `submit(Proposal, omega_0)`: validates a proposal before appending it to [K
+the history.
+  - Checks:
+    * No `Pop` outside current Ω (Requirement \ref{req:pop}).  
+    * Every `Collapse` references an approved rule (ensures no uncertified [K
+collapse can be committed).  
+
+- Returns positions for each event that is now part of H, which are used la[2D[K
+later for ordering.
+
+### Overlay Manager & Preview‑Commit  
+
+An **Overlay** captures a proposal together with the length of history at c[1D[K
+creation time. This allows “previewing” what would happen if an overlay wer[3D[K
+were applied without modifying the original history:
+
+```rust
+pub fn preview(&self, o: &Overlay, omega_0) -> State {
+    let mut speculative = self.arbiter.history.clone();
+    for e in o.pending.events.clone() { speculative.push(e); }
+    speculative.replay(omega_0)
+}
+```
+
+This mechanism is useful for testing or replaying proposals without side ef[2D[K
+effects.
+
+---
+
+## Key Points & Requirements
+
+1. **ABI Stability** – By fixing `EventKind` to exactly four variants, the [K
+layout of `Event` does not change across releases, satisfying ABI stability[9D[K
+stability (Remark).  
+
+2. **Invariant \ref{inv:replay}** – The pure function `apply` ensures that [K
+replaying a history deterministically yields the same state regardless of w[1D[K
+when or how often it is run. This makes validation checks decidable rather [K
+than heuristic.
+
+3. **Requirement \ref{req:view}** – Collapse events never store their obser[5D[K
+observed value; they only record *that* an observation occurred under a spe[3D[K
+specific rule, preserving viewability constraints.
+
+4. **Rule Registration** – Only rules registered in `self.rules` can be use[3D[K
+used for collapse operations (`collapse_meta`). Any attempt to use an unreg[5D[K
+unregistered rule triggers `ArbiterError::UncertifiedCollapseRule`.
+
+5. **Non‑Destructive Overlaying** – The overlay mechanism lets us create “w[2D[K
+“what‑if” snapshots without mutating the original history, satisfying a com[3D[K
+common requirement in distributed systems for non‑destructive state transit[7D[K
+transitions.
+
+---
+
+### Summary
+
+The design separates concerns cleanly:
+- **Events + State**: encode the logical structure of the system (pop/commi[10D[K
+(pop/commit/bind/refuse).  
+- **History + Replay**: allow deterministic reconstruction of past states. [K
+ 
+- **Collapse Rules**: provide modular, rule‑based quotients without storing[7D[K
+storing intermediate values.  
+- **Arbiter**: enforces safety constraints at commit time while keeping the[3D[K
+the history itself immutable (except for appending new events).  
+- **Overlay Manager**: enables reversible “preview” commits using a snapsho[7D[K
+snapshot of the original proposal length.
+
+Together these components satisfy all stated invariants and requirements, m[1D[K
+making the protocol both formally sound and ABI‑stable across versions.
+
+**Durable Theoretical Information Extracted**
+
+1. **Overlay Commit Mechanism (Arbiter Interface)**
+   - *Definition*: `commit(&mut self, o: Overlay, omega_0: &std::collection[16D[K
+&std::collections::HashSet<ObjectId>) -> Result<Vec<LogPos>, ArbiterError>`[14D[K
+ArbiterError>`
+     - Takes an overlay object `o` and a set of object identi[6D[K
+identifiers `omega_0`.
+     - Calls the internal method `self.arbiter.submit(o.pending, omega_0)`.[10D[K
+omega_0)`.
+   - *Constraint*: If `o.base_len != self.arbiter.len()`, returns[7D[K
+returns `Err(ArbiterError::StaleOverlay)` (indicating that the overlay has [K
+changed since its preview).
+   - *Equation/Dependency*: The operation is only valid when the length of [K
+the overlay matches the current state of the arbiter, ensuring consistency [K
+between proposal and underlying structure.
+
+2. **Arbiter Submit Call**
+   - *Definition*: `arb.submit(Proposal { events: vec![pop(1), pop(2)] }, &[1D[K
+&omega_0)?`
+     - Submits a proposal containing two `Pop` operations (effectively “con[4D[K
+“contracting” objects 1 and 2) along with the identifier set `omega_0`.
+   - *Result*: Represents an authoritative commit of events to the history [K
+managed by Arbiter.
+
+3. **Quotient Collapse Demonstration**
+   - Shows that merging (`Merge`) is not a separate event kind but achieved[8D[K
+achieved through observation rules applied to existing binding operations.
+   - After invoking `collapse("merge_quotient")`, objects previously identi[6D[K
+identified separately (1 and 2) become indistinguishable in the history, il[2D[K
+illustrating a projection onto an observational plane.
+
+4. **Unlink Sugar Mechanism**
+   - The call `refuse_bind(1, 2, "adjacent", "relation withdrawn")` marks t[1D[K
+the binding of 1 and 2 as withdrawn without deleting it.
+   - Demonstrates that the original bind remains intact (Irreversibility) w[1D[K
+while subsequent observation rules may exclude such a withdrawn relation fr[2D[K
+from further projections.
+
+5. **Geometric Semantics**
+   - *Pop*: Contraction of option space `Ω`; narrows possibilities.
+   - *RefuseOp*: Marks a region in `Ω` as excluded without contraction, ana[3D[K
+analogous to removing an area from the set of possible states.
+   - *BindOp*: Draws an edge (relationship) between two points without merg[4D[K
+merging them; retains distinct identity.
+   - *CollapseOp*: Projects the entire history onto a plane `O_c`, where di[2D[K
+different projection rules give differing visualizations of the same underl[6D[K
+underlying object.
+
+6. **Pipeline Workflow**
+   - Sequential stages from DSL input to final field configuration:
+     1. **Parse** → AST (Scene)
+     2. **Desugar** → SPC Terms
+     3. **Typecheck** → Typed Terms in Context `Γ`
+     4. **Evaluate** → Normal Forms via β-reduction + stochastic steps
+     5. **Interpret** → Field configuration `(Field, Flow, Entropy)`
+
+7. **Typing Derivations**
+   - *Application*: If `f` is typed as $\Pi{x}{A}{B}$ and `a` as type $A$, [K
+then `Pop(f,a)` yields type $B\Subst{a}{x}$.
+   - *Merge*: Two terms of the same type can be merged, producing a term of[2D[K
+of that type: `\Judgement{\Ctx}{t}{A}\wedge \Judgement{\Ctx}{u}{A} \To \Jud[4D[K
+\Judgement{\Ctx}{\Merge(t,u)}{A}`.
+   - *Choice*: Probabilistic branching is expressed as `\Judgement{\Ctx}{t}[20D[K
+`\Judgement{\Ctx}{t}{A}\wedge \Judgement{\Ctx}{u}{A} \To \Judgement{\Ctx}{\[18D[K
+\Judgement{\Ctx}{\Choice(p,t,u)}{A}`.
+
+8. **Operational Semantics Proofs**
+   - *Preservation*: By induction on typing derivations; β-reduction preser[6D[K
+preserves type safety, and both Merge and Choice maintain equality of types[5D[K
+types.
+   - *Progress*: Values are atoms or $\Sphere$-forms; application reduces t[1D[K
+to more concrete forms, while probabilistic steps in Choice remain well‑typ[8D[K
+well‑typed.
+
+9. **Category-Theoretic Interpretation**
+   - Types correspond to objects; term morphisms are generated via the $\Sp[4D[K
+$\Sphere$ operation.
+   - The monoidal structure of Merge is symmetric and idempotent: `(t\Merge[9D[K
+`(t\Merge u)\Merge v \equiv t\Merge(u\Merge v)`, reflecting compositional n[1D[K
+nature.
+   - Choice aligns with a Giry-style monad, where unit yields degenerate ch[2D[K
+choices and multiplication marginalizes nested probabilistic outcomes.
+
+10. **Core Desugaring (DSL → Lowered Core)**
+    - Application collapses abstraction boundaries (`f` applied to `a`), wh[2D[K
+while Choice introduces probabilistic branching.
+    - Typing guarantees that branches agree on type constraints, ensuring e[1D[K
+evaluation proceeds via β-reduction and stochastic sampling as defined by t[1D[K
+the operational semantics.
+
+**Unresolved Questions/Dependencies**
+
+- The role of Stochastic steps in $\Choice$ is not fully detailed; their im[2D[K
+impact on convergence or entropy distribution remains a subject for further[7D[K
+further analysis.
+- Interaction between Merge (projection) and BindOp (edge creation) when bo[2D[K
+both are applied to overlapping sets of objects requires deeper examination[11D[K
+examination, especially concerning Irreversibility and the semantics of “wi[3D[K
+“withdrawn bindings.”
+- The categorial treatment assumes standard λ-calculus adaptation; potentia[8D[K
+potential extensions beyond deterministic fragments (e.g., non‑commutative [K
+Merge) have not been explored.
+

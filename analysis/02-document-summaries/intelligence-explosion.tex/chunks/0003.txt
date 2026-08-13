@@ -1,0 +1,646 @@
+The connection to the Yarncrawler framework reinforces this interpretation.
+Yarncrawler treats world-state reconstruction as a Wasserstein gradient flow over
+constraint-satisfying configurations: the goal state defines a target in the
+space of executable structures, and the reconstruction process is the gradient
+descent that drives the system toward it. Repository discovery and integration
+can be modeled as exactly this kind of flow. The developer's intended
+architecture defines a target configuration; the process of finding, evaluating,
+forking, and adapting repositories is the gradient descent that drives the
+working codebase toward that target. Generative AI makes the gradient more
+legible --- it compresses the search space and reduces the cost of evaluating
+candidate configurations --- but it does not modify the underlying geometry of
+admissibility that defines which configurations are reachable.
+
+\subsection*{RSVP Field Equations Applied to the Repository Graph}
+
+The RSVP triple $(\Phi, \mathbf{v}, S)$ on the repository configuration space
+$M$ satisfies:
+\begin{align}
+\Box\Phi + \nabla_{\mathbf{v}}\Phi &= -\lambda S\Phi, \label{eq:phi-rsvp}\\
+\nabla_{\mathbf{v}}\mathbf{v} + \nabla\Phi &= -\kappa\mathbf{v}, \label{eq:v-rsvp}\\
+\partial_t S + \nabla\cdot(S\mathbf{v}) &= \sigma\|\nabla\Phi\|^2.
+\label{eq:S-rsvp}
+\end{align}
+
+\begin{proposition}[Entropy Monotonicity Along Admissible Trajectories]
+\label{prop:entropy-mono}
+Let $\gamma : [0,T] \to M$ be an admissible trajectory (i.e., $\Phi(\gamma(t))
+> 0$ for all $t$). Then $S(\gamma(t))$ is non-decreasing, and strictly
+increasing whenever $\|\nabla\Phi(\gamma(t))\|^2 > 0$.
+\end{proposition}
+
+\begin{proof}
+Along $\gamma$, equation \eqref{eq:S-rsvp} gives $\frac{d}{dt}S(\gamma(t)) =
+\sigma\|\nabla\Phi(\gamma(t))\|^2 \geq 0$ since $\sigma > 0$. Strict positivity
+holds whenever $\nabla\Phi \neq 0$ at the trajectory point.
+\end{proof}
+
+Applied to the repository graph, Proposition~\ref{prop:entropy-mono} states that
+the entropy of irreversible architectural commitments is non-decreasing along any
+valid development trajectory. Every design decision that moves the codebase
+further into the admissible region $\Phi > 0$ increases $S$, recording an
+irreversible narrowing of the future option-space. This is not a deficiency of
+the system; it is the mechanism by which semantic identity becomes stable.
+
+\begin{corollary}[Developmental Irreversibility]
+A well-formed repository cannot be reverted to a semantically neutral state
+without destroying its developmental identity. The entropy $S$ accumulated
+along its trajectory records the irreversible commitment structure that
+constitutes its Spherepop normal form.
+\end{corollary}
+
+
+
+
+
+Objections and Clarifications
+
+
+
+A thesis of this scope invites principled objection. We address the most
+consequential challenges directly, in each case arguing that the objection,
+properly understood, either strengthens or further specifies the central claim
+rather than undermining it.
+
+\paragraph{Is this merely collective intelligence?}
+The collective intelligence literature~\cite{holland1992} describes how groups
+of agents produce outcomes exceeding individual capacity. The GitHub thesis
+is structurally different in two respects. First, collective intelligence
+typically requires agents to coordinate in real time, whereas GitHub
+coordinates asynchronously across decades: the developer who forks a 2009
+repository in 2024 is coordinating with contributors who are no longer active.
+Second, collective intelligence produces emergent outputs but rarely externalizes
+the intermediate cognitive states that generated them. GitHub's distinctive
+contribution is precisely the preservation of developmental geometry ---
+the trajectory, not only the destination. The thesis is therefore not that
+many people working together are smart, but that GitHub changed the ontology
+of what gets preserved when they do.
+
+\paragraph{Why GitHub specifically rather than the internet generally?}
+The internet created global information access. GitHub created globally
+recomposable executable structure. The distinction is the difference between
+reading a description of a machine and having access to the machine's
+blueprints in a format that allows direct modification, extension, and
+integration with other machines. Stack Overflow~\cite{raymond1999} preserves
+isolated code fragments in natural-language context. ArXiv preserves finished
+formal artifacts. Neither preserves the developmental trajectory of a system
+--- the sequence of commits, the issue discussions, the failed branches, the
+dependency migrations. Only a version-controlled repository with public history
+does this, and GitHub's structural innovations (forking, pull requests, issue
+tracking, dependency graphs) made this preservation compositional and globally
+reachable.
+
+\paragraph{Does closed-source development undermine the thesis?}
+Closed development does not falsify the thesis; it quantifies the cost of its
+absence. The counterfactual is instructive: a world in which all development
+remained proprietary would have produced model capabilities far below the
+current state, because the training corpus would lack the procedural reasoning
+substrate that open repositories provide. The thesis predicts not that all
+intelligence explosion requires open source, but that the observed acceleration
+is explained by the fraction of global development that became publicly
+recomposable. Closed development contributes zero to $\mathcal{A}(\mathcal{D})$
+while consuming resources from the shared ecosystem, which is precisely why
+firms that selectively open-source gain disproportionate community returns.
+
+\paragraph{Could earlier scientific traditions have produced similar effects?}
+Preprint culture, open journals, and reproducible research movements all moved
+in the direction of this thesis but fell short for a specific structural reason:
+they preserved descriptions of procedures rather than the procedures themselves.
+A preprint describing a training algorithm is not the same as a public
+repository containing the training code, the data loading pipeline, the
+evaluation harness, and the issue thread debating the correctness of a
+preprocessing step. The latter preserves developmental geometry in executable
+form. The former preserves a prose projection of it, from which the original
+trajectory cannot be recovered without substantial independent reconstruction.
+GitHub closed this gap; no prior system did so at scale.
+
+\paragraph{Is the argument anthropomorphizing repositories?}
+The RSVP framework uses language --- attractors, mortality, coherence,
+governance --- that may seem to impute agency to static files. This is a
+notational convenience, not a metaphysical commitment. The claim is structural:
+a repository that encodes parity-preserving bubble logic, majority-vote
+stabilization, and a two-stage lamphron-to-lamphrodyne development history
+exposes richer developmental geometry than a repository that does not, in
+the same way that a crystal with specific lattice geometry encodes more
+recoverable structure than amorphous glass. No agency is implied; only
+recoverable architectural information.
+
+\paragraph{On dark repositories and AI-generated codebases.}
+A significant open problem deserves explicit acknowledgment. The recursion
+identified in equations~\eqref{eq:model-update} and~\eqref{eq:graph-update}
+implies that as $\mathcal{M}_t$ becomes sufficiently capable, it begins
+generating $\mathcal{G}_{t+1}$ faster than human contributors can evaluate
+it. This creates the possibility of what we might call dark repositories:
+codebases generated by language models for consumption by other language
+models, forming a coherence field that maintains admissibility within
+$\mathcal{G}$ while becoming progressively opaque to human developmental
+reconstruction. The lamphron--lamphrodyne duality does not require human
+observers to function; it requires only that nucleation and integration
+dynamics operate over a graph with sufficient admissibility structure. Whether
+AI-generated lamphron repositories constitute genuine developmental geometry ---
+whether they possess recoverable trajectories in the sense required by
+Theorem~\ref{thm:attractor-existence} --- or whether they produce admissible
+but developmentally hollow artifacts is an empirical question that current
+tooling cannot yet answer. It is one of the most important open questions
+raised by the framework.
+
+
+Conclusion: Thought as Recursively Reusable Infrastructure
+
+
+
+The intelligence explosion is not primarily artificial intelligence becoming
+intelligent. It is humanity converting thought itself into recursively reusable
+public machinery, and then training pattern synthesizers to navigate that
+machinery faster.
+
+GitHub transformed knowledge from static publication into evolutionary
+infrastructure. It externalizes cognitive debris rather than discarding it. It
+rewards incompleteness in ways that previous institutional structures punished.
+It aligns the incentive structures of academia, industry, and independent
+research toward a common outcome that no centralized institution could have
+planned: the continuous public disclosure of intermediate cognitive states at
+planetary scale.
+
+Generative AI is real, and its capabilities are genuinely significant. But it is
+an accelerant layered over a substrate, not the substrate itself. The substrate
+is the open-source graph: globally persistent, recursively recomposable,
+executable, and continuously growing. Remove the substrate and the accelerant has
+little to accelerate over. Remove the accelerant and the substrate continues to
+grow, as it did for more than a decade before large language models were publicly
+deployed.
+
+In RSVP terms, GitHub created the admissibility geometry. Generative AI reduced
+the cost of navigating it. The explosion lives in the coupling between these two
+systems --- in the closed recursion loop that now connects model output to
+repository generation to training data to model improvement. That loop did not
+close when GPT appeared. It began closing when the first pull request was merged
+into a publicly accessible repository and the first developer on another
+continent forked it the same day.
+
+GitHub transformed civilization into a globally replayable semantic field.
+Generative AI emerged as a navigational dynamics over that field. The true
+invention was globally persistent recomposable thought, and GitHub
+operationalized it before the models arrived to compress it.
+
+\paragraph{The civilizational discontinuity.}
+Framed at the largest scale, the argument identifies a genuine historical
+discontinuity: a transition in what civilizations preserve. Prior to version
+control, the record of human technical cognition consisted almost entirely of
+finalized symbolic outputs --- publications, products, patents, monographs.
+The developmental process that generated those outputs was not recorded;
+it was discarded as ephemera. What survived was the destination, not the
+trajectory. GitHub changed this. For the first time in human history, a
+civilization-scale system now preserves not only what was built but
+\emph{how it was built}: the reasoning, the failures, the alternatives
+considered, the bugs encountered and repaired, the partial implementations
+abandoned, the architectural pivots made under constraint. This is not an
+incremental improvement in archival fidelity. It is a categorical change in
+the ontology of what counts as preserved knowledge.
+
+The intelligence explosion is therefore a second-order effect of this
+civilizational transition. Generative systems trained on the GitHub corpus
+do not merely learn to write code. They learn to navigate a preserved record
+of human developmental cognition at planetary scale --- a record that no
+prior civilization produced or could have produced. The capability growth
+associated with modern AI systems is, in this sense, less a property of
+the models themselves than a property of the unprecedented substrate they
+have been given access to.
+
+\paragraph{Open problems.}
+The framework developed here raises several questions that the current
+formalism does not resolve. The most pressing concerns the transition
+identified in the objections section: as AI-assisted generation accelerates
+$\mathcal{G}_{t+1}$, the ratio of human-generated to model-generated
+developmental geometry in the training corpus will shift. Whether this
+transition preserves or degrades admissibility density --- whether AI-generated
+commits constitute genuine developmental trajectories or developmentally
+hollow admissible artifacts --- is empirically undetermined and theoretically
+urgent. A second open problem concerns the formalization of $\mathcal{A}(R)$
+beyond the proportionality established here: a computable admissibility metric
+would enable direct corpus filtering and quality assessment at scale. A third
+concerns the extension of the Kuramoto synchronization analysis to directed
+dependency graphs with heterogeneous coupling strengths, which better model
+real ecosystem topology than the complete-graph approximation used in
+\S\ref{sec:phase}. These are the problems on which the framework must be
+tested if it is to transition from a theoretical architecture into a
+predictive science of collective technical cognition.
+
+
+
+
+\section*{Notation Glossary}
+\addcontentsline{toc}{section}{Notation Glossary}
+\label{sec:notation}
+
+
+The following symbols appear throughout the main text and appendices. Where a
+symbol carries both a general mathematical meaning and a specific interpretation
+in the GitHub or Spherepop context, both are given.
+
+\medskip
+\begin{center}
+\begin{tabular}{lp{9.5cm}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$\mathcal{G}_t$ & Repository graph at time $t$; nodes are repositories,
+  directed edges are dependency or derivation relations \\
+$\mathcal{M}_t$ & Language model at time $t$, trained on the corpus of
+  $\mathcal{G}_t$ \\
+$\Sigma_t$ & Joint state $(\mathcal{G}_t, \mathcal{M}_t)$ of the
+  coupled dynamical system \\
+$\rho(R_i, R_j)$ & Recombination friction between repositories $R_i$ and $R_j$;
+  expected developer effort to integrate $R_j$ into a codebase depending on $R_i$ \\
+$\mathcal{A}(R)$ & Admissibility score of repository $R$; proportional to
+  recoverable semantic structure divided by perturbation magnitude \\
+$\Phi$ & RSVP scalar field encoding density of constraint-satisfying
+  configurations; $\Phi > 0$ in admissible regions \\
+$Z(\Phi)$ & Zero-set $\{p \in M : \Phi(p) = 0\}$; the constraint boundary
+  separating admissible from inadmissible states \\
+$\mathbf{v}$ & RSVP vector field encoding directed flow through configuration
+  space; interpreted as dominant directions of epistemic development \\
+$S$ & RSVP entropy field tracking irreversible accumulation of structural
+  commitment; non-decreasing along admissible trajectories \\
+$B_k = (c_k, r_k, \pi_k)$ & Spherepop bubble: center $c_k \in \mathbb{Z}$,
+  radius $r_k \in \mathbb{N}$, parity class $\pi_k \in \{0,1\}$ \\
+$\Omega_k$ & Support region of bubble $B_k$: all tape cells within radius
+  $r_k$ of center $c_k$ having parity $\pi_k$ \\
+$E(B_k)$ & Bubble energy $\sum_{i \in \Omega_k} |s_i|$; measures semantic
+  persistence \\
+$C(B_k)$ & Signed coherence $\sum_{i \in \Omega_k} s_i$; positive for
+  constructive, negative for destructive, zero for decoherent bubbles \\
+$\mathcal{R}_\lambda$ & Stabilization (reinforcement) operator with governance
+  coefficient $\lambda > 0$; drives bubble cells toward the sign of $C(B_k)$ \\
+$\mathcal{M}(t)$ & Global mortality functional $\sum_k \frac{d}{dt} E(B_k)$;
+  negative in expectation without stabilization \\
+$\sigma_n$ & State after $n$ replay steps; a random variable distributed
+  according to $\mathbb{P}_n$ \\
+$\mathbb{P}_n$ & Distribution over semantic states after $n$ replay
+  operations; converges weakly to $\mathbb{P}_\infty$ for Tier~1 repositories \\
+$\mu(B_a, B_b)$ & Merge coherence $\sum_{i \in \Omega_a \cap \Omega_b}
+  s_i^{(a)} s_i^{(b)}$; positive for constructive merges \\
+$\pi_k(s)$ & Coarse-graining map from tape state $s$ to bubble coherence
+  vector at scale $k$; defines the semantic renormalization group \\
+$\Psi_i$ & Complex amplitude $r_i e^{i\theta_i}$ in the Quantum SpherePop
+  lattice; amplitude encodes entropic magnitude, phase encodes coherence \\
+$K_c$ & Critical coupling strength $2\Delta$ for the synchronization
+  transition in the Kuramoto model; interpreted as the GitHub ecosystem
+  threshold separating fragmented from synchronized development \\
+$q_t$ & Commit hash at time $t$; interpreted as a Lamport timestamp encoding
+  causal order in the repository's event history \\
+\bottomrule
+\end{tabular}
+\end{center}
+\medskip
+
+\appendix
+
+
+
+Probabilistic Tape Geometry
+
+\label{sec:tapegeom}
+
+Let the substrate tape be indexed by the integers $\mathbb{Z}$. Each tape cell
+carries an integer-valued stochastic state $s_i(t) \in \mathbb{Z}$ for tape
+coordinate $i$ and discrete interpreter time $t$. The substrate state is
+therefore a field:
+\[
+S(t) = \{ s_i(t) \}_{i \in \mathbb{Z}}.
+\]
+Unlike ordinary Brainfuck, transition operators are nondeterministic. The
+arithmetic operator induces a symmetric random walk:
+\[
+s_i(t+1) = s_i(t) + \xi_t, \qquad
+\xi_t \in \{-1,+1\}, \quad
+\Pr(\xi_t = +1) = \Pr(\xi_t = -1) = \tfrac{1}{2}.
+\]
+Likewise, pointer motion is stochastic:
+\[
+p(t+1) = p(t) + \eta_t, \qquad \eta_t \in \{-1,+1\}.
+\]
+Thus the substrate is not a deterministic memory system but a coupled stochastic
+field.
+
+
+Bubble Regions
+
+\label{sec:bubbleregions}
+
+A Spherepop bubble is not represented by a single tape cell but by a finite
+parity-preserving neighborhood. Define a bubble $B_k$ as a triple:
+\[
+B_k = (c_k,\, r_k,\, \pi_k)
+\]
+where $c_k$ is the center, $r_k$ is the radius, and $\pi_k \in \{0,1\}$ is the
+parity class. The support region is:
+\[
+\Omega_k = \bigl\{
+i \in \mathbb{Z} : |i - c_k| \le r_k
+\text{ and }
+i \equiv \pi_k \pmod{2}
+\bigr\}.
+\]
+Parity structure is important because parity remains one of the few stable
+geometric invariants under noisy drift, as established by
+Lemma~\ref{lemma:parity} in \S\ref{sec:worked}.
+
+
+Bubble Energy and Coherence
+
+\label{sec:energy}
+
+Define the local bubble energy:
+\[
+E(B_k) = \sum_{i \in \Omega_k} |s_i|.
+\]
+This measures semantic persistence. Define the signed coherence:
+\[
+C(B_k) = \sum_{i \in \Omega_k} s_i.
+\]
+Interpretation: $C > 0$ denotes constructive coherence; $C < 0$ denotes
+destructive coherence; $C = 0$ denotes decoherence. A semantic bubble exists
+only while $E(B_k) > \varepsilon$ for some stability threshold $\varepsilon > 0$.
+
+
+Mortality Functional
+
+\label{sec:mortality}
+
+Define global mortality:
+\[
+\mathcal{M}(t) = \sum_k \frac{d}{dt} E(B_k).
+\]
+Without stabilization, $\mathbb{E}[\mathcal{M}(t)] < 0$.
+
+\begin{theorem}[Bubble Mortality]
+\label{thm:mortality}
+Let $S(t)$ evolve solely under unbiased substrate dynamics. Then:
+\[
+\lim_{t \to \infty} \Pr\bigl(E(B_k) = 0\bigr) = 1.
+\]
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The bubble support undergoes coupled symmetric random walks. Since no restoring
+force exists, finite local coherence dissipates under recurrence and
+cancellation. More precisely, the process $E(B_k)(t)$ is a non-negative
+supermartingale (under unbiased dynamics, $\mathbb{E}[E(B_k)(t+1) \mid
+\mathcal{F}_t] \leq E(B_k)(t)$) bounded below by zero. By the martingale
+convergence theorem it converges almost surely to a limit $L \geq 0$; since
+the random walk on $\mathbb{Z}$ is recurrent, the limit must be $L = 0$ almost
+surely.
+\end{proof}
+
+
+Stabilization Operators
+
+\label{sec:stabilization}
+
+Define a reinforcement operator $\mathcal{R}_\lambda : S \to S$ acting locally
+by:
+\[
+s_i \mapsto s_i + \lambda \operatorname{sign}(C(B_k)).
+\]
+This introduces directional correction against substrate entropy. The stabilized
+dynamics become:
+\[
+s_i(t+1) = s_i(t) + \xi_t + \lambda \operatorname{sign}(C(B_k)),
+\]
+where $\lambda > 0$ is the semantic governance coefficient. For $\lambda >
+\sqrt{2}$ the drift term dominates the noise variance, guaranteeing
+$\mathbb{E}[E(B_k)(t+1) \mid \mathcal{F}_t] > E(B_k)(t)$ whenever
+$C(B_k)(t) \neq 0$.
+
+
+Merge Dynamics
+
+\label{sec:merge}
+
+Let two bubbles overlap: $\Omega_a \cap \Omega_b \ne \emptyset$. Define merge
+coherence:
+\[
+\mu(B_a, B_b) = \sum_{i \in \Omega_a \cap \Omega_b} s_i^{(a)}\, s_i^{(b)}.
+\]
+If $\mu(B_a, B_b) > 0$ the merge is constructive. If $\mu(B_a, B_b) < 0$ the
+merge is destructive and induces collapse radiation:
+\[
+\Delta E = -\alpha |\mu|.
+\]
+This corresponds to the Spherepop Calculus merge operator interpreted
+geometrically over a mortal substrate.
+
+
+Semantic Replay
+
+\label{sec:replay}
+
+Define a semantic replay sequence $\mathcal{P} = (e_1, e_2, \dots, e_n)$ with
+replay operator:
+\[
+\sigma_n = e_n \circ e_{n-1} \circ \cdots \circ e_1(\sigma_0).
+\]
+Over a stochastic substrate the replay is itself stochastic, generating a
+distribution over semantic states:
+\[
+\sigma_n \sim \mathbb{P}_n.
+\]
+Meaning is therefore not a single state but an attractor distribution. The
+convergence of $\{\mathbb{P}_n\}$ is guaranteed for Tier~1 repositories by
+Theorem~\ref{thm:attractor-existence}.
+
+
+Attractor Semantics
+
+\label{sec:attractors}
+
+Define the replay expectation $\bar{\sigma}_n = \mathbb{E}[\sigma_n]$. A
+semantic object $O$ is stable if and only if:
+\[
+\lim_{n \to \infty} \operatorname{Var}(O_n) < \delta
+\]
+for some tolerance $\delta > 0$. Semantic persistence is therefore not exact
+symbolic preservation but bounded variance under replay. A repository's
+contribution to the collective substrate is proportional to the recoverability
+of its semantic attractor under perturbation:
+\[
+\mathcal{A}(R)
+\;\propto\;
+\frac{\text{recoverable semantic structure}}{\text{perturbation magnitude}}.
+\]
+
+
+Spherepop--\ambibf{
+ Correspondence}
+\label{sec:correspondence}
+
+\medskip
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Spherepop concept} & \textbf{Substrate interpretation} \\
+\midrule
+Sphere          & Local parity-preserving field \\
+Pop             & Entropic collapse event \\
+Merge           & Coherence synchronization \\
+Choice          & Stochastic branch distribution \\
+Collapse        & Representative normalization \\
+Replay          & Attractor regeneration \\
+Semantic object & Persistent metastable region \\
+Computation     & Guided entropy navigation \\
+\bottomrule
+\end{tabular}
+\end{center}
+\medskip
+
+The resulting interpretation reframes \ambibf{} from an esolang curiosity into
+a minimal thermodynamic semantics for mortal computation. Ordinary languages
+encourage exact addressing, exact arithmetic, and exact control flow.
+\ambibf{} destroys all three, so higher-order structure must emerge
+relationally --- making it oddly compatible with RSVP-style field thinking,
+semantic manifolds, topological cognition, and distributed attractor systems,
+and making the Spherepop layer above it not an awkward workaround but a natural
+consequence of the substrate's geometry.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{barabasi2002}
+Barab\'asi, Albert-L\'aszl\'o.
+\textit{Linked: The New Science of Networks}.
+Cambridge, MA\@: Perseus Publishing, 2002.
+
+\bibitem{barbour2020}
+Barbour, Julian, Tim Koslowski, and Flavio Mercati.
+\textit{The Janus Point: A New Theory of Time}.
+New York: Basic Books, 2020.
+
+\bibitem{benkler2006}
+Benkler, Yochai.
+\textit{The Wealth of Networks: How Social Production Transforms Markets and Freedom}.
+New Haven: Yale University Press, 2006.
+
+\bibitem{brooks1975}
+Brooks, Frederick P.
+\textit{The Mythical Man-Month: Essays on Software Engineering}.
+Reading, MA\@: Addison-Wesley, 1975.
+
+\bibitem{cover2006}
+Cover, Thomas M., and Joy A. Thomas.
+\textit{Elements of Information Theory}.
+2nd ed.
+Hoboken, NJ\@: Wiley-Interscience, 2006.
+
+\bibitem{fogel1995}
+Fogel, David B.
+\textit{Evolutionary Computation: Toward a New Philosophy of Machine Intelligence}.
+Piscataway, NJ\@: IEEE Press, 1995.
+
+\bibitem{git2005}
+Hamano, Junio C., and Linus Torvalds.
+\textit{Git Source Code Management System}.
+2005.
+\url{https://git-scm.com}
+
+\bibitem{goodfellow2016}
+Goodfellow, Ian, Yoshua Bengio, and Aaron Courville.
+\textit{Deep Learning}.
+Cambridge, MA\@: MIT Press, 2016.
+
+\bibitem{holland1992}
+Holland, John H.
+\textit{Adaptation in Natural and Artificial Systems}.
+Cambridge, MA\@: MIT Press, 1992.
+
+\bibitem{lamport1978}
+Lamport, Leslie.
+``Time, Clocks, and the Ordering of Events in a Distributed System.''
+\textit{Communications of the ACM} 21, no.~7 (1978): 558--565.
+
+\bibitem{kuramoto1984}
+Kuramoto, Yoshiki.
+\textit{Chemical Oscillations, Waves, and Turbulence}.
+Berlin: Springer-Verlag, 1984.
+
+\bibitem{lakatos1976}
+Lakatos, Imre.
+\textit{Proofs and Refutations}.
+Cambridge: Cambridge University Press, 1976.
+
+\bibitem{lessig2001}
+Lessig, Lawrence.
+\textit{The Future of Ideas}.
+New York: Random House, 2001.
+
+\bibitem{neumann1956}
+von Neumann, John.
+``Probabilistic Logics and the Synthesis of Reliable Organisms from Unreliable
+Components.''
+In \textit{Automata Studies}, edited by Claude Shannon and John McCarthy,
+43--98.
+Princeton: Princeton University Press, 1956.
+
+\bibitem{ostrom1990}
+Ostrom, Elinor.
+\textit{Governing the Commons}.
+Cambridge: Cambridge University Press, 1990.
+
+\bibitem{raymond1999}
+Raymond, Eric S.
+\textit{The Cathedral and the Bazaar}.
+Sebastopol, CA\@: O'Reilly Media, 1999.
+
+\bibitem{russell2010}
+Russell, Stuart, and Peter Norvig.
+\textit{Artificial Intelligence: A Modern Approach}.
+3rd ed.
+Upper Saddle River, NJ\@: Prentice Hall, 2010.
+
+\bibitem{shannon1948}
+Shannon, Claude E.
+``A Mathematical Theory of Communication.''
+\textit{Bell System Technical Journal} 27, no.~3 (1948): 379--423.
+
+\bibitem{simon1962}
+Simon, Herbert A.
+``The Architecture of Complexity.''
+\textit{Proceedings of the American Philosophical Society} 106, no.~6
+(1962): 467--482.
+
+\bibitem{stallman2002}
+Stallman, Richard M.
+\textit{Free Software, Free Society}.
+Boston: GNU Press, 2002.
+
+\bibitem{torvalds2001}
+Torvalds, Linus, and David Diamond.
+\textit{Just for Fun: The Story of an Accidental Revolutionary}.
+New York: HarperBusiness, 2001.
+
+\bibitem{turing1936}
+Turing, Alan M.
+``On Computable Numbers, with an Application to the Entscheidungsproblem.''
+\textit{Proceedings of the London Mathematical Society} 42, no.~2
+(1936): 230--265.
+
+\bibitem{vaswani2017}
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit,
+Llion Jones, Aidan N. Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
+``Attention Is All You Need.''
+In \textit{Advances in Neural Information Processing Systems~30},
+5998--6008. 2017.
+
+\bibitem{wiener1948}
+Wiener, Norbert.
+\textit{Cybernetics: Or Control and Communication in the Animal and the Machine}.
+Cambridge, MA\@: MIT Press, 1948.
+
+\bibitem{wolfram2002}
+Wolfram, Stephen.
+\textit{A New Kind of Science}.
+Champaign, IL\@: Wolfram Media, 2002.
+
+\end{thebibliography}
+
+\end{document}

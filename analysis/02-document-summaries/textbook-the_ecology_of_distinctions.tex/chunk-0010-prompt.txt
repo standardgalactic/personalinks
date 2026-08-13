@@ -1,0 +1,1179 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+A concept acquires meaning precisely insofar as it
+partitions a domain: separating things that fall under
+it from things that do not, cases that are clear from
+cases that are ambiguous, extensions from intensions.
+A word is semantically rich when the partition it
+induces is fine, stable, and recoverable.
+A word is semantically impoverished when its partition
+is coarse, unstable, or has collapsed toward the
+semantic horizon.
+
+The dominant twentieth-century alternatives to a
+structure-first account of meaning treat it either as a
+relation between signs and abstract senses, fixed
+independently of any geometric organisation
+\parencite{frege1892}, or as constituted entirely by patterns
+of use within a language game, with no commitment to any
+common structure across uses at all \parencite{wittgenstein1953}.
+Speech-act and implicature theories refine the second
+tradition by locating meaning in what an utterance does
+within a conversational exchange rather than what it denotes
+\parencite{austin1962,grice1975}. None of these traditions is
+wrong about the phenomena it describes, but none offers a
+geometry: there is no answer, on a pure use-theory or
+speech-act account, to the question of how far apart two
+meanings are, whether a meaning's neighbourhood is densely or
+sparsely populated by related meanings, or what it would take
+to repair a meaning that has drifted.
+
+This view has closer antecedents in conceptual space theory
+\parencite{gardenfors2000conceptual}, which models
+concepts as convex regions in quality dimensions.
+The present framework extends this by:
+\begin{enumerate}[(i)]
+  \item grounding conceptual spaces in the formal
+        distinction machinery of Part~I;
+  \item adding dynamics — meanings can be damaged and
+        repaired;
+  \item adding a geometric criterion for evaluating
+        meanings — admissibility — that goes beyond
+        mere accuracy.
+\end{enumerate}
+
+Chapter~\ref{ch:cosmo-completion} closed the book's treatment
+of physical realization by asking whether the admissibility
+geometry of Part~V could organise meaning itself, not merely
+matter, gravity, and cosmological history. This chapter is
+the first attempt at an answer. If a meaning manifold is to
+be more than a convenient visualisation, the same machinery
+that governed reachable volume, curvature, and repair in the
+physical case must reappear here, applied to a domain --- the
+space of possible meanings --- where the units being measured
+are not particles but distinctions in the sense of
+Chapter~\ref{ch:distinction}.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch20-falsifiability}
+
+The claim that meaning is a genuine instance of admissibility
+geometry, rather than a domain merely described using
+admissibility's vocabulary, is falsifiable against a specific
+structural test. The Meaning Repair Theorem
+(\cref{thm:meaning-repair}), proved later in this chapter,
+should be structurally identical to the Repair Existence and
+Minimal Repair Theorems of Chapter~\ref{ch:repair}
+(\cref{thm:repair-exist,thm:minimal-repair}) once restricted
+to the semantic domain: the same existence condition
+$\reco(m,t)>0$, the same minimality criteria, now applied to
+meanings rather than arbitrary distinctions. If semantic
+repair required additional machinery not already present in
+the general theory of repair --- some mechanism specific to
+meaning that the abstract theory could not have anticipated
+--- the claim that semantic geometry realizes the book's
+general framework, rather than merely echoing its language,
+would fail.
+
+
+Common Misinterpretations of Semantic Geometry
+
+\label{sec:ch20-misinterpretations}
+
+A first misreading takes this chapter to claim that meanings
+are literally points in a physical or perceptual space ---
+that the geometry is metaphorical packaging for what is
+really just associative similarity. The semantic distance
+function is a genuine metric in the technical sense, proved
+to satisfy the relevant axioms in the Meaning Distance
+Theorem, and the curvature, repair, and reachability results
+built on it are theorems about that metric structure, not
+loose analogies borrowed from physics for rhetorical effect.
+
+A second misreading assumes that because meaning has a
+geometry, meaning must therefore be fixed, static, or
+mind-independent in the way a physical landscape is. The
+opposite is closer to the chapter's actual claim: the meaning
+manifold is a site of constant dynamics --- drift, damage,
+repair, attractor formation --- and its geometry is precisely
+what makes those dynamics describable rather than merely
+observed.
+
+A third misreading supposes that assigning meanings a formal
+metric eliminates the role of context, use, and convention
+that the Wittgensteinian tradition emphasises. It does not.
+Context and use are part of what fixes a meaning's location
+on the manifold at a given time; the geometry describes the
+space those located meanings occupy and how they relate to
+one another, not a replacement for the social processes that
+place them there in the first place.
+
+
+What This Chapter Establishes
+
+\label{sec:ch20-preview}
+
+By the end of this chapter, the meaning manifold will carry a
+full Riemannian structure with a semantic metric and
+curvature, the Meaning Repair Theorem will show that semantic
+damage is repairable under exactly the conditions general
+repair theory predicts, and the Semantic Horizon Propagation
+Theorem will extend recoverability across networks of related
+meanings. Chapter~\ref{ch:consciousness} then asks what
+additional structure is needed once a system does not merely
+possess a meaning manifold but models itself within one: the
+question of consciousness.
+
+\begin{definition}{Semantic Domain}{semantic-domain}
+  A \emph{semantic domain} is a measurable space
+  $(W, \mu_W)$ where:
+  \begin{itemize}[nosep]
+    \item $W$ is a set of \emph{possible referents}:
+          objects, events, states, relations, or
+          situations that linguistic expressions
+          may describe.
+    \item $\mu_W$ is a \emph{semantic measure}
+          reflecting the relative salience or
+          frequency of different regions of $W$.
+  \end{itemize}
+\end{definition}
+
+\begin{definition}{Meaning Manifold}{meaning-manifold}
+  A \emph{meaning manifold} $\mathcal{M}_L$ for a
+  language $L$ is a Riemannian manifold
+  $(\mathcal{M}, g_S)$ where:
+  \begin{itemize}[nosep]
+    \item Points $m \in \mathcal{M}$ represent possible
+          \emph{meanings}: stable distinction structures
+          over $W$.
+    \item The metric $g_S$ is the \emph{semantic metric},
+          measuring the informational distance between
+          meanings.
+    \item The scalar curvature $\kappa_S$ of
+          $(\mathcal{M}, g_S)$ encodes the local
+          density of semantic distinctions.
+  \end{itemize}
+\end{definition}
+
+\begin{distinctionaside}{Waiting for a Text}
+When waiting for a message, every phone vibration becomes
+significant. When not waiting for a message, most vibrations
+are ignored.
+
+The physical event is identical. Only the distinction
+structure changed.
+
+Meaning is distinction under expectation.
+\end{distinctionaside}
+
+
+The Semantic Metric
+
+
+\begin{definition}{Semantic Distance}{sem-distance}
+  The \emph{semantic distance} between meanings
+  $m_1, m_2 \in \mathcal{M}$ is
+  \[
+    d_S(m_1, m_2)
+    \;=\;
+    \sqrt{
+      D_\mathrm{KL}(m_1 \| m_2)
+      + D_\mathrm{KL}(m_2 \| m_1)
+    },
+  \]
+  the symmetrised KL-divergence between the
+  probability distributions over $W$ induced by
+  $m_1$ and $m_2$.
+\end{definition}
+
+\begin{theorem}{Meaning Distance Theorem}{meaning-distance}
+  The semantic distance $d_S$ satisfies:
+  \begin{enumerate}[(i)]
+    \item $d_S(m_1, m_2) = 0$ iff $m_1$ and $m_2$
+          induce identical partitions of $W$.
+    \item $d_S$ is symmetric.
+    \item $d_S$ satisfies a weak triangle inequality:
+          $d_S(m_1, m_3) \le d_S(m_1, m_2)
+          + d_S(m_2, m_3) + O(\epsilon^2)$ for
+          $\epsilon$-close meanings.
+    \item Semantic distance is non-decreasing under
+          lossy projection: if $\pi: W \to W'$ is a
+          projection, $d_S(\pi(m_1), \pi(m_2))
+          \le d_S(m_1, m_2)$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) $D_\mathrm{KL}(m_1 \| m_2) = 0$ iff $m_1 = m_2$
+  as distributions. KL-divergence vanishes in both
+  directions iff the distributions are identical.
+  Identical distributions over $W$ induce identical
+  partitions (same cells with same probabilities).
+
+  (ii) The symmetrised KL-divergence is symmetric
+  by construction.
+
+  (iii) The symmetrised KL-divergence satisfies a
+  second-order triangle inequality in the sense of
+  a Fisher--Rao metric on the statistical manifold;
+  for nearby points the approximation is exact.
+
+  (iv) Projection coarsens partitions
+  (Compression Theorem, \cref{thm:compression}).
+  Coarser partitions have lower distinction capacity
+  (\cref{thm:refinement-capacity}).
+  Lower distinction capacity means fewer
+  distinguishable referents, so
+  $D_\mathrm{KL}(\pi(m_1) \| \pi(m_2))
+  \le D_\mathrm{KL}(m_1 \| m_2)$,
+  giving $d_S(\pi(m_1), \pi(m_2)) \le d_S(m_1, m_2)$.
+\end{proof}
+
+\begin{remark}{Synonymy and homonymy}{synonymy}
+  The Meaning Distance Theorem makes synonymy and
+  homonymy precise.
+  \emph{Synonyms} are expressions with $d_S \approx 0$:
+  they induce nearly identical partitions of $W$.
+  \emph{Homonyms} are expressions whose surface form
+  is identical but whose meaning manifold positions are
+  far apart: $d_S(m_1, m_2) \gg 0$ despite sharing
+  a lexical label.
+  The theorem also formalises semantic bleaching
+  (historical shift toward $d_S = 0$ between an original
+  and extended meaning) and semantic drift
+  (gradual movement through the meaning manifold).
+\end{remark}
+
+
+Semantic Curvature
+
+
+The meaning manifold is not flat. Different regions
+support different densities of semantic distinction.
+The curvature of $(\mathcal{M}, g_S)$ encodes this
+structure.
+
+\begin{definition}{Semantic Curvature}{sem-curvature}
+  The \emph{semantic curvature} at $m \in \mathcal{M}$
+  is the scalar curvature $\kappa_S(m)$ of the
+  Riemannian manifold $(\mathcal{M}, g_S)$.
+  Positive curvature indicates a region of high
+  semantic density: many distinct meanings are close
+  together.
+  Negative curvature indicates a region of low semantic
+  density: meanings are sparsely distributed.
+\end{definition}
+
+\begin{theorem}{Semantic Curvature Theorem}{sem-curvature-thm}
+  High semantic curvature at $m$ implies:
+  \begin{enumerate}[(i)]
+    \item \emph{Distinction sensitivity}: small
+          semantic displacements produce large changes
+          in the induced partition of $W$.
+    \item \emph{Repair difficulty}: semantic damage
+          at $m$ is harder to repair because many
+          nearby meanings may be conflated.
+    \item \emph{Admissibility concentration}: the
+          admissibility curvature $\kappa_\adm$
+          (\cref{thm:adm-curv}) is high at $m$,
+          marking it as a semantic decision point
+          where trajectory choices have large
+          consequences.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) In a region of high curvature, geodesic
+  deviation is large: two nearby meanings diverge
+  rapidly under parallel transport. Small displacements
+  therefore produce large changes in $d_S$ from other
+  fixed meanings, implying large changes in partition
+  structure.
+
+  (ii) Repair requires identifying and reconstructing
+  the target meaning $m^*$
+  (Definition~\ref{defn:repair-op}).
+  In high-curvature regions, many candidate meanings
+  are close to $m^*$ in the ambient space but induce
+  very different partitions. The repair operator must
+  distinguish among these candidates, which requires
+  higher recoverability and more precise reconstruction
+  information.
+
+  (iii) By the Admissibility Curvature Theorem
+  (\cref{thm:adm-curv}), admissibility curvature
+  amplifies the sensitivity of future possibility to
+  trajectory perturbations. In semantic space, high
+  curvature marks meanings whose adoption or revision
+  propagates large changes through the conceptual
+  dependency structure $\mathcal{L}_S$.
+\end{proof}
+
+\begin{example}{Technical Vocabulary as High-Curvature Regions}
+  {tech-vocab}
+  Technical scientific vocabulary occupies high-curvature
+  regions of the meaning manifold.
+  Terms like \emph{entropy}, \emph{species},
+  \emph{force}, and \emph{information} have precisely
+  defined meanings that are close to but distinct from
+  their everyday usage.
+  The Semantic Curvature Theorem predicts:
+  (i) small departures from technical meaning
+  produce large inferential errors;
+  (ii) repairing confused uses of technical terms
+  is difficult because many nearby informal meanings
+  are available as attractors;
+  (iii) the adoption or revision of technical
+  definitions is a high-curvature semantic event
+  with large downstream consequences for the
+  conceptual ecology of the field.
+\end{example}
+
+
+Conceptual Attractors
+
+
+Meanings do not evolve freely. They cluster around
+attractors: stable configurations that resist small
+perturbations and attract nearby meanings.
+
+\begin{definition}{Conceptual Attractor}{conceptual-attractor}
+  A meaning $m^* \in \mathcal{M}$ is a
+  \emph{conceptual attractor} if there exists a
+  neighbourhood $U \ni m^*$ such that all meanings
+  $m \in U$ evolve toward $m^*$ under the semantic
+  dynamics:
+  \[
+    \dot{m} = -\nabla_m E_S(m),
+  \]
+  where $E_S : \mathcal{M} \to \mathbb{R}$ is the
+  \emph{semantic energy} measuring the cost of
+  maintaining the distinction structure induced by $m$.
+\end{definition}
+
+\begin{theorem}{Conceptual Attractor Theorem}{conceptual-attractor-thm}
+  Every stable conceptual attractor $m^*$:
+  \begin{enumerate}[(i)]
+    \item Minimises semantic energy in its basin of
+          attraction:
+          $E_S(m^*) \le E_S(m)$ for all $m$ in the basin.
+    \item Is a local minimum of the distinction cost
+          function $C$ (Definition~\ref{defn:dist-cost}):
+          maintaining $m^*$ requires less cognitive,
+          social, or computational cost than nearby
+          alternatives.
+    \item Has positive recoverability:
+          $\reco(m^*, t) > 0$, since the attractor
+          is maintained by ongoing semantic repair.
+    \item Corresponds to a low-entropy region of the
+          meaning manifold: $S(m^*, t) < \theta$
+          for some threshold $\theta$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) An attractor is a stable fixed point of
+  $\dot{m} = -\nabla E_S(m)$.
+  Stable fixed points occur at local minima of $E_S$.
+
+  (ii) Semantic energy includes the cost of maintaining
+  the partition structure of $m$.
+  By the Distinction Cost Theorem
+  (\cref{thm:refinement-cost}), maintaining finer
+  distinctions costs more than coarser ones.
+  A stable attractor balances distinction capacity
+  against maintenance cost, settling at a local
+  minimum of $C$.
+
+  (iii) A conceptual attractor is actively maintained
+  by the linguistic community through use, correction,
+  and teaching — all instances of semantic repair.
+  This maintenance keeps $\reco(m^*, t) > 0$.
+
+  (iv) Low semantic energy corresponds to low
+  multiplicity beneath the distinction structure,
+  i.e.\ low entropy $S(m^*)$.
+  High-entropy meanings are unstable: they conflate
+  many referents, creating pressure toward either
+  finer distinction (attractor approach) or complete
+  merger (attractor collapse).
+\end{proof}
+
+\begin{example}{Basic-Level Categories}{basic-level}
+  \bioicon\csicon
+  In cognitive linguistics, \emph{basic-level categories}
+  — dog, chair, tree — are learned first, named most
+  easily, and used most frequently across cultures.
+  The Conceptual Attractor Theorem predicts this:
+  basic-level categories are conceptual attractors that
+  minimise semantic energy by balancing distinction
+  capacity (they are not so coarse as to conflate
+  importantly different things) against maintenance
+  cost (they are not so fine as to require specialised
+  knowledge to apply).
+  Superordinate categories (animal, furniture) are
+  lower-energy but coarser;
+  subordinate categories (labrador, Windsor chair)
+  are higher-capacity but more costly to maintain.
+  The basic level is the attractor basin minimum.
+\end{example}
+
+
+Meaning Repair
+
+
+Meanings degrade. Technical terms acquire informal
+meanings through metaphorical extension. Evaluative
+terms reverse their valence through ironic use.
+Scientific concepts lose precision through
+popularisation. Political terms are emptied through
+euphemism. All of these are forms of semantic damage
+requiring repair.
+
+\begin{theorem}{Meaning Repair Theorem}{meaning-repair}
+  Semantic repair — restoring a degraded meaning to
+  its target distinction structure — is possible iff
+  $\reco(m, t) > 0$.
+  Among all admissible semantic repairs achieving
+  $d_S(m_\mathrm{rep}, m^*) \le \epsilon$,
+  the minimal-cost repair:
+  \begin{enumerate}[(i)]
+    \item Restores the partition of $W$ induced by $m^*$
+          as closely as possible.
+    \item Does not introduce new semantic distinctions
+          not present in $m^*$.
+    \item Preserves all non-damaged semantic relations
+          in the neighbourhood of $m$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  By the Repair Existence Theorem
+  (\cref{thm:repair-exist}), repair is possible iff
+  $\reco(m,t) > 0$.
+  The minimal repair is given by the Minimal Repair
+  Theorem (\cref{thm:minimal-repair}), which in the
+  semantic setting corresponds to the minimal
+  modification to the partition structure of $W$
+  that moves $m$ within $\epsilon$ of $m^*$ in $d_S$.
+  (i) follows from the definition of $d_S$: minimising
+  $d_S(m_\mathrm{rep}, m^*)$ is equivalent to
+  restoring the partition.
+  (ii) follows from admissibility: introducing new
+  distinctions not in $m^*$ would increase
+  the repair cost beyond what is required.
+  (iii) follows from the Repair Conservation Law
+  (\cref{thm:repair-conservation}): admissible repair
+  stays within the connected component of the
+  recoverability manifold, preserving non-damaged
+  semantic relations.
+\end{proof}
+
+\begin{example}{Scientific Popularisation and Repair}
+  {popularisation}
+  The word \emph{theory} has a precise scientific
+  meaning (a well-confirmed explanatory framework
+  with empirical support) and a degraded popular
+  meaning (a conjecture or guess).
+  This is semantic damage: the popular use has moved
+  the meaning far from the scientific attractor in
+  the meaning manifold.
+
+  The Meaning Repair Theorem prescribes:
+  (i) restore the partition: \emph{theory} should
+  separate well-confirmed frameworks from guesses;
+  (ii) do not introduce new distinctions: do not
+  redefine \emph{theory} as \emph{law} or introduce
+  additional conditions not in the original meaning;
+  (iii) preserve non-damaged relations: the relationship
+  between \emph{theory}, \emph{hypothesis}, and
+  \emph{law} in the scientific vocabulary should be
+  maintained.
+  Science communication that achieves (i)--(iii) is
+  performing admissible semantic repair.
+\end{example}
+
+
+Semantic Trajectories and Admissibility
+
+
+Meanings evolve through time. A semantic trajectory
+$\gamma_S : [t_0, T] \to \mathcal{M}$ describes the
+evolution of a meaning through the meaning manifold.
+The admissibility framework applies directly.
+
+\begin{definition}{Semantic Reachability Volume}{sem-reach-vol}
+  The \emph{semantic reachability volume} at meaning $m$,
+  time $t$, is
+  \[
+    V_M(m, t)
+    = \mu_\mathcal{M}\!\bigl(\reach_\mathcal{M}(m, t)\bigr),
+  \]
+  the measure of meanings accessible from $m$ through
+  admissible semantic evolution.
+\end{definition}
+
+\begin{theorem}{Semantic Horizon Propagation Theorem}
+  {sem-horizon-prop}
+  When a meaning $m$ crosses the semantic horizon —
+  when $\reco(m, t) \to 0$ — it propagates horizon
+  effects to dependent meanings:
+  for all $m'$ with $m \prec m'$
+  (Definition~\ref{defn:dist-dep}),
+  \[
+    \reco(m', t)
+    \;\le\;
+    \reco(m', t \mid m)
+    \cdot \mathbf{1}_{\{\reco(m,t)>0\}}.
+  \]
+  The loss of a foundational meaning reduces the
+  recoverability of all meanings that depend on it.
+\end{theorem}
+
+\begin{proof}
+  By the Distinction Dependency Theorem
+  (\cref{thm:dist-dependency}), if $m \prec m'$,
+  then loss of recoverability of $m$ reduces the
+  recoverability of $m'$.
+  When $\reco(m, t) = 0$, information required for
+  the reconstruction of $m'$ via $m$ is unavailable.
+  The indicator $\mathbf{1}_{\{\reco(m,t)>0\}}$
+  captures the complete dependence: if the supporting
+  meaning has zero recoverability, the recoverability
+  of the dependent meaning is at most
+  $\reco(m', t \mid m)$, but without $m$ this
+  conditional recoverability may itself be zero.
+\end{proof}
+
+\begin{remark}{Conceptual erosion cascades}{concept-cascade}
+  The Semantic Horizon Propagation Theorem describes
+  conceptual erosion cascades.
+  When a foundational concept loses recoverability,
+  the entire network of meanings that depends on it
+  becomes harder to maintain.
+  Historical examples abound:
+  the erosion of the concept of \emph{evidence}
+  in public discourse reduces the recoverability of
+  \emph{scientific consensus}, \emph{expert opinion},
+  and \emph{empirical fact}.
+  The loss of the concept of \emph{conflict of interest}
+  reduces the recoverability of \emph{impartial
+  deliberation} and \emph{professional ethics}.
+  These are not merely social problems but structural
+  reachability failures in the collective meaning manifold.
+\end{remark}
+
+
+RSVP and the Meaning Manifold
+
+
+The scalar-vector-entropy triple of RSVP
+(\cref{ch:rsvp}) has a natural semantic interpretation.
+
+\begin{proposition}{RSVP-Semantic Correspondence}{rsvp-semantic}
+  Under the identification:
+  \begin{align*}
+    \Phi(x,t) &\;\leftrightarrow\;
+    \text{semantic density at region }x\text{ of }W, \\
+    \mathbf{v}(x,t) &\;\leftrightarrow\;
+    \text{direction of semantic flow in }\mathcal{M}, \\
+    S(x,t) &\;\leftrightarrow\;
+    \text{semantic ambiguity (entropy of the partition)},
+  \end{align*}
+  the RSVP field equations (\cref{ch:rsvp}) describe
+  the dynamics of a meaning manifold under linguistic
+  use, repair, and degradation.
+\end{proposition}
+
+\begin{proof}
+  The scalar field $\Phi$ measures local distinction
+  capacity in the semantic domain $W$.
+  High $\Phi$ corresponds to densely structured
+  regions of meaning where many fine distinctions are
+  maintained.
+  The vector field $\mathbf{v}$ describes the
+  flow of semantic influence: how meanings at one
+  region of $\mathcal{M}$ influence meanings at
+  neighbouring regions through use, metaphor, and
+  borrowing.
+  The entropy field $S$ measures semantic ambiguity:
+  the multiplicity of referents consistent with a
+  given expression, corresponding to the hidden
+  multiplicity beneath the partition induced by $m$.
+
+  Under these identifications, the RSVP continuity
+  equation (\cref{thm:capacity-conservation}) becomes
+  a conservation law for semantic density, the
+  constraint accumulation equation describes the
+  growth of semantic ambiguity, and lamphrodyne
+  relaxation (\cref{thm:lamphrodyne}) describes
+  the tendency of linguistic communities to reduce
+  ambiguity by converging toward semantic attractors.
+\end{proof}
+
+
+Semantic Geometry and Cognitive Realization
+
+
+The meaning manifold is the cognitive substrate in
+which the distinction ecology of Part~I is realised.
+Chapter~\ref{ch:consciousness} showed that
+consciousness is recursive repair of self-distinction
+structures. Chapter~\ref{ch:preference-fields} showed
+that preferences are gradients over admissible future
+volume in state space.
+
+Semantic geometry completes the cognitive picture by
+providing the space within which these processes occur.
+Consciousness maintains the meaning manifold through
+recursive repair. Preferences flow along semantic
+gradients. Intelligence is repair capacity over
+the meaning manifold. The ecology of distinctions
+is, at the cognitive scale, an ecology of meanings.
+
+\begin{theorem}{Semantic Intelligence Theorem}{sem-intel}
+  Cognitive intelligence $\mathcal{I}(\Sigma)$
+  (\cref{defn:intelligence}) is proportional to
+  the system's repair capacity over its meaning
+  manifold $\mathcal{M}_\Sigma$:
+  \[
+    \mathcal{I}(\Sigma)
+    \;\propto\;
+    \kappa(\Sigma, \mathcal{D}_{\mathcal{M}_\Sigma})
+    \cdot
+    \kappa(\Sigma, \mathcal{D}_{\repair_\mathcal{M}}),
+  \]
+  where $\mathcal{D}_{\mathcal{M}_\Sigma}$ is the
+  distinction space of the meaning manifold and
+  $\mathcal{D}_{\repair_\mathcal{M}}$ is the
+  distinction space of the semantic repair processes.
+\end{theorem}
+
+\begin{proof}
+  By the Intelligence--Repair Equivalence Theorem
+  (\cref{thm:intel-repair}), intelligence is repair
+  capacity over the system's own distinction space,
+  including its repair processes.
+  For a cognitive system, the primary distinction space
+  is the meaning manifold $\mathcal{M}_\Sigma$:
+  the distinctions the system maintains and can repair.
+  Meta-intelligence — the ability to repair semantic
+  repair processes — corresponds to
+  $\kappa(\Sigma, \mathcal{D}_{\repair_\mathcal{M}})$.
+  The product gives cognitive intelligence.
+\end{proof}
+
+\begin{remark}{Language as distinction ecology infrastructure}
+  {language-infra}
+  The Semantic Intelligence Theorem explains why language
+  is not merely a communication tool but a cognitive
+  infrastructure.
+  A system operating without language must maintain its
+  meaning manifold $\mathcal{M}_\Sigma$ entirely through
+  perceptual and motoric distinction structures.
+  A system with language can offload meaning maintenance
+  onto the shared linguistic meaning manifold of its
+  community, dramatically extending its effective
+  $\kappa(\Sigma, \mathcal{D}_\mathcal{M})$ at low cost.
+  Language is therefore a distributed repair system for
+  the collective meaning manifold.
+\end{remark}
+
+
+Related Frameworks
+
+\label{sec:ch20-related-frameworks}
+
+\subsection*{Information Geometry: The Uniqueness of the Metric}
+
+\emph{Convergence.} Information geometry's central technical
+result is that spaces of probability distributions possess
+essentially one metric --- the Fisher information metric, unique
+up to scale --- invariant under sufficient statistics and
+respecting the distinguishability of nearby distributions
+\parencite{amari2016,ay2017}. Where meanings are represented
+distributionally, as is standard in computational semantics, the
+Fisher-Rao metric is a natural, principled candidate for exactly
+the kind of semantic distance this chapter's Semantic Distance
+(\cref{defn:sem-distance}) formalises.
+
+\emph{Divergence.} The Fisher-Rao metric is derived from a fixed
+family of distributions together with an invariance requirement
+under sufficient statistics --- a narrow, specific justification.
+This chapter's Semantic Curvature (\cref{defn:sem-curvature}) is
+derived instead from repair structure: the Semantic Curvature
+Theorem (\cref{thm:sem-curvature-thm}) ties curvature to how
+difficult a meaning is to repair under perturbation, with no
+appeal to statistical invariance at all. The two metrics could in
+principle coincide for a particular choice of distributional
+semantic model, but they are justified by entirely different
+arguments, and nothing in this chapter establishes that they must
+agree in general.
+
+\emph{Open question.} Whether repair-based semantic curvature and
+Fisher-Rao curvature can be shown to coincide under some natural
+correspondence --- identifying repair difficulty with statistical
+distinguishability, for instance --- or whether they are
+genuinely different quantities that happen to share the name
+``curvature,'' is not settled here.
+
+\subsection*{Crutchfield: Concepts as Causal States}
+
+\emph{Convergence.} Chapters~\ref{ch:history} and~\ref{ch:memory}
+engaged computational mechanics on history compression and
+memory; this chapter's concern is closer to its treatment of
+causal states as stable categories. Causal states are equivalence
+classes of histories that collapse together because they are
+predictively indistinguishable, and a process's full set of
+causal states is the minimal representation needed to predict its
+future as well as its complete history would
+\parencite{crutchfield2012}. This chapter's Conceptual Attractors
+(\cref{defn:conceptual-attractor}) read naturally as exactly this
+construction applied to a meaning manifold: a concept is a stable
+region of semantic space toward which many distinct experiential
+histories converge, because, for the purposes of future
+categorisation, those histories are equivalent.
+
+\emph{Divergence.} Causal states are defined purely in terms of
+predictive sufficiency for an external observer modelling a
+process from outside. The Conceptual Attractor Theorem and
+Meaning Repair Theorem
+(\cref{thm:conceptual-attractor-thm,thm:meaning-repair}) instead
+characterise concepts by stability \emph{under repair}: a
+conceptual attractor is one the system's own repair processes can
+restore after perturbation, a fact about the system's relation to
+its own concept, not merely about prediction accuracy for an
+outside observer. A predictively minimal causal state could in
+principle be fragile under perturbation, requiring no inherent
+stability, while this chapter's conceptual attractors are
+specifically the configurations a system is disposed to actively
+defend.
+
+\emph{Open question.} Whether every causal state of a
+sufficiently rich predictive process is automatically a
+conceptual attractor in this chapter's stronger, repair-stability
+sense, or whether predictive sufficiency and repair-stability can
+come apart --- yielding causal states that are not concepts, or
+concepts that are not causal states --- is not resolved here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Meanings are stable distinction structures over
+        a semantic domain; the meaning manifold
+        $(\mathcal{M}, g_S)$ is their geometric home.
+  \item Semantic distance measures informational
+        divergence between partition structures;
+        projection reduces it
+        (\cref{thm:meaning-distance}).
+  \item High semantic curvature marks regions where
+        small displacements produce large partition
+        changes, repair is difficult, and semantic
+        decisions have disproportionate consequences
+        (\cref{thm:sem-curvature-thm}).
+  \item Conceptual attractors are low-energy, low-cost,
+        low-entropy, high-recoverability meanings that
+        resist small perturbations
+        (\cref{thm:conceptual-attractor-thm}).
+  \item Semantic repair is possible iff
+        $\reco(m,t) > 0$; minimal repair
+        restores partition structure without introducing
+        new distinctions or destroying existing relations
+        (\cref{thm:meaning-repair}).
+  \item Loss of foundational meanings propagates
+        horizon effects to all dependent meanings
+        (\cref{thm:sem-horizon-prop}).
+  \item RSVP fields $(\Phi, \mathbf{v}, S)$ describe
+        semantic density, flow, and ambiguity
+        (\cref{prop:rsvp-semantic}).
+  \item Cognitive intelligence is semantic repair
+        capacity over the meaning manifold
+        (\cref{thm:sem-intel}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  Word embeddings (Word2Vec, GloVe, sentence
+  transformers) map words to vectors in $\mathbb{R}^n$.
+  Interpret this as a projection
+  $\pi_E : \mathcal{M} \to \mathbb{R}^n$.
+  By the Meaning Distance Theorem, what does cosine
+  similarity in $\mathbb{R}^n$ approximate?
+  Under what conditions is $\pi_E$ a lossless
+  representation and when does it introduce admissibility
+  distortion?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Animal communication systems (vervet monkey alarm
+  calls, honeybee dance language) involve meaning
+  manifolds of very low dimension.
+  Using the Conceptual Attractor Theorem, explain
+  why predator-category attractors (eagle, snake,
+  leopard) are stable despite individual variation
+  in vocalisations.
+  What would a Semantic Horizon Propagation event
+  look like in an animal communication system?
+\end{exercise}
+
+\begin{exercise}
+  Prove that a perfectly ambiguous language — one in
+  which every expression maps to the entire semantic
+  domain $W$ --- has $V_M(m, t) = 0$ for all $m$ and $t$.
+  Interpret this as a reachability collapse.
+  What repair operations could restore positive $V_M$?
+\end{exercise}
+
+\begin{exercise}[CS]
+  A large language model trained on internet text
+  inherits the semantic damage present in that corpus
+  (imprecise use of technical terms, erosion of
+  evaluative distinctions, conflation of concepts).
+  Using the Meaning Repair Theorem, design a
+  fine-tuning protocol that performs admissible
+  semantic repair.
+  Which of conditions (i)--(iii) is hardest to satisfy
+  in practice, and why?
+\end{exercise}
+
+\begin{exercise}
+  The Semantic Horizon Propagation Theorem predicts
+  that erosion of foundational concepts cascades
+  to dependent concepts.
+  Identify a foundational concept in one of the
+  following domains and trace the cascade of
+  recoverability reduction if that concept erodes:
+  (a) \emph{evidence} in epistemology;
+  (b) \emph{species} in biology;
+  (c) \emph{type} in programming language theory;
+  (d) \emph{value} in economics.
+\end{exercise}
+
+
+
+
+
+
+
+
+
+
+\chapter{Consciousness}
+\label{ch:consciousness}
+
+\begin{epigraph}{
+  A system does not become conscious by acquiring a soul.
+  It becomes conscious by acquiring a history it must
+  keep reconstructing.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Derive self-reference geometrically from history
+        and reconstruction rather than postulate it as
+        primitive.
+  \item Prove the Memory Requirement Theorem and the
+        Recursive Representation Theorem.
+  \item Define awareness as the rate of improvement of
+        self-reconstruction and prove the Awareness Theorem.
+  \item Prove the Intelligence--Consciousness Separation
+        Theorem in both directions.
+  \item Prove the Depth Theorem and the Conscious
+        Reachability Theorem.
+  \item Prove Consciousness as Recursive Repair, the
+        culminating theorem of the chapter.
+\end{objectives}
+
+
+Self-Reconstruction
+
+\label{sec:ch21-self-reconstruction}
+
+The safest route through this chapter is to avoid making
+consciousness fundamental. Within the logic of this book,
+consciousness should emerge as a special regime of
+recursive reconstruction occurring within
+distinction-preserving systems, rather than being
+postulated as an irreducible property. The chapter's
+machinery therefore derives consciousness from history,
+recoverability, repair, and admissibility. The central
+progression is
+\[
+  \text{Distinction} \to \text{History} \to \text{Reconstruction}
+  \to \text{Self-Model} \to \text{Consciousness}.
+\]
+The first step is to define self-reference geometrically.
+
+
+Why Integrated Information Is Not Enough
+
+\label{sec:ch21-why-iit}
+
+The most influential contemporary mathematical theory of
+consciousness, Integrated Information Theory, proposes that
+consciousness corresponds to a scalar quantity, $\Phi$,
+measuring how much information a system's causal structure
+generates as an integrated whole beyond what its parts
+generate independently \parencite{tononi2015}. A system is
+conscious to the degree that $\Phi$ is large, and the theory
+offers, at least in principle, a procedure for computing
+$\Phi$ from a system's causal architecture.
+
+This is a serious proposal, and it shares with the present
+chapter the conviction that consciousness should be
+approached as a structural property of a system rather than
+postulated as an irreducible extra ingredient
+\parencite{dennett1991}. Where it differs is in treating
+consciousness as a quantity rather than a regime. A
+high-$\Phi$ system, on the integrated-information account, is
+conscious in roughly the way a hot object has a high
+temperature: more or less of one scalar property. The present
+chapter's account is structurally different. Consciousness
+here is not a quantity a system has more or less of in
+isolation; it is a self-referential \emph{process} ---
+recursive reconstruction operating on the system's own
+history --- that either is or is not actively underway, and
+which admits its own internal geometry (depth, reachability,
+repair) rather than reducing to a single number. This is
+closer in spirit to the ``hard problem'' framing's insistence
+that something process-like, not merely quantitative, is at
+stake \parencite{chalmers1996}, while declining to treat that
+process as forever explanatorily inaccessible.
+
+Chapter~\ref{ch:semantic-geometry} gave meaning a full
+geometric structure: a manifold, a metric, curvature, repair.
+This chapter asks what changes when a system does not merely
+possess such a structure but models \emph{itself} as a point
+within one --- when the meaning manifold's most important
+referent becomes the system doing the modelling.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch21-falsifiability}
+
+The chapter's culminating claim, Consciousness as Recursive
+Repair (\cref{thm:consciousness-recursive-repair}), asserts
+that consciousness is a genuine instance of the repair
+machinery of Chapter~\ref{ch:repair}, applied recursively to
+a system's self-model, and not merely a process that
+resembles repair by loose analogy. This is falsifiable
+against a specific test: the theorem should be derivable from
+the general repair apparatus (\cref{thm:repair-exist}) plus
+the self-model construction defined below, with no
+consciousness-specific axiom introduced along the way. If
+establishing the theorem required smuggling in some
+additional postulate --- something true of self-modelling
+systems that is not already a consequence of repair theory
+applied to a system's own history --- the claim that
+consciousness realizes repair, rather than merely echoing its
+vocabulary, would fail.
+
+\section{Common Misinterpretations of Consciousness as
+  Recursive Repair}
+\label{sec:ch21-misinterpretations}
+
+A first misreading takes this chapter to claim that it has
+solved the hard problem of consciousness --- that recursive
+repair explains why there is something it is like to be a
+conscious system. It does not make this claim. The chapter
+gives necessary structural conditions for the kind of process
+that, in systems we already agree are conscious, accompanies
+subjective experience; it remains silent on why that process
+is accompanied by experience at all, which is the hard
+problem in its sharpest form.
+
+A second misreading assumes that any system performing
+self-reconstruction must therefore be conscious --- that a
+thermostat modelling its own temperature history qualifies.
+The Depth Theorem and Conscious Reachability Theorem, proved
+later in this chapter, place quantitative floors on
+recursive depth and self-reachable volume; trivial
+self-reference of the kind a thermostat performs falls far
+short of them.
+
+A third misreading conflates this chapter's separation of
+intelligence and consciousness with a claim that the two are
+unrelated or never co-occur. The Intelligence--Consciousness
+Separation Theorem establishes logical independence, not
+empirical dissociation: most systems encountered in practice,
+biological or artificial, may well possess both or neither.
+The theorem's content is that possessing one does not entail
+possessing the other.
+
+
+What This Chapter Establishes
+
+\label{sec:ch21-preview}
+
+By the end of this chapter, self-reference will have been
+derived geometrically from history and reconstruction, the
+Memory Requirement and Recursive Representation Theorems will
+establish what self-modelling demands, and Consciousness as
+Recursive Repair will identify consciousness with a specific
+recursive regime of the repair machinery already developed.
+Chapter~\ref{ch:preference-fields} then asks what a system
+with this kind of self-model \emph{wants}: whether preference
+itself can be derived from the same admissibility geometry,
+rather than introduced as a separate axiomatic primitive.
+
+\begin{definition}{System History}{system-history-ch21}
+  Let $\Sigma$ be a system. Its \emph{history} is
+  \[
+    H_\Sigma = \{e_1, e_2, \ldots, e_n\}.
+  \]
+\end{definition}
+
+The key object is not state. It is recoverability of state,
+in the sense of Chapter~\ref{ch:recoverability}.
+
+\begin{definition}{Self-Model}{self-model}
+  A \emph{self-model} is a reconstruction operator
+  \[
+    M_\Sigma : H_\Sigma \to \hat{\Sigma}.
+  \]
+  \index{self-model|textbf}
+\end{definition}
+
+The system is building an estimate of itself from its own
+history, using the reconstruction machinery of
+\cref{thm:reconstruction}.
+
+\begin{theorem}{Memory Requirement Theorem}{memory-consciousness}
+  Conscious reconstruction requires nonzero recoverable
+  history.
+\end{theorem}
+
+\begin{proof}
+  Suppose $H_\Sigma = \varnothing$. Then $M_\Sigma$ has no
+  input, so $\hat{\Sigma}$ cannot depend upon previous
+  states, and no temporal self-reconstruction is possible.
+  Therefore consciousness, understood as self-reconstruction,
+  requires $|H_\Sigma| > 0$.
+\end{proof}
+
+This connects directly to the memory and recoverability
+machinery of Chapters~\ref{ch:recoverability}--\ref{ch:memory}.
+
+
+Recursive Self-Modeling
+
+\label{sec:ch21-recursive}
+
+\begin{definition}{Recursive Self-Model}{recursive-self-model}
+  A \emph{recursive self-model} satisfies
+  \[
+    M_\Sigma = M\bigl(M(H_\Sigma)\bigr).
+  \]
+  \index{self-model!recursive|textbf}
+\end{definition}
+
+The system does not merely model itself. It models itself
+modeling itself.
+
+\begin{theorem}{Recursive Representation Theorem}{recursive-self}
+  If $M_\Sigma = M(M(H_\Sigma))$, then self-reference
+  becomes representable.
+\end{theorem}
+
+\begin{proof}
+  The first reconstruction produces $\hat{\Sigma}_1 = M(H_\Sigma)$.
+  The second reconstruction acts on $\hat{\Sigma}_1$, giving
+  $\hat{\Sigma}_2 = M(\hat{\Sigma}_1)$. The representation
+  $\hat{\Sigma}_2$ therefore contains information about the
+  representation $\hat{\Sigma}_1$ itself. This establishes
+  self-reference within the formal machinery of
+  reconstruction operators.
+\end{proof}
+
+This is the first point at which consciousness, in the
+sense developed here, begins to appear: not as a postulated
+substance but as a structural consequence of applying a
+reconstruction operator to its own output.
+
+
+Awareness
+
+\label{sec:ch21-awareness}
+
+Recall the Hearing Your Name example from
+Chapter~\ref{ch:distinction}: a crowded room full of ignored
+sound reorganises entirely around a single activated
+distinction, with nothing physically new having entered the
+room. That example was offered there as a phenomenon, with no
+machinery yet available to explain it. The machinery is now
+available. What changed in that room was not the acoustic
+signal but the system's model of itself as a relevant target
+within it --- precisely the kind of self-referential update
+the awareness functional below is built to measure.
+
+\begin{definition}{Awareness Functional}{awareness-functional}
+  Let $D(\Sigma, \hat{\Sigma})$ denote reconstruction error.
+  Define
+  \[
+    A = -\frac{d}{dt} D(\Sigma, \hat{\Sigma}).
+  \]
+  \index{awareness|textbf}
+\end{definition}
+
+Awareness is the \emph{improvement} of self-reconstruction,
+not the mere possession of a self-model.
+
+\begin{theorem}{Awareness Theorem}{awareness}
+  A system is aware to the extent that reconstruction error
+  decreases.
+\end{theorem}
+
+\begin{proof}
+  If $\frac{d}{dt}D < 0$, the model becomes more accurate
+  over time. If $\frac{d}{dt}D = 0$, the system gains no new
+  self-information. Therefore awareness, as defined by $A$,
+  is proportional to the negative rate of growth of
+  reconstruction error.
+\end{proof}
+
+
+Intelligence and Consciousness Are Independent
+
+\label{sec:ch21-separation}
+
+The next result distinguishes intelligence from
+consciousness; this chapter does not identify them.
+
+\begin{theorem}{Intelligence--Consciousness Separation}{intel-consciousness}
+  Intelligence does not imply consciousness.
+\end{theorem}
+
+\begin{proof}
+  By the Intelligence--Repair Equivalence
+  (\cref{thm:intel-repair}, Chapter~\ref{ch:repair-intelligence}),
+  intelligence is repair capability. Let $\Sigma_I$ be
+  highly effective at repair, and suppose $M_{\Sigma_I}$ is
+  absent. Then repair occurs without self-reconstruction.
+  Hence intelligence may exist without consciousness.
+\end{proof}
+
+\begin{theorem}{Consciousness Without Intelligence}{consciousness-without-intelligence}
+  Consciousness does not imply strong repair capability.
+\end{theorem}
+
+\begin{proof}
+  A system may possess recursive self-models while remaining
+  ineffective at solving external problems. Thus
+  $M_\Sigma \ne 0$ does not imply high repair capacity
+  $\mathcal{I}(\Sigma)$ in the sense of
+  \cref{thm:intel-repair}.
+\end{proof}

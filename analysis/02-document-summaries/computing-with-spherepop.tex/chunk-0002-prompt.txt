@@ -1,0 +1,600 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+Tensor logic, in the sense articulated by Domingos, interprets logical inference and learning through tensorial composition, allowing logical operations to be reformulated as tensor operations. Spherepop provides an analogous structure in which merge corresponds to tensor-style composition and collapse corresponds to logical abstraction. The essential difference is that Spherepop grounds tensor operations in geometry rather than algebra. Logical combination becomes geometric union with normalization rather than tensor multiplication.
+
+From the standpoint of semantics, tensor logic identifies truth values with tensor elements and logical operations with tensor algebra. Spherepop instead identifies computational values with geometric regions and computational operations with merge and collapse. The structural role of tensor product is therefore played by merge. Logical implication and abstraction are represented by collapse, which removes interior structure and produces canonical representatives. In this interpretation, the algebra of canonical regions under merge becomes a geometric tensor calculus with an idempotent projection operator.
+
+
+Duality between Geometry and Tensorial Semantics
+
+
+The monoidal interpretation of Spherepop expresses a duality between geometric and tensorial semantics. On one hand, merge corresponds to geometric aggregation; on the other, it corresponds to monoidal composition. Collapse corresponds to elimination of geometric fine structure; on the other, it corresponds to tensorial abstraction. In this dual interpretation, geometric interaction encodes algebraic combination, and collapsing geometric detail corresponds to eliminating algebraic redundancy. The calculus thereby supports a tensorial interpretation without relying upon algebraic tensor definitions; geometry itself realizes the tensor structure.
+
+
+Consequences
+
+
+The algebraic and categorical interpretation of Spherepop shows that merge and collapse induce a symmetric monoidal structure on canonical representatives. This structure is sufficiently expressive to provide a geometric foundation for tensor-style computation and geometric interpretations of tensor logic. From this perspective, tensor logic appears not as an external framework but as an algebraic manifestation of Spherepop’s internal monoidal structure. The resulting algebraic semantics motivates the categorical interpretations and logical embeddings developed in the following sections.
+
+\newpage
+
+Differential and Continuous Variants
+
+
+The preceding development has treated collapse and merge as discrete geometric primitives. In practical computation, particularly in machine learning, continuous variants of these operations are essential. In this section we introduce continuous and differentiable formulations of merge and collapse, establishing a geometric counterpart to differentiable programming. These continuous formulations provide a path to incorporating gradient-based optimization, backpropagation, and learning while retaining the geometric perspective that distinguishes Spherepop from tensor-based models.
+
+
+Continuous Collapse
+
+
+Let $\mathcal{R}_d$ denote a suitable function space of regions equipped with a metric or topological structure. Rather than defining $\mathrm{pop}$ as a projection onto canonical representatives, we define a one-parameter family of continuous operators
+\[
+\mathrm{pop}_\tau:\mathcal{R}_d\to\mathcal{R}_d,\qquad \tau\in[0,1],
+\]
+with $\mathrm{pop}_0=\mathrm{id}$ and $\mathrm{pop}_1=\mathrm{pop}$, such that $\mathrm{pop}_\tau$ depends smoothly on $\tau$. Intuitively, $\tau$ controls the degree of collapse, with $\tau=0$ representing full geometric detail and $\tau=1$ representing complete abstraction. In voxel, mesh, or implicit-surface implementations, $\mathrm{pop}_\tau$ may be realized by progressive smoothing, erosion, or canonicalization of interior structure.
+
+This continuous family induces a trajectory from a detailed region to its canonical representative,
+\[
+A_\tau=\mathrm{pop}_\tau(A),\qquad \tau\in[0,1],
+\]
+providing a geometric analog of continuous relaxation and smoothing flows used in differentiable rendering and implicit neural representations.
+
+
+Differentiable Merge
+
+
+Merge is defined algebraically by $A\diamond B=\mathrm{pop}(A\cup B)$, but the geometric union and subsequent collapse can be replaced by differentiable approximations. Let $U_\varepsilon$ denote a differentiable blending operator that approximates set union for small $\varepsilon>0$,
+\[
+A\;\widetilde{\cup}_\varepsilon\; B = U_\varepsilon(A,B),
+\]
+where $U_\varepsilon$ is chosen from a family of smooth blending operators such as soft-union or differentiable set-theoretic operators. Then differentiable merge is defined by
+\[
+A\diamond_\varepsilon B = \mathrm{pop}_1(U_\varepsilon(A,B)).
+\]
+The resulting operator is fully differentiable provided $U_\varepsilon$ and $\mathrm{pop}_\tau$ are differentiable. This formulation provides a foundation for gradient-based optimization of geometric computations.
+
+
+Collapse Flows and Gradient Propagation
+
+
+The continuous collapse $\mathrm{pop}_\tau$ induces a geometric flow defined by
+\[
+\frac{d}{d\tau}A_\tau = V(A_\tau),
+\]
+where $V$ is a vector field representing the collapse direction in the chosen geometric representation. The flow interpretation permits differentiation through the collapse operator via the chain rule,
+\[
+\frac{\partial A_1}{\partial A_0}
+   = \int_0^1 DV(A_\tau)\,d\tau
+\]
+provided the differential $DV$ exists along the collapse trajectory. In practical settings, $V$ may be implemented by gradient-based displacement or smoothing operations, permitting learned collapse dynamics.
+
+
+Parametric Collapse Families
+
+
+In learning systems, the collapse operator may be parameterized by learnable parameters $\theta$, resulting in
+\[
+\mathrm{pop}_\theta:\mathcal{R}_d\to\mathcal{R}_d.
+\]
+The objective is not solely to eliminate detail but to learn an abstraction function that preserves relevant structure. When $\mathrm{pop}_\theta$ is differentiable in $\theta$, we may optimize it using standard gradient methods. This promotes collapse from a fixed projection to a learnable abstraction, reflecting domain knowledge encoded through optimization rather than manual specification.
+
+
+Continuous Merge--Collapse Semantics
+
+
+The continuous merge--collapse operator is defined by
+\[
+A\diamond_{\varepsilon,\theta} B
+  = \mathrm{pop}_{\theta}(U_\varepsilon(A,B)).
+\]
+Varying $\varepsilon$ and $\theta$ provides a continuum of computational behaviors ranging from strict geometric merge--collapse to soft blending and learnable abstraction. These continuous variants generalize Spherepop semantics to a differentiable computational calculus, enabling gradient propagation, backpropagation, and optimization while maintaining geometric intuition.
+
+
+Analytic Equivalence and Smooth Approximations
+
+
+Discrete merge--collapse semantics are recovered in the limit
+\[
+\lim_{\varepsilon\to 0}\mathrm{pop}_\theta\circ U_\varepsilon
+    = \mathrm{pop},
+\]
+assuming $\theta$ is chosen to emulate canonicalization. In this manner, differentiable Spherepop constitutes a smooth approximation of the discrete calculus, and continuous semantics converge to classical Spherepop in the limit. The continuous formulation preserves expressive power while enabling analytic reasoning and optimization, establishing Spherepop as a geometric foundation for differentiable computation.
+
+
+Discussion
+
+
+Differentiable Spherepop bridges geometric computation with continuous optimization. Collapse becomes a smooth projection, merge becomes differentiable aggregation, and entire Spherepop programs may be differentiated end-to-end. This establishes a conceptual foundation for learning geometric computations, optimizing collapse rules, and integrating Spherepop into gradient-based frameworks while preserving its geometric character.
+
+\newpage
+
+Expressiveness and Computability
+
+
+We now examine the expressive capacity of Spherepop as a computational formalism. Earlier sections established its informal ability to encode logical and functional behavior. Here we construct precise encodings of classical models of computation, beginning with simple boolean circuits and proceeding toward encodings of lambda calculus and register machines. The purpose of this section is not only to assert computational power, but to articulate the manner in which geometric abstraction and merge--collapse dynamics implement the standard primitives of symbolic computation.
+
+
+Boolean Algebra and Circuit Semantics
+
+
+Boolean values in Spherepop are represented by the presence or absence of regions modulo collapse. Let $T$ denote a canonical region representing truth, and let $\varnothing$ (or a collapsed absence) represent false. Boolean connectives may be defined through merge and controlled collapse, subject to structural regularity assumptions on collapse. For example,
+\[
+A \vee B := \mathrm{pop}(A \cup B),
+\]
+and suitable collapse conditions ensure that the result collapses to $T$ exactly when one or both regions are nonempty. Logical conjunction may be defined by requiring that collapse be delayed until after mutual interaction, thereby establishing that
+\[
+A \wedge B = \mathrm{pop}((A\cap B)\cup\text{aux}),
+\]
+where auxiliary constructions enforce collapse only when both operands contribute. Negation may be defined by complement regions (when such operations are permitted in the region space) or by controlled interaction with a reference region. These definitions yield a well-formed boolean algebra provided collapse respects canonicalization.
+
+Boolean circuits are assembled by composing these primitives according to the geometry of merge--collapse interaction. A circuit becomes a spatial configuration of regions whose evaluation under Spherepop semantics corresponds to the logical outcome of the circuit.
+
+
+Encoding Finite-State Computation
+
+
+Finite-state automata may be encoded by associating each state with a distinct region, and transitions with controlled merge--collapse dynamics. Let $\{S_i\}$ denote canonical regions representing states. Given a transition $S_i\xrightarrow{a} S_j$, one constructs a merge pattern which, on interaction with input region $A$, collapses to $S_j$. Acceptance is determined by the canonicality of the terminal region. In this manner, Spherepop simulates any regular language by corresponding geometric control rules, demonstrating that the merge--collapse calculus subsumes finite-state computation.
+
+
+Toward Turing Completeness
+
+
+To establish Turing completeness, one must show that Spherepop can encode unbounded memory and simulate arbitrary rewrite sequences. Several routes exist. One approach is to encode lambda calculus, representing lambda abstraction by controlled collapse rules and application by merge. Another approach is to encode register machines or cellular automata by arranging regions in a spatial grid with collapse rules that enforce local update semantics.
+
+We adopt the lambda-calculus approach, as it is the most direct generalization of the remark that collapse acts as abstraction and merge acts as application.
+
+
+Lambda-Term Encoding
+
+
+Let $\Lambda$ be the set of lambda terms generated by
+\[
+M ::= x \mid \lambda x. M \mid M\,N.
+\]
+We define an encoding $\llbracket\,\cdot\,\rrbracket_\Lambda: \Lambda \to \mathcal{R}_d$ mapping lambda terms to regions. Variables are represented by canonical primitive regions $V_x$, abstractions by controlled collapse families, and application by merge. Formally,
+\[
+\llbracket x \rrbracket_\Lambda = V_x,
+\qquad
+\llbracket \lambda x. M \rrbracket_\Lambda =
+C_x(\llbracket M \rrbracket_\Lambda),
+\qquad
+\llbracket M\,N \rrbracket_\Lambda =
+\llbracket M \rrbracket_\Lambda\,\diamond\,
+\llbracket N \rrbracket_\Lambda,
+\]
+where $C_x$ collapses all contributions associated with $x$, yielding a canonical representation of the abstraction. The merge--collapse dynamics then implement $\beta$-reduction geometrically, removing the contribution of the bound variable and forming a collapsed region representing the result of substitution.
+
+
+Simulation of $\beta$-Reduction
+
+
+Let us sketch the simulation of $\beta$-reduction. Consider $(\lambda x.M)\,N$. Under the geometric encoding, merge produces a region in which $V_x$ and $\llbracket N\rrbracket_\Lambda$ interact, and subsequent collapse erases the interior contribution of $x$ in favor of the canonical representative of $N$. The result collapses to $\llbracket M[N/x]\rrbracket_\Lambda$ up to geometric equivalence. Thus,
+\[
+\llbracket (\lambda x.M)\,N \rrbracket_\Lambda
+\rightsquigarrow
+\llbracket M[N/x]\rrbracket_\Lambda,
+\]
+which is precisely $\beta$-reduction. Iterated merge--collapse steps simulate repeated $\beta$-reductions. Termination requires care, but the encoding suffices to show that Spherepop can emulate lambda-calculus computation.
+
+
+Computational Completeness
+
+
+Because lambda calculus is Turing complete, and Spherepop simulates $\beta$-reduction up to geometric equivalence, it follows that Spherepop is computationally complete. Formally, any Turing machine computation may be encoded as a lambda term and evaluated in Spherepop under merge--collapse semantics. Thus, Spherepop is at least as expressive as the untyped lambda calculus.
+
+Moreover, extensions to type theories, linear logic, and functional programming arise by restricting collapse and merge rules or by adding controlled interaction conditions. A detailed treatment of these systems is postponed to later sections.
+
+
+Complexity Considerations
+
+
+The computational complexity of Spherepop evaluation depends on the geometric representation of regions and the cost of merge and collapse. Under voxel representation, merge reduces to bitwise union and collapse to morphological smoothing, yielding polynomial-time operations. Under mesh representation, constructive solid geometry may increase complexity, but approximate methods reduce cost. The number of merge--collapse steps dominates runtime, and in general, the evaluation of arbitrary Spherepop programs can be computationally expensive. Precise complexity bounds require assumptions about collapse termination and geometric simplification routines, but the existence of exponential behavior follows from the encoding of lambda calculus.
+
+
+Discussion
+
+
+Spherepop is expressive enough to simulate standard computational systems, including boolean circuits, finite-state automata, and Turing machines. This expressiveness arises from the interpretation of merge as composition and collapse as abstraction, together with the capacity of regions to encode information in geometric form. The geometric style does not diminish computational power; instead, it provides a visual and spatial interpretation of classical computation.
+
+\newpage
+
+Formal Semantics
+
+
+We now present formal semantic foundations for Spherepop. The purpose of this section is twofold. First, we introduce a precise operational semantics for merge--collapse computation. Second, we develop a categorical semantics that abstracts geometric details and treats Spherepop computations as morphisms in a suitable category. The resulting formalism clarifies the meaning of computation in terms of algebraic structure, enabling comparison with existing models such as lambda calculus and Tensor Logic. The formal semantics are independent of particular geometric implementations and apply equally to discrete, continuous, and differentiable variants.
+
+
+Operational Semantics
+
+
+Let $\mathcal{R}$ denote a class of geometric regions satisfying appropriate regularity conditions (e.g.\ closed, bounded, connected). A Spherepop configuration is a finite multiset of regions
+\[
+C = \{A_1,\dots,A_n\},\qquad A_i\in\mathcal{R}.
+\]
+The state of a computation at time $t$ is a configuration $C_t$. The operational semantics is defined by two transition rules:
+\[
+C_t \longrightarrow C_{t+1}
+\]
+whenever either a merge or a collapse transition applies. Merge transitions form the union of eligible regions, and collapse transitions replace regions by canonical representatives.
+
+Formally, a merge transition takes $A_i,A_j\in C_t$ and produces
+\[
+C_{t+1} = (C_t\setminus\{A_i,A_j\}) \cup \{\mathrm{pop}(A_i\cup A_j)\}.
+\]
+A collapse transition takes $A_i$ and replaces it with $\mathrm{pop}(A_i)$ whenever $\mathrm{pop}(A_i)\neq A_i$. Evaluation continues until no further merge or collapse rules apply, or diverges if an infinite sequence of transitions is possible.
+
+
+Normal Forms
+
+
+A configuration $C$ is in \emph{normal form} if $\mathrm{pop}(A)=A$ for every region $A\in C$ and no merge applies. Because collapse is idempotent, normal forms are fixed points of collapse. If merges are acyclic and collapse strictly reduces interior geometric complexity, evaluation terminates in finitely many steps. However, because Spherepop can encode lambda calculus (as proved earlier), termination is undecidable for arbitrary programs. Thus, evaluation is semantically well-defined but not guaranteed to halt.
+
+
+Equivalence of Configurations
+
+
+Different geometric configurations may represent the same computational state. To identify equivalent configurations, we introduce a semantic equivalence relation $\simeq$ on $\mathcal{R}$ generated by the axioms
+\[
+A\simeq \mathrm{pop}(A),\qquad
+A\diamond B \simeq \mathrm{pop}(A\cup B).
+\]
+Two configurations are equivalent if they differ only by these equivalences. In particular, all regions that collapse to the same canonical representative are considered semantically equal. The operational semantics induces equivalence classes of configurations that correspond to semantic values.
+
+
+Denotational Semantics
+
+
+We now define a denotational semantics that assigns to each Spherepop expression a semantic object in an abstract domain. Let $\mathcal{D}$ be a semantic domain of equivalence classes of regions under $\simeq$. For each primitive region $A$, let $[A]\in \mathcal{D}$ be its equivalence class. Define
+\[
+\llbracket A \rrbracket = [A],\qquad
+\llbracket\mathrm{pop}(t)\rrbracket = \llbracket t\rrbracket,\qquad
+\llbracket t_1\diamond t_2\rrbracket
+  = \llbracket t_1 \rrbracket \sqcup \llbracket t_2\rrbracket,
+\]
+where $\sqcup$ denotes the induced binary operation on equivalence classes. Because collapse identifies values up to canonical representation, denotational semantics collapses syntactic distinctions that carry no semantic information. Thus, denotational semantics is a natural abstraction of operational computation.
+
+
+Categorical Semantics
+
+
+Spherepop may also be interpreted categorically. Let $\mathsf{Sph}$ be a category whose objects are semantic equivalence classes of regions and whose morphisms represent merge--collapse computations. Morphisms compose by merge, and identity morphisms correspond to regions that collapse to themselves. Formally, each object is an equivalence class $[A]$, and each morphism $f:[A]\to[B]$ corresponds to a region $C$ such that
+\[
+[B] = [A] \sqcup [C].
+\]
+Composition is induced by merge,
+\[
+g\circ f = f\diamond g,
+\]
+and identity morphisms satisfy $A\diamond \mathrm{pop}(A)=A$. In this manner, $\mathsf{Sph}$ becomes a monoidal category under merge, with unit given by an empty or identity region. Collapse then induces a monoidal structure compatible with equivalence of objects.
+
+
+Adjunctions and Quotient Structure
+
+
+Collapse may be viewed as a quotient functor that identifies regions differing only by interior detail. Let $\mathsf{Geo}$ denote a geometric category whose objects are regions, and let $\mathsf{Sph}$ be the quotient category under $\simeq$. Then collapse induces a functor
+\[
+Q:\mathsf{Geo}\to\mathsf{Sph}
+\]
+that is surjective on objects and quotient on morphisms. The kernel of $Q$ consists precisely of morphisms that differ only by internal geometric variation eliminated by collapse. This interpretation clarifies the semantic role of collapse and supports comparisons with Tensor Logic, where linear maps serve as morphisms and equivalence classes correspond to tensor identifications.
+
+
+Soundness and Adequacy
+
+
+Operational semantics is sound with respect to denotational semantics: if $t\rightsquigarrow t'$, then $\llbracket t\rrbracket =\llbracket t'\rrbracket$. Adequacy holds under the assumption that collapse preserves semantic equivalence, so that denotational semantics reflects operational behavior. In particular, normal forms correspond to canonical representatives in $\mathcal{D}$. The combination of soundness and adequacy establishes a precise connection between geometric computation and its semantic interpretation.
+
+
+Discussion
+
+
+Formal semantics clarifies the computational meaning of merge and collapse independently of specific geometric implementation. Operational semantics interprets Spherepop as iterative collapse of geometric configurations, denotational semantics interprets computation as evaluation into equivalence classes of regions, and categorical semantics interprets Spherepop as a monoidal category in which merge acts as composition. Each perspective provides a distinct mathematical account, demonstrating that Spherepop possesses the necessary structure to serve as a foundation for geometric computing.
+
+\newpage
+
+Comparison with Tensor-Based Computational Models
+
+
+We now turn to the relationship between Spherepop and tensor-based representations of computation. While the two frameworks appear conceptually distant—one geometric and collapse-based, the other algebraic and coordinate-based—they share deep structural correspondences. In particular, tensor operations may be understood as algebraic projections of geometric merge--collapse dynamics, and conversely Spherepop may be interpreted as a geometric enrichment of tensor computation. The goal of this section is not to reproduce existing tensor formalisms, but to articulate a precise correspondence between algebraic and geometric modes of computation.
+
+
+Algebraic Representation of Merge
+
+
+Merge combines geometric regions by union and collapse, producing a canonical representative. In tensor formalisms, combination of values is typically implemented by tensor addition, concatenation, multiplication, or contraction. The algebraic operation
+\[
+u\otimes v
+\]
+forms a structured composite of vectors $u$ and $v$. By contrast, Spherepop forms a geometric composite and then collapses it. However, once collapse has eliminated internal detail, the resulting region may be represented by a point in an abstract embedding space. That abstract representation functions as a tensor if the embedding is linear and respects composition. Thus, tensor combination may be viewed as
+\[
+E(A\diamond B)
+= E(A)\otimes E(B),
+\]
+in the special case where $E$ is an embedding from spheres to tensors that respects merge, at least up to equivalence. Not every embedding possesses this property, but sufficiently regular collapse yields a canonical representative enabling such an identification.
+
+
+Collapse as Nonlinear Activation
+
+
+In tensor-based neural computation, nonlinearity is supplied by activation functions. In Spherepop, collapse plays this role, projecting geometric unions into canonical forms. Algebraically, collapse induces a nonlinear map
+\[
+E(\mathrm{pop}(A)) = \sigma(E(A)),
+\]
+where $\sigma$ is a nonlinear function (e.g.\ ReLU, sigmoid) determined by the collapse rule. Collapse thus serves as a nonlinearity consistent with tensor operations under suitable embeddings.
+
+
+Tensor Contraction and Geometric Abstraction
+
+
+Tensor contraction reduces a composite tensor to a lower-dimensional tensor by summation over indices. Conceptually, contraction eliminates internal structure while preserving global dependencies. Collapse performs a parallel operation: internal features of a region are eliminated while global structure is preserved. Hence, both contraction and collapse implement abstraction, but collapse is geometric rather than algebraic.
+
+Formally, if $T$ is a composite tensor, contraction may be written
+\[
+\mathrm{contr}(T) = T \star K,
+\]
+for some kernel $K$. Collapse may be written in analogous form
+\[
+\mathrm{pop}(A) = A \star \Phi,
+\]
+where $\Phi$ encodes canonicalization. Under this reading, tensor contraction and collapse implement analogous abstraction principles.
+
+
+Linearization as Projection
+
+
+Spherepop operations are geometric by construction. Tensor operations are linear algebraic by construction. The relation between the two frameworks may be interpreted through projection. Given a geometric region $A$, a tensor representation may be obtained by applying a linear embedding
+\[
+E:\mathcal{R}\to \mathbb{R}^n,
+\]
+mapping geometric objects to vectors. Under suitable regularity assumptions, merge--collapse dynamics project under $E$ to algebraic operations on vectors. The algebraic structure is thus a quotient of the geometric structure. Conversely, geometric structure may be recovered only up to equivalence from the algebraic image.
+
+
+Interpretation of Computation
+
+
+Tensor representations interpret computation as algebraic manipulation of coordinate arrays. Spherepop interprets computation as geometric interaction of regions. Nevertheless, both frameworks encode abstraction, composition, and aggregation. Algebraic computation models information as coordinate vectors, while geometric computation models information as spatial configurations. Despite the difference in representation, both frameworks express function composition and abstraction, and therefore possess comparable expressive power.
+
+
+Uniqueness of Collapse
+
+
+A distinctive feature of Spherepop is that collapse is geometrically motivated and need not be linear in any algebraic representation. By contrast, tensor computation requires nonlinear activation to prevent reduction to linear transformations. Collapse naturally supplies a nonlinear structure that is compatible with geometric representation and admits a tensor analogue via embedding. This mechanism suggests that geometric abstraction may be a more primitive computational concept than algebraic nonlinearity.
+
+
+Discussion
+
+
+The comparison between geometric and algebraic computation reveals a complementary relationship: tensor operations may be regarded as algebraic projections of geometric merge--collapse dynamics, and Spherepop as a geometric enrichment of tensor computation. These correspondences help connect geometric models of computation with established algebraic techniques, without assuming that either framework is subordinate to the other. The contrast between spatial abstraction through collapse and algebraic abstraction through contraction illuminates the conceptual foundations underlying both models and suggests avenues for hybrid approaches.
+
+\newpage
+
+Implementation Theory and Geometric Data Structures
+
+
+This section develops a theoretical account of Spherepop implementation. Earlier presentations adopted an informal geometric viewpoint; we now investigate the algorithmic foundations of merge and collapse for practical deployment in computational geometry. Our objective is not to recommend a single implementation strategy, but to identify structural constraints that ensure correctness, computational well-definedness, and stable behavior across representations.
+
+
+Representational Classes
+
+
+A Spherepop implementation is determined by a class $\mathcal{G}$ of geometric objects, a merge operator $U:\mathcal{G}\times\mathcal{G}\to\mathcal{G}$ approximating set union, and a collapse operator $C:\mathcal{G}\to\mathcal{G}$ enforcing canonicalization. Admissible representation classes include spheres, ellipsoids, convex polytopes, axis-aligned bounding boxes, implicit surfaces, voxel representations, and meshes. Each representation yields distinct algorithmic properties and different asymptotic behavior of merge and collapse.
+
+A representation class is said to be \emph{computationally coherent} if $U$ and $C$ are computable at finite cost, and $C$ is idempotent. Many geometric representations satisfy these conditions. Spherical and voxel classes are computationally coherent by construction. Mesh representations may require approximation schemes to enforce idempotent collapse.
+
+
+Union and Canonicalization
+
+
+Merge is defined abstractly by $A\diamond B=C(U(A,B))$. A naive implementation would require computing exact geometric unions; however, exact union for arbitrary shapes may be computationally expensive. Instead, many implementations approximate union by either (a) constructive solid geometry (CSG), (b) union of implicit level sets, or (c) bitwise union of voxel occupancy grids.
+
+In computationally coherent settings, collapse $C$ must satisfy $C\circ C=C$. Canonicalization often proceeds by contracting geometric representations along geometric flows, smoothing mesh features, or thresholding voxel occupancy. Theoretical correctness requires only that $C$ identifies interior structure and stabilizes under iteration. Practical design balances computational tractability against representational fidelity.
+
+
+Mesh-Based Realizations
+
+
+Mesh representations treat regions as polyhedral objects embedded in $\mathbb{R}^3$, equipped with boundary and adjacency information. Union may be approximated via CSG, while collapse is implemented by mesh smoothing or decimation. Mesh-based collapse resembles geometric regularization methods in computational geometry, although mesh simplification must be performed carefully to ensure idempotence. Surface quality, complexity control, and topological preservation depend on collapse heuristics.
+
+The primary difficulty arises from ensuring that collapse converges to a canonical representative independent of triangulation order. Approximate canonicalization is achievable using geodesic smoothing, Laplacian regularization, or convex-hull collapse. The convex hull is particularly well-suited because it guarantees idempotence and provides a computationally coherent collapse, albeit at the cost of discarding shape details. When interior structure is semantically irrelevant, convex-hull collapse yields a satisfactory canonical representation.
+
+
+Voxel-Based Realizations
+
+
+Voxel representations approximate regions by occupancy grids, enabling rapid computation of union via bitwise OR. Collapse reduces occupancy via thresholding or morphological operators, provided collapse operations stabilize after finite iterations. The computational cost scales with grid resolution, and memory resources can be substantial for high-dimensional grids. Nevertheless, voxel collapse remains conceptually straightforward and well-suited for parallelization, thus providing a practical foundation for large-scale Spherepop systems.
+
+In high-performance settings, GPUs are well-suited for voxel-based computation. Merge and collapse map efficiently onto parallel bitwise operations or parallel morphological operators. In such cases, Spherepop evaluation may be implemented as a sequence of GPU kernels, highlighting its suitability for large-scale geometric computation.
+
+
+Implicit Surface Realizations
+
+
+Implicit surfaces represent regions as level sets of scalar functions $f(x)=0$. This representation is particularly natural in differentiable Spherepop, as union operations correspond to differentiable blending of implicit functions and collapse corresponds to smoothing or reparameterization. Implicit collapse may be implemented via curvature-driven flows, yielding smooth level sets that converge to canonical representatives. Although implicit collapse is computationally intensive, its continuous formulation supports differentiability and analytic reasoning, and therefore constitutes a promising direction for research in differentiable geometric computation.
+
+
+Data Structures for Efficient Evaluation
+
+
+Efficient evaluation requires spatial indexing and caching of collapse operations. Common geometric data structures such as octrees, k-d trees, bounding-volume hierarchies (BVH), and spatial hash grids provide accelerated access to region adjacency, overlap detection, and merge scheduling. These structures significantly reduce pairwise intersection costs, and thus asymptotic complexity of merge scheduling. BVHs are well-established in rendering and physics simulation and readily adapted to Spherepop.
+
+In practice, performance depends largely on the cost of collapse. Collapse may be amortized using caching or incremental update schemes, particularly if collapse eliminates most interior detail. For dynamic computations, hierarchical spatial decomposition reduces collapse cost by collapsing local neighborhoods first, then applying global canonicalization.
+
+
+Complexity Analysis
+
+
+The asymptotic complexity of merge operations depends on the representation class. For voxels with resolution $n^3$, voxel merge costs $O(n^3)$ in the worst case, although sparse voxel structures may reduce cost. Mesh-union complexity depends on polygon count, typically $O(k\log k)$ or higher, depending on the complexity of CSG operations. Implicit unions depend on the complexity of blending operations and level-set reinitialization.
+
+Collapse complexity is dominated by canonicalization. In convex-hull collapse, time complexity scales with the cost of computing the convex hull, typically $O(k\log k)$ for $k$ vertices; in voxel collapse, complexity depends on morphological filtering operations; in implicit collapse, complexity depends on PDE integration and reinitialization.
+
+Overall evaluation runtime depends on the number of merge--collapse steps, analogous to the number of reduction steps in lambda calculus. Because Spherepop is computationally complete, worst-case evaluation complexity is unbounded; however, practical implementations may be designed to enforce syntactic restrictions or collapse limits that ensure termination or yield useful partial approximations.
+
+
+Discussion
+
+
+Implementation theory demonstrates that Spherepop accommodates multiple geometric representations, each with distinct computational properties. No single representation optimally balances expressiveness, efficiency, and theoretical regularity. Instead, Spherepop defines a semantic foundation within which different implementation strategies may evolve independently, united by collapse and merge as fundamental operations. This separation of semantics from implementation is crucial for connecting geometric computation with practical algorithmic realizations and for enabling a principled comparison of geometric computation with algebraic methods.
+
+\newpage
+
+Differentiable Spherepop and Gradient-Based Optimization
+
+
+The preceding sections have established discrete and continuous variants of merge and collapse. We now examine the analytic structure required to differentiate Spherepop computations and thus integrate them with gradient-based learning methodologies. In particular, we describe conditions under which collapse constitutes a differentiable projection, characterize merge as a differentiable blending operator, and show how gradient flow propagates through merge--collapse sequences. Our objective is not to reduce geometric computation to algebraic gradient flow, but to articulate a framework in which classical optimization techniques may be applied to geometric evolutions.
+
+
+Differentiability of Collapse
+
+
+Let $\mathcal{G}$ be a differentiable manifold of geometric regions parameterized by shape functions, meshes, implicit level sets, or voxel occupancy fields. A differentiable collapse operator is a map
+\[
+C_\theta:\mathcal{G}\rightarrow \mathcal{G},
+\]
+smooth in both its input and its parameter $\theta$. Differentiability is understood in the Fréchet sense when $\mathcal{G}$ is modeled as a Banach space of implicit functions, or in the manifold sense when $\mathcal{G}$ represents a smooth surface or embedded submanifold. Under either representation, differentiability requires that small perturbations in the input region lead to small perturbations in the collapsed region.
+
+The collapse operator $C_\theta$ must satisfy $C_\theta(C_\theta(A))=C_\theta(A)$ (idempotence) and depends smoothly on $\theta$, thereby enabling optimization of collapse rules by gradient descent. The functional form of $C_\theta$ may encode smoothing, radius contraction, curvature flow, or level-set reparameterization, each admitting differentiable approximations under appropriate discretizations.
+
+
+Differentiable Merge
+
+
+Merge is differentiable when the union operator is replaced by a differentiable blending operator,
+\[
+U_\varepsilon:\mathcal{G}\times\mathcal{G}\rightarrow\mathcal{G},
+\]
+smooth in both arguments and converging to geometric union in the limit as $\varepsilon\to 0$. The differentiable merge operator is then defined by
+\[
+M_{\varepsilon,\theta}(A,B)=C_\theta\bigl(U_\varepsilon(A,B)\bigr),
+\]
+smooth jointly in $A$, $B$, and $(\varepsilon,\theta)$. Differentiability allows gradient information to flow through merge operations just as in tensor-based neural layers, while retaining geometric semantics.
+
+
+Gradient Flow Through Collapse
+
+
+Let $\Phi:\mathcal{G}\rightarrow \mathbb{R}$ be a differentiable loss functional measuring the discrepancy between a Spherepop computation and a target. To optimize $\theta$, one considers the composite map $\Phi\circ C_\theta$, whose derivative is
+\[
+D_\theta(\Phi\circ C_\theta)(A)
+= D\Phi\bigl(C_\theta(A)\bigr)\circ D_\theta C_\theta(A).
+\]
+Since $C_\theta$ is idempotent, its derivative must annihilate directions corresponding to collapsed information and preserve canonical directions. The resulting derivative is a projection onto the tangent space of canonical directions determined by collapse. This contrasts with classical neural networks, in which activation functions impose nonlinearity without geometric projection.
+
+
+Gradient Propagation Through Merge--Collapse Sequences
+
+
+For composite computations of the form
+\[
+A_0 \mapsto A_1 = M_{\varepsilon,\theta}(A_0,B_0)
+           \mapsto A_2 = M_{\varepsilon,\theta}(A_1,B_1)
+           \mapsto \cdots,
+\]
+gradient flow proceeds by repeated application of the chain rule,
+\[
+D\Phi(A_k) =
+D\Phi(A_{k+1})\circ
+D M_{\varepsilon,\theta}(A_k,B_k),
+\]
+propagating sensitivity through both merge and collapse. Unlike tensor networks, gradient directions are constrained by geometric projection; collapse eliminates directions that correspond to collapsed interior states, ensuring that the gradient landscape is shaped by geometric abstraction. This yields a geometric analogue of backpropagation, in which learning corresponds to adapting collapse rules and merge interactions.
+
+
+Analytic Collapse Flows
+
+
+Continuous collapse flows may be defined by ordinary differential equations
+\[
+\frac{\mathrm{d}A(t)}{\mathrm{d}t}=V_\theta\bigl(A(t)\bigr),
+\qquad A(0)=A_0,
+\]
+whose solution converges to a canonical fixed point
+\[
+A_\infty=C_\theta(A_0).
+\]
+Differentiability follows from standard existence and uniqueness theorems for ODEs, provided $V_\theta$ is smooth. Analytic collapse flows provide a principled foundation for differentiable canonicalization and allow gradient-based learning of collapse dynamics.
+
+
+Optimization of Collapse Rules
+
+
+Since $C_\theta$ reduces interior structure, optimization of $\theta$ amounts to learning a canonical abstraction function. In machine learning, abstraction functions are typically fixed, whereas in Spherepop they are learnable geometric projections. Learning a collapse function that preserves task-relevant structure offers a novel alternative to conventional feature extraction methods. Collapse becomes not merely a computational primitive, but a learned geometric abstraction mechanism whose semantics are domain-specific rather than predefined.
+
+
+Discussion
+
+
+Differentiable Spherepop establishes a continuous and analytic extension of geometric computation. Merge becomes differentiable aggregation, collapse becomes a differentiable abstraction operator, and Spherepop admits gradient-based optimization with geometric semantics preserved. This integration of geometric computing and differentiable programming suggests future research directions in geometric learning, differentiable geometry, and continuous computational semantics, and provides a conceptual alternative to tensor-oriented views of neural computation.
+
+\newpage
+
+Complexity, Decidability, and Termination
+
+
+The expressive power of Spherepop places it squarely among computationally complete formalisms. This section examines the corresponding theoretical implications, including computational complexity, decidability of termination, and asymptotic cost of evaluation. Our discussion emphasizes that the merge--collapse calculus, while conceptually geometric, inherits undecidability phenomena intrinsic to universal computation. At the same time, Spherepop admits meaningful complexity analyses under syntactic and geometric restrictions.
+
+
+Undecidability of Termination
+
+
+Let $t$ be a Spherepop term and let $\rightsquigarrow$ denote one-step operational reduction. The termination problem asks whether evaluation
+\[
+t \rightsquigarrow t_1 \rightsquigarrow t_2 \rightsquigarrow \cdots
+\]
+halts after finitely many steps. Because Spherepop simulates untyped lambda calculus (Section~8), and termination in lambda calculus is known to be undecidable, it follows that termination in Spherepop is undecidable; that is, no algorithm can determine for all possible inputs whether a given Spherepop term terminates.
+
+Formally, if $T_{\Lambda}$ is the termination predicate for lambda calculus, and $E$ is the encoding defined previously, then
+\[
+T_{\Lambda}(M)\iff T_{\mathrm{Sph}}(E(M)),
+\]
+where $T_{\mathrm{Sph}}$ denotes the termination predicate for Spherepop. Since $T_{\Lambda}$ is undecidable, $T_{\mathrm{Sph}}$ is also undecidable. Thus, Spherepop inherits all classical undecidability properties of universal computation.
+
+
+Worst-Case Complexity
+
+
+Because Spherepop simulates lambda calculus, the worst-case cost of evaluating a Spherepop expression grows at least as fast as the worst-case cost of beta-reduction. In the absence of syntactic constraints, worst-case complexity cannot be bounded by any primitive recursive function. More precisely, we may encode lambda terms whose evaluation requires arbitrarily large numbers of merge--collapse steps, mimicking Turing machine behavior on hard instances.
+
+At the same time, implementations of merge and collapse impose additional geometric costs. The complexity of a single merge depends on the geometric representation; voxel representations have cost proportional to grid size, mesh representations depend on polygonal complexity, and implicit-surface implementations depend on PDE integration. Thus, worst-case evaluation cost is bounded below by beta-reduction complexity and above by geometric costs imposed by merge--collapse operators.
+
+
+Syntactic Restrictions and Guaranteed Termination
+
+
+Certain syntactic fragments of Spherepop enjoy guaranteed termination. For example, if collapse is applied eagerly and each merge strictly reduces dimensional or volumetric measure, then evaluation must terminate in finitely many steps. Let $\mu(A)$ denote a geometric measure on region $A$. Assume collapse preserves $\mu$ and that merge satisfies
+\[
+\mu(A\diamond B) < \mu(A) + \mu(B).
+\]
+Inductively, repeated merge--collapse reduces the sum of measures and must terminate. Such geometric constraints enforce termination, but at the cost of reducing expressiveness. These fragments are analogous to strongly normalizing fragments of lambda calculus and linear logic.
+
+
+Bounded Collapse Depth
+
+
+Termination also follows when collapse depth is bounded. Define the collapse depth $d(t)$ as the number of nested collapse operations in $t$. If $d(t)$ is bounded by a constant independent of evaluation, then repeated application of collapse cannot iterate indefinitely. For instance, if $C$ represents collapse and $C(C(A))=C(A)$ by idempotence, then each collapse reduces or preserves depth, and cannot increase indefinitely. However, merge might reintroduce new collapsible regions; bounding collapse depth requires syntactic restrictions on the placement of merge operations.
+
+
+Tractable Fragments
+
+
+Practical implementations often adopt tractable fragments by enforcing one or more of the following:
+\begin{itemize}
+\item eager collapse after each merge,
+\item geometric bounds on collapse cost,
+\item bounded region volume in voxel representations,
+\item bounded polygon count in mesh collapse,
+\item restricted merge arity.
+\end{itemize}
+When such restrictions apply, evaluation proceeds in polynomial or quasi-polynomial time, depending on geometric complexity. In these implementations, Spherepop functions analogously to restricted lambda calculus or typed functional languages.
+
+
+Parameterized Complexity

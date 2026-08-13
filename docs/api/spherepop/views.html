@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>spherepop.views API documentation</title>
+<meta name="description" content="Derived read-only views …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>spherepop.views</code></h1>
+</header>
+<section id="section-intro">
+<p>Derived read-only views.</p>
+<p>Views are presentation/comparison functions that don't modify state.
+The key principle: views.representative() is the ONLY place that may
+choose which Quotient member to display for presentation.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="spherepop.views.extensional_view"><code class="name flex">
+<span>def <span class="ident">extensional_view</span></span>(<span>config: Config) ‑> tuple[str, tuple[str, ...]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extensional_view(config: Config) -&gt; tuple[str, tuple[str, ...]]:
+    # Sort by each option&#39;s display representative -- option_space itself
+    # may hold a mix of plain strings and Quotients, which are not
+    # mutually orderable.
+    return render_expr(config.sigma), tuple(sorted(representative(o) for o in config.option_space))</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.views.format_available_options"><code class="name flex">
+<span>def <span class="ident">format_available_options</span></span>(<span>option_space: FrozenSet[str | Quotient]) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_available_options(option_space: FrozenSet[str | Quotient]) -&gt; str:
+    &#34;&#34;&#34;Format option space for error messages.
+    
+    Helper for creating actionable error messages when operations fail.
+    &#34;&#34;&#34;
+    if not option_space:
+        return &#34;option space is empty&#34;
+    options = [representative(opt) for opt in option_space]
+    if len(options) &lt;= 5:
+        return f&#34;available options: {{{&#39;, &#39;.join(sorted(options))}}}&#34;
+    sorted_opts = sorted(options)
+    return f&#34;available options: {{{&#39;, &#39;.join(sorted_opts[:5])}, ... ({len(options)} total)}}&#34;</code></pre>
+</details>
+<div class="desc"><p>Format option space for error messages.</p>
+<p>Helper for creating actionable error messages when operations fail.</p></div>
+</dd>
+<dt id="spherepop.views.format_available_paths"><code class="name flex">
+<span>def <span class="ident">format_available_paths</span></span>(<span>expr: Sphere) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_available_paths(expr: Sphere) -&gt; str:
+    &#34;&#34;&#34;Format available Sphere paths for error messages.
+    
+    Helper for creating actionable error messages when a path is invalid.
+    &#34;&#34;&#34;
+    from spherepop.path_utils import all_sphere_paths
+    paths = [p for p in all_sphere_paths(expr) if p]  # Exclude root
+    if not paths:
+        return &#34;no nested Spheres available (only root)&#34;
+    return f&#34;valid paths: {&#39;, &#39;.join(str(p) for p in sorted(paths))}&#34;</code></pre>
+</details>
+<div class="desc"><p>Format available Sphere paths for error messages.</p>
+<p>Helper for creating actionable error messages when a path is invalid.</p></div>
+</dd>
+<dt id="spherepop.views.history_prefix_view"><code class="name flex">
+<span>def <span class="ident">history_prefix_view</span></span>(<span>config: Config, length: int) ‑> tuple[str, ...]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def history_prefix_view(config: Config, length: int) -&gt; tuple[str, ...]:
+    if length &lt; 0:
+        raise ValueError(&#34;length must be non-negative&#34;)
+    return tuple(render_event(event) for event in config.history[:length])</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.views.history_view"><code class="name flex">
+<span>def <span class="ident">history_view</span></span>(<span>config: Config) ‑> tuple[str, ...]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def history_view(config: Config) -&gt; tuple[str, ...]:
+    return tuple(render_event(event) for event in config.history)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.views.make_sphere"><code class="name flex">
+<span>def <span class="ident">make_sphere</span></span>(<span>*atoms: str) ‑> <a title="spherepop.model.Sphere" href="model.html#spherepop.model.Sphere">Sphere</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def make_sphere(*atoms: str) -&gt; Sphere:
+    return Sphere(tuple(Atom(a) for a in atoms))</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.views.render_event"><code class="name flex">
+<span>def <span class="ident">render_event</span></span>(<span>event: object) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def render_event(event: object) -&gt; str:
+    attrs = event.__dict__
+    details = &#34;, &#34;.join(f&#34;{k}={attrs[k]!r}&#34; for k in sorted(attrs.keys()))
+    return f&#34;{type(event).__name__}({details})&#34;</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.views.render_expr"><code class="name flex">
+<span>def <span class="ident">render_expr</span></span>(<span>expr: Expr) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def render_expr(expr: Expr) -&gt; str:
+    if isinstance(expr, Atom):
+        return representative(expr.name)
+    return &#34;(&#34; + &#34; &#34;.join(render_expr(item) for item in expr.items) + &#34;)&#34;</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.views.representative"><code class="name flex">
+<span>def <span class="ident">representative</span></span>(<span>value: str | Quotient) ‑> str</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def representative(value: str | Quotient) -&gt; str:
+    &#34;&#34;&#34;The one place in this codebase permitted to pick a single member to
+    stand in for a whole equivalence class, for display purposes only.
+
+    This choice (sorted-first member) carries no semantic weight: it never
+    feeds back into model.py or semantics.py, and it is not what equality,
+    hashing, or admissibility checks use to compare Quotients.
+    
+    Examples:
+        &gt;&gt;&gt; from spherepop.model import Quotient
+        &gt;&gt;&gt; from spherepop.views import representative
+        
+        # Plain string passes through unchanged
+        &gt;&gt;&gt; representative(&#34;option_a&#34;)
+        &#39;option_a&#39;
+        
+        # Quotient: pick lexicographically first member
+        &gt;&gt;&gt; q = Quotient(members=frozenset({&#34;zebra&#34;, &#34;apple&#34;, &#34;banana&#34;}))
+        &gt;&gt;&gt; representative(q)
+        &#39;apple&#39;
+        
+        # Display choice is deterministic but semantically arbitrary
+        &gt;&gt;&gt; q2 = Quotient(members=frozenset({&#34;x&#34;, &#34;y&#34;, &#34;z&#34;}))
+        &gt;&gt;&gt; representative(q2)
+        &#39;x&#39;
+        
+        # Equality and hashing use ALL members, not representatives
+        &gt;&gt;&gt; q3 = Quotient(members=frozenset({&#34;z&#34;, &#34;x&#34;, &#34;y&#34;}))
+        &gt;&gt;&gt; q2 == q3  # True: same members
+        True
+        &gt;&gt;&gt; representative(q2) == representative(q3)  # Also &#39;x&#39;
+        True
+    &#34;&#34;&#34;
+    if isinstance(value, Quotient):
+        return sorted(value.members)[0]
+    return value</code></pre>
+</details>
+<div class="desc"><p>The one place in this codebase permitted to pick a single member to
+stand in for a whole equivalence class, for display purposes only.</p>
+<p>This choice (sorted-first member) carries no semantic weight: it never
+feeds back into model.py or semantics.py, and it is not what equality,
+hashing, or admissibility checks use to compare Quotients.</p>
+<p>Examples
+-----=</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Quotient
+&gt;&gt;&gt; from spherepop.views import representative
+</code></pre>
+<h1 id="plain-string-passes-through-unchanged">Plain string passes through unchanged</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; representative(&quot;option_a&quot;)
+'option_a'
+</code></pre>
+<h1 id="quotient-pick-lexicographically-first-member">Quotient: pick lexicographically first member</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; q = Quotient(members=frozenset({&quot;zebra&quot;, &quot;apple&quot;, &quot;banana&quot;}))
+&gt;&gt;&gt; representative(q)
+'apple'
+</code></pre>
+<h1 id="display-choice-is-deterministic-but-semantically-arbitrary">Display choice is deterministic but semantically arbitrary</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; q2 = Quotient(members=frozenset({&quot;x&quot;, &quot;y&quot;, &quot;z&quot;}))
+&gt;&gt;&gt; representative(q2)
+'x'
+</code></pre>
+<h1 id="equality-and-hashing-use-all-members-not-representatives">Equality and hashing use ALL members, not representatives</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; q3 = Quotient(members=frozenset({&quot;z&quot;, &quot;x&quot;, &quot;y&quot;}))
+&gt;&gt;&gt; q2 == q3  # True: same members
+True
+&gt;&gt;&gt; representative(q2) == representative(q3)  # Also 'x'
+True
+</code></pre></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="spherepop.views.extensional_view" href="#spherepop.views.extensional_view">extensional_view</a></code></li>
+<li><code><a title="spherepop.views.format_available_options" href="#spherepop.views.format_available_options">format_available_options</a></code></li>
+<li><code><a title="spherepop.views.format_available_paths" href="#spherepop.views.format_available_paths">format_available_paths</a></code></li>
+<li><code><a title="spherepop.views.history_prefix_view" href="#spherepop.views.history_prefix_view">history_prefix_view</a></code></li>
+<li><code><a title="spherepop.views.history_view" href="#spherepop.views.history_view">history_view</a></code></li>
+<li><code><a title="spherepop.views.make_sphere" href="#spherepop.views.make_sphere">make_sphere</a></code></li>
+<li><code><a title="spherepop.views.render_event" href="#spherepop.views.render_event">render_event</a></code></li>
+<li><code><a title="spherepop.views.render_expr" href="#spherepop.views.render_expr">render_expr</a></code></li>
+<li><code><a title="spherepop.views.representative" href="#spherepop.views.representative">representative</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

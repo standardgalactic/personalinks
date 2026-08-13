@@ -1,0 +1,844 @@
+{
+  "manifest_version": "1.0",
+  "description": "Machine-readable Spherepop experiment research manifest.",
+  "experiments": [
+    {
+      "id": "01",
+      "slug": "grammar",
+      "title": "Grammar parsing baseline",
+      "class": "S",
+      "proposition": "Appendix G grammar forms parse into executable Sphere structures and operations.",
+      "c0": "Input strings over Appendix G concrete syntax.",
+      "omega": [
+        "parse_sphere",
+        "parse_operation"
+      ],
+      "observable": "Parsed sigma + parsed operation object.",
+      "invariant": "Valid forms parse deterministically into expected structure.",
+      "failure_condition": "Accepted malformed syntax or mismatched parsed structure.",
+      "operations": [
+        "POP"
+      ],
+      "claims": [
+        "prop:appendix-g-parseability"
+      ],
+      "expected_output": {
+        "contains": [
+          "sigma:",
+          "operation: PopOp"
+        ]
+      }
+    },
+    {
+      "id": "02",
+      "slug": "history",
+      "title": "History append-only behavior",
+      "class": "S",
+      "proposition": "Every successful transition appends exactly one event to history.",
+      "c0": "Nested sigma with non-empty option space.",
+      "omega": [
+        "POP"
+      ],
+      "observable": "History length and rendered history tuple.",
+      "invariant": "History length increments by one and prior prefix is preserved.",
+      "failure_condition": "Transition mutates/removes existing events or appends zero/many events.",
+      "operations": [
+        "POP",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:history-append-only"
+      ],
+      "expected_output": {
+        "contains": [
+          "history length: 1",
+          "history:"
+        ]
+      }
+    },
+    {
+      "id": "03",
+      "slug": "pop",
+      "title": "POP promotion semantics",
+      "class": "S",
+      "proposition": "POP promotes a target nested scope into its parent without mutating option-space membership.",
+      "c0": "(A (B C) D) with options {A,B,C,D}.",
+      "omega": [
+        "POP"
+      ],
+      "observable": "Rendered sigma before/after.",
+      "invariant": "After POP(1), sigma is (A B C D).",
+      "failure_condition": "POP deletes content or fails to flatten target scope.",
+      "operations": [
+        "POP"
+      ],
+      "claims": [
+        "prop:pop-flattening"
+      ],
+      "expected_output": {
+        "contains": [
+          "before: (A (B C) D)",
+          "after : (A B C D)"
+        ]
+      }
+    },
+    {
+      "id": "04",
+      "slug": "refuse",
+      "title": "REFUSE subtraction semantics",
+      "class": "S",
+      "proposition": "REFUSE contracts option space by removing requested members only.",
+      "c0": "Flat sigma with option space ['o1','o2','o3'].",
+      "omega": [
+        "REFUSE"
+      ],
+      "observable": "Sorted option-space before/after.",
+      "invariant": "o2 is removed while o1/o3 remain.",
+      "failure_condition": "REFUSE changes sigma or keeps refused option.",
+      "operations": [
+        "REFUSE"
+      ],
+      "claims": [
+        "prop:refuse-subtraction"
+      ],
+      "expected_output": {
+        "contains": [
+          "before: ['o1', 'o2', 'o3']",
+          "after : ['o1', 'o3']"
+        ]
+      }
+    },
+    {
+      "id": "05",
+      "slug": "bind",
+      "title": "BIND predicate filtering",
+      "class": "X",
+      "proposition": "BIND keeps only options satisfying its predicate under the current predicate lift.",
+      "c0": "Flat sigma with options ['alpha','axis','beta'].",
+      "omega": [
+        "BIND"
+      ],
+      "observable": "Sorted option-space before/after.",
+      "invariant": "prefix:a keeps alpha and axis, removes beta.",
+      "failure_condition": "Non-matching options survive predicate filter.",
+      "operations": [
+        "BIND"
+      ],
+      "claims": [
+        "prop:bind-predicate-filter"
+      ],
+      "expected_output": {
+        "contains": [
+          "before: ['alpha', 'axis', 'beta']",
+          "after : ['alpha', 'axis']"
+        ]
+      }
+    },
+    {
+      "id": "06",
+      "slug": "collapse",
+      "title": "COLLAPSE quotient creation",
+      "class": "X",
+      "proposition": "COLLAPSE merges declared classes into quotient options and rewrites rendered sigma accordingly.",
+      "c0": "(A B C) with options A,B,C.",
+      "omega": [
+        "COLLAPSE"
+      ],
+      "observable": "Rendered sigma and option tuple before/after.",
+      "invariant": "B and C collapse into one class; sigma renders (A B B).",
+      "failure_condition": "Collapse leaves class members independent or no quotient appears.",
+      "operations": [
+        "COLLAPSE"
+      ],
+      "claims": [
+        "prop:collapse-quotient-introduction"
+      ],
+      "expected_output": {
+        "contains": [
+          "before: ('(A B C)', ('A', 'B', 'C'))",
+          "after : ('(A B B)', ('A', 'B'))"
+        ]
+      }
+    },
+    {
+      "id": "07",
+      "slug": "confluence",
+      "title": "Confluence witness",
+      "class": "S",
+      "proposition": "Certain operation reorderings are not confluent extensionally.",
+      "c0": "(A B) with options a1,a2,b1.",
+      "omega": [
+        "BIND",
+        "REFUSE"
+      ],
+      "observable": "Left/right extensional views.",
+      "invariant": "Compared pair is non-confluent extensionally.",
+      "failure_condition": "Both paths render same extensional view when they should differ.",
+      "operations": [
+        "BIND",
+        "REFUSE",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:confluence-can-fail"
+      ],
+      "expected_output": {
+        "contains": [
+          "confluent extensional view: False"
+        ]
+      }
+    },
+    {
+      "id": "08",
+      "slug": "divergence",
+      "title": "Divergence witness",
+      "class": "S",
+      "proposition": "Order sensitivity can be witnessed as extensional divergence.",
+      "c0": "(A B) with options alpha,beta,gamma.",
+      "omega": [
+        "BIND",
+        "REFUSE"
+      ],
+      "observable": "Left/right extensional views.",
+      "invariant": "Compared pair diverges extensionally.",
+      "failure_condition": "Reordered paths collapse to same extensional view.",
+      "operations": [
+        "BIND",
+        "REFUSE",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:divergence-witness"
+      ],
+      "expected_output": {
+        "contains": [
+          "divergent extensional view: True"
+        ]
+      }
+    },
+    {
+      "id": "09",
+      "slug": "regret",
+      "title": "Regretful-history witness",
+      "class": "S",
+      "proposition": "Different valid histories can witness regret relations while remaining historically distinct.",
+      "c0": "Common base then two alternative programs.",
+      "omega": [
+        "REFUSE",
+        "BIND"
+      ],
+      "observable": "History tuples for regret path vs direct path.",
+      "invariant": "Histories are distinct for compared paths.",
+      "failure_condition": "Compared paths collapse into identical history unexpectedly.",
+      "operations": [
+        "REFUSE",
+        "BIND",
+        "HISTORY",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:regret-has-history-witness"
+      ],
+      "expected_output": {
+        "contains": [
+          "histories distinct      : True"
+        ]
+      }
+    },
+    {
+      "id": "10",
+      "slug": "derived-views",
+      "title": "Derived view consistency",
+      "class": "I",
+      "proposition": "Extensional and history-prefix views are deterministic projections of a config.",
+      "c0": "Program applying POP then BIND.",
+      "omega": [
+        "POP",
+        "BIND"
+      ],
+      "observable": "extensional_view, history_view, history_prefix_view outputs.",
+      "invariant": "Prefix view with k=1 equals first history event.",
+      "failure_condition": "History prefix projection does not match recorded history.",
+      "operations": [
+        "POP",
+        "BIND",
+        "VIEW",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:views-are-deterministic-projections"
+      ],
+      "expected_output": {
+        "contains": [
+          "history prefix(1):",
+          "extensional:"
+        ]
+      }
+    },
+    {
+      "id": "11",
+      "slug": "merge-derived",
+      "title": "Merge as derived behavior",
+      "class": "I",
+      "proposition": "Merge-like outcomes emerge through composition of primitives rather than a fifth primitive.",
+      "c0": "(A B C) with options A,B,C.",
+      "omega": [
+        "BIND",
+        "COLLAPSE"
+      ],
+      "observable": "Bound view, merge-derived view, and history length.",
+      "invariant": "Derived sequence reaches merged extensional form in 2 events.",
+      "failure_condition": "Derived sequence fails to produce merged presentation.",
+      "operations": [
+        "BIND",
+        "COLLAPSE",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:merge-is-derived"
+      ],
+      "expected_output": {
+        "contains": [
+          "merge-derived view:",
+          "history length    : 2"
+        ]
+      }
+    },
+    {
+      "id": "12",
+      "slug": "default-pop",
+      "title": "Default POP target behavior",
+      "class": "I",
+      "proposition": "Repeated default POP resolves nested scopes in a deterministic order.",
+      "c0": "(A (B (C D)) E).",
+      "omega": [
+        "POP"
+      ],
+      "observable": "Rendered sigma and selected paths after sequential POPs.",
+      "invariant": "Two default POP steps flatten to (A B C D E).",
+      "failure_condition": "Default POP resolves inconsistent targets.",
+      "operations": [
+        "POP",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:default-pop-order"
+      ],
+      "expected_output": {
+        "contains": [
+          "after pop #2  : (A B C D E)"
+        ]
+      }
+    },
+    {
+      "id": "13",
+      "slug": "replay-determinism",
+      "title": "Replay determinism",
+      "class": "S",
+      "proposition": "Replaying the same parsed program from the same base yields equal extensional and historical outcomes.",
+      "c0": "Shared base config and fixed operation list.",
+      "omega": [
+        "BIND",
+        "REFUSE",
+        "POP"
+      ],
+      "observable": "run1/run2 extensional and history equality flags.",
+      "invariant": "same extensional == True and same history == True.",
+      "failure_condition": "Identical replay diverges extentionally or historically.",
+      "operations": [
+        "BIND",
+        "REFUSE",
+        "POP",
+        "HISTORY",
+        "REPLAY"
+      ],
+      "claims": [
+        "prop:replay-determinism"
+      ],
+      "expected_output": {
+        "contains": [
+          "same extensional : True",
+          "same history     : True"
+        ]
+      }
+    },
+    {
+      "id": "14",
+      "slug": "admissible-check",
+      "title": "Admissibility observer non-authority",
+      "class": "I",
+      "proposition": "admissible() predicts operation validity without mutating history.",
+      "c0": "Flat and nested sigma variants.",
+      "omega": [
+        "POP",
+        "BIND"
+      ],
+      "observable": "Boolean admissibility outputs and history view.",
+      "invariant": "Admissibility checks leave history unchanged.",
+      "failure_condition": "admissible() mutates config state.",
+      "operations": [
+        "POP",
+        "BIND",
+        "OBSERVER",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:admissible-is-read-only"
+      ],
+      "expected_output": {
+        "contains": [
+          "flat history unchanged by check: True"
+        ]
+      }
+    },
+    {
+      "id": "15",
+      "slug": "confluence-under-policy",
+      "title": "Policy-relative confluence",
+      "class": "Q",
+      "proposition": "Confluence outcomes depend on collapse policy families applied as observers.",
+      "c0": "Divergent left/right histories.",
+      "omega": [
+        "COLLAPSE"
+      ],
+      "observable": "Confluence booleans under alternative policies.",
+      "invariant": "One policy resolves divergence, unrelated policy does not.",
+      "failure_condition": "Policy family does not change confluence classification.",
+      "operations": [
+        "COLLAPSE",
+        "OBSERVER",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:confluence-is-policy-relative"
+      ],
+      "expected_output": {
+        "contains": [
+          "confluent under a1~a2 policy   : True",
+          "divergent under unrelated policy: True"
+        ]
+      }
+    },
+    {
+      "id": "16",
+      "slug": "structural-divergence",
+      "title": "Structural divergence",
+      "class": "Q",
+      "proposition": "Distinct structural histories can remain divergent under multiple collapse policies.",
+      "c0": "Two histories with different sigma structures.",
+      "omega": [
+        "COLLAPSE"
+      ],
+      "observable": "Divergence booleans under selected policies.",
+      "invariant": "Both tested policies report divergence.",
+      "failure_condition": "Policy collapses erase structural divergence unexpectedly.",
+      "operations": [
+        "COLLAPSE",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:structural-divergence-persists"
+      ],
+      "expected_output": {
+        "contains": [
+          "divergent under B~C policy: True",
+          "divergent under A~D policy: True"
+        ]
+      }
+    },
+    {
+      "id": "17",
+      "slug": "regret-detection",
+      "title": "Regret detection boundaries",
+      "class": "S",
+      "proposition": "regretful() identifies strict-option-loss continuations and rejects incomparable candidates.",
+      "c0": "Base config with narrow/unrestricted/incomparable branches.",
+      "omega": [
+        "REFUSE",
+        "BIND"
+      ],
+      "observable": "Regret booleans + exception for invalid continuation.",
+      "invariant": "narrow regrets unrestricted = True; narrow regrets incomparable = False.",
+      "failure_condition": "Regret observer accepts unrelated candidate or misclassifies incomparable branch.",
+      "operations": [
+        "REFUSE",
+        "BIND",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:regret-is-prefix-relative"
+      ],
+      "expected_output": {
+        "contains": [
+          "narrow regrets vs unrestricted: True",
+          "narrow regrets vs incomparable: False"
+        ]
+      }
+    },
+    {
+      "id": "18",
+      "slug": "equivalent-at-prefix",
+      "title": "Prefix equivalence depth",
+      "class": "S",
+      "proposition": "equivalent_at identifies the largest shared history prefix before divergence.",
+      "c0": "Two branches sharing initial events then diverging.",
+      "omega": [
+        "POP",
+        "BIND",
+        "REFUSE"
+      ],
+      "observable": "equivalent_at(k) booleans across k=0..3.",
+      "invariant": "Equivalent through k=2, not at k=3.",
+      "failure_condition": "Prefix-equivalence boundary is misdetected.",
+      "operations": [
+        "POP",
+        "BIND",
+        "REFUSE",
+        "OBSERVER",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:prefix-equivalence-boundary"
+      ],
+      "expected_output": {
+        "contains": [
+          "equivalent at k=2: True",
+          "equivalent at k=3: False"
+        ]
+      }
+    },
+    {
+      "id": "19",
+      "slug": "quotient-representative-independence",
+      "title": "Quotient representative independence",
+      "class": "S",
+      "proposition": "Quotient identity is set-based; representative choice is display-only.",
+      "c0": "Configuration with collapsed B/C class.",
+      "omega": [
+        "COLLAPSE"
+      ],
+      "observable": "Option-space membership checks and quotient equality.",
+      "invariant": "Quotient(B,C)==Quotient(C,B) and strings B/C are absent as standalone options.",
+      "failure_condition": "Representative leaks into semantic identity.",
+      "operations": [
+        "COLLAPSE",
+        "VIEW",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:quotient-representative-independence"
+      ],
+      "expected_output": {
+        "contains": [
+          "Quotient(B,C) == Quotient(C,B): True",
+          "\"B\" in option_space directly : False"
+        ]
+      }
+    },
+    {
+      "id": "20",
+      "slug": "intensional-extensional-equivalence",
+      "title": "Intensional vs extensional identity",
+      "class": "S",
+      "proposition": "Extensional equivalence does not imply intensional equivalence.",
+      "c0": "Two distinct histories with same extensional projection.",
+      "omega": [
+        "POP",
+        "BIND",
+        "REFUSE"
+      ],
+      "observable": "intensional/extensional equivalence booleans.",
+      "invariant": "Distinct paths can be extensionally equal but intensionally unequal.",
+      "failure_condition": "Intensional and extensional equivalence collapse into one relation.",
+      "operations": [
+        "POP",
+        "BIND",
+        "REFUSE",
+        "OBSERVER",
+        "HISTORY",
+        "VIEW"
+      ],
+      "claims": [
+        "prop:history-nonuniqueness-under-view"
+      ],
+      "expected_output": {
+        "contains": [
+          "intensionally equivalent (same events): False",
+          "extensionally equivalent (same view)   : True"
+        ]
+      }
+    },
+    {
+      "id": "21",
+      "slug": "refuse-bind-commute",
+      "title": "Commutation boundaries",
+      "class": "Q",
+      "proposition": "REFUSE and BIND can commute while REFUSE and COLLAPSE may not.",
+      "c0": "Shared base config for two operation families.",
+      "omega": [
+        "REFUSE",
+        "BIND",
+        "COLLAPSE"
+      ],
+      "observable": "Equivalence booleans for reordered sequences.",
+      "invariant": "REFUSE/BIND pair equivalent; REFUSE/COLLAPSE pair order-sensitive.",
+      "failure_condition": "Both families produce same commutation outcome.",
+      "operations": [
+        "REFUSE",
+        "BIND",
+        "COLLAPSE",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:commutation-is-operation-family-dependent"
+      ],
+      "expected_output": {
+        "contains": [
+          "extensionally equivalent: True",
+          "extensionally equivalent (order matters here): False"
+        ]
+      }
+    },
+    {
+      "id": "22",
+      "slug": "confluence-policy-family",
+      "title": "Irreducible divergence over policy families",
+      "class": "Q",
+      "proposition": "Some pairs remain irreducibly divergent over chosen policy families.",
+      "c0": "Structurally distinct left/right histories.",
+      "omega": [
+        "COLLAPSE"
+      ],
+      "observable": "irreducibly_divergent results over policy family.",
+      "invariant": "Divergent pair true; identical pair false.",
+      "failure_condition": "Observer cannot distinguish divergent and identical comparisons.",
+      "operations": [
+        "COLLAPSE",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:irreducible-divergence-over-family"
+      ],
+      "expected_output": {
+        "contains": [
+          "irreducibly divergent over family: True",
+          "irreducibly divergent over same family: False"
+        ]
+      }
+    },
+    {
+      "id": "23",
+      "slug": "regret-accumulation",
+      "title": "Regret accumulation behavior",
+      "class": "Q",
+      "proposition": "Local regret can persist across further shared continuations.",
+      "c0": "Branches with narrowing and follow-up steps.",
+      "omega": [
+        "REFUSE",
+        "BIND"
+      ],
+      "observable": "Stepwise regret booleans.",
+      "invariant": "Step1 and step2 regret true for compared paths.",
+      "failure_condition": "Regret classification is unstable under shared continuation.",
+      "operations": [
+        "REFUSE",
+        "BIND",
+        "OBSERVER",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:local-regret-persistence"
+      ],
+      "expected_output": {
+        "contains": [
+          "step 1 regret: True",
+          "step 2 regret (after identical further step): True"
+        ]
+      }
+    },
+    {
+      "id": "24",
+      "slug": "replay-invariance-reordering",
+      "title": "Replay invariance under safe reordering",
+      "class": "S",
+      "proposition": "Certain operation reorderings preserve replay-equivalent outcomes while unsafe POP reorderings fail.",
+      "c0": "Two programs over same base and POP-reordering stress case.",
+      "omega": [
+        "BIND",
+        "REFUSE",
+        "POP"
+      ],
+      "observable": "Program A/B views + POP admissibility check.",
+      "invariant": "A/B replay invariant true; unsafe POP ordering rejected.",
+      "failure_condition": "Safe reorder diverges or unsafe reorder silently succeeds.",
+      "operations": [
+        "BIND",
+        "REFUSE",
+        "POP",
+        "REPLAY",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:replay-invariance-bounded-reordering"
+      ],
+      "expected_output": {
+        "contains": [
+          "replay-invariant under REFUSE/BIND reordering: True",
+          "POP(2) admissible on the *original* sigma: False"
+        ]
+      }
+    },
+    {
+      "id": "25",
+      "slug": "observer-non-authority",
+      "title": "Observer non-authority guarantee",
+      "class": "I",
+      "proposition": "Running observer battery does not alter authoritative config fields.",
+      "c0": "Config with one committed history event.",
+      "omega": [
+        "observer suite"
+      ],
+      "observable": "All-fields-unchanged flag and history length.",
+      "invariant": "every field unchanged == True.",
+      "failure_condition": "Any observer mutates config state.",
+      "operations": [
+        "OBSERVER",
+        "HISTORY"
+      ],
+      "claims": [
+        "prop:observers-are-read-only"
+      ],
+      "expected_output": {
+        "contains": [
+          "every field unchanged after the full observer battery: True"
+        ]
+      }
+    },
+    {
+      "id": "26",
+      "slug": "horizon-equivalence",
+      "title": "Horizon equivalence relativization",
+      "class": "Q",
+      "proposition": "horizon_equivalent is relative to candidate operation pools and horizon depth.",
+      "c0": "Two presently non-equivalent configs.",
+      "omega": [
+        "candidate op pools",
+        "k-horizon"
+      ],
+      "observable": "horizon-equivalent booleans for k and pool variants.",
+      "invariant": "k=1 with restricted pool can be True while wider pool is False.",
+      "failure_condition": "Observer ignores candidate_ops relativity.",
+      "operations": [
+        "OBSERVER",
+        "HORIZON",
+        "REPLAY"
+      ],
+      "claims": [
+        "prop:horizon-equivalence-relativized"
+      ],
+      "expected_output": {
+        "contains": [
+          "horizon-equivalent (k=1, a-only pool): True",
+          "horizon-equivalent (k=1, wider pool): False"
+        ]
+      }
+    },
+    {
+      "id": "27",
+      "slug": "appendix-g-grammar",
+      "title": "Appendix G labeled execution",
+      "class": "S",
+      "proposition": "Labeled grammar inputs round-trip into executable runs preserving event-label provenance.",
+      "c0": "Appendix G labeled nested sphere with program.",
+      "omega": [
+        "parse_appendix_g",
+        "POP",
+        "BIND",
+        "REFUSE"
+      ],
+      "observable": "Parsed labels, final view, and event-label sequence.",
+      "invariant": "Event labels preserve expected provenance ordering.",
+      "failure_condition": "Label provenance is lost or reordered.",
+      "operations": [
+        "POP",
+        "BIND",
+        "REFUSE",
+        "HISTORY",
+        "GRAMMAR"
+      ],
+      "claims": [
+        "prop:labeled-provenance-preservation"
+      ],
+      "expected_output": {
+        "contains": [
+          "parsed sigma label: outer",
+          "event labels, in order:"
+        ]
+      }
+    },
+    {
+      "id": "28",
+      "slug": "poset-pop-commutation",
+      "title": "Plan B poset pop commutation",
+      "class": "Q",
+      "proposition": "Equal-content minimal elements commute under poset POP while non-minimal pops are rejected.",
+      "c0": "Three OptionSpace nodes alpha,beta,gamma.",
+      "omega": [
+        "poset pop_minimal"
+      ],
+      "observable": "left_then_right, right_then_left, and rejection message.",
+      "invariant": "Commutation true on equal-content minimals; gamma pop rejected.",
+      "failure_condition": "Minimal commutation fails or non-minimal pops are accepted.",
+      "operations": [
+        "PLAN_B",
+        "POP",
+        "OBSERVER"
+      ],
+      "claims": [
+        "prop:plan-b-minimal-commutation"
+      ],
+      "expected_output": {
+        "contains": [
+          "commute on equal-content minimals: True",
+          "non-minimal rejection:"
+        ]
+      }
+    },
+    {
+      "id": "29",
+      "slug": "multi-timescale-continuation",
+      "title": "Multi-timescale continuation scheduling",
+      "class": "Q",
+      "proposition": "Scheduling policies across heterogeneous timescales produce measurably different continuation dynamics.",
+      "c0": "Five scopes with distinct horizons and gains.",
+      "omega": [
+        "policy scheduler",
+        "BIND",
+        "REFUSE",
+        "COLLAPSE",
+        "POP"
+      ],
+      "observable": "Per-policy saturation, starvation, and per-scope action counts.",
+      "invariant": "All policies produce structured metrics and at least one report includes REFUSE/COLLAPSE activity.",
+      "failure_condition": "Simulation emits no policy metrics or never reaches richer operation mix.",
+      "operations": [
+        "POP",
+        "BIND",
+        "REFUSE",
+        "COLLAPSE",
+        "HISTORY",
+        "SCHEDULER"
+      ],
+      "claims": [
+        "prop:multi-timescale-scheduling-effects"
+      ],
+      "expected_output": {
+        "contains": [
+          "POLICY SUMMARY",
+          "policy:",
+          "long_horizon_starvation_rate"
+        ]
+      }
+    }
+  ]
+}

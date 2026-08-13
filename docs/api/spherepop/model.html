@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>spherepop.model API documentation</title>
+<meta name="description" content="">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>spherepop.model</code></h1>
+</header>
+<section id="section-intro">
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="spherepop.model.make_config"><code class="name flex">
+<span>def <span class="ident">make_config</span></span>(<span>sigma: <a title="spherepop.model.Sphere" href="#spherepop.model.Sphere">Sphere</a>,<br>option_space: FrozenSet[str] | set[str]) ‑> <a title="spherepop.model.Config" href="#spherepop.model.Config">Config</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def make_config(sigma: Sphere, option_space: FrozenSet[str] | set[str]) -&gt; Config:
+    return Config(sigma=sigma, history=(), option_space=frozenset(option_space), collapse_log=())</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="spherepop.model.Atom"><code class="flex name class">
+<span>class <span class="ident">Atom</span></span>
+<span>(</span><span>name: str | <a title="spherepop.model.Quotient" href="#spherepop.model.Quotient">Quotient</a>)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class Atom:
+    # A plain option/atom name, or a Quotient if this position has been
+    # identified with others by a prior COLLAPSE.
+    name: str | Quotient</code></pre>
+</details>
+<div class="desc"><p>Atom(name: 'str | Quotient')</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.Atom.name"><code class="name">var <span class="ident">name</span> : str | <a title="spherepop.model.Quotient" href="#spherepop.model.Quotient">Quotient</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.BindEvent"><code class="flex name class">
+<span>class <span class="ident">BindEvent</span></span>
+<span>(</span><span>history_index: int, predicate: str, label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class BindEvent:
+    history_index: int
+    predicate: str
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>BindEvent(history_index: 'int', predicate: 'str', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.BindEvent.history_index"><code class="name">var <span class="ident">history_index</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.BindEvent.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.BindEvent.predicate"><code class="name">var <span class="ident">predicate</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.BindOp"><code class="flex name class">
+<span>class <span class="ident">BindOp</span></span>
+<span>(</span><span>predicate: str, label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class BindOp:
+    predicate: str
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>BindOp(predicate: 'str', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.BindOp.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.BindOp.predicate"><code class="name">var <span class="ident">predicate</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.CollapseEvent"><code class="flex name class">
+<span>class <span class="ident">CollapseEvent</span></span>
+<span>(</span><span>history_index: int,<br>classes: Tuple[FrozenSet[str], ...],<br>label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class CollapseEvent:
+    history_index: int
+    classes: Tuple[FrozenSet[str], ...]
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>CollapseEvent(history_index: 'int', classes: 'Tuple[FrozenSet[str], &hellip;]', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.CollapseEvent.classes"><code class="name">var <span class="ident">classes</span> : Tuple[FrozenSet[str], ...]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.CollapseEvent.history_index"><code class="name">var <span class="ident">history_index</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.CollapseEvent.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.CollapseOp"><code class="flex name class">
+<span>class <span class="ident">CollapseOp</span></span>
+<span>(</span><span>classes: Tuple[FrozenSet[str], ...], label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class CollapseOp:
+    classes: Tuple[FrozenSet[str], ...]
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>CollapseOp(classes: 'Tuple[FrozenSet[str], &hellip;]', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.CollapseOp.classes"><code class="name">var <span class="ident">classes</span> : Tuple[FrozenSet[str], ...]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.CollapseOp.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.Config"><code class="flex name class">
+<span>class <span class="ident">Config</span></span>
+<span>(</span><span>sigma: <a title="spherepop.model.Sphere" href="#spherepop.model.Sphere">Sphere</a>,<br>history: Tuple[Event, ...],<br>option_space: FrozenSet[str | <a title="spherepop.model.Quotient" href="#spherepop.model.Quotient">Quotient</a>],<br>collapse_log: Tuple[Tuple[int, Tuple[FrozenSet[str], ...]], ...] = ())</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class Config:
+    sigma: Sphere
+    history: Tuple[Event, ...]
+    # Elements are plain option strings, or Quotients once COLLAPSE has
+    # merged some of them into an equivalence class.
+    option_space: FrozenSet[str | Quotient]
+    collapse_log: Tuple[Tuple[int, Tuple[FrozenSet[str], ...]], ...] = ()</code></pre>
+</details>
+<div class="desc"><p>Config(sigma: 'Sphere', history: 'Tuple[Event, &hellip;]', option_space: 'FrozenSet[str | Quotient]', collapse_log: 'Tuple[Tuple[int, Tuple[FrozenSet[str], &hellip;]], &hellip;]' = ())</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.Config.collapse_log"><code class="name">var <span class="ident">collapse_log</span> : Tuple[Tuple[int, Tuple[FrozenSet[str], ...]], ...]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.Config.history"><code class="name">var <span class="ident">history</span> : Tuple[<a title="spherepop.model.PopEvent" href="#spherepop.model.PopEvent">PopEvent</a> | <a title="spherepop.model.RefuseEvent" href="#spherepop.model.RefuseEvent">RefuseEvent</a> | <a title="spherepop.model.BindEvent" href="#spherepop.model.BindEvent">BindEvent</a> | <a title="spherepop.model.CollapseEvent" href="#spherepop.model.CollapseEvent">CollapseEvent</a>, ...]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.Config.option_space"><code class="name">var <span class="ident">option_space</span> : FrozenSet[str | <a title="spherepop.model.Quotient" href="#spherepop.model.Quotient">Quotient</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.Config.sigma"><code class="name">var <span class="ident">sigma</span> : <a title="spherepop.model.Sphere" href="#spherepop.model.Sphere">Sphere</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.PopEvent"><code class="flex name class">
+<span>class <span class="ident">PopEvent</span></span>
+<span>(</span><span>history_index: int, path: Tuple[int, ...], label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class PopEvent:
+    history_index: int
+    path: Tuple[int, ...]
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>PopEvent(history_index: 'int', path: 'Tuple[int, &hellip;]', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.PopEvent.history_index"><code class="name">var <span class="ident">history_index</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.PopEvent.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.PopEvent.path"><code class="name">var <span class="ident">path</span> : Tuple[int, ...]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.PopOp"><code class="flex name class">
+<span>class <span class="ident">PopOp</span></span>
+<span>(</span><span>path: Tuple[int, ...] | None = None, label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class PopOp:
+    # Exactly one of path/label should be given; neither means &#34;auto-select
+    # the deepest non-root sphere&#34; (a lab convenience default -- Appendix
+    # G&#39;s own grammar requires an explicit Label always). Mutual-exclusion
+    # is enforced in semantics.transition, not here, to keep error
+    # reporting consistent with the rest of the primitive checks (EvalError).
+    path: Tuple[int, ...] | None = None
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>PopOp(path: 'Tuple[int, &hellip;] | None' = None, label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.PopOp.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.PopOp.path"><code class="name">var <span class="ident">path</span> : Tuple[int, ...] | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.Quotient"><code class="flex name class">
+<span>class <span class="ident">Quotient</span></span>
+<span>(</span><span>members: FrozenSet[str])</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class Quotient:
+    &#34;&#34;&#34;An equivalence class produced by COLLAPSE: an element of O/\u2261_C.
+
+    This carries only its membership -- no &#34;representative&#34; field. Two
+    Quotient values built from the same set of members are equal and
+    hash-equal (dataclass equality over `members`), regardless of which
+    member anyone later chooses to display. Picking a representative for
+    display is exclusively `views.representative`&#39;s job; nothing in
+    model.py or semantics.py may treat one member as more the class than
+    another.
+    &#34;&#34;&#34;
+
+    members: FrozenSet[str]</code></pre>
+</details>
+<div class="desc"><p>An equivalence class produced by COLLAPSE: an element of O/≡_C.</p>
+<p>This carries only its membership &ndash; no "representative" field. Two
+Quotient values built from the same set of members are equal and
+hash-equal (dataclass equality over <code>members</code>), regardless of which
+member anyone later chooses to display. Picking a representative for
+display is exclusively <code>views.representative</code>'s job; nothing in
+model.py or semantics.py may treat one member as more the class than
+another.</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.Quotient.members"><code class="name">var <span class="ident">members</span> : FrozenSet[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.RefuseEvent"><code class="flex name class">
+<span>class <span class="ident">RefuseEvent</span></span>
+<span>(</span><span>history_index: int, refused: FrozenSet[str], label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class RefuseEvent:
+    history_index: int
+    refused: FrozenSet[str]
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>RefuseEvent(history_index: 'int', refused: 'FrozenSet[str]', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.RefuseEvent.history_index"><code class="name">var <span class="ident">history_index</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.RefuseEvent.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.RefuseEvent.refused"><code class="name">var <span class="ident">refused</span> : FrozenSet[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.RefuseOp"><code class="flex name class">
+<span>class <span class="ident">RefuseOp</span></span>
+<span>(</span><span>refused: FrozenSet[str], label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class RefuseOp:
+    refused: FrozenSet[str]
+    # Appendix G&#39;s &lt;Refusal&gt; ::= &#34;refuse&#34; &#34;(&#34; &lt;Label&gt; &#34;,&#34; &lt;Set&gt; &#34;)&#34; takes a
+    # Label. Recorded here and on the resulting event for provenance; it
+    # does not yet select among multiple option spaces -- REFUSE still acts
+    # on Config&#39;s single global option_space (see README: Plan A vs Plan B).
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>RefuseOp(refused: 'FrozenSet[str]', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.RefuseOp.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.RefuseOp.refused"><code class="name">var <span class="ident">refused</span> : FrozenSet[str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="spherepop.model.Sphere"><code class="flex name class">
+<span>class <span class="ident">Sphere</span></span>
+<span>(</span><span>items: Tuple[Expr, ...], label: str | None = None)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass(frozen=True)
+class Sphere:
+    items: Tuple[Expr, ...]
+    # Appendix G: &lt;Sphere&gt; ::= &#34;(&#34; &lt;Label&gt; &#34;:&#34; &lt;Expr&gt;* &#34;)&#34; -- a sphere is a
+    # labeled enclosure. Optional and defaulted to None here so the lab&#39;s
+    # existing unlabeled convenience syntax (&#34;(A B C)&#34;, via spherepop.parser)
+    # keeps working unchanged; spherepop.grammar&#39;s parser, which implements
+    # Appendix G&#39;s own concrete syntax literally, always supplies a label.
+    label: str | None = None</code></pre>
+</details>
+<div class="desc"><p>Sphere(items: 'Tuple[Expr, &hellip;]', label: 'str | None' = None)</p></div>
+<h3>Instance variables</h3>
+<dl>
+<dt id="spherepop.model.Sphere.items"><code class="name">var <span class="ident">items</span> : Tuple[<a title="spherepop.model.Atom" href="#spherepop.model.Atom">Atom</a> | <a title="spherepop.model.Sphere" href="#spherepop.model.Sphere">Sphere</a>, ...]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="spherepop.model.Sphere.label"><code class="name">var <span class="ident">label</span> : str | None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="spherepop.model.make_config" href="#spherepop.model.make_config">make_config</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="spherepop.model.Atom" href="#spherepop.model.Atom">Atom</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.Atom.name" href="#spherepop.model.Atom.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.BindEvent" href="#spherepop.model.BindEvent">BindEvent</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.BindEvent.history_index" href="#spherepop.model.BindEvent.history_index">history_index</a></code></li>
+<li><code><a title="spherepop.model.BindEvent.label" href="#spherepop.model.BindEvent.label">label</a></code></li>
+<li><code><a title="spherepop.model.BindEvent.predicate" href="#spherepop.model.BindEvent.predicate">predicate</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.BindOp" href="#spherepop.model.BindOp">BindOp</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.BindOp.label" href="#spherepop.model.BindOp.label">label</a></code></li>
+<li><code><a title="spherepop.model.BindOp.predicate" href="#spherepop.model.BindOp.predicate">predicate</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.CollapseEvent" href="#spherepop.model.CollapseEvent">CollapseEvent</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.CollapseEvent.classes" href="#spherepop.model.CollapseEvent.classes">classes</a></code></li>
+<li><code><a title="spherepop.model.CollapseEvent.history_index" href="#spherepop.model.CollapseEvent.history_index">history_index</a></code></li>
+<li><code><a title="spherepop.model.CollapseEvent.label" href="#spherepop.model.CollapseEvent.label">label</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.CollapseOp" href="#spherepop.model.CollapseOp">CollapseOp</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.CollapseOp.classes" href="#spherepop.model.CollapseOp.classes">classes</a></code></li>
+<li><code><a title="spherepop.model.CollapseOp.label" href="#spherepop.model.CollapseOp.label">label</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.Config" href="#spherepop.model.Config">Config</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.Config.collapse_log" href="#spherepop.model.Config.collapse_log">collapse_log</a></code></li>
+<li><code><a title="spherepop.model.Config.history" href="#spherepop.model.Config.history">history</a></code></li>
+<li><code><a title="spherepop.model.Config.option_space" href="#spherepop.model.Config.option_space">option_space</a></code></li>
+<li><code><a title="spherepop.model.Config.sigma" href="#spherepop.model.Config.sigma">sigma</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.PopEvent" href="#spherepop.model.PopEvent">PopEvent</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.PopEvent.history_index" href="#spherepop.model.PopEvent.history_index">history_index</a></code></li>
+<li><code><a title="spherepop.model.PopEvent.label" href="#spherepop.model.PopEvent.label">label</a></code></li>
+<li><code><a title="spherepop.model.PopEvent.path" href="#spherepop.model.PopEvent.path">path</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.PopOp" href="#spherepop.model.PopOp">PopOp</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.PopOp.label" href="#spherepop.model.PopOp.label">label</a></code></li>
+<li><code><a title="spherepop.model.PopOp.path" href="#spherepop.model.PopOp.path">path</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.Quotient" href="#spherepop.model.Quotient">Quotient</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.Quotient.members" href="#spherepop.model.Quotient.members">members</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.RefuseEvent" href="#spherepop.model.RefuseEvent">RefuseEvent</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.RefuseEvent.history_index" href="#spherepop.model.RefuseEvent.history_index">history_index</a></code></li>
+<li><code><a title="spherepop.model.RefuseEvent.label" href="#spherepop.model.RefuseEvent.label">label</a></code></li>
+<li><code><a title="spherepop.model.RefuseEvent.refused" href="#spherepop.model.RefuseEvent.refused">refused</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.RefuseOp" href="#spherepop.model.RefuseOp">RefuseOp</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.RefuseOp.label" href="#spherepop.model.RefuseOp.label">label</a></code></li>
+<li><code><a title="spherepop.model.RefuseOp.refused" href="#spherepop.model.RefuseOp.refused">refused</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="spherepop.model.Sphere" href="#spherepop.model.Sphere">Sphere</a></code></h4>
+<ul class="">
+<li><code><a title="spherepop.model.Sphere.items" href="#spherepop.model.Sphere.items">items</a></code></li>
+<li><code><a title="spherepop.model.Sphere.label" href="#spherepop.model.Sphere.label">label</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

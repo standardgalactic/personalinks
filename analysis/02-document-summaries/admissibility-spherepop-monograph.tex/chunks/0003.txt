@@ -1,0 +1,245 @@
+\begin{definition}[Evaluation Chain]
+The \emph{evaluation chain} of a Spherepop history $\shist = (e_1, \ldots, e_n)$ is the subsequence
+\[
+  \shist_{\mathrm{eval}} = (e_{k_1}, e_{k_2}, \ldots, e_{k_m})
+\]
+consisting of all and only the pop events in $\shist$, in the order of their occurrence. The evaluation chain is the compressed projection of the full history under the collapse operator that identifies histories with identical pop-event sequences; it preserves the evaluation order and the results of each reduction while discarding the refuse and bind events.
+\end{definition}
+
+The evaluation chain is an important intermediate object because it is the natural level at which many questions about computation are asked: questions about evaluation order, computational complexity, and result correctness are all questions about the evaluation chain. But the evaluation chain is not the full history, and the information lost in projecting to the evaluation chain — the refuse events that recorded constraint violations, the bind events that introduced scope constraints — is genuine semantic information that matters for questions about admissibility, provenance, and the relationship between the computation and its context.
+
+
+The Meaning of \texorpdfstring{$\spop{\cdot
+$}{pop}}
+
+The pop operator, introduced informally in Chapter~1 and defined formally in Section~1.2, is the primary evaluation primitive of the Spherepop formalism. Its meaning in the formal system is the following: given an innermost bubble $B$ in the current bubble topology $\mathcal{B}_t$, the pop event $\spop{B}$ performs the locally admissible reduction of $B$, producing a result value $v$, updating the bubble topology to $\mathcal{B}_{t+1} = \mathcal{B}_t \setminus \{B\}$, and recording the event in the computation's history.
+
+The pop operator is a strongly admissible reduction in the sense of the Foundational Definitions: it satisfies local compatibility (the bubble's boundary conditions are met), performs recursive restructuring (the containing bubble's content is updated to reflect the pop result), preserves a transportable invariant (the mathematical value computed by the bubble's operation), and modifies future admissibility conditions (by removing the popped bubble from the topology and potentially enabling the pop of the containing bubble, which was previously blocked by the presence of a non-popped inner bubble).
+
+The interpretive content of the pop operator goes beyond its formal definition. To pop a bubble is to make a commitment: to convert a potential computation into an actual result, foreclosing the alternative paths that would have been available if the bubble had remained unresolved. In the variational framework of Chapter~12, this commitment has a cost — it reduces the accessibility volume of the remaining computation — and it is irreversible in the sense that the popped bubble cannot be un-popped without reverting to a prior state of the computation's history. The pop operator is the computational analogue of an irreversible thermodynamic process: it reduces entropy locally (by resolving an undetermined expression to a specific value) while increasing the entropy of the computation's global history (by adding a new determination event to the record of past commitments).
+
+
+The Meaning of \texorpdfstring{$\srefuse{\cdot
+$}{refuse}}
+
+The refuse operator $\srefuse{B}$ is the formal complement of the pop operator. Where pop commits to a reduction, refuse records the non-commitment: the fact that a potential reduction was considered and rejected because the local admissibility conditions were not satisfied. The refuse event is not a failure but a structural determination: the determination that the computation is not yet in a state where the proposed reduction is admissible.
+
+The refuse operator has no analogue in conventional computation, where the absence of a reduction is simply the absence of a step, with no formal record and no propagation of information about why the step was not taken. In Spherepop, the refuse event is a first-class citizen of the history: it is recorded alongside pop events, it contributes to the computation's action cost (by preserving accessibility volume rather than reducing it, at the cost of deferred commitment), and it carries information about which constraints were operative at the step of the refusal.
+
+The philosophical significance of the refuse operator is that it formalizes \emph{principled non-action}: the refusal to perform a computation that is formally possible but contextually inadmissible. A system without refuse operators performs every locally possible reduction, without regard to whether the constraint conditions are satisfied. Such a system is the computational analogue of a reasoner who draws every locally valid inference without checking whether the premises are established or the background conditions are met. The refuse operator is the mechanism by which Spherepop models the kind of constraint-sensitive deferral that is characteristic of careful reasoning: the willingness to not-pop a bubble that could be popped, because the constraint conditions for doing so admissibly are not currently in force.
+
+
+Collapse Operators and Quotient Spaces
+
+
+The collapse operator family $\{\scollapse{q}\}$ is indexed by equivalence relations $q$ on the space of admissible histories. Each collapse operator identifies histories that are equivalent under $q$, producing a quotient space of equivalence classes. The formal conditions on collapse operators ensure that the quotient is semantically coherent: the factorization condition guarantees that any observable function that is invariant under the equivalence descends uniquely through the collapse map, so that the collapse preserves everything that matters for the purposes of the chosen equivalence relation.
+
+The most important special cases are:
+
+The \emph{terminal-value collapse} $\scollapse{v}$ identifies all histories with the same terminal value, producing a quotient whose equivalence classes are the sets of histories that compute the same result. This is the collapse implicitly performed by any system that discards computation history and returns only a final output.
+
+The \emph{evaluation-chain collapse} $\scollapse{e}$ identifies histories with the same evaluation chain — the same sequence of pop events — while distinguishing histories that differ in their refuse or bind events. This is a finer collapse than the terminal-value collapse, preserving evaluation order while abstracting over constraint-management events.
+
+The \emph{admissibility-profile collapse} $\scollapse{a}$ identifies histories with the same sequence of admissibility determinations — the same record of which reductions were admitted, which were refused, and under which constraint configurations — while abstracting over the specific values produced. This is the collapse relevant for auditing and verification: it preserves the structural record of the computation's constraint-compliance while abstracting over the specific results.
+
+The \emph{full-provenance collapse} $\scollapse{0}$ is the identity: it identifies only identical histories with themselves, preserving all structural information. This is the collapse appropriate when full provenance is required, such as in forensic analysis of a computation or in educational settings where the evaluation process itself is the subject of study.
+
+
+Bind Operations and Constraint Formation
+
+
+The bind operator $\sbind{a<b}{B}$ introduces a new constraint into the evaluation region of bubble $B$: the constraint that value $a$ is less than value $b$, or more generally, that a specified relation holds between specified quantities within the scope of $B$. The bind event narrows the admissibility set of the evaluation region — it adds a constraint that rules out some previously admissible evaluation paths — and records the constraint introduction in the computation's history.
+
+The bind operator is the Spherepop analogue of variable binding in programming languages and of constraint introduction in constraint satisfaction systems. Its formal effect is to modify the constraint configuration $\mathcal{C}$ of the bubble $B$: after the bind event $\sbind{a<b}{B}$, the constraint configuration becomes $\mathcal{C} \cup \{a < b\}$, and any evaluation step within $B$ that would violate this constraint is no longer locally admissible. The constraint is scoped to the bubble $B$ — it affects only the evaluation of $B$'s interior — and it is released when $B$ is popped.
+
+
+\chapter{Spherepop as a Cognitive Interface}
+\chapterrule
+
+\begin{chapterprecis}
+This chapter argues that Spherepop functions as a cognitive
+prosthetic: it externalizes working memory, reduces hidden
+cognitive load, and enables visual computation with semantic
+transparency. A sustained comparison with flat string
+representations grounds the argument empirically.
+\end{chapterprecis}
+
+
+Externalizing Working Memory
+
+
+The human working memory system — the cognitive faculty responsible for maintaining and manipulating information during active cognitive tasks — has a limited capacity that constrains the complexity of computations that can be performed mentally. The limit is not fixed at a universal number of items; it depends on the nature of the items, the availability of chunking strategies, and the degree to which long-term memory structures can be recruited to support maintenance. But the limit is real, and it is routinely exceeded by the demands of understanding complex computations represented in conventional notation.
+
+Spherepop reduces the working memory demands of computation comprehension by externalizing the primary sources of cognitive load. The scope model — the representation of which variables are in scope, which constraints are active, and which evaluation regions are currently open — is externalized into the visible bubble structure of the diagram: the scope is the bubble's interior, the active constraints are encoded in the bubble's boundary conditions, and the open evaluation regions are the bubbles that have not yet been popped. A reader does not need to maintain an internal scope model; the scope model is the diagram.
+
+The evaluation order — the representation of which subexpressions must be evaluated before which others — is externalized into the nesting structure: inner bubbles before outer bubbles. The reader does not need to maintain an internal evaluation order representation or apply precedence rules to determine which operations to perform first; the order is visible in the spatial organization. The computation state — the representation of which subexpressions have been evaluated and which remain — is externalized into the pop history: popped bubbles become values, unpopped bubbles remain as bounded regions. The reader does not need to maintain a separate mental model of the computation's progress; the progress is visible in the diagram's current state.
+
+
+Reducing Hidden Cognitive Load
+
+
+The cognitive load imposed by conventional notation is largely hidden: it is not experienced as a distinct burden because it has been internalized through years of practice. An experienced mathematician reading $\sum_{k=1}^{n} k^2$ does not consciously experience the cognitive cost of recovering the summation structure from the notation; the recovery is automatic. But the cost is real, as demonstrated by the systematic errors that occur when the notation is sufficiently unfamiliar or the expression sufficiently complex to exceed the capacity of the automated processing. The hidden cognitive load surfaces as error under pressure.
+
+Spherepop makes the cognitive load visible precisely by removing it: when the scope, evaluation order, and computation state are externalized into the diagram, the mental effort that was previously consumed by maintaining internal representations of these structural features becomes available for understanding the computation's content. The diagram does cognitive work that the reader's working memory would otherwise have to do, freeing those resources for higher-level comprehension.
+
+This externalization is not merely a pedagogical convenience for beginners. Expert users of a notation system still bear the cognitive load imposed by that system, even when they bear it automatically. The automatic processing of conventional notation consumes attentional and working memory resources that are not available for simultaneous reasoning about the computation's implications. A notation system that requires less automatic processing to recover structural information leaves more resources available for the kind of reflective engagement with the computation that produces genuine understanding rather than competent execution.
+
+
+Visual Computation and Semantic Transparency
+
+
+The phrase \emph{visual computation} refers to computation in which the visual structure of the representation directly encodes the semantic structure of the computation: where what the diagram looks like is, in a precise sense, what the computation means. Spherepop achieves visual computation in this sense: the spatial containment structure of the bubble diagram directly encodes the dependency structure of the computation, the nesting depth directly encodes the evaluation priority, the bubble boundary directly encodes the scope limit. The diagram is not a picture of the computation; it is the computation, expressed in a medium that exploits human spatial cognition rather than working against it.
+
+Semantic transparency is a property of a representation system: a representation is semantically transparent to the extent that its semantic content is directly readable from its surface form without reconstruction from implicit conventions. Conventional algebraic notation is semantically opaque: its semantic content — the evaluation order, the scope structure, the dependency relations — must be reconstructed from syntactic markers and memorized conventions. Spherepop notation is semantically transparent in the relevant respects: the evaluation order is visible in the nesting, the scope is visible in the containment, the dependency relations are visible in the inclusion structure.
+
+Semantic transparency is not the same as simplicity. A complex nested Spherepop diagram may be visually complex. But its visual complexity is a direct reflection of its semantic complexity: the diagram is complex because the computation is complex, and every feature of the diagram's complexity corresponds to a feature of the computation's structure. A complex conventional expression, by contrast, may be visually simple — a string of symbols and operators — while encoding a complex computation whose structure is invisible. The visual simplicity of the conventional expression is achieved by hiding the complexity, not by reducing it.
+
+
+Why Flat Strings Are Hard to Think With
+
+
+The flatness of conventional notation — its representation of hierarchically structured computations as linear sequences of symbols — is the source of its cognitive difficulty. Human cognition is not naturally flat. It processes hierarchical structures through spatial cognition that is organized around containment, nesting, and boundary, not through sequential symbol processing. The sequential symbol string of conventional notation is not the natural format for human cognition; it is a compromise between the spatial complexity of hierarchical representation and the linear constraints of written text on a page.
+
+The sequential format requires the reader to perform a specific cognitive operation that Spherepop notation does not: the mental reconstruction of a hierarchical spatial structure from a linear symbolic sequence. This reconstruction is not trivial. It requires maintaining an internal representation of the current nesting depth, tracking the opening and closing of parentheses or the application of precedence rules, and updating the representation at each symbol in the sequence. The reconstruction is error-prone when nesting is deep, when operators with different precedences are interleaved, or when the reader is simultaneously trying to understand the semantic content of the expression rather than merely parsing its syntactic structure.
+
+The difficulty is not that flat strings are inherently impossible to understand. With sufficient practice, a reader can reconstruct the hierarchical structure from the flat string automatically. But the automaticity of the reconstruction is not the same as the absence of cognitive cost. The cognitive cost is paid in the form of resources devoted to reconstruction that are not available for understanding, and it accumulates as expressions become more complex. Spherepop eliminates this cost by providing the hierarchical structure directly, in a form that spatial cognition can process without reconstruction.
+
+
+\chapter{Spherepop and Programming Languages}
+\chapterrule
+
+\begin{chapterprecis}
+Spherepop is situated within the broader landscape of programming
+language theory. Parse trees versus spatial regions, context
+windows as topological neighborhoods, and the relation to
+functional programming are examined. The chapter argues that
+Spherepop's contribution is not merely aesthetic but
+operationally substantive.
+\end{chapterprecis}
+
+
+Operational Semantics and Language Design
+
+
+The operational semantics of a programming language is the formal specification of how programs in that language are executed: what the execution steps are, how they modify the program's state, and what the relationship is between the source-language expression and the sequence of machine-level operations that it produces. Conventional presentations of operational semantics describe reduction rules — rules that specify how one expression is transformed into another — and apply those rules sequentially until a value is reached. The evaluation history is implicit in the sequence of rule applications, but it is not a first-class object of the semantics: it is a device for defining the meaning of expressions, not an object of study in its own right.
+
+Spherepop's operational semantics makes the evaluation history a first-class object. The meaning of a Spherepop expression is not its terminal value but the set of strongly admissible histories that lead from the initial expression to terminal values: the admissibility manifold of the expression, equipped with the action functional that assigns costs to trajectories through it. The terminal value is a derived notion — the last entry in the evaluation chain of any history in the expression's admissibility manifold — rather than the primary semantic object.
+
+This shift has consequences for language design. A language whose operational semantics takes histories as primary will naturally expose evaluation histories to programmers: it will provide mechanisms for inspecting, recording, and reasoning about the history of a running computation. It will distinguish between computations that produce the same output via different histories, because those computations have different semantic profiles in a history-sensitive semantics. It will provide collapse operators that allow the programmer to choose the appropriate level of history preservation for a given task.
+
+
+Parse Trees Versus Spatial Regions
+
+
+The parse tree of a programming language expression is the conventional data structure used to represent its hierarchical syntactic structure. Like the nested bubble structure of a Spherepop diagram, a parse tree encodes the dependency relations among the expression's subexpressions: the parent-child relation in the tree corresponds to the containment relation in the Spherepop bubble structure. The two representations are structurally isomorphic as graphs.
+
+The difference lies in what the representation makes visible and what it suppresses. A parse tree is a data structure that is typically invisible to the programmer: it is constructed internally by the parser and used to drive evaluation, but it is not exposed as a first-class object of the language. The programmer writes a flat source string; the compiler internally constructs the parse tree; the parse tree drives code generation or interpretation; the programmer never sees the tree. The hierarchical structure of the computation is present in the parse tree but invisible to the user of the language.
+
+In Spherepop, the bubble structure — the analogue of the parse tree — is the primary interface. The programmer does not write a flat string and rely on a parser to recover the structure; the programmer draws or constructs the bubble structure directly, making the hierarchical dependency explicit in the representation rather than leaving it implicit in a flat string. The parse tree and the bubble structure are isomorphic as abstract structures, but they differ in their epistemic status: the parse tree is an internal implementation artifact; the bubble structure is the user-visible semantic representation.
+
+
+Context Windows as Topological Neighborhoods
+
+
+A context window in a programming language is the set of bindings, types, and constraints that are in scope at a given point in a program: the local semantic environment that determines what names refer to, what operations are admissible, and what types are expected. Context windows are typically implicit in programming language implementations — they are maintained internally by the type checker or interpreter — but they are one of the primary sources of cognitive difficulty for programmers, who must maintain a mental model of the current context window while reading code.
+
+In Spherepop, the context window of an evaluation step is exactly the bubble that contains it: the interior of the current evaluation region, bounded by the bubble's boundary, with the constraint configuration defined by the active bind events within that region. The context window is not implicit; it is the visible bubble. Knowing the context window requires only reading the boundary conditions of the current bubble, which are explicit features of the Spherepop diagram.
+
+The topological characterization of context windows as neighborhoods in the admissibility manifold is more than a metaphor. The context window at a given evaluation step is literally a neighborhood in the semantic configuration space of the computation: the set of evaluation states that are reachable from the current state by locally admissible transitions, without crossing the current bubble's boundary. Two evaluation steps are in the same topological neighborhood — the same context window — if and only if they are within the same bubble. The bubble structure of the Spherepop diagram is a topological atlas for the computation's semantic configuration space: each bubble is a coordinate chart, and the nesting relations among bubbles define the gluing conditions that assemble the local charts into the global admissibility manifold.
+
+
+The Relation to Functional Programming
+
+
+Functional programming languages — languages in which computation is modeled as the application of functions to arguments, without mutable state or side effects — are the conventional programming paradigm closest in spirit to the Spherepop formalism. Both treat computation as the evaluation of expressions, both use hierarchical nesting to encode the order of operations, and both have well-developed theories of evaluation order and reduction strategies. Lambda calculus, the mathematical foundation of functional programming, is the canonical formal system for the study of expression reduction, and its beta-reduction rule is the prototype for the pop operator of Spherepop.
+
+The differences between functional programming and Spherepop are not differences in underlying mathematical structure but differences in the objects that are treated as primary. In functional programming, values are primary: the meaning of an expression is its value, computation is the process of finding that value, and the evaluation history is an implementation detail. In Spherepop, histories are primary: the meaning of an expression is the admissibility manifold of its evaluation histories, values are derived from histories, and the evaluation history is a semantic object in its own right.
+
+The relationship between Spherepop and functional programming is therefore the relationship between a history-sensitive and a value-sensitive semantics for the same underlying class of computations. For computations where only the terminal value matters, the two semantics agree: the Spherepop evaluation chain produces the same terminal value as the functional-programming evaluation. For computations where the evaluation history matters — for understanding, for verification, for audit, for pedagogy, for complexity analysis — the Spherepop semantics provides information that the functional-programming semantics discards. The Spherepop formalism is a conservative extension of functional-programming semantics: it adds history-sensitivity without changing the terminal-value behavior, at the cost of requiring richer representations and admitting a richer space of equivalence relations.
+
+ \clearpage
+
+
+
+
+\part{Cognition, Neuroscience, and Program Understanding}
+
+
+\chapter{The Neuroaesthetics of Programming}
+\chapterrule
+
+\begin{chapterprecis}
+Program comprehension is treated as a semantic and neurological
+activity. Drawing on brain imaging studies of programming and
+cognitive science research on working memory, this chapter
+establishes why scope visualization is not merely pedagogically
+useful but reflects the architecture of human semantic cognition.
+\end{chapterprecis}
+
+
+Program Comprehension as Semantic Activity
+
+
+There is a persistent and largely unexamined assumption embedded in the way programming is taught and discussed: that writing and reading code is fundamentally a logical activity, that the programmer's cognitive task is essentially that of a formal reasoner manipulating symbols according to syntactic rules. On this assumption, the difficulty of programming is a difficulty of logic — of keeping track of complex inference chains, of applying rules correctly, of avoiding logical errors in reasoning about the behavior of abstract machines. The assumption is natural enough: programming languages are formal systems, their semantics are defined by mathematical specifications, and correctness in programming is determined by logical criteria. But the assumption is empirically wrong, or at least seriously incomplete, in ways that have significant consequences for how programming environments should be designed and how programming should be taught.
+
+The evidence against the purely logical model of programming cognition comes from several converging directions. First, from the phenomenology of programming itself: experienced programmers report that their understanding of code is organized around semantic units — functions, modules, patterns, design strategies — rather than around syntactic or logical structure. When an experienced programmer reads an unfamiliar codebase, they do not process it as a sequence of logical propositions to be evaluated; they recognize familiar patterns, assign semantic roles to components, construct a high-level model of the code's purpose, and then use that model to navigate the lower-level details selectively. The process is top-down and semantically organized, not bottom-up and syntactically driven.
+
+Second, from the study of programming errors: the kinds of mistakes programmers make are not primarily the kinds of mistakes that a formal reasoner would make — incorrect application of inference rules, violations of logical constraints — but rather the kinds of mistakes that arise when a semantic model is incorrect or incomplete. Off-by-one errors, wrong assumptions about variable scope, incorrect mental models of data structure behavior: these are errors in the programmer's internal representation of the code's semantic content, not in their ability to apply formal rules to syntactic expressions. The formal rules are generally known; the semantic model is where the difficulty resides.
+
+Third, and most directly relevant to the concerns of this monograph, from the observation that the difficulty of reading code scales with its structural opacity rather than with its logical complexity. Code that is logically complex but structurally transparent — where the nesting, scope, and dependency relations among components are visually evident from the code's layout — is experienced as easier to understand than code that is logically simpler but structurally opaque, where the scope and dependency relations must be reconstructed from surface syntax using implicit conventions. This asymmetry points directly toward the central thesis of Spherepop: that the difficulty of program comprehension is largely a difficulty of recovering structural information that conventional notation has compressed away.
+
+
+Working Memory and Attention
+
+
+Working memory — the cognitive system responsible for maintaining and manipulating information over short time scales during the performance of a task — is a limited resource in human cognition. The classical characterization of working memory capacity as approximately seven plus or minus two items, proposed by Miller in 1956, has been refined by subsequent research to suggest that the effective limit is closer to three or four distinct chunks of information that can be actively maintained and manipulated simultaneously, with the exact capacity depending on the nature of the items, the degree of chunking, and the availability of long-term memory structures to support the maintenance of information in a compressed form.
+
+The relevance of working memory limitations to programming comprehension is direct and well-documented. When a programmer reads a piece of code, they must maintain in working memory a representation of the current state of the program — the values of relevant variables, the current scope, the constraints imposed by prior control-flow decisions — while simultaneously parsing the current expression and integrating it with the maintained representation. If the code's structural organization does not support the chunking of this information — if scope boundaries are not visually marked, if dependency relations between components must be inferred from non-local syntactic cues, if the evaluation order of nested expressions must be reconstructed from memorized precedence rules — then the working memory demands of comprehension increase sharply.
+
+The specific bottleneck that Spherepop is designed to address is the cost of maintaining \emph{implicit scope} in working memory. In standard linear notation, the scope of a subexpression — the set of other expressions on which it depends and by which it is constrained — is not directly visible. It must be inferred from syntactic structure, parenthesization, indentation conventions, and operator precedence rules. This inference itself consumes working memory resources, because the programmer must simultaneously maintain the current scope model and update it as they parse each new syntactic element. In Spherepop's nested bubble notation, scope is made physically explicit: the boundary of a bubble is the scope boundary of its contents, and the nesting relation of bubbles directly encodes the dependency relation of the expressions they contain. The working memory cost of maintaining the scope model is reduced to near zero, because the scope model is externalized into the visible structure of the notation rather than maintained as an internal representation.
+[I
+This externalization of scope is not merely a convenience. It is a cognitive prosthetic in the precise sense: a representational structure that takes over a cognitive function that would otherwise have to be performed internally, at the cost of working memory resources, thereby freeing those resources for other aspects of the comprehension task. The analogy with other cognitive prosthetics — written language, which externalizes memory; mathematical notation, which externalizes calculation; diagrams, which externalize spatial reasoning — is direct. Spherepop externalizes scope tracking, which is one of the most cognitively demanding aspects of program comprehension.
+
+
+Why Code Is Not Experienced as Pure Logic
+
+
+The claim that code is experienced as semantic content rather than as formal structure is not merely a phenomenological observation. It has a neurological basis that has become increasingly clear as brain imaging methods have been applied to the study of programming comprehension. The relevant finding — which will be examined in more detail in the following section — is that reading and understanding code activates brain regions associated with semantic processing and working memory rather than, or in addition to, regions associated with mathematical reasoning. This finding is consistent with the phenomenological evidence and with the error-pattern evidence: programming comprehension is a semantic activity, organized around meaningful units and their relations, rather than a purely logical activity organized around formal rules and their application.
+
+The philosophical implication is significant. If code comprehension is fundamentally semantic, then the legibility of code is fundamentally a function of how well its surface form supports semantic interpretation — how clearly its meaningful units are delimited, how transparently its dependency and scope relations are expressed, how naturally its evaluation order is encoded in its visual structure. A notation system optimized for semantic legibility will look very different from one optimized for syntactic conciseness or formal precision. Standard mathematical and programming notation has been optimized primarily for conciseness and formal precision, under the implicit assumption that the reader will supply the semantic structure through internalized conventions. Spherepop is optimized for semantic legibility, under the explicit assumption that the notation should carry as much semantic structure as possible in its visible form.
+
+The contrast becomes clearest when comparing two representations of the same computation. The expression $1 + 3 \times 2^2$ is formally precise and syntactically concise. A reader familiar with operator precedence conventions can recover its semantic structure — exponentiation first, then multiplication, then addition — from the surface syntax, but the recovery requires an active inference step that consumes working memory resources and is prone to error when the expression is more complex. The Spherepop representation, with its nested bubbles marking the evaluation regions explicitly, makes the same semantic structure directly visible. The evaluation order is not inferred from convention; it is read from the geometry of the nesting. A reader who has never encountered operator precedence conventions can read the structure from the diagram, because the diagram's spatial organization directly encodes the information that the linear notation encodes only implicitly through a compressed convention.
+
+This is why code is not experienced as pure logic: because the cognitive task of reading code is not the application of logical rules to syntactic expressions, but the reconstruction of a semantic model from a compressed representation that encodes semantic structure implicitly. The difficulty of programming is largely the difficulty of this reconstruction, and the solution Spherepop proposes is not to make the logical rules clearer but to make the semantic structure explicit.
+
+
+The Brain Imaging Studies of Programming
+
+
+The application of functional magnetic resonance imaging to the study of programming comprehension has produced a body of evidence that substantially revises the naive picture of programming as purely logical activity. Studies in which participants are asked to understand code segments while their brain activity is recorded consistently reveal activation in regions associated with semantic processing — in particular, regions in the left inferior frontal gyrus and the temporal-parietal junction that are also activated during natural language comprehension and semantic memory retrieval — as well as regions associated with working memory maintenance, including the dorsolateral prefrontal cortex and parietal areas involved in visuospatial attention.
+
+The activation of language-associated semantic processing regions during code comprehension is particularly striking, because it suggests that the cognitive machinery used for understanding programming language is substantially the same machinery used for understanding natural language: a system organized around semantic interpretation, not logical inference. This does not mean that code comprehension is identical to natural language comprehension — the syntactic structure of programming languages is more rigid and the semantic conventions are more formally specified — but it suggests that the fundamental cognitive orientation is similar: both are semantic activities in which the reader constructs a model of meaning from a structured input, guided by prior knowledge of the conventions governing that input.
+
+The working memory activation during code comprehension confirms the picture developed in the preceding sections. Understanding code requires maintaining an active representation of the current state of the computation — the scope, the values of variables in scope, the control-flow context — while parsing each new element of the code and updating the representation accordingly. This is exactly the kind of active maintenance-and-manipulation task for which the dorsolateral prefrontal cortex and associated working memory systems are engaged. The demands on these systems are higher when the code's structural organization does not support chunking — when scope boundaries must be tracked by counting indentation levels rather than reading explicit structural markers, when dependency relations must be inferred from non-local syntactic cues rather than read from visible structure.
+
+The brain imaging evidence thus provides neurological support for the Spherepop thesis: that scope visualization is not merely a pedagogical convenience but a cognitively significant feature of a notation system. Making scope explicit in the visual structure of the representation reduces the working memory load of scope tracking, freeing cognitive resources for other aspects of comprehension. The notation system is not an inert carrier of formal content; it is an active contributor to the cognitive process of understanding that content. A notation system designed without reference to the cognitive architecture of its users will impose unnecessary cognitive costs, even when it is formally adequate.
+
+
+Spatial Reasoning and Symbolic Manipulation
+
+
+The relationship between spatial reasoning and symbolic manipulation is one of the central puzzles in cognitive science, and it has direct implications for the design of notation systems. The traditional view, inherited from a broadly Kantian philosophical tradition, treats spatial intuition and logical-symbolic reasoning as distinct cognitive faculties: the former is a capacity for representing and reasoning about spatial relations among objects in the world, while the latter is a capacity for manipulating abstract symbols according to formal rules. On this view, the use of spatial representations in mathematics and programming — diagrams, graphs, geometric proofs — is a heuristic convenience that helps the spatial-intuitive faculty assist the logical-symbolic faculty, but the real cognitive work of reasoning is done by the symbolic faculty operating on abstract representations.
+
+This view has been substantially challenged by evidence from cognitive science and neuroscience. Spatial reasoning and symbolic reasoning share significant neural resources and interact in complex ways during mathematical and programming tasks. Mental rotation tasks — tasks requiring the spatial transformation of a represented object — activate many of the same brain regions as symbolic manipulation tasks, suggesting that spatial and symbolic representations are not as cleanly separated in the brain as the traditional view suggests. More directly relevant, the performance of mathematical tasks that would appear to be purely symbolic — mental arithmetic, algebraic manipulation — is systematically influenced by spatial variables: the spatial arrangement of numbers on a mental number line, the spatial organization of the work in a calculation, the directionality of written notation.
+
+The implication for Spherepop is significant. If spatial and symbolic cognition are not distinct faculties but interacting systems that share resources and representations, then a notation system that makes the spatial structure of a computation explicit — that encodes scope as containment, evaluation order as nesting depth, dependency as spatial proximity — is not merely making a pedagogical accommodation to spatial intuition. It is recruiting spatial cognition into the computational task in a way that distributes the cognitive load across more of the available cognitive architecture, potentially reducing the overall burden while increasing the richness of the representation.
+
+The nesting structure of Spherepop bubbles is not an arbitrary choice of visual metaphor. Containment is one of the most primitive spatial relations available to human cognition — it is among the first spatial concepts that develop in infancy, before formal symbolic competence of any kind. A notation system grounded in containment therefore connects formal computational concepts to spatial intuitions that are developmentally primitive and neurologically robust. This is not a weakness of the notation — a concession to intuition at the expense of rigor — but a strength: it means that the notation can be understood by spatial cognition at the same time that it is being processed by symbolic cognition, providing a form of cognitive redundancy that supports accuracy and reduces error.
+
+
+Semantic Grouping in Human Cognition
+
+
+Human cognitive systems have a strong tendency to organize information into meaningful groups. This tendency — variously described as chunking, Gestalt organization, or categorical perception — operates across sensory modalities and cognitive domains, and it is one of the fundamental mechanisms by which the brain manages the information load of complex environments. In vision, the Gestalt principles of proximity, similarity, continuity, and closure describe the conditions under which elements of a visual scene are grouped into perceptual units. In language, the segmentation of continuous speech or text into words, phrases, and sentences reflects the operation of syntactic and semantic grouping mechanisms. In memory, the chunking of individual items into meaningful groups is the primary mechanism by which working memory capacity is effectively extended: items that can be grouped into a single meaningful chunk occupy a single slot in working memory regardless of the complexity of their internal structure.
+
+The relevance of semantic grouping to programming comprehension is direct. Code is not processed as a linear sequence of individual tokens but as a hierarchically organized structure of semantic units: expressions, statements, blocks, functions, modules. The grouping of code into these units is partly supported by syntactic structure — indentation, delimiters, keyword markers — and partly by the programmer's prior semantic knowledge of what kinds of units appear in code of the relevant type. When the syntactic marking of units is clear and consistent with the semantic grouping, comprehension is efficient: the reader's grouping perception is aligned with the code's actual semantic organization. When the syntactic marking is ambiguous, inconsistent, or requires active reconstruction from implicit conventions — as in the case of operator precedence in nested arithmetic expressions — the reader must perform additional cognitive work to recover the correct grouping, at the cost of working memory resources.

@@ -1,0 +1,1231 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+class TestUnclosedSphere:
+    """Test unclosed sphere syntax errors."""
+
+    def test_parse_unclosed_sphere_simple(self):
+        """Unclosed sphere raises error."""
+        with pytest.raises(ParseError, match="missing '\\)' in sphere expression"):
+            parse_expr("(a b")
+
+    def test_parse_unclosed_sphere_nested(self):
+        """Nested unclosed sphere raises error."""
+        with pytest.raises(ParseError, match="missing '\\)' in sphere expression"):
+            parse_expr("((a b)")
+
+    def test_parse_unclosed_sphere_empty(self):
+        """Empty unclosed sphere raises error."""
+        with pytest.raises(ParseError, match="missing '\\)' in sphere expression"):
+            parse_expr("(")
+
+    def test_parse_multiple_unclosed(self):
+        """Multiple unclosed spheres raise error."""
+        with pytest.raises(ParseError, match="missing '\\)' in sphere expression"):
+            parse_expr("((a")
+
+
+class TestUnexpectedCloseParen:
+    """Test unexpected close parenthesis errors."""
+
+    def test_parse_unexpected_close_paren_start(self):
+        """Close paren at start raises error."""
+        with pytest.raises(ParseError, match="unexpected '\\)'"):
+            parse_expr(")")
+
+    def test_parse_unexpected_close_paren_after_atom(self):
+        """Close paren after atom raises error."""
+        with pytest.raises(ParseError, match="trailing tokens"):
+            parse_expr("a)")
+
+    def test_parse_unmatched_close_paren(self):
+        """Unmatched close paren raises error."""
+        with pytest.raises(ParseError, match="trailing tokens"):
+            parse_expr("(a))")
+
+
+class TestTrailingTokens:
+    """Test trailing tokens after complete expression."""
+
+    def test_parse_trailing_atom(self):
+        """Trailing atom after valid expression raises error."""
+        with pytest.raises(ParseError, match="trailing tokens after expression"):
+            parse_expr("(a b) c")
+
+    def test_parse_trailing_sphere(self):
+        """Trailing sphere after valid expression raises error."""
+        with pytest.raises(ParseError, match="trailing tokens after expression"):
+            parse_expr("(a) (b)")
+
+    def test_parse_trailing_paren(self):
+        """Trailing paren after valid expression raises error."""
+        with pytest.raises(ParseError, match="trailing tokens after expression"):
+            parse_expr("a (")
+
+
+class TestParseSphere:
+    """Test parse_sphere() type enforcement."""
+
+    def test_parse_sphere_with_sphere(self):
+        """Sphere input parses correctly."""
+        result = parse_sphere("(a b c)")
+        assert isinstance(result, Sphere)
+        assert len(result.items) == 3
+
+    def test_parse_sphere_with_atom(self):
+        """Atom input raises error (must be Sphere)."""
+        with pytest.raises(ParseError, match="top-level expression must be a Sphere"):
+            parse_sphere("a")
+
+    def test_parse_sphere_empty(self):
+        """Empty sphere parses correctly."""
+        result = parse_sphere("()")
+        assert isinstance(result, Sphere)
+        assert len(result.items) == 0
+
+
+class TestOperationParsing:
+    """Test parse_operation() command parsing."""
+
+    def test_parse_operation_pop_no_args(self):
+        """POP with no args uses default."""
+        op = parse_operation("POP")
+        assert isinstance(op, PopOp)
+        assert op.path is None
+
+    def test_parse_operation_pop_with_path(self):
+        """POP with dotted path arg."""
+        op = parse_operation("POP 0.1.2")
+        assert isinstance(op, PopOp)
+        assert op.path == (0, 1, 2)
+
+    def test_parse_operation_pop_empty_path_becomes_none(self):
+        """POP with whitespace-only path becomes None (default)."""
+        op = parse_operation("POP   ")
+        assert isinstance(op, PopOp)
+        assert op.path is None
+
+    def test_parse_operation_pop_invalid_path(self):
+        """POP with non-numeric path raises error."""
+        with pytest.raises(ParseError, match="invalid POP path"):
+            parse_operation("POP abc")
+
+    def test_parse_operation_pop_negative_index(self):
+        """POP with negative index raises error."""
+        with pytest.raises(ParseError, match="non-negative"):
+            parse_operation("POP 0.-1")
+
+    def test_parse_operation_refuse(self):
+        """REFUSE with option names."""
+        op = parse_operation("REFUSE a b c")
+        assert isinstance(op, RefuseOp)
+        assert op.refused == frozenset({"a", "b", "c"})
+
+    def test_parse_operation_refuse_empty(self):
+        """REFUSE with no options raises error (Appendix E)."""
+        with pytest.raises(ParseError, match="REFUSE requires at least one target"):
+            parse_operation("REFUSE")
+
+    def test_parse_operation_refuse_comma_separated(self):
+        """REFUSE accepts comma-separated options."""
+        op = parse_operation("REFUSE a, b, c")
+        assert isinstance(op, RefuseOp)
+        assert op.refused == frozenset({"a", "b", "c"})
+
+    def test_parse_operation_bind(self):
+        """BIND with predicate."""
+        op = parse_operation("BIND prefix:user")
+        assert isinstance(op, BindOp)
+        assert op.predicate == "prefix:user"
+
+    def test_parse_operation_bind_no_predicate(self):
+        """BIND with no predicate raises error."""
+        with pytest.raises(ParseError, match="BIND requires a predicate"):
+            parse_operation("BIND")
+
+    def test_parse_operation_bind_with_spaces(self):
+        """BIND predicate can contain spaces."""
+        op = parse_operation("BIND in:a, b, c")
+        assert isinstance(op, BindOp)
+        assert op.predicate == "in:a, b, c"
+
+    def test_parse_operation_collapse(self):
+        """COLLAPSE with equivalence classes."""
+        op = parse_operation("COLLAPSE a,b; c,d")
+        assert isinstance(op, CollapseOp)
+        assert len(op.classes) == 2
+        assert frozenset({"a", "b"}) in op.classes
+        assert frozenset({"c", "d"}) in op.classes
+
+    def test_parse_operation_collapse_equals_separator(self):
+        """COLLAPSE accepts = as separator."""
+        op = parse_operation("COLLAPSE a=b; c=d")
+        assert isinstance(op, CollapseOp)
+        assert len(op.classes) == 2
+
+    def test_parse_operation_collapse_no_classes(self):
+        """COLLAPSE with no classes raises error."""
+        with pytest.raises(ParseError, match="requires at least one equivalence class"):
+            parse_operation("COLLAPSE")
+
+    def test_parse_operation_collapse_single_member_class(self):
+        """COLLAPSE class with single member raises error."""
+        with pytest.raises(ParseError, match="at least two members"):
+            parse_operation("COLLAPSE a")
+
+    def test_parse_operation_collapse_multiple_classes(self):
+        """COLLAPSE with multiple semicolon-separated classes."""
+        op = parse_operation("COLLAPSE a,b,c; x,y; p,q,r,s")
+        assert len(op.classes) == 3
+        assert frozenset({"a", "b", "c"}) in op.classes
+        assert frozenset({"x", "y"}) in op.classes
+        assert frozenset({"p", "q", "r", "s"}) in op.classes
+
+    def test_parse_operation_unknown_command(self):
+        """Unknown command raises error."""
+        with pytest.raises(ParseError, match="unknown operation"):
+            parse_operation("UNKNOWN a b")
+
+    def test_parse_operation_empty_line(self):
+        """Empty line raises error."""
+        with pytest.raises(ParseError, match="operation line cannot be empty"):
+            parse_operation("")
+
+    def test_parse_operation_whitespace_only(self):
+        """Whitespace-only line raises error."""
+        with pytest.raises(ParseError, match="operation line cannot be empty"):
+            parse_operation("   \n\t  ")
+
+    def test_parse_operation_lowercase_normalized(self):
+        """Operation names are normalized to uppercase."""
+        op = parse_operation("pop")
+        assert isinstance(op, PopOp)
+
+
+class TestParseProgram:
+    """Test parse_program() full program parsing."""
+
+    def test_parse_program_single_operation(self):
+        """Program with single operation."""
+        ops = parse_program(["POP 0.1"])
+        assert len(ops) == 1
+        assert isinstance(ops[0], PopOp)
+
+    def test_parse_program_multiple_operations(self):
+        """Program with multiple operations."""
+        ops = parse_program([
+            "POP 0",
+            "REFUSE x",
+            "BIND ALL"
+        ])
+        assert len(ops) == 3
+        assert isinstance(ops[0], PopOp)
+        assert isinstance(ops[1], RefuseOp)
+        assert isinstance(ops[2], BindOp)
+
+    def test_parse_program_empty_lines(self):
+        """Program with empty lines (skipped)."""
+        ops = parse_program([
+            "POP",
+            "",
+            "REFUSE a",
+            "   ",
+            "BIND ALL"
+        ])
+        assert len(ops) == 3
+
+    def test_parse_program_comments(self):
+        """Program with comment lines (skipped)."""
+        ops = parse_program([
+            "# This is a comment",
+            "POP",
+            "  # Another comment",
+            "REFUSE a"
+        ])
+        assert len(ops) == 2
+
+    def test_parse_program_empty_list(self):
+        """Empty program returns empty list."""
+        ops = parse_program([])
+        assert ops == []
+
+    def test_parse_program_invalid_operation(self):
+        """Program with invalid operation raises error."""
+        with pytest.raises(ParseError, match="unknown operation"):
+            parse_program(["INVALID"])
+
+    def test_parse_program_stops_at_first_error(self):
+        """Program parsing stops at first error."""
+        with pytest.raises(ParseError):
+            parse_program([
+                "POP",
+                "INVALID",  # Error here
+                "REFUSE a"  # Never reached
+            ])
+
+
+class TestEdgeCases:
+    """Test additional edge cases."""
+
+    def test_parse_expr_deeply_nested(self):
+        """Deeply nested spheres parse correctly."""
+        result = parse_expr("(((a)))")
+        assert isinstance(result, Sphere)
+        assert isinstance(result.items[0], Sphere)
+        assert isinstance(result.items[0].items[0], Sphere)
+
+    def test_parse_expr_mixed_nesting(self):
+        """Mixed atom and sphere nesting."""
+        result = parse_expr("(a (b c) d)")
+        assert isinstance(result, Sphere)
+        assert len(result.items) == 3
+        assert isinstance(result.items[0], Atom)
+        assert isinstance(result.items[1], Sphere)
+        assert isinstance(result.items[2], Atom)
+
+    def test_tokenize_special_chars_in_atoms(self):
+        """Atoms can contain various characters."""
+        result = parse_expr("(user_id-123)")
+        assert isinstance(result, Sphere)
+        assert result.items[0].name == "user_id-123"
+
+    def test_parse_empty_sphere_nested(self):
+        """Empty nested spheres."""
+        result = parse_expr("(() ())")
+        assert isinstance(result, Sphere)
+        assert len(result.items) == 2
+        assert all(isinstance(item, Sphere) and len(item.items) == 0 for item in result.items)
+
+    def test_parse_operation_refuse_many_options(self):
+        """REFUSE with many options."""
+        op = parse_operation("REFUSE " + " ".join(f"opt{i}" for i in range(100)))
+        assert isinstance(op, RefuseOp)
+        assert len(op.refused) == 100
+
+    def test_parse_operation_pop_single_index(self):
+        """POP with single index."""
+        op = parse_operation("POP 5")
+        assert op.path == (5,)
+
+    def test_parse_operation_collapse_mixed_separators(self):
+        """COLLAPSE with mixed comma and equals separators."""
+        op = parse_operation("COLLAPSE a,b=c")
+        assert frozenset({"a", "b", "c"}) in op.classes
+
+============================================================
+FILE: tests/test_path_utils.py
+============================================================
+
+"""Tests for spherepop.path_utils module."""
+
+from __future__ import annotations
+
+import unittest
+
+from spherepop.model import Atom, Sphere
+from spherepop.path_utils import (
+    PathError,
+    all_sphere_paths,
+    deepest_non_root_sphere,
+    expr_at,
+    find_label_path,
+    path_exists,
+)
+
+
+class TestPathExists(unittest.TestCase):
+    """Tests for path_exists function."""
+
+    def test_root_path_exists(self) -> None:
+        """Empty path always refers to root and exists."""
+        s = Sphere((Atom("a"),))
+        self.assertTrue(path_exists(s, ()))
+
+    def test_valid_single_step_path(self) -> None:
+        """Valid single-step path exists."""
+        s = Sphere((Atom("a"), Atom("b")))
+        self.assertTrue(path_exists(s, (0,)))
+        self.assertTrue(path_exists(s, (1,)))
+
+    def test_invalid_out_of_range(self) -> None:
+        """Out-of-range index returns False."""
+        s = Sphere((Atom("a"), Atom("b")))
+        self.assertFalse(path_exists(s, (2,)))
+        self.assertFalse(path_exists(s, (-1,)))
+
+    def test_cannot_traverse_through_atom(self) -> None:
+        """Cannot traverse through an Atom."""
+        s = Sphere((Atom("a"),))
+        self.assertFalse(path_exists(s, (0, 0)))
+
+    def test_nested_sphere_path(self) -> None:
+        """Can traverse through nested Spheres."""
+        inner = Sphere((Atom("a"), Atom("b")))
+        outer = Sphere((inner, Atom("c")))
+        self.assertTrue(path_exists(outer, (0,)))
+        self.assertTrue(path_exists(outer, (0, 0)))
+        self.assertTrue(path_exists(outer, (0, 1)))
+        self.assertFalse(path_exists(outer, (0, 2)))
+
+
+class TestAllSpherePaths(unittest.TestCase):
+    """Tests for all_sphere_paths function."""
+
+    def test_single_sphere_returns_root_only(self) -> None:
+        """Sphere with only Atoms returns just the root path."""
+        s = Sphere((Atom("a"), Atom("b")))
+        paths = all_sphere_paths(s)
+        self.assertEqual(paths, [()])
+
+    def test_nested_sphere_returns_both(self) -> None:
+        """Nested Sphere returns paths to both."""
+        inner = Sphere((Atom("a"),))
+        outer = Sphere((inner, Atom("b")))
+        paths = all_sphere_paths(outer)
+        self.assertIn((), paths)  # Root
+        self.assertIn((0,), paths)  # Inner
+        self.assertEqual(len(paths), 2)
+
+    def test_multiple_nested_spheres(self) -> None:
+        """Multiple nested Spheres all get paths."""
+        inner1 = Sphere((Atom("a"),))
+        inner2 = Sphere((Atom("b"),))
+        outer = Sphere((inner1, inner2))
+        paths = all_sphere_paths(outer)
+        self.assertIn((), paths)
+        self.assertIn((0,), paths)
+        self.assertIn((1,), paths)
+        self.assertEqual(len(paths), 3)
+
+    def test_atom_at_root_returns_empty_list(self) -> None:
+        """Atom at root returns no paths (no Spheres)."""
+        a = Atom("x")
+        paths = all_sphere_paths(a)
+        self.assertEqual(paths, [])
+
+
+class TestDeepestNonRootSphere(unittest.TestCase):
+    """Tests for deepest_non_root_sphere function."""
+
+    def test_single_nested_sphere(self) -> None:
+        """Single nested Sphere is deepest."""
+        inner = Sphere((Atom("a"),))
+        outer = Sphere((inner,))
+        path = deepest_non_root_sphere(outer)
+        self.assertEqual(path, (0,))
+
+    def test_multiple_at_same_depth_returns_first(self) -> None:
+        """Multiple Spheres at same depth: return lexicographically first."""
+        inner1 = Sphere((Atom("a"),))
+        inner2 = Sphere((Atom("b"),))
+        outer = Sphere((inner1, inner2))
+        path = deepest_non_root_sphere(outer)
+        self.assertEqual(path, (0,))  # (0,) comes before (1,)
+
+    def test_deeply_nested_sphere(self) -> None:
+        """Deepest Sphere wins even if others exist."""
+        deep = Sphere((Atom("a"),))
+        middle = Sphere((deep,))
+        shallow = Sphere((Atom("b"),))
+        outer = Sphere((middle, shallow))
+        path = deepest_non_root_sphere(outer)
+        self.assertEqual(path, (0, 0))  # Depth 2 beats depth 1
+
+    def test_no_nested_spheres_raises(self) -> None:
+        """Sphere with no nested Spheres raises PathError."""
+        s = Sphere((Atom("a"), Atom("b")))
+        with self.assertRaises(PathError) as cm:
+            deepest_non_root_sphere(s)
+        self.assertIn("at least one nested Sphere", str(cm.exception))
+
+
+class TestFindLabelPath(unittest.TestCase):
+    """Tests for find_label_path function."""
+
+    def test_find_labeled_sphere(self) -> None:
+        """Finds the Sphere with the given label."""
+        inner = Sphere((Atom("a"),), label="inner")
+        outer = Sphere((inner, Atom("b")), label="outer")
+        path = find_label_path(outer, "inner")
+        self.assertEqual(path, (0,))
+
+    def test_label_not_found_raises(self) -> None:
+        """Non-existent label raises PathError."""
+        s = Sphere((Atom("a"),), label="foo")
+        with self.assertRaises(PathError) as cm:
+            find_label_path(s, "bar")
+        self.assertIn("no Sphere labeled 'bar'", str(cm.exception))
+
+    def test_ambiguous_label_raises(self) -> None:
+        """Duplicate label raises PathError."""
+        inner1 = Sphere((Atom("a"),), label="dup")
+        inner2 = Sphere((Atom("b"),), label="dup")
+        outer = Sphere((inner1, inner2))
+        with self.assertRaises(PathError) as cm:
+            find_label_path(outer, "dup")
+        self.assertIn("ambiguous", str(cm.exception))
+
+    def test_label_on_root_is_ignored(self) -> None:
+        """Label on root Sphere is not found (root can't be POPped)."""
+        s = Sphere((Atom("a"),), label="root_label")
+        with self.assertRaises(PathError):
+            find_label_path(s, "root_label")
+
+    def test_find_deeply_nested_label(self) -> None:
+        """Can find labels in deeply nested structures."""
+        deep = Sphere((Atom("a"),), label="target")
+        middle = Sphere((deep,))
+        outer = Sphere((middle,))
+        path = find_label_path(outer, "target")
+        self.assertEqual(path, (0, 0))
+
+
+class TestExprAt(unittest.TestCase):
+    """Tests for expr_at function."""
+
+    def test_root_path_returns_root(self) -> None:
+        """Empty path returns the root expression itself."""
+        s = Sphere((Atom("a"),))
+        result = expr_at(s, ())
+        self.assertEqual(result, s)
+
+    def test_single_step_to_atom(self) -> None:
+        """Single step can navigate to an Atom."""
+        a = Atom("target")
+        s = Sphere((a, Atom("other")))
+        result = expr_at(s, (0,))
+        self.assertEqual(result, a)
+
+    def test_single_step_to_sphere(self) -> None:
+        """Single step can navigate to a nested Sphere."""
+        inner = Sphere((Atom("a"),))
+        outer = Sphere((inner,))
+        result = expr_at(outer, (0,))
+        self.assertEqual(result, inner)
+
+    def test_multi_step_path(self) -> None:
+        """Multi-step path navigates through structure."""
+        target = Atom("target")
+        inner = Sphere((target,))
+        outer = Sphere((inner,))
+        result = expr_at(outer, (0, 0))
+        self.assertEqual(result, target)
+
+    def test_invalid_path_raises(self) -> None:
+        """Invalid path raises AssertionError."""
+        s = Sphere((Atom("a"),))
+        # Out of range
+        with self.assertRaises(AssertionError):
+            expr_at(s, (5,))
+        # Traverse through Atom
+        with self.assertRaises(AssertionError):
+            expr_at(s, (0, 0))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_performance.py
+============================================================
+
+"""Performance benchmarks for Spherepop operations.
+
+These tests measure computational cost as functions of structural variables:
+    |h| - history length
+    |O| - option space cardinality
+    k   - observational horizon
+    b   - branching factor
+
+Per OVERSOUL directive §9, benchmarks record T(|h|,|O|,k,b) and M(|h|,|O|,k,b)
+rather than absolute wall-clock times. This reveals algorithmic scaling
+rather than hardware variance.
+
+Thresholds are generous "sanity checks" to catch catastrophic regressions
+(e.g., accidental exponential traversal), not strict performance contracts.
+
+Run separately with: pytest -m slow --benchmark-only
+"""
+
+from __future__ import annotations
+
+import pytest
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import (
+    Atom,
+    BindOp,
+    CollapseOp,
+    Config,
+    PopOp,
+    RefuseOp,
+    Sphere,
+)
+from spherepop.observers import admissible, equivalent_at, horizon_equivalent
+from spherepop.semantics import eval_program
+
+
+pytestmark = pytest.mark.slow
+
+
+# ============================================================================
+# Fixtures: Synthetic Workloads
+# ============================================================================
+
+
+def make_deeply_nested_sphere(depth: int, label_prefix: str = "L") -> Sphere:
+    """Create a sphere nested to specified depth."""
+    if depth == 0:
+        return Sphere((Atom("x"),), label=f"{label_prefix}0")
+    
+    inner = make_deeply_nested_sphere(depth - 1, label_prefix)
+    return Sphere((inner,), label=f"{label_prefix}{depth}")
+
+
+def make_wide_sphere(width: int) -> Sphere:
+    """Create a sphere with many immediate children."""
+    items = tuple(Atom(f"opt{i}") for i in range(width))
+    return Sphere(items, label="root")
+
+
+def make_large_option_space(size: int) -> frozenset[str]:
+    """Create an option space with many options."""
+    return frozenset(f"option_{i}" for i in range(size))
+
+
+# ============================================================================
+# POP Benchmarks (depth scaling)
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="pop-depth")
+def test_benchmark_pop_depth_10(benchmark):
+    """POP on depth-10 nested sphere."""
+    sigma = make_deeply_nested_sphere(10)
+    cfg = make_config(sigma, {"x"})
+    
+    # Benchmark popping the deepest sphere
+    result = benchmark(transition, cfg, PopOp(label="L1"))
+    assert len(result.history) == 1
+
+
+@pytest.mark.benchmark(group="pop-depth")
+def test_benchmark_pop_depth_20(benchmark):
+    """POP on depth-20 nested sphere."""
+    sigma = make_deeply_nested_sphere(20)
+    cfg = make_config(sigma, {"x"})
+    
+    result = benchmark(transition, cfg, PopOp(label="L1"))
+    assert len(result.history) == 1
+
+
+@pytest.mark.benchmark(group="pop-depth")
+def test_benchmark_pop_depth_50(benchmark):
+    """POP on depth-50 nested sphere.
+    
+    Sanity check: Should complete in reasonable time despite depth.
+    Path resolution is O(depth) but depth=50 is still tractable.
+    """
+    sigma = make_deeply_nested_sphere(50)
+    cfg = make_config(sigma, {"x"})
+    
+    result = benchmark(transition, cfg, PopOp(label="L1"))
+    assert len(result.history) == 1
+
+
+# ============================================================================
+# REFUSE Benchmarks (|O| scaling)
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="refuse-cardinality")
+def test_benchmark_refuse_100_options(benchmark):
+    """REFUSE with |O| = 100."""
+    sigma = make_wide_sphere(100)
+    options = make_large_option_space(100)
+    cfg = make_config(sigma, options)
+    
+    # Refuse half the options
+    to_refuse = frozenset(f"option_{i}" for i in range(50))
+    result = benchmark(transition, cfg, RefuseOp(refused=to_refuse))
+    
+    assert len(result.option_space) == 50
+
+
+@pytest.mark.benchmark(group="refuse-cardinality")
+def test_benchmark_refuse_1000_options(benchmark):
+    """REFUSE with |O| = 1000.
+    
+    This tests frozenset operations at scale.
+    """
+    sigma = make_wide_sphere(1000)
+    options = make_large_option_space(1000)
+    cfg = make_config(sigma, options)
+    
+    to_refuse = frozenset(f"option_{i}" for i in range(500))
+    result = benchmark(transition, cfg, RefuseOp(refused=to_refuse))
+    
+    assert len(result.option_space) == 500
+
+
+@pytest.mark.benchmark(group="refuse-cardinality")
+def test_benchmark_refuse_10000_options(benchmark):
+    """REFUSE with |O| = 10,000.
+    
+    Stress test for large option spaces.
+    Sanity threshold: Should complete in <1 second.
+    """
+    sigma = make_wide_sphere(10000)
+    options = make_large_option_space(10000)
+    cfg = make_config(sigma, options)
+    
+    to_refuse = frozenset(f"option_{i}" for i in range(5000))
+    result = benchmark(transition, cfg, RefuseOp(refused=to_refuse))
+    
+    assert len(result.option_space) == 5000
+
+
+# ============================================================================
+# BIND Benchmarks (predicate evaluation)
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="bind-predicate")
+def test_benchmark_bind_prefix_1000(benchmark):
+    """BIND with prefix predicate over 1000 options."""
+    sigma = make_wide_sphere(1000)
+    options = make_large_option_space(1000)
+    cfg = make_config(sigma, options)
+    
+    # Bind to options with specific prefix
+    result = benchmark(transition, cfg, BindOp(predicate="prefix:option_1"))
+    
+    # Should match option_1, option_10-19, option_100-199
+    assert len(result.option_space) > 0
+
+
+@pytest.mark.benchmark(group="bind-predicate")
+def test_benchmark_bind_contains_large(benchmark):
+    """BIND with contains predicate on large space."""
+    sigma = make_wide_sphere(1000)
+    options = make_large_option_space(1000)
+    cfg = make_config(sigma, options)
+    
+    result = benchmark(transition, cfg, BindOp(predicate="contains:5"))
+    assert len(result.option_space) > 0
+
+
+# ============================================================================
+# COLLAPSE Benchmarks (quotient construction)
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="collapse-classes")
+def test_benchmark_collapse_10_classes(benchmark):
+    """COLLAPSE creating 10 equivalence classes."""
+    options = make_large_option_space(100)
+    cfg = make_config(make_wide_sphere(100), options)
+    
+    # Create 10 classes of 10 members each
+    classes = tuple(
+        frozenset(f"option_{i*10 + j}" for j in range(10))
+        for i in range(10)
+    )
+    
+    result = benchmark(transition, cfg, CollapseOp(classes=classes))
+    assert len(result.option_space) == 10  # 10 quotients
+
+
+@pytest.mark.benchmark(group="collapse-classes")
+def test_benchmark_collapse_100_classes(benchmark):
+    """COLLAPSE creating 100 equivalence classes."""
+    options = make_large_option_space(1000)
+    cfg = make_config(make_wide_sphere(1000), options)
+    
+    # Create 100 classes of 10 members each
+    classes = tuple(
+        frozenset(f"option_{i*10 + j}" for j in range(10))
+        for i in range(100)
+    )
+    
+    result = benchmark(transition, cfg, CollapseOp(classes=classes))
+    assert len(result.option_space) == 100
+
+
+# ============================================================================
+# eval_program Benchmarks (|h| scaling)
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="eval-program")
+def test_benchmark_eval_program_10_ops(benchmark):
+    """Execute 10 operations sequentially."""
+    cfg = make_config(make_wide_sphere(20), make_large_option_space(20))
+    
+    ops = [RefuseOp(refused=frozenset([f"option_{i}"])) for i in range(10)]
+    
+    result = benchmark(eval_program, cfg, ops)
+    assert len(result.history) == 10
+
+
+@pytest.mark.benchmark(group="eval-program")
+def test_benchmark_eval_program_100_ops(benchmark):
+    """Execute 100 operations sequentially.
+    
+    Tests history accumulation cost T(|h|).
+    """
+    cfg = make_config(make_wide_sphere(150), make_large_option_space(150))
+    
+    ops = [RefuseOp(refused=frozenset([f"option_{i}"])) for i in range(100)]
+    
+    result = benchmark(eval_program, cfg, ops)
+    assert len(result.history) == 100
+
+
+# ============================================================================
+# Observer Benchmarks
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="observers")
+def test_benchmark_admissible_check(benchmark):
+    """Benchmark admissible() predicate checking."""
+    cfg = make_config(make_wide_sphere(100), make_large_option_space(100))
+    op = RefuseOp(refused=frozenset(["option_50"]))
+    
+    result = benchmark(admissible, op, cfg)
+    assert result is True
+
+
+@pytest.mark.benchmark(group="observers")
+def test_benchmark_equivalent_at_depth_3(benchmark):
+    """Benchmark equivalent_at with k=3."""
+    cfg = make_config(make_wide_sphere(10), make_large_option_space(10))
+    
+    ops1 = [RefuseOp(refused=frozenset([f"option_{i}"])) for i in range(5)]
+    ops2 = [RefuseOp(refused=frozenset([f"option_{i}"])) for i in range(5)]
+    
+    result = benchmark(equivalent_at, cfg, ops1, ops2, 3)
+    assert isinstance(result, bool)
+
+
+# ============================================================================
+# Horizon Equivalence (k scaling) - Most Expensive
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="horizon-equivalence")
+@pytest.mark.parametrize("k", [2, 3, 4])
+def test_benchmark_horizon_equivalent_k(benchmark, k):
+    """Benchmark horizon_equivalent for varying k.
+    
+    This is the most expensive observer - it explores full reachable sets.
+    Cost scales exponentially with k but is bounded by candidate_ops.
+    """
+    cfg1 = make_config(make_wide_sphere(5), make_large_option_space(5))
+    cfg2 = make_config(make_wide_sphere(5), make_large_option_space(5))
+    
+    # Small candidate set to keep tractable
+    candidate_ops = [
+        RefuseOp(refused=frozenset([f"option_{i}"]))
+        for i in range(3)
+    ]
+    
+    result = benchmark(horizon_equivalent, cfg1, cfg2, candidate_ops, k)
+    assert isinstance(result, bool)
+
+
+# ============================================================================
+# Structural Complexity Benchmarks
+# ============================================================================
+
+
+@pytest.mark.benchmark(group="structural")
+def test_benchmark_complex_history(benchmark):
+    """Benchmark with complex history: mix of all operations."""
+    cfg = make_config(make_wide_sphere(100), make_large_option_space(100))
+    
+    ops = [
+        RefuseOp(refused=frozenset(["option_0", "option_1"])),
+        BindOp(predicate="prefix:option_"),  # Keep all option_* (no-op filter)
+        CollapseOp(classes=(frozenset(["option_10", "option_11"]),)),
+        RefuseOp(refused=frozenset(["option_2", "option_3"])),
+        BindOp(predicate="ALL"),  # Keep all
+    ]
+    
+    result = benchmark(eval_program, cfg, ops)
+    assert len(result.history) == 5
+
+
+# ============================================================================
+# Summary Reporter
+# ============================================================================
+
+
+def test_benchmark_summary():
+    """Informational test explaining benchmark usage.
+    
+    Run benchmarks with:
+        pytest -m slow --benchmark-only
+        
+    Compare runs:
+        pytest -m slow --benchmark-autosave
+        pytest -m slow --benchmark-compare
+        
+    Generate report:
+        pytest -m slow --benchmark-only --benchmark-json=benchmark.json
+    """
+    pass
+
+============================================================
+FILE: tests/test_poset.py
+============================================================
+
+import unittest
+
+from spherepop.poset import OptionSpace, PosetError, extensionally_equivalent, minimal_elements, pop_minimal, preceq
+
+
+class PosetTests(unittest.TestCase):
+    def test_preceq_is_reflexive_and_transitive(self):
+        a = OptionSpace("a", frozenset({"x"}))
+        b = OptionSpace("b", frozenset({"x", "y"}))
+        c = OptionSpace("c", frozenset({"x", "y", "z"}))
+        self.assertTrue(preceq(a, a))
+        self.assertTrue(preceq(a, b))
+        self.assertTrue(preceq(b, c))
+        self.assertTrue(preceq(a, c))  # transitivity
+
+    def test_preceq_is_not_antisymmetric_at_object_identity(self):
+        # Distinct labels, identical content: preceq holds both ways,
+        # but these are not the same labeled scope.
+        a = OptionSpace("scope-a", frozenset({"x", "y"}))
+        b = OptionSpace("scope-b", frozenset({"x", "y"}))
+        self.assertTrue(preceq(a, b))
+        self.assertTrue(preceq(b, a))
+        self.assertNotEqual(a, b)
+        self.assertTrue(extensionally_equivalent(a, b))
+
+    def test_extensionally_equivalent_requires_exact_content_equality(self):
+        a = OptionSpace("a", frozenset({"x"}))
+        b = OptionSpace("b", frozenset({"x", "y"}))  # a strictly smaller, not equal
+        self.assertTrue(preceq(a, b))
+        self.assertFalse(preceq(b, a))
+        self.assertFalse(extensionally_equivalent(a, b))
+
+    def test_minimal_elements_basic_chain(self):
+        a = OptionSpace("a", frozenset({"x"}))
+        b = OptionSpace("b", frozenset({"x", "y"}))
+        c = OptionSpace("c", frozenset({"x", "y", "z"}))
+        self.assertEqual(minimal_elements([a, b, c]), (a,))
+
+    def test_minimal_elements_incomparable_different_content(self):
+        # Disjoint local contexts: neither's content contains the other's.
+        a = OptionSpace("a", frozenset({"x"}))
+        b = OptionSpace("b", frozenset({"y"}))
+        c = OptionSpace("c", frozenset({"x", "y"}))
+        self.assertEqual(set(minimal_elements([a, b, c])), {a, b})
+
+    def test_minimal_elements_equal_content_different_labels_are_jointly_minimal(self):
+        # The fix: two differently-labeled scopes with IDENTICAL content
+        # must not disqualify one another. Neither's content is a
+        # *strict* subset of the other's (they're equal), so both stay
+        # minimal together.
+        a = OptionSpace("scope-a", frozenset({"x"}))
+        b = OptionSpace("scope-b", frozenset({"x"}))
+        c = OptionSpace("c", frozenset({"x", "y"}))
+        self.assertEqual(set(minimal_elements([a, b, c])), {a, b})
+
+    def test_minimal_elements_strict_subset_still_excludes_equal_content_pair(self):
+        # Equal-content scopes ARE excluded when something else has
+        # strictly smaller content than both of them -- the equal-content
+        # exception only protects scopes from disqualifying *each other*.
+        a = OptionSpace("scope-a", frozenset({"x", "y"}))
+        b = OptionSpace("scope-b", frozenset({"x", "y"}))
+        smaller = OptionSpace("smaller", frozenset({"x"}))
+        self.assertEqual(minimal_elements([a, b, smaller]), (smaller,))
+
+    def test_pop_minimal_removes_only_the_named_label(self):
+        a = OptionSpace("a", frozenset({"x"}))
+        b = OptionSpace("b", frozenset({"x", "y"}))
+        result = pop_minimal([a, b], "a")
+        self.assertEqual(result, (b,))
+        # b's own content is untouched by the pop.
+        self.assertEqual(result[0].content, frozenset({"x", "y"}))
+
+    def test_pop_minimal_rejects_nonminimal_label(self):
+        a = OptionSpace("a", frozenset({"x"}))
+        b = OptionSpace("b", frozenset({"x", "y"}))
+        with self.assertRaises(PosetError):
+            pop_minimal([a, b], "b")
+
+    def test_pop_minimal_rejects_unknown_label(self):
+        a = OptionSpace("a", frozenset({"x"}))
+        with self.assertRaises(PosetError):
+            pop_minimal([a], "nonexistent")
+
+    def test_pop_minimal_on_equal_content_pair_leaves_the_other_still_minimal(self):
+        # After popping one of an equal-content minimal pair, the other
+        # must remain a *valid* pop target -- it was never disqualified
+        # by its sibling in the first place.
+        a = OptionSpace("scope-a", frozenset({"x"}))
+        b = OptionSpace("scope-b", frozenset({"x"}))
+        after_a = pop_minimal([a, b], "scope-a")
+        self.assertEqual(after_a, (b,))
+        self.assertIn(b, minimal_elements(after_a))
+        after_both = pop_minimal(after_a, "scope-b")
+        self.assertEqual(after_both, ())
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_predicates.py
+============================================================
+
+"""Tests for spherepop.predicates module."""
+
+from __future__ import annotations
+
+import unittest
+
+import pytest
+
+from spherepop.model import Quotient
+from spherepop.predicates import predicate, string_test
+
+
+class TestStringTest(unittest.TestCase):
+    """Tests for string_test function."""
+
+    def test_all_predicate(self) -> None:
+        """ALL predicate matches everything."""
+        test = string_test("ALL")
+        self.assertTrue(test("anything"))
+        self.assertTrue(test(""))
+        self.assertTrue(test("user_id"))
+
+    def test_prefix_predicate(self) -> None:
+        """prefix: predicate matches strings with given prefix."""
+        test = string_test("prefix:user")
+        self.assertTrue(test("user"))
+        self.assertTrue(test("user_id"))
+        self.assertTrue(test("user_name"))
+        self.assertFalse(test("admin"))
+        self.assertFalse(test("use"))  # Doesn't match prefix
+        self.assertFalse(test(""))
+
+    def test_contains_predicate(self) -> None:
+        """contains: predicate matches strings containing substring."""
+        test = string_test("contains:_id")
+        self.assertTrue(test("user_id"))
+        self.assertTrue(test("admin_id"))
+        self.assertTrue(test("_id"))
+        self.assertTrue(test("a_id_b"))
+        self.assertFalse(test("user"))
+        self.assertFalse(test("id"))  # Must contain "_id", not just "id"
+
+    def test_in_predicate(self) -> None:
+        """in: predicate matches strings in explicit set."""
+        test = string_test("in:a1,a2,a3")
+        self.assertTrue(test("a1"))
+        self.assertTrue(test("a2"))
+        self.assertTrue(test("a3"))
+        self.assertFalse(test("a4"))
+        self.assertFalse(test("a"))
+        self.assertFalse(test(""))
+
+    def test_in_predicate_with_spaces(self) -> None:
+        """in: predicate strips whitespace from members."""
+        test = string_test("in: a1 , a2 , a3 ")
+        self.assertTrue(test("a1"))
+        self.assertTrue(test("a2"))
+        self.assertTrue(test("a3"))
+        self.assertFalse(test(" a1"))  # Doesn't match " a1" with space
+        self.assertFalse(test("a1 "))
+
+    def test_in_predicate_empty_members(self) -> None:
+        """in: predicate ignores empty members."""
+        test = string_test("in:a1,,a2,")
+        self.assertTrue(test("a1"))
+        self.assertTrue(test("a2"))
+        self.assertFalse(test(""))
+
+    def test_exact_match_predicate(self) -> None:
+        """Any other string is treated as exact match."""
+        test = string_test("user_id")
+        self.assertTrue(test("user_id"))
+        self.assertFalse(test("user"))
+        self.assertFalse(test("user_id_2"))
+        self.assertFalse(test("admin"))
+
+
+class TestPredicate(unittest.TestCase):
+    """Tests for predicate function (handles Quotients).
+    
+    Note: Quotient handling uses EXPERIMENTAL semantics.
+    See THEORY_STATUS.md Q3 for discussion of alternatives.
+    """
+
+    def test_predicate_on_plain_strings(self) -> None:
+        """Predicate works on plain strings like string_test."""
+        pred = predicate("prefix:user")
+        self.assertTrue(pred("user_id"))
+        self.assertTrue(pred("user_name"))
+        self.assertFalse(pred("admin"))
+
+    def test_predicate_on_quotient_existential_true(self) -> None:
+        """Quotient is admitted if any member matches (existential).
+        
+        **Theory Status**: EXPERIMENTAL - This tests provisional existential
+        semantics for BIND predicates on Quotients. See THEORY_STATUS.md Q3.
+        The paper (Appendix E) does not specify how predicates should lift
+        to quotient classes. Alternatives: universal, well-defined on classes.
+        """
+        pred = predicate("prefix:user")
+        q = Quotient(frozenset({"user_id", "admin"}))
+        # Should be True because "user_id" matches even though "admin" doesn't
+        self.assertTrue(pred(q))
+
+    def test_predicate_on_quotient_existential_false(self) -> None:
+        """Quotient is rejected if no members match."""
+        pred = predicate("prefix:user")
+        q = Quotient(frozenset({"admin", "guest"}))
+        # Should be False because neither "admin" nor "guest" matches
+        self.assertFalse(pred(q))
+
+    def test_predicate_all_on_quotient(self) -> None:
+        """ALL predicate admits any Quotient."""
+        pred = predicate("ALL")
+        q = Quotient(frozenset({"anything", "everything"}))
+        self.assertTrue(pred(q))
+
+    def test_predicate_exact_match_on_quotient(self) -> None:
+        """Exact match predicate checks if target is in Quotient members."""
+        pred = predicate("user_id")
+        q1 = Quotient(frozenset({"user_id", "admin"}))
+        q2 = Quotient(frozenset({"admin", "guest"}))
+        self.assertTrue(pred(q1))  # "user_id" is a member
+        self.assertFalse(pred(q2))  # "user_id" is not a member
+
+    def test_predicate_contains_on_quotient(self) -> None:
+        """contains: predicate with Quotient - existential semantics."""
+        pred = predicate("contains:_id")
+        q1 = Quotient(frozenset({"user_id", "admin"}))  # "user_id" contains "_id"
+        q2 = Quotient(frozenset({"user", "admin"}))  # Neither contains "_id"
+        self.assertTrue(pred(q1))
+        self.assertFalse(pred(q2))
+
+    def test_predicate_in_on_quotient(self) -> None:
+        """in: predicate with Quotient - existential semantics."""
+        pred = predicate("in:a1,a2,a3")
+        q1 = Quotient(frozenset({"a1", "b1"}))  # "a1" is in the set
+        q2 = Quotient(frozenset({"b1", "b2"}))  # Neither is in the set
+        self.assertTrue(pred(q1))
+        self.assertFalse(pred(q2))
+
+    def test_predicate_empty_quotient(self) -> None:
+        """Empty Quotient (edge case) - should never match."""
+        # This is a degenerate case that shouldn't happen in practice
+        # (Quotients are built from nonempty classes) but test it anyway
+        pred = predicate("ALL")
+        q = Quotient(frozenset())
+        # Existential over empty set is False (no member matches)
+        self.assertFalse(pred(q))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_properties.py
+============================================================
+
+"""Property-based tests using Hypothesis.
+
+These tests verify universal properties that should hold across all valid
+inputs, complementing example-based tests with automated exploration of the
+input space.
+
+Key properties tested:
+- Structural invariants (history never shrinks, operations preserve types)
+- Algebraic properties (commutativity, associativity where applicable)
+- Idempotence and identity behavior
+- Consistency of observers (determinism, reflexivity, transitivity)
+"""
+
+from __future__ import annotations
+
+from hypothesis import given, strategies as st
+import pytest
+
+from spherepop.model import (
+    Atom,
+    BindOp,
+    CollapseOp,
+    Config,
+    Operation,
+    PopOp,
+    RefuseOp,
+    Quotient,
+    Sphere,
+)
+from spherepop.observers import (
+    admissible,
+    extensionally_equivalent,
+    history_is_prefix,
+)
+from spherepop.semantics import EvalError, eval_program, transition
+from spherepop.views import extensional_view
+
+
+# ============================================================================
+# Hypothesis Strategies for Generating Valid Spherepop Data
+# ============================================================================
+
+
+@st.composite
+def atom_names(draw):
+    """Generate valid atom names (a-z, simple identifiers)."""
+    return draw(st.text(alphabet="abcdefghij", min_size=1, max_size=3))
+
+
+@st.composite
+def atoms(draw):
+    """Generate Atom instances."""
+    name = draw(atom_names())
+    return Atom(name)
+
+
+@st.composite
+def simple_spheres(draw, max_depth=2, max_width=4):
+    """Generate Sphere instances with limited nesting."""
+    if max_depth == 0:
+        # Leaf: just atoms
+        num_items = draw(st.integers(min_value=0, max_value=max_width))
+        items = tuple(draw(atoms()) for _ in range(num_items))
+    else:
+        # Mix of atoms and nested spheres
+        num_items = draw(st.integers(min_value=0, max_value=max_width))
+        items = []
+        for _ in range(num_items):
+            if draw(st.booleans()):
+                items.append(draw(atoms()))
+            else:
+                items.append(draw(simple_spheres(max_depth=max_depth - 1, max_width=max_width)))
+        items = tuple(items)
+    
+    label = draw(st.text(alphabet="abcdefghij", min_size=1, max_size=5))
+    return Sphere(items, label=label)

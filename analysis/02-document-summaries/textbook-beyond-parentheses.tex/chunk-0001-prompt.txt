@@ -1,0 +1,1608 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+
+
+
+
+
+
+
+
+\documentclass[12pt,oneside]{article}
+
+
+
+
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+
+
+
+
+
+\usepackage[
+a4paper,
+margin=1.2in,
+top=1.3in,
+bottom=1.3in
+]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+
+
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{bm}
+
+
+
+
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{
+arrows.meta,
+calc,
+positioning,
+fit,
+matrix,
+decorations.pathmorphing,
+shapes.geometric,
+trees,
+graphs
+}
+
+
+
+
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+
+
+
+
+
+\usepackage{enumitem}
+
+
+
+
+
+\usepackage[
+colorlinks=true,
+linkcolor=black,
+citecolor=black,
+urlcolor=black
+]{hyperref}
+
+
+
+
+
+\usepackage{microtype}
+
+
+
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+
+
+
+
+\DeclareMathOperator{\Replay}{Replay}
+\DeclareMathOperator{\Collapse}{Collapse}
+\DeclareMathOperator{\Merge}{Merge}
+\DeclareMathOperator{\Choice}{Choice}
+\DeclareMathOperator{\Pop}{Pop}
+\DeclareMathOperator{\Sphere}{Sphere}
+\DeclareMathOperator{\Refuse}{Refuse}
+\DeclareMathOperator{\Bind}{Bind}
+\DeclareMathOperator{\Hist}{Hist}
+\DeclareMathOperator{\Type}{Type}
+\DeclareMathOperator{\Disc}{Disc}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ob}{Ob}
+
+
+
+
+
+\title{
+{\Large\bfseries
+Beyond Parentheses:\\[0.4em]
+A Geometric Foundation for Concurrent Computation\\
+through the Spherepop Calculus}
+\\[1.2em]
+{\large
+Evaluation as the Construction of Irreversible Computational Histories}
+}
+
+\author{Flyxion}
+
+\date{June 2026}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+Traditional programming languages inherit a conception of computation in which scope is represented syntactically through nested parentheses, braces, and textual delimiters. Evaluation proceeds by repeatedly locating the innermost reducible expression and replacing it with its value, while the intermediate computational history is largely discarded. Although this model has served programming language theory for decades, it obscures the geometric structure of dependency, limits explicit reasoning about provenance, and separates operational execution from the persistent record of computation.
+
+This monograph develops the Spherepop Calculus (SPC), a history-oriented computational framework in which scope is represented as nested geometric regions rather than purely textual syntax. Computational abstractions are modeled as embedded spheres within a computational plenum, evaluation becomes the geometric collapse of boundaries through the Pop operator, and execution constructs an irreversible history that remains a first-class mathematical object throughout computation. Replay reconstructs admissible historical context, Refusal prevents incoherent continuations before commitment, and Collapse records terminal computational outcomes while preserving provenance.
+
+The resulting framework unifies operational semantics, denotational semantics, category theory, graph rewriting, compiler construction, concurrent execution, probabilistic computation, differentiable programming, and geometric reasoning within a common historical model. Logic becomes an operator library rather than a fixed execution engine, allowing Boolean, fuzzy, probabilistic, differentiable, and other computational regimes to share a single composition-first architecture. Histories replace mutable state as the primary semantic object, while dependency graphs, hyperplane boundaries, and manifold geometry provide complementary mathematical interpretations of execution.
+
+The later chapters establish the Spherepop Calculus as a formal computational system through type theory, abstract machines, rewrite systems, categorical semantics, algebraic structures, geometric semantics, complexity analysis, and a collection of mathematical conjectures intended to guide future research. Rather than viewing computation as the manipulation of transient symbolic expressions, the Spherepop perspective treats computation as the construction, transformation, and geometric organization of persistent histories.
+
+\end{abstract}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+Introduction
+
+
+Every student first encounters symbolic computation through arithmetic.
+An expression such as
+
+\[
+3(2+(5\times4))-7
+\]
+
+is not evaluated all at once.
+Instead, one repeatedly identifies the innermost scope,
+computes its value,
+substitutes the result,
+and continues until the entire expression has been reduced.
+
+The algorithm is so familiar that it is rarely regarded as a profound
+observation about computation itself.
+Yet nearly every programming language, proof assistant, compiler,
+symbolic algebra package, and logical calculus ultimately performs
+some variation of exactly this procedure.
+
+The central claim of Spherepop is that this simple algorithm deserves
+to be regarded as the primitive operation of computation.
+
+Computation is not fundamentally the manipulation of variables,
+nor the evaluation of lambda terms,
+nor the execution of instructions.
+It is the repeated discovery of an admissible scope,
+the evaluation of that scope,
+and the replacement of the scope by its result.
+
+Everything else is structure built around this operation.
+
+
+The Parenthesis Algorithm
+
+
+Consider
+
+\[
+((2+3)\times(4+5)).
+\]
+
+A conventional interpreter performs
+
+\[
+((2+3)\times(4+5))
+\rightarrow
+(5\times9)
+\rightarrow
+45.
+\]
+
+Notice that the computation always follows the same pattern.
+
+First, locate a scope.
+
+Second, evaluate that scope.
+
+Third, replace the scope by its result.
+
+Repeat until no scopes remain.
+
+Spherepop simply elevates this familiar algorithm into the primary
+mathematical object.
+
+Instead of viewing parentheses as temporary syntax,
+it views every scope as an explicit computational object that is born,
+evaluated,
+recorded,
+and finally dissolved.
+
+
+Why ``Sphere'' and ``Pop''?
+
+
+A pair of parentheses defines a region of computation.
+
+Spherepop interprets this region literally as a sphere of abstraction.
+
+Opening a parenthesis creates a sphere.
+
+Closing the parenthesis seals that sphere.
+
+Evaluation pops the sphere,
+replacing the entire region by the value produced inside it.
+
+For example,
+
+\[
+((2+3)\times(4+5))
+\]
+
+may be pictured as two nested spheres.
+
+The first sphere pops,
+
+\[
+((2+3)\times(4+5))
+\rightarrow
+(5\times(4+5)),
+\]
+
+then the second,
+
+\[
+(5\times(4+5))
+\rightarrow
+(5\times9),
+\]
+
+and finally the outer sphere,
+
+\[
+(5\times9)
+\rightarrow
+45.
+\]
+
+The familiar arithmetic algorithm therefore becomes a sequence of
+sphere creations and sphere dissolutions.
+
+
+The Missing Object
+
+
+Traditional programming languages preserve only the current state.
+
+Once
+
+\[
+2+3=5
+\]
+
+has been computed,
+the computation that produced the value is normally discarded.
+
+Spherepop asks a different question.
+
+What if the computation itself were never forgotten?
+
+Instead of storing only values,
+suppose every scope,
+every evaluation,
+every dependency,
+and every replacement were preserved as part of an irreversible
+history.
+
+The primitive object would no longer be the current expression.
+
+It would be the complete record of how the expression came to exist.
+
+
+Arithmetic as the First Programming Language
+
+
+Long before students encounter programming languages, automata, or formal
+logic, they learn a remarkably sophisticated computational procedure through
+elementary arithmetic. Every expression containing parentheses implicitly
+defines a computation, and every student learns to execute that computation by
+following a deterministic evaluation strategy.
+
+Consider the familiar expression
+
+\[
+3\left(2 + (5 \times 4)\right) - 7.
+\]
+
+No student attempts to evaluate every operation simultaneously.
+Instead, one repeatedly locates the innermost parenthesized expression,
+computes its value, substitutes the result into the surrounding expression,
+and repeats until no unresolved scopes remain.
+
+The evaluation proceeds as
+
+\[
+3\left(2 + (5 \times 4)\right)-7
+\]
+
+\[
+\longrightarrow
+3(2+20)-7
+\]
+
+\[
+\longrightarrow
+3(22)-7
+\]
+
+\[
+\longrightarrow
+66-7
+\]
+
+\[
+\longrightarrow
+59.
+\]
+
+This algorithm is so commonplace that its significance is often overlooked.
+Yet it contains the essential structure of symbolic computation.
+
+At every stage three operations occur.
+
+First, an admissible scope is identified.
+
+Second, the computation contained within that scope is evaluated.
+
+Third, the scope itself disappears, replaced by the value it produced.
+
+This procedure appears throughout mathematics.
+
+Polynomial evaluation proceeds by reducing nested expressions.
+
+Matrix expressions evaluate inner products before outer compositions.
+
+Logical formulas reduce subformulas before larger propositions.
+
+Programming languages evaluate nested function applications.
+
+Proof assistants normalize expressions by repeatedly reducing local
+redexes.
+
+Although the syntax differs, the underlying computational strategy remains
+remarkably consistent.
+
+This observation motivates the central question of this work.
+
+What exactly is the primitive operation of symbolic computation?
+
+Traditional foundations answer this question differently.
+
+The $\lambda$-calculus identifies abstraction and application as primitive.
+
+Combinatory logic eliminates variables entirely.
+
+Term rewriting systems emphasize rewrite relations.
+
+Abstract machines describe transitions between machine states.
+
+Operational semantics specifies reduction rules over syntax.
+
+Each perspective captures an important aspect of computation, yet they all
+inherit a common assumption: computation is fundamentally manipulation of
+symbolic expressions.
+
+Spherepop proposes a different starting point.
+
+The primitive operation is not the manipulation of syntax itself but the
+evaluation of a bounded computational region.
+
+Parentheses are therefore not merely punctuation.
+They identify regions of computation that temporarily isolate local structure
+from the surrounding expression.
+Evaluation consists of selecting one of these regions, resolving the
+computation contained within it, and replacing the entire region by its
+result.
+
+This shift may initially appear cosmetic.
+After all, every interpreter already behaves in this manner.
+
+However, a closer inspection reveals that conventional formalisms treat these
+regions as temporary implementation details.
+Once evaluation completes, the scope disappears completely.
+Only the resulting value survives.
+
+Spherepop instead asks whether the scope itself should be regarded as a
+first-class mathematical object.
+
+Rather than viewing an expression as a sequence of symbols decorated by
+parentheses, Spherepop views it as a collection of nested computational
+regions whose creation, evolution, interaction, and dissolution constitute
+the computation itself.
+
+In this interpretation, evaluation is no longer simply the replacement of one
+term by another.
+
+It is the controlled collapse of a bounded computational region.
+
+The history of these collapses, together with the dependencies they create,
+forms the persistent computational object.
+
+The remainder of this paper develops this idea systematically.
+
+We begin not with advanced category theory or dependent type systems, but
+with the elementary notion of scope itself.
+By progressively enriching the mathematics of nested computational regions,
+we show that abstraction, application, concurrency, probabilistic choice,
+typing, provenance, and dependent computation can all be understood as
+natural extensions of the same elementary process first encountered in
+arithmetic: locating an admissible scope, evaluating it, and continuing until
+no unresolved computational regions remain.
+
+
+Parentheses, Scope, and Evaluation
+
+
+Having recognized that elementary arithmetic already embodies a complete
+evaluation strategy, we now examine the mathematical role played by
+parentheses themselves. Surprisingly, parentheses contribute nothing to the
+numerical result of a computation. They exist solely to delimit regions within
+which particular computational rules are temporarily privileged.
+
+For example, the expressions
+
+\[
+2+3\times4
+\]
+
+and
+
+\[
+(2+3)\times4
+\]
+
+contain precisely the same symbols. The only difference is the placement of a
+single pair of parentheses, yet this alteration fundamentally changes the
+evaluation order and therefore the resulting computation.
+
+The parenthesis does not perform arithmetic.
+
+It performs organization.
+
+It defines a temporary computational environment whose contents must be
+resolved before the surrounding computation may continue.
+
+One may therefore think of every pair of parentheses as creating a local
+workspace. Variables introduced inside this workspace remain invisible outside
+it until the workspace has been completely evaluated. Intermediate values may
+be created, transformed, or discarded entirely within its boundary. Only the
+final result escapes.
+
+This observation extends far beyond elementary arithmetic.
+
+In the $\lambda$-calculus,
+
+\[
+(\lambda x.t)\;u
+\]
+
+defines a computational region that cannot be reduced until the function and
+its argument have both become sufficiently explicit. Likewise, in modern
+programming languages, every function body, block statement, closure, module,
+or namespace defines a computational scope that regulates visibility,
+evaluation, and dependency.
+
+Although these constructs appear different, they all perform the same
+fundamental task.
+
+They establish a boundary.
+
+The traditional presentation of these ideas is entirely syntactic.
+Compilers typically represent expressions as abstract syntax trees whose
+internal nodes correspond to operators and whose leaves correspond to atomic
+values. Evaluation proceeds by recursively traversing these trees according to
+their grammatical structure.
+
+This representation is both elegant and efficient, but it encourages an
+important misconception.
+
+It suggests that computation is fundamentally about symbols.
+
+Spherepop instead argues that syntax is merely one possible encoding of a more
+primitive object.
+
+The primitive object is the bounded computational region itself.
+
+Parentheses are therefore not essential because they are symbols.
+
+They are essential because they identify where one computation temporarily
+separates from another.
+
+To emphasize this distinction, consider the expression
+
+\[
+((1+2)+3)+4.
+\]
+
+Conventionally, this expression is viewed as a nested sequence of parentheses.
+
+Spherepop proposes a different interpretation.
+
+Rather than seeing four textual delimiters, we see four nested computational
+regions.
+
+The innermost region contains
+
+\[
+1+2.
+\]
+
+Once evaluated, that region ceases to exist as an unresolved computation and
+is replaced by its result.
+
+The surrounding region now becomes the innermost unresolved computation.
+
+Its evaluation proceeds in exactly the same manner.
+
+The process repeats until every computational region has been resolved.
+
+This viewpoint naturally suggests a geometric interpretation.
+
+Instead of imagining parentheses as punctuation marks written on a page, we
+may regard each scope as a bounded region occupying its own local space.
+Larger regions contain smaller ones, and evaluation always proceeds from the
+most deeply nested admissible region outward.
+
+This geometric perspective has several immediate advantages.
+
+First, containment becomes an intrinsic property rather than a syntactic
+artifact. A computational region literally contains its local variables,
+temporary constructions, and intermediate states.
+
+Second, locality becomes explicit. Every computation occurs within a bounded
+environment whose effects are initially confined to that region.
+
+Third, evaluation acquires a natural direction. Rather than recursively
+descending through textual syntax, computation becomes the progressive
+resolution of nested regions from the interior toward the exterior.
+
+Most importantly, this interpretation prepares the transition from symbolic
+syntax to computational history.
+
+In conventional semantics, once an inner scope has been evaluated, it simply
+disappears. The computation proceeds as though the intermediate region had
+never existed.
+
+Spherepop takes the opposite position.
+
+The disappearance of a computational region is itself a computational event.
+
+The opening of a scope, the transformations occurring within it, and its final
+resolution together form an indivisible episode in the history of the
+computation.
+
+Rather than treating scope as temporary punctuation, Spherepop elevates it to
+the primary structural object from which evaluation, dependency, provenance,
+and ultimately computation itself are constructed.
+
+The next section formalizes this intuition by replacing purely syntactic scope
+with an explicit geometric object: the \emph{Sphere}. Rather than representing
+scope by punctuation, the Sphere represents computation as the creation of a
+bounded region whose eventual resolution becomes the fundamental operation of
+the calculus.
+
+
+From Parentheses to Spheres
+
+
+The transition from conventional symbolic notation to the Spherepop Calculus
+begins with a simple observation. Parentheses themselves are not the objects
+being computed. They are merely symbols used to indicate where computation is
+temporarily localized.
+
+If two mathematicians evaluate the same expression written in different
+notations, the underlying computation remains unchanged. Whether one writes
+
+\[
+((2+3)\times(4+5))
+\]
+
+or draws a syntax tree, or uses indentation, or constructs an abstract syntax
+graph, the numerical result is identical. The notation has changed, but the
+computational structure has not.
+
+This suggests that parentheses are not fundamental mathematical objects.
+Instead, they are one possible representation of a more primitive notion:
+bounded computational scope.
+
+Spherepop therefore replaces the symbolic parenthesis with an explicit
+geometric object called a \emph{Sphere}.
+
+A Sphere is not intended merely as a visual metaphor. It represents a
+computational region whose interior possesses temporary autonomy. Every local
+definition, intermediate value, and dependency exists within the boundary of
+the Sphere until evaluation is complete.
+
+Rather than writing
+
+\[
+(a+b)
+\]
+
+one may think of computation as creating a bounded region containing the
+operations
+
+\[
+a+b.
+\]
+
+The boundary itself records that this computation is temporarily isolated from
+its surroundings. External computations cannot directly interfere with the
+interior of the Sphere until the boundary has been resolved.
+
+This interpretation separates two concepts that are often conflated in
+traditional programming languages.
+
+The first is the computation itself.
+
+The second is the boundary within which that computation occurs.
+
+Conventional syntax represents both simultaneously using parentheses.
+
+Spherepop treats them as distinct mathematical entities.
+
+The computational content consists of operators, values, and dependencies.
+
+The Sphere consists solely of the boundary that contains those objects.
+
+Once this distinction is made, many familiar programming constructs become
+instances of the same geometric idea.
+
+A function body defines a Sphere.
+
+A lexical block defines a Sphere.
+
+A namespace defines a Sphere.
+
+A module defines a Sphere.
+
+Even a process executing concurrently may be viewed as occupying its own
+bounded computational region.
+
+The apparent diversity of programming constructs begins to collapse into a
+single geometric abstraction.
+
+The significance of this reinterpretation becomes clearer when considering
+nested computation.
+
+Suppose we evaluate
+
+\[
+((2+3)\times(4+5)).
+\]
+
+Traditional notation presents this as nested parentheses.
+
+Spherepop instead views the expression as three nested computational regions.
+
+The outer Sphere contains two interior Spheres.
+
+Each interior Sphere contains a local computation.
+
+Neither interior computation depends upon the other.
+
+Consequently, each may evolve independently until both have produced values.
+
+Only after both interior regions have been resolved does the enclosing Sphere
+become admissible for evaluation.
+
+This observation immediately exposes concurrency hidden inside ordinary
+arithmetic.
+
+The additions
+
+\[
+2+3
+\]
+
+and
+
+\[
+4+5
+\]
+
+are independent.
+
+Nothing prevents their simultaneous execution.
+
+The enclosing multiplication merely waits until both interior Spheres have
+completed.
+
+Thus sequential notation often conceals naturally parallel computational
+structure.
+
+The geometry makes this independence explicit.
+
+More generally, every Sphere possesses three distinguishable phases during its
+lifetime.
+
+Initially, the Sphere is opened.
+
+This establishes a new computational boundary together with its local
+environment.
+
+During execution, the Sphere evolves internally.
+Intermediate values appear, disappear, and interact while remaining confined
+to the local region.
+
+Finally, the Sphere is resolved.
+
+Its boundary disappears, its interior computation is replaced by its resulting
+value, and its influence propagates into the surrounding computational
+environment.
+
+Spherepop gives this final event a dedicated mathematical status.
+
+Rather than treating evaluation as an anonymous rewrite rule, the calculus
+identifies the dissolution of a computational boundary as a primitive
+operation.
+
+This operation is called a \emph{Pop}.
+
+The terminology reflects an intuitive geometric picture.
+A Sphere temporarily encloses a computation.
+Evaluation removes the enclosing boundary, exposing the value produced inside.
+The surrounding computation then continues using this newly available result.
+
+Importantly, the Pop is not merely another name for $\beta$-reduction.
+
+It represents a broader computational event.
+
+Function application, arithmetic evaluation, module initialization, concurrent
+task completion, logical proof normalization, and probabilistic commitment may
+all be understood as particular instances of the same underlying operation:
+the dissolution of an admissible computational boundary.
+
+By elevating bounded scope to a first-class mathematical object, Spherepop
+moves the emphasis of computation away from symbolic manipulation and toward
+the evolution of computational regions.
+
+Expressions are no longer viewed simply as trees of symbols.
+
+They become evolving collections of nested Spheres whose successive openings
+and Pops define the observable history of computation.
+
+The next section formalizes the Pop operation itself and demonstrates that
+evaluation is most naturally understood as the controlled collapse of an
+admissible computational region rather than merely the replacement of one
+symbolic expression by another.
+
+
+The Pop Primitive
+
+
+Having replaced symbolic parentheses with explicit computational regions, we
+must now identify the fundamental operation that advances a computation. In
+traditional operational semantics this role is played by reduction. A redex is
+located, a rewrite rule is applied, and the resulting expression replaces the
+original. While mathematically elegant, this description emphasizes the
+transformation of syntax rather than the evolution of computation itself.
+
+Spherepop adopts a different viewpoint. The primitive event is not the rewrite
+of an expression but the dissolution of an admissible computational region.
+This event is called a \emph{Pop}.
+
+Intuitively, every Sphere represents a temporary suspension of commitment.
+Within its boundary multiple intermediate constructions may exist
+simultaneously. Variables may be introduced, functions applied, constraints
+evaluated, and dependencies accumulated. None of these internal activities are
+visible outside the Sphere until the boundary itself is removed. The Pop is
+precisely the event that removes this boundary.
+
+Unlike a simple rewrite rule, a Pop has both local and global significance.
+Locally, it resolves the computation contained within a Sphere. Globally, it
+changes the surrounding computational landscape by making new information
+available to enclosing regions. Every Pop therefore represents both an
+evaluation and a propagation.
+
+Formally, let
+
+\[
+S=(B,I)
+\]
+
+denote a Sphere consisting of a boundary \(B\) enclosing an interior
+computation \(I\). If the interior has reached an admissible state, the Pop
+operation
+
+\[
+\operatorname{Pop}(S)
+\]
+
+replaces the entire Sphere by the value computed within it,
+
+\[
+\operatorname{Pop}(S)
+\longrightarrow
+v.
+\]
+
+Unlike conventional reduction, however, the Pop is understood as a transition
+between two computational histories rather than merely two symbolic
+expressions. The computation has not simply changed form. One bounded region of
+the computational world has ceased to exist, and a new history has been
+created.
+
+This distinction becomes clearer when examining nested evaluation.
+
+Consider once more
+
+\[
+((2+3)\times(4+5)).
+\]
+
+Initially three computational regions exist.
+
+The two inner Spheres are immediately admissible because their computations
+contain no unresolved subregions.
+
+The enclosing Sphere is not yet admissible because its operands remain
+unresolved.
+
+The first Pop produces
+
+\[
+(5\times(4+5)).
+\]
+
+The second produces
+
+\[
+(5\times9).
+\]
+
+Only now does the outer Sphere become admissible.
+
+Its Pop finally produces
+
+\[
+45.
+\]
+
+Nothing about this process depends specifically upon arithmetic.
+
+Exactly the same sequence occurs during function application,
+
+\[
+(\lambda x.t)\;u,
+\]
+
+during expression simplification,
+
+during logical normalization,
+
+during proof reduction,
+
+and during compiler optimization.
+
+Each case consists of identifying a computational region whose internal
+requirements have been satisfied, dissolving its boundary, and exposing its
+result to the surrounding environment.
+
+From this perspective, evaluation is naturally viewed as a sequence of
+admissible Pops.
+
+The scheduler of a Spherepop runtime therefore has a remarkably simple task.
+Rather than recursively traversing syntax trees looking for rewrite rules, it
+searches for Spheres whose internal dependencies have all been satisfied.
+
+A Sphere is said to be \emph{ready} whenever every prerequisite computation
+contained within it has already completed.
+
+Evaluation then becomes
+
+\[
+\text{Locate Ready Sphere}
+\longrightarrow
+\text{Pop}
+\longrightarrow
+\text{Update History}
+\longrightarrow
+\text{Repeat}.
+\]
+
+This formulation deliberately separates readiness from execution.
+
+Conventional interpreters often intertwine dependency analysis with reduction.
+Spherepop instead treats dependency analysis as the determination of which
+computational regions are currently admissible for Pop.
+
+This distinction becomes particularly valuable once concurrency is introduced.
+
+If two Spheres are independent, neither blocks the other. Both are admissible
+simultaneously.
+
+Consequently,
+
+\[
+((2+3)\times(4+5))
+\]
+
+contains two Pops that may occur in parallel without altering the final
+result.
+
+The computation therefore possesses an intrinsic concurrency that is obscured
+by purely textual syntax but immediately visible once computation is viewed as
+the evolution of nested computational regions.
+
+The Pop primitive also provides a natural location for recording provenance.
+Instead of remembering only the value produced by a computation, the runtime
+may record when the Sphere was opened, which dependencies entered it, which
+computations occurred internally, and when the boundary was dissolved.
+Evaluation becomes an observable historical event rather than an invisible
+rewrite.
+
+This historical interpretation does not alter the computed result. Arithmetic
+still produces the same numbers, functions still return the same values, and
+proofs still normalize to the same canonical forms. What changes is the object
+of study. The primary mathematical object is no longer the expression itself
+but the evolving sequence of bounded computational regions whose creation and
+resolution constitute the computation.
+
+The next step is therefore to ask what should happen after a Pop has occurred.
+Traditional semantics simply discard the vanished scope. Spherepop instead
+treats every Pop as an irreversible extension of computational history. It is
+this transition from isolated evaluation to persistent history that gives the
+calculus its distinctive semantic character.
+
+
+Histories as Persistent Scope Evolution
+
+
+The Pop primitive completes the evaluation of a computational region, but it
+raises an important question. What becomes of the region that has been
+evaluated?
+
+Traditional operational semantics answers this question by simply removing the
+reduced expression. Once
+
+\[
+(2+3)
+\]
+
+has become
+
+\[
+5,
+\]
+
+the computation that produced the value is no longer represented within the
+state of the program. Evaluation is therefore fundamentally ephemeral.
+Intermediate computational structure disappears as soon as it has served its
+purpose.
+
+This design has proved extraordinarily successful for efficient execution.
+Nevertheless, it reflects a particular philosophical commitment: that the
+current computational state is more fundamental than the process that produced
+it.
+
+Spherepop rejects this assumption.
+
+Instead of treating computation as a sequence of transient states, Spherepop
+treats it as the construction of an irreversible history. Every Pop extends
+that history, and every computational object derives its meaning from the
+sequence of scope transformations that produced it.
+
+The fundamental mathematical object therefore becomes a history
+
+\[
+H=(e_1,e_2,\ldots,e_n),
+\]
+
+where each event
+
+\[
+e_i
+\]
+
+records a meaningful computational transition.
+
+Rather than representing only values, a history records the evolution of
+computational boundaries themselves.
+
+A typical history may contain events such as
+
+\[
+\operatorname{Open}(S),
+\]
+
+\[
+\operatorname{Bind}(x,v),
+\]
+
+\[
+\operatorname{Pop}(S),
+\]
+
+\[
+\operatorname{Collapse}(v),
+\]
+
+or
+
+\[
+\operatorname{Refuse}(r),
+\]
+
+depending upon the operational semantics being executed.
+
+The important observation is that these events are ordered.
+
+Unlike an ordinary typing context, whose primary role is to record assumptions,
+a history records the chronology of construction. Every later event depends
+upon the existence of earlier events.
+
+Consequently, histories possess an intrinsic direction.
+
+Computation no longer moves between anonymous states.
+
+It grows.
+
+Every admissible computation extends an existing history,
+
+\[
+H
+\longrightarrow
+H',
+\]
+
+where
+
+\[
+H'
+=
+H
+\mathbin{\|}e
+\]
+
+denotes the extension of the existing history by a newly admitted event
+\(e\).
+
+This monotonicity property immediately distinguishes histories from mutable
+machine states.
+
+A mutable state may overwrite information.
+
+A history cannot.
+
+The only admissible operation is extension.
+
+Nothing already admitted may be removed from the historical record.
+
+This does not imply that previous values remain operationally active.
+
+Many historical events cease to influence future computation directly.
+Intermediate values may become unreachable.
+Entire computational regions may no longer participate in subsequent
+evaluation.
+
+Operational irrelevance, however, is distinct from historical nonexistence.
+
+A value may cease to matter computationally while remaining part of the
+construction that produced the current program.
+
+This distinction mirrors ordinary mathematical practice.
+
+A proof consists of many intermediate lemmas.
+
+Once the theorem has been established, those intermediate constructions may no
+longer be consulted during routine use.
+
+Nevertheless, they remain part of the proof.
+
+Likewise, a compiler may eliminate temporary variables after optimization.
+
+The optimized program no longer contains them.
+
+Yet they remain part of the developmental history of the program that was
+compiled.
+
+Spherepop elevates this familiar distinction into a semantic principle.
+
+Programs are not merely expressions.
+
+They are histories of computational construction.
+
+This perspective naturally introduces provenance.
+
+Every value possesses not only an identity but also an origin.
+
+Suppose a computation produces
+
+\[
+v.
+\]
+
+Traditional semantics associates \(v\) only with its current value.
+
+Spherepop instead associates \(v\) with the history responsible for its
+construction,
+
+\[
+\operatorname{Prov}(v)=H_v.
+\]
+
+The provenance of a value therefore consists of the sequence of computational
+events whose successful execution admitted that value into the evolving
+history.
+
+As computations become increasingly concurrent, this provenance becomes
+particularly valuable.
+
+Suppose two independent Spheres execute simultaneously.
+
+Each develops its own local history.
+
+When both complete, the enclosing computation observes not merely two values,
+but two independently constructed historical trajectories that now become
+available for composition.
+
+Concurrency therefore becomes the composition of histories rather than the
+interleaving of machine instructions.
+
+This interpretation provides a remarkably uniform description of sequential and
+parallel computation.
+
+Sequential evaluation extends a single history.
+
+Parallel evaluation develops multiple compatible histories whose eventual
+composition forms a larger historical structure.
+
+The operational semantics therefore shifts emphasis away from instantaneous
+program states and toward persistent computational evolution.
+
+Every successful computation answers two questions simultaneously.
+
+First, what value was produced?
+
+Second, how did that value come to exist?
+
+Traditional semantics primarily answers the first question.
+
+Spherepop treats the second as equally fundamental.
+
+This historical viewpoint will become increasingly important throughout the
+remainder of the calculus.
+
+Replay, dependent computation, provenance tracking, repair, admissibility,
+parallel scheduling, and compilation all rely not merely upon the values that
+exist at a given moment, but upon the histories that brought those values into
+existence.
+
+The next section develops this idea further by replacing traditional syntactic
+substitution with the more general operation of replay, demonstrating that
+computation is better understood as the continuation of historical
+construction than as the manipulation of isolated symbolic expressions.
+
+
+Replay as Historical Continuation
+
+
+Traditional symbolic computation is founded upon one of the most successful
+ideas in the history of logic: substitution. Whenever a function is applied,
+an argument replaces a formal parameter, and computation proceeds as though the
+parameter had always denoted the supplied value. In the $\lambda$-calculus,
+this operation appears as the familiar $\beta$-reduction
+
+\[
+(\lambda x.t)\;u
+\longrightarrow
+t[u/x].
+\]
+
+Substitution is elegant because it reduces function application to a purely
+syntactic transformation. The variable disappears, the argument is copied into
+its place, and evaluation continues.
+
+From the perspective developed in the preceding sections, however,
+substitution conceals an important aspect of computation.
+
+Nothing in the resulting expression records how the argument arrived there.
+
+The transformed term is mathematically equivalent to the original, yet the
+history that justified the transformation has vanished.
+
+Spherepop therefore replaces substitution with a more primitive operation
+called \emph{Replay}.
+
+Replay does not merely replace one symbol with another.
+
+Instead, it reconstructs the continuation of a computation by replaying the
+historical events that produced the supplied argument.
+
+Suppose a function expects a value
+
+\[
+x:A,
+\]
+
+and suppose that a computation has produced a value
+
+\[
+v:A
+\]
+
+through the history
+
+\[
+H_v.
+\]
+
+Traditional substitution inserts only the value
+
+\[
+v.
+\]
+
+Replay instead introduces the pair
+
+\[
+(v,H_v),
+\]
+
+thereby preserving not only what the argument is, but how it came to exist.
+
+Consequently, function application becomes the extension of an existing
+history rather than the replacement of a variable.
+
+Formally, if
+
+\[
+H_f
+\]
+
+denotes the history producing the function and
+
+\[
+H_v
+\]
+
+denotes the history producing the argument, then function application extends
+both histories into a larger construction
+
+\[
+H'
+=
+\operatorname{Replay}(H_f,H_v).
+\]
+
+The resulting computation therefore inherits the complete provenance of both
+participants.
+
+This interpretation naturally explains why histories were introduced before
+Replay.
+
+Replay is not an isolated primitive.
+
+It is an operation on histories.
+
+Without persistent histories there would be nothing to replay.
+
+The distinction between substitution and replay becomes clearer when
+considering repeated evaluation.
+
+Suppose a function computes
+
+\[
+f(x)=x+x.
+\]
+
+Traditional substitution transforms
+
+\[
+f(3)
+\]
+
+into
+
+\[
+3+3.
+\]
+
+From the viewpoint of symbolic evaluation this is entirely sufficient.
+
+Spherepop observes, however, that the two occurrences of \(3\) are not merely
+identical values.
+
+They are two references to the same historical construction.
+
+Replay therefore duplicates the admissible continuation rather than erasing
+its origin.
+
+The computational graph remains connected to the events that produced the
+argument.
+
+This distinction becomes increasingly important once computation extends
+beyond deterministic arithmetic.
+
+Suppose a value arises from probabilistic sampling, external input, or a
+distributed computation.
+
+Two identical numerical values may possess entirely different historical
+origins.
+
+Traditional substitution cannot distinguish between them because both reduce
+to the same symbol.
+
+Replay preserves this distinction automatically.
+
+The identity of a computational object therefore consists of both its value
+and its provenance.
+
+Replay also provides a natural interpretation of incremental computation.
+
+Suppose a large computation has already produced an extensive history
+
+\[
+H.
+\]
+
+A small modification to an earlier input should not require the entire
+computation to begin again.
+
+Instead, Replay identifies precisely those historical continuations whose
+dependencies have changed and reconstructs only those portions of the
+computation.
+
+The unaffected regions remain valid because their histories remain unchanged.
+
+In this sense, Replay resembles the execution strategy employed by modern
+incremental build systems and reactive programming environments, yet it is
+expressed here as a primitive semantic operation rather than an implementation
+optimization.
+
+Another consequence concerns explanation.
+
+One of the persistent difficulties in contemporary software systems is the
+production of meaningful explanations for computed results.
+
+Traditional execution traces often consist of low-level machine operations
+bearing little resemblance to the conceptual structure of the original
+program.
+
+Replay naturally generates explanations at the level of computational history.
+
+To explain why a value exists is simply to replay the sequence of admissible
+events that constructed it.
+
+Explanation therefore becomes an intrinsic property of execution rather than
+an auxiliary debugging facility.
+
+It is important to emphasize that Replay is not intended as a replacement for
+the efficiency of substitution in existing implementations.
+
+An optimizing compiler may still perform ordinary substitutions whenever they
+preserve the required historical semantics.
+
+Replay is instead the semantic primitive from which substitution may be
+derived as a history-erasing optimization under appropriate conditions.
+
+This reverses the traditional perspective.
+
+Rather than beginning with substitution and attempting to recover provenance
+afterwards, Spherepop begins with complete historical continuity and permits
+substitution only when the discarded history is known to be observationally
+irrelevant.
+
+Replay therefore represents the first major consequence of adopting histories
+as the primary computational object.
+
+Programs no longer evolve through isolated symbolic rewrites.
+
+They evolve through the continual extension and reconstruction of admissible
+histories whose provenance remains available throughout the lifetime of the
+computation.
+
+The next section introduces the complementary operation of \emph{Refusal}.
+Where Replay governs the admissible continuation of histories, Refusal
+governs their admissible termination, preventing incoherent computational
+extensions before they become irreversible commitments.
+
+
+Refusal and Admissibility
+
+
+Replay governs the admissible continuation of computation. Every successful
+evaluation extends an existing history by replaying the computational events
+necessary to produce new constructions. The complementary question is equally
+important.
+
+What should happen when no admissible continuation exists?
+
+Traditional programming languages answer this question in numerous ways.
+Execution may halt with an exception, terminate with an error code, produce an
+undefined value, invoke recovery mechanisms, or simply exhibit undefined
+behavior. Although these mechanisms differ operationally, they share a common
+assumption: failure is primarily an event that occurs \emph{after} an
+inadmissible computation has already been attempted.
+
+Spherepop adopts a different perspective.
+
+Instead of treating failure as the consequence of executing an invalid
+computation, the calculus introduces a primitive operation that prevents such
+computations from becoming historical commitments in the first place.
+
+This primitive is called \emph{Refusal}.
+
+Refusal is not an exception.
+
+It is not an error message.
+
+It is not a distinguished return value.
+
+Rather, Refusal is a computational boundary that prevents an inadmissible
+history from being extended.
+
+Suppose a computation has produced the history
+
+\[
+H,
+\]
+
+and suppose that an operation proposes to extend this history by an event
+
+\[
+e.
+\]
+
+Traditional execution attempts the extension and determines afterwards whether
+the resulting state is acceptable.
+
+Spherepop instead evaluates the admissibility of the extension itself.
+
+If
+
+\[
+\operatorname{Adm}(H,e)
+\]
+
+holds, then the computation proceeds,
+
+\[
+H
+\longrightarrow
+H \mathbin{\|} e.
+\]
+
+Otherwise,
+
+\[
+H
+\longrightarrow
+\operatorname{Refuse}(r),
+\]
+
+where \(r\) records the reason that the continuation was rejected.
+
+The history itself remains coherent.
+
+Nothing inadmissible has been admitted into it.
+
+This distinction is subtle but fundamental.
+
+Errors describe computations that have already occurred.
+
+Refusals prevent certain computations from becoming part of the historical
+record at all.
+
+From this viewpoint, admissibility precedes evaluation.
+
+Evaluation is not merely the execution of available operations.
+
+It is the execution of operations that satisfy the continuation conditions
+defined by the surrounding history.
+
+The role traditionally played by types now acquires a new interpretation.
+
+Rather than viewing a type as the collection of permissible values, Spherepop
+views a type as a structured collection of admissible continuations.
+
+A typing judgment
+
+\[
+\Gamma \vdash t : A
+\]
+
+may therefore be read historically.
+
+It asserts not merely that the term \(t\) possesses type \(A\), but that the
+history represented by \(\Gamma\) may be extended by the construction \(t\)
+without violating the continuation discipline embodied by \(A\).
+
+Types become operational boundaries rather than descriptive labels.
+
+This interpretation also clarifies why contexts are naturally understood as
+histories.
+
+In conventional type theory,
+
+\[
+\Gamma
+=
+x_1:A_1,\,
+x_2:A_2,\,
+\ldots,\,
+x_n:A_n
+\]
+
+is often presented as an environment containing assumptions.
+
+Within Spherepop, the same context is interpreted as the ordered record of
+admitted computational events that make the present continuation possible.
+
+Each declaration represents a previous commitment.
+
+Future computation inherits these commitments but cannot invalidate them.
+
+The ordering therefore reflects historical construction rather than merely
+syntactic bookkeeping.
+
+Refusal also provides a natural semantic foundation for program verification.
+
+Suppose a resource may only be consumed once.
+
+Instead of proving globally that every execution satisfies this constraint,
+each attempted continuation is locally tested for admissibility.
+
+The first consumption extends the history normally.
+
+Subsequent attempts encounter a Refusal because no admissible continuation
+exists.
+
+Likewise, access-control policies, capability systems, protocol verification,
+and dependent resource management may all be interpreted as different forms of
+historical admissibility.
+
+Rather than adding special-purpose runtime mechanisms for each domain,
+Spherepop treats them uniformly as boundary conditions governing historical
+extension.

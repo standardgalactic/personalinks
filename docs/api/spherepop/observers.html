@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>spherepop.observers API documentation</title>
+<meta name="description" content="Read-only observers: propositions *about* histories, never events *in* them …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>spherepop.observers</code></h1>
+</header>
+<section id="section-intro">
+<p>Read-only observers: propositions <em>about</em> histories, never events <em>in</em> them.</p>
+<p>The four primitives in <code><a title="spherepop.semantics" href="semantics.html">spherepop.semantics</a></code> (POP, REFUSE, BIND, COLLAPSE)
+are the only things that may append to a Config's history. Everything in
+this module answers a question about one or more already-produced Configs
+and returns a plain value (bool, or a small read-only structure) — it never
+returns a Config for the caller to adopt as "the" continuation, and it never
+mutates history_index bookkeeping or collapse_log in place.</p>
+<pre><code>operations make history; experiments interrogate history.
+</code></pre>
+<p>Confluence, divergence, and regret are properties discovered about
+histories under a stated policy or against a stated alternative — they are
+deliberately <em>not</em> added as a fifth Operation, because doing so would erase
+the distinction between the closed four-operator algebra and the questions
+we ask of it.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="spherepop.observers.admissible"><code class="name flex">
+<span>def <span class="ident">admissible</span></span>(<span>op: Operation, config: Config) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def admissible(op: Operation, config: Config) -&gt; bool:
+    &#34;&#34;&#34;Whether `op` could be applied to `config` without raising.
+
+    This attempts the transition and discards the result — it reports on
+    admissibility without committing `op` to `config`&#39;s history. Because
+    Config is itself immutable, `config` is unaffected either way; the
+    discipline here is about *usage*: callers must not treat this as a way
+    to &#34;peek&#34; at the resulting sigma or option_space, only at whether the
+    move is legal.
+    &#34;&#34;&#34;
+    try:
+        transition(config, op)
+    except EvalError:
+        return False
+    return True</code></pre>
+</details>
+<div class="desc"><p>Whether <code>op</code> could be applied to <code>config</code> without raising.</p>
+<p>This attempts the transition and discards the result — it reports on
+admissibility without committing <code>op</code> to <code>config</code>'s history. Because
+Config is itself immutable, <code>config</code> is unaffected either way; the
+discipline here is about <em>usage</em>: callers must not treat this as a way
+to "peek" at the resulting sigma or option_space, only at whether the
+move is legal.</p></div>
+</dd>
+<dt id="spherepop.observers.confluent"><code class="name flex">
+<span>def <span class="ident">confluent</span></span>(<span>left: Config, right: Config, policy: CollapseOp) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def confluent(left: Config, right: Config, policy: CollapseOp) -&gt; bool:
+    &#34;&#34;&#34;Whether `left` and `right` can be explicitly identified under `policy`.
+
+    Confluence is not something COLLAPSE produces as a side effect of
+    ordinary evaluation — it is a claim about two independently-reached
+    configurations, checked by applying the same stated policy to analysis
+    copies of both and comparing the resulting extensional views. Neither
+    `left` nor `right` is modified; `policy` is never appended to either
+    history by this function.
+    
+    Examples:
+        &gt;&gt;&gt; from spherepop.model import Config, Sphere, Atom, CollapseOp, RefuseOp
+        &gt;&gt;&gt; from spherepop.semantics import transition
+        &gt;&gt;&gt; from spherepop.observers import confluent
+        
+        # Two paths reach different states
+        &gt;&gt;&gt; sigma = Sphere((Atom(&#34;a&#34;), Atom(&#34;b&#34;), Atom(&#34;c&#34;)), label=&#34;root&#34;)
+        &gt;&gt;&gt; cfg = Config(sigma=sigma, option_space=frozenset({&#34;a&#34;, &#34;b&#34;, &#34;c&#34;}), history=())
+        
+        &gt;&gt;&gt; left = transition(cfg, RefuseOp(options=frozenset({&#34;b&#34;})))
+        &gt;&gt;&gt; right = transition(cfg, RefuseOp(options=frozenset({&#34;c&#34;})))
+        &gt;&gt;&gt; left.option_space  # {a, c}
+        frozenset({&#39;a&#39;, &#39;c&#39;})
+        &gt;&gt;&gt; right.option_space  # {a, b}
+        frozenset({&#39;a&#39;, &#39;b&#39;})
+        
+        # Policy that identifies all remaining options
+        &gt;&gt;&gt; policy = CollapseOp(classes=frozenset([
+        ...     frozenset({&#34;a&#34;, &#34;b&#34;, &#34;c&#34;})  # Collapse everything
+        ... ]))
+        &gt;&gt;&gt; confluent(left, right, policy)  # Both end up with single quotient
+        True
+        
+        # But they&#39;re divergent without collapse
+        &gt;&gt;&gt; from spherepop.observers import divergent
+        &gt;&gt;&gt; divergent(left, right, CollapseOp(classes=frozenset()))
+        True
+    &#34;&#34;&#34;
+    left_after = transition(left, policy)
+    right_after = transition(right, policy)
+    return extensional_view(left_after) == extensional_view(right_after)</code></pre>
+</details>
+<div class="desc"><p>Whether <code>left</code> and <code>right</code> can be explicitly identified under <code>policy</code>.</p>
+<p>Confluence is not something COLLAPSE produces as a side effect of
+ordinary evaluation — it is a claim about two independently-reached
+configurations, checked by applying the same stated policy to analysis
+copies of both and comparing the resulting extensional views. Neither
+<code>left</code> nor <code>right</code> is modified; <code>policy</code> is never appended to either
+history by this function.</p>
+<p>Examples
+-----=</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Config, Sphere, Atom, CollapseOp, RefuseOp
+&gt;&gt;&gt; from spherepop.semantics import transition
+&gt;&gt;&gt; from spherepop.observers import confluent
+</code></pre>
+<h1 id="two-paths-reach-different-states">Two paths reach different states</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; sigma = Sphere((Atom(&quot;a&quot;), Atom(&quot;b&quot;), Atom(&quot;c&quot;)), label=&quot;root&quot;)
+&gt;&gt;&gt; cfg = Config(sigma=sigma, option_space=frozenset({&quot;a&quot;, &quot;b&quot;, &quot;c&quot;}), history=())
+</code></pre>
+<pre><code class="language-python-repl">&gt;&gt;&gt; left = transition(cfg, RefuseOp(options=frozenset({&quot;b&quot;})))
+&gt;&gt;&gt; right = transition(cfg, RefuseOp(options=frozenset({&quot;c&quot;})))
+&gt;&gt;&gt; left.option_space  # {a, c}
+frozenset({'a', 'c'})
+&gt;&gt;&gt; right.option_space  # {a, b}
+frozenset({'a', 'b'})
+</code></pre>
+<h1 id="policy-that-identifies-all-remaining-options">Policy that identifies all remaining options</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; policy = CollapseOp(classes=frozenset([
+...     frozenset({&quot;a&quot;, &quot;b&quot;, &quot;c&quot;})  # Collapse everything
+... ]))
+&gt;&gt;&gt; confluent(left, right, policy)  # Both end up with single quotient
+True
+</code></pre>
+<h1 id="but-theyre-divergent-without-collapse">But they're divergent without collapse</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.observers import divergent
+&gt;&gt;&gt; divergent(left, right, CollapseOp(classes=frozenset()))
+True
+</code></pre></div>
+</dd>
+<dt id="spherepop.observers.divergent"><code class="name flex">
+<span>def <span class="ident">divergent</span></span>(<span>left: Config, right: Config, policy: CollapseOp) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def divergent(left: Config, right: Config, policy: CollapseOp) -&gt; bool:
+    &#34;&#34;&#34;Failure of confluence under `policy`.
+
+    Divergence is not &#34;no COLLAPSE could ever identify these&#34; (that would
+    require quantifying over all policies) — it is the negation of
+    confluence under one stated policy, matching `confluent`&#39;s scope.
+    &#34;&#34;&#34;
+    return not confluent(left, right, policy)</code></pre>
+</details>
+<div class="desc"><p>Failure of confluence under <code>policy</code>.</p>
+<p>Divergence is not "no COLLAPSE could ever identify these" (that would
+require quantifying over all policies) — it is the negation of
+confluence under one stated policy, matching <code><a title="spherepop.observers.confluent" href="#spherepop.observers.confluent">confluent()</a></code>'s scope.</p></div>
+</dd>
+<dt id="spherepop.observers.equivalent_at"><code class="name flex">
+<span>def <span class="ident">equivalent_at</span></span>(<span>base: Config,<br>ops_left: Iterable[Operation],<br>ops_right: Iterable[Operation],<br>k: int) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def equivalent_at(
+    base: Config,
+    ops_left: Iterable[Operation],
+    ops_right: Iterable[Operation],
+    k: int,
+) -&gt; bool:
+    &#34;&#34;&#34;Whether two *specific* operation sequences, replayed from `base`,
+    agree at step k.
+
+    This is a witness-level check over one stated pair of sequences, not
+    Appendix F&#39;s `\u2248_k` (see `horizon_equivalent` for that): agreement of
+    one pair of continuations does not establish that the full sets of
+    k-step continuations coincide. Config does not retain a snapshot per
+    history index, so agreement here is answered by replaying the first k
+    operations of each sequence from the same base via `eval_program` and
+    comparing extensional views. This is a read: it produces two
+    disposable analysis Configs and returns a bool, and appends nothing to
+    `base` itself.
+    &#34;&#34;&#34;
+    if k &lt; 0:
+        raise ValueError(&#34;k must be non-negative&#34;)
+    left = eval_program(base, list(ops_left)[:k])
+    right = eval_program(base, list(ops_right)[:k])
+    return extensional_view(left) == extensional_view(right)</code></pre>
+</details>
+<div class="desc"><p>Whether two <em>specific</em> operation sequences, replayed from <code>base</code>,
+agree at step k.</p>
+<p>This is a witness-level check over one stated pair of sequences, not
+Appendix F's <code>≈_k</code> (see <code><a title="spherepop.observers.horizon_equivalent" href="#spherepop.observers.horizon_equivalent">horizon_equivalent()</a></code> for that): agreement of
+one pair of continuations does not establish that the full sets of
+k-step continuations coincide. Config does not retain a snapshot per
+history index, so agreement here is answered by replaying the first k
+operations of each sequence from the same base via <code>eval_program</code> and
+comparing extensional views. This is a read: it produces two
+disposable analysis Configs and returns a bool, and appends nothing to
+<code>base</code> itself.</p></div>
+</dd>
+<dt id="spherepop.observers.extensionally_equivalent"><code class="name flex">
+<span>def <span class="ident">extensionally_equivalent</span></span>(<span>left: Config, right: Config) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def extensionally_equivalent(left: Config, right: Config) -&gt; bool:
+    &#34;&#34;&#34;Whether `left` and `right` look the same from the outside: same
+    rendered sigma, same displayed option space — identity of *what*,
+    indifferent to *how*. Two configurations can be extensionally
+    equivalent while intensionally distinct (see experiment 20).&#34;&#34;&#34;
+    return extensional_view(left) == extensional_view(right)</code></pre>
+</details>
+<div class="desc"><p>Whether <code>left</code> and <code>right</code> look the same from the outside: same
+rendered sigma, same displayed option space — identity of <em>what</em>,
+indifferent to <em>how</em>. Two configurations can be extensionally
+equivalent while intensionally distinct (see experiment 20).</p></div>
+</dd>
+<dt id="spherepop.observers.horizon_equivalent"><code class="name flex">
+<span>def <span class="ident">horizon_equivalent</span></span>(<span>left: Config, right: Config, candidate_ops: Sequence[Operation], k: int) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def horizon_equivalent(
+    left: Config,
+    right: Config,
+    candidate_ops: Sequence[Operation],
+    k: int,
+) -&gt; bool:
+    &#34;&#34;&#34;Appendix F&#39;s h1 \u2248_k h2: whether `left` and `right` admit exactly the
+    same *set* of extensional outcomes reachable by k further events, not
+    merely whether one chosen pair of continuations happens to agree
+    (that weaker, witness-level question is `equivalent_at`).
+
+    The paper quantifies over &#34;admissible events&#34; without fixing a
+    concrete alphabet; this lab requires the caller to supply a finite
+    `candidate_ops` pool to quantify over, since enumerating every
+    syntactically expressible Operation (arbitrary REFUSE sets, arbitrary
+    BIND predicates, ...) is unbounded. The result is therefore \u2248_k
+    *relative to* `candidate_ops` -- widening the pool can only grow each
+    side&#39;s reachable set, never shrink it, so equivalence relative to a
+    smaller pool does not imply equivalence relative to a larger one.
+
+    Exponential in k and len(candidate_ops); fine for the small pools and
+    small k this lab works with, not intended for production-scale search.
+    &#34;&#34;&#34;
+    if k &lt; 0:
+        raise ValueError(&#34;k must be non-negative&#34;)
+
+    def reachable(config: Config, remaining: int) -&gt; set[tuple[str, tuple[str, ...]]]:
+        if remaining == 0:
+            return {extensional_view(config)}
+        outcomes: set[tuple[str, tuple[str, ...]]] = set()
+        for op in candidate_ops:
+            try:
+                nxt = transition(config, op)
+            except EvalError:
+                continue
+            outcomes |= reachable(nxt, remaining - 1)
+        return outcomes
+
+    return reachable(left, k) == reachable(right, k)</code></pre>
+</details>
+<div class="desc"><p>Appendix F's h1 ≈_k h2: whether <code>left</code> and <code>right</code> admit exactly the
+same <em>set</em> of extensional outcomes reachable by k further events, not
+merely whether one chosen pair of continuations happens to agree
+(that weaker, witness-level question is <code><a title="spherepop.observers.equivalent_at" href="#spherepop.observers.equivalent_at">equivalent_at()</a></code>).</p>
+<p>The paper quantifies over "admissible events" without fixing a
+concrete alphabet; this lab requires the caller to supply a finite
+<code>candidate_ops</code> pool to quantify over, since enumerating every
+syntactically expressible Operation (arbitrary REFUSE sets, arbitrary
+BIND predicates, &hellip;) is unbounded. The result is therefore ≈_k
+<em>relative to</em> <code>candidate_ops</code> &ndash; widening the pool can only grow each
+side's reachable set, never shrink it, so equivalence relative to a
+smaller pool does not imply equivalence relative to a larger one.</p>
+<p>Exponential in k and len(candidate_ops); fine for the small pools and
+small k this lab works with, not intended for production-scale search.</p></div>
+</dd>
+<dt id="spherepop.observers.intensionally_equivalent"><code class="name flex">
+<span>def <span class="ident">intensionally_equivalent</span></span>(<span>left: Config, right: Config) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def intensionally_equivalent(left: Config, right: Config) -&gt; bool:
+    &#34;&#34;&#34;Whether `left` and `right` were reached by the exact same event
+    sequence — identity of *how*, not just *what*.&#34;&#34;&#34;
+    return left.history == right.history</code></pre>
+</details>
+<div class="desc"><p>Whether <code>left</code> and <code>right</code> were reached by the exact same event
+sequence — identity of <em>how</em>, not just <em>what</em>.</p></div>
+</dd>
+<dt id="spherepop.observers.irreducibly_divergent"><code class="name flex">
+<span>def <span class="ident">irreducibly_divergent</span></span>(<span>left: Config, right: Config, policies: Iterable[CollapseOp]) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def irreducibly_divergent(left: Config, right: Config, policies: Iterable[CollapseOp]) -&gt; bool:
+    &#34;&#34;&#34;Whether `left` and `right` remain divergent under every policy in
+    `policies`.
+
+    This is divergence irreducible *relative to the given family* — not a
+    proof of divergence under every policy that could ever be stated,
+    which would require enumerating the full policy space. A structural
+    divergence (different sigma shape; see experiment 16) is a case where
+    this holds for essentially any atom-renaming policy, since COLLAPSE
+    quotients atoms and cannot repair a difference in bracket structure —
+    but that stronger claim is a fact about COLLAPSE&#39;s reach, not
+    something this function tests directly.
+    &#34;&#34;&#34;
+    return all(divergent(left, right, policy) for policy in policies)</code></pre>
+</details>
+<div class="desc"><p>Whether <code>left</code> and <code>right</code> remain divergent under every policy in
+<code>policies</code>.</p>
+<p>This is divergence irreducible <em>relative to the given family</em> — not a
+proof of divergence under every policy that could ever be stated,
+which would require enumerating the full policy space. A structural
+divergence (different sigma shape; see experiment 16) is a case where
+this holds for essentially any atom-renaming policy, since COLLAPSE
+quotients atoms and cannot repair a difference in bracket structure —
+but that stronger claim is a fact about COLLAPSE's reach, not
+something this function tests directly.</p></div>
+</dd>
+<dt id="spherepop.observers.regretful"><code class="name flex">
+<span>def <span class="ident">regretful</span></span>(<span>base: Config, candidate: Config, alternative: Config) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def regretful(base: Config, candidate: Config, alternative: Config) -&gt; bool:
+    &#34;&#34;&#34;Whether `candidate` is a regretful continuation of `base`.
+
+    Regret describes a history whose commitments leave a strictly smaller
+    option space than another continuation reachable from the same prefix.
+    `base` fixes what &#34;the common prefix&#34; means; both `candidate` and
+    `alternative` must extend it (checked via `history_is_prefix`, the same
+    prefix relation the core semantics already exposes). This raises rather
+    than guessing at a shared ancestor, since silently comparing unrelated
+    histories would misrepresent what regret is a claim about.
+
+    Caveat: `history_is_prefix` treats an empty history as a prefix of any
+    history, so a `base` with no committed events cannot rule out an
+    unrelated `candidate` or `alternative` -- pass a `base` with at least
+    one event already committed for this check to be non-vacuous.
+    
+    Examples:
+        &gt;&gt;&gt; from spherepop.model import Config, Sphere, Atom, RefuseOp
+        &gt;&gt;&gt; from spherepop.semantics import transition
+        &gt;&gt;&gt; from spherepop.observers import regretful
+        
+        # Start with three options
+        &gt;&gt;&gt; sigma = Sphere((Atom(&#34;a&#34;), Atom(&#34;b&#34;), Atom(&#34;c&#34;)), label=&#34;root&#34;)
+        &gt;&gt;&gt; base = Config(sigma=sigma, option_space=frozenset({&#34;a&#34;, &#34;b&#34;, &#34;c&#34;}), history=())
+        
+        # Candidate: refuse two options, left with one
+        &gt;&gt;&gt; candidate = transition(base, RefuseOp(options=frozenset({&#34;b&#34;, &#34;c&#34;})))
+        &gt;&gt;&gt; candidate.option_space
+        frozenset({&#39;a&#39;})
+        
+        # Alternative: refuse only one option, left with two
+        &gt;&gt;&gt; alternative = transition(base, RefuseOp(options=frozenset({&#34;c&#34;})))
+        &gt;&gt;&gt; alternative.option_space
+        frozenset({&#39;a&#39;, &#39;b&#39;})
+        
+        # Candidate is regretful: alternative has strictly more options
+        &gt;&gt;&gt; regretful(base, candidate, alternative)
+        True
+        
+        # Not regretful if candidate has same or more options
+        &gt;&gt;&gt; regretful(base, alternative, candidate)
+        False
+    &#34;&#34;&#34;
+    if not history_is_prefix(base, candidate):
+        raise ValueError(&#34;candidate does not continue from base&#34;)
+    if not history_is_prefix(base, alternative):
+        raise ValueError(&#34;alternative does not continue from base&#34;)
+    return candidate.option_space &lt; alternative.option_space</code></pre>
+</details>
+<div class="desc"><p>Whether <code>candidate</code> is a regretful continuation of <code>base</code>.</p>
+<p>Regret describes a history whose commitments leave a strictly smaller
+option space than another continuation reachable from the same prefix.
+<code>base</code> fixes what "the common prefix" means; both <code>candidate</code> and
+<code>alternative</code> must extend it (checked via <code>history_is_prefix</code>, the same
+prefix relation the core semantics already exposes). This raises rather
+than guessing at a shared ancestor, since silently comparing unrelated
+histories would misrepresent what regret is a claim about.</p>
+<p>Caveat: <code>history_is_prefix</code> treats an empty history as a prefix of any
+history, so a <code>base</code> with no committed events cannot rule out an
+unrelated <code>candidate</code> or <code>alternative</code> &ndash; pass a <code>base</code> with at least
+one event already committed for this check to be non-vacuous.</p>
+<p>Examples
+-----=</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Config, Sphere, Atom, RefuseOp
+&gt;&gt;&gt; from spherepop.semantics import transition
+&gt;&gt;&gt; from spherepop.observers import regretful
+</code></pre>
+<h1 id="start-with-three-options">Start with three options</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; sigma = Sphere((Atom(&quot;a&quot;), Atom(&quot;b&quot;), Atom(&quot;c&quot;)), label=&quot;root&quot;)
+&gt;&gt;&gt; base = Config(sigma=sigma, option_space=frozenset({&quot;a&quot;, &quot;b&quot;, &quot;c&quot;}), history=())
+</code></pre>
+<h1 id="candidate-refuse-two-options-left-with-one">Candidate: refuse two options, left with one</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; candidate = transition(base, RefuseOp(options=frozenset({&quot;b&quot;, &quot;c&quot;})))
+&gt;&gt;&gt; candidate.option_space
+frozenset({'a'})
+</code></pre>
+<h1 id="alternative-refuse-only-one-option-left-with-two">Alternative: refuse only one option, left with two</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; alternative = transition(base, RefuseOp(options=frozenset({&quot;c&quot;})))
+&gt;&gt;&gt; alternative.option_space
+frozenset({'a', 'b'})
+</code></pre>
+<h1 id="candidate-is-regretful-alternative-has-strictly-more-options">Candidate is regretful: alternative has strictly more options</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; regretful(base, candidate, alternative)
+True
+</code></pre>
+<h1 id="not-regretful-if-candidate-has-same-or-more-options">Not regretful if candidate has same or more options</h1>
+<pre><code class="language-python-repl">&gt;&gt;&gt; regretful(base, alternative, candidate)
+False
+</code></pre></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="spherepop.observers.admissible" href="#spherepop.observers.admissible">admissible</a></code></li>
+<li><code><a title="spherepop.observers.confluent" href="#spherepop.observers.confluent">confluent</a></code></li>
+<li><code><a title="spherepop.observers.divergent" href="#spherepop.observers.divergent">divergent</a></code></li>
+<li><code><a title="spherepop.observers.equivalent_at" href="#spherepop.observers.equivalent_at">equivalent_at</a></code></li>
+<li><code><a title="spherepop.observers.extensionally_equivalent" href="#spherepop.observers.extensionally_equivalent">extensionally_equivalent</a></code></li>
+<li><code><a title="spherepop.observers.horizon_equivalent" href="#spherepop.observers.horizon_equivalent">horizon_equivalent</a></code></li>
+<li><code><a title="spherepop.observers.intensionally_equivalent" href="#spherepop.observers.intensionally_equivalent">intensionally_equivalent</a></code></li>
+<li><code><a title="spherepop.observers.irreducibly_divergent" href="#spherepop.observers.irreducibly_divergent">irreducibly_divergent</a></code></li>
+<li><code><a title="spherepop.observers.regretful" href="#spherepop.observers.regretful">regretful</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

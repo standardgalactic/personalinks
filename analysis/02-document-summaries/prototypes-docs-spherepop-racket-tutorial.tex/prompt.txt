@@ -1,0 +1,62 @@
+You are analyzing one document from a large theoretical and
+computational research repository called Spherepop.
+
+Produce a dense scholarly summary.
+
+Identify:
+
+1. the central thesis;
+2. definitions and primitive concepts;
+3. mathematical claims;
+4. important equations or formal structures;
+5. mechanisms and processes;
+6. philosophical commitments;
+7. connections to computation;
+8. connections to other likely parts of Spherepop;
+9. unresolved questions;
+10. contradictions, ambiguities, or weaknesses;
+11. concepts that appear unusually important and should survive
+    later compression.
+
+Do not merely paraphrase section by section.
+
+Preserve technical distinctions. Do not invent claims absent from
+the source.
+
+SOURCE DOCUMENT
+===============
+
+                                  Spherepop in Racket:
+                                    A Short Tutorial
+                                             Flyxion
+
+                                        August 13, 2026
+
+
+
+1    Getting Started
+Assuming the collection is available on your Racket path, you can require it as follows:
+
+#lang racket
+(require spherepop-lib)
+
+   This gives you access to the core region type, merge and collapse, and the tiny sp surface
+syntax.
+
+
+2    First Examples
+(define s default-collapse-strategy)
+(define a (make-region "a" ’(1)))
+(define b (make-region "b" ’(2)))
+(define t (sp (a b)))
+(define r (eval-term s t))
+
+
+3    Further Work
+[Extend this document with more examples, invariants, and exercises.]
+
+
+
+
+                                                 1
+

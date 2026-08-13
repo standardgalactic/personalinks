@@ -1,0 +1,1094 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+
+
+
+
+
+
+
+
+\documentclass[12pt,oneside]{article}
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=1.25in}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black
+}
+
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0.35em}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{remark}[definition]{Remark}
+
+\newcommand{\Pop}{\mathsf{pop}}
+\newcommand{\Refuse}{\mathsf{refuse}}
+\newcommand{\Collapse}{\mathsf{collapse}}
+\newcommand{\Bind}{\mathsf{bind}}
+\newcommand{\Hist}{\mathsf{Hist}}
+\newcommand{\Ty}{\mathsf{Ty}}
+\newcommand{\Tm}{\mathsf{Tm}}
+\newcommand{\Ctx}{\mathsf{Ctx}}
+\newcommand{\Type}{\mathsf{Type}}
+\newcommand{\Kind}{\mathsf{Kind}}
+\newcommand{\Prop}{\mathsf{Prop}}
+\newcommand{\Adm}{\mathsf{Adm}}
+\newcommand{\Rest}{\mathsf{Rest}}
+\newcommand{\NF}{\mathsf{NF}}
+\newcommand{\Id}{\mathsf{Id}}
+\newcommand{\El}{\mathsf{El}}
+\newcommand{\eval}{\Downarrow}
+\newcommand{\step}{\longrightarrow}
+\newcommand{\steps}{\longrightarrow^{*}}
+\newcommand{\judges}{\vdash}
+\newcommand{\defeq}{\equiv}
+
+\title{\textbf{Types as Refusal Structures}\\
+\large Toward a Calculus of Constructions in Spherepop}
+
+\author{Flyxion}
+\date{June 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This essay develops a path from the operational calculus of Spherepop to a dependent type calculus and finally to a Spherepop-native version of the calculus of constructions. The guiding idea is that a type is not merely a collection of values, nor merely a proposition, nor merely a syntactic classifier. A type is a disciplined refusal structure: it determines which histories may continue, which collapses are admissible, and which malformed constructions must be refused before they become executable commitments. In ordinary type theory, judgments such as $\Gamma \judges t : A$ classify terms relative to contexts. In Spherepop, the same judgment is interpreted dynamically as the claim that the history $\Gamma$ can be extended by the event $t$ without violating the continuation conditions encoded by $A$. This shifts the emphasis from static membership to controlled continuation. The calculus of constructions is then reconstructed as a hierarchy of admissible continuation principles: terms inhabit types, types depend on terms, propositions are types of proofs, and universes classify the stages at which refusal rules themselves may be formed. The resulting system treats computation, proof, and program construction as modes of history repair under admissibility constraints.
+\end{abstract}
+
+
+Introduction
+
+
+Spherepop begins from a simple operational reversal. Instead of treating programs as inert expressions that later acquire histories, it treats histories as primary and programs as controlled ways of extending them. The basic operations of the calculus are $\Pop$, $\Refuse$, $\Collapse$, and $\Bind$. A computation may open a possible continuation, refuse an inadmissible one, collapse a resolved branch into a committed value, or bind one history-producing operation to another. This gives Spherepop the character of a process calculus, but its philosophical orientation is closer to repair theory: a program is not merely a function from inputs to outputs, but a disciplined way of preserving coherence while new distinctions are introduced.
+
+Type theory is a natural next step because types are already the formal language of disciplined continuation. In a simply typed lambda calculus, a term cannot be applied to an argument unless the argument has the required type. In a dependent type theory, a type may depend on a value, so that the admissibility of a continuation can vary with the history already produced. In the calculus of constructions, propositions and types are unified: to prove a proposition is to construct an inhabitant of the corresponding type. This is exactly the kind of structure Spherepop needs if it is to become not only a language of executable histories, but a language of certified histories.
+
+The central claim of this essay is that a Spherepop type should be understood as a refusal boundary over possible continuations. A value of type $A$ is not simply an element of a set. It is a history fragment that survives the refusal tests imposed by $A$. A function type $A \to B$ is not merely a set of mappings. It is a repair operator that transforms any admissible $A$-continuation into an admissible $B$-continuation. A dependent product $\Pi x:A.\,B(x)$ is a uniform repair operator whose output admissibility may depend on the input history. A dependent sum $\Sigma x:A.\,B(x)$ is a paired commitment: first a witness $x$ is admitted, then a second witness is admitted relative to it. Identity types express controlled substitutability between histories. Universes classify the levels at which these refusal structures may themselves be named, transported, and constructed.
+
+This interpretation does not replace ordinary type theory. Rather, it reinterprets its judgments operationally. The familiar judgment
+\[
+\Gamma \judges t : A
+\]
+is read as follows: under the accumulated history $\Gamma$, the expression $t$ is an admissible continuation satisfying the refusal structure $A$. The judgment
+\[
+\Gamma \judges A : \Type
+\]
+says that $A$ is itself a well-formed refusal structure in the current history. The judgment
+\[
+\Gamma \judges A \defeq B : \Type
+\]
+says that $A$ and $B$ impose the same continuation discipline up to normalization, repair, or collapse equivalence.
+
+The point of building a calculus of constructions inside Spherepop is not merely to imitate Coq or Agda. It is to make proof, execution, and repair share one operational substrate. A proof is a history that cannot be refused by the proposition it inhabits. A program is a history transformer that preserves admissibility. A type error is not a failed decoration pass after syntax has already been accepted, but an early refusal event preventing an incoherent history from becoming a committed collapse.
+
+
+The Operational Core of Spherepop
+
+
+We begin with a minimal operational vocabulary. Let $\Hist$ be a class of finite histories. A history $h \in \Hist$ records the sequence of commitments, refusals, collapses, and bindings that have occurred so far. Spherepop programs are not interpreted as direct maps from values to values, but as partial continuation procedures on histories.
+
+\begin{definition}[Spherepop operation]
+A primitive Spherepop operation is one of the following history-transforming acts:
+\[
+\Pop(a), \qquad \Refuse(r), \qquad \Collapse(v), \qquad \Bind(p,q).
+\]
+Here $\Pop(a)$ opens or exposes a possible continuation labelled by $a$; $\Refuse(r)$ blocks a continuation for reason $r$; $\Collapse(v)$ commits a resolved continuation to value $v$; and $\Bind(p,q)$ composes a history-producing procedure $p$ with a continuation procedure $q$.
+\end{definition}
+
+The distinction between refusal and collapse is essential. A collapse commits. A refusal prevents commitment. A malformed program should not collapse to an error value if the error represents a violation of admissibility. It should be refused before it becomes a member of the history of accepted computation.
+
+This means that Spherepop already contains the seed of type theory. A type system is precisely a disciplined refusal mechanism. It prevents some expressions from entering the accepted operational history. The usual distinction between dynamic and static semantics becomes a distinction between late refusal and early refusal. A dynamically checked language allows many histories to proceed until failure. A typed Spherepop system moves refusal closer to the point where inadmissibility first appears.
+
+\begin{definition}[Admissible continuation]
+Given a history $h$, a continuation $k$ is admissible relative to $h$ when extending $h$ by $k$ does not force a refusal:
+\[
+\Adm(h,k) \quad \Longleftrightarrow \quad h \cdot k \not\steps \Refuse(r)
+\]
+for any terminal refusal reason $r$.
+\end{definition}
+
+A type can now be introduced as a predicate on continuations, but this predicate should not be thought of as merely external. A type is part of the operational language. It is a programmable refusal surface.
+
+\begin{definition}[Type as refusal structure]
+A Spherepop type over a history $h$ is a rule $A$ assigning to each candidate continuation $k$ either admission, refusal, or deferred admissibility:
+\[
+A_h(k) \in \{\mathsf{admit},\mathsf{refuse},\mathsf{defer}\}.
+\]
+A term $t$ has type $A$ in history $h$ when the continuation generated by $t$ is admitted by $A$ relative to $h$.
+\end{definition}
+
+The value $\mathsf{defer}$ is important. It allows open terms, dependent obligations, unresolved constraints, and interactive proof states. A type calculus for Spherepop should not require every admissibility question to be settled immediately. It should allow some refusals to remain suspended until the missing history has been supplied.
+
+
+Contexts as Histories
+
+
+In ordinary type theory, a context is a list of variable declarations:
+\[
+x_1:A_1,\ldots,x_n:A_n.
+\]
+In Spherepop, this is reinterpreted as a history of admissible openings. Each variable declaration says that a possible continuation has been popped and accepted as a stable dependency for later construction.
+
+\begin{definition}[Spherepop context]
+A context is a finite admissible history of typed openings:
+\[
+\Gamma ::= \varnothing \mid \Gamma, x:A.
+\]
+The extension $\Gamma,x:A$ is valid only when $\Gamma \judges A : \Type$ and the name $x$ is fresh in $\Gamma$.
+\end{definition}
+
+Thus a context is not merely an environment. It is a sequence of permitted assumptions. Every variable in the context is a controlled unresolved continuation. It has not been collapsed to a concrete value, but it has been admitted as a legitimate dependency.
+
+The context formation rules become the first layer of the type calculus:
+\[
+\frac{}{\varnothing \ \mathsf{ctx}}
+\qquad
+\frac{\Gamma \ \mathsf{ctx} \qquad \Gamma \judges A : \Type \qquad x \notin \Gamma}
+{\Gamma,x:A \ \mathsf{ctx}}.
+\]
+The variable rule says that a previously admitted opening may be used:
+\[
+\frac{\Gamma,x:A,\Delta \ \mathsf{ctx}}
+{\Gamma,x:A,\Delta \judges x : A}.
+\]
+Operationally, this is a controlled $\Pop$. The variable $x$ names a continuation that has already passed the refusal boundary encoded by $A$.
+
+
+The Basic Judgment Forms
+
+
+A Spherepop type calculus requires several judgment forms. The minimal collection is:
+\[
+\Gamma \ \mathsf{ctx},
+\]
+\[
+\Gamma \judges A : \Type,
+\]
+\[
+\Gamma \judges t : A,
+\]
+\[
+\Gamma \judges A \defeq B : \Type,
+\]
+\[
+\Gamma \judges t \defeq u : A.
+\]
+The first says that $\Gamma$ is an admissible history of assumptions. The second says that $A$ is a well-formed refusal structure. The third says that $t$ is an admitted continuation of type $A$. The fourth and fifth express definitional equality: two types or terms are the same for purposes of computation and refusal.
+
+Definitional equality is crucial in a calculus of constructions because types may compute. If $B$ reduces to $A$, then an inhabitant of $A$ may also be used as an inhabitant of $B$. In Spherepop terms, definitional equality identifies histories whose collapses produce the same refusal behavior.
+
+\begin{definition}[Collapse equivalence]
+Two terms $t$ and $u$ are collapse-equivalent at type $A$ in context $\Gamma$ when they normalize to the same committed history:
+\[
+\Gamma \judges t \defeq u : A
+\quad \Longleftrightarrow \quad
+t \eval v,\ u \eval v,
+\]
+up to admissible renaming and suspended obligations.
+\end{definition}
+
+This definition is intentionally schematic. A real implementation must specify the reduction relation, the normalization strategy, and the permitted equivalences. But the guiding idea is clear: definitional equality is equality of computational behavior before proof-relevant distinctions are considered.
+
+
+Simple Types in Spherepop
+
+
+The simply typed fragment contains base types, function types, product types, sum types, and perhaps a unit type. Let $\iota$ range over base types. Formation begins with:
+\[
+\frac{\Gamma \ \mathsf{ctx}}
+{\Gamma \judges \iota : \Type}.
+\]
+Function types are formed by:
+\[
+\frac{\Gamma \judges A : \Type \qquad \Gamma \judges B : \Type}
+{\Gamma \judges A \to B : \Type}.
+\]
+The introduction rule for functions is lambda abstraction:
+\[
+\frac{\Gamma,x:A \judges t : B}
+{\Gamma \judges \lambda x.t : A \to B}.
+\]
+The elimination rule is application:
+\[
+\frac{\Gamma \judges f : A \to B \qquad \Gamma \judges a : A}
+{\Gamma \judges f\,a : B}.
+\]
+The computation rule is beta reduction:
+\[
+(\lambda x.t)\,a \step t[a/x].
+\]
+The extensional principle is eta conversion:
+\[
+f \defeq \lambda x. f\,x.
+\]
+
+In Spherepop, a function is a continuation transformer. The term $\lambda x.t$ says: if the history is extended by an admissible $A$-opening named $x$, then $t$ produces an admissible $B$-continuation. Application binds a function history to an argument history. Beta reduction is the collapse of that binding.
+
+Thus the ordinary computation rule
+\[
+(\lambda x.t)\,a \step t[a/x]
+\]
+becomes a repair rule: an explicit dependency on an open admissible continuation is repaired by substituting a concrete admitted continuation.
+
+
+Dependent Types
+
+
+Simple types are insufficient for Spherepop because admissibility often depends on history. A file path may be valid only after a directory has been opened. A proof obligation may be meaningful only after a proposition has been formed. A repair rule may be applicable only after a defect has been witnessed. These are dependent phenomena. The type of a continuation may depend on a previous continuation.
+
+The dependent product is written:
+\[
+\Pi x:A.\,B(x).
+\]
+It generalizes the function type. A term of this type is a procedure that, for every admitted $x:A$, produces an admitted continuation of type $B(x)$.
+
+The formation rule is:
+\[
+\frac{\Gamma \judges A : \Type \qquad \Gamma,x:A \judges B(x) : \Type}
+{\Gamma \judges \Pi x:A.\,B(x) : \Type}.
+\]
+Introduction is:
+\[
+\frac{\Gamma,x:A \judges t : B(x)}
+{\Gamma \judges \lambda x.t : \Pi x:A.\,B(x)}.
+\]
+Elimination is:
+\[
+\frac{\Gamma \judges f : \Pi x:A.\,B(x) \qquad \Gamma \judges a : A}
+{\Gamma \judges f\,a : B(a)}.
+\]
+The beta rule remains:
+\[
+(\lambda x.t)\,a \step t[a/x].
+\]
+
+The dependent sum is written:
+\[
+\Sigma x:A.\,B(x).
+\]
+It represents a pair consisting of a witness $a:A$ and a second witness $b:B(a)$. Its formation rule is:
+\[
+\frac{\Gamma \judges A : \Type \qquad \Gamma,x:A \judges B(x) : \Type}
+{\Gamma \judges \Sigma x:A.\,B(x) : \Type}.
+\]
+Its introduction rule is:
+\[
+\frac{\Gamma \judges a:A \qquad \Gamma \judges b:B(a)}
+{\Gamma \judges (a,b):\Sigma x:A.\,B(x)}.
+\]
+Its eliminations are projections:
+\[
+\frac{\Gamma \judges p:\Sigma x:A.\,B(x)}
+{\Gamma \judges \pi_1(p):A},
+\]
+\[
+\frac{\Gamma \judges p:\Sigma x:A.\,B(x)}
+{\Gamma \judges \pi_2(p):B(\pi_1(p))}.
+\]
+
+In Spherepop, $\Pi$ is universal repair and $\Sigma$ is witnessed repair. The product says that no matter which admissible history fragment is supplied, continuation can be preserved. The sum says that a particular admissible fragment has been found, together with the dependent evidence required to continue from it.
+
+
+Propositions as Types
+
+
+The Curry--Howard interpretation identifies propositions with types and proofs with inhabitants. Spherepop gives this identification an operational reading. A proposition is a refusal structure whose inhabitants are histories that survive its demand for evidence. To prove $P$ is to construct a continuation that $P$ cannot refuse.
+
+We introduce a universe $\Prop$ of propositions:
+\[
+\Gamma \judges \Prop : \Type.
+\]
+If $P:\Prop$, then a proof of $P$ is a term $p:P$. Logical implication is represented by function type:
+\[
+P \Rightarrow Q \quad := \quad P \to Q.
+\]
+Universal quantification is represented by dependent product:
+\[
+\forall x:A.\,P(x) \quad := \quad \Pi x:A.\,P(x).
+\]
+Existential quantification is represented by dependent sum:
+\[
+\exists x:A.\,P(x) \quad := \quad \Sigma x:A.\,P(x).
+\]
+
+The Spherepop interpretation is direct. A proof of $P \to Q$ is a repair operation that converts any admitted proof-history of $P$ into an admitted proof-history of $Q$. A proof of $\forall x:A.\,P(x)$ is a uniform method that produces evidence for $P(x)$ after any admissible $x$ is supplied. A proof of $\exists x:A.\,P(x)$ is a witness and a dependent proof relative to that witness.
+
+Negation can be defined through refusal:
+\[
+\neg P := P \to \bot.
+\]
+Here $\bot$ is the uninhabited type, the type whose only operational behavior is refusal. To prove $\neg P$ is to show that any attempted proof of $P$ forces collapse into impossibility.
+
+This gives Spherepop a particularly natural account of contradiction. A contradiction is not merely a syntactic pair $P$ and $\neg P$. It is a history that admits both a continuation and a rule proving that continuation inadmissible. Such a history cannot be collapsed coherently. It must be repaired, quarantined, or refused.
+
+
+Identity Types and Substitution
+
+
+A dependent type theory needs identity types. Given $a,b:A$, the identity type
+\[
+\Id_A(a,b)
+\]
+is the type of evidence that $a$ and $b$ may be treated as the same at type $A$.
+
+The formation rule is:
+\[
+\frac{\Gamma \judges A:\Type \qquad \Gamma \judges a:A \qquad \Gamma \judges b:A}
+{\Gamma \judges \Id_A(a,b):\Type}.
+\]
+The introduction rule is reflexivity:
+\[
+\frac{\Gamma \judges a:A}
+{\Gamma \judges \mathsf{refl}_a:\Id_A(a,a)}.
+\]
+
+In ordinary intensional type theory, identity proofs need not collapse all differences between $a$ and $b$. They provide controlled substitutability. This is exactly the Spherepop reading. An identity proof is a repair path showing that one history fragment may replace another without violating the relevant refusal structures.
+
+The eliminator for identity, often called $J$, says that to prove a property for all identity proofs, it is enough to prove it for reflexivity. In schematic form:
+\[
+\frac{
+\Gamma,x:A \judges C(x,x,\mathsf{refl}_x):\Type
+\qquad
+\Gamma,x:A \judges c(x):C(x,x,\mathsf{refl}_x)
+}{
+\Gamma,a:A,b:A,p:\Id_A(a,b) \judges J(c,a,b,p):C(a,b,p)
+}.
+\]
+Operationally, $J$ is the principle that a repair path may be collapsed back to the trivial repair path when the only admissible distinction is reflexive. It is not an assertion that all equalities are judgmentally identical. It is a disciplined way of transporting constructions across admitted identity evidence.
+
+
+Universes and the Calculus of Constructions
+
+
+The calculus of constructions requires types whose elements may themselves be types. To avoid paradoxes, one usually uses a hierarchy of universes:
+\[
+\Type_0 : \Type_1 : \Type_2 : \cdots.
+\]
+Spherepop should adopt such a hierarchy. A universe is a level at which refusal structures may be named as objects.
+
+The formation rule is:
+\[
+\frac{\Gamma \ \mathsf{ctx}}
+{\Gamma \judges \Type_i : \Type_{i+1}}.
+\]
+If $A:\Type_i$ and $B:\Type_i$ under $x:A$, then $\Pi x:A.\,B(x)$ also belongs to an appropriate universe:
+\[
+\frac{\Gamma \judges A:\Type_i \qquad \Gamma,x:A \judges B(x):\Type_j}
+{\Gamma \judges \Pi x:A.\,B(x):\Type_{\max(i,j)}}.
+\]
+Similarly,
+\[
+\frac{\Gamma \judges A:\Type_i \qquad \Gamma,x:A \judges B(x):\Type_j}
+{\Gamma \judges \Sigma x:A.\,B(x):\Type_{\max(i,j)}}.
+\]
+
+A Spherepop calculus of constructions is now obtained by combining four ingredients: dependent products, dependent sums, universes, and propositions-as-types. Its judgments are histories; its types are refusal structures; its terms are admissible continuations; its reductions are collapse rules; its proof terms are certified repairs.
+
+The resulting system may be summarized as:
+\[
+\text{program} = \text{history transformer},
+\]
+\[
+\text{type} = \text{refusal structure},
+\]
+\[
+\text{proof} = \text{unrefused continuation},
+\]
+\[
+\text{computation} = \text{collapse of admissible history},
+\]
+\[
+\text{type checking} = \text{early refusal of incoherent continuation}.
+\]
+
+
+Spherepop Syntax for Dependent Construction
+
+
+A concrete syntax might begin with the following forms:
+\[
+t,u ::= x
+\mid \lambda x:A.\,t
+\mid t\,u
+\mid \Pi x:A.\,B
+\mid (t,u)
+\mid \Sigma x:A.\,B
+\mid \pi_1(t)
+\mid \pi_2(t)
+\mid \Type_i
+\mid \mathsf{refl}(t)
+\mid J(c,a,b,p).
+\]
+Spherepop-specific forms may be added:
+\[
+t ::= \Pop(a)
+\mid \Refuse(r)
+\mid \Collapse(v)
+\mid \Bind(t,u)
+\mid \mathsf{repair}(t)
+\mid \mathsf{defer}(o).
+\]
+The key design question is whether these operational forms live at the term level, the proof level, or both. The most natural answer is that they live at both levels but are typed differently. A computational refusal and a logical contradiction are not the same event, but both are refusal events. A computational collapse and a proof normalization are not the same event, but both are collapse events.
+
+A typed form of $\Refuse$ may be written:
+\[
+\frac{\Gamma \judges r:\mathsf{Reason}(A)}
+{\Gamma \judges \Refuse(r):A}
+\]
+only in a controlled exceptional or empty context. In a total proof calculus, unrestricted refusal would trivialize the system, because from refusal one could inhabit arbitrary types. Therefore Spherepop must distinguish between object-level refusal and meta-level refusal. Object-level refusal records a failed continuation. Meta-level refusal prevents a judgment from being formed.
+
+This distinction is fundamental. The type checker should not produce a term $\Refuse(r):A$ whenever checking fails. It should refuse the judgment $\Gamma \judges t:A$ itself. In other words, refusal is not generally an inhabitant. It is a boundary condition on inhabitation.
+
+
+Normalization and Type Checking
+
+
+A practical Spherepop calculus requires normalization. Type checking dependent types often requires comparing types after computation. For example, if $A$ reduces to $B$, then a term of type $A$ should be usable at type $B$. This requires a normalization or conversion procedure.
+
+We write:
+\[
+t \eval n
+\]
+when $t$ normalizes to $n$. Definitional equality may then be checked by normalization:
+\[
+\frac{t \eval n \qquad u \eval n}
+{\Gamma \judges t \defeq u : A}.
+\]
+For an implementation, this suggests a bidirectional type checker. Inference synthesizes a type:
+\[
+\Gamma \judges t \Rightarrow A,
+\]
+while checking verifies a term against a known type:
+\[
+\Gamma \judges t \Leftarrow A.
+\]
+Variables, applications, projections, and annotated terms synthesize. Lambda terms, pairs, and proof terms usually check against expected types. This is especially important for dependent types, where full inference is undecidable or impractical.
+
+The Spherepop checking algorithm can be described operationally as follows. First, parse a candidate history expression. Second, elaborate surface syntax into core syntax with explicit binders, universes, and annotations. Third, normalize types enough to expose their outer constructors. Fourth, check whether each continuation is admitted by the expected refusal structure. Fifth, collapse definitional equalities by normalization. Sixth, refuse the judgment if an admissibility boundary is crossed.
+
+
+Repair Terms
+
+
+Spherepop should also expose repair explicitly. A repair term records how an apparently blocked continuation can be transformed into an admissible one. If $t$ fails to check against $A$, but a repair procedure $\rho$ transforms it into $t'$, and $t'$ checks against $A$, then one may record:
+\[
+\Gamma \judges \rho : t \rightsquigarrow_A t'.
+\]
+This is not ordinary definitional equality. It is proof-relevant repair. The original malformed or incomplete construction remains visible as history, but it is not allowed to collapse as if it were already correct.
+
+A repair type may therefore be introduced:
+\[
+\mathsf{Repair}_A(t,t')
+\]
+whose inhabitants are admissible transformations from $t$ to $t'$ at type $A$. The formation rule is:
+\[
+\frac{\Gamma \judges A:\Type \qquad \Gamma \judges t:\mathsf{Raw} \qquad \Gamma \judges t':A}
+{\Gamma \judges \mathsf{Repair}_A(t,t'):\Type}.
+\]
+A repair proof does not say that the broken term was valid all along. It says that there is an admissible path from the broken construction to a valid one.
+
+This is where Spherepop differs most sharply from ordinary proof assistants. In many systems, invalid terms disappear from the formal world. In Spherepop, they may remain as refused histories, repair obligations, or deferred continuations. The calculus can therefore represent not only finished proofs but the ecology of proof development: failed attempts, blocked branches, partial constructions, and admissible repairs.
+
+
+A Spherepop Calculus of Constructions
+
+
+We can now state the core system.
+
+\begin{definition}[Spherepop Calculus of Constructions]
+The Spherepop Calculus of Constructions, written $\mathsf{SPCC}$, is a dependent type theory with the following ingredients:
+\[
+\Type_0,\Type_1,\Type_2,\ldots
+\]
+\[
+\Pi x:A.\,B(x),
+\qquad
+\Sigma x:A.\,B(x),
+\qquad
+\Id_A(a,b),
+\]
+together with operational history forms
+\[
+\Pop,\Refuse,\Collapse,\Bind
+\]
+and a judgmental interpretation in which contexts are admissible histories, types are refusal structures, terms are admitted continuations, and reduction is admissible collapse.
+\end{definition}
+
+The typing judgment
+\[
+\Gamma \judges t:A
+\]
+means that the history $\Gamma$ may be extended by $t$ under the refusal discipline $A$. The reduction judgment
+\[
+t \step u
+\]
+means that $t$ collapses by one admissible computational step to $u$. The refusal judgment
+\[
+\Gamma \njudges t:A
+\]
+means not merely that $t$ lacks a type, but that admitting $t$ as an $A$-continuation would corrupt the history.
+
+The central soundness theorem should have the following shape.
+
+\begin{theorem}[Preservation]
+If $\Gamma \judges t:A$ and $t \step u$, then $\Gamma \judges u:A$.
+\end{theorem}
+
+\begin{proof}
+The proof proceeds by induction on the typing derivation. The essential case is application. If $t$ is $(\lambda x.b)\,a$, then the typing derivation gives $\Gamma,x:A \judges b:B(x)$ and $\Gamma \judges a:A$. By substitution, $\Gamma \judges b[a/x]:B(a)$. Since beta reduction sends $(\lambda x.b)\,a$ to $b[a/x]$, the type is preserved. The remaining cases follow from the compatibility of reduction with the typing rules.
+\end{proof}
+
+\begin{theorem}[Progress relative to refusal]
+If $\varnothing \judges t:A$, then either $t$ is a value, or there exists $u$ such that $t \step u$, or $t$ contains a suspended admissibility obligation explicitly marked as deferred.
+\end{theorem}
+
+\begin{proof}
+The proof proceeds by induction on the typing derivation. Canonical forms show that a closed term of function type is a lambda abstraction, a closed term of dependent sum type is a pair, and a closed proof of identity introduced directly is reflexivity. If a term is not already canonical, its typing derivation exposes a reducible subterm unless the derivation contains an explicit deferred obligation. Ill-formed continuations cannot appear because they would have been refused before the judgment was formed.
+\end{proof}
+
+This version of progress is deliberately weaker than the ordinary one because Spherepop allows deferred obligations. That is a feature, not a defect. Interactive proof development and repair-oriented programming both require open histories.
+
+
+Implementation Strategy
+
+
+A minimal implementation can be built in stages. The first stage defines a core abstract syntax for terms, types, contexts, and universes. The second implements substitution, alpha-equivalence, and normalization. The third implements bidirectional checking. The fourth adds dependent products and sums. The fifth adds identity types. The sixth adds explicit history events, refusal reasons, deferred obligations, and repair terms.
+
+The core checker should never treat refusal as a normal runtime exception. A type error is not a value. It is a failed judgment. Therefore the checker should return either a derivation object or a refusal object:
+\[
+\mathsf{check}(\Gamma,t,A)
+\in
+\mathsf{Derivation}(\Gamma \judges t:A)
++
+\mathsf{Refusal}.
+\]
+This is the implementation-level version of the philosophical claim. Type checking does not discover whether an already valid program happens to run. It decides whether a proposed continuation may enter the history at all.
+
+A suitable internal representation is:
+\[
+\mathsf{RawTerm}
+\to
+\mathsf{ElaboratedTerm}
+\to
+\mathsf{TypedTerm}
+\to
+\mathsf{CollapsedTerm}.
+\]
+Each arrow is partial. Failure at any stage produces a refusal reason. Repair may then act on refused or deferred terms, but repaired terms must re-enter the checker rather than bypass it.
+
+To build a type calculus in Spherepop is to make refusal constructive. A type is not merely a label attached to a term. It is the operational boundary that determines whether a proposed continuation may become part of the accepted history. Dependent types generalize this boundary by allowing admissibility to depend on previous commitments. The calculus of constructions completes the picture by allowing propositions, proofs, programs, and types to live in one stratified universe of admissible construction.
+
+The Spherepop interpretation clarifies why type theory belongs naturally inside a repair-theoretic language. Programs are histories under construction. Proofs are histories that cannot be refused by the propositions they inhabit. Type errors are inadmissible continuations. Normalization is collapse. Substitution is repair of an open dependency by an admitted witness. Universes are levels at which refusal structures themselves become constructible.
+
+The result is not merely a typed programming language. It is a calculus of admissible continuation. In such a system, correctness is not imposed after computation. Correctness is the condition under which computation is allowed to become history.
+
+
+Composition Before Typing
+
+
+One of the central philosophical claims of this work is that composition is more fundamental than typing. Every computational system ultimately consists of primitive operations together with rules for composing them. Whether the primitive objects are logic gates, lambda terms, combinators, Lisp pairs, machine instructions, or Spherepop operations is largely incidental. What matters is that one operation may be connected to another to produce a larger computation.
+
+The expressive power of a computational system therefore comes primarily from composition rather than classification. Once composition is available, arbitrarily complex constructions can be assembled recursively. Every parser, compiler, theorem prover, operating system, and neural network is ultimately a finite composition of simpler operations.
+
+Type systems do not increase the expressive power of the underlying computational model. A simply typed lambda calculus, an untyped lambda calculus, a combinatory logic, and a Turing machine differ dramatically in their reasoning principles and safety guarantees, but their computational foundations remain composition.
+
+Spherepop therefore treats composition as ontologically prior. Histories are built by composing operational events. Typing is introduced later as a structured way of describing which histories should be regarded as admissible.
+
+
+Types as Human Compression
+
+
+From this perspective, a type is not a computational necessity but a semantic compression.
+
+Suppose a programmer writes a function intended to consume integers. Nothing in the physical hardware requires the existence of an integer type. The processor simply receives bit patterns. The distinction between integers, floating-point numbers, characters, pointers, and functions exists because human programmers have found these categories useful for organizing programs.
+
+The same phenomenon appears throughout mathematics. Categories, groups, manifolds, Hilbert spaces, and topological spaces do not create mathematical objects. They organize mathematical objects into classes that make proofs easier to formulate and communicate.
+
+Type theory performs an analogous organizational role for computation.
+
+Instead of reasoning about every possible execution history individually, the programmer reasons about entire families of histories simultaneously. The statement
+\[
+f:A\rightarrow B
+\]
+compresses an infinite collection of possible executions into a single semantic description.
+
+The computer does not require this compression to execute the program. The programmer benefits from it because it makes large systems tractable.
+
+Spherepop therefore interprets types as descriptions of histories rather than generators of histories. Histories remain primary.
+
+
+Construction Without a Calculus of Constructions
+
+
+The calculus of constructions is one of the most elegant formalisms ever developed for reasoning about programs and proofs. Nevertheless, it should not be mistaken for the source of computation itself.
+
+A processor does not execute dependent products.
+
+A transistor does not evaluate universes.
+
+A logic gate has no awareness of propositions.
+
+Instead, these physical systems repeatedly compose primitive operations.
+
+The calculus of constructions provides an extraordinarily rich language for describing those compositions, verifying their correctness, and expressing higher-order abstractions. It is therefore a language of explanation rather than a prerequisite for execution.
+
+Spherepop deliberately separates these roles.
+
+The operational substrate consists only of history-producing operators such as
+\[
+\Pop,\qquad
+\Bind,\qquad
+\Collapse,\qquad
+\Refuse.
+\]
+
+Dependent types, universes, identity types, propositions-as-types, and proof objects may all be defined as higher-level structures over these primitive histories. They enrich the language of reasoning without enlarging the underlying computational capability.
+
+
+Composition Trees and Lisp
+
+
+Lisp illustrates this principle particularly clearly.
+
+At its foundation, Lisp contains only atoms, pairs, and recursive composition through \texttt{cons}. Every list, tree, symbolic expression, abstract syntax tree, interpreter, compiler, and macro system emerges from repeated application of this single compositional mechanism.
+
+The remarkable flexibility of Lisp comes not from an elaborate hierarchy of primitive types but from the uniformity of its composition rules.
+
+Spherepop adopts a similar philosophy.
+
+Instead of beginning with a large collection of primitive semantic objects, it begins with a small collection of primitive history operations. Rich semantic structures emerge recursively through repeated composition.
+
+The resulting system remains conceptually small while supporting arbitrarily complex constructions.
+
+
+Directed Acyclic Graphs as Sequential Circuits
+
+
+The relationship between circuits and directed acyclic graphs is similarly clarified once composition is taken as primitive.
+
+A combinational logic circuit is simply a graph whose vertices represent primitive operations and whose edges represent compositions between them.
+
+A directed acyclic graph imposes one additional structural condition: every composition proceeds in a single direction without returning to an earlier stage.
+
+This topological restriction guarantees that evaluation may proceed according to a topological ordering. Every node is evaluated only after all of its predecessors have been computed.
+
+No explicit sequencing instructions are required because sequencing has become part of the graph itself.
+
+A DAG may therefore be understood as a circuit whose sequential evaluation order is encoded geometrically.
+
+Cycles fundamentally change the situation.
+
+Once feedback edges exist, evaluation can no longer be determined solely from graph structure. Delay operators, fixed-point semantics, recursion, iterative convergence, or temporal state become necessary.
+
+The distinction is therefore not merely graph-theoretic.
+
+A DAG represents pure compositional flow.
+
+A cyclic graph represents compositional flow together with persistent state.
+
+This observation provides another motivation for Spherepop's history-first semantics. Histories naturally capture stateful computation without requiring the operational primitives themselves to become substantially more complicated.
+
+
+Histories Before Types
+
+
+These observations suggest an inversion of the traditional foundations of programming languages.
+
+Rather than beginning with syntax, typing rules, proof objects, and semantic interpretations before finally reaching execution, Spherepop begins with execution itself.
+
+Primitive operational events generate histories.
+
+Histories compose into larger histories.
+
+Patterns emerge within collections of histories.
+
+Types summarize these patterns.
+
+Proofs certify these summaries.
+
+Universes organize the summaries into increasingly abstract levels.
+
+The hierarchy therefore becomes
+\[
+\text{composition}
+\rightarrow
+\text{histories}
+\rightarrow
+\text{patterns}
+\rightarrow
+\text{types}
+\rightarrow
+\text{proofs}
+\rightarrow
+\text{meta-theories}.
+\]
+
+Nothing computationally essential is added after the first step.
+
+Each successive layer exists to improve explanation, abstraction, verification, communication, and maintenance rather than to enlarge the class of computable functions.
+
+This inversion is entirely consistent with the philosophy of Spherepop. Computation is the progressive construction of histories through admissible composition. Types, proofs, and logical systems are powerful descriptive languages built upon those histories rather than the source from which computation itself originates.
+
+
+Simulating Fuzzy Logic Through Composition
+
+
+One advantage of treating composition rather than types as primitive is that alternative logical systems require no fundamental changes to the execution model. Classical Boolean logic, fuzzy logic, probabilistic logic, paraconsistent logic, and many-valued logics differ primarily in the interpretation assigned to intermediate values, not in the mechanics of function composition itself.
+
+A Spherepop evaluator therefore does not require a separate execution engine for fuzzy logic. The same composition engine may execute Boolean circuits, fuzzy circuits, arithmetic circuits, and probabilistic circuits simply by changing the primitive operators associated with each node.
+
+Suppose a history contains primitive values
+\[
+x_i\in[0,1].
+\]
+Instead of representing truth as the discrete set
+\[
+\{0,1\},
+\]
+truth becomes a continuous degree of admissibility.
+
+The computation itself is unchanged.
+
+Nodes continue to receive inputs.
+
+Primitive operators continue to produce outputs.
+
+Histories continue to compose.
+
+Only the interpretation of the primitive operators changes.
+
+
+Generalizing Boolean Gates
+
+
+Ordinary digital circuits define gates such as
+
+\[
+\mathrm{AND}(x,y),
+\qquad
+\mathrm{OR}(x,y),
+\qquad
+\mathrm{NOT}(x).
+\]
+
+Fuzzy logic replaces these with continuous operators.
+
+For example,
+
+\[
+\mathrm{AND}(x,y)=\min(x,y),
+\]
+
+\[
+\mathrm{OR}(x,y)=\max(x,y),
+\]
+
+\[
+\mathrm{NOT}(x)=1-x.
+\]
+
+Many alternative choices are possible.
+
+One may instead use the product t-norm
+
+\[
+\mathrm{AND}(x,y)=xy,
+\]
+
+or the Lukasiewicz operator
+
+\[
+\mathrm{AND}(x,y)=\max(0,x+y-1).
+\]
+
+Nothing about the surrounding computation changes.
+
+Each node still performs a deterministic function.
+
+The circuit topology remains identical.
+
+Only the local operator associated with each node has changed.
+
+Spherepop therefore separates topology from semantics.
+
+The graph determines how information flows.
+
+The primitive operators determine how information transforms.
+
+
+Circuits as Operator Networks
+
+
+This viewpoint suggests representing every computation as an operator network.
+
+Each node stores
+
+\[
+(v_i,f_i),
+\]
+
+where
+
+\[
+v_i
+\]
+
+is the current value and
+
+\[
+f_i
+\]
+
+is the local transformation.
+
+Evaluation simply becomes
+
+\[
+v_i
+=
+f_i(v_{j_1},\ldots,v_{j_k}).
+\]
+
+Neither Boolean logic nor fuzzy logic is fundamental.
+
+Both correspond to different choices for the family
+
+\[
+\{f_i\}.
+\]
+
+One network might contain Boolean gates.
+
+Another might contain differentiable functions.
+
+Another might contain neural network activations.
+
+Another might contain symbolic rewrite operators.
+
+The composition engine remains unchanged.
+
+
+Blending Logical Systems
+
+
+Because every node merely applies a function, different logical systems may coexist within the same graph.
+
+For example,
+
+one region of a program might use Boolean operators,
+
+another fuzzy operators,
+
+another probabilistic operators,
+
+and another ordinary arithmetic.
+
+The outputs of one region become the inputs of another.
+
+The graph does not need to know what "kind" of logic is being used.
+
+It only propagates values according to the local functions.
+
+This makes logical systems modular rather than global.
+
+Logic becomes a property of operators rather than of the execution engine.
+
+
+Continuous Admissibility
+
+
+Within Spherepop, fuzzy truth can be interpreted as continuous admissibility.
+
+Instead of saying
+
+\[
+x\in A
+\]
+
+or
+
+\[
+x\notin A,
+\]
+
+one assigns an admissibility score
+
+\[
+\alpha_A(x)\in[0,1].
+\]
+
+The score represents the degree to which a continuation satisfies the intended constraints.
+
+Refusal therefore becomes gradual rather than binary.
+
+Instead of
+
+\[
+\Refuse
+\]
+
+or
+
+\[
+\Pop,
+\]
+
+one may define
+
+\[
+\Refuse_\lambda
+\]
+
+where
+
+\[
+\lambda\in[0,1]
+\]
+
+measures confidence or admissibility.
+
+Hard refusals become the limiting case
+
+\[
+\lambda=0.
+\]
+
+Complete acceptance becomes
+
+\[
+\lambda=1.
+\]
+
+Intermediate values represent uncertain, partial, or repairable continuations.
+
+This interpretation connects naturally with repair theory.
+
+Repair no longer transforms only invalid histories into valid ones.
+
+Instead, repair increases admissibility continuously until an operational threshold is reached.
+
+
+Differentiable Circuits
+
+
+An even more interesting consequence is that fuzzy circuits become differentiable whenever the primitive operators are differentiable.
+
+Suppose each node computes
+
+\[
+v_i=f_i(v_{j_1},\ldots,v_{j_k}),
+\]
+
+where every
+
+\[
+f_i
+\]
+
+is continuously differentiable.
+
+The entire graph then defines a differentiable function
+
+\[
+F:\mathbb{R}^n\rightarrow\mathbb{R}^m.
+\]
+
+Gradients propagate through exactly the same composition graph.
+
+Backpropagation is therefore not a fundamentally different computation.
+
+It is another traversal of the same graph using different local operators.
+
+The forward pass computes values.
+
+The backward pass computes derivatives.
+
+Both are compositions over the same underlying history.
+
+
+Composition as the Universal Simulator
+
+
+This illustrates a broader principle.
+
+Once a language possesses sufficiently expressive function composition, almost every computational formalism can be simulated by changing only the primitive operators.
+
+Boolean circuits become one operator family.
+
+Fuzzy circuits become another.
+
+Neural networks become another.
+
+Probabilistic graphical models become another.
+
+Constraint solvers become another.
+
+Even symbolic theorem provers may be viewed as graphs whose nodes perform rewrite operations instead of arithmetic.
+
+The composition engine itself remains remarkably small.
+
+Its only responsibilities are to maintain the graph, propagate values, preserve evaluation order, and record histories.
+
+Everything traditionally viewed as "the logic of the language" becomes merely a library of composable operators.
+
+This is one of the strongest arguments for treating composition rather than typing as the true computational primitive. The same compositional substrate can faithfully simulate an enormous range of logical and computational systems, while types, proofs, and semantic disciplines remain optional layers that help humans organize and verify those computations rather than enabling them.
+
+
+Parameterized Logical Operators
+
+
+The preceding discussion suggests that Boolean logic and fuzzy logic should not be viewed as separate computational paradigms. They are merely different parameterizations of the same compositional substrate.
+
+Let every logical operator belong to a parameterized family
+\[
+F_\theta : [0,1]^n \rightarrow [0,1],
+\]
+where the parameter $\theta$ determines the interpretation of conjunction, disjunction, implication, negation, or any other connective.
+
+Boolean logic appears as one particular choice of $\theta$.
+
+The minimum t-norm appears as another.
+
+The product t-norm appears as another.
+
+The Lukasiewicz operators appear as another.
+
+Nothing about the evaluation algorithm changes.
+
+Only the operator tables are replaced.
+
+Consequently, a Spherepop runtime need not contain a privileged notion of logical truth. It need only evaluate parameterized operators attached to nodes in the computation graph.

@@ -1,0 +1,253 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+The rules below define $\to$ by consuming the head event and updating state.
+
+\paragraph{POP.}
+\[
+\frac{
+x \notin H
+}{
+\langle \texttt{POP}(x)\;P,\; \langle H,\preceq,L,\approx,M\rangle \rangle
+\to
+\langle P,\; \langle H\cup\{x\},\preceq,L,\approx,M\rangle \rangle
+}
+\]
+If $x\in H$, the event is either treated as an error or as a no-op depending on kernel policy. For a foundational semantics, it is useful to model it as an error; for an engineering semantics, as an idempotent no-op. We record both options below.
+
+\paragraph{POP (Idempotent Variant).}
+\[
+\frac{
+x \in H
+}{
+\langle \texttt{POP}(x)\;P,\; \Sigma \rangle \to \langle P,\; \Sigma \rangle
+}
+\]
+
+\paragraph{MERGE.}
+\[
+\frac{
+x,y \in H
+}{
+\langle \texttt{MERGE}(x,y)\;P,\; \Sigma \rangle
+\to
+\langle P,\; \Sigma[\preceq \;:=\; \preceq \cup \{(\mathsf{rep}_\Sigma(x),\mathsf{rep}_\Sigma(y))\}] \rangle
+}
+\]
+This rule records a directed containment edge from the representative of $x$ to the representative of $y$.
+
+\paragraph{LINK.}
+\[
+\frac{
+x,y \in H
+}{
+\langle \texttt{LINK}(x,y,\ell)\;P,\; \Sigma \rangle
+\to
+\langle P,\; \Sigma[L \;:=\; L \cup \{(\mathsf{rep}_\Sigma(x),\mathsf{rep}_\Sigma(y),\ell)\}] \rangle
+}
+\]
+
+\paragraph{COLLAPSE.}
+\[
+\frac{
+x,y \in H
+}{
+\langle \texttt{COLLAPSE}(x,y)\;P,\; \Sigma \rangle
+\to
+\langle P,\; \mathsf{collapse}(\Sigma,x,y)\rangle
+}
+\]
+The function $\mathsf{collapse}$ updates $\approx$ by identifying $x$ and $y$, chooses a representative, and normalizes the remaining relations accordingly. Formally, let $\Sigma=\langle H,\preceq,L,\approx,M\rangle$. Define
+\[
+\approx' \;=\; \mathsf{cl}(\approx \cup \{(x,y)\}),
+\]
+where $\mathsf{cl}$ is the smallest equivalence relation containing the added pair. Let $\mathsf{rep}_{\Sigma'}$ be the representative function induced by $\approx'$.
+
+Then define
+\[
+\preceq' \;=\; \mathsf{norm}_{\mathsf{rep}_{\Sigma'}}(\preceq),\qquad
+L' \;=\; \mathsf{norm}_{\mathsf{rep}_{\Sigma'}}(L),
+\]
+and update metadata by redirecting targets through representatives:
+\[
+M' \;=\; \mathsf{norm}_{\mathsf{rep}_{\Sigma'}}(M).
+\]
+Finally,
+\[
+\mathsf{collapse}(\Sigma,x,y) \;=\; \langle H,\preceq',L',\approx',M'\rangle.
+\]
+
+This is the operational content of identity-as-event: collapse is not a derived equivalence, but an executed act that rewrites subsequent interpretation.
+
+\paragraph{META.}
+\[
+\frac{
+\text{the target } \tau \text{ is well-formed in } \Sigma
+}{
+\langle \texttt{META}(\tau,k,v)\;P,\; \Sigma \rangle
+\to
+\langle P,\; \Sigma[M := M \cup \{(\mathsf{rep}_\Sigma(\tau),k)\mapsto v\}] \rangle
+}
+\]
+Metadata does not affect $H,\preceq,L,\approx$ and is therefore non-ontological unless later used by authority or view logic.
+
+
+Derived Notions: Temporal Parthood
+
+
+The semantics above defines the induced containment relation after replaying a prefix. For a program prefix $P_{\leq t}=e_1\cdots e_t$, define the replayed state by
+\[
+\langle P_{\leq t},\Sigma_0\rangle \to^{*} \langle \varepsilon,\Sigma_t\rangle,
+\]
+where $\Sigma_0$ is the initial empty state.
+
+Define time-indexed parthood by reachability in the induced containment graph:
+\[
+x \leq_t y \quad \text{iff}\quad \mathsf{rep}_{\Sigma_t}(x) \text{ reaches } \mathsf{rep}_{\Sigma_t}(y) \text{ via } \preceq_t^{*}.
+\]
+This makes explicit the earlier claim that parthood is a historical fact witnessed by replay.
+
+
+Determinism and Replay Equivalence
+
+
+\begin{theorem}[Determinism]
+Fix a deterministic representative-selection policy for $\mathsf{rep}$. For any configuration $\langle P,\Sigma\rangle$, there exists at most one $\langle P',\Sigma'\rangle$ such that $\langle P,\Sigma\rangle \to \langle P',\Sigma'\rangle$.
+\end{theorem}
+
+\begin{proof}
+Each rule matches only the head constructor of the event sequence and prescribes a unique state update. The only potential non-determinism arises in representative choice during collapse; once a deterministic policy is fixed, the update is unique.
+\end{proof}
+
+\begin{theorem}[Replay Equivalence]
+If two programs share the same event prefix $P_{\leq t}$, then replaying that prefix from the same initial state yields the same state $\Sigma_t$.
+\end{theorem}
+
+\begin{proof}
+By determinism, evaluation of the shared prefix proceeds via the same unique transition sequence, producing the same state.
+\end{proof}
+
+
+Safety Properties Induced by the Semantics
+
+
+The small-step semantics enforces the foundational constraints emphasized in the main text.
+
+\begin{lemma}[Existence by Construction]
+If $x \in H_t$ in the replayed state $\Sigma_t$, then there exists $i\leq t$ such that $e_i = \texttt{POP}(x)$.
+\end{lemma}
+
+\begin{proof}
+The only rule that adds elements to $H$ is \texttt{POP}. Therefore membership of $x$ in $H_t$ implies that some \texttt{POP}(x) occurred in the prefix.
+\end{proof}
+
+\begin{lemma}[No Predicate-Generated Objects]
+There is no derivation step that introduces a new handle except via \texttt{POP}.
+\end{lemma}
+
+\begin{proof}
+Inspection of the transition rules shows that only the \texttt{POP} rule updates $H$. All other rules update only relations or metadata.
+\end{proof}
+
+\begin{lemma}[Explicit Identity]
+If $\mathsf{rep}_{\Sigma_t}(x)=\mathsf{rep}_{\Sigma_t}(y)$ and $x\neq y$, then some \texttt{COLLAPSE} event relating the equivalence classes of $x$ and $y$ occurred at or before time $t$.
+\end{lemma}
+
+\begin{proof}
+Handles become identified only by updates to $\approx$, and only \texttt{COLLAPSE} modifies $\approx$.
+\end{proof}
+
+
+Summary
+
+
+The small-step semantics provides a concrete, execution-aligned foundation for the philosophical claims advanced in the paper. It formalizes the principle that ontology is induced by replay, that parthood is time-indexed and constructed, that identity is explicit and historical, and that metadata is non-ontological unless elevated by further events or governance. Higher-level logical, categorical, or sheaf-theoretic interpretations may be layered on top of this semantics, but none are required for the core meaning of the calculus.
+
+
+\begin{thebibliography}{99}
+
+\bibitem{Zermelo1908}
+E.~Zermelo.
+Untersuchungen \"uber die Grundlagen der Mengenlehre I.
+\emph{Mathematische Annalen}, 65:261--281, 1908.
+
+\bibitem{Fraenkel1922}
+A.~Fraenkel.
+Zu den Grundlagen der Cantor--Zermeloschen Mengenlehre.
+\emph{Mathematische Annalen}, 86:230--237, 1922.
+
+\bibitem{Jech}
+T.~Jech.
+\emph{Set Theory}.
+Springer, 3rd edition, 2003.
+
+\bibitem{Lesniewski}
+S.~Le\'sniewski.
+On the Foundations of Mathematics.
+In S.~McCall (ed.), \emph{Polish Logic 1920--1939}.
+Oxford University Press, 1967.
+
+\bibitem{LeonardGoodman}
+H.~S.~Leonard and N.~Goodman.
+The Calculus of Individuals and Its Uses.
+\emph{Journal of Symbolic Logic}, 5(2):45--55, 1940.
+
+\bibitem{Goodman}
+N.~Goodman.
+\emph{The Structure of Appearance}.
+Harvard University Press, 1951.
+
+\bibitem{Varzi}
+A.~C.~Varzi.
+Mereology.
+In \emph{The Stanford Encyclopedia of Philosophy}, Winter 2023 Edition.
+
+\bibitem{Husserl}
+E.~Husserl.
+\emph{Logical Investigations}, Vol.~II.
+Routledge, 2001.
+
+\bibitem{Wiggins}
+D.~Wiggins.
+\emph{Sameness and Substance Renewed}.
+Cambridge University Press, 2001.
+
+\bibitem{GrayReuter}
+J.~Gray and A.~Reuter.
+\emph{Transaction Processing: Concepts and Techniques}.
+Morgan Kaufmann, 1993.
+
+\bibitem{Fowler}
+M.~Fowler.
+Event Sourcing.
+\emph{martinfowler.com}, 2005.
+
+\bibitem{Shapiro}
+M.~Shapiro, N.~Pregui\c{c}a, C.~Baquero, and M.~Zawirski.
+Conflict-Free Replicated Data Types.
+\emph{SSS 2011}, LNCS 6976.
+
+\bibitem{MacLane}
+S.~Mac~Lane.
+\emph{Categories for the Working Mathematician}.
+Springer, 1998.
+
+\bibitem{Lawvere}
+F.~W.~Lawvere and S.~Schanuel.
+\emph{Conceptual Mathematics}.
+Cambridge University Press, 1997.
+
+\end{thebibliography}
+
+\end{document}

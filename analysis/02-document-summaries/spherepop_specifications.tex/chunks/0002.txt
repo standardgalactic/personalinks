@@ -1,0 +1,157 @@
+    /// The only call that can make an overlay authoritative — routes through
+    /// Arbiter::submit like any other proposal.
+    pub fn commit(&mut self, o: Overlay, omega_0: &std::collections::HashSet<ObjectId>)
+        -> Result<Vec<LogPos>, ArbiterError>
+    {
+        if o.base_len != self.arbiter.len() {
+            return Err(ArbiterError::StaleOverlay); // H moved since preview
+        }
+        self.arbiter.submit(o.pending, omega_0)
+    }
+}
+\end{verbatim}
+
+\begin{remark}
+There is deliberately no \texttt{auto\_commit} method and no default argument making \texttt{commit} implicit in \texttt{create} or \texttt{preview}: ``no utility may auto-commit by default'' is the absence of a code path here, not a documented convention.
+\end{remark}
+
+
+Worked Trace
+
+
+\begin{verbatim}
+let omega_0: HashSet<ObjectId> = [1, 2].into_iter().collect();
+let mut arb = Arbiter::new(["merge_quotient", "identity"]);
+
+arb.submit(Proposal { events: vec![pop(1), pop(2)] }, &omega_0)?;   // commit a, b
+arb.submit(Proposal { events: vec![bind(1, 2, "adjacent")] }, &omega_0)?; // Bind(a,b)
+
+// Observe under the quotient rule: this IS Merge, per Def. of Merge-sugar.
+arb.submit(Proposal { events: vec![collapse("merge_quotient")] }, &omega_0)?;
+let classes = collapse_quotient(arb.history_ref());
+assert_eq!(classes.find(1), classes.find(2));       // a and b are now one class
+
+// Withdraw reliance on the bind without deleting it (Unlink-sugar):
+arb.submit(Proposal {
+    events: vec![refuse_bind(1, 2, "adjacent", "relation withdrawn")]
+}, &omega_0)?;
+assert!(arb.state(&omega_0).bound.contains(&(1, 2, "adjacent".into()))); // H unchanged
+assert!(arb.state(&omega_0).refused.iter().any(|(_,_,r)| r == "relation withdrawn"));
+\end{verbatim}
+
+\paragraph{Explanation.} The quotient-collapse call demonstrates that Merge never needed to be a fifth event kind: identifying $a$ and $b$ is what a specific, admissibility-certified observation rule does with an ordinary $\BindOp$ event already in $H$. The final refusal demonstrates Unlink-sugar: the original bind is untouched (Irreversibility, Corollary~\ref{cor:irrev}), and a later collapse rule is free to honor the refusal by excluding withdrawn bindings from its own observable state — a policy decision for that rule, not a structural deletion.
+
+
+Geometric Semantics
+
+\paragraph{Reading the Primitives as Geometry.}
+The primary geometric reading now belongs to \S\ref{sec:primitives}, not to the surface calculus: $\Pop$ is the contraction of the option space $\Omega$ — narrowing possibility; $\RefuseOp$ marks a region of $\Omega$ as excluded without contracting it; $\BindOp$ draws an edge between two points without merging them; $\CollapseOp$ is a projection of the whole history onto an observational plane $O_c$, with different rules $c$ giving different projections of the same underlying object. The surface calculus's older reading — $\Sphere$ as a local region, $\Merge$ as entropic smoothing, $\Choice$ as bifurcation — still holds, but now derivatively: it describes what the desugared primitive events look like when composed in the specific patterns \S\ref{sec:desugar} gives for abstraction, quotienting, and proposal-time branching.
+
+
+Pipeline
+
+\begin{center}
+\begin{tabular}{lll}
+Stage & Input & Output\\\hline
+Parse & DSL Scene & AST (Scene)\\
+Desugar & AST & SPC Terms\\
+Typecheck & SPC Terms & Typed Terms in $\Ctx$\\
+Evaluate & Typed Terms & Normal Forms (β + stochastic)\\
+Interpret & Terms & Field configuration $(\Field,\Flow,\Entropy)$\\
+\end{tabular}
+\end{center}
+
+\paragraph{Explanation.}
+Authoring, compilation, and execution are strictly layered; correctness resides at the SPC level, independent of surface notation.
+
+
+Example
+
+
+DSL
+
+\begin{verbatim}
+@scene {
+  sphere f(type: Πx:A.B, body: pop g with x)
+  sphere g(type: Πx:A.B, value: <primitive>)
+  sphere a(type: A, value: a0)
+
+  pop f with a
+  choose 0.5: pop g with a | pop f with a
+}
+\end{verbatim}
+
+
+Lowered Core
+
+\begin{verbatim}
+f = Sphere(x:A. Pop(g, x))
+g = <primitive> : Πx:A.B
+a = a0 : A
+Pop(f, a)
+Choice(0.5, Pop(g, a), Pop(f, a))
+\end{verbatim}
+
+
+Explanation
+
+Application collapses the abstraction boundary; choice branches probabilistically. 
+Typing ensures both branches agree, and evaluation proceeds by β-reduction.
+
+\appendix
+
+\begin{remark}
+The appendices below concern the derived surface calculus of \S\ref{sec:surface-calculus}, not the primitive layer of \S\ref{sec:primitives}. Where they speak of ``Merge'' or ``Choice'' as though typing them directly, read this as shorthand for typing their desugared primitive forms.
+\end{remark}
+
+
+Appendix A: Typing Derivations
+
+\paragraph{Application.}
+\begin{align*}
+&\Judgement{\Ctx}{f}{\PiT{x}{A}{B}} \qquad \Judgement{\Ctx}{a}{A}\\
+&\text{Hence } \Judgement{\Ctx}{\Pop(f,a)}{B\Subst{a}{x}}.
+\end{align*}
+
+\paragraph{Merge.}
+\begin{align*}
+\Judgement{\Ctx}{t}{A}\wedge \Judgement{\Ctx}{u}{A} \To \Judgement{\Ctx}{\Merge(t,u)}{A}.
+\end{align*}
+
+\paragraph{Choice.}
+\begin{align*}
+\Judgement{\Ctx}{t}{A}\wedge \Judgement{\Ctx}{u}{A} \To \Judgement{\Ctx}{\Choice(p,t,u)}{A}.
+\end{align*}
+
+
+Appendix B: Operational Semantics Proofs
+
+\paragraph{Preservation (Sketch).}
+By induction on typing derivations. 
+The β-case follows from substitution; $\Merge$ and $\Choice$ are congruent and keep types equal.
+
+\paragraph{Progress (Sketch).}
+Values are atoms or $\Sphere$-forms. 
+$\Pop(\Sphere(\cdot),\cdot)$ reduces; otherwise subterms reduce. 
+Stochastic steps in $\Choice$ are admissible and type-stable.
+
+\paragraph{Confluence (Deterministic Fragment).}
+Without $\Choice$, β-reduction is confluent up to standard λ-calculus arguments adapted to $\Merge$.
+
+
+Appendix C: Category-Theoretic Interpretation
+
+\paragraph{Objects and Morphisms.}
+Types are objects; terms $t:A\to B$ are morphisms produced by $\Sphere$; application $\Pop$ is composition up to β.
+
+\paragraph{Monoidal Structure.}
+$\Merge$ is a symmetric, idempotent tensor: $(t\Merge u)\Merge v \Equiv t\Merge(u\Merge v)$, $t\Merge u \Equiv u\Merge t$, $t\Merge t \Equiv t$.
+
+\paragraph{Probabilistic Functor.}
+$\Choice$ aligns with a Giry-style monad: unit returns a degenerate choice, multiplication marginalizes nested choices.
+
+\paragraph{Topos View.}
+Interpreting $\Sphere$-scopes as objects of a site $\SphereCat$, SPC terms act as arrows in the presheaf topos $\ToPos$, explaining why abstraction/application behave functorially.
+
+\end{document}
+

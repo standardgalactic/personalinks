@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>spherepop.predicates API documentation</title>
+<meta name="description" content="Predicate logic for BIND operations …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>spherepop.predicates</code></h1>
+</header>
+<section id="section-intro">
+<p>Predicate logic for BIND operations.</p>
+<p>This module defines the predicate DSL used by the BIND operation to filter
+option spaces. Predicates are stated over plain strings but generalized to
+handle Quotient elements (equivalence classes from COLLAPSE).</p>
+<h2 id="predicate-syntax">Predicate Syntax</h2>
+<p>The predicate DSL supports:</p>
+<ul>
+<li><code>"ALL"</code>: Matches any option (identity predicate)</li>
+<li><code>"prefix:X"</code>: Matches options starting with X</li>
+<li><code>"contains:X"</code>: Matches options containing X as a substring</li>
+<li><code>"in:A,B,C"</code>: Matches options in the explicit set {A, B, C}</li>
+<li>Exact match: Any other string matches only that exact option</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<pre><code>&gt;&gt;&gt; from spherepop.predicates import string_test, predicate
+&gt;&gt;&gt; from spherepop.model import Quotient
+&gt;&gt;&gt;
+&gt;&gt;&gt; # String predicates
+&gt;&gt;&gt; test = string_test("prefix:user")
+&gt;&gt;&gt; test("user_id")
+True
+&gt;&gt;&gt; test("admin")
+False
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Quotient handling (existential semantics)
+&gt;&gt;&gt; pred = predicate("prefix:user")
+&gt;&gt;&gt; q = Quotient(frozenset({"user_id", "admin"}))
+&gt;&gt;&gt; pred(q)  # True because "user_id" matches
+True
+</code></pre>
+<h2 id="quotient-handling">Quotient Handling</h2>
+<p>When a BIND predicate encounters a Quotient (an option merged by a prior
+COLLAPSE), it applies existential semantics: the Quotient is admitted if
+<em>any</em> of its members would match the predicate.</p>
+<p>This is a provisional modeling choice pending clarification in Appendix G.
+The alternative (universal semantics: admit only if <em>all</em> members match)
+would be more restrictive but potentially more intuitive for some use cases.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><code><a title="spherepop.semantics.transition" href="semantics.html#spherepop.semantics.transition">transition()</a></code> : Uses predicates in BindOp handling</li>
+<li><code><a title="spherepop.model.Quotient" href="model.html#spherepop.model.Quotient">Quotient</a></code> : Equivalence classes handled by predicates</li>
+</ul>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="spherepop.predicates.predicate"><code class="name flex">
+<span>def <span class="ident">predicate</span></span>(<span>spec: str) ‑> Callable[[str | <a title="spherepop.model.Quotient" href="model.html#spherepop.model.Quotient">Quotient</a>], bool]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def predicate(spec: str) -&gt; Callable[[str | Quotient], bool]:
+    &#34;&#34;&#34;Build a predicate function that handles both strings and Quotients.
+
+    This generalizes :func:`string_test` to work with option-space elements
+    that may be plain strings or Quotient equivalence classes (from prior
+    COLLAPSE operations).
+
+    For Quotients, this uses **existential semantics**: a Quotient is
+    admitted if the predicate would admit *any* one of its members. 
+
+    **Theory Status**: This is **PROVISIONAL** semantics. The paper
+    (Appendix E) does not specify how predicates should lift to quotient
+    classes. See THEORY_STATUS.md Q3 for three plausible alternatives:
+    existential (current), universal, or well-defined-on-classes.
+
+    Parameters
+    ----------
+    spec : str
+        Predicate specification (same DSL as :func:`string_test`).
+
+    Returns
+    -------
+    Callable[[str | Quotient], bool]
+        A function that tests option-space elements (strings or Quotients).
+
+    Examples
+    --------
+    &gt;&gt;&gt; from spherepop.model import Quotient
+    &gt;&gt;&gt; pred = predicate(&#34;prefix:user&#34;)
+    &gt;&gt;&gt; pred(&#34;user_id&#34;)  # Plain string
+    True
+    &gt;&gt;&gt; pred(&#34;admin&#34;)
+    False
+    &gt;&gt;&gt; q = Quotient(frozenset({&#34;user_id&#34;, &#34;admin&#34;}))
+    &gt;&gt;&gt; pred(q)  # Quotient - existential: any member matches
+    True
+
+    Notes
+    -----
+    The existential reading for Quotients means that if even one member
+    of a merged class would pass the predicate, the entire class is kept.
+    This may be surprising in cases where you expect all members to match.
+
+    Alternative (not implemented): Universal semantics would require *all*
+    members to match before admitting the Quotient. This would make
+    ``predicate(&#34;prefix:user&#34;)`` reject ``Quotient({&#34;user_id&#34;, &#34;admin&#34;})``
+    because &#34;admin&#34; doesn&#39;t match.
+
+    See Also
+    --------
+    THEORY_STATUS.md : Full discussion of BIND predicate semantics
+    &#34;&#34;&#34;
+    test = string_test(spec)
+
+    def pred(option: str | Quotient) -&gt; bool:
+        if isinstance(option, Quotient):
+            # Existential semantics: admit if any member matches
+            return any(test(member) for member in option.members)
+        return test(option)
+
+    return pred</code></pre>
+</details>
+<div class="desc"><p>Build a predicate function that handles both strings and Quotients.</p>
+<p>This generalizes :func:<code><a title="spherepop.predicates.string_test" href="#spherepop.predicates.string_test">string_test()</a></code> to work with option-space elements
+that may be plain strings or Quotient equivalence classes (from prior
+COLLAPSE operations).</p>
+<p>For Quotients, this uses <strong>existential semantics</strong>: a Quotient is
+admitted if the predicate would admit <em>any</em> one of its members. </p>
+<p><strong>Theory Status</strong>: This is <strong>PROVISIONAL</strong> semantics. The paper
+(Appendix E) does not specify how predicates should lift to quotient
+classes. See THEORY_STATUS.md Q3 for three plausible alternatives:
+existential (current), universal, or well-defined-on-classes.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>spec</code></strong> :&ensp;<code>str</code></dt>
+<dd>Predicate specification (same DSL as :func:<code><a title="spherepop.predicates.string_test" href="#spherepop.predicates.string_test">string_test()</a></code>).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Callable[[str | Quotient], bool]</code></dt>
+<dd>A function that tests option-space elements (strings or Quotients).</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Quotient
+&gt;&gt;&gt; pred = predicate(&quot;prefix:user&quot;)
+&gt;&gt;&gt; pred(&quot;user_id&quot;)  # Plain string
+True
+&gt;&gt;&gt; pred(&quot;admin&quot;)
+False
+&gt;&gt;&gt; q = Quotient(frozenset({&quot;user_id&quot;, &quot;admin&quot;}))
+&gt;&gt;&gt; pred(q)  # Quotient - existential: any member matches
+True
+</code></pre>
+<h2 id="notes">Notes</h2>
+<p>The existential reading for Quotients means that if even one member
+of a merged class would pass the predicate, the entire class is kept.
+This may be surprising in cases where you expect all members to match.</p>
+<p>Alternative (not implemented): Universal semantics would require <em>all</em>
+members to match before admitting the Quotient. This would make
+<code>predicate("prefix:user")</code> reject <code>Quotient({"user_id", "admin"})</code>
+because "admin" doesn't match.</p>
+<h2 id="see-also">See Also</h2>
+<dl>
+<dt><code>THEORY_STATUS.md</code></dt>
+<dd>Full discussion of BIND predicate semantics</dd>
+</dl></div>
+</dd>
+<dt id="spherepop.predicates.string_test"><code class="name flex">
+<span>def <span class="ident">string_test</span></span>(<span>spec: str) ‑> Callable[[str], bool]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def string_test(spec: str) -&gt; Callable[[str], bool]:
+    &#34;&#34;&#34;Build a predicate function that tests plain strings.
+
+    This is the core predicate logic for BIND operations, stated over
+    individual option names (plain strings). For handling Quotients, see
+    :func:`predicate`.
+
+    Parameters
+    ----------
+    spec : str
+        Predicate specification using the DSL syntax:
+        - ``&#34;ALL&#34;`` → matches everything
+        - ``&#34;prefix:X&#34;`` → matches strings starting with X
+        - ``&#34;contains:X&#34;`` → matches strings containing X
+        - ``&#34;in:A,B,C&#34;`` → matches strings in {A, B, C}
+        - Any other string → exact match only
+
+    Returns
+    -------
+    Callable[[str], bool]
+        A function that tests whether a string satisfies the predicate.
+
+    Examples
+    --------
+    &gt;&gt;&gt; test = string_test(&#34;prefix:user&#34;)
+    &gt;&gt;&gt; test(&#34;user_id&#34;)
+    True
+    &gt;&gt;&gt; test(&#34;user_name&#34;)
+    True
+    &gt;&gt;&gt; test(&#34;admin&#34;)
+    False
+
+    &gt;&gt;&gt; test_in = string_test(&#34;in:a1,a2,a3&#34;)
+    &gt;&gt;&gt; test_in(&#34;a1&#34;)
+    True
+    &gt;&gt;&gt; test_in(&#34;a4&#34;)
+    False
+    &#34;&#34;&#34;
+    if spec == &#34;ALL&#34;:
+        return lambda _: True
+    if spec.startswith(&#34;prefix:&#34;):
+        prefix = spec.split(&#34;:&#34;, 1)[1]
+        return lambda option: option.startswith(prefix)
+    if spec.startswith(&#34;contains:&#34;):
+        chunk = spec.split(&#34;:&#34;, 1)[1]
+        return lambda option: chunk in option
+    if spec.startswith(&#34;in:&#34;):
+        members = {p.strip() for p in spec.split(&#34;:&#34;, 1)[1].split(&#34;,&#34;) if p.strip()}
+        return lambda option: option in members
+    return lambda option: option == spec</code></pre>
+</details>
+<div class="desc"><p>Build a predicate function that tests plain strings.</p>
+<p>This is the core predicate logic for BIND operations, stated over
+individual option names (plain strings). For handling Quotients, see
+:func:<code><a title="spherepop.predicates.predicate" href="#spherepop.predicates.predicate">predicate()</a></code>.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>spec</code></strong> :&ensp;<code>str</code></dt>
+<dd>Predicate specification using the DSL syntax:
+- <code>"ALL"</code> → matches everything
+- <code>"prefix:X"</code> → matches strings starting with X
+- <code>"contains:X"</code> → matches strings containing X
+- <code>"in:A,B,C"</code> → matches strings in {A, B, C}
+- Any other string → exact match only</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Callable[[str], bool]</code></dt>
+<dd>A function that tests whether a string satisfies the predicate.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; test = string_test(&quot;prefix:user&quot;)
+&gt;&gt;&gt; test(&quot;user_id&quot;)
+True
+&gt;&gt;&gt; test(&quot;user_name&quot;)
+True
+&gt;&gt;&gt; test(&quot;admin&quot;)
+False
+</code></pre>
+<pre><code class="language-python-repl">&gt;&gt;&gt; test_in = string_test(&quot;in:a1,a2,a3&quot;)
+&gt;&gt;&gt; test_in(&quot;a1&quot;)
+True
+&gt;&gt;&gt; test_in(&quot;a4&quot;)
+False
+</code></pre></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul>
+<li><a href="#predicate-syntax">Predicate Syntax</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#quotient-handling">Quotient Handling</a></li>
+<li><a href="#see-also">See Also</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="spherepop.predicates.predicate" href="#spherepop.predicates.predicate">predicate</a></code></li>
+<li><code><a title="spherepop.predicates.string_test" href="#spherepop.predicates.string_test">string_test</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>

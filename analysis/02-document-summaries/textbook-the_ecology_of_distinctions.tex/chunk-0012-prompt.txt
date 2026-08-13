@@ -1,0 +1,1194 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+By the end of this chapter, flow systems will have been
+defined formally as networks of distinction-transforming
+processes, the Flow Conservation Theorem will characterise
+when a pipeline stage preserves distinguishability exactly,
+and the History Dominance Theorem will show why
+history-preserving storage strictly dominates state-only
+storage. Chapter~\ref{ch:spherepop} then asks what a
+programming language looks like when it is built around this
+history-preserving commitment from the ground up, rather than
+having history-preservation added as an architectural choice
+on top of a conventional state-based language.
+
+\begin{definition}{Flow System}{flow-system}
+  A \emph{flow system} is a tuple
+  $\mathcal{F} = (P, C, \Sigma, \delta)$ where:
+  \begin{itemize}[nosep]
+    \item $P = \{p_1, \ldots, p_n\}$ is a set of
+          \emph{processes};
+    \item $C \subseteq P \times P$ is a set of
+          \emph{channels} (directed pipes);
+    \item $\Sigma$ is an \emph{alphabet} of distinguishable
+          tokens;
+    \item $\delta_i : \Sigma^* \to \Sigma^*$ is the
+          \emph{transformation} of process $p_i$.
+  \end{itemize}
+  A \emph{flow} through the system is a sequence of tokens
+  $s \in \Sigma^\omega$ transformed by the composition of
+  processes along channels.
+\end{definition}
+
+\begin{definition}{Flow Distinction}{flow-distinction}
+  Two flows $f_1, f_2 \in \Sigma^\omega$ are
+  \emph{flow-distinguishable} by process $p_i$ if
+  $\delta_i(f_1) \ne \delta_i(f_2)$.
+  The \emph{flow distinction capacity} of $p_i$ is
+  \[
+    D_F(p_i) = \log|\{[\delta_i(f)] : f \in \Sigma^*\}|,
+  \]
+  the log-number of distinguishable output classes.
+\end{definition}
+
+
+The Flow Conservation Theorem
+
+
+\begin{theorem}{Flow Conservation Theorem}{flow-conservation}
+  For a lossless process $p_i$ (one where $\delta_i$ is
+  injective), flow distinction capacity is preserved:
+  \[
+    D_F(\delta_i(f)) = D_F(f).
+  \]
+  For a lossy process, $D_F(\delta_i(f)) \le D_F(f)$.
+\end{theorem}
+
+\begin{proof}
+  If $\delta_i$ is injective, distinct inputs produce
+  distinct outputs. The number of distinguishable output
+  classes equals the number of input classes.
+  Hence $D_F$ is preserved.
+
+  If $\delta_i$ is not injective, there exist
+  $f_1 \ne f_2$ with $\delta_i(f_1) = \delta_i(f_2)$.
+  Those two flows become indistinguishable at the output.
+  The output partition is coarser than the input partition.
+  By the Refinement Increases Distinction Capacity Theorem
+  (\cref{thm:refinement-capacity}),
+  $D_F(\delta_i(f)) \le D_F(f)$.
+\end{proof}
+
+\begin{remark}{grep, sort, and uniq as operators}{grep-sort}
+  \csicon
+  The classic Unix tools realise distinct distinction
+  operations. \texttt{grep} is a filter: it selects a
+  subset of lines, which is lossy (lines not matching are
+  discarded) but \emph{order-preserving} within the
+  selected set. \texttt{sort} is a permutation: it
+  rearranges distinctions without destroying them, so it
+  is lossless in the sense of the Flow Conservation
+  Theorem. \texttt{uniq} collapses adjacent identical
+  lines into one — a coarsening operation that explicitly
+  reduces $D_F$.
+\end{remark}
+
+
+The Pipeline Determination Theorem
+
+
+Pipelines compose processes. The question is how
+composition affects admissibility.
+
+\begin{definition}{Pipeline}{pipeline}
+  A \emph{pipeline} is a sequence of processes
+  $\mathbf{p} = (p_1 \to p_2 \to \cdots \to p_k)$
+  whose composed transformation is
+  \[
+    \delta_\mathbf{p} = \delta_k \circ \cdots \circ \delta_1.
+  \]
+\end{definition}
+
+\begin{theorem}{Pipeline Determination Theorem}{pipeline-det}
+  The distinction capacity of a pipeline output is
+  determined by its \emph{minimum-capacity stage}:
+  \[
+    D_F(\delta_\mathbf{p}(f))
+    \;\le\;
+    \min_{i} D_F(\delta_i).
+  \]
+\end{theorem}
+
+\begin{proof}
+  By the Flow Conservation Theorem, each stage can only
+  preserve or reduce $D_F$. The minimum is achieved at
+  the bottleneck stage; all subsequent stages cannot
+  recover distinctions lost there. Hence the output
+  capacity is bounded above by the minimum across stages.
+\end{proof}
+
+\begin{remark}{Architectural implication}{pipeline-arch}
+  \csicon
+  The Pipeline Determination Theorem is a formal version
+  of the observation that a system is only as informative
+  as its weakest stage. In data pipelines, a single
+  \texttt{GROUP BY} that collapses fine-grained events
+  into coarse categories permanently reduces the
+  distinction capacity available to all downstream
+  consumers — even if those consumers would have
+  preferred finer granularity. Admissibility-preserving
+  pipeline design requires that no stage reduces
+  distinction capacity below what downstream stages
+  require.
+\end{remark}
+
+
+The Markov Boundary Theorem
+
+
+Each process in a flow system sees only its immediate
+input. Information from earlier stages is hidden behind
+the Markov boundary of the channel.
+
+\begin{definition}{Process Markov Boundary}{process-markov}
+  The \emph{Markov boundary} of process $p_i$ in
+  pipeline $\mathbf{p}$ is the set of distinctions
+  in $\Sigma^*$ that are visible to $p_i$ through its
+  input channel, i.e.\ $\mathrm{Im}(\delta_{i-1})$.
+\end{definition}
+
+\begin{theorem}{Markov Boundary Theorem}{markov-boundary}
+  Process $p_i$ cannot distinguish inputs that are
+  identical at its Markov boundary, regardless of their
+  upstream history.
+  \[
+    \delta_{i-1}(f_1) = \delta_{i-1}(f_2)
+    \;\implies\;
+    \delta_i(\delta_{i-1}(f_1)) = \delta_i(\delta_{i-1}(f_2)).
+  \]
+\end{theorem}
+
+\begin{proof}
+  $p_i$ receives only $\delta_{i-1}(f)$ as input.
+  If $\delta_{i-1}(f_1) = \delta_{i-1}(f_2)$, the inputs
+  to $p_i$ are identical. Since $\delta_i$ is a function,
+  it produces identical output. The upstream distinction
+  $f_1 \ne f_2$ is invisible.
+\end{proof}
+
+\noindent
+The Markov Boundary Theorem formalises why Unix
+pipes are composable: each process need only reason about
+its immediate input, not the full history of upstream
+transformations. But it also explains the cost: upstream
+distinctions lost at any stage are irrecoverable by
+downstream processes — a computational instance of the
+Semantic Horizon Theorem
+(\cref{thm:semantic-horizon}).
+
+
+History Dominance in File Systems
+
+
+\bioicon\csicon
+File systems that preserve history — version control
+systems, append-only logs, event stores — have strictly
+higher distinction capacity than those that overwrite
+in place.
+
+\begin{theorem}{History Dominance Theorem}{history-dominance}
+  Let $\mathcal{F}_H$ be a history-preserving file system
+  and $\mathcal{F}_S$ a state-only file system over the
+  same sequence of writes.
+  Then $D_F(\mathcal{F}_H) \ge D_F(\mathcal{F}_S)$,
+  with strict inequality whenever any write modifies
+  existing content.
+\end{theorem}
+
+\begin{proof}
+  $\mathcal{F}_H$ retains all previous states as distinct
+  addressable objects.
+  $\mathcal{F}_S$ projects the write sequence onto the
+  single current state, collapsing historical distinctions.
+  By the History Primacy Theorem
+  (\cref{thm:history-primacy}),
+  $|\hist(\mathcal{F}_H)| > |\hist(\mathcal{F}_S)|$
+  whenever writes are non-idempotent.
+  Therefore $D_F(\mathcal{F}_H) > D_F(\mathcal{F}_S)$.
+\end{proof}
+
+\begin{example}{Git as a Distinction Ecology}{git-ecology}
+  \csicon
+  A git repository is a distinction ecology in the sense
+  of Definition~\ref{defn:dist-ecology}. Each commit is a
+  distinction. The dependency graph $\mathcal{L}$ is the
+  parent-commit relation. The repair algebra $\mathcal{R}$
+  consists of \texttt{git revert}, \texttt{git bisect},
+  and \texttt{git cherry-pick}. The semantic horizon
+  corresponds to force-pushed history: distinctions that
+  once existed but whose recoverability has been
+  deliberately driven to zero. Admissibility-preserving
+  repository management avoids force-push on shared
+  branches for exactly this reason.
+\end{example}
+
+
+Flow Computing and Admissibility
+
+
+\begin{theorem}{Flow Admissibility Theorem}{flow-admissibility}
+  \index{admissibility!computational|textbf}
+  A flow system is admissible (in the sense of
+  Chapter~\ref{ch:admissibility}) if and only if its
+  pipeline composition does not reduce the distinction
+  capacity available to all reachable downstream consumers.
+  Formally:
+  \[
+    \forall p_i \in P,\quad
+    D_F(\delta_i \circ \cdots \circ \delta_1)
+    \;\ge\;
+    D_{\min}(p_i),
+  \]
+  where $D_{\min}(p_i)$ is the minimum capacity
+  required for $p_i$ to perform its function.
+\end{theorem}
+
+\begin{proof}
+  Admissibility requires $V_R(\delta(f), t) \ge V_R(f, t)$
+  for all transformations $\delta$
+  (\cref{prop:repair-adm}).
+  In the flow setting, $V_R$ corresponds to the number of
+  future computations distinguishable from the current
+  state. Reduction of $D_F$ below $D_{\min}(p_i)$
+  prevents $p_i$ from distinguishing inputs it needs to
+  separate, collapsing future computation branches.
+  Hence the condition on $D_F$ is exactly admissibility.
+\end{proof}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Flow systems are distinction ecologies: processes
+        are distinctions, channels are dependencies,
+        transformations are repair or coarsening operators.
+  \item Lossless processes preserve $D_F$; lossy processes
+        reduce it (\cref{thm:flow-conservation}).
+  \item Pipeline capacity is bounded by the minimum-capacity
+        stage (\cref{thm:pipeline-det}).
+  \item The Markov boundary limits what downstream
+        processes can recover
+        (\cref{thm:markov-boundary}).
+  \item History-preserving systems dominate state-only
+        systems in distinction capacity
+        (\cref{thm:history-dominance}).
+  \item Admissible flow systems do not reduce $D_F$ below
+        the minimum required by downstream consumers
+        (\cref{thm:flow-admissibility}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+\begin{exercise}[CS]
+  Model a \texttt{sort | uniq -c | sort -rn} pipeline
+  as a sequence of distinction operators.
+  At which stage does $D_F$ decrease?
+  Is the decrease admissible given the stated purpose
+  of the pipeline?
+\end{exercise}
+\begin{exercise}[CS]
+  Compare an event-sourced database (append-only log
+  of events, state derived on demand) with a
+  traditional CRUD database (in-place updates) using
+  the History Dominance Theorem.
+  Under what conditions does the CRUD system remain
+  adequate despite its lower $D_F$?
+\end{exercise}
+\begin{exercise}
+  Prove that a flow system consisting entirely of
+  injective processes has constant distinction capacity
+  from source to sink. What is the computational
+  significance of this result?
+\end{exercise}
+
+
+
+
+\chapter{Spherepop}
+\label{ch:spherepop}
+
+\begin{epigraph}{
+  An irreversible event is one that cannot be recalled.
+  A computation is an ecology of irreversible events
+  from which certain futures can still be reached.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define the four Spherepop primitives:
+        Pop, Refuse, Collapse, Bind.
+  \item Prove the Refusal Preservation Theorem.
+  \item Prove the Collapse Quotient Theorem.
+  \item Prove the History Monotonicity Theorem.
+  \item Prove the Scope Dynamics Theorem.
+  \item Connect Spherepop operational semantics to
+        distinction, recoverability, and admissibility.
+\end{objectives}
+
+
+Irreversible Event Calculus
+
+
+Chapter~\ref{ch:flow-computing} showed that flow systems
+model distinction transport. But flow systems are
+\emph{stateless} in the sense that each transformation is
+a pure function of its input. Real computation involves
+something stronger: commitment. A process may choose to
+\emph{pop} an event — to consume it irreversibly,
+recording the fact of consumption in its history. Or it
+may \emph{refuse} — leaving the event unconsumed and
+preserving optionality. Or it may \emph{collapse} a scope
+— reducing a structured possibility space to a single
+result. Or it may \emph{bind} — creating a persistent
+association between a name and a value, extending the
+repair capacity of the naming environment.
+
+Spherepop formalises these four operations as the
+primitive vocabulary of history-first computation.
+
+
+Why Structural Operational Semantics Is Not Enough
+
+\label{sec:ch24-why-sos}
+
+Programming-language semantics already has a mature
+formalism for describing computation as a sequence of
+primitive transitions: structural operational semantics,
+which specifies a transition relation on configurations and
+derives a program's behaviour from the closure of that
+relation \parencite{plotkin1981}. The lambda calculus
+\parencite{church1936} and process calculi such as CCS
+\parencite{milner1989} share the same basic commitment: a
+computation is a sequence of reduction or communication steps,
+each one replacing a configuration with its successor.
+
+What none of these formalisms builds in as a primitive is the
+distinction between consuming an event and declining to
+consume it while leaving it available. A transition either
+fires or it does not; there is no separate operation whose
+entire content is the deliberate preservation of an option not
+yet exercised. Spherepop's four primitives are deliberately
+asymmetric on exactly this point: \textbf{Pop} commits and is
+irreversible, while \textbf{Refuse} is a first-class operation
+whose only effect is the preservation of future reachability.
+This is not a notational variant of standard operational
+semantics; it is operational semantics extended with a
+primitive that exists specifically to make optionality-
+preservation visible as an event in its own right, rather than
+something that happens automatically whenever a rule simply
+fails to fire.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch24-falsifiability}
+
+The Refusal Preservation Theorem, proved later in this
+chapter (\cref{thm:refusal-preserve}), states that
+$\mathbf{Refuse}$ preserves reachability volume $V_R$ and is
+admissible in the exact technical sense of
+Chapter~\ref{ch:admissibility}. This is a strong claim: it
+asserts that Spherepop's $V_R$ and admissibility are not
+locally reimplemented notions that happen to share a name with
+Chapters~\ref{ch:reachability}--\ref{ch:admissibility}'s
+machinery, but the same objects, applied to configurations
+$\langle S, H\rangle$ as a particular kind of state space. The
+claim is falsified if the proof of Refusal Preservation
+required anything beyond a direct instance of the Reachability
+Monotonicity Theorem (\cref{thm:reach-mono}) applied to scope
+contraction --- if Spherepop's semantics needed its own,
+independently justified notion of reachability that merely
+resembled the book's general one, the realization claim would
+fail. The proof given later draws the connection directly, with
+no such independent machinery introduced.
+
+
+What This Chapter Establishes
+
+\label{sec:ch24-preview}
+
+By the end of this chapter, the four Spherepop primitives will
+have been given a complete operational semantics, the Refusal
+Preservation Theorem will tie optionality-preservation directly
+to reachability volume, and the Scope Dynamics Theorem will
+characterise how scopes evolve under repeated transitions.
+Chapter~\ref{ch:hydra} then asks what changes once a single
+sequence of events is no longer enough --- when many such
+event histories must be coordinated, compared, and reconciled
+across multiple interacting processes at once.
+
+\begin{definition}{Spherepop Alphabet}{spherepop-alpha}
+  The \emph{Spherepop alphabet} consists of four
+  primitive operations:
+  \begin{enumerate}[(i)]
+    \item $\mathbf{Pop}(e, H)$: consume event $e$,
+          appending it to history $H$. Irreversible.
+    \item $\mathbf{Refuse}(e, H)$: decline event $e$,
+          leaving $H$ unchanged. Optionality-preserving.
+    \item $\mathbf{Collapse}(S, H)$: reduce scope $S$
+          to its canonical result, appending a
+          collapse record to $H$. Irreversible.
+    \item $\mathbf{Bind}(n, v, H)$: associate name $n$
+          with value $v$ in $H$. Extends naming
+          environment.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}{Spherepop Configuration}{spherepop-config}
+  A \emph{Spherepop configuration} is a pair
+  $\langle S, H \rangle$ where:
+  \begin{itemize}[nosep]
+    \item $S \subseteq \mathcal{E}$ is the current
+          \emph{scope}: the set of events available
+          for consumption.
+    \item $H \in \hist(\mathcal{E})$ is the
+          \emph{history}: the ordered sequence of
+          events already consumed or refused.
+  \end{itemize}
+\end{definition}
+
+\begin{definition}{Spherepop Transition Relation}{spherepop-trans}
+  The transition relation $\to$ on configurations is
+  defined by:
+  \begin{align*}
+    \langle S \cup \{e\}, H \rangle
+    &\xrightarrow{\mathbf{Pop}(e)}
+    \langle S, H \cdot e \rangle \\
+    \langle S \cup \{e\}, H \rangle
+    &\xrightarrow{\mathbf{Refuse}(e)}
+    \langle S \setminus \{e\}, H \rangle \\
+    \langle S, H \rangle
+    &\xrightarrow{\mathbf{Collapse}(S)}
+    \langle \varnothing, H \cdot \lfloor S \rfloor \rangle \\
+    \langle S, H \rangle
+    &\xrightarrow{\mathbf{Bind}(n,v)}
+    \langle S, H \cdot (n \mapsto v) \rangle
+  \end{align*}
+  where $H \cdot e$ denotes appending $e$ to $H$ and
+  $\lfloor S \rfloor$ is the canonical reduction of $S$.
+\end{definition}
+
+
+The Refusal Preservation Theorem
+
+
+\begin{theorem}{Refusal Preservation Theorem}{refusal-preserve}
+  $\mathbf{Refuse}(e, H)$ preserves the reachability
+  volume of the configuration:
+  \[
+    V_R(\langle S \setminus \{e\}, H \rangle, t)
+    \;\le\;
+    V_R(\langle S \cup \{e\}, H \rangle, t).
+  \]
+  Moreover, $\mathbf{Refuse}$ is admissible: it does not
+  reduce the set of futures reachable by subsequent
+  $\mathbf{Pop}$ operations on other
+  events.\index{admissibility!computational|textbf}
+\end{theorem}
+
+\begin{proof}
+  Before refusal, the scope contains $e$.
+  The reachability set includes all futures reachable
+  by $\mathbf{Pop}(e)$ and all futures reachable by
+  $\mathbf{Refuse}(e)$.
+  After refusal, $e$ is removed from scope.
+  Futures reachable only via $\mathbf{Pop}(e)$ are
+  eliminated.
+  Hence $V_R$ after refusal $\le V_R$ before refusal.
+
+  However, refusal does not consume $e$ into $H$,
+  so the history remains unchanged.
+  All futures reachable from the post-refusal configuration
+  were reachable from the pre-refusal configuration
+  via the $\mathbf{Refuse}$ branch.
+  Therefore refusal is admissible: it selects a branch
+  of the future cone without collapsing orthogonal branches
+  that do not depend on $e$.
+\end{proof}
+
+\begin{remark}{Refuse as optionality management}{refuse-option}
+  \csicon
+  $\mathbf{Refuse}$ is the Spherepop primitive that most
+  directly implements admissibility. A computation that
+  refuses events it cannot yet integrate preserves its
+  future option space — it does not commit to
+  interpretation before sufficient context has accumulated.
+  This is the computational analogue of the Admissibility
+  Existence Theorem (\cref{thm:adm-exist}): the system
+  keeps $\adm$ non-empty by refusing premature commitment.
+\end{remark}
+
+
+The Collapse Quotient Theorem
+
+
+\begin{definition}{Scope Quotient}{scope-quotient}
+  The \emph{collapse quotient} of scope $S$ under
+  $\mathbf{Collapse}$ is the equivalence relation
+  $\sim_S$ on $\hist(\mathcal{E})$ defined by:
+  \[
+    H_1 \sim_S H_2
+    \;\iff\;
+    \lfloor S \rfloor_{H_1} = \lfloor S \rfloor_{H_2},
+  \]
+  i.e.\ two histories are equivalent if they produce
+  the same canonical reduction of $S$.
+\end{definition}
+
+\begin{theorem}{Collapse Quotient Theorem}{collapse-quotient}
+  $\mathbf{Collapse}(S)$ projects the history space
+  $\hist(\mathcal{E})$ onto the quotient
+  $\hist(\mathcal{E})/{\sim_S}$.
+  The collapse is:
+  \begin{enumerate}[(i)]
+    \item Irreversible: $V_R$ after collapse
+          $\le V_R$ before collapse.
+    \item Admissible iff $\lfloor S \rfloor$ preserves
+          all distinctions required by subsequent
+          computations.
+    \item A projection failure (Ch.~\ref{ch:geometry-failure})
+          iff the canonical reduction collapses
+          distinctions that generate persistent anomalies
+          in downstream scopes.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) After collapse, the scope $S$ is replaced by
+  $\lfloor S \rfloor$. Any history that would have
+  produced a different reduction of $S$ is now
+  indistinguishable from the canonical result.
+  The quotient $\hist/{\sim_S}$ has fewer equivalence
+  classes than $\hist$, so $V_R$ cannot increase.
+
+  (ii) Admissibility requires that downstream
+  computations can distinguish all inputs they need to
+  separate. If $\lfloor S \rfloor$ preserves those
+  distinctions, the collapse is admissible; otherwise not.
+
+  (iii) By the Projection Failure Theorem
+  (\cref{thm:proj-fail-thm}), any persistent anomaly
+  in downstream scope arises from a distinction collapsed
+  by the projection $S \mapsto \lfloor S \rfloor$.
+\end{proof}
+
+\begin{example}{Premature Aggregation as Collapse Failure}
+  {premature-agg}
+  \csicon
+  Aggregating sensor readings into hourly averages before
+  storing them is a $\mathbf{Collapse}$ operation. If
+  downstream analysis later requires sub-hourly anomaly
+  detection, the collapsed data contains a persistent
+  anomaly: the anomaly cannot be resolved from the
+  available data. This is a projection failure. The repair
+  requires re-ingestion at finer granularity — an
+  ontological enlargement in the sense of
+  Definition~\ref{defn:ont-enlarge}.
+\end{example}
+
+
+The History Monotonicity Theorem
+
+
+\begin{theorem}{History Monotonicity Theorem}{history-monotone}
+  In any Spherepop execution, the history $H$ grows
+  monotonically: no transition removes entries from $H$.
+  Formally, for any sequence of transitions
+  $\langle S_0, H_0 \rangle \to \cdots \to
+  \langle S_n, H_n \rangle$:
+  \[
+    H_0 \;\sqsubseteq\; H_1 \;\sqsubseteq\;
+    \cdots \;\sqsubseteq\; H_n,
+  \]
+  where $H \sqsubseteq H'$ means $H$ is a prefix of $H'$.
+\end{theorem}
+
+\begin{proof}
+  By inspection of the transition relation
+  (Definition~\ref{defn:spherepop-trans}):
+  \begin{itemize}[nosep]
+    \item $\mathbf{Pop}(e)$: appends $e$ to $H$.
+    \item $\mathbf{Refuse}(e)$: leaves $H$ unchanged.
+    \item $\mathbf{Collapse}(S)$: appends $\lfloor S \rfloor$
+          to $H$.
+    \item $\mathbf{Bind}(n,v)$: appends $(n \mapsto v)$
+          to $H$.
+  \end{itemize}
+  No transition removes or reorders entries. Hence $H$
+  is prefix-monotone across all transitions.
+\end{proof}
+
+\begin{remark}{Monotone history and the Repair Conservation Law}
+  {mono-repair}
+  History Monotonicity is the computational analogue of
+  the Repair Conservation Law
+  (\cref{thm:repair-conservation}): repair stays within
+  the connected component of the recoverability manifold.
+  In Spherepop, the history is the recoverability manifold.
+  Monotonicity guarantees that past events remain
+  recoverable --- they are never erased, only extended.
+\end{remark}
+
+\begin{remark}{History growth and the pruning problem}
+  {history-pruning}
+  History Monotonicity implies that Spherepop histories
+  are unbounded: every execution step appends to $H$,
+  and no step removes entries. In any finite-resource
+  implementation this requires a strategy for managing
+  history size. The formal framework is silent on this,
+  because the abstract semantics treats history as
+  infinite-precision recoverability --- a theoretical
+  ideal. Three implementation strategies are compatible
+  with the framework's admissibility requirement:
+  \begin{enumerate}[(i)]
+    \item \emph{Compression}: encode $H$ in a
+          compressed form that preserves $\reco$ while
+          reducing storage. Any lossless compression
+          is admissible; lossy compression that reduces
+          $\reco$ below the system's operational
+          threshold is not.
+    \item \emph{Archival}: move old history entries to
+          slower or cheaper storage rather than
+          discarding them. Admissibility is preserved
+          as long as retrieval remains possible within
+          the system's repair time horizon.
+    \item \emph{Selective forgetting}: remove entries
+          whose $\reco$ contribution has fallen below
+          a threshold (e.g.\ events too old to be
+          implicated in any current scope's repair
+          path). This is admissible if and only if it
+          does not reduce $\reco(\mathcal{F}_S)$ below
+          zero for any currently active failure state
+          $\mathcal{F}_S$.
+  \end{enumerate}
+  Strategy (iii) is the most aggressive and requires
+  careful bookkeeping; strategies (i) and (ii) are
+  conservative and safe. The choice is an engineering
+  decision outside the scope of the formal semantics.
+\end{remark}
+
+
+The Scope Dynamics Theorem
+
+
+\begin{definition}{Scope Reachability}{scope-reach}
+  The \emph{scope reachability volume} of configuration
+  $\langle S, H \rangle$ is
+  \[
+    V_S(\langle S, H \rangle)
+    = |\{H' : \langle S, H \rangle \to^* \langle \varnothing, H' \rangle\}|,
+  \]
+  the number of terminal histories reachable by complete
+  execution of scope $S$.
+\end{definition}
+
+\begin{theorem}{Scope Dynamics Theorem}{scope-dynamics}
+  For any Spherepop configuration:
+  \begin{enumerate}[(i)]
+    \item $\mathbf{Pop}$ reduces $V_S$ by eliminating
+          futures in which $e$ is refused.
+    \item $\mathbf{Refuse}$ reduces $V_S$ by eliminating
+          futures in which $e$ is popped.
+    \item $\mathbf{Collapse}$ reduces $V_S$ to at most
+          $|\{\lfloor S' \rfloor : S' \subseteq S\}|$.
+    \item $\mathbf{Bind}$ does not reduce $V_S$; it may
+          increase $V_S$ by enabling new branch conditions.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) $\mathbf{Pop}(e)$ commits to consuming $e$.
+  All futures involving $\mathbf{Refuse}(e)$ from the
+  current configuration are eliminated.
+  Hence $V_S$ decreases.
+
+  (ii) $\mathbf{Refuse}(e)$ removes $e$ from scope.
+  All futures involving $\mathbf{Pop}(e)$ are eliminated.
+  Hence $V_S$ decreases.
+
+  (iii) $\mathbf{Collapse}(S)$ reduces all remaining
+  scope to a single canonical value. Only distinctions
+  preserved by $\lfloor \cdot \rfloor$ survive.
+  $V_S$ is bounded by the number of distinct canonical
+  reductions.
+
+  (iv) $\mathbf{Bind}$ extends the environment without
+  consuming scope events. New bindings may enable
+  conditional branches previously unreachable, weakly
+  increasing $V_S$.
+\end{proof}
+
+\begin{example}{Spherepop Execution Trace}{spherepop-trace}
+  \csicon
+  Consider a scope $S = \{e_1, e_2, e_3\}$ with
+  $V_S = 8$ (three binary choices). A sequence of
+  decisions:
+  \begin{lstlisting}[language=Spherepop]
+  // V_S = 8
+  pop e1        // V_S = 4 (e1 consumed; refuse(e1) branch gone)
+  refuse e2     // V_S = 2 (e2 removed; pop(e2) branch gone)
+  bind x = 42  // V_S = 2 (new binding; no scope reduction)
+  collapse S   // V_S = 1 (terminal: one canonical result)
+  \end{lstlisting}
+  Each $\mathbf{Pop}$ and $\mathbf{Refuse}$ halves
+  $V_S$; $\mathbf{Bind}$ leaves it unchanged;
+  $\mathbf{Collapse}$ terminates.
+\end{example}
+
+
+Computational Recoverability
+
+
+\begin{definition}{Computational Recoverability}{comp-reco}
+  The \emph{computational recoverability} of history $H$
+  with respect to target configuration
+  $\langle S^*, H^* \rangle$ is
+  \[
+    \reco_C(H)
+    = \frac{|\{H' \sqsupseteq H : H' = H^*\}|}
+           {|\{H^* \text{ reachable from } H_0\}|}.
+  \]
+  A computation is \emph{computationally recoverable}
+  from $H$ iff $\reco_C(H) > 0$.
+\end{definition}
+
+\begin{theorem}{Spherepop Recoverability Theorem}{spherepop-reco}
+  A Spherepop execution is recoverable from history $H$
+  iff there exists a suffix $\Delta H$ such that
+  $H \cdot \Delta H$ produces the target configuration.
+  Irrecoverability occurs iff the required suffix is
+  incompatible with history monotonicity.
+\end{theorem}
+
+\begin{proof}
+  By History Monotonicity (\cref{thm:history-monotone}),
+  $H$ can only be extended, not modified.
+  A target $H^*$ is recoverable from $H$ iff $H \sqsubseteq H^*$.
+  If a $\mathbf{Pop}(e)$ in $H$ contradicts the required
+  $\mathbf{Refuse}(e)$ in $H^*$, the suffix is
+  incompatible: $\reco_C(H) = 0$.
+\end{proof}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Spherepop's four primitives — Pop, Refuse,
+        Collapse, Bind — implement distinction consumption,
+        optionality preservation, scope reduction, and
+        environment extension respectively.
+  \item $\mathbf{Refuse}$ is the admissibility-preserving
+        primitive: it declines premature commitment
+        (\cref{thm:refusal-preserve}).
+  \item $\mathbf{Collapse}$ is the projection operator:
+        it is admissible iff it preserves downstream
+        distinctions (\cref{thm:collapse-quotient}).
+  \item History grows monotonically; past events are
+        never erased (\cref{thm:history-monotone}).
+  \item $V_S$ decreases under Pop and Refuse, collapses
+        under Collapse, and is preserved or increased
+        under Bind (\cref{thm:scope-dynamics}).
+  \item Computational recoverability is determined by
+        history prefix compatibility
+        (\cref{thm:spherepop-reco}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+\begin{exercise}[CS]
+  Model exception handling (\texttt{try}/\texttt{catch})
+  in a mainstream language as a Spherepop configuration.
+  Which primitive does \texttt{throw} correspond to?
+  Is it admissible? What does
+  \texttt{finally} correspond to?
+\end{exercise}
+\begin{exercise}[CS]
+  Prove that a purely functional program (no side effects,
+  no mutable state) corresponds to a Spherepop execution
+  in which every $\mathbf{Pop}$ is immediately followed
+  by a $\mathbf{Collapse}$ of the resulting scope.
+  What does referential transparency correspond to?
+\end{exercise}
+\begin{exercise}
+  Show that the Spherepop primitives form a monoid under
+  sequential composition, identifying the identity element.
+  Is the monoid commutative? If not, give a
+  counter-example showing that
+  $\mathbf{Pop}(e_1) \cdot \mathbf{Pop}(e_2) \ne
+   \mathbf{Pop}(e_2) \cdot \mathbf{Pop}(e_1)$ in general.
+\end{exercise}
+
+
+
+
+\chapter{HYDRA}
+\label{ch:hydra}
+
+\begin{epigraph}{
+  A mind is a collection of repair strategies for
+  the distinctions it cares about.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define the HYDRA architecture as a distinction
+        ecology over cognitive modules.
+  \item Prove the Hybrid Repair Theorem.
+  \item Prove the Projection Management Theorem.
+  \item Prove the Multi-Module Admissibility Theorem.
+  \item Prove the Constraint-Guided Intelligence Theorem.
+  \item Connect HYDRA to the Intelligence--Repair
+        Equivalence Theorem of Chapter~\ref{ch:repair-intelligence}.
+\end{objectives}
+
+
+Repair-Based Cognition
+
+
+Chapter~\ref{ch:repair-intelligence} defined intelligence
+as repair capacity over distinction spaces, including
+the distinction space of repair itself. HYDRA —
+Hybrid Dynamic Reasoning Architecture — is a
+computational realisation of this definition.
+
+HYDRA does not search for optimal solutions to
+pre-specified objectives. It maintains a set of
+active \emph{distinction projections} (partial models
+of the environment) and continuously repairs them
+against incoming evidence. When a projection fails —
+when it generates persistent anomalies in the sense of
+Chapter~\ref{ch:geometry-failure} — HYDRA invokes a
+higher-order repair: revision of the projection itself.
+
+
+Why a Single Objective Function Is Not Enough
+
+\label{sec:ch25-why-monolithic}
+
+The dominant architectural pattern in contemporary artificial
+intelligence is monolithic and single-objective: a network
+or agent optimises one differentiable loss, or maximises one
+scalar reward signal, with the entire system's behaviour
+emerging from gradient pressure toward that single target
+\parencite{sutton2018}. This pattern is powerful and has
+produced most of the field's recent capability gains, but it
+has no architectural place for the case where the objective
+itself is wrong, underspecified, or actively misleading in a
+particular regime --- the system can only get better at
+optimising the objective it has, not notice that the objective
+needs revision.
+
+Predictive-processing accounts come closer. The free-energy
+principle treats an agent as continuously minimising prediction
+error across a hierarchy of generative models, with model
+revision triggered by sustained error rather than treated as a
+separate, externally imposed event \parencite{friston2010}.
+This is structurally close to HYDRA's anomaly-driven repair.
+Where it differs is in granularity: HYDRA does not merely
+revise predictions within a single hierarchical model. It
+maintains explicitly separate modules with their own
+distinction spaces and repair algebras, coordinated through
+projection operators that are themselves subject to repair when
+cross-module distortions accumulate. A monolithic
+free-energy-minimising system has one error landscape; HYDRA
+has many, plus a second-order repair process for the relations
+between them.
+
+The real test of HYDRA's claim to realize
+Chapter~\ref{ch:repair-intelligence}'s definition of
+intelligence is not architectural resemblance but whether
+HYDRA's intelligence measure is actually derived from that
+chapter's machinery, rather than independently reinvented under
+a new name.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch25-falsifiability}
+
+The Constraint-Guided Intelligence Theorem, proved later in
+this chapter (\cref{thm:cgi}), defines HYDRA's intelligence as
+a product of per-module repair capacities and a meta-capacity
+term over the inter-module projection algebra. This is
+falsifiable against a specific test: the decomposition should
+follow directly from the Intelligence--Repair Equivalence
+Theorem of Chapter~\ref{ch:repair-intelligence}
+(\cref{thm:intel-repair}), which already identifies
+intelligence with the product of base and meta repair
+capacity, with HYDRA's modules supplying the base term and its
+projection algebra supplying the meta term. If HYDRA's
+intelligence measure required a genuinely new definition not
+already implicit in Chapter~\ref{ch:repair-intelligence}'s
+theorem --- some architecture-specific notion of capability
+that the general theory could not have anticipated --- the
+claim that HYDRA realizes that theorem, rather than merely
+echoing its vocabulary, would fail. The proof given later
+draws the decomposition directly from
+\cref{thm:intel-repair} with no additional axiom.
+
+
+What This Chapter Establishes
+
+\label{sec:ch25-preview}
+
+By the end of this chapter, HYDRA's multi-module architecture
+will have been defined formally, the Hybrid Repair Theorem
+will show when local repair saturation forces cross-module
+escalation, and the Constraint-Guided Intelligence Theorem will
+derive system-level intelligence directly from the repair
+machinery of Chapter~\ref{ch:repair-intelligence}.
+Chapter~\ref{ch:tartan} then asks what happens inside a single
+module's distinction space when the distinctions it contains
+are themselves recursively structured --- when a module must
+represent not just facts but facts about its own
+representations.
+
+\begin{definition}{HYDRA Architecture}{hydra-arch}
+  A HYDRA instance is a tuple
+  $\mathcal{H} = (M, \Pi, \mathcal{R}, \Gamma, \adm)$
+  where:
+  \begin{itemize}[nosep]
+    \item $M = \{m_1, \ldots, m_k\}$ is a set of
+          \emph{modules}, each maintaining a partial
+          distinction model of the environment.
+    \item $\Pi = \{\pi_{ij} : m_i \to m_j\}$ is a set
+          of \emph{projection operators} between modules.
+    \item $\mathcal{R}$ is the \emph{repair algebra}
+          (Chapter~\ref{ch:repair}) for each module.
+    \item $\Gamma$ is a set of \emph{admissibility
+          constraints} on module interactions.
+    \item $\adm$ is the system-level admissibility
+          manifold.
+  \end{itemize}
+\end{definition}
+
+\begin{definition}{Module State and Anomaly Set}{hydra-module}
+  Module $m_i$ maintains:
+  \begin{itemize}[nosep]
+    \item A distinction space $\mathcal{D}_i$ over its
+          domain.
+    \item A current model $d_i \in \mathcal{D}_i$.
+    \item An anomaly set
+          $\mathcal{F}_i = \mathcal{F}(d_i, \mathcal{R}_i)$
+          (the failure manifold of Ch.~\ref{ch:geometry-failure}).
+  \end{itemize}
+\end{definition}
+
+
+The Hybrid Repair Theorem
+
+
+HYDRA performs two levels of repair: local repair within
+modules, and cross-module repair when local repair
+saturates.
+
+\begin{theorem}{Hybrid Repair Theorem}{hybrid-repair}
+  Let $m_i$ be a HYDRA module with saturated local repair
+  algebra $\mathcal{R}_i$.
+  Then HYDRA invokes cross-module repair:
+  it selects module $m_j$ whose distinction space
+  $\mathcal{D}_j$ provides an ontological enlargement
+  (\cref{defn:ont-enlarge}) resolving anomalies in
+  $\mathcal{F}_i$.
+  The composed repair
+  $\repair_j \circ \pi_{ij} \circ \repair_i$
+  is an admissible repair operator on
+  $\mathcal{D}_i \cup \mathcal{D}_j$.
+\end{theorem}
+
+\begin{proof}
+  By the Scientific Revolution Theorem
+  (\cref{thm:sci-rev-thm}), saturation of local repair
+  plus deep anomalies requires ontological enlargement.
+  Module $m_j$ provides $\mathcal{D}_j \supsetneq
+  \mathcal{D}_i$ satisfying
+  Definition~\ref{defn:ont-enlarge}(i)--(iii).
+  The projection $\pi_{ij}$ maps $\mathcal{D}_i$-anomalies
+  into $\mathcal{D}_j$-resolvable form.
+  Since each individual repair is admissible
+  (\cref{defn:admissible-repair}), and the composition
+  of admissible repairs is admissible
+  (\cref{thm:repair-closure}), the composed operator is
+  admissible.
+\end{proof}
+
+\begin{remark}{HYDRA and System 1/System 2}{hydra-dual}
+  \csicon
+  The HYDRA architecture provides a formal account of
+  the dual-process distinction in cognitive science.
+  System~1 (fast, local, automatic) corresponds to
+  repair within a single module $m_i$ using $\mathcal{R}_i$.
+  System~2 (slow, deliberate, flexible) corresponds to
+  cross-module repair via $\pi_{ij}$ when local repair
+  saturates. The key insight is that System~2 is not a
+  different \emph{kind} of cognition but a higher-order
+  instance of the same repair operation applied to a
+  larger distinction space.
+\end{remark}
+
+
+The Projection Management Theorem
+
+
+Projections between modules transfer distinctions but may
+introduce distortion. HYDRA must manage this distortion
+to maintain system-level admissibility.
+
+\begin{theorem}{Projection Management Theorem}{proj-mgmt}
+  For any projection $\pi_{ij} : m_i \to m_j$ in HYDRA,
+  the admissibility distortion satisfies
+  \[
+    \Delta_\adm(\pi_{ij})
+    \;\ge\;
+    \frac{\log r_{ij}}{\log |\mathcal{D}_i|}
+    \cdot V_R(d_i, t),
+  \]
+  where $r_{ij} = |\mathcal{D}_i| / |\mathcal{D}_j|$
+  is the compression ratio of the projection.
+  HYDRA maintains admissibility by tracking
+  $\Delta_\adm(\pi_{ij})$ and triggering module expansion
+  when it exceeds a threshold $\theta$.
+\end{theorem}
+
+\begin{proof}
+  By the Projection--Admissibility Gap Theorem
+  (\cref{thm:proj-adm-gap}), any projection with
+  compression ratio $r > 1$ introduces distortion at
+  least $(\log r / \log |\mathcal{D}|) \cdot V_R$.
+  HYDRA monitors this quantity. When
+  $\Delta_\adm(\pi_{ij}) > \theta$, the projection is
+  losing more admissibility than the system can tolerate.
+  Module expansion (adding distinctions to $\mathcal{D}_j$)
+  reduces $r_{ij}$, lowering $\Delta_\adm$.
+\end{proof}
+
+
+The Multi-Module Admissibility Theorem
+
+
+\begin{theorem}{Multi-Module Admissibility Theorem}{multi-module-adm}
+  \index{admissibility!computational}
+  A HYDRA instance is system-level admissible iff
+  the composed projection
+  $\Pi = \pi_{k,k-1} \circ \cdots \circ \pi_{21}$
+  satisfies
+  \[
+    \Vol(\adm_\mathcal{H}(t)) \;\ge\; \alpha \cdot V_R(d_0, t)
+  \]
+  for threshold $\alpha \in (0,1)$, where $d_0$ is the
+  root module's model and $\adm_\mathcal{H}$ is the
+  system-level admissibility manifold.
+\end{theorem}
+
+\begin{proof}
+  System-level admissibility is the admissibility of the
+  composed transformation (Definition~\ref{defn:adm-manifold}).
+  Each projection $\pi_{ij}$ may reduce $V_R$ by at most
+  its compression ratio.
+  The cumulative reduction across $k$ projections is
+  bounded by the product of compression ratios.
+  System admissibility requires that this product
+  leaves admissible volume above $\alpha V_R(d_0, t)$.
+\end{proof}
+
+
+The Constraint-Guided Intelligence Theorem
+
+
+\begin{theorem}{Constraint-Guided Intelligence Theorem}{cgi}
+  A HYDRA instance with constraint set $\Gamma$ has
+  intelligence
+  \[
+    \mathcal{I}(\mathcal{H})
+    \;=\;
+    \prod_{i=1}^k
+    \kappa(m_i, \mathcal{D}_{m_i})
+    \;\cdot\;
+    \kappa(\mathcal{H}, \mathcal{D}_\Pi),
+  \]
+  where $\mathcal{D}_\Pi$ is the distinction space of
+  the inter-module projection algebra.
+  Constraints in $\Gamma$ that reduce
+  $\kappa(\mathcal{H}, \mathcal{D}_\Pi)$ reduce
+  system intelligence; constraints that increase it
+  (by specifying repair strategies for projection failures)
+  increase system intelligence.
+\end{theorem}
+
+\begin{proof}
+  By the Intelligence--Repair Equivalence Theorem
+  (\cref{thm:intel-repair}), intelligence is the product
+  of base repair capacity and meta-repair capacity.
+  In HYDRA, base capacity is the product over module
+  repair capacities. Meta-capacity is the repair capacity
+  over projection failures — the ability of the system
+  to revise its own inter-module projection operators.
+  Constraints $\Gamma$ that specify admissible projections
+  increase meta-capacity by providing repair strategies
+  for cross-module distortions; constraints that forbid
+  useful projections reduce it.
+\end{proof}
+
+\begin{remark}{Why the product form?}{cgi-product-form}
+  The intelligence measure uses a product rather than a
+  sum: $\mathcal{I} = (\prod_i \kappa_i) \cdot \kappa_\Pi$.
+  This is a modeling choice, not a uniquely derived
+  consequence. The semantics it encodes is that base-level
+  and meta-level repair capacity are \emph{jointly
+  necessary}: a HYDRA instance with strong module-level
+  repair but zero projection-repair capacity cannot
+  revise failing inter-module mappings; conversely,
+  excellent projection-repair capacity atop broken
+  modules cannot compensate for the absence of base
+  distinctions to project. The product vanishes when
+  either factor vanishes, capturing this joint necessity.
+  A sum $\sum_i \kappa_i + \kappa_\Pi$ would allow one
+  tier to fully compensate for the other's failure,
+  which contradicts the hierarchical structure the
+  theorem is intended to formalize. Alternative
+  aggregation functions (e.g.\ the harmonic mean, or
+  a weighted product) are conceivable and may better
+  model specific architectures; the product is adopted
+  as the natural minimal form consistent with the
+  joint-necessity requirement.
+\end{remark}
+
+\begin{remark}{Why constraint guides rather than limits}{cgi-rmk}
+  The Constraint-Guided Intelligence Theorem explains
+  why well-designed constraints increase rather than
+  decrease cognitive performance. A constraint that
+  specifies which projections are admissible provides
+  HYDRA with a repair strategy for the case when
+  projections fail. Without constraints, HYDRA must
+  search the space of possible inter-module projections
+  blindly. With constraints, the search is guided.
+  The distinction between constraints that increase
+  $\kappa$ (good constraints) and those that decrease
+  it (bad constraints) formalises the difference between
+  useful cognitive biases and pathological ones.
+\end{remark}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item HYDRA is a distinction ecology over cognitive
+        modules with a repair algebra and admissibility
+        manifold.
+  \item Cross-module repair resolves anomalies that
+        saturate local repair, implementing ontological
+        enlargement (\cref{thm:hybrid-repair}).
+  \item Projection distortion between modules is tracked
+        and managed by monitoring
+        $\Delta_\adm(\pi_{ij})$
+        (\cref{thm:proj-mgmt}).
+  \item System admissibility requires the composed
+        projection to preserve admissible volume above
+        threshold (\cref{thm:multi-module-adm}).
+  \item Well-designed constraints increase system
+        intelligence by providing meta-repair strategies
+        for projection failures (\cref{thm:cgi}).
+\end{chapsummary}

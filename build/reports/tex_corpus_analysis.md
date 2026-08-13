@@ -1,0 +1,273 @@
+# TeX corpus analysis: /home/runner/work/personalinks/personalinks
+
+113 .tex files, 827,413 words (approx).
+
+## Exact duplicates (3 group(s))
+
+- 2 identical copies (52,145 bytes, sha256 302130cf7004...):
+  - `Spherepop_Specifications.tex`
+  - `processing/Spherepop_Specifications.tex`
+- 2 identical copies (116,327 bytes, sha256 347aed0712a5...):
+  - `Structured Irreversibility.tex`
+  - `working/Structured Irreversibility.tex`
+- 2 identical copies (126,722 bytes, sha256 bbae060251e4...):
+  - `intelligence-explosion.tex`
+  - `processing/intelligence-explosion.tex`
+
+## Title/version clusters (14 cluster(s))
+
+Grouped by filename after stripping version/draft suffixes -- a naming heuristic, not a content diff. Largest file per cluster is bolded as a size-based guess only, not a canonicalization claim.
+
+- **structured irreversibility** (4 files):
+  - **`Structured Irreversibility.tex`** -- 116,327 bytes, 9,143 words
+  - `working/Structured Irreversibility - draft 01.tex` -- 51,954 bytes, 3,976 words
+  - `working/Structured Irreversibility - draft 02.tex` -- 84,926 bytes, 6,477 words
+  - `working/Structured Irreversibility.tex` -- 116,327 bytes, 9,143 words
+- **execution history** (4 files):
+  - `working/execution history - draft 02.tex` -- 64,134 bytes, 7,501 words
+  - **`working/execution history - draft 03.tex`** -- 106,348 bytes, 12,824 words
+  - `working/execution history - draft 04.tex` -- 72,311 bytes, 8,121 words
+  - `working/execution history.tex` -- 89,704 bytes, 10,802 words
+- **history as identity** (3 files):
+  - `History as Identity - v01.tex` -- 37,332 bytes, 4,624 words
+  - `History as Identity - v02.tex` -- 47,073 bytes, 5,517 words
+  - **`History as Identity.tex`** -- 70,818 bytes, 7,116 words
+- **spherepop calculus** (3 files):
+  - `essay/draft-01/spherepop_calculus.tex` -- 8,703 bytes, 449 words
+  - `essay/spherepop_calculus.tex` -- 7,884 bytes, 352 words
+  - **`monograph/spherepop-calculus.tex`** -- 76,708 bytes, 6,360 words
+- **intelligence explosion** (3 files):
+  - **`intelligence-explosion.tex`** -- 126,722 bytes, 13,513 words
+  - `processing/draft/intelligence-explosion.tex` -- 74,208 bytes, 7,682 words
+  - `processing/intelligence-explosion.tex` -- 126,722 bytes, 13,513 words
+- **monograph** (3 files):
+  - `processing/adaptive-trust/monograph.tex` -- 23,788 bytes, 1,777 words
+  - **`processing/geometry/monograph.tex`** -- 76,207 bytes, 7,567 words
+  - `processing/monograph.tex` -- 19,581 bytes, 2,007 words
+- **introducción a spherepop** (2 files):
+  - `Introducción a Spherepop - v01.tex` -- 96,468 bytes, 12,897 words
+  - **`Introducción a Spherepop.tex`** -- 112,288 bytes, 11,537 words
+- **joy of spherepop** (2 files):
+  - `Joy-of-Spherepop-draft-01.tex` -- 84,840 bytes, 10,387 words
+  - **`Joy-of-Spherepop.tex`** -- 106,514 bytes, 13,024 words
+- **operational mereology** (2 files):
+  - **`Operational-Mereology.tex`** -- 53,020 bytes, 6,355 words
+  - `prototypes/Operational-Mereology.tex` -- 42,400 bytes, 4,588 words
+- **spherepop specifications** (2 files):
+  - **`Spherepop_Specifications.tex`** -- 52,145 bytes, 4,914 words
+  - `processing/Spherepop_Specifications.tex` -- 52,145 bytes, 4,914 words
+- **throwing the game** (2 files):
+  - `Throwing-the-game.tex` -- 63,223 bytes, 7,270 words
+  - **`throwing_the_game_v2.tex`** -- 98,167 bytes, 11,248 words
+- **computing with spherepop** (2 files):
+  - **`computing-with-spherepop.tex`** -- 109,455 bytes, 12,641 words
+  - `prototypes/docs/computing-with-spherepop.tex` -- 2,042 bytes, 164 words
+- **essay** (2 files):
+  - `essay/draft-01/essay.tex` -- 10,004 bytes, 793 words
+  - **`processing/essay.tex`** -- 39,301 bytes, 2,468 words
+- **identity as event history** (2 files):
+  - `identity_as_event_history-v1.tex` -- 102,832 bytes, 12,174 words
+  - **`identity_as_event_history.tex`** -- 187,729 bytes, 22,687 words
+
+## Per-file stats
+
+| file | words | sections | labels | cites | packages |
+|---|---:|---:|---:|---:|---:|
+| `Active Geodesic Inference.tex` | 13,980 | 106 | 0 | 0 | 14 |
+| `Computation After Storage.tex` | 7,489 | 22 | 0 | 0 | 9 |
+| `Computation as Semantic Maintenance.tex` | 11,964 | 31 | 0 | 0 | 9 |
+| `Event-historical Aggregation.tex` | 9,336 | 91 | 0 | 0 | 11 |
+| `History as Identity - v01.tex` | 4,624 | 12 | 11 | 0 | 9 |
+| `History as Identity - v02.tex` | 5,517 | 37 | 19 | 0 | 9 |
+| `History as Identity.tex` | 7,116 | 49 | 32 | 7 | 9 |
+| `Introducción a Spherepop - v01.tex` | 12,897 | 31 | 0 | 0 | 10 |
+| `Introducción a Spherepop.tex` | 11,537 | 30 | 69 | 52 | 22 |
+| `Joy-of-Spherepop-draft-01.tex` | 10,387 | 110 | 18 | 0 | 5 |
+| `Joy-of-Spherepop.tex` | 13,024 | 108 | 14 | 23 | 8 |
+| `Operational-Mereology.tex` | 6,355 | 41 | 0 | 0 | 8 |
+| `Scope as Geometry.tex` | 6,792 | 14 | 0 | 0 | 8 |
+| `Spherepop Trajectory Collapse.tex` | 9,317 | 40 | 0 | 0 | 11 |
+| `Spherepop-OS.tex` | 1,999 | 28 | 0 | 0 | 10 |
+| `Spherepop_Specifications.tex` | 4,914 | 35 | 13 | 0 | 11 |
+| `Structured Irreversibility.tex` | 9,143 | 91 | 99 | 6 | 16 |
+| `The Calculus of Commitment.tex` | 10,693 | 127 | 0 | 0 | 15 |
+| `The Forkability of Time.tex` | 4,817 | 37 | 0 | 0 | 12 |
+| `Throwing-the-game.tex` | 7,270 | 65 | 12 | 5 | 10 |
+| `admissibility/spherepop-monograph.tex` | 61,223 | 316 | 3 | 0 | 23 |
+| `attention-as-minimal-relational-interaction.tex` | 3,344 | 42 | 0 | 0 | 12 |
+| `computing-with-spherepop.tex` | 12,641 | 137 | 0 | 0 | 12 |
+| `dynamics/spherepop_scope_dynamics.tex` | 9,217 | 57 | 3 | 9 | 12 |
+| `entropy_of_austerity.tex` | 3,016 | 13 | 0 | 0 | 13 |
+| `essay/draft-01/essay.tex` | 793 | 14 | 0 | 0 | 4 |
+| `essay/draft-01/spherepop_calculus.tex` | 449 | 15 | 0 | 0 | 8 |
+| `essay/spherepop_calculus.tex` | 352 | 14 | 0 | 3 | 13 |
+| `history/The History of Spherepop.tex` | 8,754 | 28 | 0 | 0 | 8 |
+| `identity_as_event_history-v1.tex` | 12,174 | 23 | 33 | 6 | 9 |
+| `identity_as_event_history.tex` | 22,687 | 72 | 60 | 8 | 12 |
+| `intelligence-explosion.tex` | 13,513 | 40 | 25 | 16 | 13 |
+| `monograph/spherepop-calculus.tex` | 6,360 | 58 | 13 | 25 | 10 |
+| `processing/Spherepop_Specifications.tex` | 4,914 | 35 | 13 | 0 | 11 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_01.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_02.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_03.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_04.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_05.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_06.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_07.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_08.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_09.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_10.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_11.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_12.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_13.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_14.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_15.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_16.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_17.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_18.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_19.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle1_Diagnosis/essay_1_20.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_01.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_02.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_03.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_04.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_05.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_06.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_07.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_08.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_09.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_10.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_11.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_12.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_13.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_14.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_15.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_16.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_17.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_18.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_19.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/Cycle2_Renewal/essay_2_20.tex` | 13 | 0 | 0 | 0 | 14 |
+| `processing/adaptive-trust/Adaptive_Trust_Dynamics_Corpus/index.tex` | 0 | 0 | 0 | 0 | 4 |
+| `processing/adaptive-trust/corpus.tex` | 1,431 | 46 | 44 | 0 | 19 |
+| `processing/adaptive-trust/monograph.tex` | 1,777 | 35 | 11 | 0 | 18 |
+| `processing/draft/figures.tex` | 669 | 0 | 8 | 0 | 0 |
+| `processing/draft/intelligence-explosion.tex` | 7,682 | 23 | 0 | 16 | 14 |
+| `processing/essay.tex` | 2,468 | 55 | 2 | 0 | 13 |
+| `processing/geometry/monograph.tex` | 7,567 | 102 | 2 | 0 | 20 |
+| `processing/intelligence-explosion.tex` | 13,513 | 40 | 25 | 16 | 13 |
+| `processing/monograph.tex` | 2,007 | 19 | 3 | 0 | 23 |
+| `prototypes/Operational-Mereology.tex` | 4,588 | 79 | 0 | 0 | 8 |
+| `prototypes/canonicalization.tex` | 455 | 16 | 0 | 0 | 8 |
+| `prototypes/docs/computing-with-spherepop.tex` | 164 | 2 | 0 | 0 | 11 |
+| `prototypes/docs/spherepop-haskell-tutorial.tex` | 46 | 3 | 0 | 0 | 6 |
+| `prototypes/docs/spherepop-python-tutorial.tex` | 27 | 3 | 0 | 0 | 6 |
+| `prototypes/docs/spherepop-racket-tutorial.tex` | 65 | 3 | 0 | 0 | 6 |
+| `prototypes/roadmap.tex` | 641 | 25 | 0 | 0 | 8 |
+| `spherepop-foundations.tex` | 6,969 | 115 | 11 | 1 | 8 |
+| `textbook/The_Ecology_of_Distinctions.tex` | 98,807 | 682 | 309 | 0 | 25 |
+| `textbook/beyond-parentheses.tex` | 26,967 | 363 | 0 | 0 | 18 |
+| `textbook/dependent-type-theory.tex` | 29,688 | 384 | 0 | 0 | 19 |
+| `textbook/ecology-of-thought.tex` | 32,233 | 148 | 0 | 0 | 14 |
+| `textbook/economy-of-forgotten-things.tex` | 27,542 | 451 | 0 | 0 | 21 |
+| `textbook/fate-of-distinguishability.tex` | 35,953 | 216 | 39 | 21 | 28 |
+| `textbook/language_as_generator.tex` | 5,361 | 16 | 0 | 0 | 16 |
+| `textbook/memory-before-representation.tex` | 7,812 | 57 | 28 | 7 | 18 |
+| `textbook/negation-before-logic.tex` | 18,696 | 186 | 16 | 0 | 7 |
+| `textbook/persistence-before-truth.tex` | 48,600 | 54 | 0 | 3 | 14 |
+| `textbook/refusal-structures.tex` | 26,974 | 223 | 0 | 0 | 12 |
+| `textbook/repairing-futures.tex` | 7,552 | 10 | 0 | 1 | 14 |
+| `textbook/rotation_admissibility.tex` | 3,772 | 8 | 14 | 16 | 10 |
+| `the-autonomy-of-refusal.tex` | 8,167 | 41 | 20 | 4 | 10 |
+| `throwing_the_game_v2.tex` | 11,248 | 75 | 23 | 9 | 11 |
+| `working/Structured Irreversibility - draft 01.tex` | 3,976 | 40 | 32 | 6 | 17 |
+| `working/Structured Irreversibility - draft 02.tex` | 6,477 | 66 | 75 | 3 | 16 |
+| `working/Structured Irreversibility.tex` | 9,143 | 91 | 99 | 6 | 16 |
+| `working/execution history - draft 02.tex` | 7,501 | 48 | 14 | 5 | 12 |
+| `working/execution history - draft 03.tex` | 12,824 | 103 | 0 | 0 | 11 |
+| `working/execution history - draft 04.tex` | 8,121 | 62 | 19 | 12 | 12 |
+| `working/execution history.tex` | 10,802 | 98 | 0 | 0 | 11 |
+
+## Package usage (69 distinct package(s))
+
+- `hyperref`: 110 file(s)
+- `amsmath`: 108 file(s)
+- `geometry`: 108 file(s)
+- `amssymb`: 106 file(s)
+- `amsthm`: 97 file(s)
+- `microtype`: 86 file(s)
+- `mathtools`: 82 file(s)
+- `fontenc`: 71 file(s)
+- `inputenc`: 63 file(s)
+- `enumitem`: 62 file(s)
+- `lmodern`: 61 file(s)
+- `bm`: 56 file(s)
+- `titlesec`: 54 file(s)
+- `setspace`: 53 file(s)
+- `parskip`: 46 file(s)
+- `fontspec`: 29 file(s)
+- `booktabs`: 27 file(s)
+- `tikz`: 21 file(s)
+- `xcolor`: 20 file(s)
+- `csquotes`: 18 file(s)
+- `tikz-cd`: 17 file(s)
+- `array`: 16 file(s)
+- `graphicx`: 11 file(s)
+- `natbib`: 10 file(s)
+- `mathrsfs`: 9 file(s)
+- `unicode-math`: 9 file(s)
+- `fancyhdr`: 8 file(s)
+- `amsfonts`: 6 file(s)
+- `listings`: 6 file(s)
+- `stmaryrd`: 6 file(s)
+- `biblatex`: 5 file(s)
+- `caption`: 5 file(s)
+- `cleveref`: 5 file(s)
+- `longtable`: 5 file(s)
+- `mdframed`: 4 file(s)
+- `epigraph`: 3 file(s)
+- `float`: 3 file(s)
+- `pgfplots`: 3 file(s)
+- `subcaption`: 3 file(s)
+- `tcolorbox`: 3 file(s)
+- `babel`: 2 file(s)
+- `fontawesome5`: 2 file(s)
+- `glossaries`: 2 file(s)
+- `makeidx`: 2 file(s)
+- `mathpazo`: 2 file(s)
+- `multirow`: 2 file(s)
+- `physics`: 2 file(s)
+- `tabularx`: 2 file(s)
+- `times`: 2 file(s)
+- `adjustbox`: 1 file(s)
+- `afterpage`: 1 file(s)
+- `algorithm`: 1 file(s)
+- `algpseudocode`: 1 file(s)
+- `bookmark`: 1 file(s)
+- `color`: 1 file(s)
+- `emptypage`: 1 file(s)
+- `fullpage`: 1 file(s)
+- `inconsolata`: 1 file(s)
+- `luatextra`: 1 file(s)
+- `mathpartir`: 1 file(s)
+- `multicol`: 1 file(s)
+- `palatino`: 1 file(s)
+- `proof`: 1 file(s)
+- `quoting`: 1 file(s)
+- `sectsty`: 1 file(s)
+- `titletoc`: 1 file(s)
+- `titling`: 1 file(s)
+- `tocloft`: 1 file(s)
+- `url`: 1 file(s)
+
+## Possibly-dangling references
+
+A \ref/\cite key with no \label/\bibitem *anywhere in this corpus* -- real if each file is self-contained, a false positive if targets live in an external/shared .bib or a file outside this scan.
+
+- `Structured Irreversibility.tex`: ax:auth, ax:colid
+- `essay/spherepop_calculus.tex`: milner1992
+- `identity_as_event_history.tex`: ax:irreversibility
+- `monograph/spherepop-calculus.tex`: adams2020foundations, awodey2010category, barendregt1984lambda, bertot2004interactive, church1940formulation, coquand1988calculus, fritz2020synthetic, girard1987linear, giry1982categorical, goodman2014design, gordon2014probabilistic, jacobs2015new, kozen1981semantics, lambek1986categorical, lawvere1970quantifiers, maclane1963natural, martinlof1975intuitionistic, milner1980calculus, milner1992calculus, milner1999communicating, moggi1991notions, norell2009dependently, pierce2002types, street1972two, van2018introduction
+- `textbook/The_Ecology_of_Distinctions.tex`: defn:adm-manifold, defn:blind-spot, defn:coherence-tile, defn:dist-capacity, defn:dist-cost, defn:dist-dep, defn:dist-ecology, defn:object-induced, defn:ont-enlarge, defn:repair-op, defn:spherepop-trans, prop:bio-adm-entropy, thm:blind-spot-thm, thm:constraint-vol, thm:reach-mono
+- `textbook/fate-of-distinguishability.tex`: axm:nonneg-cost, defn:fate-equiv, prop:kernel-char
+- `working/Structured Irreversibility - draft 02.tex`: ax:auth, ax:colid
+- `working/Structured Irreversibility.tex`: ax:auth, ax:colid

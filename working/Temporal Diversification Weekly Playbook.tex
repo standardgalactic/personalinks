@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+\title{Temporal Diversification Weekly Playbook}
+\author{Flyxion}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\section{Goal}
+
+Sustain engagement by managing a portfolio of unfinished histories on different clocks,
+not by demanding continuous novelty from a single process.
+
+\section{Weekly Portfolio Construction}
+
+Maintain at least four active scopes:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Fast} ($\tau\approx$ minutes--hours): daily execution and immediate feedback.
+  \item \textbf{Medium} ($\tau\approx$ days): experiments and short deliverables.
+  \item \textbf{Slow} ($\tau\approx$ weeks): proofs, architecture shifts, chapter drafts.
+  \item \textbf{Very slow} ($\tau\approx$ months+): foundational programs and long manuscripts.
+\end{itemize}
+
+\section{Operational Rules}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Never require all scopes to POP weekly.} Long horizons stay unresolved by design.
+  \item \textbf{Require anti-starvation updates.} Every slow scope must receive at least one
+  structural event per week.
+  \item \textbf{Default action under local flattening: BIND.} If immediate closure is premature,
+  add a constraint that sharpens next continuation.
+  \item \textbf{Use REFUSE to cut dead branches quickly.} Remove known-nonproductive continuations.
+  \item \textbf{Use COLLAPSE to reduce bookkeeping overhead.} Merge distinctions no longer
+  decision-relevant.
+\end{enumerate}
+
+\section{Daily Scope-Selection Procedure}
+
+At each work block:
+\begin{enumerate}[leftmargin=*]
+  \item Estimate candidate gains for active scopes: $\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)$.
+  \item If a slow scope is near starvation threshold, prioritize it.
+  \item Otherwise choose action by highest gain-per-cost.
+  \item Log the event type (POP/REFUSE/BIND/COLLAPSE) and whether saturation or recovery was observed.
+\end{enumerate}
+
+\section{Weekly Review Metrics}
+
+Track:
+\begin{itemize}[leftmargin=*]
+  \item time-to-local-saturation (per scope),
+  \item total time in field saturation,
+  \item recovery latency after switching scopes,
+  \item starvation rate for slow scopes,
+  \item stability of compression progress across horizons.
+\end{itemize}
+
+\section{Applied Templates}
+
+\subsection*{Personal Workflow}
+One fast execution scope, one medium experimentation scope, one slow integration scope,
+one very-slow thesis scope. Weekly requirement: no slow scope receives zero events.
+
+\subsection*{Education}
+Design schedules that interleave immediate drills, multi-day projects, and long-form inquiry.
+Measure whether boredom events correlate with local flattening in only one horizon.
+
+\subsection*{Research and Programming}
+Treat deep projects as unresolved scopes; require periodic BIND-like refinement events
+(lemma sketch, boundary condition, interface constraint) even without POP.
+
+\subsection*{AI Agent Orchestration}
+Use multi-clock schedulers where long-horizon tasks get explicit anti-starvation allocations
+instead of purely greedy short-horizon optimization.
+
+\end{document}

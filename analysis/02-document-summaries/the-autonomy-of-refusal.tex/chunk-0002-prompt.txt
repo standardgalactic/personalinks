@@ -1,0 +1,412 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+For $D$ to decide refusal correctly, it must evaluate properties of the execution consequences of $f(w)$ that are not representable in $\mathcal{R}$, since refusal is triggered precisely by considerations external to the abstraction. Therefore $D$ must determine non-local, non-represented properties of the computation induced by $f$.
+
+This implies that $D$ decides a semantic property of arbitrary programs not computable from their syntactic representation within the abstraction. By Rice’s Theorem, no such decision procedure exists.
+
+Hence no general refusal-detection algorithm is possible without collapsing the abstraction back into the full world-state space $\mathcal{W}$.  
+\end{proof}
+
+\begin{corollary}[Impossibility of ``Knowing When to Stop'']
+Any claim that a scalable abstraction can internally ``know when to stop'' is equivalent to claiming a solution to a non-trivial semantic decision problem over its own executions, and is therefore false.
+\end{corollary}
+
+\begin{corollary}[Speed as Structural Enemy of Refusal]
+Since refusal detection is undecidable, any real-time execution regime must approximate refusal by truncation, thresholds, or heuristics. These approximations preserve execution and therefore eliminate refusal by design.
+\end{corollary}
+
+\begin{remark}[Relation to the Halting Problem]
+The present result is stronger than a halting-style argument. The halting problem concerns whether execution terminates. Refusal concerns whether execution should occur at all. The latter strictly subsumes the former and inherits its undecidability.
+\end{remark}
+
+
+A.2$'''''$ Synthesis
+
+\label{sec:A2quintprime}
+
+Taken together, Sections~\ref{sec:A2prime}--\ref{sec:A2quadprime} establish that refusal is:
+\begin{enumerate}
+  \item meta-operational rather than executable,
+  \item non-substitutional rather than conditional,
+  \item non-measurable rather than probabilistic,
+  \item undecidable rather than computable.
+\end{enumerate}
+
+These properties are not defects. They are the precise sense in which refusal constitutes the non-scalable core of autonomy.
+
+
+Relation to Markov's Principle
+
+\label{sec:markov-refusal}
+
+Markov's principle (MP), in its computational formulation, asserts that for a decidable predicate $P$ over $\mathbb{N}$,
+\[
+\neg\neg\exists n\,P(n) \;\Rightarrow\; \exists n\,P(n).
+\]
+Intuitively, if it is impossible that a computation never succeeds, then it must succeed. While classically valid, this principle fails in general constructive settings precisely because it converts double-negated existence into positive execution.
+
+The present framework reveals a strictly stronger obstruction. Refusal does not concern the existence of an output within a fixed domain, but the authorization of execution itself. Let $\mathsf{Exec}(f)$ denote the executability of a governing mapping $f:\mathcal{W}\to\mathcal{R}$. An internalized ``refusal-capable'' abstraction would require an admissible inference of the form
+\[
+\neg\neg\,\mathsf{Exec}(f) \;\Rightarrow\; \mathsf{Exec}(f),
+\]
+thereby eliminating double negation at the level of executability.
+
+However, by Sections~\ref{sec:A2prime}--\ref{sec:A2quadprime}, executability is not a decidable predicate over world-states, nor is refusal an object-level event subject to enumeration, search, or probabilistic estimation. Refusal negates the evaluation map itself, rather than asserting the existence or non-existence of a value. Consequently, no Markov-style principle can be formulated internally for $\mathsf{Exec}(f)$ without collapsing the abstraction.
+
+In this sense, scalable abstractions fail to satisfy even the weakest admissibility conditions required to internalize Markov's principle. The impossibility of endogenous refusal is therefore not merely a constructive limitation, but a structural consequence of abstraction itself. What Markov's principle reveals at the boundary between constructive and classical logic, refusal reveals at the boundary between execution and governance.
+
+
+Corollary: Extended Church's Thesis and Executability
+
+\label{sec:ect-refusal}
+
+Extended Church's Thesis (ECT) asserts that every total function is computable. In constructive arithmetic, ECT is often paired with Markov's principle to recover classical existence results from double-negated claims.
+
+The results of Sections~\ref{sec:A2prime}--\ref{sec:markov-refusal} show that neither assumption suffices to internalize refusal.
+
+\begin{corollary}[Extended Church's Thesis Does Not Recover Refusal]
+\label{cor:ect-fails-refusal}
+Assuming Extended Church's Thesis, there still exists no internal procedure by which a scalable abstraction can realize refusal.
+\end{corollary}
+
+\begin{proof}
+Extended Church's Thesis concerns the computability of total functions on well-defined domains. Refusal, however, is not a function from $\mathcal{W}$ to $\mathcal{R}$, nor a partial function, nor a total function with distinguished outputs. By Definition~\ref{def:refusal-meta}, refusal negates the authorization of evaluation itself.
+
+Therefore refusal is not a candidate for representation under ECT. Even if all total functions are computable, the executability predicate $\mathsf{Exec}(f)$ is not a computable predicate internal to the abstraction. The obstruction identified here precedes questions of computability and persists under maximal computational assumptions.
+\end{proof}
+
+\begin{remark}
+This explains why appeals to ``more powerful models,'' ``unbounded computation,'' or ``general intelligence'' fail to address the refusal problem. The limitation is not computational but structural: refusal is not an uncomputed function but a non-functional suspension of execution.
+\end{remark}
+
+
+Refusal and Bergsonian Duration
+
+\label{sec:bergson-duration}
+
+Henri Bergson distinguished \emph{duration} (\emph{durée}) from spatialized or metric time. Duration is not a sequence of discrete instants but a continuous, qualitative unfolding in which past, present, and future interpenetrate. Action within duration is not reducible to stepwise execution; it involves hesitation, reconsideration, and the retention of alternatives.
+
+This distinction illuminates the formal results above. Scalable abstractions operate exclusively in spatialized time: execution is decomposed into discrete steps, states, or updates, each authorized by local rules. Such systems may pause, delay, or terminate, but these are transitions within execution, not suspensions of executability itself.
+
+Refusal, by contrast, requires duration. To refuse is not merely to stop at a time-slice, but to withhold continuation in light of a temporally extended apprehension of context, consequence, and meaning. This apprehension cannot be discretized without loss. It is precisely what abstraction eliminates in order to achieve scalability.
+
+\begin{corollary}[Speed Eliminates Refusal]
+\label{cor:speed-refusal}
+Any system whose correctness depends on real-time or near-real-time execution necessarily eliminates refusal as a structural possibility.
+\end{corollary}
+
+\begin{proof}
+By Section~\ref{sec:A2quadprime}, refusal detection is undecidable and cannot be resolved within bounded time. Real-time systems therefore approximate refusal through thresholds, heuristics, or truncation. These approximations preserve executability while sacrificing suspension. Since duration cannot be compressed into bounded execution time without spatialization, refusal is excluded by design.
+\end{proof}
+
+\begin{remark}
+This clarifies why acceleration consistently correlates with ethical failure in automated systems. The problem is not insufficient foresight or misaligned values, but the elimination of duration itself. Where there is no duration, there can be no refusal.
+\end{remark}
+
+
+Against the Dimensionalization of Refusal
+
+\label{sec:dimensionalization-refusal}
+
+A recurring error in the design and analysis of automated systems is the attempt to represent refusal as an internal state, variable, or coordinate within the system’s operational space. In such treatments, refusal is modeled as a distinct outcome, a threshold-crossing event, or a position along an axis of confidence or risk.
+
+This maneuver is structurally analogous to treating time as a geometric dimension. In both cases, a condition of possibility is reified as an internal coordinate. The result is not clarification, but elimination. When refusal is dimensionalized—made enumerable, comparable, or interpolable—it ceases to function as refusal and becomes merely another mode of execution.
+
+The defining feature of refusal is not its location within a state space, but its ability to suspend the application of that space altogether. Any representation that preserves the evaluative machinery while assigning refusal a position within it has already failed. Refusal cannot be indexed without being neutralized.
+
+
+Temporal Suspension Versus Temporal Indexing
+
+\label{sec:temporal-suspension}
+
+Execution unfolds in indexed time: a sequence of ordered steps, updates, or transitions. Such time is discrete, spatialized, and compatible with optimization. Suspension, by contrast, does not occur \emph{at} a time-step, nor does it occupy an interval measured by the system clock. It interrupts the very progression by which steps are ordered.
+
+Refusal is therefore not a temporal event but a temporal suspension. It cannot be represented as a delay, timeout, or pause without converting suspension into deferred execution. Delays preserve executability; refusal negates it.
+
+This distinction explains why increasing temporal resolution—faster clocks, tighter feedback loops, real-time responsiveness—does not make systems safer. On the contrary, as execution becomes more finely indexed, the possibility of genuine suspension vanishes. What remains are only faster executions and more granular thresholds.
+
+Refusal requires a form of time that is not reducible to indexation: a duration in which reconsideration, hesitation, and withdrawal are possible. Systems that operate exclusively in indexed time cannot host such duration and therefore cannot refuse.
+
+
+Scale, Acceleration, and the Disappearance of Refusal
+
+\label{sec:scale-acceleration}
+
+The loss of refusal is not an accidental byproduct of poor design, but a structural consequence of scale. As systems grow in scope and speed, they must replace suspension with approximation. Decisions must be made before their full context can be apprehended, and execution must proceed under conditions of partial knowledge.
+
+At small scales, refusal appears viable because context remains legible and execution remains interruptible. As scale increases, interruption becomes costly, coordination becomes fragile, and hesitation is reframed as failure. What disappears is not judgment, but the capacity to withhold action without collapsing the system.
+
+Acceleration intensifies this effect. Faster systems compress deliberation into execution and eliminate the temporal slack in which refusal could occur. This is why safeguards in high-speed domains take the form of thresholds, cutoffs, and automated overrides rather than suspensions. These mechanisms preserve flow while simulating caution.
+
+The result is a paradox: the systems most in need of refusal are precisely those least capable of sustaining it. At scale, refusal must be externalized—or it will be eliminated entirely.
+
+\subsection*{Synthesis}
+Refusal cannot be internalized without being destroyed. Attempts to represent it as a state, index it in time, or preserve it under acceleration all fail for the same reason: refusal is a suspension of execution, not a mode of it. Systems that scale by eliminating suspension eliminate refusal by necessity. Where refusal persists, it does so only by remaining external.
+
+
+Proper Time, Coordinate Time, and the Error of Temporal Reification
+
+\label{sec:proper-time-refusal}
+
+It is important to distinguish the present argument from a common but misleading metaphor: that ethical failure in automated systems results from time ``slowing down'' or ``speeding up.'' No such dynamical claim is required, nor would it be correct.
+
+In special relativity, time does not slow down in itself. What differs between reference frames is the decomposition of an invariant spacetime interval into temporal and spatial components. For two timelike-separated events, the proper time
+\[
+\Delta \tau^2 = \Delta t^2 - \frac{\Delta x^2}{c^2}
+\]
+is invariant. Coordinate time $\Delta t$ varies with frame choice, and is minimized in the frame where the events occur at the same spatial location. Nothing physical happens to time; only the representational slicing changes.
+
+This distinction clarifies the temporal structure of refusal. Refusal does not require that execution take longer, nor that time dilate. It requires that execution be suspended in a way that cannot be represented as a coordinate interval within the system’s operational frame. Delays, timeouts, and rate limits correspond to changes in coordinate time. They preserve executability. Refusal negates it.
+
+Just as proper time is not an additional dimension but a geometric invariant that cannot be reduced to any single coordinate system, refusal is not an internal temporal state or duration that can be indexed within execution. It is a structural property of the system’s relation to action, not a measurable lapse between steps.
+
+Attempts to internalize refusal as a timeout, pause state, or latency budget therefore commit the same category error as treating time itself as a manipulable dimension. In both cases, what is invariant is mistaken for what is representable. The result is not control but erasure: time becomes spatialized, and refusal becomes execution under another name.
+
+
+
+
+Structural Agency
+
+
+\textbf{Definition A.3 (Structural Agency).}  
+A system exhibits structural agency if it satisfies all of the following:
+
+\begin{enumerate}
+\item (\emph{Persistence}) Its effects propagate through time;
+\item (\emph{Generalization}) Its behavior applies across multiple contexts;
+\item (\emph{Constraint}) Its internal structure restricts downstream possibilities.
+\end{enumerate}
+
+No requirement of intentionality, consciousness, or semantic understanding is imposed.
+
+
+Axis-Relativity Theorem
+
+
+\textbf{Theorem B.1 (Axis-Relativity of Superhuman Intelligence).}  
+For any cognitive artifact $C$, there exists at least one axis $\alpha$ along which $C$ exceeds unaided human performance, and at least one axis $\beta$ along which $C$ is strictly inferior or blind.
+
+\textbf{Proof.}  
+Let $C$ be defined by abstraction $A : \mathcal{W} \to \mathcal{R}$.  
+By Definition A.1, $A$ preserves only a subset of dimensions of $\mathcal{W}$. Along preserved dimensions (e.g., memory capacity, symbolic manipulation, numerical precision), performance scales independently of biological limits. Along discarded dimensions (e.g., perception, ethical judgment, contextual awareness), performance is identically zero.
+
+Therefore superhuman capability along $\alpha$ necessarily implies subhuman incapacity along $\beta$.  
+\hfill $\square$
+
+\textbf{Corollary B.2.}  
+``Artificial General Intelligence'' understood as uniform superiority across all axes is a category error.
+
+
+Constitutive Limitation Theorem
+
+
+\textbf{Theorem C.1 (Constitutive Blindness of Abstraction).}  
+The limitations of an abstraction are necessary consequences of its scalability, not contingent engineering defects.
+
+\textbf{Proof.}  
+Assume an abstraction $A : \mathcal{W} \to \mathcal{R}$ satisfying Definition A.1.  
+Reduction requires discarding degrees of freedom. Let $I(\mathcal{W})$ denote information content. Then
+\[
+I(\mathcal{R}) < I(\mathcal{W}).
+\]
+
+Recovering discarded information requires an inverse mapping $A^{-1}$, but such a mapping is undefined unless $A$ is injective, contradicting reduction.
+
+Thus blindness is structurally entailed by abstraction.  
+\hfill $\square$
+
+\textbf{Corollary C.2.}  
+Any attempt to ``add context'' or ``restore judgment'' to an abstraction without sacrificing scalability is incoherent.
+
+
+Non-Intentional Agency Theorem
+
+
+\textbf{Theorem D.1 (Agency Without Intentionality).}  
+A system may exert causal agency without possessing beliefs, desires, or phenomenological awareness.
+
+\textbf{Proof.}  
+By Definition A.3, agency depends on persistence, generalization, and constraint. None of these properties require intentional states. Markets, legal codes, algorithms, and infrastructures satisfy all three conditions while lacking intentionality.
+
+Therefore intentionality is not a necessary condition for agency.  
+\hfill $\square$
+
+\textbf{Corollary D.2.}  
+Treating abstractions as ``neutral tools'' constitutes agency laundering.
+
+
+Opacity Necessity Theorem
+
+
+\textbf{Theorem E.1 (Necessity of Opacity).}  
+Total transparency of a scalable abstraction is mathematically impossible.
+
+\textbf{Proof.}  
+Let $A : \mathcal{W} \to \mathcal{R}$ be an abstraction. Transparency requires reconstructability of $\mathcal{W}$ from $\mathcal{R}$. This requires $A$ to be information-preserving.
+
+But by Definition A.1, $A$ is information-reducing. Therefore full transparency contradicts abstraction itself.  
+\hfill $\square$
+
+\textbf{Corollary E.2.}  
+Opacity is an achievement condition of abstraction, not a political accident.
+
+\textbf{Corollary E.3.}  
+Local interpretability is compatible with abstraction; global interpretability is not.
+
+
+Externality of Responsibility Theorem
+
+
+\textbf{Theorem F.1 (Externality of Responsibility).}  
+Responsibility for the actions of an abstraction cannot be located within the abstraction itself.
+
+\textbf{Proof.}  
+By Definition A.2, refusal requires a meta-operation not derivable from the governing rule.  
+By Theorem C.1, abstractions discard contextual degrees of freedom and therefore cannot generate meta-operations without ceasing to be abstractions.
+
+Since responsibility requires the capacity to suspend or redirect execution in light of consequences, and abstractions lack refusal by design, responsibility cannot be internal to the abstraction.
+
+Therefore responsibility must be external to the abstraction.  
+\hfill $\square$
+
+\textbf{Corollary F.2.}  
+Attempts to assign moral responsibility to abstractions constitute category errors.
+
+\textbf{Corollary F.3.}  
+Responsibility must be imposed through governance, law, or human intervention external to the abstraction.
+
+
+Invariant Alignment Theorem
+
+
+\textbf{Theorem G.1 (Invariant Alignment Theorem).}  
+Alignment of scalable abstractions must operate at the level of representational invariants rather than behavioral control.
+
+\textbf{Proof.}  
+Behavioral alignment presupposes that a system can conditionally refuse or redirect execution based on context.  
+By Theorem C.1 and Definition A.2, contextual refusal is incompatible with scalable abstraction.
+
+Let $\mathcal{R}$ be the representational space of abstraction $A$.  
+Alignment is achievable iff the set of misaligned states $M \subset \mathcal{R}$ is unreachable under all permissible transformations of $A$.
+
+Therefore alignment must consist in constraining the topology of $\mathcal{R}$ such that $M$ is excluded by construction.  
+\hfill $\square$
+
+\textbf{Corollary G.2.}  
+Behavioral safeguards without representational constraints are necessarily brittle.
+
+\textbf{Corollary G.3.}  
+Invariant alignment is a mathematical necessity, not an engineering preference.
+
+
+Extinction Impossibility Theorem
+
+
+\textbf{Theorem H.1 (Impossibility of the Detached Maximizer).}  
+A detached, refusal-capable, adversarial maximizer is ontologically incompatible with scalable abstraction.
+
+\textbf{Proof.}  
+A detached maximizer must possess:
+\begin{enumerate}
+\item autonomous goal revision,
+\item contextual refusal,
+\item global situational awareness.
+\end{enumerate}
+
+Each property requires retention of degrees of freedom explicitly discarded by abstraction (Definition A.1).  
+Therefore any system possessing these properties is not scalable abstraction.
+
+Extinction narratives that posit such agents presuppose a contradictory ontology.  
+\hfill $\square$
+
+\textbf{Corollary H.2.}  
+Existential risk does not arise from adversarial intent but from inexorable execution within ecological and institutional flows.
+
+\textbf{Corollary H.3.}  
+Containment, not persuasion, is the appropriate safety paradigm.
+
+
+Governance Theorem
+
+
+\textbf{Theorem I.1 (Governance as Exogenous Refusal).}  
+Effective governance of abstractions consists in the deliberate reintroduction of refusal external to the abstraction.
+
+\textbf{Proof.}  
+By Theorem F.1, responsibility cannot be internal.  
+By Theorem G.1, alignment must constrain representability rather than behavior.
+
+Therefore governance must introduce:
+\begin{enumerate}
+\item veto mechanisms,
+\item shutdown capabilities,
+\item institutional override authority,
+\item enforced boundary conditions.
+\end{enumerate}
+
+Each constitutes refusal imposed from outside the abstraction.  
+\hfill $\square$
+
+\textbf{Corollary I.2.}  
+Kill switches and veto power are not failures of design but necessary complements to abstraction.
+
+\textbf{Corollary I.3.}  
+Institutions that eliminate refusal eliminate their own capacity for self-correction.
+
+
+Meta-Theorem: Closure of the System
+
+
+\textbf{Theorem J.1 (Closure and Consistency of the Refusal Framework).}  
+The preceding theorems form a closed, non-contradictory system describing abstraction, agency, alignment, and governance.
+
+\textbf{Proof Sketch.}  
+\begin{enumerate}
+\item Abstraction requires reduction (Theorem C.1).
+\item Reduction amputates refusal (Definition A.2).
+\item Amputation produces non-intentional agency (Theorem D.1).
+\item Agency without refusal necessitates external responsibility (Theorem F.1).
+\item External responsibility requires invariant alignment (Theorem G.1).
+\item Failure to impose invariants yields ecological risk, not adversarial takeover (Theorem H.1).
+\item Governance restores refusal exogenously (Theorem I.1).
+\end{enumerate}
+
+No theorem contradicts another; each depends on the previous.  
+The system is therefore internally consistent and complete with respect to its domain.  
+\hfill $\square$
+
+\textbf{Corollary J.2.}  
+Any proposal that demands contextual judgment, moral agency, or endogenous refusal from scalable abstractions violates at least one theorem in this system.
+
+\textbf{Corollary J.3.}  
+The autonomy of refusal is the non-scalable remainder upon which all ethical governance depends.
+
+\begin{thebibliography}{9}
+
+\bibitem{melville}
+H.~Melville, \emph{Bartleby, the Scrivener}, 1853.
+
+\bibitem{thoreau}
+H.~D.~Thoreau, \emph{Civil Disobedience}, 1849.
+
+\bibitem{agamben}
+G.~Agamben, \emph{The Use of Bodies}, Stanford University Press, 2015.
+
+\bibitem{martinson}
+H.~Martinson, \emph{Aniara}, 1956.
+
+\end{thebibliography}
+
+
+\end{document}

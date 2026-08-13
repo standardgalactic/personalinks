@@ -1,0 +1,3112 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+The identifier is intentionally independent of the textual name supplied by the
+user.
+
+Names are merely convenient aliases.
+
+Identity is determined entirely by constructive provenance.
+
+Consequently,
+
+renaming a theorem does not alter the mathematical object represented by the
+kernel.
+
+
+Persistent Dependency Graphs
+
+
+The dependency graph forms the principal indexing structure.
+
+Every edge
+
+\[
+u
+\rightarrow
+v
+\]
+
+records that the construction represented by
+
+\[
+v
+\]
+
+depends directly upon the construction represented by
+
+\[
+u.
+\]
+
+Because histories are immutable,
+
+the graph itself is persistent.
+
+Insertion creates additional vertices and edges without modifying existing
+ones.
+
+Older versions of the mathematical library therefore remain permanently
+available.
+
+Incremental verification simply traverses the reachable portion of this graph.
+
+No global recompilation is required.
+
+
+Replay Engine
+
+
+Replay is implemented as a deterministic graph traversal.
+
+Beginning from the empty history,
+
+the replay engine visits historical events in dependency order.
+
+Each event invokes the corresponding primitive kernel operation.
+
+The resulting object is inserted into an in-memory reconstruction of the
+historical state.
+
+If every replay step succeeds,
+
+the history is accepted.
+
+Otherwise,
+
+the first failed replay identifies the precise location of the inconsistency.
+
+Replay therefore functions simultaneously as
+
+an evaluator,
+
+a proof checker,
+
+and
+
+a debugger.
+
+The same algorithm serves all three purposes.
+
+
+Normalization Engine
+
+
+Observable normalization remains necessary for conversion checking.
+
+Rather than traversing arbitrary syntax trees,
+
+the historical kernel performs graph-guided normalization.
+
+Only those subgraphs reachable from the requested construction are evaluated.
+
+Shared historical prefixes are normalized once and cached.
+
+Subsequent requests simply reference the cached normal forms.
+
+Consequently,
+
+the computational cost of normalization depends upon the size of the reachable
+dependency graph rather than the size of the complete mathematical library.
+
+
+Historical Memoization
+
+
+One of the principal implementation advantages of immutable histories is the
+simplicity of memoization.
+
+Suppose replay has already reconstructed the history
+
+\[
+H.
+\]
+
+Any future computation depending upon
+
+\[
+H
+\]
+
+may reuse the cached result without re-executing the corresponding events.
+
+Because histories cannot change,
+
+cached replay results never become invalid.
+
+Only descendants of newly added events require recomputation.
+
+Historical memoization therefore follows directly from immutability.
+
+No cache invalidation protocol beyond reachability analysis is required.
+
+
+Parallel Replay
+
+
+Replay naturally exposes parallelism.
+
+Suppose two histories satisfy
+
+\[
+H_1
+\parallel
+H_2.
+\]
+
+The replay engine constructs
+
+\[
+\Replay(H_1)
+\]
+
+and
+
+\[
+\Replay(H_2)
+\]
+
+simultaneously.
+
+Synchronization occurs only when a subsequent Meld event combines the two
+histories.
+
+This organization avoids global scheduling.
+
+The dependency graph itself determines the available concurrency.
+
+Parallel execution therefore follows directly from the mathematical semantics.
+
+
+Storage Optimization
+
+
+Historical persistence naturally suggests several compression strategies.
+
+Repeated replay prefixes are stored only once.
+
+Replay-equivalent histories are connected through collapse graphs rather than
+duplicated.
+
+Immutable subgraphs are reference counted.
+
+Frequently accessed normal forms are cached.
+
+Because none of these optimizations alter observable replay,
+
+they remain entirely outside the trusted logical foundation.
+
+The mathematical semantics remain unchanged.
+
+Only storage efficiency improves.
+
+
+Historical Transactions
+
+
+Insertion of new mathematical knowledge proceeds transactionally.
+
+A candidate history is first constructed in isolation.
+
+Replay then verifies the complete derivation.
+
+Only after successful verification is the history merged into the persistent
+database.
+
+Consequently,
+
+the persistent archive always consists entirely of replayable histories.
+
+No partially verified mathematics ever enters the trusted repository.
+
+This transaction model closely resembles append-only databases,
+
+except that correctness is established through formal replay rather than through
+consistency constraints alone.
+
+
+Reference Kernel Algorithm
+
+
+The implementation developed throughout this chapter may be summarized
+abstractly by the following recursive procedure.
+
+Given a proposed historical extension,
+
+first verify that every referenced dependency already exists.
+
+Next,
+
+replay the referenced histories.
+
+Then,
+
+execute each newly introduced historical event in dependency order.
+
+Normalize every observable construction required for conversion checking.
+
+Verify every typing judgment.
+
+Record every replay result.
+
+Finally,
+
+commit the completed immutable history to the persistent archive.
+
+Observe that no mutable global state appears anywhere in this procedure.
+
+The only persistent mathematical object is the growing history itself.
+
+
+Implementation Philosophy
+
+
+The implementation architecture reflects the central philosophical principle of
+Spherepop.
+
+Mathematics is not a mutable collection of declarations.
+
+It is a persistent history of constructive events.
+
+The kernel therefore resembles an event-sourced database more closely than a
+traditional theorem prover.
+
+Every theorem is an immutable transaction.
+
+Every proof is a replayable construction.
+
+Every optimization preserves provenance.
+
+Every extension enlarges rather than replaces the existing mathematical record.
+
+This architecture separates the trusted kernel from every higher-level language
+feature. Parsers, elaborators, optimizers, proof search procedures, integrated
+development environments, and compiler back ends all become replaceable
+front-end tools. Their only responsibility is to generate candidate historical
+constructions. The kernel itself remains responsible solely for replay,
+verification, normalization, and historical persistence.
+
+Having completed the implementation architecture, the remaining chapters turn
+toward future directions. We shall investigate cubical historical equality,
+higher inductive histories, distributed theorem proving, verified compilation,
+and the possibility that constructive histories provide a common mathematical
+foundation for programming languages, proof assistants, version-control systems,
+and persistent knowledge archives.
+
+
+
+Future Directions
+
+
+
+The historical calculus presented throughout this paper should be regarded as
+the foundation of a broader research programme rather than as a completed
+theory. The primary objective has been to demonstrate that constructive
+histories can replace unordered contexts as the primitive semantic objects of a
+dependently typed calculus while preserving the expressive power of the
+Calculus of Constructions. Many natural extensions remain open.
+
+These extensions do not require abandoning the historical kernel. Instead, they
+represent successive enrichments of the same event-oriented foundation.
+
+
+Cubical Historical Equality
+
+
+One of the most promising directions concerns computational equality.
+
+Modern cubical type theories replace extensional identity with explicit paths
+that possess computational content. The historical interpretation developed in
+this paper suggests an alternative viewpoint.
+
+A path may be interpreted as a continuous replay transformation between two
+construction histories.
+
+Instead of asking whether two objects are connected by a path, one asks whether
+their histories admit a continuous family of replay operations preserving
+constructive admissibility.
+
+Collapse would then become the endpoint of a replay homotopy rather than merely
+an isolated historical event.
+
+This interpretation may provide a bridge between cubical computation and
+event-oriented semantics.
+
+
+Higher Inductive Histories
+
+
+The present development has considered only ordinary inductive families.
+
+Higher inductive types suggest a corresponding notion of higher historical
+generators.
+
+Constructors would no longer generate only objects.
+
+They would generate histories,
+
+replay morphisms,
+
+collapse witnesses,
+
+and higher replay equivalences simultaneously.
+
+The resulting structures could provide a computational foundation for topology,
+geometry, and higher category theory directly within the historical kernel.
+
+
+Verified Distributed Mathematics
+
+
+The Meld operation naturally supports distributed theorem proving.
+
+An important direction for future work is the development of globally
+distributed mathematical repositories in which independently verified histories
+are continuously exchanged between cooperating kernels.
+
+Because every theorem is replayable,
+
+trust need not depend upon the originating machine.
+
+Only replay correctness matters.
+
+The resulting mathematical archive would resemble a persistent distributed graph
+of constructive knowledge rather than a centralized library.
+
+
+Verified Compilation
+
+
+The historical interpretation naturally extends to compiler construction.
+
+Compilation itself may be represented as a replay-preserving historical
+transformation,
+
+\[
+C
+:
+\mathcal H_{\mathrm{source}}
+\rightarrow
+\mathcal H_{\mathrm{target}}.
+\]
+
+Rather than proving only semantic preservation,
+
+one may prove preservation of constructive provenance.
+
+Every machine instruction would remain historically connected to the source
+construction that generated it.
+
+Compiler verification would therefore become another instance of replay
+verification.
+
+
+Historical Operating Systems
+
+
+The event-oriented ontology developed throughout this paper suggests that the
+kernel may extend beyond proof assistants.
+
+Operating systems traditionally organize computation around mutable process
+state.
+
+An alternative architecture would organize computation around persistent
+histories.
+
+Processes,
+
+files,
+
+inter-process communication,
+
+resource allocation,
+
+and synchronization
+
+could all be represented as replayable historical constructions.
+
+The distinction between operating system,
+
+version-control system,
+
+proof assistant,
+
+and database would thereby become increasingly blurred.
+
+
+Persistent Scientific Computation
+
+
+Scientific computing frequently suffers from incomplete reproducibility.
+
+Intermediate computations disappear.
+
+Parameter choices are forgotten.
+
+Data transformations become difficult to reconstruct.
+
+The historical calculus provides an alternative.
+
+Every simulation,
+
+every optimization,
+
+every numerical approximation,
+
+and every visualization
+
+may be represented as replayable historical constructions.
+
+Scientific publications would therefore include executable historical proofs of
+their computational claims rather than static numerical results alone.
+
+
+Historical Artificial Intelligence
+
+
+Machine learning systems typically discard the majority of their intermediate
+reasoning.
+
+Weights remain,
+
+while the constructive history producing those weights largely disappears.
+
+The historical kernel suggests a different approach.
+
+Learning becomes the accumulation of admissible historical constructions.
+
+Inference becomes replay over previously established histories.
+
+Optimization records explicit collapse events identifying equivalent
+representations.
+
+Interpretability follows naturally because every prediction possesses an
+explicit construction history.
+
+Rather than explaining decisions after the fact,
+
+the explanation becomes intrinsic to the computation itself.
+
+
+Historical Mathematics
+
+
+Perhaps the most ambitious direction concerns the philosophy of mathematics.
+
+The traditional foundations of mathematics emphasize completed structures,
+
+sets,
+
+functions,
+
+or categories.
+
+The historical calculus instead proposes that mathematical existence should be
+understood through admissible constructive history.
+
+Objects exist because they have been constructed.
+
+Identity arises from replay.
+
+Equivalence arises through collapse.
+
+Knowledge grows through Meld.
+
+The resulting ontology replaces static mathematical universes with persistent
+historical evolution.
+
+Whether this viewpoint ultimately provides a more satisfactory foundation for
+constructive mathematics remains an open question deserving substantial future
+investigation.
+
+
+A Unified Historical Foundation
+
+
+The various research directions outlined above are united by a common principle.
+
+The same event algebra governing dependent type theory also appears naturally in
+
+proof assistants,
+
+distributed systems,
+
+compiler verification,
+
+persistent databases,
+
+version-control systems,
+
+scientific computation,
+
+and
+
+artificial intelligence.
+
+These disciplines have traditionally developed largely independently despite
+sharing many underlying structural ideas concerning dependency, persistence,
+reproducibility, and constructive growth.
+
+The historical calculus suggests that these similarities are not accidental.
+
+They arise because all of these systems manipulate histories rather than merely
+states.
+
+A sufficiently general mathematical theory of constructive histories therefore
+has the potential to unify ideas that presently appear in separate areas of
+computer science and constructive mathematics.
+
+The work presented in this paper represents only the first step toward such a
+unification. It establishes a minimal historical kernel, demonstrates that the
+Calculus of Constructions may be reconstructed within that kernel, and develops
+its operational, logical, categorical, and implementation-theoretic
+consequences. Much remains to be explored, but the central conclusion already
+appears clear: histories are not merely implementation artifacts. They are
+mathematical objects in their own right, and treating them as such opens a wide
+range of new possibilities for programming languages, proof assistants, and the
+foundations of constructive reasoning.
+
+The final chapter concludes by summarizing the historical programme and
+reconsidering the relationship between computation, proof, identity, and
+construction from the perspective developed throughout this monograph.
+
+
+
+Conclusion
+
+
+
+The principal objective of this paper has been to investigate whether the
+Calculus of Constructions may be reconstructed upon a different mathematical
+foundation. Rather than taking lambda abstraction, substitution, and unordered
+typing contexts as primitive, we have proposed that irreversible constructive
+histories constitute the fundamental objects of computation and reasoning.
+
+The resulting historical calculus preserves the expressive capabilities of the
+Calculus of Constructions while assigning a different interpretation to nearly
+every one of its central notions.
+
+Contexts become histories.
+
+Substitution becomes historical inheritance.
+
+Evaluation becomes replay.
+
+Equality becomes constructive historical equivalence.
+
+Proofs become immutable event histories.
+
+Normalization becomes reconstruction.
+
+Dependency becomes explicit.
+
+The trusted kernel becomes a persistent event algebra.
+
+Throughout the development of the paper, every familiar component of dependent
+type theory has been reconstructed from this perspective.
+
+Dependent products were interpreted as admissible continuations of constructive
+history.
+
+Universes became classifications of historical modes of construction rather
+than merely collections of types.
+
+Inductive families became generators of admissible historical growth.
+
+Equality types became replay witnesses relating independent construction
+histories.
+
+The Curry--Howard correspondence expanded naturally into a correspondence among
+propositions, types, programs, and histories.
+
+Category theory emerged from replay composition rather than being imposed
+externally.
+
+Implementation itself reduced to the maintenance of a persistent graph of
+historical events.
+
+None of these developments required abandoning the computational behavior of
+the Calculus of Constructions.
+
+Observable programs remain lambda terms.
+
+Dependent products continue to represent universal quantification.
+
+Normalization computes the same observable results.
+
+The familiar mathematics therefore survives intact.
+
+What changes is the ontology lying beneath it.
+
+Observable syntax becomes the visible projection of a richer constructive
+history.
+
+This shift in perspective has several mathematical consequences.
+
+First, provenance becomes intrinsic rather than auxiliary.
+
+Every theorem contains not merely a proof term but the complete historical
+derivation that produced it.
+
+Replay therefore reconstructs mathematical reasoning directly from immutable
+historical events.
+
+Explanation becomes a mathematical property rather than a debugging tool.
+
+Second, persistence replaces mutation.
+
+Mathematical knowledge no longer evolves through replacement.
+
+Instead, it grows through irreversible historical extension.
+
+Earlier constructions remain permanently available.
+
+Later discoveries enlarge the existing history rather than rewriting it.
+
+The resulting mathematical archive resembles an event-sourced knowledge graph
+rather than a mutable collection of declarations.
+
+Third, the primitive operations of the historical kernel naturally divide into
+two complementary classes.
+
+Meld enlarges constructive history by combining independent developments.
+
+Collapse reorganizes that enlarged history by recording newly discovered
+equivalences.
+
+Knowledge therefore evolves through construction and recognition rather than
+through deletion and replacement.
+
+Both mechanisms preserve provenance.
+
+Neither destroys information.
+
+Fourth, the implementation architecture becomes unusually compact.
+
+Because histories are immutable,
+
+incremental verification,
+
+persistent caching,
+
+parallel replay,
+
+dependency analysis,
+
+distributed theorem proving,
+
+and
+
+proof explanation
+
+all arise naturally from the same mathematical representation.
+
+The trusted kernel remains small precisely because these capabilities emerge
+from the historical semantics rather than from additional implementation
+machinery.
+
+Perhaps the most significant philosophical consequence concerns the nature of
+mathematical identity itself.
+
+Traditional foundations often begin with completed mathematical objects and ask
+how they may be related.
+
+The historical calculus proceeds in the opposite direction.
+
+Construction comes first.
+
+Identity emerges from replay.
+
+Equivalence is established through explicit collapse.
+
+Objects are therefore understood not as primitive entities but as persistent
+historical constructions.
+
+Their identities are consequences of how they were built.
+
+This inversion of perspective extends naturally beyond proof assistants.
+
+Persistent databases,
+
+distributed systems,
+
+version-control systems,
+
+compiler verification,
+
+scientific computation,
+
+knowledge management,
+
+and
+
+interactive theorem proving
+
+all manipulate histories whose provenance is often as important as their final
+observable state.
+
+The historical calculus suggests that these systems may share a common
+mathematical foundation.
+
+Their apparent differences arise primarily from the particular historical events
+they manipulate rather than from fundamentally different computational
+principles.
+
+Whether this broader unification can be realized remains an open question.
+
+The present work should therefore be understood as a foundational proposal
+rather than a completed theory.
+
+Many directions remain to be explored.
+
+A complete normalization proof for the historical calculus,
+
+a mechanized metatheory,
+
+cubical historical equality,
+
+higher historical inductive families,
+
+verified distributed proof systems,
+
+categorical completeness,
+
+compiler correctness,
+
+and
+
+large-scale implementation
+
+all represent substantial future research programmes.
+
+Nevertheless, the central thesis of the paper may already be stated with some
+confidence.
+
+The expressive power of the Calculus of Constructions does not depend upon
+taking lambda calculus or unordered contexts as primitive.
+
+The same logical structure may instead be reconstructed from a considerably
+more operational foundation based upon irreversible constructive histories.
+
+Within this framework,
+
+computation is the extension of history,
+
+proof is replay,
+
+identity is historical equivalence,
+
+and
+
+mathematics itself becomes the persistent accumulation of admissible
+construction.
+
+The historical calculus therefore offers not merely another implementation of
+dependent type theory but an alternative conceptual foundation for constructive
+mathematics. It retains the logical precision of the Calculus of Constructions
+while replacing static ontology with dynamic construction, transforming proofs
+from isolated symbolic objects into replayable historical processes and
+suggesting that the true primitive of computation is not state, nor term, nor
+set, but the irreversible history by which mathematical structure is brought
+into existence.
+
+
+\newpage 
+\section*{Appendices}
+
+
+\appendix
+
+
+
+Formal Grammar of the Spherepop Kernel
+
+
+This appendix presents the complete abstract syntax of the historical kernel.
+Only this grammar is trusted by the implementation. Surface syntax, theorem
+declarations, notation, modules, tactics, and parser conveniences elaborate into
+the abstract language defined here.
+
+
+Lexical Categories
+
+
+We assume countably infinite collections of
+
+\[
+x,y,z,\ldots
+\]
+
+for variables,
+
+\[
+c,d,\ldots
+\]
+
+for constructors,
+
+and
+
+\[
+u,v,\ldots
+\]
+
+for universe levels.
+
+Universe indices satisfy
+
+\[
+u\in\mathbb N.
+\]
+
+
+Terms
+
+
+The set of kernel terms is generated inductively by
+
+\[
+\begin{aligned}
+t ::= {} &
+x
+\\
+&
+\mid\;
+\lambda x:A.\,t
+\\
+&
+\mid\;
+t\,u
+\\
+&
+\mid\;
+\Pi x:A.\,B
+\\
+&
+\mid\;
+\Sigma x:A.\,B
+\\
+&
+\mid\;
+\Type_u
+\\
+&
+\mid\;
+\Prop
+\\
+&
+\mid\;
+\mathsf{History}
+\\
+&
+\mid\;
+\mathsf{Replay}
+\\
+&
+\mid\;
+\mathsf{Pop}
+\\
+&
+\mid\;
+\mathsf{Refuse}
+\\
+&
+\mid\;
+\mathsf{Collapse}
+\\
+&
+\mid\;
+\mathsf{Meld}
+\\
+&
+\mid\;
+\mathsf{Bind}
+\\
+&
+\mid\;
+\mathsf{Declare}
+\\
+&
+\mid\;
+\mathsf{Inductive}
+\\
+&
+\mid\;
+\mathsf{Constructor}
+\\
+&
+\mid\;
+\mathsf{Elim}.
+\end{aligned}
+\]
+
+Every observable construction appearing in Spherepop elaborates into terms of
+this grammar.
+
+
+Formal Event Algebra
+
+
+Events are generated by
+
+\[
+e
+::=
+\operatorname{Declare}
+\mid
+\operatorname{Bind}
+\mid
+\operatorname{Pop}
+\mid
+\operatorname{Refuse}
+\mid
+\operatorname{Collapse}
+\mid
+\operatorname{Meld}
+\mid
+\operatorname{Reduce}
+\mid
+\operatorname{Replay}.
+\]
+
+A history is a finite sequence
+
+\[
+H=e_1;e_2;\cdots;e_n
+\]
+
+satisfying
+
+\[
+\forall i<j,\;
+e_j
+\text{ depends only upon }
+e_1,\ldots,e_i.
+\]
+
+Thus every history determines a finite directed acyclic graph
+
+\[
+G(H)
+=
+(V,E).
+\]
+
+The dependency graph is uniquely reconstructed from replay.
+
+
+
+Complete Typing Rules
+
+
+
+This appendix presents the declarative typing system of the historical kernel in
+its entirety. The purpose of collecting the rules in one location is to provide
+a precise specification independent of the informal exposition in the main body
+of the paper.
+
+Throughout this appendix
+
+\[
+H
+\]
+
+denotes a well-formed historical context,
+
+\[
+A,B,C
+\]
+
+denote types,
+
+and
+
+\[
+s
+\]
+
+ranges over the universe hierarchy
+
+\[
+\Prop,
+\Type_0,
+\Type_1,
+\ldots.
+\]
+
+Every judgment has the form
+
+\[
+H
+\vdash
+t
+:
+A.
+\]
+
+Unlike conventional dependent type theory,
+
+the context
+
+\[
+H
+\]
+
+is an immutable constructive history rather than an unordered list of
+assumptions.
+
+
+
+
+Historical Well-Formedness
+
+
+The empty history is well formed.
+
+\[
+\frac{}{
+\vdash
+\varepsilon
+}
+\]
+
+Historical extension preserves well-formedness whenever the appended event is
+admissible.
+
+\[
+\frac{
+\vdash H
+\qquad
+\operatorname{Admissible}(H,e)
+}{
+\vdash
+H;e
+}
+\]
+
+
+
+
+Variable Rule
+
+
+Variables are introduced through declaration events.
+
+\[
+\frac{
+\operatorname{Declare}(x:A)
+\in
+H
+}{
+H
+\vdash
+x
+:
+A
+}
+\]
+
+The declaration event uniquely determines the provenance of the variable.
+
+
+
+
+Universe Rules
+
+
+The historical kernel adopts cumulative universes.
+
+\[
+\frac{}{
+H
+\vdash
+\Prop
+:
+\Type_0
+}
+\]
+
+\[
+\frac{}{
+H
+\vdash
+\Type_i
+:
+\Type_{i+1}
+}
+\]
+
+Universe lifting is admissible.
+
+\[
+\frac{
+H
+\vdash
+A
+:
+\Type_i
+}{
+H
+\vdash
+A
+:
+\Type_{i+1}
+}
+\]
+
+
+
+
+Dependent Product Formation
+
+
+\[
+\frac{
+H
+\vdash
+A
+:
+\Type_i
+\qquad
+H,
+x:A
+\vdash
+B
+:
+\Type_j
+}{
+H
+\vdash
+\Pi
+x:A.
+B
+:
+\Type_{\max(i,j)}
+}
+\]
+
+
+
+
+Dependent Sum Formation
+
+
+\[
+\frac{
+H
+\vdash
+A
+:
+\Type_i
+\qquad
+H,
+x:A
+\vdash
+B
+:
+\Type_j
+}{
+H
+\vdash
+\Sigma
+x:A.
+B
+:
+\Type_{\max(i,j)}
+}
+\]
+
+
+
+
+Lambda Introduction
+
+
+\[
+\frac{
+H,
+x:A
+\vdash
+t
+:
+B
+}{
+H
+\vdash
+\lambda
+x:A.
+t
+:
+\Pi
+x:A.
+B
+}
+\]
+
+
+
+
+Application
+
+
+\[
+\frac{
+H
+\vdash
+f
+:
+\Pi
+x:A.
+B
+\qquad
+H
+\vdash
+a
+:
+A
+}{
+H
+\vdash
+f\,a
+:
+B[x:=a]
+}
+\]
+
+Historical substitution merges the dependency graphs of
+
+\[
+f
+\]
+
+and
+
+\[
+a.
+\]
+
+
+
+
+Pair Formation
+
+
+\[
+\frac{
+H
+\vdash
+a
+:
+A
+\qquad
+H
+\vdash
+b
+:
+B[a/x]
+}{
+H
+\vdash
+(a,b)
+:
+\Sigma
+x:A.
+B
+}
+\]
+
+
+
+
+Projection
+
+
+\[
+\frac{
+H
+\vdash
+p
+:
+\Sigma
+x:A.
+B
+}{
+H
+\vdash
+\pi_1(p)
+:
+A
+}
+\]
+
+\[
+\frac{
+H
+\vdash
+p
+:
+\Sigma
+x:A.
+B
+}{
+H
+\vdash
+\pi_2(p)
+:
+B[\pi_1(p)/x]
+}
+\]
+
+
+
+
+Conversion
+
+
+Replay equivalence induces definitional equality.
+
+\[
+\frac{
+H
+\vdash
+t
+:
+A
+\qquad
+A
+\equiv_H
+B
+}{
+H
+\vdash
+t
+:
+B
+}
+\]
+
+The equivalence
+
+\[
+A
+\equiv_H
+B
+\]
+
+is determined by replay normalization.
+
+
+
+
+Historical Weakening
+
+
+\[
+\frac{
+H
+\vdash
+t
+:
+A
+\qquad
+\operatorname{Independent}(e,t)
+}{
+H;e
+\vdash
+t
+:
+A
+}
+\]
+
+Appending an unrelated historical event cannot invalidate an existing typing
+judgment.
+
+
+
+
+Historical Substitution
+
+
+\[
+\frac{
+H
+\vdash
+a
+:
+A
+\qquad
+H,
+x:A
+\vdash
+t
+:
+B
+}{
+H
+\vdash
+t[x:=a]
+:
+B[x:=a]
+}
+\]
+
+The resulting construction history contains the merged dependency graph of both
+premises.
+
+
+
+
+Historical Equality
+
+
+\[
+\frac{
+H
+\vdash
+a
+:
+A
+\qquad
+H
+\vdash
+b
+:
+A
+}{
+H
+\vdash
+\operatorname{Eq}_A(a,b)
+:
+\Prop
+}
+\]
+
+Reflexivity is introduced by
+
+\[
+\frac{
+H
+\vdash
+a
+:
+A
+}{
+H
+\vdash
+\operatorname{refl}(a)
+:
+\operatorname{Eq}_A(a,a)
+}
+\]
+
+Historical transport follows replay equivalence.
+
+
+
+
+Historical Replay
+
+
+Replay preserves typing.
+
+\[
+\frac{
+H
+\vdash
+t
+:
+A
+}{
+\Replay(H)
+\vdash
+t
+:
+A
+}
+\]
+
+This rule forms the logical foundation of replay verification.
+
+
+
+
+Historical Meld
+
+
+Suppose
+
+\[
+H_1
+\parallel
+H_2.
+\]
+
+Then
+
+\[
+\frac{
+H_1
+\vdash
+t
+:
+A
+\qquad
+H_2
+\vdash
+u
+:
+B
+}{
+\Meld(H_1,H_2)
+\vdash
+(t,u)
+:
+A\times B
+}
+\]
+
+provided the compatibility proof establishes that no dependency conflicts arise.
+
+
+
+
+Historical Collapse
+
+
+Suppose replay establishes
+
+\[
+a
+\equiv_H
+b.
+\]
+
+Then
+
+\[
+\frac{
+H
+\vdash
+p
+:
+\operatorname{Eq}_A(a,b)
+}{
+\Collapse(H,a,b,p)
+\vdash
+a
+\equiv
+b
+}
+\]
+
+Collapse therefore records equivalence as an explicit historical event rather
+than an extensional axiom.
+
+
+
+
+Summary
+
+
+These rules constitute the complete declarative specification of the historical
+kernel. Every higher-level language construct introduced by the Spherepop
+surface language elaborates into derivations built entirely from these rules.
+The trusted implementation therefore requires no additional logical primitives.
+The subsequent appendix develops the operational semantics corresponding to this
+typing system, giving the complete small-step and big-step evaluation relations
+for replay-driven computation.
+
+
+
+Operational Semantics
+
+
+
+This appendix gives the formal operational semantics of the historical kernel.
+Unlike conventional presentations of the Calculus of Constructions, evaluation
+is not defined solely as a relation upon terms. Every computational step
+simultaneously transforms an observable expression and extends the constructive
+history responsible for that transformation.
+
+The operational semantics therefore act upon configurations
+
+\[
+(H,t),
+\]
+
+rather than isolated terms
+
+\[
+t.
+\]
+
+The history is an essential component of the computational state.
+
+
+
+
+Configurations
+
+
+A configuration is defined by
+
+\[
+C
+=
+(H,t),
+\]
+
+where
+
+\[
+H
+:
+\mathsf{History}
+\]
+
+is a well-formed history and
+
+\[
+t
+\]
+
+is a well-typed kernel term.
+
+Evaluation transforms configurations according to
+
+\[
+(H,t)
+\longrightarrow
+(H',u).
+\]
+
+The resulting history
+
+\[
+H'
+\]
+
+extends
+
+\[
+H
+\]
+
+through one additional primitive event.
+
+
+
+
+Historical Values
+
+
+Values are defined inductively.
+
+\[
+v
+::=
+\lambda x:A.t
+\mid
+\Type_i
+\mid
+\Prop
+\mid
+c
+\mid
+(v_1,v_2)
+\]
+
+where
+
+\[
+c
+\]
+
+ranges over inductive constructors.
+
+A configuration
+
+\[
+(H,v)
+\]
+
+is terminal whenever no reduction rule applies.
+
+
+
+
+Historical Evaluation Contexts
+
+
+Evaluation proceeds according to left-to-right historical contexts.
+
+\[
+E
+::=
+[\ ]
+\mid
+E\,t
+\mid
+v\,E
+\mid
+(E,t)
+\mid
+(v,E)
+\]
+
+Whenever
+
+\[
+(H,t)
+\rightarrow
+(H',u),
+\]
+
+evaluation contexts satisfy
+
+\[
+(H,E[t])
+\rightarrow
+(H',E[u]).
+\]
+
+Thus replay preserves evaluation structure.
+
+
+
+
+Beta Reduction
+
+
+The principal computational rule is historical beta reduction.
+
+\[
+\frac{}{
+(H,
+(\lambda x:A.t)\,a)
+\longrightarrow
+(H;e_\beta,
+t[x:=a])
+}
+\]
+
+where
+
+\[
+e_\beta
+=
+\operatorname{Reduce}_\beta
+(\lambda x:A.t,a).
+\]
+
+Unlike ordinary beta reduction,
+
+the reduction event becomes part of the persistent history.
+
+
+
+
+Projection
+
+
+Dependent pairs reduce by projection.
+
+\[
+\frac{}{
+(H,\pi_1(a,b))
+\rightarrow
+(H;e_{\pi_1},a)
+}
+\]
+
+and
+
+\[
+\frac{}{
+(H,\pi_2(a,b))
+\rightarrow
+(H;e_{\pi_2},b)
+}
+\]
+
+The projection events preserve replayability.
+
+
+
+
+Historical Replay
+
+
+Replay reconstructs configurations recursively.
+
+The empty history satisfies
+
+\[
+\Replay(\varepsilon)
+=
+(\varepsilon,\varnothing).
+\]
+
+Suppose
+
+\[
+H'
+=
+H;e.
+\]
+
+Then
+
+\[
+\Replay(H')
+=
+\operatorname{Execute}
+(
+e,
+\Replay(H)
+).
+\]
+
+Thus replay is defined inductively over historical extension.
+
+
+
+
+Replay Execution
+
+
+Each primitive event possesses an execution rule.
+
+Declaration introduces a variable into the replay environment.
+
+Bind inserts a dependency edge.
+
+Pop selects an admissible continuation.
+
+Refuse removes an admissible continuation from the future search space.
+
+Collapse records replay equivalence.
+
+Meld combines compatible replay states.
+
+Reduction evaluates the associated computation.
+
+Replay itself recursively reconstructs earlier events.
+
+No additional operational primitives are required.
+
+
+
+
+Historical Meld
+
+
+Suppose
+
+\[
+H_1
+\parallel
+H_2.
+\]
+
+Replay satisfies
+
+\[
+\Replay(\Meld(H_1,H_2))
+=
+\Meld(
+\Replay(H_1),
+\Replay(H_2)
+).
+\]
+
+Thus replay commutes with historical composition.
+
+This property provides the semantic foundation for parallel verification.
+
+
+
+
+Historical Collapse
+
+
+Suppose
+
+\[
+p
+:
+\operatorname{Eq}_A(a,b).
+\]
+
+Replay of
+
+\[
+\Collapse(H,a,b,p)
+\]
+
+first reconstructs
+
+\[
+H,
+\]
+
+then verifies
+
+\[
+p,
+\]
+
+and finally records the new collapse edge joining the replay graphs of
+
+\[
+a
+\]
+
+and
+
+\[
+b.
+\]
+
+Observable computation remains unchanged.
+
+Only the historical dependency graph is extended.
+
+
+
+
+Small-Step Evaluation
+
+
+The reflexive transitive closure of
+
+\[
+\longrightarrow
+\]
+
+is written
+
+\[
+\Longrightarrow.
+\]
+
+Thus
+
+\[
+(H,t)
+\Longrightarrow
+(H',v)
+\]
+
+denotes a finite sequence of historical reductions terminating in a value.
+
+The accumulated history
+
+\[
+H'
+\]
+
+contains every replay event performed during evaluation.
+
+
+
+
+Big-Step Evaluation
+
+
+Big-step evaluation is written
+
+\[
+(H,t)
+\Downarrow
+(H',v).
+\]
+
+The inductive rules are
+
+\[
+\frac{}{
+(H,v)
+\Downarrow
+(H,v)
+}
+\]
+
+for values,
+
+and
+
+\[
+\frac{
+(H,t)
+\rightarrow
+(H_1,u)
+\qquad
+(H_1,u)
+\Downarrow
+(H_2,v)
+}{
+(H,t)
+\Downarrow
+(H_2,v)
+}
+\]
+
+for recursive evaluation.
+
+Big-step semantics therefore arise directly from repeated small-step replay.
+
+
+
+
+Historical Determinism
+
+
+Evaluation is deterministic.
+
+Suppose
+
+\[
+(H,t)
+\rightarrow
+(H_1,u_1)
+\]
+
+and
+
+\[
+(H,t)
+\rightarrow
+(H_2,u_2).
+\]
+
+Then
+
+\[
+u_1
+=
+u_2
+\]
+
+and
+
+\[
+H_1
+\simeq_R
+H_2.
+\]
+
+Replay therefore reconstructs a unique observable computation.
+
+
+
+
+Historical Soundness
+
+
+Operational semantics preserve typing.
+
+If
+
+\[
+H
+\vdash
+t:A
+\]
+
+and
+
+\[
+(H,t)
+\Longrightarrow
+(H',u),
+\]
+
+then
+
+\[
+H'
+\vdash
+u:A.
+\]
+
+Thus replay cannot invalidate previously established typing judgments.
+
+
+
+
+Operational Interpretation
+
+
+The operational semantics developed in this appendix illustrate the central
+difference between the historical calculus and conventional evaluation
+semantics.
+
+Ordinary operational semantics transform terms.
+
+Historical operational semantics transform histories.
+
+Observable terms evolve only because the underlying constructive history has
+grown.
+
+Evaluation therefore becomes one particular manifestation of historical
+construction.
+
+Normalization,
+
+proof replay,
+
+dependency reconstruction,
+
+distributed verification,
+
+incremental compilation,
+
+and
+
+persistent mathematical archives
+
+are all described by the same operational relation.
+
+The following appendix presents the replay algorithm itself in executable
+language-independent pseudocode and demonstrates that the operational semantics
+may be implemented using only the primitive event algebra introduced in the
+kernel specification.
+
+
+
+The Replay Algorithm
+
+
+
+The operational semantics of the preceding appendix define the mathematical
+meaning of replay. This appendix presents the corresponding implementation in a
+language-independent form. The objective is not to prescribe a particular
+programming language but to specify the minimal algorithm that every conforming
+Spherepop kernel must implement.
+
+The replay engine is the computational heart of the historical kernel.
+
+Unlike conventional proof assistants, whose trusted computation consists
+primarily of normalization and conversion checking, the Spherepop kernel treats
+replay as the primitive verification mechanism. Every theorem, every proof,
+every normalization, and every historical equivalence is ultimately verified by
+reconstructing the corresponding construction history.
+
+Replay therefore functions simultaneously as
+
+evaluation,
+
+type reconstruction,
+
+dependency reconstruction,
+
+proof verification,
+
+and
+
+historical validation.
+
+The entire trusted kernel is organized around this single algorithm.
+
+
+
+
+Input and Output
+
+
+Replay accepts a well-formed history
+
+\[
+H
+=
+e_1;
+e_2;
+\cdots;
+e_n.
+\]
+
+The output is the reconstructed kernel state
+
+\[
+S(H),
+\]
+
+consisting of
+
+the current typing environment,
+
+the dependency graph,
+
+the collection of replay-normal forms,
+
+the universe assignments,
+
+and
+
+the collection of verified mathematical objects.
+
+Replay never modifies an existing state.
+
+Instead,
+
+each event constructs a new state
+
+\[
+S_i,
+\]
+
+from its predecessor
+
+\[
+S_{i-1}.
+\]
+
+
+
+
+Replay Invariant
+
+
+Throughout execution the replay engine maintains the invariant
+
+\[
+S_i
+=
+\Replay(e_1;\cdots;e_i).
+\]
+
+Consequently,
+
+after processing every event,
+
+the reconstructed state is identical to the state originally produced during
+construction.
+
+Replay therefore establishes deterministic reproducibility.
+
+
+
+
+Initialization
+
+
+Replay begins from the empty historical state.
+
+\[
+S_0
+=
+(
+\varnothing,
+\varnothing,
+\varnothing,
+\varnothing
+).
+\]
+
+No declarations,
+
+no dependency edges,
+
+no replay cache,
+
+and
+
+no historical objects
+
+exist initially.
+
+Every subsequent component is generated constructively.
+
+
+
+
+Main Replay Loop
+
+
+Conceptually,
+
+the replay engine performs the following recursive computation.
+
+\[
+S_{i+1}
+=
+\operatorname{Execute}
+(
+e_{i+1},
+S_i
+).
+\]
+
+Thus
+
+\[
+\Replay(H)
+=
+S_n.
+\]
+
+Execution therefore consists of repeatedly interpreting historical events.
+
+The replay engine itself contains no mathematical knowledge beyond the event
+algebra.
+
+
+
+
+Declaration Events
+
+
+Suppose
+
+\[
+e
+=
+\operatorname{Declare}(x,A).
+\]
+
+Replay first verifies that
+
+\[
+A
+\]
+
+is already a well-formed type.
+
+The variable
+
+\[
+x
+\]
+
+is then inserted into the reconstructed typing environment together with its
+historical identifier.
+
+The dependency graph receives a new isolated vertex corresponding to the
+declaration event.
+
+
+
+
+Bind Events
+
+
+Suppose
+
+\[
+e
+=
+\operatorname{Bind}(a,b).
+\]
+
+Replay verifies that both constructions already exist.
+
+A dependency edge
+
+\[
+a
+\rightarrow
+b
+\]
+
+is inserted into the reconstructed dependency graph.
+
+Cycle detection is performed immediately.
+
+If a directed cycle appears,
+
+replay terminates with failure.
+
+Consequently,
+
+acyclicity is enforced incrementally rather than globally.
+
+
+
+
+Reduction Events
+
+
+Suppose
+
+\[
+e
+=
+\operatorname{Reduce}(t).
+\]
+
+Replay computes the corresponding reduction step,
+
+verifies preservation,
+
+records the resulting normal form,
+
+and
+
+stores the result inside the replay cache.
+
+Previously normalized historical prefixes are reused whenever available.
+
+
+
+
+Collapse Events
+
+
+Suppose
+
+\[
+e
+=
+\operatorname{Collapse}(a,b,p).
+\]
+
+Replay first reconstructs the equality proof
+
+\[
+p.
+\]
+
+Replay equivalence is then verified.
+
+Only after successful verification is the collapse edge inserted into the
+historical graph.
+
+Failure of replay equivalence causes immediate rejection of the history.
+
+
+
+
+Meld Events
+
+
+Suppose
+
+\[
+e
+=
+\Meld(H_1,H_2).
+\]
+
+Replay independently reconstructs
+
+\[
+H_1
+\]
+
+and
+
+\[
+H_2.
+\]
+
+Compatibility is verified.
+
+If compatibility succeeds,
+
+their dependency graphs are combined according to the Meld semantics developed
+earlier.
+
+Otherwise,
+
+replay terminates with failure.
+
+
+
+
+Universe Verification
+
+
+Whenever replay encounters a universe declaration,
+
+the cumulative hierarchy is verified immediately.
+
+Every judgment
+
+\[
+\Type_i
+:
+\Type_{i+1}
+\]
+
+is checked locally.
+
+Attempted construction of
+
+\[
+\Type
+:
+\Type
+\]
+
+necessarily introduces a cyclic dependency,
+
+causing replay failure.
+
+Universe consistency therefore follows directly from replay.
+
+
+
+
+Replay Caching
+
+
+The immutable nature of histories permits aggressive caching.
+
+Suppose replay has already reconstructed
+
+\[
+H_0.
+\]
+
+Any subsequent history
+
+\[
+H
+=
+H_0;
+H'
+\]
+
+begins replay from the cached state corresponding to
+
+\[
+H_0.
+\]
+
+Only the suffix
+
+\[
+H'
+\]
+
+requires execution.
+
+Replay therefore scales with historical growth rather than total history size.
+
+This property forms the computational basis of incremental verification.
+
+
+
+
+Replay Complexity
+
+
+Let
+
+\[
+n
+\]
+
+denote the number of newly introduced historical events.
+
+Suppose replay caches every previously verified prefix.
+
+Then replay complexity satisfies
+
+\[
+T(n)
+=
+O(n),
+\]
+
+with respect to the number of new events.
+
+Graph traversal,
+
+dependency verification,
+
+and
+
+historical reconstruction
+
+are all linear in the size of the newly introduced historical suffix.
+
+Observable normalization contributes only through newly generated reductions.
+
+Consequently,
+
+verification depends primarily upon historical growth rather than total library
+size.
+
+
+
+
+Replay Correctness
+
+
+The replay algorithm satisfies the following correctness theorem.
+
+\begin{theorem}[Replay Correctness]
+
+Suppose
+
+\[
+H
+\]
+
+is accepted by the replay engine.
+
+Then
+
+\[
+\Replay(H)
+=
+S
+\]
+
+constructs exactly the kernel state originally produced by
+
+\[
+H.
+\]
+
+Furthermore,
+
+every typing judgment reconstructed during replay is derivable in the
+declarative historical calculus.
+
+\end{theorem}
+
+The proof proceeds by induction over the event sequence.
+
+Each event preserves the replay invariant established earlier.
+
+
+
+
+The Central Role of Replay
+
+
+Replay occupies a uniquely central position within the historical kernel.
+
+Normalization,
+
+type checking,
+
+dependency reconstruction,
+
+proof verification,
+
+incremental recompilation,
+
+distributed synchronization,
+
+historical compression,
+
+and
+
+persistent archival verification
+
+all reduce to replay over immutable constructive histories.
+
+Consequently,
+
+the trusted implementation of Spherepop consists primarily of one deterministic
+graph reconstruction algorithm together with the primitive event algebra.
+
+The remainder of the language—including elaboration, proof automation, syntax,
+module systems, tactics, optimizers, and development environments—may all remain
+outside the trusted kernel.
+
+This separation between historical replay and user-facing language design is one
+of the principal architectural consequences of adopting histories rather than
+contexts as the primitive semantic objects of constructive computation.
+
+The next appendix develops the normalization algorithm itself, showing how
+historical replay naturally supports normalization by evaluation while avoiding
+repeated reduction of unchanged historical prefixes.
+
+
+
+Normalization by Historical Evaluation
+
+
+
+The replay algorithm developed in the previous appendix reconstructs the
+historical derivation associated with a computation. Replay alone, however, does
+not determine definitional equality. The kernel must also compare terms that may
+differ syntactically while representing identical constructions.
+
+Conventional implementations of the Calculus of Constructions frequently employ
+Normalization by Evaluation (NbE). Rather than repeatedly applying rewriting
+rules to syntax, NbE evaluates terms into a semantic domain before
+reconstructing canonical normal forms.
+
+The historical calculus preserves this fundamental idea while enriching the
+semantic domain with constructive provenance.
+
+Normalization therefore becomes normalization of histories as well as
+expressions.
+
+We refer to this procedure as \emph{Normalization by Historical Evaluation}
+(NbHE).
+
+
+
+
+Motivation
+
+
+Ordinary normalization answers the question
+
+\[
+t
+\Downarrow
+v.
+\]
+
+Historical normalization answers a richer question,
+
+\[
+(H,t)
+\Downarrow
+(H',v),
+\]
+
+where
+
+\[
+H'
+\]
+
+contains the replay history responsible for producing the normal form.
+
+Normalization therefore computes two objects simultaneously.
+
+The observable canonical expression.
+
+The constructive history explaining that expression.
+
+
+
+
+Historical Semantic Domain
+
+
+Let
+
+\[
+\mathcal V
+\]
+
+denote the semantic domain of values.
+
+Historical evaluation instead employs
+
+\[
+\widehat{\mathcal V}
+=
+\mathcal V
+\times
+\mathcal H,
+\]
+
+where
+
+\[
+\mathcal H
+\]
+
+is the category of replayable histories introduced earlier.
+
+Every semantic object therefore consists of
+
+an observable value,
+
+its construction history,
+
+its dependency graph,
+
+and
+
+its replay certificate.
+
+Semantic evaluation never discards provenance.
+
+
+
+
+Evaluation Function
+
+
+The historical evaluation function is
+
+\[
+\llbracket
+t
+\rrbracket
+_H
+:
+Env
+\rightarrow
+\widehat{\mathcal V}.
+\]
+
+Unlike ordinary semantic evaluation,
+
+the resulting value records the complete replay history responsible for its
+construction.
+
+Evaluation therefore preserves the invariant
+
+\[
+\History(
+\llbracket
+t
+\rrbracket_H
+)
+=
+H_t.
+\]
+
+
+
+
+Reflection
+
+
+Neutral terms are reflected into the semantic domain by
+
+\[
+\uparrow
+:
+Ne
+\rightarrow
+\widehat{\mathcal V}.
+\]
+
+Reflection constructs semantic objects whose replay history initially consists
+only of the corresponding declaration event.
+
+Future reductions extend this history monotonically.
+
+
+
+
+Reification
+
+
+Reification reconstructs canonical syntax.
+
+The historical reification operator is
+
+\[
+\downarrow
+:
+\widehat{\mathcal V}
+\rightarrow
+Nf.
+\]
+
+Unlike ordinary NbE,
+
+reification preserves a reference to the historical provenance of the resulting
+normal form.
+
+The kernel therefore produces
+
+\[
+(
+\downarrow(v),
+\History(v)
+)
+\]
+
+rather than the syntax alone.
+
+
+
+
+Normalization Procedure
+
+
+Normalization consists of three conceptual phases.
+
+First,
+
+evaluate the observable term into the historical semantic domain.
+
+Second,
+
+perform replay-aware semantic computation until no further reductions are
+possible.
+
+Third,
+
+reify the resulting semantic object into canonical syntax while preserving its
+construction history.
+
+Formally,
+
+\[
+\operatorname{Norm}(H,t)
+=
+\downarrow
+(
+\llbracket
+t
+\rrbracket_H
+).
+\]
+
+
+
+
+Historical Sharing
+
+
+One of the principal advantages of historical normalization concerns shared
+constructive prefixes.
+
+Suppose
+
+\[
+t_1
+\]
+
+and
+
+\[
+t_2
+\]
+
+share the historical prefix
+
+\[
+H_0.
+\]
+
+Ordinary normalization often evaluates the common subexpression repeatedly.
+
+Historical normalization instead evaluates
+
+\[
+H_0
+\]
+
+once,
+
+records the resulting semantic object,
+
+and
+
+reuses that object whenever replay encounters the same historical prefix.
+
+Consequently,
+
+semantic evaluation depends upon historical novelty rather than syntactic
+duplication.
+
+
+
+
+Incremental Normalization
+
+
+Suppose
+
+\[
+H'
+=
+H;
+e.
+\]
+
+Only the newly introduced event
+
+\[
+e
+\]
+
+requires semantic evaluation.
+
+Every previously normalized prefix remains valid because histories are
+immutable.
+
+Incremental normalization therefore satisfies
+
+\[
+\operatorname{Norm}(H')
+=
+\operatorname{Extend}
+(
+\operatorname{Norm}(H),
+e
+).
+\]
+
+No previously normalized historical segment requires recomputation.
+
+
+
+
+Replay-Guided Conversion
+
+
+Conversion checking reduces to comparison of replay-normal forms.
+
+Suppose
+
+\[
+A
+\]
+
+and
+
+\[
+B
+\]
+
+are types.
+
+The kernel computes
+
+\[
+\operatorname{Norm}(H,A)
+\]
+
+and
+
+\[
+\operatorname{Norm}(H,B).
+\]
+
+Definitional equality holds precisely when
+
+their observable normal forms coincide,
+
+their replay histories are replay equivalent,
+
+and
+
+their dependency graphs satisfy historical equivalence.
+
+Observable equality alone is therefore insufficient.
+
+Constructive provenance also contributes to conversion.
+
+
+
+
+Correctness
+
+
+Historical normalization satisfies two fundamental correctness properties.
+
+First,
+
+normalization preserves observable semantics.
+
+If

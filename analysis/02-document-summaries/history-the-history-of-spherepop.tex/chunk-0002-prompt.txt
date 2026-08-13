@@ -1,0 +1,506 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+The comparison with category theory, type theory, operational and denotational semantics
+clarified what Spherepop both inherits and rejects. These frameworks provide indispensable
+tools for abstraction, correctness, and equivalence, but they systematically treat history as
+secondary or eliminable. Spherepop reverses this priority. It treats events as primary,
+abstractions as compressions of history, and equivalence as something that must be enacted
+rather than assumed. Coherence is not guaranteed in advance; it is achieved by paying the
+cost of commitment.
+
+By extending the analysis to circuits, shell evaluation, databases, and version control, the
+paper demonstrated that Spherepop is not an idiosyncratic formalism but an explicit
+articulation of a structure already present in successful real-world systems. Wherever local
+contexts are resolved and their consequences carried forward irreversibly, Spherepop’s core
+operators are already at work. The calculus does not impose a foreign discipline; it names an
+existing one and makes it explicit.
+
+The formal unification of these examples revealed a common mathematical core: computation
+as a sequence of monotone quotient maps over nested option spaces. Each evaluation step
+collapses internal distinctions, constrains future action, and contributes irreversibly to a
+history. Meaning, on this view, is neither a static denotation nor a transient execution trace,
+but the accumulated consequence of having acted.
+
+Spherepop therefore offers a unifying perspective on meaning, computation, and agency in
+finite worlds. It explains why scope matters, why history cannot be ignored, and why
+irreversibility is not an implementation detail but the ground of significance itself. To compute,
+to speak, or to act is to change what can happen next. Spherepop provides a formal language
+for this fact, treating commitment not as a limitation to be minimized but as the substance
+from which meaning is made.
+
+\newpage
+
+\appendix
+\section*{Appendix A: Spherepop as a History-Indexed Rewrite System}
+
+This appendix presents a minimal formalization of Spherepop as a rewrite system indexed by
+history rather than by state. The purpose is not to specify an implementation, but to make
+explicit the sense in which Spherepop replaces state-based semantics with event-based
+semantics.
+
+Let $\Sigma$ be a set of syntactic forms, and let $\mathcal{H}$ be the set of all finite histories,
+where a history $h \in \mathcal{H}$ is a finite sequence of events. We write $h \cdot e$ for the
+history obtained by appending event $e$ to history $h$.
+
+A Spherepop configuration is a pair $(\sigma, h)$, where $\sigma \in \Sigma$ is a current form
+and $h \in \mathcal{H}$ is the history of committed events.
+
+Evaluation is given by a partial function
+\[
+\mathsf{pop} : \Sigma \times \mathcal{H} \rightharpoonup \Sigma \times \mathcal{H},
+\]
+such that
+\[
+\mathsf{pop}(\sigma, h) = (\sigma', h \cdot e)
+\]
+for some event $e$ recording the collapse of a local context in $\sigma$.
+
+The defining constraint of the calculus is monotonicity of history. If
+\[
+(\sigma_0, h_0) \xrightarrow{\mathsf{pop}} (\sigma_1, h_1)
+\quad\text{and}\quad
+(\sigma_1, h_1) \xrightarrow{\mathsf{pop}} (\sigma_2, h_2),
+\]
+then $h_0$ is a prefix of $h_1$, and $h_1$ is a prefix of $h_2$. No transition removes or
+rewrites history.
+
+Rewrite equivalence is therefore history-relative. Two forms $\sigma$ and $\tau$ are
+definitionally equivalent only relative to a collapse policy
+\[
+\sim_C \;\subseteq\; \Sigma \times \Sigma
+\]
+that explicitly identifies histories whose event sequences may be quotient-collapsed.
+
+In the absence of such a collapse, equivalence is intensional:
+\[
+(\sigma, h) \not\equiv (\tau, h')
+\quad\text{unless}\quad h = h'.
+\]
+
+This distinguishes Spherepop from classical rewriting systems, in which rewrite sequences
+are treated as auxiliary and equivalence is defined extensionally over normal forms. In
+Spherepop, normal forms do not erase the history that produced them, and rewriting is an
+act of commitment rather than substitution.
+
+\section*{Appendix B: Nested Scope as a Poset of Option Spaces}
+
+This appendix formalizes the notion of nested scope used throughout the paper as a partially
+ordered structure of option spaces. The aim is to make precise the sense in which evaluation
+order is governed by inclusion rather than by syntactic convention.
+
+Let $\mathcal{O}$ be a set of option spaces. An element $O \in \mathcal{O}$ represents the set of
+all admissible continuations available to a system at a given point in its history.
+
+We equip $\mathcal{O}$ with a partial order $\preceq$ defined by inclusion of admissible futures.
+For $O_1, O_2 \in \mathcal{O}$, we write
+\[
+O_1 \preceq O_2
+\]
+if every continuation admissible in $O_1$ is also admissible in $O_2$. Intuitively, $O_1$ is a
+more constrained context than $O_2$.
+
+A nested scope structure is a finite poset $(\mathcal{O}, \preceq)$ such that for any two option
+spaces $O_1, O_2 \in \mathcal{O}$, either $O_1 \preceq O_2$, $O_2 \preceq O_1$, or they are
+incomparable. Incomparable option spaces correspond to disjoint local contexts.
+
+Evaluation proceeds by selecting a minimal element $O_{\min}$ of the poset, corresponding
+to an innermost scope. A pop operation is defined as a monotone map
+\[
+\pi : O_{\min} \rightarrow O',
+\]
+where $O'$ is an option space satisfying $O' \preceq O$ for all $O$ such that
+$O_{\min} \preceq O$.
+
+The effect of $\pi$ is to remove $O_{\min}$ from the poset and replace all occurrences of it
+in upper bounds with $O'$. The resulting poset $(\mathcal{O}', \preceq')$ has strictly fewer
+elements than $(\mathcal{O}, \preceq)$.
+
+Termination of evaluation corresponds to the existence of a unique maximal element
+$O_{\top}$, representing the fully collapsed option space. No further pops are admissible
+once this element is reached.
+
+This formalization abstracts the common structure underlying parentheses in arithmetic,
+subcircuits in electrical networks, subshells in process execution, and nested spheres in
+Spherepop. In all cases, evaluation order is determined by the partial order of option-space
+inclusion rather than by linear sequencing alone.
+
+\section*{Appendix C: Collapse as Quotient with Memory}
+
+This appendix formalizes the notion of collapse as an explicit quotient operation that
+preserves historical information. The purpose is to distinguish Spherepop collapse from
+classical quotienting, in which prior structure is erased rather than compressed.
+
+
+Let $(\mathcal{O}, \preceq)$ be a poset of option spaces as defined in Appendix B. Let
+$O \in \mathcal{O}$ be an option space selected for collapse. A collapse policy is specified
+by an equivalence relation
+\[
+\equiv_C \;\subseteq\; O \times O
+\]
+that identifies distinctions within $O$ deemed no longer semantically relevant.
+
+The collapse operation induces a quotient space
+\[
+\overline{O} \;:=\; O/{\equiv_{C}},
+\]
+together with a canonical projection
+\[
+q : O \to \overline{O}.
+\]
+
+Unlike classical quotient constructions, collapse in Spherepop is indexed by history.
+Formally, a collapse event is a triple
+\[
+c := (O,\equiv_{C},h),
+\]
+where $h \in \mathcal{H}$ is the history prefix at which the collapse occurs.
+
+
+The application of a collapse event extends the history:
+\[
+h' = h \cdot c,
+\]
+and replaces $O$ in the ambient poset with $\overline{O}$, ordered so that
+\[
+\overline{O} \preceq O' \quad \text{whenever} \quad O \preceq O'.
+\]
+
+Crucially, the projection $q$ is not invertible, but it is recorded. The history retains the
+information that $\overline{O}$ arose as a quotient of $O$ under $\equiv_C$, even though the
+distinctions identified by $\equiv_C$ are no longer available for future computation.
+
+Two quotient spaces $\overline{O}_1$ and $\overline{O}_2$ are considered extensionally
+equivalent only if they arise from identical quotient relations applied at identical history
+prefixes. Otherwise, they are intensionally distinct despite being isomorphic as sets.
+
+This construction formalizes the claim that collapse reduces descriptive complexity without
+erasing responsibility. Collapse compresses the past but does not annul it. Meaning is carried
+forward as constrained possibility together with an irreducible record of how that constraint
+was imposed.
+
+\section*{Appendix D: Evaluation as a Functor from Histories to Views}
+
+This appendix formalizes the distinction between authoritative history and derived observation
+by treating evaluation as a functor from histories to views. The goal is to make precise the
+sense in which observation in Spherepop is non-causal and non-authoritative.
+
+Let $\mathcal{H}$ be the category of histories. Objects of $\mathcal{H}$ are finite histories
+$h = e_1 \cdot e_2 \cdots e_n$. There exists a unique morphism
+\[
+h \rightarrow h'
+\]
+if and only if $h'$ is obtained by appending a finite sequence of events to $h$. Composition
+is given by concatenation, and identities are given by empty extensions. The category
+$\mathcal{H}$ is therefore a thin category encoding prefix order.
+
+Let $\mathcal{V}$ be a category of views. Objects of $\mathcal{V}$ are representational
+structures such as graphs, tables, summaries, or numerical projections. Morphisms in
+$\mathcal{V}$ are view-preserving transformations that do not introduce new semantic
+commitments.
+
+An evaluation policy is defined as a functor
+\[
+F : \mathcal{H} \rightarrow \mathcal{V}.
+\]
+
+For a given history $h$, the object $F(h)$ represents the view obtained by replaying $h$
+according to a fixed interpretation rule. For a morphism $h \rightarrow h'$, functoriality
+requires that
+\[
+F(h \rightarrow h') : F(h) \rightarrow F(h')
+\]
+be a view update induced purely by the additional events in $h'$. No view may influence the
+structure of $\mathcal{H}$ itself.
+
+Different functors $F_1, F_2 : \mathcal{H} \rightarrow \mathcal{V}$ may yield distinct views of
+the same history. These differences correspond to alternative projections, summaries, or
+analyses. However, all such functors are observational. None introduce new morphisms in
+$\mathcal{H}$, and none may alter existing histories.
+
+A collapse policy corresponds to a natural transformation between functors
+\[
+\eta : F \Rightarrow G
+\]
+that identifies distinctions in the view space without modifying the underlying history. Such
+transformations are irreversible at the level of $\mathcal{V}$ but leave $\mathcal{H}$ intact.
+
+This formalization captures the core architectural discipline of Spherepop. History is
+authoritative and monotone. Views are derived and replaceable. Evaluation is not execution
+but interpretation. Computation occurs in $\mathcal{H}$; understanding occurs in
+$\mathcal{V}$. The separation of these roles ensures that observation, abstraction, and
+summarization can proceed freely without compromising the integrity of the past.
+
+\section*{Appendix E: Refusal and Binding as Monotone Constraints}
+
+This appendix formalizes refusal and binding as explicit, monotone constraints on option
+spaces. The aim is to complete the operator set by showing how Spherepop represents
+non-selection and conditional commitment without reverting to negation or backtracking.
+
+Let $(\mathcal{O}, \preceq)$ be a poset of option spaces as in Appendix B, and let
+$\mathcal{H}$ be the category of histories as in Appendix D. For a given history $h \in
+\mathcal{H}$, let $O_h \in \mathcal{O}$ denote the option space admissible at $h$.
+
+A refusal is an event that excludes a subset of possibilities without selecting an alternative.
+Formally, a refusal event is a pair
+\[
+r = (O_h, R),
+\]
+where $R \subseteq O_h$ is a nonempty subset of options to be excluded. The application of
+$r$ induces a new option space
+\[
+O_{h'} = O_h \setminus R,
+\]
+with $h' = h \cdot r$. By construction, $O_{h'} \preceq O_h$. Refusal is therefore monotone:
+it strictly reduces the set of admissible continuations without introducing new ones.
+
+A binding is an event that commits to a relation between future options without immediately
+collapsing them. Formally, a binding event is a triple
+\[
+b = (O_h, \beta, h),
+\]
+where $\beta$ is a constraint predicate over $O_h$ specifying conditions that future options
+must satisfy. The application of $b$ yields a constrained option space
+\[
+O_{h'} = \{ o \in O_h \mid \beta(o) \},
+\]
+with $h' = h \cdot b$. Binding thus restricts future admissibility while preserving internal
+distinctions among remaining options.
+
+Refusal and binding differ from collapse in that they do not identify options with one
+another. Refusal removes options outright. Binding preserves options but constrains their
+compatibility with future events. Collapse, by contrast, identifies options and compresses
+distinctions. All three operations are monotone with respect to $\preceq$, but they impose
+different kinds of semantic commitment.
+
+Two histories $h_1$ and $h_2$ that differ only by the order of refusals and bindings may yield
+extensionally equivalent option spaces while remaining intensionally distinct. The order of
+constraint application is therefore semantically significant unless an explicit collapse event
+identifies them.
+
+This formalization captures a key aspect of Spherepop’s treatment of agency. Not all
+meaningful acts consist in choosing among alternatives. Some acts consist in refusing certain
+paths, while others consist in binding future actions to shared constraints. By representing
+these acts as first-class, irreversible events, Spherepop models decision-making as the
+progressive shaping of possibility rather than as instantaneous selection.
+
+Together with pop and collapse, refusal and binding complete a minimal algebra of
+historical constraint. Every Spherepop history may be understood as a finite sequence of
+monotone transformations on option spaces, each narrowing, structuring, or compressing the
+future. Meaning arises from this sequence itself, not from any single terminal configuration.
+
+\section*{Appendix F: Confluence, Divergence, and Regret as Properties of Histories}
+
+This appendix introduces formal notions of confluence, divergence, and regret as properties
+of histories rather than of states or expressions. The aim is to characterize correctness and
+failure in Spherepop without appealing to backtracking, normalization, or error states.
+
+Let $\mathcal{H}$ be the category of histories defined in Appendix D, and let
+$O_h$ denote the option space admissible at history $h$. Two histories $h_1$ and $h_2$ are
+said to be extensionally equivalent at horizon $k$ if their induced option spaces agree up to
+$k$ further admissible events. Formally, we write
+\[
+h_1 \approx_k h_2
+\]
+if the sets of length-$k$ extensions of $h_1$ and $h_2$ are equal.
+
+Confluence is defined relative to a collapse policy. A family of histories
+$\{h_i\}_{i \in I}$ is confluent if there exists a history $h_c$ and a collapse policy $C$ such
+that for all $i \in I$,
+\[
+h_i \cdot C \approx_0 h_c.
+\]
+Confluence therefore does not assert that histories are identical, but that they may be made
+equivalent by an explicit act of identification. In the absence of such a collapse, histories
+remain distinct even if their futures coincide.
+
+Divergence is the failure of such confluence. A set of histories diverges if no collapse policy
+exists that identifies them without violating monotonicity of option spaces. Divergence is
+not an error condition but a fact about incompatibility of commitments. Some differences in
+history cannot be compressed without loss of admissible futures.
+
+Regret is defined as a property of a single history. A history $h$ exhibits regret if there
+exists a history $h'$ such that $h'$ is reachable from a common prefix with strictly greater
+option space, but $h'$ is no longer reachable from $h$. Formally, regret occurs when there
+exists a prefix $p$ and histories $h = p \cdot e_1 \cdots e_n$ and $h' = p \cdot e'_1 \cdots e'_m$
+such that
+\[
+O_h \prec O_{h'}.
+\]
+
+Regret is therefore not a logical inconsistency or a runtime error. It is the recognition that
+a sequence of irreversible commitments has led to a strictly more constrained future than
+was otherwise possible. Regret cannot be undone; it can only be acknowledged and worked
+around through further commitments or through collapse that compresses the significance
+of the regretted distinctions.
+
+This framing replaces classical notions of correctness and failure. A history is not incorrect
+because it diverges or exhibits regret. It is simply more constrained. Evaluation succeeds
+whenever it produces a history. The question is not whether the history is valid, but whether
+its remaining option space aligns with the goals of the agent or system.
+
+By shifting correctness from states to histories, Spherepop accommodates learning, error,
+and adaptation without retreating to backtracking or exception handling. Systems improve
+not by undoing the past but by acting coherently in light of it. Confluence, divergence, and
+regret become descriptive properties of lived computation rather than pathologies to be
+eliminated.
+
+\section*{Appendix G: A Minimal BNF Grammar for Spherepop}
+
+This appendix presents a minimal Backus–Naur Form grammar for Spherepop. The grammar is
+not intended to specify a concrete syntax for any particular implementation, but to capture
+the abstract structure of Spherepop expressions, events, and histories in a form suitable for
+formal reasoning.
+
+Let terminal symbols be written in typewriter font and non-terminals in angle brackets.
+
+\subsection*{Lexical Domains}
+
+\begin{verbatim}
+<Identifier> ::= letter (letter | digit | "_")*
+<Label>      ::= <Identifier>
+<Value>      ::= <Identifier> | <Number>
+<Number>     ::= digit+
+\end{verbatim}
+
+\subsection*{Expressions and Spheres}
+
+\begin{verbatim}
+<Expr>   ::= <Value>
+           | <Sphere>
+
+<Sphere> ::= "(" <Label> ":" <Expr>* ")"
+\end{verbatim}
+
+A sphere is a labeled enclosure containing zero or more subexpressions. Nesting induces
+scope.
+
+\subsection*{Events}
+
+\begin{verbatim}
+<Event> ::= <Pop>
+          | <Collapse>
+          | <Refusal>
+          | <Binding>
+
+<Pop>      ::= "pop" "(" <Label> ")"
+<Collapse> ::= "collapse" "(" <Label> "," <Equiv> ")"
+<Refusal>  ::= "refuse" "(" <Label> "," <Set> ")"
+<Binding>  ::= "bind" "(" <Label> "," <Predicate> ")"
+\end{verbatim}
+
+\subsection*{Auxiliary Structures}
+
+\begin{verbatim}
+<Equiv>     ::= "{" <Pair> ("," <Pair>)* "}"
+<Pair>      ::= <Value> "~" <Value>
+
+<Set>       ::= "{" <Value> ("," <Value>)* "}"
+
+<Predicate> ::= <Identifier>
+\end{verbatim}
+
+Equivalence relations, sets, and predicates are treated abstractly. Their internal structure
+is not specified at the grammatical level.
+
+\subsection*{Histories}
+
+\begin{verbatim}
+<History> ::= <Event>*
+\end{verbatim}
+
+A history is a finite sequence of events. There is no grammatical provision for deletion or
+reordering.
+
+\subsection*{Configurations}
+
+\begin{verbatim}
+<Config> ::= "<" <Expr> "," <History> ">"
+\end{verbatim}
+
+A configuration pairs a current expression with its authoritative history.
+
+\subsection*{Evaluation}
+
+\begin{verbatim}
+<Eval> ::= <Config> "=>" <Config>
+\end{verbatim}
+
+Evaluation is a relation between configurations induced by the application of a single event.
+
+This grammar makes explicit the central commitments of Spherepop. Expressions are nested.
+Events are first-class. Histories are monotone. Evaluation produces new configurations by
+appending events rather than rewriting expressions in place. All further semantic structure
+is defined relative to this grammar.
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{Wittgenstein1953}
+L. Wittgenstein.
+\newblock \emph{Philosophical Investigations}.
+\newblock Blackwell Publishing, Oxford, 1953.
+
+\bibitem{Church1936}
+A. Church.
+\newblock An unsolvable problem of elementary number theory.
+\newblock \emph{American Journal of Mathematics}, 58(2):345--363, 1936.
+
+\bibitem{Turing1936}
+A. M. Turing.
+\newblock On computable numbers, with an application to the Entscheidungsproblem.
+\newblock \emph{Proceedings of the London Mathematical Society}, 42(2):230--265, 1936.
+
+\bibitem{Fant1995}
+K. Fant.
+\newblock \emph{Computer Science Reconsidered: The Challenge of Computers and the Mind}.
+\newblock Addison--Wesley, Reading, MA, 1995.
+
+\bibitem{Needham1997}
+T. Needham.
+\newblock \emph{Visual Complex Analysis}.
+\newblock Oxford University Press, Oxford, 1997.
+
+\bibitem{Meijer2012}
+E. Meijer.
+\newblock Your mouse is a database.
+\newblock In \emph{Proceedings of the ACM SIGMOD International Conference on Management of Data}, 2012.
+
+\bibitem{Meijer2011}
+E. Meijer.
+\newblock The duality of computation.
+\newblock \emph{Communications of the ACM}, 54(5):41--47, 2011.
+
+\bibitem{MacLane1971}
+S. Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Springer-Verlag, New York, 1971.
+
+\bibitem{Girard1987}
+J.-Y. Girard.
+\newblock Linear logic.
+\newblock \emph{Theoretical Computer Science}, 50(1):1--102, 1987.
+
+\bibitem{Milner1999}
+R. Milner.
+\newblock \emph{Communicating and Mobile Systems: The Pi-Calculus}.
+\newblock Cambridge University Press, Cambridge, 1999.
+
+\bibitem{Stonebraker2018}
+M. Stonebraker and A. Pavlo.
+\newblock What goes around comes around.
+\newblock \emph{Communications of the ACM}, 61(1):16--18, 2018.
+
+\end{thebibliography}
+
+\end{document}

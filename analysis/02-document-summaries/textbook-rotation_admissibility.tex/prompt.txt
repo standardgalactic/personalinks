@@ -1,0 +1,669 @@
+You are analyzing one document from a large theoretical and
+computational research repository called Spherepop.
+
+Produce a dense scholarly summary.
+
+Identify:
+
+1. the central thesis;
+2. definitions and primitive concepts;
+3. mathematical claims;
+4. important equations or formal structures;
+5. mechanisms and processes;
+6. philosophical commitments;
+7. connections to computation;
+8. connections to other likely parts of Spherepop;
+9. unresolved questions;
+10. contradictions, ambiguities, or weaknesses;
+11. concepts that appear unusually important and should survive
+    later compression.
+
+Do not merely paraphrase section by section.
+
+Preserve technical distinctions. Do not invent claims absent from
+the source.
+
+SOURCE DOCUMENT
+===============
+
+       Rotation Before Number:
+Admissibility, Geometry, and the Quotient
+   Structure of Quantum Mechanics
+                                  Flyxion
+                           Independent Researcher
+
+                                 June 2026
+
+
+                                   Abstract
+
+   A recent paper by Barrios Hita, Trushechkin, Kampermann, Epping, and
+Bruß establishes that quantum mechanics can be formulated entirely over the
+real numbers while reproducing all predictions of the complex theory [2]. This
+essay argues that the construction is a deep instance of a principle running
+through geometry, epistemology, and the theory of admissibility. The argu-
+ment proceeds in three stages. First, drawing on Tristan Needham’s geomet-
+ric reinterpretation of complex analysis [1], we recover the claim that complex
+numbers are compact encodings of planar rotations, and that the real formula-
+tion is not an elimination but an explanatory recovery of the generative mecha-
+nism those encodings compressed. Second, we connect this to the admissibil-
+ity program: the quotient space that the paper constructs to handle composite
+systems is precisely an admissibility quotient, collapsing distinctions that are
+representationally present but physically unreachable. Third, we identify the
+novel contribution as establishing a three-level hierarchy—coordinates, rep-
+resentations, invariant structure—in which physical ontology belongs to the
+deepest layer alone. Ambiguity is conserved throughout, migrating from state
+vectors into gauge orbits. Complex numbers are not necessary to describe
+quantum mechanics; but the geometry they were encoding was always there,
+and the quotient reveals which distinctions belong to reality and which belong
+only to description.
+
+                                       1
+1    Explanation Before Correctness
+There is a distinction that Tristan Needham’s Visual Complex Analysis draws implic-
+itly throughout its preface and opening chapters, though he never states it quite in
+these terms [1]. It is the distinction between a representation that is correct and one
+that is explanatory.
+    A correct representation encodes the right answers. An explanatory represen-
+tation makes the generative mechanism visible. The two need not coincide. A
+formalism can remain correct long after the geometric intuition that produced it
+has been compressed into notation and forgotten. When that compression hap-
+pens, the notation continues to yield valid results while becoming epistemically
+opaque—capable of producing answers without revealing why those answers are
+true.
+    Needham’s argument is not primarily that geometry is a helpful visualization
+of complex algebra. It is that the geometric interpretation is the source: the algebra
+of complex numbers emerged historically from geometric reasoning about rota-
+tions and scalings in the plane, and the algebra compressed that geometry into
+notation. Visual reasoning is not a pedagogical aid appended to an algebraically
+prior subject. It is where the subject came from.
+    This gives us a distinction that will carry weight throughout the essay:
+
+               correct representation ̸= explanatory representation.
+
+The standard algebraic presentation of complex numbers is correct. Needham’s
+geometric presentation is explanatory. The real-number formulation of quantum
+mechanics discussed below falls on the same axis: complex amplitudes remain cor-
+rect, but the flag construction makes the underlying rotational mechanism visible
+again.
+    This is also the sense in which the title is meant. Rotation is not prior to num-
+ber in the order of correctness—both the complex and the real descriptions yield
+the same predictions. Rotation is prior in the order of explanation. The number
+recorded the rotation. The rotation generated the number.
+    Because the essay draws repeatedly on the notion of admissibility, a working
+definition is useful before the term bears argumentative weight.
+
+
+
+                                          2
+Definition 1 (Admissibility). An admissibility condition is a rule that determines
+which distinctions correspond to physically realizable or operationally accessible differences
+and which are merely representational artifacts. An admissibility quotient identifies and
+collapses all distinctions that fail this criterion, leaving the space of equivalence classes
+under the relation of operational indistinguishability.
+
+    On this account, the passage from a raw representation to its admissibility quo-
+tient is a form of repair: not the correction of an error, but the removal of distinc-
+tions that were never genuine to begin with. The real formulation of quantum
+mechanics will provide a concrete mathematical instance of exactly this operation.
+
+
+2    Rotation Before Number
+With that distinction in hand, we can state Needham’s geometric inversion pre-
+cisely.
+    The standard story about complex numbers begins with the observation that
+  2
+x = −1 has no real solution, introduces i as a formal square root of −1, and ends
+with C as an extension field of R [17, 18, 19]. In this story, complex numbers are
+algebraic objects first: points, scalars, coordinates satisfying field axioms. Their
+geometric interpretation is secondary.
+    Needham’s inversion says: the algebra did not come first. What came first was
+the recognition that the plane admits a coherent family of combined rotations and
+scalings, and that these operations compose in a systematic way. The algebraic
+field structure is a compression: it records which compositions are admissible and
+how they combine, without explaining why those combinations are the natural
+ones. Figure 1 summarizes this inversion.
+
+           Rotations      compression     Complex         notation    Coordinate
+           & Scalings                     Algebra                       Repr.
+                                     geometric recovery
+
+
+
+Figure 1: Needham’s inversion. Geometry generates algebra; algebra generates
+notation. Explanatory recovery reconstructs the geometric structure hidden by the
+notation.
+
+
+
+                                              3
+    On the geometric account, a complex number z = reiθ is an operation: the am-
+plitwist that scales a vector by r and rotates it by θ. Needham introduces the
+word “amplitwist” precisely because no existing term captured the unity of the
+operation—existing vocabulary split a single stable phenomenon into two sepa-
+rate components, and the new word introduced a new admissible distinction.
+    Every nonzero complex number admits such a decomposition.
+
+Proposition 2 (Amplitude–Twist Decomposition). Every nonzero complex number
+z ∈ C admits a unique decomposition
+
+                                             z = reiθ
+
+with r > 0 and θ ∈ [0, 2π).
+                                                    p
+Proof. For z = x + iy with (x, y) ̸= (0, 0), set r = x2 + y 2 > 0. Then x/r = cos θ
+and y/r = sin θ for a unique θ ∈ [0, 2π). Hence z = r(cos θ +i sin θ) = reiθ by Euler’s
+formula, and uniqueness follows from the uniqueness of polar coordinates.
+
+   The amplitude r and the twist θ are thus genuinely independent:
+
+                                     z =       |{z}  eiθ .
+                                                r · |{z}
+                                             amplitude   twist
+
+
+The notation fuses them, but the geometry keeps them separate. Figure 2 makes
+this visible.
+    Complex multiplication is composition of amplitwists:
+
+                              r1 eiθ1 · r2 eiθ2 = (r1 r2 ) ei(θ1 +θ2 ) .
+
+Scaling factors multiply. Rotation angles add. The multiplication rule is not as-
+sumed but explained: it follows from the geometry of how rotations and scalings
+compose. The algebra emerges from the geometry.
+   This constitutes what we may call the Needham Principle:
+
+      Transformations are ontologically prior to the coordinates used to describe
+      them.
+
+   The following proposition makes this principle precise.
+
+                                                  4
+                                          Im
+
+
+                                                       reiθ
+                                                   r
+                                                   θ
+                                                              Re
+
+
+
+
+Figure 2: An amplitwist decomposes into a radial amplitude component r and an
+angular twist component θ. Notation fuses them; geometry keeps them distinct.
+
+Proposition 3 (Coordinate Independence of Transformation). Let T : X → X be a
+transformation and let ϕ1 , ϕ2 : X → Rn be two admissible coordinate systems. Then
+
+                  ϕ2 ◦ T ◦ ϕ−1         −1             −1         −1
+                            2 = (ϕ2 ◦ ϕ1 ) (ϕ1 ◦ T ◦ ϕ1 ) (ϕ1 ◦ ϕ2 ).
+
+
+Changing coordinates alters only the representation of T , not the transformation itself.
+
+Proof. The identity holds by composition: ϕ2 ◦T ◦ϕ−1        −1            −1
+                                                  2 = (ϕ2 ◦ϕ1 )◦(ϕ1 ◦T ◦ϕ1 )◦(ϕ1 ◦
+ϕ−1                              −1           −1
+  2 ). The transition maps ϕ2 ◦ ϕ1 and ϕ1 ◦ ϕ2 are coordinate changes (similarity
+transforms); they conjugate the representation of T without altering T itself.
+
+    The point on the unit circle is generated by the motion eiθ as θ varies. The num-
+ber is generated by the transformation. The symbol records the process. This pri-
+ority runs throughout Visual Complex Analysis: Needham consistently introduces
+Euler’s formula through the dynamics of rotation rather than through algebraic
+power series. The continuously evolving rotation is primary; the formula describes
+it.
+    The imaginary unit, on this account, is the quarter-turn operator i(v) = R90◦ (v).
+The equation i2 = −1 is not a mysterious algebraic fact but a transparent geometric
+statement:
+                      i2 (v) = R90◦ R90◦ (v) = R180◦ (v) = −v.
+                                            
+
+From the admissibility perspective, i2 = −1 is an admissibility constraint on pla-
+nar transformations: the composition of two admissible quarter-turns produces the
+
+                                               5
+unique admissible half-turn, and the algebra records which geometric continua-
+tions remain distinguishable under that constraint.
+    Needham also warns against confusing the coordinate pair (x, y) with the ge-
+ometric point it represents. A complex number is a single geometric object—an
+amplitwist—that admits multiple descriptions. The pair (x, y) is a representative;
+the geometric operation is the invariant object described by many coordinate sys-
+tems. That is the admissibility lesson stated in geometric language, and it is the
+lesson the quotient construction will make precise.
+
+
+3    The Flag Space and the Reappearance of Rotation
+Barrios Hita, Trushechkin, Kampermann, Epping, and Bruß take Needham’s pri-
+ority claim seriously at the level of quantum mechanics [2]. Earlier work had ex-
+plored whether real quantum mechanics could reproduce all predictions of the
+complex theory [6, 5, 4], and the experimental literature had established that naive
+real quantum theories without the correct composite-system structure cannot [3].
+The central obstacle is a dimension mismatch: a state in C2 ⊗ C2 carries 8 real pa-
+rameters, while the naive real tensor product R4 ⊗ R4 carries 16. Naive extension
+overcounts; the excess represents representational distinctions with no physical
+content.
+    The Barrios et al. construction begins with the single-system map
+
+                S : |ψ⟩ 7→ Re(|ψ⟩) ⊗ |0⟩F + Im(|ψ⟩) ⊗ |1⟩F =: |ψ̃⟩,
+
+where the two-dimensional “flag” system F records the real and imaginary parts.
+A global phase eiα on |ψ⟩ translates to a rotation RF (α) on the flag:
+
+                            S(eiα |ψ⟩) = RF (α) S(|ψ⟩).
+
+The U(1) ambiguity of complex quantum mechanics corresponds to an SO(2) am-
+biguity in the real formulation: a flag rotation leaving all observables unchanged.
+   The operators compatible with this structure take the form
+
+                        T (Π) = Re(Π) ⊗ IF + Im(Π) ⊗ JF ,
+
+
+
+                                         6
+where the flag matrices are
+                                       !                        !
+                                   1 0                      0 −1
+                           IF =          ,          JF =          .
+                                   0 1                      1 0
+
+    The following proposition shows that this is not a coincidence but a direct real-
+ization of the complex multiplication structure.
+
+Proposition 4 (Real Realization of Complex Multiplication). The matrix JF satisfies
+JF2 = −IF . Moreover, for any a, b, c, d ∈ R,
+
+                (aIF + bJF )(cIF + dJF ) = (ac − bd)IF + (ad + bc)JF ,
+
+which reproduces the complex multiplication rule (a + ib)(c + id) = (ac − bd) + i(ad + bc).
+                                       2
+Proof. Direct computation: JF2 = 01 −1    = −1  0
+                                                  
+                                     0       0 −1 = −IF . Then (aIF + bJF )(cIF +
+dJF ) = acIF + adJF + bcJF + bdJF2 = (ac − bd)IF + (ad + bc)JF , which matches the
+complex rule.
+
+    The entire complex algebra has reappeared as real matrix operations. JF is the
+quarter-turn operator realized as an explicit 2 × 2 real matrix. The rotation that i
+was always encoding has been made geometrically manifest. Figure 3 summarizes
+this chain.
+
+                         real realization                  generator
+                a + ib                      aIF + bJF                  JF2 = −IF
+
+Figure 3: Complex multiplication is realized in real vector spaces through the dis-
+tinguished rotation operator JF satisfying JF2 = −IF . The complex field becomes a
+derived structure.
+
+   The maps S and T satisfy
+
+                              S(|ψ⟩)T T (A) S(|ψ⟩) = ⟨ψ|A|ψ⟩
+
+for all states and operators [2]: all expectation values are preserved. The passage
+from complex to real formulation with flag structure is an explanatory recovery
+of the rotational geometry that complex notation compressed. A complex Hilbert
+space of dimension n over C is equivalent, as a real structure, to a real Hilbert
+
+                                                7
+space of dimension 2n over R equipped with a distinguished operator J satisfying
+J 2 = −I [13, 7, 14]. The complex numbers become secondary. The operator J—the
+rotation structure—is primary.
+
+
+4    The Quotient as Admissibility
+The single-system construction is straightforward. The real difficulty appears when
+one attempts to compose systems, and it is here that the admissibility program
+makes contact with the paper’s central technical contribution.
+    The authors’ postulate (P4) replaces the tensor product postulate with a phys-
+ical locality requirement: given two subsystems, an operation on one must have
+no measurable effect on the other. Formally, any two local operators OA and OB
+must commute: [OA , OB ] = 0 [2]. This postulate is satisfied automatically by the
+complex tensor product but is weaker than the tensor product postulate, allowing
+a different construction.
+    The naive extension S ⊗2 is not well-defined: the states |01⟩AB ⊗ |00⟩Fa Fb and
+−|01⟩AB ⊗ |11⟩Fa Fb correspond to the same physical state yet are different vectors in
+the raw real tensor product. The kernel of (S −1 )⊗2 is nontrivial, spanned by vectors
+of the form
+
+          |ψ ′ ⟩AB ⊗ |00⟩Fa Fb + |11⟩Fa Fb       and |ψ ′ ⟩AB ⊗ |01⟩Fa Fb − |10⟩Fa Fb .
+                                                                                    
+
+
+The authors pass to the quotient space R4A ⊗ R4B / ker[(S −1 )⊗2 ]. The canonical flag
+representatives of the two equivalence classes are
+
+         (2)                                            (2)
+              ⟩ = √12 |00⟩Fa Fb − |11⟩Fa Fb ,         |ψodd ⟩ = √12 |01⟩Fa Fb + |10⟩Fa Fb .
+                                                                                        
+       |ψeven
+
+These are canonical representatives, not entangled states; each is equivalent to a
+product state. The quotient structure does the work that complex phase structure
+does automatically in C.
+   Define an equivalence relation ∼A on the raw real state space X by:
+
+x ∼A x′      ⇐⇒       x and x′ are operationally indistinguishable by any admissible local measuremen
+
+    Before applying this relation, we verify it is an equivalence relation.
+
+                                                  8
+Proposition 5 (Admissibility Equivalence). The relation ∼A is an equivalence relation
+on X.
+
+Proof. Reflexivity. Every state is operationally indistinguishable from itself, since
+any measurement on x returns the same statistics as on x.
+    Symmetry. If no admissible measurement distinguishes x from x′ , then equally
+no admissible measurement distinguishes x′ from x.
+    Transitivity. Suppose x ∼A y and y ∼A z. Then for any admissible measurement
+M , the statistics of M agree on x and y, and on y and z. Hence they agree on x and
+z, so x ∼A z.
+
+    The quotient X/∼A is therefore well-defined. The repair schema is:
+
+Raw real tensor product −→ Distinction excess −→ Equivalence identification −→ Repaired com
+
+The repaired object is the equivalence class, not the representative. The construc-
+tion is unique up to Hilbert space isomorphisms, given natural conditions related
+to SO(2) representations [2]. Figure 4 illustrates the quotient map.
+
+                              x
+                                              π
+                                                                [x]
+                 x′
+                        x′′
+
+                      X                                       X/∼A
+
+Figure 4: The admissibility quotient π : X → X/∼A identifies operationally indis-
+tinguishable states. Individual representatives are replaced by equivalence classes.
+
+
+
+
+5    The Conservation of Ambiguity
+A common expectation is that explanatory progress eliminates ambiguity. The real
+formulation shows something subtler. When the quotient construction repairs the
+state space, the ambiguity distributed across phase choices in the raw representa-
+tion is not destroyed. It is reorganized—relocated from apparent freedom in state
+
+
+                                         9
+vectors into explicit structure in the equivalence relation. The lesson is not elimi-
+nation but conservation: ambiguity redistributes rather than vanishes.
+    One of the more precise instances of this concerns global phase. In quantum
+mechanics, a global phase factor eiϕ has no observable consequences: |ψ⟩ and eiϕ |ψ⟩
+are physically identical [9, 8]. In the real formulation, this phase corresponds to a
+flag rotation RF (ϕ) commuting with all physical operators.
+    The more subtle point concerns how phase distributes across composite sys-
+tems. Given two independent subsystems, a global phase on the composite state
+can be split arbitrarily between the subsystems—what the paper calls “phase kick-
+back” in the compositional setting [2]. In the real formulation, a global phase eiα
+can be arbitrarily redistributed among the local flag rotations RFa , RFb , and so on.
+The equivalence relation on the flag states implements exactly this ambiguity.
+    The physically correct identification is:
+
+                           physical state = gauge orbit,
+
+not physical state = representative vector. The following proposition formalizes
+this conservation.
+
+Proposition 6 (Ambiguity Conservation). Let G be a gauge group acting on state space
+X, and let π : X → X/G be the quotient map. Then the quotient does not eliminate gauge
+freedom but reorganizes it into the orbit structure of G.
+
+Proof. Each equivalence class [x] = {gx : g ∈ G} contains all gauge-related rep-
+resentatives. Passing to X/G removes the need to choose a representative but
+does not remove the orbit itself. The freedom to choose among elements of [x]
+is precisely the gauge freedom; it survives as the group action that generated the
+quotient. The total informational content of the gauge structure is therefore con-
+served.
+
+   The ambiguity does not vanish. It transforms as shown in Figure 5:
+
+       ambiguity in state vectors −→ gauge freedom −→ orbit structure,
+
+rather than ambiguity → 0. The second path would represent genuine information
+destruction. The first represents reorganization.
+
+
+                                         10
+             State Vector               Gauge                   Orbit
+             Ambiguity                 Freedom                Structure
+
+Figure 5: Ambiguity is not destroyed by quotienting. It is reorganized from rep-
+resentational freedom in state vectors into gauge-orbit structure in the quotient
+space.
+
+6    Witnesses and Invariant Structure
+There is a natural connection between the quotient construction and the notion of
+a witness. A witness is not the underlying object. It is a structure that survives pro-
+jection or representation change: what persists across admissible transformations.
+    In the quantum case, the complex phase of an individual state vector is not a
+witness. It does not survive the passage to physical predictions. The individual
+representative vector is therefore not the real object. The equivalence class is the
+real object, because it is the class that survives all admissible observations.
+
+Proposition 7 (Witness Invariance). Let R1 and R2 be admissible representations of a
+physical system related by an admissibility-preserving equivalence R1 ∼A R2 . Then any
+operational witness W satisfies
+
+                                  W (R1 ) = W (R2 ).
+
+Hence witnesses descend naturally to equivalence classes: the map [R] 7→ W (R) is well-
+defined on the quotient X/∼A .
+
+Proof. Suppose R1 ∼A R2 . Then by definition no admissible measurement dis-
+tinguishes R1 from R2 . An operational witness W is defined precisely as a quan-
+tity determined by admissible measurements. Therefore W must return the same
+value on R1 and R2 . The map [R] 7→ W (R) is thus well-defined on the equivalence
+class.
+
+    The previous proposition leads directly to a sufficiency criterion.
+
+Proposition 8 (Witness Sufficiency). Suppose x, y ∈ X satisfy W (x) = W (y) for every
+admissible witness W . Then x ∼A y.
+
+
+
+
+                                          11
+Proof. Suppose for contradiction that x ̸∼A y. Then some admissible measurement
+distinguishes x from y, and that measurement defines an admissible witness W
+with W (x) ̸= W (y), contradicting the assumption. Hence x ∼A y.
+
+    Together, Witness Invariance and Witness Sufficiency establish that the admis-
+sibility relation ∼A is exactly the witness-indistinguishability relation: x ∼A y if
+and only if W (x) = W (y) for all admissible witnesses W . Figure 6 illustrates how
+witnesses factor through the quotient.
+
+                         R1             W
+                                                     X/∼A
+
+                                        W
+                         R2
+
+Figure 6: Distinct representations R1 and R2 induce the same quotient of admissi-
+ble distinctions. Operational witnesses W factor through the quotient and cannot
+distinguish between the representations.
+
+    In the quantum case, W is any observable quantity: a transition probability, an
+expectation value, an interference pattern. These are functions of the gauge orbit.
+The expectation-value identity S(|ψ⟩)T T (A) S(|ψ⟩) = ⟨ψ|A|ψ⟩ [2] guarantees this
+at the formal level.
+    The slogan is: what persists across representations is what is real. The rotation
+structure J persists. The particular encoding of J—as multiplication by i or as the
+flag matrix JF —does not persist as a canonical object. The rotation is the witness.
+The coordinate representation of the rotation is the artifact.
+
+
+7    Algebra Hides Geometry
+The broader lesson generalizes. Algebra, when powerful, tends to compress the
+geometric information that generated it into symbolic operations. The geometric
+content becomes invisible inside the notation. Later generations inherit the algebra
+without the geometry. The notation becomes correct but epistemically opaque [16,
+15].
+
+
+
+                                         12
+    The history of complex numbers exemplifies this exactly. The original geomet-
+ric content—rotation and scaling in the plane—was present from the beginning in
+the work of Wessel, Argand, and Gauss [19, 18, 17]. But as complex analysis be-
+came a powerful computational tool, the geometric origin receded. By the time
+quantum mechanics was formulated, complex numbers were understood primar-
+ily as algebraic objects satisfying field axioms.
+    Needham’s project is a recovery of the geometry from within the algebra [1].
+The flag-space paper is the same recovery applied to the quantum formalism. By
+making the rotation explicit as a real matrix JF rather than leaving it compressed
+inside the symbol i, the paper restores explanatory transparency: not repairing
+a mistake, but recovering the explanatory mechanism the formalism had com-
+pressed away while remaining correct.
+    The general pattern is:
+
+geometry −→ algebra that encodes geometry −→ notation that hides encoding −→ correctness
+
+Recovery follows the same path in reverse:
+
+correct but opaque −→ geometric reinterpretation −→ explanatory formulation.
+
+When algebra hides geometry, the geometric distinctions are present in the formal-
+ism but not operationally accessible to someone working purely symbolically. The
+geometric reinterpretation makes those distinctions accessible again.
+
+
+8   The Ontology of Quantum Mechanics
+The philosophical conclusion is unusually strong. Complex numbers are not nec-
+essary to describe quantum mechanics. The Barrios et al. construction is a one-to-
+one mapping of complex quantum mechanics to a real description compatible with
+all quantum experiments, including multipartite Bell-type scenarios [2]. Physical
+reality depends only on the invariant structure preserved under the quotient.
+    To make this precise, separate three distinct layers:
+
+          Coordinates −→ Representations −→ Invariant Structure.
+
+
+
+                                       13
+The field C and the pair (R2n , J) both belong to the representation layer: choices of
+how to coordinatize the state space. The quotient structure—the space of gauge
+orbits, the admissibility manifold—belongs to the invariant layer: what all admissi-
+ble representations share. The coordinates layer comprises further choices within
+a representation: basis, phase convention, gauge.
+    Physical ontology belongs to the invariant layer alone. The following proposi-
+tion makes this explicit, connecting Witness Sufficiency to the ontological conclu-
+sion.
+Proposition 9 (Ontological Invariance). Let R1 and R2 be admissible representations
+of a physical theory. If there exists an isomorphism Φ : R1 /∼A → R2 /∼A preserving all
+operational witnesses—that is, W (R1 ) = W (Φ(R2 )) for every witness W —then R1 and
+R2 possess identical ontological content. All differences between them are representational
+rather than physical.
+Proof. By Witness Invariance (Proposition 7), every operational witness W is well-
+defined on the quotient X/∼A . By Witness Sufficiency (Proposition 8), the admis-
+sibility relation is exactly witness-indistinguishability. If Φ preserves all witnesses,
+then no operational procedure can distinguish R1 from R2 . Since the physical con-
+tent of a theory is exhausted by what is operationally accessible, any remaining
+difference between R1 and R2 is necessarily representational.
+
+    In the quantum case, R1 = Cn and R2 = (R2n , JF ) satisfy the conditions of On-
+tological Invariance: the expectation-value identity guarantees the required witness-
+preserving isomorphism. The complex and real formulations are therefore not two
+theories but two coordinate systems on the same theory.
+    The novel contribution of this essay is not the claim that complex numbers are
+rotations. Needham established that perspective decades ago [1]. The novel chain
+is:
+                  Rotation −→ Equivalence −→ Admissibility.
+
+Figure 7 shows the logical architecture of the entire argument.
+   The essay begins as a discussion of complex numbers and ends as a discus-
+sion of which distinctions deserve ontological status. That transition is where the
+admissibility framework adds something genuinely new: a principled account of
+why the quotient is not merely a technical convenience but the location of physical
+reality.
+
+                                            14
+                Complex          Flag         Admiss.
+ Rotation                                                    Witnesses      Ontology
+                Algebra          Repr.        Quotient
+
+
+Figure 7: Logical architecture of the essay. The argument moves from geometric
+rotation through algebraic encoding and the flag representation to the quotient
+structure, witnesses, and finally ontological invariants.
+
+    Needham’s deepest contribution to this essay is not the rotation interpretation
+of i. It is the practice of asking, at every step, what geometric operation survives
+when the notation changes. That is precisely the question the admissibility quo-
+tient answers at the level of quantum mechanics.
+    The rotational structure survives a change of coordinates, while the coordi-
+nates themselves do not. The geometry was always there; the quotient reveals
+which distinctions belong to reality and which belong only to description. The re-
+paired object is therefore not the representative but the equivalence class itself. As
+Barrios et al. conclude: complex numbers are not necessary to describe quantum
+mechanics—but they are certainly very useful [2].
+
+
+References
+ [1] T. Needham, Visual Complex Analysis, Oxford University Press, Oxford (1997).
+
+ [2] P. Barrios Hita, A. Trushechkin, H. Kampermann, M. Epping, and D. Bruß,
+     “Quantum Mechanics Based on Real Numbers: A Consistent Description,”
+     Physical Review Letters 136, 240202 (2026).
+
+ [3] M.-O. Renou et al., “Quantum Theory Based on Real Numbers Can Be Exper-
+     imentally Falsified,” Nature 600, 625–629 (2021).
+
+ [4] M. McKague, M. Mosca, and N. Gisin, “Simulating Quantum Systems Using
+     Real Hilbert Spaces,” Physical Review Letters 102, 020505 (2009).
+
+ [5] J. Myrheim, “Quantum Mechanics on Real Hilbert Spaces,” arXiv:quant-
+     ph/9905037 (1999).
+
+
+
+
+                                         15
+ [6] E. C. G. Stueckelberg, “Quantum Theory in Real Hilbert Space,” Helvetica
+     Physica Acta 33, 727–752 (1960).
+
+ [7] F. J. Dyson, “The Threefold Way: Algebraic Structure of Symmetry Groups
+     and Ensembles in Quantum Mechanics,” Journal of Mathematical Physics 3,
+     1199–1215 (1962).
+
+ [8] J. von Neumann, Mathematical Foundations of Quantum Mechanics, Princeton
+     University Press, Princeton (1955).
+
+ [9] P. A. M. Dirac, The Principles of Quantum Mechanics, 4th ed., Oxford University
+     Press, Oxford (1958).
+
+[10] G. Birkhoff and J. von Neumann, “The Logic of Quantum Mechanics,” Annals
+     of Mathematics 37, 823–843 (1936).
+
+[11] J. M. Jauch, Foundations of Quantum Mechanics, Addison-Wesley, Reading, MA
+     (1968).
+
+[12] V. S. Varadarajan, Geometry of Quantum Theory, 2nd ed., Springer, New York
+     (1985).
+
+[13] B. C. Hall, Quantum Theory for Mathematicians, Springer, New York (2013).
+
+[14] V. I. Arnold, Mathematical Methods of Classical Mechanics, 2nd ed., Springer,
+     New York (1989).
+
+[15] H. Weyl, Symmetry, Princeton University Press, Princeton (1952).
+
+[16] R. Penrose, The Road to Reality, Jonathan Cape, London (2004).
+
+[17] C. F. Gauss, Theoria Residuorum Biquadraticorum, Commentationes Societatis
+     Regiae Scientiarum Gottingensis Recentiores 6 (1831).
+
+[18] J.-R. Argand, Essai sur une manière de représenter les quantités imaginaires dans
+     les constructions géométriques, Paris (1806).
+
+[19] C. Wessel, “On the Analytical Representation of Direction,” Danske Vidensk-
+     abernes Selskabs Skrifter 5 (1799).
+
+
+
+                                         16
+

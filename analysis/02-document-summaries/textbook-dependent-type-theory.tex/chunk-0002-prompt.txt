@@ -1,0 +1,2589 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+This theorem plays the same foundational role in the historical calculus that
+the ordinary substitution lemma plays in conventional dependent type theory.
+Virtually every subsequent metatheoretic argument will rely upon it.
+
+The difference is that substitution now preserves considerably more information
+than observable syntax alone. It transports complete constructive provenance,
+making proof replay, dependency analysis, incremental recompilation, and
+history-sensitive verification natural consequences of the kernel rather than
+external implementation techniques.
+
+With historical substitution established, we are now prepared to introduce the
+computational core of the language. The next section reconstructs the lambda
+calculus itself as a calculus of historical construction, showing that
+abstraction and application emerge naturally from the event algebra rather than
+serving as primitive ontological notions.
+
+
+
+The Historical Lambda Calculus
+
+
+
+The preceding sections have deliberately postponed discussion of the lambda
+calculus. This ordering differs from nearly every traditional presentation of
+type theory. Conventionally, abstraction and application are regarded as the
+primitive computational operations from which the remainder of the calculus is
+constructed. Histories, if they appear at all, are viewed merely as operational
+artifacts generated during evaluation.
+
+The philosophy of Spherepop reverses this relationship.
+
+Histories are primitive.
+
+Lambda abstraction is a derived mechanism for constructing reusable historical
+transformations.
+
+Functions are therefore understood not as timeless mathematical objects but as
+persistent construction procedures whose repeated application produces new
+historical events while preserving their internal provenance.
+
+This interpretation does not alter the observable behavior of the lambda
+calculus. Instead, it enriches its semantics by embedding every computational
+step within the irreversible historical record.
+
+
+Terms
+
+
+The historical lambda calculus is generated inductively by the grammar
+
+\[
+t,u,A,B
+::=
+x
+\mid
+\lambda x:A.\,t
+\mid
+t\,u
+\mid
+\Pi x:A.\,B
+\mid
+\Prop
+\mid
+\Type_i.
+\]
+
+This syntax is intentionally almost identical to the ordinary Calculus of
+Constructions.
+
+The distinction lies not in the observable language but in the interpretation
+assigned to each constructor.
+
+Every term possesses an associated construction history
+
+\[
+\History(t),
+\]
+
+which records the sequence of events by which the term entered the kernel.
+
+Thus the semantic object is more accurately represented by the pair
+
+\[
+(H,t),
+\]
+
+rather than by the term
+
+\[
+t
+\]
+
+alone.
+
+Observable syntax is therefore regarded as the visible projection of a richer
+historical construction.
+
+
+Historical Variables
+
+
+Variables are introduced through declaration events.
+
+Suppose
+
+\[
+e_x
+=
+\operatorname{Declare}(x:A).
+\]
+
+The variable
+
+\[
+x
+\]
+
+is thereafter identified not merely by its textual name but by the declaration
+event that introduced it.
+
+Consequently,
+
+\[
+x_{e_1}
+\neq
+x_{e_2}
+\]
+
+whenever
+
+\[
+e_1
+\neq
+e_2,
+\]
+
+even if both declarations assign the same observable type.
+
+This historical interpretation eliminates accidental ambiguity arising from
+shadowing, renaming, or repeated declarations.
+
+Variables become globally unique historical references rather than locally
+scoped textual symbols.
+
+
+Historical Abstraction
+
+
+Lambda abstraction records the construction of a reusable transformation.
+
+Conventionally,
+
+\[
+\lambda x:A.\,t
+\]
+
+is interpreted as an anonymous function.
+
+Spherepop instead interprets abstraction as the construction of a historical
+template capable of generating future histories.
+
+\begin{definition}[Historical Abstraction]
+
+Suppose
+
+\[
+H;
+\operatorname{Declare}(x:A)
+\vdash
+t:B.
+\]
+
+Then
+
+\[
+H
+\vdash
+\lambda x:A.\,t
+:
+\Pi x:A.\,B
+\]
+
+constructs a reusable historical transformation whose future applications
+inherit the dependency graph of the original derivation.
+
+\end{definition}
+
+The abstraction therefore captures not only symbolic structure but also
+constructive provenance.
+
+Applying the function later does not erase this provenance.
+
+Instead, it extends it.
+
+
+Historical Application
+
+
+Application instantiates a historical template with a completed construction.
+
+Suppose
+
+\[
+H
+\vdash
+f
+:
+\Pi x:A.\,B
+\]
+
+and
+
+\[
+H
+\vdash
+a:A.
+\]
+
+Application produces
+
+\[
+f\,a,
+\]
+
+but simultaneously records a new historical event connecting the construction
+history of
+
+\[
+a
+\]
+
+with the dependency graph already contained inside
+
+\[
+f.
+\]
+
+Operationally,
+
+\[
+(H,f\,a)
+\]
+
+becomes
+
+\[
+(H',f\,a),
+\]
+
+where
+
+\[
+H'
+=
+H;
+\Bind(H,a,f).
+\]
+
+Application is therefore not merely evaluation.
+
+It is also the explicit construction of a new dependency relation.
+
+
+Historical Beta Reduction
+
+
+Beta reduction remains the computational heart of the calculus.
+
+The observable reduction rule is unchanged,
+
+\[
+(\lambda x:A.\,t)\,a
+\reduces
+t[x:=a].
+\]
+
+The historical semantics, however, are richer.
+
+Reduction is represented by
+
+\[
+(H,
+(\lambda x:A.\,t)\,a)
+\reduces
+(H',
+t[H,x\mapsto a]),
+\]
+
+where
+
+\[
+H'
+=
+H;
+\Bind(H,a,t);
+\operatorname{Reduce}.
+\]
+
+The reduction event becomes part of the permanent historical record.
+
+Repeated normalization therefore produces not merely a normal form but also a
+complete explanation of every computational step that produced it.
+
+
+Historical Eta Conversion
+
+
+Eta conversion expresses extensional equivalence between functions.
+
+Conventionally,
+
+\[
+\lambda x.\,f\,x
+\equiv
+f.
+\]
+
+Spherepop distinguishes observable behavior from historical provenance.
+
+Observable equality may hold while historical identity does not.
+
+Instead,
+
+\[
+\lambda x.\,f\,x
+\]
+
+and
+
+\[
+f
+\]
+
+remain distinct historical constructions until an explicit collapse event
+identifies them.
+
+Thus eta conversion becomes an admissible historical equivalence rather than an
+automatic syntactic simplification.
+
+This preserves the provenance of optimization steps while allowing extensional
+reasoning whenever required.
+
+
+Historical Normal Forms
+
+
+Normalization no longer produces only a simplified term.
+
+Instead it computes a pair
+
+\[
+(H,t)
+\Downarrow
+(H',v),
+\]
+
+where
+
+\[
+v
+\]
+
+is the observable normal form and
+
+\[
+H'
+\]
+
+is the completed construction history that generated
+
+\[
+v.
+\]
+
+The observable computation and its provenance therefore terminate together.
+
+Proof replay simply reconstructs
+
+\[
+H'
+\]
+
+and verifies that each recorded reduction is historically admissible.
+
+
+Lambda Calculus as Historical Composition
+
+
+The reinterpretation developed above reveals that abstraction and application
+are fundamentally operations upon histories.
+
+Abstraction constructs reusable historical templates.
+
+Application composes existing histories.
+
+Beta reduction performs historical substitution.
+
+Eta conversion identifies equivalent historical transformations through explicit
+collapse.
+
+The ordinary lambda calculus is therefore recovered without alteration of its
+observable syntax, yet every computational step now carries complete
+constructive provenance.
+
+This perspective provides a natural bridge between functional programming,
+proof construction, event sourcing, and dependency analysis. Rather than viewing
+functions as timeless mappings between values, Spherepop regards them as
+persistent generators of historical construction. The familiar lambda calculus
+thus emerges as a special case of a more general calculus of irreversible
+events.
+
+With the computational interpretation established, we next introduce dependent
+products and show that the historical calculus naturally reconstructs the full
+expressive hierarchy of the Calculus of Constructions.
+
+
+
+Dependent Products and Historical Families
+
+
+
+The dependent product is the central constructor of modern dependent type
+theory. It simultaneously generalizes ordinary function spaces, universal
+quantification, polymorphism, higher-order type operators, and families of
+types indexed by values. Nearly the entire expressive power of the Calculus of
+Constructions arises from repeated application of a single constructor,
+
+\[
+\Pi.
+\]
+
+From the perspective developed in the preceding chapters, however, the
+dependent product is no longer introduced as a primitive logical connective.
+Instead, it emerges as the canonical method for describing the evolution of
+constructive histories. A dependent product specifies not merely which values
+may be constructed, but how future histories are permitted to extend existing
+ones.
+
+Consequently, a dependent type should be interpreted as a family of admissible
+historical continuations rather than merely as a family of sets.
+
+
+Historical Families
+
+
+Suppose
+
+\[
+H \vdash A : \Type_i.
+\]
+
+A dependent family assigns to every admissible inhabitant
+
+\[
+a:A
+\]
+
+a type
+
+\[
+B(a),
+\]
+
+whose construction may itself depend upon both the value of
+
+\[
+a
+\]
+
+and the history that produced it.
+
+Rather than writing simply
+
+\[
+B(a),
+\]
+
+the historical interpretation is more accurately expressed as
+
+\[
+B(H,a),
+\]
+
+emphasizing that type formation depends upon constructive provenance as well as
+observable value.
+
+The explicit reference to
+
+\[
+H
+\]
+
+will usually be omitted when the surrounding history is clear from context, but
+its semantic role remains fundamental throughout the calculus.
+
+
+Formation of Dependent Products
+
+
+Suppose
+
+\[
+H
+\vdash
+A:\Type_i
+\]
+
+and
+
+\[
+H;
+\operatorname{Declare}(x:A)
+\vdash
+B:\Type_j.
+\]
+
+The dependent product is formed by the judgment
+
+\[
+H
+\vdash
+\Pi x:A.\,B
+:
+\Type_{\max(i,j)}.
+\]
+
+This rule differs from the conventional presentation only in its interpretation.
+
+The declaration of
+
+\[
+x
+\]
+
+is itself a historical event.
+
+The family
+
+\[
+B
+\]
+
+therefore describes every admissible continuation of the history following that
+declaration.
+
+Consequently,
+
+\[
+\Pi x:A.\,B
+\]
+
+classifies historical construction procedures rather than abstract mappings
+between extensional collections.
+
+
+Ordinary Function Spaces
+
+
+Whenever
+
+\[
+x
+\]
+
+does not occur free in
+
+\[
+B,
+\]
+
+the dependent product reduces to the ordinary function space
+
+\[
+A
+\rightarrow
+B.
+\]
+
+Observable syntax therefore remains identical to conventional type theory.
+
+Historically, however, even ordinary functions are interpreted as procedures
+that transform histories.
+
+Thus
+
+\[
+f
+:
+A\rightarrow B
+\]
+
+is more accurately regarded as
+
+\[
+f
+:
+(H,A)
+\longrightarrow
+(H',B),
+\]
+
+where
+
+\[
+H'
+\]
+
+extends
+
+\[
+H
+\]
+
+through the constructive events performed during evaluation.
+
+Every function therefore carries an implicit history transformer.
+
+
+Dependent Construction
+
+
+The elimination rule for dependent products follows the familiar pattern.
+
+Suppose
+
+\[
+H
+\vdash
+f
+:
+\Pi x:A.\,B
+\]
+
+and
+
+\[
+H
+\vdash
+a:A.
+\]
+
+Application produces
+
+\[
+f\,a
+:
+B[a/x].
+\]
+
+Historically this judgment should be interpreted as
+
+\[
+(H,f)
+\otimes
+(H,a)
+\longmapsto
+(H',f\,a),
+\]
+
+where
+
+\[
+H'
+\]
+
+contains the merged dependency graphs of both constructions together with the
+historical substitution event connecting them.
+
+The dependent product therefore governs both logical dependence and historical
+inheritance simultaneously.
+
+
+Historical Universality
+
+
+Dependent products also recover universal quantification through the
+Curry--Howard correspondence.
+
+Conventionally,
+
+\[
+\forall x:A.\,P(x)
+\]
+
+is represented as
+
+\[
+\Pi x:A.\,P(x).
+\]
+
+Spherepop retains this identification but enriches its meaning.
+
+A proof of
+
+\[
+\Pi x:A.\,P(x)
+\]
+
+constructs not merely a function returning proofs.
+
+It constructs a reusable historical procedure capable of extending every
+admissible construction of
+
+\[
+x
+\]
+
+into a corresponding construction of
+
+\[
+P(x).
+\]
+
+Universal quantification therefore becomes universal historical continuation.
+
+
+Historical Polymorphism
+
+
+One of the most remarkable properties of dependent products is their ability to
+describe polymorphic functions.
+
+The polymorphic identity function possesses the type
+
+\[
+\Pi A:\Type_0.\,
+A\rightarrow A.
+\]
+
+Within the historical calculus this judgment states that every admissible type
+construction determines a corresponding historical identity transformation.
+
+The proof term
+
+\[
+\lambda A:\Type_0.\,
+\lambda x:A.\,
+x
+\]
+
+contains almost no observable computation.
+
+Nevertheless it records a universal construction template whose future
+applications inherit the declaration history of every supplied type.
+
+Thus polymorphism itself becomes historical rather than purely syntactic.
+
+
+Historical Type Operators
+
+
+Dependent products also permit types to depend upon other types.
+
+For example,
+
+\[
+\lambda A:\Type_i.\,
+A\rightarrow A
+\]
+
+constructs a type operator.
+
+Historically this operator maps one admissible history of type construction to
+another.
+
+Type-level computation therefore participates in the same event algebra already
+developed for ordinary terms.
+
+No distinction is required between computation at the value level and
+computation at the type level.
+
+Both are governed by the same historical semantics.
+
+
+Historical Families of Data
+
+
+Dependent products naturally describe indexed data structures.
+
+Consider the familiar example
+
+\[
+\Pi n:\mathsf{Nat}.\,
+\mathsf{Vector}(A,n).
+\]
+
+Conventional type theory interprets this as a family of vector types indexed by
+their length.
+
+Spherepop interprets it as a family of admissible construction histories.
+
+Each value of
+
+\[
+n
+\]
+
+determines not only the observable shape of the resulting vector but also the
+historical constraints governing its construction.
+
+Appending an element therefore extends both the vector and the history proving
+its length.
+
+The index becomes a constructive witness rather than merely an integer carried
+inside a type.
+
+
+The Four Modes of Dependence
+
+
+The expressive power of the Calculus of Constructions is traditionally described
+by the four forms of dependence generated by the dependent product.
+
+Within the historical calculus these acquire a unified interpretation.
+
+Terms may depend upon terms because later constructions inherit earlier
+histories.
+
+Types may depend upon terms because admissible future constructions depend upon
+previous values.
+
+Terms may depend upon types because historical templates may abstract over
+earlier type constructions.
+
+Finally, types may depend upon types because histories themselves may classify
+future histories of type formation.
+
+All four dependency modes therefore become manifestations of a single principle:
+constructive continuation of admissible histories.
+
+This observation suggests that the dependent product should not be viewed merely
+as a logical connective but as the universal constructor governing historical
+extension throughout the Spherepop kernel. Having established this foundation,
+we next develop the cumulative hierarchy of universes and show how historical
+construction prevents paradox while permitting unrestricted dependent
+abstraction across multiple logical levels.
+
+
+
+Historical Universes
+
+
+
+The introduction of dependent products immediately raises the question of how
+types themselves are to be classified. If types are ordinary objects of the
+language, then they too require types. Without a disciplined hierarchy the
+calculus quickly encounters the familiar logical paradoxes arising from
+self-reference. The historical interpretation adopted by Spherepop does not
+remove this necessity. Rather, it provides a different understanding of why the
+hierarchy exists.
+
+Conventional presentations motivate universes as stratifications of collections
+of types. Spherepop instead interprets universes as successive levels of
+historical construction. A universe is not merely a container of types. It is a
+space within which particular kinds of historical constructions are admissible.
+Moving upward through the universe hierarchy therefore corresponds to enlarging
+the class of histories that may themselves become mathematical objects.
+
+Consequently, universes should be understood operationally rather than
+extensionally. They classify modes of construction rather than collections of
+completed entities.
+
+
+The Cumulative Hierarchy
+
+
+The kernel adopts the standard cumulative hierarchy
+
+\[
+\Prop,
+\qquad
+\Type_0,
+\qquad
+\Type_1,
+\qquad
+\Type_2,
+\qquad
+\cdots
+\]
+
+together with the judgments
+
+\[
+\Prop
+:
+\Type_0,
+\]
+
+and
+
+\[
+\Type_i
+:
+\Type_{i+1}.
+\]
+
+Each universe is therefore itself an inhabitant of the next higher universe.
+
+Unlike the inconsistent universe
+
+\[
+\Type:\Type,
+\]
+
+no universe contains itself.
+
+The historical semantics leave this observable hierarchy unchanged while
+providing a constructive interpretation of its significance.
+
+
+Historical Interpretation
+
+
+Suppose
+
+\[
+H
+\vdash
+A
+:
+\Type_i.
+\]
+
+This judgment states more than the ordinary assertion that
+
+\[
+A
+\]
+
+is a type.
+
+It asserts that the historical construction responsible for
+
+\[
+A
+\]
+
+belongs to the class of admissible constructions represented by
+
+\[
+\Type_i.
+\]
+
+Thus universes classify histories of type construction.
+
+Observable types appear only as projections of these richer historical objects.
+
+From this perspective,
+
+\[
+\Type_i
+\]
+
+is itself a family of admissible construction procedures.
+
+It describes not static collections but permissible methods of producing future
+types.
+
+
+Historical Growth
+
+
+One of the central principles established earlier is that histories are
+monotonic.
+
+Universes inherit the same property.
+
+Suppose
+
+\[
+H
+\vdash
+A
+:
+\Type_i.
+\]
+
+Extending the history cannot invalidate the construction of
+
+\[
+A.
+\]
+
+Consequently,
+
+\[
+H;e
+\vdash
+A
+:
+\Type_i
+\]
+
+whenever
+
+\[
+e
+\]
+
+is historically admissible.
+
+This historical monotonicity mirrors the weakening theorem developed for
+contexts while extending it to the universe hierarchy itself.
+
+Universes therefore remain stable under constructive growth.
+
+
+Universe Lifting
+
+
+Because the hierarchy is cumulative, every construction inhabiting a lower
+universe may be regarded as inhabiting every higher universe.
+
+Formally,
+
+\[
+\Type_i
+\hookrightarrow
+\Type_{i+1}.
+\]
+
+Historically this inclusion should not be interpreted merely as set-theoretic
+containment.
+
+Rather, every construction admitted at one historical level remains admissible
+after enlarging the available space of future constructions.
+
+The inclusion therefore preserves provenance.
+
+No reconstruction of the original object is required.
+
+Only its admissible context of future use is expanded.
+
+
+Universe Polymorphism
+
+
+Many useful constructions should operate uniformly across arbitrary universe
+levels.
+
+For example, the identity function naturally generalizes to
+
+\[
+\Pi
+i.
+\,
+\Pi
+A:\Type_i.
+\,
+A
+\rightarrow
+A.
+\]
+
+The historical interpretation is particularly natural.
+
+The function abstracts not merely over observable types but over entire classes
+of historical type constructions.
+
+Consequently, universe polymorphism becomes historical polymorphism.
+
+The resulting proof object is reusable across every admissible level of the
+construction hierarchy without modification of its internal provenance.
+
+
+Historical Closure
+
+
+Dependent products preserve universe levels according to the familiar formation
+rule.
+
+Suppose
+
+\[
+H
+\vdash
+A
+:
+\Type_i
+\]
+
+and
+
+\[
+H,
+x:A
+\vdash
+B
+:
+\Type_j.
+\]
+
+Then
+
+\[
+H
+\vdash
+\Pi
+x:A.
+B
+:
+\Type_{\max(i,j)}.
+\]
+
+Historically, this theorem states that composing two admissible construction
+procedures produces another admissible construction procedure whose complexity
+is governed by the larger of the two historical levels.
+
+Thus the universe hierarchy is closed under dependent abstraction.
+
+No additional universe constructors are required.
+
+
+Historical Reflection
+
+
+The cumulative hierarchy also supports a limited form of historical reflection.
+
+A history may reason about constructions performed at lower universe levels
+without becoming identical to them.
+
+Suppose
+
+\[
+\Type_i
+:
+\Type_{i+1}.
+\]
+
+A construction within
+
+\[
+\Type_{i+1}
+\]
+
+may therefore manipulate descriptions of constructions occurring in
+
+\[
+\Type_i.
+\]
+
+Reflection consequently becomes stratified.
+
+Each level may observe lower levels while remaining insulated from direct
+self-reference.
+
+This asymmetry provides the constructive explanation for the consistency of the
+hierarchy.
+
+
+Historical Consistency
+
+
+The prohibition against
+
+\[
+\Type:\Type
+\]
+
+acquires a particularly intuitive interpretation.
+
+If a universe were permitted to classify its own historical construction, then
+the corresponding dependency graph would necessarily contain a directed cycle.
+
+Such cycles contradict the foundational principle that histories are acyclic,
+irreversible constructions.
+
+Thus the historical semantics provide an operational explanation for why
+self-containing universes are forbidden.
+
+Consistency follows not merely from an abstract logical restriction but from the
+impossibility of constructing cyclic histories within the event algebra.
+
+
+Universes as Histories of Histories
+
+
+The interpretation developed in this section suggests that universes should not
+be regarded as levels of objects but as levels of historical organization.
+
+Terms inhabit histories.
+
+Types classify terms.
+
+Universes classify histories of type construction.
+
+Higher universes classify increasingly rich modes of historical organization.
+
+The familiar cumulative hierarchy therefore acquires a dynamic interpretation in
+which every ascent through the hierarchy corresponds to reasoning about a more
+expressive class of constructive histories.
+
+This viewpoint preserves the metatheoretic advantages of conventional universe
+systems while integrating them naturally into the event-oriented ontology of
+Spherepop.
+
+Having established the hierarchy of universes, we next turn to one of the most
+subtle notions in the entire calculus: equality. Rather than treating equality
+as primitive or purely extensional, the historical kernel derives it from
+constructive provenance through explicit collapse events, yielding a notion of
+historical equivalence that serves as the foundation for definitional equality,
+identity types, and proof replay.
+
+
+
+Historical Equality and Definitional Equivalence
+
+
+
+Equality occupies a unique position within constructive mathematics. Every
+proof assistant requires a notion of equality in order to compare terms,
+simplify expressions, normalize computations, and verify that two derivations
+represent the same mathematical object. Despite its ubiquity, equality is often
+treated as primitive. One either assumes an extensional notion of identity or
+defines an inductive identity type whose computational interpretation is
+specified separately.
+
+The historical foundation of Spherepop suggests a different approach.
+
+Objects are not primitive.
+
+Histories are primitive.
+
+Consequently, equality should arise from relationships between histories rather
+than relationships between completed objects. Observable equality is therefore a
+projection of a richer historical equivalence.
+
+This shift has several important consequences.
+
+First, equal objects need not possess identical provenance.
+
+Second, identical provenance always determines equal objects.
+
+Third, explicit identification becomes a constructive event rather than an
+implicit logical assumption.
+
+The resulting notion of equality is therefore simultaneously computational,
+constructive, and historical.
+
+
+Observable Equality
+
+
+Let
+
+\[
+H
+\vdash
+a:A,
+\qquad
+H
+\vdash
+b:A.
+\]
+
+Traditional dependent type theory asks whether
+
+\[
+a
+\equiv
+b
+\]
+
+holds under definitional equality.
+
+Spherepop instead begins with the histories
+
+\[
+\History(a)
+\]
+
+and
+
+\[
+\History(b).
+\]
+
+Observable equality is regarded as a consequence of their constructive
+relationship rather than as an independent primitive relation.
+
+
+Historical Equivalence
+
+
+\begin{definition}[Historical Equivalence]
+
+Two constructions
+
+\[
+a
+\]
+
+and
+
+\[
+b
+\]
+
+are historically equivalent whenever there exists an admissible replay of their
+construction histories that establishes identical observable behavior.
+
+We write
+
+\[
+a
+\equiv_H
+b.
+\]
+
+\end{definition}
+
+Notice that historical equivalence is weaker than historical identity.
+
+Two constructions may arise from different derivations while nevertheless
+computing the same observable result.
+
+Conversely, historical identity immediately implies historical equivalence.
+
+Thus
+
+\[
+a
+=
+_H
+b
+\Longrightarrow
+a
+\equiv_H
+b,
+\]
+
+but the converse need not hold.
+
+This distinction allows the kernel to preserve provenance without sacrificing
+the extensional reasoning required by ordinary mathematics.
+
+
+Replay Equivalence
+
+
+The event-oriented semantics naturally introduce a replay operator.
+
+Suppose
+
+\[
+\Replay(H)
+\]
+
+reconstructs the observable computation determined by the history
+
+\[
+H.
+\]
+
+Two histories are replay equivalent whenever replay produces identical normal
+forms.
+
+\begin{definition}[Replay Equivalence]
+
+Histories
+
+\[
+H_1
+\]
+
+and
+
+\[
+H_2
+\]
+
+are replay equivalent whenever
+
+\[
+\Replay(H_1)
+=
+\Replay(H_2).
+\]
+
+We write
+
+\[
+H_1
+\simeq_R
+H_2.
+\]
+
+\end{definition}
+
+Replay equivalence provides the operational interpretation of definitional
+equality.
+
+Instead of comparing symbolic expressions directly, the kernel compares their
+constructive histories.
+
+
+Collapse Events
+
+
+Historical equivalence alone does not identify two constructions.
+
+Identification requires an explicit historical event.
+
+Suppose
+
+\[
+a
+\]
+
+and
+
+\[
+b
+\]
+
+have been shown replay equivalent.
+
+The kernel records
+
+\[
+\Collapse(H,a,b),
+\]
+
+producing the extended history
+
+\[
+H'.
+\]
+
+This event permanently records the constructive decision that the two histories
+should thereafter be regarded as interchangeable.
+
+Unlike quotient constructions, no provenance is discarded.
+
+Both original derivations remain permanently recoverable.
+
+The collapse merely contributes another event to the historical record.
+
+Thus equality itself possesses provenance.
+
+
+Definitional Equality
+
+
+Observable type checking ultimately requires a decidable notion of
+definitional equality.
+
+Within the historical calculus this relation is derived rather than assumed.
+
+\begin{definition}[Historical Definitional Equality]
+
+Two terms are definitionally equal whenever their normalized histories are
+replay equivalent,
+
+\[
+a
+\equiv
+b
+\Longleftrightarrow
+\Normalize(\History(a))
+\simeq_R
+\Normalize(\History(b)).
+\]
+
+\end{definition}
+
+Normalization therefore acts upon histories before observable terms are
+compared.
+
+This differs conceptually from ordinary conversion checking while remaining
+observationally compatible with it.
+
+
+Conversion Rule
+
+
+The familiar conversion rule now takes historical form.
+
+\begin{theorem}[Historical Conversion]
+
+Suppose
+
+\[
+H
+\vdash
+t:A
+\]
+
+and
+
+\[
+A
+\equiv_H
+B.
+\]
+
+Then
+
+\[
+H
+\vdash
+t:B.
+\]
+
+\end{theorem}
+
+\begin{proof}
+
+Replay equivalence establishes that the normalized histories constructing
+
+\[
+A
+\]
+
+and
+
+\[
+B
+\]
+
+produce identical observable type structures.
+
+The typing derivation therefore remains valid after replacing one historical
+construction by an equivalent one.
+
+\end{proof}
+
+Observe that the proof depends upon replay equivalence rather than upon
+syntactic coincidence.
+
+Conversion is therefore justified operationally through constructive replay.
+
+
+Congruence
+
+
+Historical equivalence is preserved by every constructor of the calculus.
+
+If
+
+\[
+a_1
+\equiv_H
+a_2,
+\]
+
+then
+
+\[
+f\,a_1
+\equiv_H
+f\,a_2,
+\]
+
+provided the application histories are themselves admissible.
+
+Likewise,
+
+\[
+\lambda x.\,t_1
+\equiv_H
+\lambda x.\,t_2
+\]
+
+whenever
+
+\[
+t_1
+\equiv_H
+t_2.
+\]
+
+The dependency graph therefore propagates historical equivalence
+compositionally throughout every derivation.
+
+
+Historical Quotients
+
+
+Traditional quotient constructions identify objects by introducing an
+equivalence relation and then forgetting the distinction between equivalent
+representatives.
+
+Spherepop performs the opposite construction.
+
+Representatives are never forgotten.
+
+Instead, every identification becomes another historical event.
+
+Consequently, quotient structures become accumulated histories of collapse
+operations.
+
+This approach preserves complete provenance while supporting the same
+observable mathematics.
+
+A quotient object therefore consists not merely of an equivalence class but of
+the complete constructive history by which that equivalence class was
+established.
+
+
+Equality as Constructive Provenance
+
+
+The development of this section illustrates one of the central themes of the
+historical calculus.
+
+Equality is not a primitive relation imposed upon completed mathematical
+objects.
+
+It is a consequence of admissible historical reconstruction.
+
+Objects become interchangeable because their histories admit equivalent
+replays, and they become identified only after an explicit collapse event has
+recorded that decision.
+
+This interpretation preserves all of the computational behavior expected by the
+Calculus of Constructions while introducing an additional layer of provenance
+that remains available for proof replay, dependency analysis, optimization, and
+verified compilation.
+
+The next section applies these ideas to the primitive historical operations
+introduced earlier, showing how Pop, Refuse, Bind, Collapse, and Meld become
+fully typed computational operators within the dependent type calculus itself.
+
+
+
+Typing the Primitive Historical Operations
+
+
+
+The event algebra introduced earlier has so far been presented primarily as an
+informal ontology. In order for the historical calculus to function as the
+trusted kernel of a proof assistant or programming language, these primitive
+operations must themselves become well-typed constructions. They cannot remain
+external implementation mechanisms. Instead, they must participate in the same
+typing discipline that governs functions, dependent products, inductive
+families, and proof terms.
+
+This section therefore internalizes the historical operations into the type
+calculus. Every primitive event becomes a typed constructor whose execution
+extends an admissible history while preserving logical correctness.
+
+The objective is not merely to provide operational semantics. Rather, the event
+algebra itself becomes part of the language.
+
+
+Histories as First-Class Objects
+
+
+Up to this point histories have appeared as parameters of typing judgments,
+
+\[
+H \vdash t : A.
+\]
+
+It is now useful to internalize histories as mathematical objects.
+
+\begin{definition}[History Type]
+
+For every universe level \(i\), there exists a type
+
+\[
+\mathsf{History}_i : \Type_{i+1},
+\]
+
+whose inhabitants are admissible constructive histories.
+
+\end{definition}
+
+Consequently,
+
+\[
+H : \mathsf{History}_i
+\]
+
+is itself a well-typed term.
+
+Histories therefore become available to ordinary dependent abstraction,
+polymorphism, and inductive reasoning.
+
+This step is important because it allows programs to reason explicitly about
+their own provenance without requiring any extension of the underlying logical
+framework.
+
+
+The Empty History
+
+
+The distinguished empty history is represented by the constructor
+
+\[
+\varepsilon
+:
+\mathsf{History}.
+\]
+
+Operationally,
+
+\[
+\varepsilon
+\]
+
+contains no events and therefore possesses an empty dependency graph.
+
+Every admissible history is generated by finite applications of the primitive
+historical constructors beginning from this distinguished object.
+
+Accordingly,
+
+\[
+\History
+=
+\operatorname{Closure}
+(
+\varepsilon
+).
+\]
+
+The closure is taken under the primitive event algebra introduced previously.
+
+
+Typing Historical Extension
+
+
+Historical extension appends one admissible event to an existing history.
+
+Its type is
+
+\[
+\operatorname{extend}
+:
+\Pi
+H:\mathsf{History}.
+\,
+\Event
+\rightarrow
+\mathsf{History}.
+\]
+
+Given
+
+\[
+H
+:
+\mathsf{History}
+\]
+
+and
+
+\[
+e
+:
+\Event,
+\]
+
+the application
+
+\[
+\operatorname{extend}(H,e)
+\]
+
+constructs the new history
+
+\[
+H;e.
+\]
+
+Unlike ordinary list construction, extension carries semantic constraints.
+
+The resulting history must satisfy the admissibility conditions developed in
+earlier sections.
+
+Thus historical extension is only partially defined over arbitrary events,
+although it is total over admissible ones.
+
+
+Typing Pop
+
+
+The Pop operation records constructive commitment among admissible
+continuations.
+
+Its dependent type is
+
+\[
+\Pop
+:
+\Pi
+H:\mathsf{History}.
+\,
+\Pi
+b:\mathsf{Branch}(H).
+\,
+\mathsf{History}.
+\]
+
+Here
+
+\[
+\mathsf{Branch}(H)
+\]
+
+denotes the family of admissible continuations available after the history
+
+\[
+H.
+\]
+
+The dependency upon
+
+\[
+H
+\]
+
+is essential.
+
+Different histories generally admit different future continuations.
+
+Consequently, Pop is naturally expressed as a dependent function.
+
+
+Typing Refuse
+
+
+Constructive refusal possesses an analogous type,
+
+\[
+\Refuse
+:
+\Pi
+H:\mathsf{History}.
+\,
+\Pi
+a:\mathsf{Alternative}(H).
+\,
+\mathsf{History}.
+\]
+
+The family
+
+\[
+\mathsf{Alternative}(H)
+\]
+
+enumerates those admissible constructions that may still be rejected.
+
+Once refusal has been recorded, the rejected alternative no longer belongs to
+the admissible continuation space of the extended history.
+
+Thus refusal modifies the future geometry of computation while preserving the
+past.
+
+
+Typing Bind
+
+
+Historical dependency becomes an explicit dependent constructor.
+
+Suppose
+
+\[
+x:A
+\]
+
+and
+
+\[
+f
+:
+A
+\rightarrow
+B.
+\]
+
+Then
+
+\[
+\Bind
+:
+\Pi
+H:\mathsf{History}.
+\,
+\Pi
+x:A.
+\,
+\Pi
+f:A\rightarrow B.
+\,
+\mathsf{History}.
+\]
+
+Applying Bind extends the dependency graph by introducing an edge connecting
+the construction of
+
+\[
+x
+\]
+
+to every subsequent construction generated by
+
+\[
+f.
+\]
+
+Dependency therefore becomes an explicit mathematical object rather than an
+implicit consequence of substitution.
+
+
+Typing Collapse
+
+
+Historical identification is likewise internalized.
+
+The constructor
+
+\[
+\Collapse
+\]
+
+has type
+
+\[
+\Pi
+H:\mathsf{History}.
+\,
+\Pi
+a:A.
+\,
+\Pi
+b:A.
+\,
+\mathsf{ReplayEq}(a,b)
+\rightarrow
+\mathsf{History}.
+\]
+
+Observe that collapse requires explicit evidence that the two constructions are
+replay equivalent.
+
+The kernel therefore prevents arbitrary identifications.
+
+Every collapse event carries a constructive witness demonstrating the
+equivalence that justifies the identification.
+
+In this sense, equality becomes evidence-based rather than axiomatic.
+
+
+Typing Meld
+
+
+Concurrent composition combines two compatible histories.
+
+The most general typing rule is
+
+\[
+\Meld
+:
+\Pi
+H_1:\mathsf{History}.
+\,
+\Pi
+H_2:\mathsf{History}.
+\,
+\mathsf{Compatible}(H_1,H_2)
+\rightarrow
+\mathsf{History}.
+\]
+
+Compatibility itself appears as an explicit proof object.
+
+Thus concurrency is not assumed.
+
+It is verified.
+
+Only after compatibility has been established does the kernel permit the
+construction of the merged history.
+
+This formulation naturally supports mechanically verified distributed
+computation.
+
+
+Historical Closure
+
+
+The primitive operations satisfy an important closure theorem.
+
+\begin{theorem}[Closure of the Event Algebra]
+
+The collection of well-formed histories is closed under every primitive
+historical constructor.
+
+\end{theorem}
+
+\begin{proof}
+
+Historical extension preserves admissibility by construction.
+
+Pop and Refuse merely specialize admissible extensions.
+
+Bind introduces only forward dependency edges and therefore cannot create
+cycles.
+
+Collapse extends the history only after replay equivalence has been
+constructively established.
+
+Meld requires an explicit proof of compatibility before construction.
+
+Consequently, every primitive operation preserves well-formedness.
+
+\end{proof}
+
+This theorem ensures that the event algebra remains internal to the trusted
+kernel.
+
+No primitive operation is capable of producing an ill-formed history provided
+its typing premises have been satisfied.
+
+The event algebra therefore enjoys the same logical discipline as the remainder
+of the dependent type calculus.
+
+Rather than existing alongside the type theory, it becomes one of its ordinary
+typed subsystems.
+
+Having incorporated the primitive historical operations into the typing
+discipline, we are now prepared to develop the operational semantics of the
+entire kernel. The next section formalizes evaluation as a transition between
+historical states, demonstrating that computation simultaneously transforms
+observable terms and extends constructive provenance.
+
+
+
+Operational Semantics over Histories
+
+
+
+The preceding chapters have established the static structure of the historical
+type calculus. Histories have been introduced as first-class mathematical
+objects, the primitive event algebra has been internalized into the type
+system, and the familiar constructors of dependent type theory have been
+reinterpreted as operations upon constructive provenance. The remaining task is
+to describe computation itself.
+
+Operational semantics traditionally describe how programs execute. One specifies
+a reduction relation
+
+\[
+t
+\longrightarrow
+u,
+\]
+
+which transforms one expression into another until a normal form is obtained.
+The surrounding execution environment is generally treated as an implementation
+detail. Reduction is therefore regarded as a relation upon terms rather than
+upon histories.
+
+Spherepop reverses this perspective.
+
+Evaluation never occurs independently of historical construction.
+
+Every computational step both transforms an observable expression and extends
+the history responsible for that transformation. Operational semantics
+therefore become relations between pairs consisting of a history and an
+observable term.
+
+The primitive computational judgment is
+
+\[
+(H,t)
+\longrightarrow
+(H',u),
+\]
+
+where
+
+\[
+H'
+\]
+
+extends
+
+\[
+H.
+\]
+
+The history itself is therefore part of the semantic state.
+
+
+Configurations
+
+
+The fundamental semantic object is called a configuration.
+
+\begin{definition}[Configuration]
+
+A configuration is an ordered pair
+
+\[
+(H,t),
+\]
+
+where
+
+\[
+H
+:
+\mathsf{History}
+\]
+
+is a well-formed constructive history and
+
+\[
+t
+\]
+
+is a well-typed observable term.
+
+\end{definition}
+
+Configurations replace the ordinary notion of machine state.
+
+Unlike mutable stores, however, histories are immutable.
+
+A computational step therefore produces a new configuration rather than
+modifying an existing one.
+
+
+Evaluation Relation
+
+
+Evaluation is written
+
+\[
+(H,t)
+\longrightarrow
+(H',u).
+\]
+
+This judgment carries two simultaneous meanings.
+
+The observable term
+
+\[
+t
+\]
+
+reduces to
+
+\[
+u.
+\]
+
+At the same time,
+
+\[
+H
+\]
+
+is extended to
+
+\[
+H'.
+\]
+
+Every reduction therefore possesses both computational content and constructive
+provenance.
+
+The second component is not auxiliary bookkeeping.
+
+It is part of the mathematical meaning of computation itself.
+
+
+Historical Reflexivity
+
+
+Every configuration evaluates to itself in zero computational steps.
+
+Accordingly,
+
+\[
+(H,t)
+\Longrightarrow^{0}
+(H,t).
+\]
+
+This relation forms the base case for finite evaluation sequences.
+
+The superscript records the number of reduction events contributing to the
+constructed history.
+
+
+Historical Transitivity
+
+
+Evaluation composes naturally.
+
+Suppose
+
+\[
+(H_0,t_0)
+\longrightarrow
+(H_1,t_1)
+\]
+
+and
+
+\[
+(H_1,t_1)
+\longrightarrow
+(H_2,t_2).
+\]
+
+Then
+
+\[
+(H_0,t_0)
+\Longrightarrow
+(H_2,t_2),
+\]
+
+where
+
+\[
+H_2
+\]
+
+contains the complete provenance of both reductions.
+
+Operational composition therefore coincides with historical composition.
+
+No separate mechanism is required.
+
+
+Beta Reduction
+
+
+The principal computational rule remains beta reduction.
+
+Observable computation is unchanged,
+
+\[
+(\lambda x:A.\,t)\,a
+\longrightarrow
+t[x:=a].
+\]
+
+Historically, however, beta reduction generates a new event,
+
+\[
+e_\beta.
+\]
+
+The complete reduction rule becomes
+
+\[
+(H,
+(\lambda x:A.\,t)\,a)
+\longrightarrow
+(H;e_\beta,
+t[H,x\mapsto a]).
+\]
+
+The beta event records
+
+\begin{enumerate}
+
+\item
+the function being applied,
+
+\item
+the argument supplied,
+
+\item
+the substitution performed,
+
+\item
+the dependency graph inherited by the resulting construction.
+
+\end{enumerate}
+
+Thus every beta reduction becomes replayable.
+
+
+Historical Congruence
+
+
+Evaluation is preserved by every syntactic constructor.
+
+Suppose
+
+\[
+(H,t)
+\longrightarrow
+(H',u).
+\]
+
+Then
+
+\[
+(H,f\,t)
+\longrightarrow
+(H',f\,u),
+\]
+
+provided the application remains well typed.
+
+Similarly,
+
+\[
+(H,\lambda x.t)
+\longrightarrow
+(H',\lambda x.u)
+\]
+
+whenever evaluation occurs inside the body.
+
+These congruence rules mirror the standard small-step semantics while extending
+their histories appropriately.
+
+
+Historical Values
+
+
+Values terminate observable computation.
+
+Historically, however, they remain accompanied by their construction
+provenance.
+
+A value therefore consists of the pair
+
+\[
+(H,v),
+\]
+
+where
+
+\[
+v
+\]
+
+is irreducible and
+
+\[
+H
+\]
+
+records every event required to construct it.
+
+Evaluation terminates only when both components are complete.
+
+
+Normalization
+
+
+The normalization relation is written
+
+\[
+(H,t)
+\Downarrow
+(H',v).
+\]
+
+Unlike ordinary normalization, this relation computes two outputs.
+
+The observable normal form
+
+\[
+v,
+\]
+
+and
+
+the completed historical derivation
+
+\[
+H'.
+\]
+
+Consequently,
+
+\[
+\Normalize(t)
+=
+(v,H'),
+\]
+
+rather than merely
+
+\[
+v.
+\]
+
+Proof replay therefore requires no additional instrumentation.
+
+The evaluator itself constructs the complete provenance.
+
+
+Determinism
+
+
+The historical semantics preserve deterministic evaluation.
+
+\begin{theorem}[Historical Determinism]
+
+Suppose
+
+\[
+(H,t)
+\longrightarrow
+(H_1,u_1)
+\]
+
+and
+
+\[
+(H,t)
+\longrightarrow
+(H_2,u_2).
+\]
+
+Then
+
+\[
+u_1
+=
+u_2
+\]
+
+and
+
+\[
+H_1
+\simeq
+H_2.
+\]
+
+\end{theorem}
+
+\begin{proof}
+
+Observable determinism follows from the deterministic reduction strategy of the
+underlying lambda calculus.
+
+Every reduction rule introduces a uniquely determined historical event.
+
+Consequently the resulting histories are replay equivalent.
+
+\end{proof}
+
+This theorem ensures that historical provenance remains reproducible.
+
+Running the same computation twice reconstructs the same derivation rather than
+merely the same observable result.
+
+
+Replay Semantics
+
+
+One immediate consequence of historical evaluation is the existence of a
+canonical replay operation.
+
+Given a completed history
+
+\[
+H,
+\]
+
+the replay operator reconstructs every intermediate configuration,
+
+\[
+(H_0,t_0),
+\;
+(H_1,t_1),
+\;
+\ldots,
+\;
+(H_n,t_n).
+\]
+
+Proof verification therefore becomes historical verification.
+
+Rather than trusting externally supplied proof objects, the kernel reconstructs
+their complete derivation from immutable historical events.
+
+This capability provides an intrinsic foundation for proof certificates,
+incremental recompilation, reproducible builds, distributed verification, and
+persistent debugging.
+
+
+Computation as Historical Growth
+
+
+The operational semantics developed here reveal a unifying principle that has
+been implicit throughout the preceding chapters.
+
+Computation is not the transformation of one state into another.
+
+It is the irreversible growth of an admissible history.
+
+Observable expressions merely provide snapshots of that ongoing construction.
+
+The true semantic object is the history itself.
+
+Reduction, normalization, and proof construction all become particular forms of
+historical extension governed by the event algebra.
+
+This viewpoint allows operational semantics, provenance tracking, proof replay,
+and event sourcing to coexist within a single mathematical framework without
+introducing separate implementation layers.
+
+Having established the semantics of evaluation, we now turn to the practical
+problem of type checking. The next chapter develops a bidirectional historical
+type checker whose conversion algorithm operates by replaying and comparing
+constructive histories rather than merely normalizing observable syntax.
+
+
+
+A Bidirectional Historical Type Checker
+
+
+
+The preceding chapters have developed the mathematical structure of the
+historical calculus. In order for this theory to serve as the kernel of a
+practical implementation, the typing rules must be organized into an algorithm.
+The trusted kernel should be small, deterministic, and mechanically
+implementable. At the same time, it should expose sufficient expressive power
+to support dependent types, proof construction, and higher-order polymorphism
+without requiring extensive proof search.
+
+Modern proof assistants achieve this objective through bidirectional type
+checking. Instead of attempting to infer the type of every expression,
+bidirectional systems distinguish between two complementary judgments.
+
+Certain expressions \emph{synthesize} a type.
+
+Other expressions are \emph{checked} against a type already known from their
+context.
+
+The historical calculus preserves this organization while extending every
+judgment with constructive provenance. Type checking therefore validates both
+observable typing and historical admissibility simultaneously.
+
+
+Two Judgments
+
+
+The historical kernel employs two algorithmic judgments.
+
+The synthesis judgment
+
+\[
+H
+\vdash
+t
+\Rightarrow
+A
+\]
+
+computes the type of an expression.
+
+The checking judgment
+
+\[
+H
+\vdash
+t
+\Leftarrow
+A
+\]
+
+verifies that an expression inhabits a previously supplied type.
+
+These two judgments mutually define one another.
+
+Their interaction replaces the unrestricted inference procedures that would
+otherwise render dependent type checking computationally impractical.

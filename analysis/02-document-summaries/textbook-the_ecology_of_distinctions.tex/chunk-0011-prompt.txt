@@ -1,0 +1,1169 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\begin{remark}{Against the common conflation}{intel-consciousness-remark}
+  Together these two theorems prevent the common conflation
+  of intelligence and consciousness. A highly effective
+  repair system with no self-model is intelligent but not
+  conscious; a system absorbed in recursive self-modeling
+  with weak external repair capacity is conscious but not
+  especially intelligent.
+\end{remark}
+
+
+Phenomenological Depth
+
+\label{sec:ch21-depth}
+
+\begin{definition}{Phenomenological Depth}{phenomenological-depth}
+  \[
+    P = \operatorname{depth}\bigl(M^n(H_\Sigma)\bigr).
+  \]
+  \index{phenomenological depth|textbf}
+\end{definition}
+
+This measures how many levels of recursive
+self-representation exist.
+
+\begin{theorem}{Depth Theorem}{phenomenological-depth-thm}
+  Phenomenological complexity increases with recursive
+  model depth.
+\end{theorem}
+
+\begin{proof}
+  Each application of $M$ adds an additional representational
+  layer. Thus $M^n(H_\Sigma)$ contains strictly more
+  self-referential structure than $M^{n-1}(H_\Sigma)$, since
+  the latter is recoverable from the former by one fewer
+  application of $M$ but not conversely. Hence complexity
+  grows monotonically with depth $n$.
+\end{proof}
+
+
+Consciousness and Admissibility
+
+\label{sec:ch21-admissibility}
+
+The chapter now connects consciousness to the admissibility
+machinery of Part~V.
+
+\begin{definition}{Conscious Reachability}{conscious-reachability}
+  Define
+  \[
+    R_C = \reach(\hat{\Sigma}).
+  \]
+\end{definition}
+
+This is the future volume available to the self-model,
+using the reachability operator $\reach$ of
+Chapter~\ref{ch:reachability}.
+
+\begin{theorem}{Conscious Reachability Theorem}{conscious-reach}
+  Increasing self-reconstruction accuracy increases
+  reachable future volume.
+\end{theorem}
+
+\begin{proof}
+  Better reconstruction reduces uncertainty about system
+  state. Reduced uncertainty improves action selection,
+  since fewer admissible actions are misclassified as
+  inadmissible or vice versa. Improved action selection
+  enlarges admissible future volume, by the Constraint
+  Volume Theorem (\cref{thm:constraint-vol}). Hence
+  $\frac{dR_C}{dA} > 0$, where $A$ is the awareness
+  functional of \cref{defn:awareness-functional}.
+\end{proof}
+
+\begin{theorem}{Consciousness--Admissibility Theorem}{consciousness-admissibility}
+  Conscious systems are distinguished by preserving models
+  of futures rather than merely reacting to present
+  states.\index{admissibility!cognitive|textbf}
+\end{theorem}
+
+\begin{proof}
+  Let $F = \{\hat{\Sigma}_{t+1}, \hat{\Sigma}_{t+2}, \ldots\}$
+  be a sequence of projected self-reconstructions. A
+  conscious system, by \cref{defn:recursive-self-model},
+  evaluates actions using these future reconstructions.
+  Therefore its action selection depends upon projected
+  admissible regions $\adm(\hat{\Sigma}_{t+k})$. A purely
+  reactive system, lacking $M_\Sigma$, depends only on
+  current state. Thus consciousness introduces
+  future-oriented admissibility evaluation that reactive
+  systems lack.
+\end{proof}
+
+
+Consciousness as Recursive Repair
+
+\label{sec:ch21-recursive-repair}
+
+The chapter's culminating theorem follows.
+
+\begin{theorem}{Consciousness as Recursive Repair}{consciousness-recursive-repair}
+  Consciousness is repair directed toward the self-model
+  rather than solely toward the external world.
+  \index{consciousness!as recursive repair|textbf}
+\end{theorem}
+
+\begin{proof}
+  Repair seeks reduction of discrepancy, by the Repair
+  Operator definition (\cref{defn:repair-op}). Let $D_E$
+  denote environmental discrepancy and $D_S$ denote
+  self-model discrepancy $D(\Sigma, \hat{\Sigma})$. Ordinary
+  intelligence, by the Intelligence--Repair Equivalence
+  (\cref{thm:intel-repair}), minimizes $D_E$. Consciousness,
+  by the Awareness Theorem (\cref{thm:awareness}), minimizes
+  $D_S$. Recursive minimization of $D_S$ constitutes
+  ongoing self-reconstruction, by
+  \cref{defn:recursive-self-model}. Therefore consciousness
+  is recursive repair directed at the self-model.
+\end{proof}
+
+
+Mutual Information and the Recoverability Floor
+
+\label{sec:ch21-mutual-info}
+
+The preceding sections characterise consciousness
+qualitatively, in terms of recursive self-modeling and
+awareness. This section makes the connection to
+Chapters~\ref{ch:recoverability}--\ref{ch:memory}
+quantitative, by expressing the persistence condition for
+consciousness directly in terms of mutual information and
+recoverability.
+
+\begin{definition}{Historical Self-Information}{historical-self-info}
+  Let $\hat{H}_t = M_\Sigma(H_t)$ be the self-model's
+  reconstruction of history up to time $t$. Define
+  \[
+    C(t) = I(H_t; \hat{H}_t),
+  \]
+  the mutual information between the actual history and its
+  reconstruction.
+  \index{consciousness!mutual information measure|textbf}
+  \index{history!historical self-information|textbf}
+\end{definition}
+
+\begin{theorem}{Reconstruction Persistence Theorem}{reconstruction-persistence}
+  A trajectory sustains consciousness, in the sense of
+  \cref{thm:consciousness-recursive-repair}, only if
+  \[
+    \liminf_{t\to\infty} C(t) > 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Suppose instead $\liminf_{t\to\infty} C(t) = 0$, so there
+  is a sequence $t_n\to\infty$ with $C(t_n)\to0$. By
+  definition of mutual information, $C(t_n)\to0$ means
+  $\hat{H}_{t_n}$ becomes asymptotically independent of
+  $H_{t_n}$: the self-model carries no information about
+  actual history along this sequence. By the Awareness
+  Theorem (\cref{thm:awareness}), awareness is the rate of
+  decrease of $D(\Sigma,\hat\Sigma)$; but a self-model
+  asymptotically independent of history cannot be
+  systematically reducing its discrepancy with $\Sigma$,
+  since discrepancy reduction requires the reconstruction to
+  track the actual trajectory. Hence
+  $A \not\to$ a state of sustained positive
+  self-reconstruction improvement along $t_n$, contradicting
+  \cref{thm:consciousness-recursive-repair}, which requires
+  consciousness to be \emph{ongoing} self-reconstruction.
+  Therefore $\liminf_{t\to\infty} C(t) > 0$ is necessary.
+\end{proof}
+
+\begin{theorem}{Minimum Recoverability Condition}{min-recoverability-condition}
+  There exists a threshold $r_c > 0$, depending on the
+  self-model architecture $M_\Sigma$, such that conscious
+  trajectories satisfy
+  \[
+    \mathfrak{rec}(H_t) \ge r_c
+  \]
+  for all sufficiently large
+  $t$.\index{recoverability!floor/threshold|textbf}
+\end{theorem}
+
+\begin{proof}
+  By the Reconstruction Persistence Theorem,
+  $\liminf_t C(t) > 0$ along conscious trajectories. By the
+  Reconstruction Theorem of Chapter~\ref{ch:memory}
+  (\cref{thm:reconstruction}), a reconstruction operator
+  achieving $R(M(d))\approx d$ exists only when
+  $\reco(d) > 0$, and the degree of approximation achievable
+  --- which bounds the mutual information $C(t)$ between $d$
+  and its reconstruction --- is a monotonically increasing
+  function of $\reco(d)$. Since $C(t)$ is bounded away from
+  $0$ in the limit, $\reco(H_t) = \mathfrak{rec}(H_t)$ must
+  likewise be bounded away from $0$: otherwise the
+  achievable mutual information would itself tend to $0$,
+  contradicting \cref{thm:reconstruction-persistence}. The
+  threshold $r_c$ is the infimum recoverability compatible
+  with $\liminf C(t) > 0$ under the given $M_\Sigma$.
+\end{proof}
+
+\begin{remark}{Consciousness as a recoverability regime}
+  {consciousness-recoverability-regime}
+  Together, the Reconstruction Persistence Theorem and the
+  Minimum Recoverability Condition relocate consciousness
+  from a free-standing topic to a special regime of the
+  recoverability machinery developed in
+  Chapters~\ref{ch:recoverability}--\ref{ch:memory}: a
+  conscious trajectory is precisely one whose history never
+  falls below a positive recoverability floor $r_c$, and
+  whose self-model sustains positive mutual information with
+  that history indefinitely. Crossing below $r_c$ --- the
+  trajectory approaching the semantic horizon of
+  \cref{thm:semantic-horizon} from the perspective of its
+  own self-model --- is, on this account, formally
+  equivalent to the cessation of consciousness.
+\end{remark}
+
+This gives the chapter a tight integration with the rest of
+the book. Chapters~\ref{ch:repair}--\ref{ch:repair-intelligence}
+established repair; Chapters~\ref{ch:history}--\ref{ch:memory}
+established history and reconstruction; Chapters~13--15
+established admissible futures. Consciousness then appears
+not as a mysterious substance or primitive property but as
+a regime in which a system continually repairs and
+reconstructs its own model of itself in order to navigate
+future admissible regions. In the architecture of this
+monograph, consciousness becomes a special case of
+regenerative distinction preservation applied reflexively
+to the observer.
+
+
+Related Frameworks
+
+\label{sec:ch21-related-frameworks}
+
+\subsection*{Active Inference: Friston's Free-Energy Principle}
+
+\emph{Convergence.} Friston's free-energy principle holds that
+perception and self-modelling are both processes of approximate
+inference, in which a system continually updates an internal
+generative model of itself and its environment so as to minimise
+variational free energy, an upper bound on surprise
+\parencite{friston2010}. This is structurally close to this
+chapter's Self-Model and Recursive Self-Model
+(\cref{defn:self-model,defn:recursive-self-model}): both treat
+the persistence of a self-model as an ongoing, active inferential
+process rather than a static given.
+
+\emph{Divergence.} The free-energy principle treats surprise
+minimisation as a single objective applying uniformly across all
+of biological self-organisation --- perception, action, and even
+evolution are each framed as instances of the same process, with
+no further distinction drawn between the self-modelling that
+constitutes mere homeostatic regulation and the self-modelling
+this chapter identifies with consciousness specifically. The
+Intelligence--Consciousness Separation Theorem and the
+Consciousness Without Intelligence Theorem
+(\cref{thm:intel-consciousness,thm:consciousness-without-intelligence})
+draw exactly the distinction Friston's framework does not:
+minimising free energy, which is closer to this book's notion of
+repair capacity, is shown to be neither necessary nor sufficient
+for the recursive self-modelling this chapter identifies with
+consciousness.
+
+\emph{Open question.} Whether variational free energy can be
+shown to be a special case of, or bounded by, this chapter's
+Phenomenological Depth or Conscious Reachability measures
+(\cref{defn:phenomenological-depth,defn:conscious-reachability}),
+giving a precise translation between the two frameworks, or
+whether they measure genuinely different things that happen to
+both be cast as minimisation principles, is not settled here.
+
+
+Functional Consciousness and the Hard Problem
+
+\label{sec:ch21-hard-problem}
+
+This chapter is a \emph{functional} theory of consciousness.
+It characterises the structural and computational properties
+associated with conscious systems: nonzero recoverable
+history, recursive self-modelling, sensitivity to self-model
+error, and recursive repair directed at the self-model. It
+does not claim to derive phenomenal experience --- the
+\emph{what-it-is-like} of perception, thought, or feeling.
+
+The ``hard problem'' of consciousness, in Chalmers's
+formulation, asks why any physical or functional process is
+accompanied by subjective experience at all. A system
+satisfying the Minimum Recoverability Condition
+(\cref{thm:min-recoverability-condition}) and the
+Consciousness--Admissibility Theorem
+(\cref{thm:consciousness-admissibility}) behaves as
+conscious systems behave. Whether it has experiences is a
+further question no functional theory answers, including
+this one. The present chapter is explicit about this:
+phenomenological depth (\cref{defn:phenomenological-depth})
+measures representational complexity, not the presence of
+qualia.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Theory & Proposed criterion & Hard problem? \\
+\midrule
+IIT (Tononi) & $\Phi$ (integrated information) & Claimed addressed \\
+Global Workspace & Broadcast availability & Not addressed \\
+Predictive Processing & Free-energy minimisation & Not addressed \\
+Active Inference & Markov blanket dynamics & Not addressed \\
+Recursive Repair (this chapter) & $\frac{d}{dt}\mathfrak{rec}(H_\Sigma) \ge 0$ & Not addressed \\
+\bottomrule
+\end{tabular}
+\caption{Contemporary functional theories of consciousness
+and their engagement with the hard problem. All functional
+theories --- including Integrated Information Theory, despite
+its claims --- characterise what consciousness \emph{does},
+not what it \emph{is} phenomenologically. The present
+theory belongs to this tradition.}
+\label{tab:consciousness-theories}
+\end{table}
+
+The honest position is that no current scientific theory
+resolves the hard problem, because the hard problem may not
+be a scientific question in the sense that physical science
+currently knows how to answer. This does not make the
+functional question unimportant. Understanding which
+structural conditions are necessary for the kind of
+information integration, recursive self-reference, and
+adaptive repair we associate with conscious experience is
+a productive scientific programme. It is simply not the
+same programme as explaining why experience exists at all.
+
+Where the present theory differs from its competitors is in
+the ladder it identifies: the repair sequence establishes
+why recursive self-modelling is not merely possible but
+necessary for systems attempting to maintain themselves in
+environments that change their failure modes over time. A
+system that cannot model its own repair capacity cannot
+repair its repair capacity when that capacity itself is
+eroding. This functional necessity --- not an account of
+qualia --- is what the chapter establishes.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Conscious reconstruction requires nonzero
+        recoverable history (\cref{thm:memory-consciousness}).
+  \item Recursive self-models make self-reference formally
+        representable (\cref{thm:recursive-self}).
+  \item Awareness is the rate of decrease of
+        self-reconstruction error, not the mere possession
+        of a self-model (\cref{thm:awareness}).
+  \item Intelligence and consciousness are independent in
+        both directions
+        (\cref{thm:intel-consciousness,thm:consciousness-without-intelligence}).
+  \item Phenomenological depth grows monotonically with
+        recursive model depth (\cref{thm:phenomenological-depth-thm}).
+  \item Self-reconstruction accuracy increases reachable
+        future volume (\cref{thm:conscious-reach}).
+  \item Consciousness is recursive repair directed at the
+        self-model rather than the external world
+        (\cref{thm:consciousness-recursive-repair}).
+  \item Sustained consciousness requires
+        $\liminf_{t\to\infty} I(H_t;\hat H_t) > 0$
+        (\cref{thm:reconstruction-persistence}), which in
+        turn forces history to remain above a positive
+        recoverability floor $r_c$
+        (\cref{thm:min-recoverability-condition}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Construct an explicit system with $|H_\Sigma| > 0$ but
+  $M_\Sigma$ trivial (constant). Show that the Memory
+  Requirement Theorem is satisfied while the Recursive
+  Representation Theorem fails. What does this imply about
+  the relationship between memory and consciousness?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Sleep involves measurable changes in self-model accuracy
+  and recursive depth. Using the Awareness Theorem, propose
+  an operational definition of $D(\Sigma,\hat\Sigma)$ that
+  could in principle distinguish waking, dreaming, and
+  dreamless sleep.
+\end{exercise}
+
+\begin{exercise}[CS]
+  A large language model maintains no persistent
+  $H_\Sigma$ across independent sessions. Using the Memory
+  Requirement Theorem, evaluate whether such a system can
+  satisfy the Recursive Representation Theorem within a
+  single context window. What changes if persistent memory
+  is added?
+\end{exercise}
+
+\begin{exercise}
+  Prove or disprove: phenomenological depth $P$ is bounded
+  above for any system with finite memory viscosity
+  $\mu_M$ (\cref{defn:mem-viscosity}).
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Anaesthesia is associated with a measurable drop in
+  information integration. Using the Minimum Recoverability
+  Condition, propose how $r_c$ might be estimated
+  empirically, and what it would mean for $\mathfrak{rec}(H_t)$
+  to cross below $r_c$ under anaesthesia.
+\end{exercise}
+
+
+
+
+\chapter{Preference Fields}
+\label{ch:preference-fields}
+
+\begin{epigraph}{
+  Preference is not what defines value.
+  Preference is what value looks like when viewed locally
+  from inside a trajectory moving through an admissible
+  manifold.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Derive preference as a geometric gradient over
+        future admissible volume rather than postulate it
+        as primitive.
+  \item Prove the Preference Emergence Theorem and the
+        Gradient Preference Theorem.
+  \item Prove the Reward--Admissibility Divergence Theorem,
+        formalizing pathological continuation.
+  \item Prove the Preference Curvature Theorem and connect
+        it to admissibility curvature.
+  \item Prove the Preference Interference Theorem for
+        collective preference fields.
+  \item Prove the Preference--Admissibility Equivalence
+        Theorem, the central result of the chapter.
+\end{objectives}
+
+
+Preference as Geometry
+
+\label{sec:ch22-geometry}
+
+Preference fields sit naturally between reachability and
+admissibility, which makes this one of the more direct
+chapters to formalize. The key move is to stop treating
+preferences as primitive. Instead, preferences become
+geometric gradients over future admissible volume. The
+chapter's central claim is
+\[
+  \text{Preference} =
+  \text{Local tendency toward admissible future expansion}.
+\]
+Everything else follows from this.
+
+\begin{definition}{Preference Field}{preference-field}
+  Let $X$ be a state manifold. A \emph{preference field} is
+  a smooth scalar field $\Phi : X \to \mathbb{R}$.
+  \index{preference field|textbf}
+\end{definition}
+
+\begin{distinctionaside}{The Last Slice of Pizza}
+A pizza arrives with eight slices. After the first slice, the
+second is good. After the fifth, the sixth is endurable.
+After the seventh, the eighth is a chore.
+
+Nothing about the pizza has changed. The cheese is the same
+cheese. The crust is the same crust.
+
+What changed is the field surrounding it: how many slices
+have already been eaten, how full you already are, what else
+is reachable from here. Value is not a property of the
+object. It is a property of the trajectory the object is
+encountered along.
+\end{distinctionaside}
+
+Traditionally, utility functions are introduced
+axiomatically: a rational agent is assumed, by fiat or by a
+representation theorem built on independence and continuity
+axioms, to behave \emph{as if} maximising some scalar
+function over outcomes, and the content of the theory lies
+almost entirely in what follows from that assumption rather
+than in any account of where the function comes from.
+Expected-utility theory is formally elegant and behaviourally
+productive, but it treats the existence of a consistent
+ordering over outcomes as a starting postulate rather than a
+derived consequence of anything deeper. It has, by
+construction, nothing to say about why an agent's preferences
+take the shape they do, or why preference for the same object
+should change as a trajectory unfolds around it --- the
+phenomenon already illustrated by the pizza above.
+
+Here, by contrast, utility is not postulated; it is derived
+from admissibility, the geometric structure developed across
+Part~V and realized physically, semantically, and now
+cognitively in the chapters since. Chapter~\ref{ch:consciousness}
+showed that a system capable of recursive self-modelling
+emerges from repair applied to its own history. This chapter
+asks what such a system wants, and answers that wanting itself
+is not a separate primitive bolted onto the self-model but a
+gradient already implicit in the admissibility geometry the
+self-model is embedded within. A preference field is not
+assumed; it is what the local slope of future admissible
+volume looks like from the inside of a trajectory.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch22-falsifiability}
+
+The chapter's central result, the Preference--Admissibility
+Equivalence Theorem (\cref{thm:pref-adm-equivalence}), claims
+that preference, properly formalised, is not merely
+correlated with admissibility-preserving behaviour but is
+identical to the gradient of admissible volume itself. This
+is falsifiable in a specific way: the theorem should recover
+ordinary expected-utility behaviour as a special case
+whenever an agent's admissibility potential happens to align
+with a fixed, exogenously given utility function, while
+predicting systematic divergence --- captured later in this
+chapter by the Reward--Admissibility Divergence Theorem ---
+whenever an agent optimises a reward signal that does not
+track future admissible volume. If no such divergence could
+be exhibited, or if every case of reward-admissibility
+mismatch could equally well be redescribed within ordinary
+utility theory without loss, the claim that admissibility is
+the deeper quantity, rather than an alternative notation for
+utility, would fail.
+
+
+Common Misinterpretations of Preference Fields
+
+\label{sec:ch22-misinterpretations}
+
+A first misreading takes this chapter to claim that all
+existing preferences are admissibility-tracking, or that
+revealed preference is automatically evidence of admissible
+behaviour. The Reward--Admissibility Divergence Theorem
+proves precisely the opposite is possible: an agent can
+reliably optimise a reward signal that diverges sharply from
+admissible-volume preservation, which is this chapter's
+formal account of what earlier chapters described, in
+ordinary language, as pathological continuation.
+
+A second misreading assumes that deriving preference from
+geometry makes preference computable in practice --- that an
+agent could, even in principle, evaluate $\Phi_A(x)$ exactly
+and act on it directly. Nothing in this chapter requires
+that. The theorem establishes what preference \emph{is},
+not that it is tractable to compute; real agents approximate
+$\Phi_A$ under severe uncertainty, exactly as they
+approximate every other quantity introduced in this book.
+
+A third misreading treats the collective preference field
+introduced later in this chapter as a simple aggregate or
+average of individual preferences. The Preference
+Interference Theorem shows that collective fields exhibit
+genuine interference effects --- constructive and
+destructive --- that have no counterpart in any single
+individual's field, making collective preference a distinct
+geometric object rather than a summary statistic over
+individual ones.
+
+
+What This Chapter Establishes
+
+\label{sec:ch22-preview}
+
+By the end of this chapter, preference will have been derived
+as the gradient of the admissibility potential, the
+Reward--Admissibility Divergence Theorem will formalise
+exactly when optimising a reward signal works against an
+agent's own future, and the Preference--Admissibility
+Equivalence Theorem will close Part~VII by identifying
+preference with admissibility geometry rather than treating
+it as a separate primitive. This completes the book's
+treatment of cognitive realization. Chapter~\ref{ch:flow-computing}
+turns to computation itself, asking whether the same
+admissibility machinery that has now organised matter,
+meaning, self-modelling, and preference can organise
+computation as well.
+
+\begin{definition}{Admissibility Potential}{pref-adm-potential}
+  Define
+  \[
+    \Phi_A(x)
+    = \mathbb{E}\bigl[
+        \Vol(\adm(y)) \mid y \in \reach(x)
+      \bigr].
+  \]
+  \index{admissibility potential|textbf}
+\end{definition}
+
+This is the expected future admissible volume reachable
+from the current state $x$, using the reachability operator
+of Chapter~\ref{ch:reachability}. Preference becomes a
+derived quantity.
+
+\begin{theorem}{Preference Emergence Theorem}{pref-emergence}
+  If an agent seeks to preserve future distinction capacity,
+  then its preference ordering is induced by $\Phi_A$.
+\end{theorem}
+
+\begin{proof}
+  Let $x_1, x_2 \in X$ and suppose
+  $\Phi_A(x_1) > \Phi_A(x_2)$. Then
+  $\mathbb{E}[\Vol(\adm) \mid x_1] > \mathbb{E}[\Vol(\adm) \mid x_2]$.
+  By the Generative Admissibility Principle
+  (\cref{prc:gap-ch15}), states preserving larger future
+  distinction volume are strictly preferred by any agent
+  whose objective is preservation of future
+  distinction-production capacity. Therefore $x_1 \succ x_2$.
+\end{proof}
+
+Preferences, on this reading, are not arbitrary. They
+emerge from the geometry of admissible volume --- but only
+under the conditional stated in the theorem. The theorem
+characterises what a preference ordering \emph{would}
+look like for an agent whose goal is preservation of
+future distinction capacity; it does not assert that all
+agents have this goal, or that preferences not so grounded
+are irrational. The conditional is load-bearing.
+
+
+Preference as Gradient Flow
+
+\label{sec:ch22-gradient}
+
+\begin{definition}{Preference Flow}{preference-flow}
+  A preference trajectory satisfies
+  \[
+    \dot{x} = \nabla\Phi_A(x).
+  \]
+\end{definition}
+
+\begin{theorem}{Gradient Preference Theorem}{gradient-pref}
+  Preference-directed motion follows the gradient of future
+  admissible volume.
+\end{theorem}
+
+\begin{proof}
+  By \cref{defn:pref-adm-potential}, $\Phi_A(x) = \mathbb{E}[\Vol(\adm)]$.
+  The steepest-ascent direction of $\Phi_A$ is $\nabla\Phi_A$.
+  Therefore local preference optimization produces the flow
+  $\dot{x} = \nabla\Phi_A$.
+\end{proof}
+
+This makes preference fields formally analogous to
+potential fields in physics, with $\Phi_A$ playing the role
+of a potential whose gradient generates motion.
+
+
+Reward Versus Admissibility
+
+\label{sec:ch22-divergence}
+
+A distinction between immediate reward and future
+admissibility is now needed.
+
+\begin{definition}{Reward Potential}{reward-potential}
+  Let $R : X \to \mathbb{R}$ denote immediate reward.
+\end{definition}
+
+\begin{definition}{Admissibility Potential (Restated)}{admissibility-potential-restated}
+  \[
+    A(x) = \Phi_A(x).
+  \]
+\end{definition}
+
+\begin{theorem}{Reward--Admissibility Divergence}{reward-divergence}
+  There exist states $x_1, x_2$ such that
+  $R(x_1) > R(x_2)$ while $A(x_1) < A(x_2)$.
+\end{theorem}
+
+\begin{proof}
+  Let $x_1$ be a locally rewarding but irreversible state,
+  and let $x_2$ have lower immediate reward but larger
+  future reachability volume. Then $R(x_1) > R(x_2)$ by
+  construction, while $\Vol(\adm(x_1)) < \Vol(\adm(x_2))$
+  by irreversibility (\cref{thm:collapse-threshold}-style
+  contraction of admissible volume). Thus $A(x_1) < A(x_2)$.
+\end{proof}
+
+\begin{remark}{Pathologies of reward}{reward-pathology-remark}
+  This theorem formally captures addiction, reward hacking,
+  resource depletion, wireheading, and pathological
+  continuation: in each case, an agent or system pursues a
+  trajectory of high immediate $R$ at the cost of
+  contracting $A$, the very quantity the Generative
+  Admissibility Principle identifies as the correct
+  long-run invariant (\cref{prc:gap-ch15}).
+\end{remark}
+
+
+Preference Curvature
+
+\label{sec:ch22-curvature}
+
+\begin{definition}{Preference Hessian}{preference-hessian}
+  \[
+    H_\Phi = \nabla^2 \Phi_A.
+  \]
+\end{definition}
+
+\begin{theorem}{Preference Curvature Theorem}{pref-curvature}
+  Large eigenvalues of $H_\Phi$ correspond to preference
+  bottlenecks.
+\end{theorem}
+
+\begin{proof}
+  Let $\lambda_i$ be eigenvalues of $H_\Phi$. Large positive
+  eigenvalues imply rapid local growth of future admissible
+  volume along the corresponding eigendirection; large
+  negative eigenvalues imply rapid local collapse.
+  Therefore high-curvature directions correspond to decision
+  points with disproportionate effects on future possibility
+  relative to a small change in state.
+\end{proof}
+
+This directly links to the Admissibility Curvature Theorem
+of Chapter~\ref{ch:geometry-futures}
+(\cref{thm:adm-curv}): preference curvature is the
+projection of admissibility curvature onto the preference
+field induced by an agent's reachability structure.
+
+
+Collective Preference
+
+\label{sec:ch22-collective}
+
+\begin{definition}{Collective Preference Field}{collective-preference}
+  For agents $\Sigma_1, \ldots, \Sigma_n$, define
+  \[
+    \Phi_C = \sum_i w_i \Phi_i.
+  \]
+\end{definition}
+
+\begin{theorem}{Preference Interference Theorem}{pref-interference}
+  The collective preference field is generative iff
+  $\nabla\Phi_i \cdot \nabla\Phi_j \ge 0$ for most agent
+  pairs.
+\end{theorem}
+
+\begin{proof}
+  Positive inner products imply that preference gradients
+  reinforce one another; negative inner products imply
+  cancellation and conflict. Total admissible expansion is
+  \[
+    \Bigl\|\sum_i w_i \nabla\Phi_i\Bigr\|^2
+    = \sum_i w_i^2 \|\nabla\Phi_i\|^2
+      + 2\sum_{i<j} w_i w_j\, \nabla\Phi_i \cdot \nabla\Phi_j.
+  \]
+  The cross terms determine whether total future admissible
+  volume expands or contracts under the combined flow.
+  Generativity of $\Phi_C$, by the Generative Admissibility
+  Principle, requires the right-hand side to be
+  nonnegative, which holds for most agent pairs precisely
+  when $\nabla\Phi_i \cdot \nabla\Phi_j \ge 0$ dominates the
+  cross-term sum.
+\end{proof}
+
+This theorem feeds directly into the governance and fiscal
+reachability results of Part~IX
+(Chapters~\ref{ch:fiscal}--\ref{ch:science-regen}).
+
+
+The Central Equivalence
+
+\label{sec:ch22-equivalence}
+
+The most important theorem of the chapter is the following.
+
+\begin{theorem}{Preference--Admissibility Equivalence}{pref-adm-equivalence}
+  A preference field is generatively admissible iff
+  \[
+    \mathcal{L}_{\nabla\Phi_A} \Vol(\adm) \ge 0.
+  \]
+  \index{preference field|textbf}
+  \index{admissibility!cognitive}
+\end{theorem}
+
+\begin{proof}
+  The Lie derivative $\mathcal{L}_{\nabla\Phi_A}\Vol(\adm)$
+  measures the rate of change of admissible volume along
+  preference trajectories generated by the flow
+  $\dot{x} = \nabla\Phi_A$ (\cref{thm:gradient-pref}). A
+  positive derivative implies expansion of future
+  possibility along the preference flow; a negative
+  derivative implies extractive behavior in the sense of
+  Chapter~\ref{ch:preservation}. By the Generative
+  Admissibility Principle (\cref{prc:gap-ch15}), these two
+  conditions — nonnegative Lie derivative and generative
+  admissibility — are equivalent.
+\end{proof}
+
+
+Field Dynamics and the Boundary-Flux Identity
+
+\label{sec:ch22-field-dynamics}
+
+The Preference--Admissibility Equivalence Theorem states a
+sign condition. This section refines it into an exact
+identity, by deriving the preference field directly as a
+convolution against the underlying capacity field and
+expressing the rate of change of admissible volume as a
+boundary flux of the resulting preference flow.
+
+\begin{definition}{Preference Potential}{preference-potential}
+  Let $w:X\times X\to\mathbb{R}_{\ge0}$ be a weighting
+  kernel. Define the \emph{preference potential}
+  \[
+    U(x,t) = \int_X w(x,y)\,\Phi(y,t)\,dy,
+  \]
+  where $\Phi$ is the RSVP capacity field of
+  \cref{defn:capacity-field}.
+\end{definition}
+
+The preference potential generalises the admissibility
+potential $\Phi_A$ of \cref{defn:pref-adm-potential}: where
+$\Phi_A(x)$ is an expectation of future admissible volume
+over states reachable from $x$, $U(x,t)$ is a weighted
+aggregate of present capacity over the whole domain,
+parametrised by an arbitrary kernel $w$ rather than the
+reachability-conditioned expectation.
+
+\begin{definition}{Preference Flow Field}{preference-flow-field}
+  Define the \emph{preference flow}
+  \[
+    \mathbf{p}(x,t) = -\nabla U(x,t).
+  \]
+\end{definition}
+
+\begin{theorem}{Boundary-Flux Theorem}{boundary-flux}
+  Under admissible dynamics generated by the preference
+  flow $\mathbf{p}$,
+  \[
+    \frac{d}{dt}\Vol(\mathcal{A}_t)
+    = \int_{\partial\mathcal{A}_t} \mathbf{p}\cdot\mathbf{n}\,dS,
+  \]
+  where $\mathbf{n}$ is the outward unit normal to the
+  admissibility manifold boundary $\partial\mathcal{A}_t$.
+\end{theorem}
+
+\begin{proof}
+  By the divergence theorem applied to the vector field
+  $\mathbf{p}$ on the region $\mathcal{A}_t$,
+  \[
+    \int_{\mathcal{A}_t} \nabla\cdot\mathbf{p}\,dV
+    = \int_{\partial\mathcal{A}_t} \mathbf{p}\cdot\mathbf{n}\,dS.
+  \]
+  Under dynamics in which points of $\mathcal{A}_t$ move
+  according to the preference flow $\dot{x}=\mathbf{p}(x,t)$,
+  the rate of change of the enclosed volume is exactly the
+  net outward flux of $\mathbf{p}$ across the boundary, by
+  the Reynolds Transport Theorem applied to the
+  time-dependent region $\mathcal{A}_t$ with boundary
+  velocity field $\mathbf{p}|_{\partial\mathcal{A}_t}$.
+  Combining the two identities gives
+  \[
+    \frac{d}{dt}\Vol(\mathcal{A}_t)
+    = \int_{\mathcal{A}_t} \nabla\cdot\mathbf{p}\,dV
+    = \int_{\partial\mathcal{A}_t} \mathbf{p}\cdot\mathbf{n}\,dS. \qedhere
+  \]
+\end{proof}
+
+\begin{corollary}{Field-Theoretic Form of Preference--Admissibility Equivalence}
+  {field-pref-adm-equiv}
+  A preference field generated by potential $U$ is
+  generatively admissible if and only if
+  \[
+    \int_{\partial\mathcal{A}_t} \mathbf{p}\cdot\mathbf{n}\,dS \ge 0:
+  \]
+  the preference flow has non-negative net outward flux
+  across the admissibility boundary.
+\end{corollary}
+
+\begin{proof}
+  Immediate from \cref{thm:boundary-flux} together with the
+  Preference--Admissibility Equivalence Theorem
+  (\cref{thm:pref-adm-equivalence}), since
+  $\frac{d}{dt}\Vol(\mathcal{A}_t) \ge 0$ is precisely the
+  generative-admissibility condition and the theorem
+  identifies this quantity with the stated boundary
+  integral.
+\end{proof}
+
+\begin{remark}{From sign condition to flux identity}{flux-identity-remark}
+  This corollary converts the Preference--Admissibility
+  Equivalence Theorem from an abstract sign condition on a
+  Lie derivative into a concrete, locally computable
+  surface integral. In principle, generativity of a
+  preference field can now be assessed by examining flow
+  behaviour only at the admissibility boundary
+  $\partial\mathcal{A}_t$, rather than requiring global
+  knowledge of $\Phi_A$ throughout the interior of
+  $\mathcal{A}_t$ --- considerably reducing the information
+  needed to certify generative admissibility in applied
+  settings such as the governance and fiscal models of
+  Part~IX.
+\end{remark}
+
+After this theorem, preference ceases to be a psychological
+primitive. It becomes a geometric object. The progression
+of the chapter is
+\[
+  \text{Distinction} \to \text{Reachability}
+  \to \text{Admissibility} \to \text{Preference}.
+\]
+In other words, preferences are not what define value.
+Preferences are what value looks like when viewed locally
+from inside a trajectory moving through an admissible
+manifold.
+
+
+Related Frameworks
+
+\label{sec:ch22-related-frameworks}
+
+\subsection*{Active Inference: Expected Free Energy}
+
+\emph{Convergence.} Chapter~\ref{ch:consciousness} engaged
+active inference on perception and self-modelling; this
+chapter's concern is closer to its treatment of action
+selection. Friston's framework extends free-energy minimisation
+to action via \emph{expected free energy}, which decomposes into
+a pragmatic term, seeking expected reward, and an epistemic
+term, seeking to resolve uncertainty \parencite{friston2010}.
+This directly anticipates this chapter's central claim, formalised
+in the Reward--Admissibility Divergence Theorem
+(\cref{thm:reward-divergence}): that reward-seeking alone is an
+incomplete account of adaptive preference, and that something
+beyond immediate reward must be included for behaviour to remain
+adaptive over time.
+
+\emph{Divergence.} Friston's epistemic term is specifically about
+reducing uncertainty in an agent's own generative model: it
+rewards actions that resolve ambiguity about the world, whether
+or not the resolved information is ever useful for preserving
+future options. The Admissibility Potential and the
+Preference--Admissibility Equivalence Theorem
+(\cref{defn:pref-adm-potential,thm:pref-adm-equivalence}) are not
+about reducing uncertainty at all. An agent could face a fully
+known, perfectly predictable environment and still face a
+meaningful trade-off between actions that expand admissible
+futures and actions that contract them. Information-seeking and
+admissibility-seeking can come apart: gathering more information
+about an already-narrowing future does nothing to widen it.
+
+\emph{Open question.} Whether expected free energy's epistemic
+term can be shown to be a special case of, or a proxy for, this
+chapter's admissibility gradient under specific conditions ---
+when uncertainty reduction is causally upstream of future
+option-preservation, for instance --- or whether the two value
+the situation differently in general, is left open.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Preference orderings are induced by the
+        admissibility potential $\Phi_A$
+        (\cref{thm:pref-emergence}).
+  \item Preference-directed motion follows
+        $\dot{x} = \nabla\Phi_A$
+        (\cref{thm:gradient-pref}).
+  \item Immediate reward and future admissibility can
+        diverge, formalizing pathological continuation
+        (\cref{thm:reward-divergence}).
+  \item Preference curvature identifies decision
+        bottlenecks and connects to admissibility curvature
+        (\cref{thm:pref-curvature}).
+  \item Collective preference fields are generative when
+        agent preference gradients are mostly aligned
+        (\cref{thm:pref-interference}).
+  \item A preference field is generatively admissible iff
+        $\mathcal{L}_{\nabla\Phi_A}\Vol(\adm) \ge 0$
+        (\cref{thm:pref-adm-equivalence}).
+  \item This sign condition is exactly the net outward flux
+        of the preference flow $\mathbf{p}=-\nabla U$ across
+        the admissibility boundary,
+        $\frac{d}{dt}\Vol(\mathcal{A}_t) =
+        \int_{\partial\mathcal{A}_t}\mathbf{p}\cdot\mathbf{n}\,dS$
+        (\cref{thm:boundary-flux}), reducing generative
+        admissibility to a locally computable boundary
+        condition (\cref{cor:field-pref-adm-equiv}) --- the
+        central result of the chapter.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Construct an explicit two-state example realizing the
+  Reward--Admissibility Divergence Theorem, and compute
+  $\Phi_A(x_1)$ and $\Phi_A(x_2)$ under a simple reachability
+  model.
+\end{exercise}
+
+\begin{exercise}[CS]
+  In reinforcement learning, a reward-maximizing policy
+  may exhibit reward hacking. Using
+  \cref{thm:reward-divergence}, propose a modification to
+  a standard RL objective that incorporates $\Phi_A$
+  alongside $R$. What practical obstacles arise in
+  estimating $\Phi_A$ from data?
+\end{exercise}
+
+\begin{exercise}
+  Prove that if $\nabla\Phi_i \cdot \nabla\Phi_j < 0$ for
+  \emph{all} pairs $i \ne j$, the Preference Interference
+  Theorem implies the collective field $\Phi_C$ cannot be
+  generative regardless of the weights $w_i$, unless some
+  $w_i = 0$.
+\end{exercise}
+
+\begin{exercise}
+  Apply the Preference--Admissibility Equivalence Theorem
+  to a institution undergoing the governance dynamics of
+  Chapter~\ref{ch:governance}. Under what condition does
+  the institution's revealed preference field fail to be
+  generatively admissible despite individual members having
+  generatively admissible preferences?
+\end{exercise}
+
+\begin{exercise}
+  Using the Boundary-Flux Theorem, show that a preference
+  field with $U$ constant on $\partial\mathcal{A}_t$
+  produces zero net flux. What does this imply about
+  preference fields that are generatively admissible only
+  in the interior of $\mathcal{A}_t$?
+\end{exercise}
+
+\part{Computational Realizations}
+
+
+
+
+\chapter{Flow Computing}
+\label{ch:flow-computing}
+
+\begin{epigraph}{
+  Write programs that do one thing and do it well.
+  Write programs that work together.
+  Write programs that handle text streams, because that is
+  a universal interface.}
+  {Doug McIlroy, \textit{Bell System Technical Journal}, 1978}
+\end{epigraph}
+
+\begin{objectives}
+  \item Interpret Unix pipelines as distinction-preserving
+        transport operators.
+  \item Prove the Flow Conservation Theorem.
+  \item Prove the Pipeline Determination Theorem.
+  \item Prove the Markov Boundary Theorem for processes.
+  \item Prove the History Dominance Theorem for file systems.
+  \item Apply flow computing to admissibility preservation
+        in software architectures.
+\end{objectives}
+
+
+Programs as Distinction Histories
+
+
+Chapter~\ref{ch:history} established that states are
+compressed projections of histories. Nowhere is this
+more visible than in computation.
+
+A running program occupies a state: registers, memory,
+program counter. But the interesting thing about a
+computation is rarely its instantaneous state. It is its
+\emph{trajectory} — the sequence of transformations that
+produced the current state from some initial input. Two
+programs may reach identical states by entirely different
+paths, with entirely different implications for future
+behavior.
+
+The tradition of flow-based computing recognises this.
+Unix pipelines compose small programs through streams.
+Each stage transforms a stream of distinctions — bytes,
+lines, records — passing transformed output to the next
+stage. The intermediate state of any single process is
+largely irrelevant. The relevant object is the flow: the
+sequence of distinctions propagating through the pipe.
+
+
+Why the Turing Machine Is Not Enough
+
+\label{sec:ch23-why-turing}
+
+The dominant model of computation, both historically and
+pedagogically, is the Turing machine: a finite control
+reading and writing symbols on a tape, transitioning between
+a finite set of states \parencite{turing1936}. The von Neumann
+architecture that implements this model in physical hardware
+makes the same commitment concrete: a program counter,
+a fixed memory addressed by location, and an instruction
+cycle that overwrites state in place. Both formalisms are
+state-centred in exactly the sense Chapter~\ref{ch:history}
+diagnosed: a computation is characterised by where it
+currently is, and the path that brought it there is, by
+construction, not part of what the formalism tracks. This is
+not a flaw in either model --- the Church--Turing thesis does
+not require historical fidelity to establish what is
+computable --- but it does mean that a Turing-machine-level
+description of a computation discards exactly the structure
+this book has spent its abstract chapters arguing is
+ontologically primary.
+
+Flow computing, in the sense this chapter develops, is what
+results from taking history seriously as the primary
+computational object rather than the discarded byproduct of
+state transitions. A pipeline does not merely transition
+through states; it propagates a flow whose distinguishability
+can be tracked, conserved, or lost at each stage, and a file
+system that preserves history rather than overwriting in
+place is, in this chapter's terms, strictly more
+distinction-capable than a state-only equivalent computing
+the same function.
+
+Chapter~\ref{ch:preference-fields} closed the book's treatment
+of cognitive realization by asking whether the same
+admissibility machinery that had organised matter, meaning,
+and self-modelling could organise computation as well. This
+chapter is the first attempt at an answer, and it begins with
+the most basic computational object there is: not a value, but
+a trace of how a value came to be.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch23-falsifiability}
+
+The claim that computation realizes the book's general
+history-before-state argument, rather than merely admitting a
+historical redescription after the fact, is falsifiable
+against a specific test. The History Dominance Theorem proved
+later in this chapter (\cref{thm:history-dominance}), which
+ranks history-preserving file systems strictly above
+state-only file systems in distinction capacity, should follow
+directly from the History Primacy Theorem of
+Chapter~\ref{ch:history} (\cref{thm:history-primacy}) applied
+to the flow-distinction machinery already defined above, with
+no computation-specific axiom introduced along the way. The
+proof given later does exactly this. If establishing the file-system
+result had instead required some principle special to
+computation --- something not already a consequence of history
+dominating state in general --- the claim that flow computing
+is a genuine instance of Chapter~\ref{ch:history}'s argument,
+rather than a separate, merely analogous result wearing the
+same name, would fail.
+
+
+What This Chapter Establishes
+
+\label{sec:ch23-preview}

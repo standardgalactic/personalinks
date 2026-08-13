@@ -1,0 +1,193 @@
+The following are analytical summaries of consecutive fragments
+of one research document.
+
+Reconstruct the document as a unified theoretical object.
+
+Produce a dense scholarly synthesis covering:
+
+- thesis;
+- primitives and definitions;
+- formalism;
+- mechanisms;
+- major arguments;
+- dependencies between concepts;
+- implications;
+- unresolved problems;
+- internal tensions;
+- connections likely to matter elsewhere in Spherepop.
+
+Remove repetition introduced by chunking.
+
+Do not flatten genuine distinctions.
+
+FRAGMENT SUMMARIES
+==================
+
+Spherepop’s structural properties—namely its idempotent commutative monoid [K
+behavior under merge and the quotienting effect of collapse—allow us to int[3D[K
+interpret its computational semantics through the lens of categorical algeb[5D[K
+algebra, particularly as a variant of tensor logic. While traditional tenso[5D[K
+tensor logic operates on abstract tensors with well‑defined multilinear ope[3D[K
+operations (tensor product), Spherepop’s merge operation provides an analog[6D[K
+analogous way of combining “geometric objects” in a manner that respects th[2D[K
+their idempotent and commutative nature.
+
+In categorical terms, the monoidal structure induced by merge mirrors how t[1D[K
+tensors combine under the tensor product: both are associative (up to canon[5D[K
+canonical equivalence) and have identity elements corresponding to degenera[8D[K
+degenerate or empty regions. Collapse acts similarly to normalizing steps s[1D[K
+seen in tensor algebra—eliminating redundancies and ensuring that each comb[4D[K
+combination is represented uniquely within $\mathcal{S}$.
+
+However, unlike conventional tensor logic which works over a field of scala[5D[K
+scalars with strict bilinearity, Spherepop operates on the space of geometr[7D[K
+geometric regions defined by metric and topological properties. This differ[6D[K
+difference means that while the categorical frameworks are comparable at an[2D[K
+an abstract level (both involve monoidal structures), the concrete realizab[8D[K
+realizability of these operations differs: tensor products operate algebrai[8D[K
+algebraically within vector spaces, whereas merge–collapse in Spherepop is [K
+realized through spatial aggregation and projection.
+
+Thus, we can view Spherepop as a geometric instantiation of ideas from tens[4D[K
+tensor logic—providing a richly expressive yet structured computational mod[3D[K
+model where “tensor-like” merging and normalization are expressed through t[1D[K
+the language of regions rather than abstract algebraic tensors. This perspe[6D[K
+perspective opens avenues for exploring differential geometry, topology, an[2D[K
+and machine learning applications by leveraging familiar concepts from line[4D[K
+linear algebra while adapting them to spatial data representations.
+
+**Complexity and Termination Analysis for Differentiable Spherepop**
+
+1. **Undecidability of Termination**
+   - The termination problem in Spherepop is equivalent to that in untyped [K
+λ‑calculus, which is known to be undecidable.
+   - For a term \(t\) in Spherepop, whether it terminates after finitely ma[2D[K
+many reduction steps (\(\rightsquigarrow\)) cannot be decided algorithmical[13D[K
+algorithmically because any such term can simulate an arbitrary λ‑term, and[3D[K
+and thus we can reduce the problem to the halting problem for λ‑calculus.
+   - Formally, if \(T_{\Lambda}\) is the termination predicate for λ‑calcul[8D[K
+λ‑calculus and \(E\) encodes Spherepop terms, then:
+     \[
+     T_{\Lambda}(M) \iff T_{\mathrm{Sph}}(E(M)),
+     \]
+     where \(T_{\mathrm{Sph}}\) is the termination predicate for Spherepop.[10D[K
+Spherepop. Since \(T_{\Lambda}\) is undecidable, so is \(T_{\mathrm{Sph}}\)[20D[K
+\(T_{\mathrm{Sph}}\).
+
+2. **Worst-Case Complexity**
+   - Because Spherepop can simulate untyped λ‑calculus, its worst-case eval[4D[K
+evaluation complexity grows at least as fast as the β-reduction cost in lam[3D[K
+lambda calculus.
+   - Without syntactic constraints, there are no upper bounds on how many m[1D[K
+merge–collapse steps a term might require, mirroring Turing machine behavio[7D[K
+behavior for hard inputs.
+
+3. **Geometric Costs**
+   - The actual computational cost also depends on the geometric representa[10D[K
+representation used (voxel grid size, mesh polygon count, implicit surface [K
+integration).
+   - This introduces lower bounds: worst-case evaluation costs are at least[5D[K
+least as high as β-reduction complexity and may be higher depending on the [K
+chosen geometric model.
+
+4. **Syntactic Restrictions for Termination**
+   - Certain syntactic fragments guarantee termination:
+     - If collapse preserves a measurable property (e.g., volume or area) a[1D[K
+and each merge strictly reduces this measure (\(\mu(A \diamond B) < \mu(A) [K
++ \mu(B)\)), the total geometric measure must decrease, forcing finite eval[4D[K
+evaluation.
+   - Such constraints reduce expressiveness but ensure termination by preve[5D[K
+preventing infinite regress in collapse operations.
+
+5. **Bounded Collapse Depth**
+   - Limiting the depth of nested collapses (e.g., bounding \(d(t)\), the n[1D[K
+number of successive collapses) also guarantees termination because each co[2D[K
+collapse cannot increase depth indefinitely due to idempotence (\(C(C(A)) =[1D[K
+= C(A)\)).
+   - However, merges might reintroduce collapsible regions; thus bounded de[2D[K
+depth must be combined with other syntactic restrictions.
+
+6. **Tractable Fragments via Constraints**
+   - Practical implementations often enforce:
+     1. Eager collapse after each merge.
+     2. Geometric bounds on collapse cost (e.g., volume limits).
+     3. Bounded region size in voxel grids or polygon count in meshes.
+     4. Restricted merge arity (limited number of inputs).
+   - Under these conditions, evaluation proceeds within polynomial or quasi[5D[K
+quasi-polynomial time, analogous to restricted λ‑calculus or typed function[8D[K
+functional languages.
+
+**Conclusion**
+Differentiable Spherepop inherits the undecidability and worst-case complex[7D[K
+complexity characteristics of universal computation due to its simulation c[1D[K
+capabilities via lambda calculus. Yet, by imposing syntactic constraints (e[2D[K
+(eager collapse, geometric bounds, depth limits), one can achieve tractable[9D[K
+tractable evaluation in polynomial time, making it feasible for practical a[1D[K
+applications while retaining expressive power. This analysis highlights tra[3D[K
+trade-offs between computational expressiveness and termination guarantees [K
+inherent in such a powerful geometric computation framework.
+
+**Durable Theoretical Information Extracted**
+
+1. **Parameterized Complexity Framework**
+   - *Quantities*: Depth of merge chains, number of primitive regions, voxe[4D[K
+voxel resolution ($n^3$), mesh polygon count, implicit level‑set resolution[10D[K
+resolution.
+   - *Resource‑Constrained Evaluation*: Allows incomplete evaluation simila[6D[K
+similar to approximate inference in probabilistic programming.
+
+2. **Evaluation Time for Voxel Spherepop**
+   - For a voxel representation with resolution $n^3$, each collapse step e[1D[K
+evaluates in time \(O(n^3)\).
+   - Under sparsity, complexity drops significantly due to reduced geometri[8D[K
+geometric detail.
+
+3. **Mesh Implementations**
+   - With bounded polygon count, evaluation scales proportionally to surfac[6D[K
+surface complexity (i.e., number of polygons).
+
+4. **Implicit Representations**
+   - Depend on discretization and step size for partial differential equati[6D[K
+equation (PDE) solvers used in collapse.
+
+5. **Semantic Foundations**
+   - Spherepop inherits undecidability and worst‑case complexity from class[5D[K
+classical computation.
+   - It is semantically rigorous yet geometrically grounded, comparable to [K
+symbolic models in expressive power.
+
+6. **Open Problems & Research Directions**
+   - **Collapse Operator Hierarchy**: Investigate whether there exists a st[2D[K
+strict hierarchy \(C_0 \prec C_1 \prec \dots\) of collapse operators ordere[6D[K
+ordered by expressiveness.
+   - **Semantic Stability & Confluence**: Determine under what conditions e[1D[K
+evaluation order does not affect the final semantic result (i.e., achieve c[1D[K
+confluence).
+   - **Geometric Invariants of Normal Forms**: Characterize the set of norm[4D[K
+normal forms \(\mathcal{N}\) and assess properties such as convexity, smoot[5D[K
+smoothness, contractibility, and uniqueness.
+   - **Resource‑Bounded Semantics**: Develop bounded‑resource models analog[6D[K
+analogous to those in functional and logic programming.
+   - **Continuous Collapse & Differentiable Structure**: Analyze how differ[6D[K
+differentiable manifolds of regions arise when \(\mathcal{G}\) is a Banach [K
+manifold; explore potential fractal or intricate limiting surfaces.
+   - **Monoidal & Cartesian Structure**: Identify whether merge can be mode[4D[K
+modeled as a monoidal operator and collapse as a quotient functor, establis[8D[K
+establishing categorical equivalence with known rewriting systems (e.g., in[2D[K
+interaction nets).
+   - **Comparisons with Established Models**: Determine formal equivalences[12D[K
+equivalences/inequivalences between Spherepop and existing computational mo[2D[K
+models such as lambda calculus or neural networks.
+   - **Geometric Interpretation via Energy Minimization**: Express collapse[8D[K
+collapse in variational form using energy functionals \(E(A)\) and gradient[8D[K
+gradient descent to explore convergence properties.
+
+7. **Implementation Strategies**
+   - *Discrete Representations*: Voxel/surface approximations with threshol[8D[K
+thresholding/smoothing operators for merge and collapse.
+   - *Implicit Representations*: Level‑set functions solved via PDEs (e.g.,[6D[K
+(e.g., curvature flow), enabling continuous, differentiable collapse.
+
+These points encapsulate the core theoretical concepts, open questions, and[3D[K
+and methodological directions derived from the document.
+

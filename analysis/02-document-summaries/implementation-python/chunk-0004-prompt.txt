@@ -1,0 +1,1238 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+def _validate_history_sequential(config: Config) -> list[str]:
+    """Check that history events have consecutive indices starting at 0."""
+    violations: list[str] = []
+    
+    for i, event in enumerate(config.history):
+        if not hasattr(event, 'history_index'):
+            violations.append(
+                f"History event at position {i} missing history_index attribute"
+            )
+            continue
+        
+        if event.history_index != i:
+            violations.append(
+                f"History event at position {i} has history_index={event.history_index}, expected {i}"
+            )
+    
+    return violations
+
+
+def _validate_collapse_log(config: Config) -> list[str]:
+    """Check that collapse_log indices reference actual CollapseEvents."""
+    violations: list[str] = []
+    
+    for log_entry in config.collapse_log:
+        # collapse_log is Tuple[Tuple[int, Tuple[FrozenSet[str], ...]], ...]
+        # Each entry is (history_index, classes)
+        if not isinstance(log_entry, tuple) or len(log_entry) != 2:
+            violations.append(
+                f"collapse_log entry has invalid structure: {log_entry}"
+            )
+            continue
+        
+        log_idx, _classes = log_entry
+        
+        if log_idx < 0 or log_idx >= len(config.history):
+            violations.append(
+                f"collapse_log contains index {log_idx}, but history has only {len(config.history)} events"
+            )
+            continue
+        
+        event = config.history[log_idx]
+        if not isinstance(event, CollapseEvent):
+            violations.append(
+                f"collapse_log index {log_idx} points to {type(event).__name__}, not CollapseEvent"
+            )
+    
+    return violations
+
+
+def _validate_quotient_uniqueness(config: Config) -> list[str]:
+    """Check that there are no duplicate Quotients with identical members."""
+    violations: list[str] = []
+    
+    quotients = [o for o in config.option_space if isinstance(o, Quotient)]
+    
+    # Check for duplicates by comparing members
+    for i, q1 in enumerate(quotients):
+        for q2 in quotients[i+1:]:
+            if q1.members == q2.members:
+                violations.append(
+                    f"Duplicate Quotient with members {sorted(q1.members)}"
+                )
+                break  # Only report once per duplicate
+    
+    return violations
+
+
+def _validate_label_uniqueness(sigma: Expr) -> list[str]:
+    """Check that Sphere labels are globally unique (implementation choice).
+    
+    Per THEORY_STATUS.md Q8, global label uniqueness is an implementation
+    convenience to make pop(label) unambiguous, not a theoretical requirement.
+    """
+    violations: list[str] = []
+    
+    labels: dict[str, list[str]] = {}  # label -> list of paths where it appears
+    
+    def recurse(expr: Expr, path: str) -> None:
+        if isinstance(expr, Sphere) and expr.label is not None:
+            if expr.label in labels:
+                labels[expr.label].append(path)
+            else:
+                labels[expr.label] = [path]
+            
+            for i, item in enumerate(expr.items):
+                if isinstance(item, Sphere):
+                    recurse(item, f"{path}.items[{i}]")
+    
+    recurse(sigma, "sigma")
+    
+    for label, paths in labels.items():
+        if len(paths) > 1:
+            violations.append(
+                f"Label '{label}' appears at multiple paths: {', '.join(paths)}"
+            )
+    
+    return violations
+
+============================================================
+FILE: spherepop/views.py
+============================================================
+
+"""Derived read-only views.
+
+Views are presentation/comparison functions that don't modify state.
+The key principle: views.representative() is the ONLY place that may
+choose which Quotient member to display for presentation.
+"""
+
+from __future__ import annotations
+
+from typing import FrozenSet
+
+from spherepop.model import Atom, Config, Expr, Quotient, Sphere
+
+
+def representative(value: str | Quotient) -> str:
+    """The one place in this codebase permitted to pick a single member to
+    stand in for a whole equivalence class, for display purposes only.
+
+    This choice (sorted-first member) carries no semantic weight: it never
+    feeds back into model.py or semantics.py, and it is not what equality,
+    hashing, or admissibility checks use to compare Quotients.
+    
+    Examples:
+        >>> from spherepop.model import Quotient
+        >>> from spherepop.views import representative
+        
+        # Plain string passes through unchanged
+        >>> representative("option_a")
+        'option_a'
+        
+        # Quotient: pick lexicographically first member
+        >>> q = Quotient(members=frozenset({"zebra", "apple", "banana"}))
+        >>> representative(q)
+        'apple'
+        
+        # Display choice is deterministic but semantically arbitrary
+        >>> q2 = Quotient(members=frozenset({"x", "y", "z"}))
+        >>> representative(q2)
+        'x'
+        
+        # Equality and hashing use ALL members, not representatives
+        >>> q3 = Quotient(members=frozenset({"z", "x", "y"}))
+        >>> q2 == q3  # True: same members
+        True
+        >>> representative(q2) == representative(q3)  # Also 'x'
+        True
+    """
+    if isinstance(value, Quotient):
+        return sorted(value.members)[0]
+    return value
+
+
+def render_expr(expr: Expr) -> str:
+    if isinstance(expr, Atom):
+        return representative(expr.name)
+    return "(" + " ".join(render_expr(item) for item in expr.items) + ")"
+
+
+def render_event(event: object) -> str:
+    attrs = event.__dict__
+    details = ", ".join(f"{k}={attrs[k]!r}" for k in sorted(attrs.keys()))
+    return f"{type(event).__name__}({details})"
+
+
+def history_view(config: Config) -> tuple[str, ...]:
+    return tuple(render_event(event) for event in config.history)
+
+
+def extensional_view(config: Config) -> tuple[str, tuple[str, ...]]:
+    # Sort by each option's display representative -- option_space itself
+    # may hold a mix of plain strings and Quotients, which are not
+    # mutually orderable.
+    return render_expr(config.sigma), tuple(sorted(representative(o) for o in config.option_space))
+
+
+def history_prefix_view(config: Config, length: int) -> tuple[str, ...]:
+    if length < 0:
+        raise ValueError("length must be non-negative")
+    return tuple(render_event(event) for event in config.history[:length])
+
+
+def make_sphere(*atoms: str) -> Sphere:
+    return Sphere(tuple(Atom(a) for a in atoms))
+
+
+def format_available_paths(expr: Sphere) -> str:
+    """Format available Sphere paths for error messages.
+    
+    Helper for creating actionable error messages when a path is invalid.
+    """
+    from spherepop.path_utils import all_sphere_paths
+    paths = [p for p in all_sphere_paths(expr) if p]  # Exclude root
+    if not paths:
+        return "no nested Spheres available (only root)"
+    return f"valid paths: {', '.join(str(p) for p in sorted(paths))}"
+
+
+def format_available_options(option_space: FrozenSet[str | Quotient]) -> str:
+    """Format option space for error messages.
+    
+    Helper for creating actionable error messages when operations fail.
+    """
+    if not option_space:
+        return "option space is empty"
+    options = [representative(opt) for opt in option_space]
+    if len(options) <= 5:
+        return f"available options: {{{', '.join(sorted(options))}}}"
+    sorted_opts = sorted(options)
+    return f"available options: {{{', '.join(sorted_opts[:5])}, ... ({len(options)} total)}}"
+
+============================================================
+FILE: tests/test_baseline.py
+============================================================
+
+"""Tests for benchmark baseline tracking system."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from spherepop.baseline import (
+    DEFAULT_BASELINE_DIR,
+    BaselineStore,
+    BenchmarkResult,
+    extract_structural_params,
+    format_comparison_report,
+    get_default_store,
+)
+
+
+# ============================================================================
+# BenchmarkResult Tests
+# ============================================================================
+
+
+def test_benchmark_result_structural_key():
+    """Structural key captures relevant dimensions."""
+    result = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=10,
+        option_count=100,
+        horizon=3,
+        branching=2,
+    )
+    
+    assert result.structural_key() == (10, 100, 3, 2)
+
+
+def test_benchmark_result_is_structurally_equivalent():
+    """Structural equivalence checks name, group, and dimensions."""
+    r1 = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=10,
+        option_count=100,
+    )
+    
+    r2 = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=10,
+        option_count=100,
+        mean_us=500.0,  # Different performance
+    )
+    
+    r3 = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=20,  # Different structure
+        option_count=100,
+    )
+    
+    assert r1.is_structurally_equivalent(r2)  # Same structure
+    assert not r1.is_structurally_equivalent(r3)  # Different structure
+
+
+def test_benchmark_result_relative_change():
+    """Relative change computes ratio of current/baseline."""
+    baseline = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        mean_us=100.0,
+    )
+    
+    current = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        mean_us=150.0,  # 1.5x slower
+    )
+    
+    assert current.relative_change(baseline) == 1.5
+
+
+def test_benchmark_result_relative_change_requires_structural_equivalence():
+    """Cannot compare structurally different benchmarks."""
+    baseline = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=10,
+    )
+    
+    current = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=20,  # Different structure
+    )
+    
+    with pytest.raises(ValueError, match="structurally different"):
+        current.relative_change(baseline)
+
+
+def test_benchmark_result_regression_severity():
+    """Regression severity classification."""
+    baseline = BenchmarkResult(name="test", group="g", mean_us=100.0)
+    
+    # Improvement: < 0.9x
+    improved = BenchmarkResult(name="test", group="g", mean_us=80.0)
+    assert improved.regression_severity(baseline) == "improvement"
+    
+    # Stable: 0.9x - 1.1x
+    stable = BenchmarkResult(name="test", group="g", mean_us=105.0)
+    assert stable.regression_severity(baseline) == "stable"
+    
+    # Regression: 1.1x - 1.5x
+    regressed = BenchmarkResult(name="test", group="g", mean_us=130.0)
+    assert regressed.regression_severity(baseline) == "regression"
+    
+    # Severe regression: > 1.5x
+    severe = BenchmarkResult(name="test", group="g", mean_us=200.0)
+    assert severe.regression_severity(baseline) == "severe_regression"
+
+
+# ============================================================================
+# BaselineStore Tests
+# ============================================================================
+
+
+def test_baseline_store_initialization(tmp_path):
+    """BaselineStore creates root directory."""
+    store_dir = tmp_path / "baselines"
+    assert not store_dir.exists()
+    
+    store = BaselineStore(root_dir=store_dir)
+    assert store_dir.exists()
+
+
+def test_baseline_store_save_and_load(tmp_path):
+    """Save and load benchmark results."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    result = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=10,
+        mean_us=123.45,
+        timestamp="2026-08-13T09:00:00",
+    )
+    
+    store.save_result(result)
+    
+    # Load history
+    history = store.load_history("group1", "test_foo")
+    assert len(history) == 1
+    assert history[0].name == "test_foo"
+    assert history[0].mean_us == 123.45
+
+
+def test_baseline_store_append_results(tmp_path):
+    """Multiple saves append to history."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    result1 = BenchmarkResult(name="test", group="g", mean_us=100.0, timestamp="T1")
+    result2 = BenchmarkResult(name="test", group="g", mean_us=110.0, timestamp="T2")
+    
+    store.save_result(result1)
+    store.save_result(result2)
+    
+    history = store.load_history("g", "test")
+    assert len(history) == 2
+    assert history[0].timestamp == "T1"
+    assert history[1].timestamp == "T2"
+
+
+def test_baseline_store_get_latest_baseline(tmp_path):
+    """Get latest baseline returns most recent."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    result1 = BenchmarkResult(name="test", group="g", mean_us=100.0, timestamp="T1")
+    result2 = BenchmarkResult(name="test", group="g", mean_us=110.0, timestamp="T2")
+    result3 = BenchmarkResult(name="test", group="g", mean_us=105.0, timestamp="T3")
+    
+    store.save_result(result1)
+    store.save_result(result2)
+    store.save_result(result3)
+    
+    latest = store.get_latest_baseline("g", "test")
+    assert latest is not None
+    assert latest.timestamp == "T3"
+    assert latest.mean_us == 105.0
+
+
+def test_baseline_store_get_latest_baseline_no_history(tmp_path):
+    """Get latest baseline returns None when no history."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    latest = store.get_latest_baseline("nonexistent", "test")
+    assert latest is None
+
+
+def test_baseline_store_compare_to_baseline_no_baseline(tmp_path):
+    """Comparison without baseline reports no_baseline."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    result = BenchmarkResult(name="test", group="g", mean_us=100.0)
+    comparison = store.compare_to_baseline(result)
+    
+    assert not comparison["has_baseline"]
+    assert comparison["severity"] == "no_baseline"
+    assert comparison["ratio"] is None
+
+
+def test_baseline_store_compare_to_baseline_with_baseline(tmp_path):
+    """Comparison with baseline computes ratio and severity."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    baseline = BenchmarkResult(name="test", group="g", mean_us=100.0, timestamp="T1")
+    store.save_result(baseline)
+    
+    current = BenchmarkResult(name="test", group="g", mean_us=150.0, timestamp="T2")
+    comparison = store.compare_to_baseline(current)
+    
+    assert comparison["has_baseline"]
+    assert comparison["ratio"] == 1.5
+    assert comparison["severity"] == "severe_regression"  # 1.5x = severe
+    assert comparison["delta_us"] == 50.0
+    assert comparison["baseline_timestamp"] == "T1"
+
+
+def test_baseline_store_explicit_baseline(tmp_path):
+    """Can compare against explicit baseline, not just latest."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    baseline1 = BenchmarkResult(name="test", group="g", mean_us=100.0, timestamp="T1")
+    baseline2 = BenchmarkResult(name="test", group="g", mean_us=200.0, timestamp="T2")
+    
+    store.save_result(baseline1)
+    store.save_result(baseline2)
+    
+    current = BenchmarkResult(name="test", group="g", mean_us=150.0, timestamp="T3")
+    
+    # Compare to explicit baseline1 (not latest)
+    comparison = store.compare_to_baseline(current, baseline=baseline1)
+    assert comparison["ratio"] == 1.5  # 150/100
+    assert comparison["baseline_timestamp"] == "T1"
+
+
+# ============================================================================
+# Utility Function Tests
+# ============================================================================
+
+
+def test_extract_structural_params_depth():
+    """Extract depth parameter from benchmark name."""
+    params = extract_structural_params("test_benchmark_pop_depth_20")
+    assert params["history_len"] == 20
+
+
+def test_extract_structural_params_options():
+    """Extract option count from benchmark name."""
+    params = extract_structural_params("test_benchmark_refuse_1000_options")
+    assert params["option_count"] == 1000
+
+
+def test_extract_structural_params_horizon():
+    """Extract horizon parameter from benchmark name."""
+    params = extract_structural_params("test_benchmark_horizon_equivalent_k[3]")
+    assert params["horizon"] == 3
+
+
+def test_extract_structural_params_ops():
+    """Extract operation count from benchmark name."""
+    params = extract_structural_params("test_benchmark_eval_program_100_ops")
+    assert params["history_len"] == 100
+
+
+def test_extract_structural_params_multiple():
+    """Extract multiple parameters."""
+    params = extract_structural_params("test_refuse_1000_options_depth_50")
+    assert params["option_count"] == 1000
+    assert params["history_len"] == 50
+
+
+def test_format_comparison_report_no_baseline():
+    """Format report when no baseline available."""
+    result = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        mean_us=123.45,
+        stddev_us=5.67,
+    )
+    
+    comparison = {"has_baseline": False}
+    report = format_comparison_report(result, comparison)
+    
+    assert "No baseline" in report
+    assert "123" in report  # Flexible for rounding (123.4 or 123.5)
+
+
+def test_format_comparison_report_with_baseline():
+    """Format report with baseline comparison."""
+    result = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        mean_us=150.0,
+        stddev_us=10.0,
+    )
+    
+    comparison = {
+        "has_baseline": True,
+        "ratio": 1.5,
+        "severity": "regression",
+        "delta_us": 50.0,
+        "baseline_mean_us": 100.0,
+    }
+    
+    report = format_comparison_report(result, comparison)
+    
+    assert "100.0μs" in report  # Baseline
+    assert "150.0μs" in report  # Current
+    assert "+50%" in report or "50.0%" in report  # Change percentage
+    assert "regression" in report
+
+
+def test_format_comparison_report_improvement():
+    """Format report for performance improvement."""
+    result = BenchmarkResult(name="test", group="g", mean_us=80.0, stddev_us=5.0)
+    
+    comparison = {
+        "has_baseline": True,
+        "ratio": 0.8,
+        "severity": "improvement",
+        "delta_us": -20.0,
+        "baseline_mean_us": 100.0,
+    }
+    
+    report = format_comparison_report(result, comparison)
+    
+    assert "✓" in report
+    assert "improvement" in report
+    assert "-20%" in report or "20.0%" in report
+
+
+def test_format_comparison_report_severe_regression():
+    """Format report for severe regression."""
+    result = BenchmarkResult(name="test", group="g", mean_us=200.0, stddev_us=10.0)
+    
+    comparison = {
+        "has_baseline": True,
+        "ratio": 2.0,
+        "severity": "severe_regression",
+        "delta_us": 100.0,
+        "baseline_mean_us": 100.0,
+    }
+    
+    report = format_comparison_report(result, comparison)
+    
+    assert "✗" in report
+    assert "severe_regression" in report
+
+
+def test_get_default_store():
+    """Default store uses expected directory."""
+    store = get_default_store()
+    assert store.root_dir == DEFAULT_BASELINE_DIR
+
+
+def test_baseline_store_json_format(tmp_path):
+    """Baseline files are valid JSON."""
+    store = BaselineStore(root_dir=tmp_path / "baselines")
+    
+    result = BenchmarkResult(
+        name="test_foo",
+        group="group1",
+        history_len=10,
+        mean_us=123.45,
+        timestamp="2026-08-13T09:00:00",
+    )
+    
+    store.save_result(result)
+    
+    # Check JSON file directly
+    baseline_path = tmp_path / "baselines" / "group1" / "test_foo.json"
+    assert baseline_path.exists()
+    
+    with open(baseline_path) as f:
+        data = json.load(f)
+    
+    assert isinstance(data, list)
+    assert len(data) == 1
+    assert data[0]["name"] == "test_foo"
+    assert data[0]["mean_us"] == 123.45
+
+============================================================
+FILE: tests/test_grammar.py
+============================================================
+
+import unittest
+
+from spherepop import eval_program, extensional_view, make_config, render_expr, transition
+from spherepop.grammar import GrammarError, parse_event, parse_expr, parse_sphere
+from spherepop.model import Atom, BindOp, CollapseOp, PopOp, RefuseOp, Sphere
+
+
+class GrammarTests(unittest.TestCase):
+    def test_parse_sphere_carries_a_real_label(self):
+        sp = parse_sphere("(outer: A (inner: B C) D)")
+        self.assertEqual(sp.label, "outer")
+        self.assertEqual(render_expr(sp), "(A (B C) D)")
+        inner = sp.items[1]
+        self.assertIsInstance(inner, Sphere)
+        self.assertEqual(inner.label, "inner")
+
+    def test_parse_expr_atom_is_unlabeled_value(self):
+        self.assertEqual(parse_expr("x1"), Atom("x1"))
+        self.assertEqual(parse_expr("42"), Atom("42"))
+
+    def test_parse_sphere_rejects_bare_atom_at_top_level(self):
+        with self.assertRaises(GrammarError):
+            parse_sphere("x1")
+
+    def test_parse_sphere_requires_colon_after_label(self):
+        with self.assertRaises(GrammarError):
+            parse_sphere("(outer A B)")
+
+    def test_parse_event_pop(self):
+        op = parse_event("pop(inner)")
+        self.assertEqual(op, PopOp(label="inner"))
+
+    def test_parse_event_refuse(self):
+        op = parse_event("refuse(outer, {a1, a2})")
+        self.assertIsInstance(op, RefuseOp)
+        self.assertEqual(op.label, "outer")
+        self.assertEqual(op.refused, frozenset({"a1", "a2"}))
+
+    def test_parse_event_bind(self):
+        op = parse_event("bind(outer, ALL)")
+        self.assertEqual(op, BindOp(predicate="ALL", label="outer"))
+
+    def test_parse_event_collapse_closes_pairs_transitively(self):
+        # a~b, b~c should merge into one class {a,b,c}, not two overlapping
+        # pairs -- ~ and disjoint classes are the same equivalence relation.
+        op = parse_event("collapse(outer, {a~b, b~c})")
+        self.assertIsInstance(op, CollapseOp)
+        self.assertEqual(op.label, "outer")
+        self.assertEqual(op.classes, (frozenset({"a", "b", "c"}),))
+
+    def test_parse_event_collapse_multiple_disjoint_pairs(self):
+        op = parse_event("collapse(outer, {a~b, x~y})")
+        self.assertIsInstance(op, CollapseOp)
+        self.assertEqual(set(op.classes), {frozenset({"a", "b"}), frozenset({"x", "y"})})
+
+    def test_parse_event_unknown_keyword(self):
+        with self.assertRaises(GrammarError):
+            parse_event("merge(outer, {a,b})")
+
+    def test_grammar_labeled_pop_runs_through_ordinary_transition(self):
+        sigma = parse_sphere("(outer: A (inner: B C) D)")
+        cfg = make_config(sigma, {"x"})
+        out = transition(cfg, parse_event("pop(inner)"))
+        self.assertEqual(render_expr(out.sigma), "(A B C D)")
+        # inner's label dissolves with it; outer's persists on the rebuilt root.
+        self.assertEqual(out.sigma.label, "outer")
+
+    def test_grammar_events_compose_with_eval_program(self):
+        sigma = parse_sphere("(outer: A (inner: B C) D)")
+        cfg = make_config(sigma, {"a1", "a2", "b1"})
+        program = [
+            parse_event("refuse(outer, {a2})"),
+            parse_event("bind(outer, ALL)"),
+            parse_event("pop(inner)"),
+        ]
+        out = eval_program(cfg, program)
+        self.assertEqual(extensional_view(out), ("(A B C D)", ("a1", "b1")))
+        # Appendix G provenance: each event records the label it named.
+        self.assertEqual([e.label for e in out.history], ["outer", "outer", "inner"])
+
+    def test_tokenize_unexpected_character(self):
+        """Tokenizer rejects unexpected characters."""
+        with self.assertRaises(GrammarError):
+            parse_expr("(root: $ invalid)")
+    
+    def test_parse_expr_unexpected_end(self):
+        """Parser rejects unexpected end of input."""
+        with self.assertRaises(GrammarError):
+            parse_expr("(root:")
+    
+    def test_parse_sphere_non_ident_label(self):
+        """Sphere label must be identifier."""
+        with self.assertRaises(GrammarError):
+            parse_expr("(123: A B)")
+    
+    def test_parse_sphere_missing_close_paren(self):
+        """Sphere requires closing paren."""
+        with self.assertRaises(GrammarError):
+            parse_expr("(root: A B")
+    
+    def test_parse_expr_trailing_tokens(self):
+        """Parser rejects trailing tokens."""
+        with self.assertRaises(GrammarError):
+            parse_expr("(root: A) extra")
+    
+    def test_parse_event_non_ident_keyword(self):
+        """Event keyword must be identifier."""
+        with self.assertRaises(GrammarError):
+            parse_event("123(root)")
+    
+    def test_parse_event_non_ident_label(self):
+        """Event label must be identifier."""
+        with self.assertRaises(GrammarError):
+            parse_event("pop(123)")
+    
+    def test_parse_event_bind_non_ident_predicate(self):
+        """BIND predicate must be identifier."""
+        with self.assertRaises(GrammarError):
+            parse_event("bind(root, 123)")
+    
+    def test_parse_event_trailing_tokens(self):
+        """Parser rejects trailing tokens after event."""
+        with self.assertRaises(GrammarError):
+            parse_event("pop(root) extra")
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_internal_coverage.py
+============================================================
+
+"""Direct tests for internal functions to complete coverage.
+
+Tests internal implementation details that are hard to trigger through
+the public API but important for defensive programming.
+
+These tests import and call private functions directly (violating
+encapsulation) specifically to achieve complete branch coverage of
+defensive checks.
+"""
+import pytest
+from spherepop.model import Atom, Config, PopEvent, Sphere
+from spherepop.semantics import EvalError, _pop_path, history_is_prefix
+
+
+class TestPopPathInternal:
+    """Direct tests for _pop_path internal defensive checks."""
+
+    def test_pop_path_target_not_sphere_at_recursion_end(self):
+        """Internal check: target node at recursion end must be Sphere."""
+        # Create structure where path ends at an Atom
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        
+        # Path (0,) ends at Atom("a"), not a Sphere
+        # This is caught by line 44 in recurse() when target is empty
+        with pytest.raises(EvalError, match="POP target must be a Sphere"):
+            _pop_path(sigma, (0,))
+
+    def test_pop_path_traverses_through_atom(self):
+        """Internal check: path cannot traverse through Atom."""
+        # Create structure with Atom that path tries to traverse
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        
+        # Path (0, 0) tries to traverse through Atom("a")
+        # This is caught by line 48 when node is not Sphere
+        with pytest.raises(EvalError, match="POP path traverses through non-Sphere"):
+            _pop_path(sigma, (0, 0))
+
+    def test_pop_path_index_negative(self):
+        """Internal check: negative indices rejected."""
+        inner = Sphere((Atom("a"),), label="inner")
+        sigma = Sphere((inner,), label="root")
+        
+        # Path with negative index
+        with pytest.raises(EvalError, match="POP path is out of range"):
+            _pop_path(sigma, (-1,))
+
+    def test_pop_path_index_out_of_bounds(self):
+        """Internal check: out-of-bounds indices rejected."""
+        inner = Sphere((Atom("a"),), label="inner")
+        sigma = Sphere((inner,), label="root")
+        
+        # Path (5,) - index 5 doesn't exist
+        with pytest.raises(EvalError, match="POP path is out of range"):
+            _pop_path(sigma, (5,))
+
+    def test_pop_path_deep_traversal_through_atom(self):
+        """Internal check: deep path through Atom rejected."""
+        # Nested structure
+        deepest = Sphere((Atom("a"),), label="deep")
+        middle = Sphere((deepest, Atom("b")), label="middle")
+        sigma = Sphere((middle,), label="root")
+        
+        # Path (0, 1, 0) tries to traverse through Atom("b")
+        with pytest.raises(EvalError, match="POP path traverses through non-Sphere"):
+            _pop_path(sigma, (0, 1, 0))
+
+    def test_pop_path_result_not_sphere_defensive_check(self):
+        """Internal check: result must be Sphere (line 70).
+        
+        This is a defensive assertion that should never trigger through
+        normal code paths - the function guarantees a Sphere result.
+        Cannot be triggered without patching the function itself.
+        """
+        # This defensive check (line 70) protects against internal
+        # bugs in the recursion. It cannot be triggered through
+        # valid inputs because recurse() always returns Sphere when
+        # called from valid path.
+        # 
+        # We document it exists but cannot test it without mocking.
+        pass
+
+    def test_pop_path_valid_single_level(self):
+        """Valid single-level POP for comparison."""
+        inner = Sphere((Atom("a"), Atom("b")), label="inner")
+        sigma = Sphere((inner, Atom("c")), label="root")
+        
+        result = _pop_path(sigma, (0,))
+        
+        # Inner sphere contents promoted
+        assert isinstance(result, Sphere)
+        assert len(result.items) == 3
+        assert result.label == "root"
+
+    def test_pop_path_valid_multi_level(self):
+        """Valid multi-level POP for comparison."""
+        deepest = Sphere((Atom("x"),), label="deep")
+        middle = Sphere((deepest,), label="middle")
+        sigma = Sphere((middle,), label="root")
+        
+        result = _pop_path(sigma, (0, 0))
+        
+        # Deepest sphere contents promoted through middle
+        assert isinstance(result, Sphere)
+        middle_result = result.items[0]
+        assert isinstance(middle_result, Sphere)
+
+
+class TestHistoryIsPrefix:
+    """Tests for history_is_prefix utility function."""
+
+    def test_history_is_prefix_longer_old_history(self):
+        """history_is_prefix returns False when old history is longer."""
+        cfg_old = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+                PopEvent(history_index=1, path=(1,), label=None),
+                PopEvent(history_index=2, path=(2,), label=None),
+            )
+        )
+        
+        cfg_new = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+            )
+        )
+        
+        # Old history (3 events) > new history (1 event)
+        assert history_is_prefix(cfg_old, cfg_new) is False
+
+    def test_history_is_prefix_true_case(self):
+        """history_is_prefix returns True when old is prefix."""
+        cfg_old = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+            )
+        )
+        
+        cfg_new = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+                PopEvent(history_index=1, path=(1,), label=None),
+            )
+        )
+        
+        assert history_is_prefix(cfg_old, cfg_new) is True
+
+    def test_history_is_prefix_equal_histories(self):
+        """history_is_prefix returns True when histories are equal."""
+        cfg1 = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+            )
+        )
+        
+        cfg2 = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+            )
+        )
+        
+        assert history_is_prefix(cfg1, cfg2) is True
+
+    def test_history_is_prefix_false_mismatch(self):
+        """history_is_prefix returns False when histories diverge."""
+        cfg_old = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+            )
+        )
+        
+        cfg_new = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(1,), label=None),  # Different path
+            )
+        )
+        
+        assert history_is_prefix(cfg_old, cfg_new) is False
+
+
+class TestGrammarInternals:
+    """Direct tests for grammar.py internal error paths."""
+
+    def test_cursor_pop_unexpected_end(self):
+        """Test _Cursor.pop() when out of tokens (line 121)."""
+        from spherepop.grammar import GrammarError, _Cursor, _Token
+        
+        # Create empty cursor
+        cur = _Cursor([])
+        
+        with pytest.raises(GrammarError, match="unexpected end of input"):
+            cur.pop()
+
+    def test_parse_value_invalid_token_type(self):
+        """Test _parse_value() with non-IDENT/NUMBER token (line 136)."""
+        from spherepop.grammar import GrammarError, _Cursor, _Token
+        
+        # Create cursor with PUNCT token where value expected
+        cur = _Cursor([_Token("PUNCT", "{")])
+        
+        from spherepop.grammar import _parse_value
+        with pytest.raises(GrammarError, match="expected a Value"):
+            _parse_value(cur)
+
+    def test_parse_expr_peek_none(self):
+        """Test _parse_expr() when peek() returns None (line 143)."""
+        from spherepop.grammar import GrammarError, _Cursor
+        
+        # Empty cursor causes peek() to return None
+        cur = _Cursor([])
+        
+        from spherepop.grammar import _parse_expr
+        with pytest.raises(GrammarError, match="unexpected end of input while parsing"):
+            _parse_expr(cur)
+
+============================================================
+FILE: tests/test_multi_timescale_continuation.py
+============================================================
+
+import importlib.util
+import pathlib
+import sys
+import unittest
+
+
+def _load_experiment_module():
+    repo_root = pathlib.Path(__file__).resolve().parents[1]
+    module_path = repo_root / "spherepop" / "29-multi-timescale-continuation" / "run.py"
+    spec = importlib.util.spec_from_file_location("multi_timescale_run", module_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+class MultiTimescaleContinuationTests(unittest.TestCase):
+    def test_refuse_and_collapse_are_reachable(self):
+        mod = _load_experiment_module()
+        policies = [
+            ("novelty_only", mod.choose_novelty_only),
+            ("shortest_task_first", mod.choose_shortest_task_first),
+            ("max_emcg", mod.choose_max_emcg),
+            ("emcg_over_cost_antistarvation", mod.choose_ratio_antistarvation),
+        ]
+        outputs = [mod.simulate(name, chooser) for name, chooser in policies]
+
+        total_refuse = sum(scope["refuse"] for out in outputs for scope in out["scope_stats"])
+        total_collapse = sum(scope["collapse"] for out in outputs for scope in out["scope_stats"])
+
+        self.assertGreater(total_refuse, 0)
+        self.assertGreater(total_collapse, 0)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_observers.py
+============================================================
+
+import unittest
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import BindOp, CollapseOp, PopOp, RefuseOp
+from spherepop.observers import (
+    admissible,
+    confluent,
+    divergent,
+    equivalent_at,
+    extensionally_equivalent,
+    horizon_equivalent,
+    intensionally_equivalent,
+    irreducibly_divergent,
+    regretful,
+)
+
+
+class ObserverTests(unittest.TestCase):
+    def test_admissible_reports_without_mutating(self):
+        flat = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+        before = (flat.history, flat.option_space, flat.sigma)
+        self.assertFalse(admissible(PopOp(), flat))
+        self.assertTrue(admissible(BindOp("ALL"), flat))
+        self.assertEqual((flat.history, flat.option_space, flat.sigma), before)
+
+    def test_confluent_identifies_under_stated_policy(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        left = transition(base, RefuseOp(frozenset({"a2"})))
+        right = transition(base, RefuseOp(frozenset({"a1"})))
+        identify_a = CollapseOp(classes=(frozenset({"a1", "a2"}),))
+        self.assertTrue(confluent(left, right, identify_a))
+        # applying the policy for analysis does not append it to either history
+        self.assertEqual(len(left.history), 1)
+        self.assertEqual(len(right.history), 1)
+
+    def test_divergent_survives_unrelated_policy(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        left = transition(base, RefuseOp(frozenset({"a2"})))
+        right = transition(base, RefuseOp(frozenset({"a1"})))
+        unrelated = CollapseOp(classes=(frozenset({"b1", "b2"}),))
+        self.assertTrue(divergent(left, right, unrelated))
+
+    def test_divergent_is_negation_of_confluent(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        left = transition(base, RefuseOp(frozenset({"a2"})))
+        right = transition(base, RefuseOp(frozenset({"a1"})))
+        policy = CollapseOp(classes=(frozenset({"a1", "a2"}),))
+        self.assertEqual(confluent(left, right, policy), not divergent(left, right, policy))
+
+    def test_structural_divergence_survives_every_atom_policy(self):
+        base = make_config(parse_sphere("(A (B C) D)"), {"x", "y"})
+        left = transition(base, PopOp(path=(1,)))
+        right = base
+        self.assertTrue(divergent(left, right, CollapseOp(classes=(frozenset({"B", "C"}),))))
+        self.assertTrue(divergent(left, right, CollapseOp(classes=(frozenset({"A", "D"}),))))
+
+    def test_regretful_is_strict_subset_relative_to_common_prefix(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        narrow = transition(base, RefuseOp(frozenset({"a1", "a2"})))
+        unrestricted = transition(base, BindOp("ALL"))
+        incomparable = transition(base, BindOp("prefix:a"))
+
+        self.assertTrue(regretful(base, narrow, unrestricted))
+        self.assertFalse(regretful(base, narrow, incomparable))
+        self.assertFalse(regretful(base, unrestricted, narrow))  # not smaller, so no regret
+
+    def test_regretful_rejects_configs_without_common_prefix(self):
+        # A base with at least one committed event, so the prefix check is
+        # non-vacuous (an empty-history base is trivially a prefix of any
+        # history -- see the caveat on regretful()).
+        base0 = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        base = transition(base0, BindOp("ALL"))
+        unrestricted = transition(base, BindOp("ALL"))
+        unrelated = transition(make_config(parse_sphere("(X)"), {"z"}), RefuseOp(frozenset({"z"})))
+        with self.assertRaises(ValueError):
+            regretful(base, unrelated, unrestricted)
+
+    def test_equivalent_at_prefix_then_parts_ways(self):
+        base = make_config(parse_sphere("(A (B C) D)"), {"a1", "a2", "b1"})
+        shared_prefix = [BindOp("contains:a"), RefuseOp(frozenset({"a2"}))]
+        ops_left = shared_prefix + [PopOp(path=(1,))]
+        ops_right = shared_prefix + [BindOp("ALL")]
+
+        self.assertTrue(equivalent_at(base, ops_left, ops_right, 0))
+        self.assertTrue(equivalent_at(base, ops_left, ops_right, 2))
+        self.assertFalse(equivalent_at(base, ops_left, ops_right, 3))
+        self.assertEqual(base.history, ())  # replay never touches base
+
+    def test_equivalent_at_rejects_negative_k(self):
+        base = make_config(parse_sphere("(A B)"), {"a1"})
+        with self.assertRaises(ValueError):
+            equivalent_at(base, [], [], -1)
+
+    def test_irreducibly_divergent_over_a_policy_family(self):
+        base = make_config(parse_sphere("(A (B C) D)"), {"x", "y"})
+        left = transition(base, PopOp(path=(1,)))
+        right = base
+        policies = [
+            CollapseOp(classes=(frozenset({"B", "C"}),)),
+            CollapseOp(classes=(frozenset({"A", "D"}),)),
+            CollapseOp(classes=(frozenset({"x", "y"}),)),
+        ]
+        self.assertTrue(irreducibly_divergent(left, right, policies))
+
+    def test_irreducibly_divergent_fails_once_one_policy_identifies_them(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        left = transition(base, RefuseOp(frozenset({"a2"})))
+        right = transition(base, RefuseOp(frozenset({"a1"})))
+        policies = [
+            CollapseOp(classes=(frozenset({"b1", "b2"}),)),  # unrelated: still divergent
+            CollapseOp(classes=(frozenset({"a1", "a2"}),)),  # this one confluences them
+        ]
+        self.assertFalse(irreducibly_divergent(left, right, policies))
+
+    def test_intensional_vs_extensional_equivalence(self):
+        base = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+        h1 = transition(base, PopOp(path=(1,)))
+        h2 = transition(base, BindOp("ALL"))
+        h2 = transition(h2, PopOp(path=(1,)))
+        self.assertFalse(intensionally_equivalent(h1, h2))
+        self.assertTrue(extensionally_equivalent(h1, h2))
+
+    def test_intensionally_equivalent_implies_extensionally_equivalent(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2"})
+        left = transition(base, BindOp("ALL"))
+        right = transition(base, BindOp("ALL"))
+        self.assertTrue(intensionally_equivalent(left, right))
+        self.assertTrue(extensionally_equivalent(left, right))
+
+    def test_horizon_equivalent_reduces_to_extensional_at_k0(self):
+        base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        other = transition(base, BindOp("ALL"))
+        self.assertEqual(horizon_equivalent(base, other, [], 0), extensionally_equivalent(base, other))
+
+    def test_horizon_equivalent_can_hold_despite_differing_now(self):
+        # Different right now (b1 vs c1), but under a candidate pool that
+        # only cares about the "a" prefix, both futures coincide.
+        left = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+        right = make_config(parse_sphere("(A B)"), {"a1", "a2", "c1"})
+        self.assertFalse(extensionally_equivalent(left, right))
+        candidate_ops = [BindOp("prefix:a")]
+        self.assertTrue(horizon_equivalent(left, right, candidate_ops, 1))
+
+    def test_horizon_equivalent_rejects_negative_k(self):
+        base = make_config(parse_sphere("(A B)"), {"a1"})
+        with self.assertRaises(ValueError):
+            horizon_equivalent(base, base, [], -1)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_parser.py
+============================================================
+
+"""Test parser.py error handling and edge cases.
+
+Coverage targets (parser.py):
+- Line 25: Pop on empty tokens (unexpected end)
+- Lines 47, 60, 65, 70: parse_expr edge cases
+- Lines 77, 84, 87-88, 90: parse_one error branches
+- Lines 96, 101, 109: Operation parsing errors
+- Lines 128, 133, 141: parse_program error handling
+
+These test the lab convenience parser for simple expressions and operations.
+For Appendix G's formal grammar, see grammar.py and test_grammar.py.
+"""
+import pytest
+from spherepop.model import Atom, BindOp, CollapseOp, PopOp, RefuseOp, Sphere
+from spherepop.parser import (
+    ParseError,
+    parse_expr,
+    parse_operation,
+    parse_program,
+    parse_sphere,
+)
+
+
+class TestTokenization:
+    """Test basic tokenization and parsing."""
+
+    def test_parse_empty_string(self):
+        """Empty string causes unexpected end of input."""
+        with pytest.raises(ParseError, match="unexpected end of input"):
+            parse_expr("")
+
+    def test_parse_whitespace_only(self):
+        """Whitespace-only string causes unexpected end of input."""
+        with pytest.raises(ParseError, match="unexpected end of input"):
+            parse_expr("   \n  \t  ")
+
+    def test_parse_single_atom(self):
+        """Single atom parses correctly."""
+        result = parse_expr("a")
+        assert isinstance(result, Atom)
+        assert result.name == "a"
+
+    def test_parse_atom_with_whitespace(self):
+        """Atoms with surrounding whitespace parse correctly."""
+        result = parse_expr("  atom  ")
+        assert isinstance(result, Atom)
+        assert result.name == "atom"

@@ -1,0 +1,1239 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+@st.composite
+def configs(draw):
+    """Generate valid Config instances."""
+    sigma = draw(simple_spheres(max_depth=2, max_width=3))
+    
+    # Extract atom names from sigma
+    def collect_atoms(expr) -> set[str]:
+        if isinstance(expr, Atom):
+            return {expr.name}
+        atoms_set = set()
+        for item in expr.items:
+            atoms_set.update(collect_atoms(item))
+        return atoms_set
+    
+    atom_set = collect_atoms(sigma)
+    if not atom_set:
+        # Need at least one option
+        atom_set = {"a"}
+        sigma = Sphere((Atom("a"),), label="root")
+    
+    # Generate option_space as a subset of available atoms
+    option_list = list(atom_set)
+    num_options = draw(st.integers(min_value=1, max_value=len(option_list)))
+    selected_options = draw(st.lists(
+        st.sampled_from(option_list),
+        min_size=num_options,
+        max_size=num_options,
+        unique=True
+    ))
+    option_space = frozenset(selected_options)
+    
+    return Config(sigma=sigma, option_space=option_space, history=())
+
+
+@st.composite
+def refuse_ops(draw, config: Config):
+    """Generate REFUSE operations valid for a given config."""
+    if not config.option_space:
+        # Can't refuse from empty space
+        return None
+    
+    options_list = list(config.option_space)
+    # Refuse a non-empty proper subset (leave at least one option)
+    if len(options_list) == 1:
+        # Would leave empty, skip
+        return None
+    
+    num_to_refuse = draw(st.integers(min_value=1, max_value=len(options_list) - 1))
+    refused = frozenset(draw(st.lists(
+        st.sampled_from(options_list),
+        min_size=num_to_refuse,
+        max_size=num_to_refuse,
+        unique=True
+    )))
+    
+    return RefuseOp(refused=refused)
+
+
+# ============================================================================
+# Property Tests
+# ============================================================================
+
+
+@given(configs())
+def test_property_transition_never_shortens_history(cfg: Config):
+    """Property: transition() never shortens Config.history.
+    
+    Every valid transition appends exactly one event to history.
+    """
+    # Try a simple REFUSE that should always succeed
+    if len(cfg.option_space) > 1:
+        options_list = list(cfg.option_space)
+        refuse_op = RefuseOp(refused=frozenset([options_list[0]]))
+        try:
+            cfg_after = transition(cfg, refuse_op)
+            assert len(cfg_after.history) == len(cfg.history) + 1
+        except EvalError:
+            # Invalid transition, that's OK
+            pass
+
+
+@given(configs())
+def test_property_history_is_prefix_reflexive(cfg: Config):
+    """Property: history_is_prefix is reflexive.
+    
+    Every config's history is a prefix of itself.
+    """
+    assert history_is_prefix(cfg, cfg)
+
+
+@given(configs())
+def test_property_eval_program_empty_is_identity(cfg: Config):
+    """Property: eval_program with empty operations is identity.
+    
+    Evaluating no operations returns the config unchanged.
+    """
+    cfg_result = eval_program(cfg, [])
+    assert cfg_result == cfg
+
+
+@given(configs())
+def test_property_extensional_view_deterministic(cfg: Config):
+    """Property: extensional_view is deterministic.
+    
+    Calling extensional_view multiple times on the same config returns
+    the same result.
+    """
+    view1 = extensional_view(cfg)
+    view2 = extensional_view(cfg)
+    assert view1 == view2
+
+
+@given(configs())
+def test_property_extensionally_equivalent_reflexive(cfg: Config):
+    """Property: extensionally_equivalent is reflexive.
+    
+    Every config is extensionally equivalent to itself.
+    """
+    assert extensionally_equivalent(cfg, cfg)
+
+
+@given(configs())
+def test_property_admissible_consistent_with_transition(cfg: Config):
+    """Property: admissible(op, cfg) iff transition(cfg, op) succeeds.
+    
+    The admissible() observer should agree with whether transition() raises.
+    """
+    if len(cfg.option_space) > 1:
+        options_list = list(cfg.option_space)
+        refuse_op = RefuseOp(refused=frozenset([options_list[0]]))
+        
+        is_admissible = admissible(refuse_op, cfg)
+        
+        try:
+            transition(cfg, refuse_op)
+            succeeded = True
+        except EvalError:
+            succeeded = False
+        
+        assert is_admissible == succeeded
+
+
+@given(configs())
+def test_property_refuse_bind_commute_when_disjoint(cfg: Config):
+    """Property: REFUSE and BIND commute when they select disjoint options.
+    
+    If REFUSE removes X and BIND keeps Y where X ∩ Y = ∅, order doesn't matter.
+    
+    NOTE: This is marked experimental because the commutativity depends on
+    the BIND predicate's semantics on Quotients (THEORY_STATUS.md Q3).
+    """
+    if len(cfg.option_space) < 3:
+        # Need at least 3 options for disjoint REFUSE/BIND
+        return
+    
+    options_list = list(cfg.option_space)
+    
+    # REFUSE first option, BIND to keep second option
+    refuse_target = options_list[0]
+    bind_target = options_list[1]
+    
+    refuse_op = RefuseOp(refused=frozenset([refuse_target]))
+    bind_op = BindOp(predicate=f"exact:{bind_target}")
+    
+    try:
+        # Path 1: REFUSE then BIND
+        cfg_r = transition(cfg, refuse_op)
+        cfg_rb = transition(cfg_r, bind_op)
+        
+        # Path 2: BIND then REFUSE
+        cfg_b = transition(cfg, bind_op)
+        cfg_br = transition(cfg_b, refuse_op)
+        
+        # Should reach the same extensional state
+        assert extensional_view(cfg_rb) == extensional_view(cfg_br)
+    except EvalError:
+        # One path may fail if operations aren't truly disjoint
+        pass
+
+
+@pytest.mark.experimental
+@given(configs())
+def test_property_collapse_idempotent_on_same_classes(cfg: Config):
+    """Property: COLLAPSE is idempotent on the same equivalence classes.
+    
+    Collapsing with the same classes twice should have the same effect
+    as collapsing once.
+    
+    EXPERIMENTAL: This tests the provisional behavior of COLLAPSE composition
+    (THEORY_STATUS.md Q2b). Currently, second COLLAPSE over Quotient is
+    unsupported and raises an error.
+    """
+    if len(cfg.option_space) < 2:
+        return
+    
+    options_list = list(cfg.option_space)
+    classes = frozenset([frozenset(options_list[:2])])
+    collapse_op = CollapseOp(classes=classes)
+    
+    try:
+        cfg_1 = transition(cfg, collapse_op)
+        cfg_2 = transition(cfg_1, collapse_op)
+        
+        # If second collapse succeeds, it should be idempotent
+        assert extensional_view(cfg_1) == extensional_view(cfg_2)
+    except EvalError as e:
+        # Currently expected: "COLLAPSE over already-quoted option"
+        assert "already" in str(e).lower() or "quotient" in str(e).lower()
+
+
+@given(st.integers(min_value=0, max_value=10))
+def test_property_eval_program_history_length(n: int):
+    """Property: eval_program with n operations extends history by n events.
+    
+    Each successful operation appends exactly one event.
+    """
+    sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+    cfg = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+    
+    # Generate n valid REFUSE operations that won't empty option_space
+    ops = []
+    current_cfg = cfg
+    for i in range(min(n, len(cfg.option_space) - 1)):
+        # Refuse one option at a time, leaving at least one
+        options_to_refuse = list(current_cfg.option_space)[:1]
+        refuse_op = RefuseOp(refused=frozenset(options_to_refuse))
+        ops.append(refuse_op)
+        try:
+            current_cfg = transition(current_cfg, refuse_op)
+        except EvalError:
+            break
+    
+    result = eval_program(cfg, ops)
+    assert len(result.history) == len(ops)
+
+
+# ============================================================================
+# Edge Case Properties
+# ============================================================================
+
+
+def test_property_empty_history_is_universal_prefix():
+    """Property: Empty history is a prefix of any history.
+    
+    This is the base case for history_is_prefix transitivity.
+    """
+    sigma = Sphere((Atom("a"), Atom("b")), label="root")
+    cfg_empty = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+    cfg_with_history = transition(cfg_empty, RefuseOp(refused=frozenset({"b"})))
+    
+    assert history_is_prefix(cfg_empty, cfg_empty)
+    assert history_is_prefix(cfg_empty, cfg_with_history)
+
+
+def test_property_refuse_empty_set_raises():
+    """Property: REFUSE with empty refused set raises EvalError.
+    
+    Appendix E requires REFUSE to remove a nonempty subset. Refusing nothing
+    is not a degenerate no-op refusal — it is not a refusal at all.
+    """
+    sigma = Sphere((Atom("a"), Atom("b")), label="root")
+    cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+    
+    with pytest.raises(EvalError, match="nonempty subset"):
+        transition(cfg, RefuseOp(refused=frozenset()))
+
+
+def test_property_bind_all_preserves_options():
+    """Property: BIND with ALL predicate preserves all options.
+    
+    The ALL predicate should keep everything.
+    """
+    sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+    cfg = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+    
+    cfg_after = transition(cfg, BindOp(predicate="ALL"))
+    assert cfg_after.option_space == cfg.option_space
+
+============================================================
+FILE: tests/test_regressions.py
+============================================================
+
+"""Regression tests extracted from experiments 01-29.
+
+These tests preserve key behaviors discovered and validated in the experiment
+scripts, ensuring that future changes don't break proven functionality.
+
+Each test is self-contained and fast (<100ms), unlike the exploratory
+experiment scripts which may include prints, plots, or longer scenarios.
+"""
+
+from __future__ import annotations
+
+import pytest
+
+from spherepop import make_config, parse_operation, parse_sphere, render_expr, transition
+from spherepop.grammar import parse_event, parse_expr
+from spherepop.model import (
+    Atom,
+    BindOp,
+    CollapseOp,
+    PopOp,
+    Quotient,
+    RefuseOp,
+    Sphere,
+)
+from spherepop.observers import (
+    admissible,
+    confluent,
+    divergent,
+    extensionally_equivalent,
+    history_is_prefix,
+    regretful,
+)
+from spherepop.semantics import eval_program
+from spherepop.views import extensional_view, history_view, representative
+
+
+# ============================================================================
+# Exp 01: Grammar Parsing
+# ============================================================================
+
+
+def test_regression_grammar_parse_sphere():
+    """Exp 01: Parse nested Sphere from convenience syntax."""
+    # The convenience parser doesn't use labels from the first atom
+    # It parses "(A (B C) D)" as a sphere with items: Atom(A), Sphere(B C), Atom(D)
+    sigma = parse_sphere("(A (B C) D)")
+    assert len(sigma.items) == 3
+    assert isinstance(sigma.items[0], Atom)
+    assert isinstance(sigma.items[1], Sphere)
+    assert isinstance(sigma.items[2], Atom)
+
+
+def test_regression_grammar_parse_pop_operation():
+    """Exp 01: Parse POP operation from command syntax."""
+    op = parse_operation("POP 1")
+    assert isinstance(op, PopOp)
+    assert op.path == (1,)
+
+
+def test_regression_appendix_g_parse_event():
+    """Exp 27: Parse Appendix G event syntax."""
+    pop_op = parse_event("pop(inner)")
+    assert isinstance(pop_op, PopOp)
+    assert pop_op.label == "inner"
+    
+    refuse_op = parse_event("refuse(root, {a, b})")
+    assert isinstance(refuse_op, RefuseOp)
+    assert refuse_op.refused == frozenset({"a", "b"})
+
+
+def test_regression_appendix_g_collapse_transitivity():
+    """Exp 27: COLLAPSE transitively closes equivalence classes."""
+    # Parse "a~b, b~c" and verify it produces one class {a,b,c}
+    collapse_op = parse_event("collapse(root, {a~b, b~c})")
+    assert len(collapse_op.classes) == 1
+    assert frozenset({"a", "b", "c"}) in collapse_op.classes
+
+
+# ============================================================================
+# Exp 02: History Immutability
+# ============================================================================
+
+
+def test_regression_history_appends_event():
+    """Exp 02: Transition appends exactly one event to history."""
+    cfg0 = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+    cfg1 = transition(cfg0, PopOp(path=(1,)))
+    
+    assert len(cfg1.history) == len(cfg0.history) + 1
+    assert len(cfg1.history) == 1
+
+
+def test_regression_history_is_immutable():
+    """Exp 02: History is immutable; operations produce new Config."""
+    cfg0 = make_config(parse_sphere("(A B)"), {"A", "B"})
+    original_history = cfg0.history
+    
+    cfg1 = transition(cfg0, RefuseOp(frozenset({"B"})))
+    
+    # Original unchanged
+    assert cfg0.history == original_history
+    assert len(cfg0.history) == 0
+    # New config has extended history
+    assert len(cfg1.history) == 1
+
+
+# ============================================================================
+# Exp 03: POP Semantics
+# ============================================================================
+
+
+def test_regression_pop_promotes_nested_sphere():
+    """Exp 03: POP removes nested Sphere, promoting its contents."""
+    # Structure: (A (B C) D) where (B C) is at index 1
+    cfg = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+    out = transition(cfg, PopOp(path=(1,)))
+    
+    # Before: 3 items: A, (B C), D
+    # After: 4 items: A, B, C, D (nested sphere popped and contents promoted)
+    assert len(cfg.sigma.items) == 3  # Before
+    assert len(out.sigma.items) == 4  # After: contents promoted
+
+
+def test_regression_pop_with_label():
+    """Exp 14: POP can target by label."""
+    sigma = Sphere((Sphere((Atom("a"), Atom("b")), label="inner"),), label="root")
+    cfg = make_config(sigma, {"a", "b"})
+    out = transition(cfg, PopOp(label="inner"))
+    
+    assert len(out.sigma.items) == 2  # a and b promoted
+    assert out.sigma.items[0] == Atom("a")
+    assert out.sigma.items[1] == Atom("b")
+
+
+# ============================================================================
+# Exp 04: REFUSE Semantics
+# ============================================================================
+
+
+def test_regression_refuse_removes_options():
+    """Exp 04: REFUSE removes specified options from option_space."""
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    out = transition(cfg, RefuseOp(frozenset({"B", "C"})))
+    
+    assert out.option_space == frozenset({"A"})
+
+
+def test_regression_refuse_requires_nonempty_intersection():
+    """Exp 04: REFUSE must remove at least one present option."""
+    from spherepop.semantics import EvalError
+    
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    
+    # Refusing non-existent options raises
+    with pytest.raises(EvalError, match="nonempty subset"):
+        transition(cfg, RefuseOp(frozenset({"X", "Y"})))
+
+
+# ============================================================================
+# Exp 05: BIND Semantics
+# ============================================================================
+
+
+def test_regression_bind_all_predicate():
+    """Exp 05: BIND with ALL keeps all options."""
+    cfg = make_config(parse_sphere("(A B C)"), {"a1", "a2", "b1"})
+    out = transition(cfg, BindOp("ALL"))
+    
+    assert out.option_space == cfg.option_space
+
+
+def test_regression_bind_prefix_predicate():
+    """Exp 05: BIND with prefix: filters by prefix."""
+    cfg = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    out = transition(cfg, BindOp("prefix:a"))
+    
+    assert out.option_space == frozenset({"a1", "a2"})
+
+
+def test_regression_bind_exact_predicate():
+    """Exp 05: BIND with exact match keeps only that option."""
+    cfg = make_config(parse_sphere("(A B C)"), {"apple", "apricot", "banana"})
+    # No "exact:" prefix - just use the literal string for exact match
+    out = transition(cfg, BindOp("apple"))
+    
+    assert out.option_space == frozenset({"apple"})
+
+
+# ============================================================================
+# Exp 06: COLLAPSE Semantics
+# ============================================================================
+
+
+def test_regression_collapse_creates_quotient():
+    """Exp 06: COLLAPSE creates Quotient equivalence classes."""
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    out = transition(cfg, CollapseOp(classes=(frozenset({"B", "C"}),)))
+    
+    # option_space now has 2 elements: plain "A" and Quotient{B,C}
+    assert len(out.option_space) == 2
+    
+    # One element is still plain "A"
+    assert "A" in out.option_space
+    
+    # Other element is Quotient containing B and C
+    quotients = [o for o in out.option_space if isinstance(o, Quotient)]
+    assert len(quotients) == 1
+    assert quotients[0].members == frozenset({"B", "C"})
+
+
+def test_regression_collapse_multiple_classes():
+    """Exp 06: COLLAPSE can create multiple separate equivalence classes."""
+    cfg = make_config(parse_sphere("(A B C D)"), {"A", "B", "C", "D"})
+    out = transition(cfg, CollapseOp(classes=(
+        frozenset({"A", "B"}),
+        frozenset({"C", "D"}),
+    )))
+    
+    assert len(out.option_space) == 2
+    
+    quotients = [o for o in out.option_space if isinstance(o, Quotient)]
+    assert len(quotients) == 2
+    assert frozenset({"A", "B"}) in [q.members for q in quotients]
+    assert frozenset({"C", "D"}) in [q.members for q in quotients]
+
+
+# ============================================================================
+# Exp 07 & 15: Confluence Under Policy
+# ============================================================================
+
+
+def test_regression_confluence_under_collapse_policy():
+    """Exp 15: Two paths are confluent when collapse identifies their differences."""
+    base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    
+    # Two paths refuse different a-options
+    left = transition(base, RefuseOp(frozenset({"a2"})))   # keeps {a1, b1}
+    right = transition(base, RefuseOp(frozenset({"a1"})))  # keeps {a2, b1}
+    
+    # Different without policy
+    assert not extensionally_equivalent(left, right)
+    
+    # But confluent under policy that identifies a1~a2
+    identify_a = CollapseOp(classes=(frozenset({"a1", "a2"}),))
+    assert confluent(left, right, identify_a)
+
+
+def test_regression_confluence_preserves_original_history():
+    """Exp 15: confluent() does not modify input Configs."""
+    base = make_config(parse_sphere("(A B)"), {"a1", "b1"})
+    left = transition(base, RefuseOp(frozenset({"a1"})))
+    right = transition(base, RefuseOp(frozenset({"b1"})))
+    
+    policy = CollapseOp(classes=frozenset())
+    original_left_len = len(left.history)
+    original_right_len = len(right.history)
+    
+    # Check confluence
+    divergent(left, right, policy)
+    
+    # Histories unchanged
+    assert len(left.history) == original_left_len
+    assert len(right.history) == original_right_len
+
+
+# ============================================================================
+# Exp 09 & 23: Regret Detection
+# ============================================================================
+
+
+def test_regression_regret_strict_subset():
+    """Exp 09: Regret occurs when alternative has strictly more options."""
+    base0 = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    base = transition(base0, BindOp("ALL"))  # Non-vacuous common prefix
+    
+    candidate = transition(base, RefuseOp(frozenset({"a1", "a2"})))  # -> {b1}
+    alternative = transition(base, BindOp("ALL"))  # -> {a1, a2, b1}
+    
+    assert regretful(base, candidate, alternative)
+    assert candidate.option_space < alternative.option_space
+
+
+def test_regression_regret_accumulation_persists():
+    """Exp 23: Regret persists through identical subsequent steps."""
+    base0 = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    base = transition(base0, BindOp("ALL"))
+    
+    candidate1 = transition(base, RefuseOp(frozenset({"a1", "a2"})))
+    alternative1 = transition(base, BindOp("ALL"))
+    
+    # Both take identical next step
+    candidate2 = transition(candidate1, BindOp("ALL"))
+    alternative2 = transition(alternative1, BindOp("ALL"))
+    
+    # Regret persists
+    assert regretful(base, candidate2, alternative2)
+
+
+def test_regression_regret_can_disappear_when_alternative_narrows():
+    """Exp 23: Regret disappears if alternative narrows below candidate."""
+    base0 = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    base = transition(base0, BindOp("ALL"))
+    
+    candidate = transition(base, RefuseOp(frozenset({"a1", "a2"})))  # {b1}
+    alternative1 = transition(base, BindOp("ALL"))  # {a1, a2, b1}
+    
+    assert regretful(base, candidate, alternative1)
+    
+    # Alternative narrows
+    alternative2 = transition(alternative1, RefuseOp(frozenset({"b1"})))  # {a1, a2}
+    
+    # Now not regretful: {b1} ⊄ {a1, a2}
+    assert not regretful(base, candidate, alternative2)
+
+
+# ============================================================================
+# Exp 10: Derived Views
+# ============================================================================
+
+
+def test_regression_extensional_view_deterministic():
+    """Exp 10: extensional_view produces same result for same Config."""
+    cfg = make_config(parse_sphere("(A B)"), {"a", "b"})
+    view1 = extensional_view(cfg)
+    view2 = extensional_view(cfg)
+    
+    assert view1 == view2
+
+
+def test_regression_history_view_renders_events():
+    """Exp 10: history_view renders events as strings."""
+    cfg0 = make_config(parse_sphere("(A B)"), {"A", "B"})
+    cfg1 = transition(cfg0, RefuseOp(frozenset({"B"})))
+    
+    view = history_view(cfg1)
+    assert len(view) == 1
+    assert "RefuseEvent" in view[0]
+
+
+# ============================================================================
+# Exp 13: Replay Determinism
+# ============================================================================
+
+
+def test_regression_eval_program_deterministic():
+    """Exp 13: Replaying same operations produces same result."""
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    ops = [
+        RefuseOp(frozenset({"C"})),
+        BindOp("prefix:A"),
+    ]
+    
+    result1 = eval_program(cfg, ops)
+    result2 = eval_program(cfg, ops)
+    
+    assert extensional_view(result1) == extensional_view(result2)
+
+
+# ============================================================================
+# Exp 14: Admissible Check
+# ============================================================================
+
+
+def test_regression_admissible_matches_transition_success():
+    """Exp 14: admissible(op, cfg) iff transition(cfg, op) succeeds."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    
+    valid_op = RefuseOp(frozenset({"B"}))
+    assert admissible(valid_op, cfg)
+    
+    # And it actually succeeds
+    result = transition(cfg, valid_op)
+    assert result.option_space == frozenset({"A"})
+
+
+def test_regression_admissible_false_for_invalid():
+    """Exp 14: admissible returns False for operations that would raise."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    
+    # Refusing non-existent option
+    invalid_op = RefuseOp(frozenset({"X"}))
+    assert not admissible(invalid_op, cfg)
+
+
+# ============================================================================
+# Exp 19: Quotient Representative Independence
+# ============================================================================
+
+
+def test_regression_quotient_equality_by_members_not_representative():
+    """Exp 19: Quotient equality depends on members, not display representative."""
+    q1 = Quotient(members=frozenset({"a", "b", "c"}))
+    q2 = Quotient(members=frozenset({"c", "a", "b"}))  # Different order
+    
+    # Same members → equal
+    assert q1 == q2
+    assert hash(q1) == hash(q2)
+    
+    # But representative() picks deterministically (lexicographic first)
+    assert representative(q1) == "a"
+    assert representative(q2) == "a"
+
+
+# ============================================================================
+# Exp 20: Intensional vs Extensional Equivalence
+# ============================================================================
+
+
+def test_regression_intensional_vs_extensional():
+    """Exp 20: Different histories can be extensionally equivalent.
+    
+    Two configurations may exhibit identical extensional views while
+    remaining intensionally distinct — the history itself is primary,
+    not what it presently looks like.
+    """
+    # 2120
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    
+    # Two paths to the same extensional outcome
+    affliction = transition(cfg, RefuseOp(frozenset({"B", "C"})))
+    infliction = transition(cfg, BindOp("A"))
+    
+    # Extensionally identical
+    assert extensional_view(affliction) == extensional_view(infliction)
+    assert extensionally_equivalent(affliction, infliction)
+    
+    # But intensionally distinct: history is primary identity
+    assert affliction.history != infliction.history
+    assert not history_is_prefix(affliction, infliction)
+    assert not history_is_prefix(infliction, affliction)
+
+
+# ============================================================================
+# Exp 21: REFUSE/BIND Commutativity
+# ============================================================================
+
+
+@pytest.mark.experimental
+def test_regression_refuse_bind_commute_disjoint():
+    """Exp 21: REFUSE and BIND commute when selecting disjoint sets.
+    
+    EXPERIMENTAL: Depends on BIND's existential semantics on Quotients (Q3).
+    """
+    cfg = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1", "b2"})
+    
+    # Path 1: REFUSE b-options, then BIND to a-prefix
+    cfg_rb = transition(cfg, RefuseOp(frozenset({"b1", "b2"})))
+    cfg_rb = transition(cfg_rb, BindOp("prefix:a"))
+    
+    # Path 2: BIND to a-prefix, then REFUSE b-options (which are already gone)
+    cfg_br = transition(cfg, BindOp("prefix:a"))
+    # After BIND prefix:a, we only have {a1, a2}, so can't refuse {b1, b2}
+    # Instead, verify the first path works and produces {a1, a2}
+    
+    assert cfg_rb.option_space == frozenset({"a1", "a2"})
+    assert cfg_br.option_space == frozenset({"a1", "a2"})
+    # Both paths reach the same state
+    assert extensional_view(cfg_rb) == extensional_view(cfg_br)
+
+
+# ============================================================================
+# Exp 25: Observer Non-Authority
+# ============================================================================
+
+
+def test_regression_observers_dont_modify_history():
+    """Exp 25: Observers never append to Config.history."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    original_len = len(cfg.history)
+    
+    # Call various observers
+    extensional_view(cfg)
+    history_view(cfg)
+    admissible(RefuseOp(frozenset({"B"})), cfg)
+    
+    # History unchanged
+    assert len(cfg.history) == original_len
+
+
+# ============================================================================
+# Exp 26: Horizon Equivalence
+# ============================================================================
+
+
+def test_regression_horizon_equivalent_reflexive():
+    """Exp 26: A continuation is horizon-equivalent to itself."""
+    from spherepop.observers import equivalent_at
+    
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    ops = [RefuseOp(frozenset({"B"}))]
+    
+    # Same sequence compared to itself
+    assert equivalent_at(cfg, ops, ops, k=1)
+
+
+def test_regression_horizon_equivalent_at_k():
+    """Exp 26: equivalent_at checks agreement at specific depth."""
+    from spherepop.observers import equivalent_at
+    
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    
+    ops1 = [RefuseOp(frozenset({"C"})), RefuseOp(frozenset({"B"}))]
+    ops2 = [RefuseOp(frozenset({"C"})), RefuseOp(frozenset({"A"}))]
+    
+    # Same at k=1 (both refuse C first)
+    assert equivalent_at(cfg, ops1, ops2, k=1)
+    
+    # Different at k=2 (different second refusals)
+    assert not equivalent_at(cfg, ops1, ops2, k=2)
+
+
+# ============================================================================
+# Summary
+# ============================================================================
+
+
+def test_regression_all_tests_fast():
+    """Meta-test: All regression tests should run quickly."""
+    import time
+    start = time.perf_counter()
+    
+    # This test itself is part of the suite, so if we get here,
+    # all prior tests have already run
+    
+    elapsed = time.perf_counter() - start
+    # Should be negligible since we're just in this one test now
+    assert elapsed < 0.1  # 100ms budget for this meta-test itself
+
+============================================================
+FILE: tests/test_semantics_errors.py
+============================================================
+
+"""Test error handling and edge cases in spherepop.semantics.
+
+Coverage targets (semantics.py):
+- Lines 39-70: Error handling in transition() and _pop_path()
+- Lines 134-135: _pop helper edge cases
+- Lines 207, 224: _bind and _refuse edge cases
+- Line 252: Invalid operation type handling
+
+These tests complement test_regressions.py which covers successful paths.
+"""
+import pytest
+from spherepop.model import (
+    Atom,
+    BindOp,
+    CollapseOp,
+    Config,
+    PopOp,
+    Quotient,
+    RefuseOp,
+    Sphere,
+)
+from spherepop.semantics import EvalError, transition
+
+
+class TestPopErrors:
+    """Test POP operation error handling."""
+
+    def test_pop_with_both_path_and_label(self):
+        """PopOp must specify at most one of path or label."""
+        sigma = Sphere(
+            (Sphere((Atom("a"),), label="inner"),),
+            label="root"
+        )
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        op = PopOp(path=(0,), label="inner")
+        with pytest.raises(EvalError, match="specify at most one of path or label"):
+            transition(cfg, op)
+
+    def test_pop_nonexistent_path(self):
+        """POP with path that doesn't exist raises EvalError."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        # Path (0,) would be valid, but (5,) is out of range
+        op = PopOp(path=(5,))
+        with pytest.raises(EvalError, match="POP path does not exist"):
+            transition(cfg, op)
+
+    def test_pop_empty_path_rejected(self):
+        """POP with empty path (targeting root) is rejected."""
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        op = PopOp(path=())
+        with pytest.raises(EvalError, match="POP must target a nested Sphere path, not the root"):
+            transition(cfg, op)
+
+    def test_pop_target_not_sphere(self):
+        """POP target must be a Sphere, not Atom or Quotient."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        # Path (0,) targets Atom("a"), not a Sphere
+        op = PopOp(path=(0,))
+        with pytest.raises(EvalError, match="POP target must be a Sphere"):
+            transition(cfg, op)
+
+    def test_pop_path_through_non_sphere(self):
+        """POP path traversing through non-Sphere node is rejected."""
+        sigma = Sphere(
+            (
+                Sphere((Atom("a"),), label="inner"),
+                Atom("b")
+            ),
+            label="root"
+        )
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        # Path (1, 0) tries to traverse through Atom("b")
+        op = PopOp(path=(1, 0))
+        with pytest.raises(EvalError, match="POP path does not exist"):
+            transition(cfg, op)
+
+    def test_pop_index_out_of_range(self):
+        """POP with index beyond sphere items raises EvalError."""
+        sigma = Sphere(
+            (Sphere((Atom("a"),), label="inner"),),
+            label="root"
+        )
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        # Path (0, 5) - inner sphere only has 1 item
+        op = PopOp(path=(0, 5))
+        with pytest.raises(EvalError, match="POP path does not exist"):
+            transition(cfg, op)
+
+    def test_pop_nonexistent_label(self):
+        """POP with label that doesn't exist raises EvalError."""
+        sigma = Sphere(
+            (Sphere((Atom("a"),), label="inner"),),
+            label="root"
+        )
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        op = PopOp(label="nonexistent")
+        with pytest.raises(EvalError, match="no Sphere labeled 'nonexistent' found"):
+            transition(cfg, op)
+
+    def test_pop_ambiguous_label(self):
+        """POP with duplicate label raises EvalError."""
+        sigma = Sphere(
+            (
+                Sphere((Atom("a"),), label="duplicate"),
+                Sphere((Atom("b"),), label="duplicate"),
+            ),
+            label="root"
+        )
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        op = PopOp(label="duplicate")
+        with pytest.raises(EvalError, match="label 'duplicate' is ambiguous"):
+            transition(cfg, op)
+
+
+class TestRefuseErrors:
+    """Test REFUSE operation edge cases."""
+
+    def test_refuse_empty_option_space(self):
+        """REFUSE on already-empty option space raises EvalError."""
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset(), history=())
+        
+        op = RefuseOp(refused=frozenset({"a"}))
+        with pytest.raises(EvalError, match="nonempty subset of the current option space"):
+            transition(cfg, op)
+
+    def test_refuse_nonexistent_options(self):
+        """REFUSE of options not in current space raises EvalError."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        # Try to refuse 'x' which doesn't exist
+        op = RefuseOp(refused=frozenset({"x", "y"}))
+        with pytest.raises(EvalError, match="nonempty subset of the current option space"):
+            transition(cfg, op)
+
+    def test_refuse_partial_overlap(self):
+        """REFUSE with partial overlap succeeds, refusing only present options."""
+        sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+        
+        # Request to refuse 'b' and 'x' - only 'b' exists
+        op = RefuseOp(refused=frozenset({"b", "x"}))
+        result = transition(cfg, op)
+        
+        assert result.option_space == frozenset({"a", "c"})
+        assert len(result.history) == 1
+        # Event records only what was actually refused
+        assert result.history[0].refused == frozenset({"b"})
+
+    def test_refuse_with_quotient_refuses_class(self):
+        """Refusing one member of a Quotient refuses the whole class."""
+        sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+        
+        # First COLLAPSE {a, b} into equivalence class
+        collapse_op = CollapseOp(classes=(frozenset({"a", "b"}),))
+        cfg_collapsed = transition(cfg, collapse_op)
+        
+        # Now option_space has Quotient([a,b]) and "c"
+        assert len(cfg_collapsed.option_space) == 2
+        
+        # REFUSE "a" should remove the entire Quotient
+        refuse_op = RefuseOp(refused=frozenset({"a"}))
+        result = transition(cfg_collapsed, refuse_op)
+        
+        # Only "c" remains
+        assert result.option_space == frozenset({"c"})
+
+
+class TestBindErrors:
+    """Test BIND operation edge cases."""
+
+    def test_bind_empty_result(self):
+        """BIND with predicate matching nothing produces empty option_space."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        # Predicate that matches nothing
+        op = BindOp(predicate="prefix:x")
+        result = transition(cfg, op)
+        
+        assert result.option_space == frozenset()
+        assert len(result.history) == 1
+
+    def test_bind_on_empty_option_space(self):
+        """BIND on empty option_space produces empty result (not an error)."""
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset(), history=())
+        
+        op = BindOp(predicate="prefix:a")
+        result = transition(cfg, op)
+        
+        assert result.option_space == frozenset()
+        assert len(result.history) == 1
+
+    def test_bind_unknown_format_becomes_exact_match(self):
+        """BIND with unknown format uses exact match (default behavior)."""
+        sigma = Sphere((Atom("a"), Atom("invalidformat")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "invalidformat"}), history=())
+        
+        # Unknown format becomes exact match for "invalidformat"
+        op = BindOp(predicate="invalidformat")
+        result = transition(cfg, op)
+        
+        # Should match only the exact string "invalidformat"
+        assert result.option_space == frozenset({"invalidformat"})
+
+
+class TestCollapseErrors:
+    """Test COLLAPSE operation edge cases."""
+
+    def test_collapse_empty_classes(self):
+        """COLLAPSE with empty class set is allowed (no-op mapping)."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        op = CollapseOp(classes=())
+        result = transition(cfg, op)
+        
+        # No change to option_space or sigma
+        assert result.option_space == cfg.option_space
+        assert result.sigma == cfg.sigma
+        # But history records the event
+        assert len(result.history) == 1
+
+    def test_collapse_preserves_top_level_sphere(self):
+        """COLLAPSE must maintain Sphere at top level."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        op = CollapseOp(classes=(frozenset({"a", "b"}),))
+        result = transition(cfg, op)
+        
+        assert isinstance(result.sigma, Sphere)
+        assert result.sigma.label == "root"
+
+    def test_collapse_on_already_quotient(self):
+        """Successive COLLAPSE leaves existing Quotients unchanged (Q2b)."""
+        sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+        
+        # First COLLAPSE: {a, b} → Quotient
+        op1 = CollapseOp(classes=(frozenset({"a", "b"}),))
+        cfg1 = transition(cfg, op1)
+        
+        # Second COLLAPSE: {b, c} → another class
+        # Current implementation doesn't merge with existing Quotient
+        op2 = CollapseOp(classes=(frozenset({"b", "c"}),))
+        cfg2 = transition(cfg1, op2)
+        
+        # Quotient([a,b]) remains untouched; new Quotient([c]) created
+        # This tests provisional semantics per THEORY_STATUS.md Q2b
+        assert len(cfg2.option_space) == 2
+        has_quotient_ab = any(
+            isinstance(o, Quotient) and {"a", "b"} == set(o.members)
+            for o in cfg2.option_space
+        )
+        assert has_quotient_ab
+
+
+class TestInvalidOperationType:
+    """Test handling of invalid operation types."""
+
+    def test_invalid_operation_type(self):
+        """Passing non-Operation type raises EvalError."""
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        # Pass something that's not an Operation
+        with pytest.raises(EvalError, match="Unsupported operation type"):
+            transition(cfg, "not an operation")  # type: ignore
+
+    def test_none_operation(self):
+        """Passing None as operation raises EvalError."""
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        with pytest.raises(EvalError, match="Unsupported operation type"):
+            transition(cfg, None)  # type: ignore
+
+
+class TestEvalProgram:
+    """Test eval_program with error conditions."""
+
+    def test_eval_program_propagates_errors(self):
+        """Errors in eval_program propagate from transition()."""
+        from spherepop.semantics import eval_program
+        
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        # Invalid POP path
+        ops = [PopOp(path=(99,))]
+        with pytest.raises(EvalError, match="POP path does not exist"):
+            eval_program(cfg, ops)
+
+    def test_eval_program_stops_at_first_error(self):
+        """eval_program stops at first error, doesn't continue."""
+        from spherepop.semantics import eval_program
+        
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        ops = [
+            RefuseOp(refused=frozenset({"a"})),  # Valid
+            PopOp(path=(99,)),                   # Invalid - stops here
+            RefuseOp(refused=frozenset({"b"})),  # Never reached
+        ]
+        
+        with pytest.raises(EvalError):
+            eval_program(cfg, ops)
+        
+        # Original config unchanged
+        assert len(cfg.history) == 0
+
+
+class TestEdgeCaseInteractions:
+    """Test interactions between operations in edge cases."""
+
+    def test_refuse_all_options(self):
+        """REFUSE removing all options produces empty option_space."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        op = RefuseOp(refused=frozenset({"a", "b"}))
+        result = transition(cfg, op)
+        
+        assert result.option_space == frozenset()
+
+    def test_bind_then_refuse_empty(self):
+        """BIND to empty, then REFUSE raises error."""
+        sigma = Sphere((Atom("a"),), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a"}), history=())
+        
+        # BIND removes everything
+        bind_op = BindOp(predicate="prefix:x")
+        cfg1 = transition(cfg, bind_op)
+        assert cfg1.option_space == frozenset()
+        
+        # Now REFUSE on empty space fails
+        refuse_op = RefuseOp(refused=frozenset({"a"}))
+        with pytest.raises(EvalError, match="nonempty subset"):
+            transition(cfg1, refuse_op)
+
+    def test_collapse_single_element_class(self):
+        """COLLAPSE with single-element classes is allowed."""
+        sigma = Sphere((Atom("a"), Atom("b")), label="root")
+        cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        
+        # Single-element class {a}
+        op = CollapseOp(classes=(frozenset({"a"}),))
+        result = transition(cfg, op)
+        
+        # Creates Quotient with single member
+        assert len(result.option_space) == 2
+        has_single_quotient = any(
+            isinstance(o, Quotient) and len(o.members) == 1
+            for o in result.option_space
+        )
+        assert has_single_quotient
+
+============================================================
+FILE: tests/test_spherepop.py
+============================================================
+
+import unittest
+
+from spherepop import (
+    EvalError,
+    ParseError,
+    extensional_view,
+    history_is_prefix,
+    history_view,
+    make_config,
+    parse_operation,
+    parse_program,
+    parse_sphere,
+    render_expr,
+    representative,
+    transition,
+)
+from spherepop.model import BindOp, CollapseOp, PopOp, Quotient, RefuseOp
+
+
+class SpherepopTests(unittest.TestCase):
+    def test_parse_program_and_operation_types(self):
+        ops = parse_program(["POP 1", "REFUSE o2", "BIND prefix:a", "COLLAPSE B=C"])
+        self.assertEqual([type(op).__name__ for op in ops], ["PopOp", "RefuseOp", "BindOp", "CollapseOp"])
+        self.assertEqual(parse_operation("POP").path, None)
+
+    def test_pop_resolves_scope_not_deletion(self):
+        cfg = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+        out = transition(cfg, PopOp(path=(1,)))
+        self.assertEqual(render_expr(out.sigma), "(A B C D)")
+        self.assertEqual(out.option_space, cfg.option_space)
+        self.assertEqual(len(out.history), 1)
+
+    def test_pop_by_label_resolves_to_same_result_as_path(self):
+        from spherepop.grammar import parse_sphere as grammar_parse_sphere

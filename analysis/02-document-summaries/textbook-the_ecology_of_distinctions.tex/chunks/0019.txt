@@ -1,0 +1,3254 @@
+Since every squared term is nonnegative,
+
+\[
+x^TLx
+\ge0.
+\]
+
+Hence (L) is positive semidefinite.
+\end{proof}
+
+Consequently all Laplacian eigenvalues satisfy
+
+\[
+\lambda_i\ge0.
+\]
+
+
+Connectivity and the Zero Eigenvalue
+
+
+The smallest Laplacian eigenvalue contains topological
+information.
+
+\begin{theorem}
+The multiplicity of
+
+\[
+\lambda=0
+\]
+
+equals the number of connected components of the graph.
+\end{theorem}
+
+\begin{proof}
+A vector that is constant on a connected component
+satisfies
+
+\[
+Lx=0.
+\]
+
+Independent connected components generate independent
+null-space vectors.
+
+The dimension of the null space therefore equals the
+number of connected components.
+\end{proof}
+
+This theorem provides a direct connection between
+topology and spectral structure.
+
+
+Spectral Gap
+
+
+The most important quantity for many applications is the
+spectral gap.
+
+\begin{definition}{Spectral Gap}{spectral-gap}
+The spectral gap is
+
+\[
+\gamma
+=
+
+\lambda_2-\lambda_1.
+\]
+\end{definition}
+
+For connected graphs,
+
+\[
+\lambda_1=0,
+\]
+
+so
+
+\[
+\gamma
+=
+
+\lambda_2.
+\]
+
+The quantity
+
+\[
+\lambda_2
+\]
+
+is often called the algebraic connectivity.
+
+\begin{theorem}{Connectivity Criterion}{connectivity-criterion}
+A graph is connected if and only if
+
+\[
+\lambda_2>0.
+\]
+\end{theorem}
+
+\begin{proof}
+Connectivity implies a one-dimensional null space and
+therefore
+
+\[
+\lambda_2>0.
+\]
+
+Conversely, if
+
+\[
+\lambda_2=0,
+\]
+
+the null space has dimension greater than one, implying
+multiple connected components.
+
+Hence the graph is disconnected.
+\end{proof}
+
+
+Spectral Stability
+
+
+Spectral gaps frequently determine resilience.
+
+\begin{prop}
+Systems with larger spectral gaps return more rapidly to
+equilibrium after perturbation.
+\end{prop}
+
+\begin{proof}
+Relaxation rates are governed by exponential modes
+
+\[
+e^{-\lambda_i t}.
+\]
+
+The smallest nonzero eigenvalue controls the slowest mode
+of recovery.
+
+Increasing
+
+\[
+\lambda_2
+\]
+
+therefore increases convergence speed.
+\end{proof}
+
+This principle appears throughout synchronization theory,
+consensus dynamics, neural systems, ecological networks,
+and repair ecologies.
+
+
+Diffusion and Repair
+
+
+Consider the diffusion equation
+
+\[
+\frac{du}{dt}
+=
+
+-Lu.
+\]
+
+Expanding in eigenvectors gives
+
+\[
+u(t)
+=
+
+\sum_i
+c_i
+e^{-\lambda_i t}
+\phi_i.
+\]
+
+Modes associated with large eigenvalues decay rapidly.
+
+Modes associated with small eigenvalues persist.
+
+Repair processes often behave similarly.
+
+Local damage corresponds to high-frequency modes.
+
+Regeneration removes those modes through diffusion-like
+dynamics.
+
+
+Semantic Spectra
+
+
+Let
+
+\[
+\mathcal M
+\]
+
+denote a semantic manifold.
+
+A semantic Laplacian may be defined using either graph
+structure or differential geometry.
+
+The corresponding spectrum reveals latent semantic
+organization.
+
+Small eigenvalues correspond to broad conceptual
+structures.
+
+Large eigenvalues correspond to fine semantic detail.
+
+Spectral clustering methods exploit precisely this
+property.
+
+
+Ecological Spectra
+
+
+Distinction ecologies may likewise be represented as
+graphs.
+
+Nodes represent distinction structures.
+
+Edges represent interaction, repair, communication, or
+dependency relations.
+
+The spectral gap then becomes a measure of ecological
+coherence.
+
+\begin{definition}{Ecological Spectral Resilience}{spectral-resilience}
+The ecological spectral resilience is
+
+\[
+\rho
+=
+
+\lambda_2.
+\]
+\end{definition}
+
+Large values indicate strongly integrated repair
+ecologies.
+
+Small values indicate fragmentation and vulnerability.
+
+
+Regenerative Spectral Criterion
+
+
+One of the most useful applications of spectral theory in
+the present framework concerns regeneration.
+
+Let
+
+\[
+\kappa
+\]
+
+denote repair capacity and let
+
+\[
+L_R
+\]
+
+be the regeneration operator.
+
+\begin{theorem}{Regenerative Spectral Criterion}{regenerative-spectral}
+A regenerative equilibrium is locally stable if every
+nontrivial eigenvalue of
+
+\[
+L_R
+\]
+
+has negative real part.
+\end{theorem}
+
+\begin{proof}
+Linearization near equilibrium yields
+
+\[
+\dot x
+=
+
+L_Rx.
+\]
+
+Solutions decompose into eigenmodes
+
+\[
+x(t)
+=
+
+\sum_i
+c_i
+e^{\lambda_i t}
+\phi_i.
+\]
+
+If
+
+\[
+\operatorname{Re}(\lambda_i)<0
+\]
+
+for all nontrivial modes, every perturbation decays.
+
+The equilibrium is therefore locally stable.
+\end{proof}
+
+This theorem is the spectral analogue of the Lyapunov
+stability criteria developed in the previous section.
+
+
+Spectral Reachability
+
+
+Let
+
+\[
+R_t
+\]
+
+be a reachable set and let
+
+\[
+L_R
+\]
+
+be its associated connectivity operator.
+
+As spectral gaps approach zero,
+
+\[
+\gamma\rightarrow0,
+\]
+
+the reachable space fragments into weakly connected
+regions.
+
+This phenomenon often precedes observable reachability
+collapse.
+
+Spectral indicators therefore provide useful early-warning
+signals for admissibility failure.
+
+
+Summary
+
+
+Spectral theory decomposes complex systems into
+elementary modes governed by eigenvalues and
+eigenvectors. Graph Laplacians provide spectral
+descriptions of networks, the spectral gap measures
+connectivity and resilience, diffusion dynamics emerge
+naturally from Laplacian operators, and regenerative
+stability can often be expressed through spectral
+criteria.
+
+Spectral methods serve as tools for analyzing semantic organization,
+repair ecologies, regenerative systems, reachability
+structure, and admissibility geometry. The spectrum of a
+system frequently reveals structural properties that are
+difficult or impossible to observe directly in the
+original coordinates.
+(Chapter~\ref{ch:distinction-ecology}).
+
+
+Optimal Transport
+
+
+Many problems in mathematics concern comparison. Given
+two probability distributions, two geometric structures,
+two semantic states, or two ecological configurations,
+one may ask how different they are.
+
+Optimal transport addresses a stronger question.
+
+Rather than merely measuring difference, it asks:
+
+\emph{What is the least costly transformation that converts
+one distribution into another?}
+
+Originally introduced by Monge in 1781 as a problem of
+moving soil between locations, optimal transport has
+become one of the central mathematical theories connecting
+geometry, probability, information theory, economics,
+machine learning, and dynamical systems.
+
+Within the present framework optimal transport provides a
+natural language for repair. Damage corresponds to
+displacement within a distinction space. Repair
+corresponds to the transport of the damaged state toward a
+recoverable configuration. Regeneration corresponds to
+preservation of the capacity to perform such transport.
+
+
+The Monge Problem
+
+
+Let
+
+\[
+(X,d)
+\]
+
+be a metric space.
+
+Suppose
+
+\[
+\mu
+\]
+
+represents an initial distribution and
+
+\[
+\nu
+\]
+
+represents a desired distribution.
+
+A transport map
+
+\[
+T:X\rightarrow X
+\]
+
+moves mass from (\mu) to (\nu).
+
+\begin{definition}{Pushforward Measure}{pushforward}
+The pushforward of (\mu) under (T) is
+
+\[
+T_{#}\mu(B)
+=
+
+\mu(T^{-1}(B))
+\]
+
+for every measurable set
+
+\[
+B.
+\]
+\end{definition}
+
+The condition
+
+\[
+T_{#}\mu
+=
+
+\nu
+\]
+
+ensures that transport exactly converts one distribution
+into the other.
+
+Monge's problem seeks a transport map minimizing total
+cost.
+
+\begin{definition}{Monge Transport Problem}{transport-problem}
+Given cost function
+
+\[
+c(x,y),
+\]
+
+find
+
+\[
+T
+\]
+
+minimizing
+
+\[
+\int_X
+c(x,T(x))
+,d\mu(x)
+\]
+
+subject to
+
+\[
+T_{#}\mu=\nu.
+\]
+\end{definition}
+
+For Euclidean spaces the most common cost is
+
+\[
+c(x,y)
+=
+
+d(x,y)^p.
+\]
+
+The Monge formulation is elegant but often difficult
+because admissible transport maps may not exist.
+
+
+The Kantorovich Relaxation
+
+
+Kantorovich introduced a more general formulation.
+
+Instead of moving individual points, one transports
+probability mass.
+
+\begin{definition}{Transport Coupling}{transport-coupling}
+A coupling between
+
+\[
+\mu
+\]
+
+and
+
+\[
+\nu
+\]
+
+is a probability measure
+
+\[
+\gamma
+\]
+
+on
+
+\[
+X\times X
+\]
+
+whose marginals are
+
+\[
+\mu
+\]
+
+and
+
+\[
+\nu.
+\]
+\end{definition}
+
+The set of all couplings is denoted
+
+\[
+\Gamma(\mu,\nu).
+\]
+
+\begin{definition}{Kantorovich Transport Problem}{kantorovich}
+Find
+
+\[
+\gamma
+\in
+\Gamma(\mu,\nu)
+\]
+
+minimizing
+
+\[
+\int_{X\times X}
+c(x,y)
+,d\gamma(x,y).
+\]
+\end{definition}
+
+The Kantorovich formulation always possesses solutions
+under broad conditions and forms the modern foundation of
+optimal transport theory.
+
+
+Wasserstein Distance
+
+
+The most important quantity arising from optimal transport
+is the Wasserstein metric.
+
+\begin{definition}{Wasserstein Distance}{wasserstein}
+For
+
+\[
+1\le p<\infty,
+\]
+
+the Wasserstein distance is
+
+\[
+W_p(\mu,\nu)
+=
+
+\left(
+\inf_{\gamma\in\Gamma(\mu,\nu)}
+\int
+d(x,y)^p
+,d\gamma(x,y)
+\right)^{1/p}.
+\]
+\end{definition}
+
+The Wasserstein distance measures the minimum amount of
+work required to transform one distribution into another.
+
+Unlike divergences such as KL divergence, Wasserstein
+distance remains meaningful even when the supports of the
+distributions do not overlap.
+
+\begin{theorem}{Metric Property}{metric-property}
+The Wasserstein distance satisfies:
+
+\[
+W_p(\mu,\nu)\ge0,
+\]
+
+\[
+W_p(\mu,\nu)=0
+\iff
+\mu=\nu,
+\]
+
+\[
+W_p(\mu,\nu)
+=
+
+W_p(\nu,\mu),
+\]
+
+and
+
+\[
+W_p(\mu,\lambda)
+\le
+W_p(\mu,\nu)
++
+W_p(\nu,\lambda).
+\]
+\end{theorem}
+
+\begin{proof}
+Nonnegativity follows from the nonnegativity of the cost
+function.
+
+Identity follows because zero transport cost implies no
+mass displacement.
+
+Symmetry follows from exchanging source and destination.
+
+The triangle inequality follows from the gluing lemma and
+construction of composite transport plans.
+\end{proof}
+
+Thus
+
+\[
+W_p
+\]
+
+is a genuine metric on probability spaces.
+
+
+The Earth Mover Interpretation
+
+
+For
+
+\[
+p=1,
+\]
+
+the Wasserstein metric is often called the Earth Mover's
+Distance.
+
+Imagine two piles of soil.
+
+The cost of moving one unit of mass by distance
+
+\[
+d
+\]
+
+is proportional to
+
+\[
+d.
+\]
+
+The Wasserstein distance is the minimum amount of work
+required to reshape one pile into the other.
+
+This physical intuition is particularly useful when
+interpreting repair processes.
+
+Damage displaces structure.
+
+Repair transports structure back toward a viable
+configuration.
+
+
+Geodesics in Probability Space
+
+
+One of the most remarkable discoveries of modern optimal
+transport theory is that probability distributions form a
+geometric space.
+
+\begin{theorem}{McCann Interpolation}{mcann-interpolation}
+Between probability distributions
+
+\[
+\mu_0
+\]
+
+and
+
+\[
+\mu_1,
+\]
+
+there exists a Wasserstein geodesic
+
+\[
+\mu_t
+\]
+
+minimizing transport cost.
+\end{theorem}
+
+The resulting curve
+
+\[
+\mu_t
+\]
+
+acts as the shortest path through probability space.
+
+Optimal transport therefore induces a geometry on the
+space of distributions.
+
+This geometry plays a central role in modern information
+geometry and gradient-flow theory.
+
+
+Repair as Transport
+
+
+One of the central interpretations adopted throughout this
+book is that repair may be viewed as transport.
+
+Let
+
+\[
+\mu_D
+\]
+
+denote a damaged distinction structure and
+
+\[
+\mu_R
+\]
+
+the repaired structure.
+
+\begin{definition}{Repair Cost}{repair-cost}
+The repair cost is
+
+\[
+C_R
+=
+
+W_2(\mu_D,\mu_R).
+\]
+\end{definition}
+
+Repair cost measures the minimum geometric effort
+required to restore structure.
+
+\begin{prop}
+Perfect repair satisfies
+
+\[
+C_R=0.
+\]
+\end{prop}
+
+\begin{proof}
+If
+
+\[
+\mu_D=\mu_R,
+\]
+
+the identity coupling yields zero transport cost.
+
+Conversely, Wasserstein metrics vanish only for identical
+distributions.
+\end{proof}
+
+Repair therefore becomes a geometric optimization problem.
+
+
+Recoverability and Transport Distance
+
+
+Let
+
+\[
+\mathcal R
+\]
+
+denote recoverability.
+
+A natural recoverability functional is
+
+\[
+\mathcal R
+=
+
+\exp(-W_2).
+\]
+
+\begin{prop}
+Recoverability decreases monotonically with transport
+distance.
+\end{prop}
+
+\begin{proof}
+Since
+
+\[
+W_2\ge0,
+\]
+
+the function
+
+\[
+e^{-W_2}
+\]
+
+is strictly decreasing.
+
+Larger transport distances therefore imply smaller
+recoverability.
+\end{proof}
+
+This construction links geometric transport directly to
+the recoverability formalism developed in earlier
+chapters.
+
+
+Repair Flows
+
+
+Many repair processes occur continuously rather than
+instantaneously.
+
+Let
+
+\[
+\mu_t
+\]
+
+represent the evolving state of a system.
+
+The repair flow is governed by
+
+\[
+\frac{\partial\mu_t}{\partial t}
+=
+
+-\nabla\cdot(\mu_t v_t),
+\]
+
+where
+
+\[
+v_t
+\]
+
+is a transport velocity field.
+
+This is the continuity equation of optimal transport.
+
+Repair trajectories therefore become transport flows
+through distinction space.
+
+
+Gradient Flows
+
+
+Many important dynamical systems can be interpreted as
+gradient descent in Wasserstein space.
+
+Let
+
+\[
+\mathcal F[\mu]
+\]
+
+be an energy functional.
+
+The corresponding flow satisfies
+
+\[
+\frac{\partial\mu}{\partial t}
+=
+
+\nabla\cdot
+\left(
+\mu
+\nabla
+\frac{\delta\mathcal F}{\delta\mu}
+\right).
+\]
+
+\begin{theorem}{Entropy Gradient Flow}{entropy-gradient}
+The heat equation
+
+\[
+\frac{\partial\rho}{\partial t}
+=
+
+\Delta\rho
+\]
+
+is the gradient flow of entropy in Wasserstein space.
+\end{theorem}
+
+This result reveals a profound connection between
+transport, entropy, and geometry.
+
+Processes that appear diffusive may be interpreted as
+geodesic descent through probability space.
+
+
+Transport and Reachability
+
+
+Let
+
+\[
+R_t
+\]
+
+denote a reachable set.
+
+Transport cost induces a metric on reachability spaces.
+
+\begin{definition}{Reachability Transport Cost}{transport-cost}
+The transport cost between reachable regions is
+
+\[
+C(R_1,R_2)
+=
+
+W_2(\mu_{R_1},\mu_{R_2}).
+\]
+\end{definition}
+
+Large transport costs indicate substantial structural
+reorganization.
+
+Small transport costs indicate nearby futures.
+
+This interpretation links optimal transport directly to
+the geometry of future possibility.
+
+
+Transport and Admissibility
+
+
+Let
+
+\[
+\mathcal A
+\]
+
+denote an admissible region.
+
+For a trajectory
+
+\[
+\gamma(t),
+\]
+
+define the admissibility transport action
+
+\[
+\mathcal S_A
+=
+
+\int_0^T
+|v_t|^2
+,dt.
+\]
+
+\begin{definition}{Admissible Geodesic}{adm-geodesic}
+An admissible geodesic is a transport path minimizing
+(\mathcal S_A) while remaining entirely inside
+
+\[
+\mathcal A.
+\]
+\end{definition}
+
+This notion provides a bridge between optimal transport
+and admissibility geometry.
+
+The least costly future is not necessarily admissible.
+
+The admissible future is the least costly future that
+remains inside the viable region.
+
+
+Transport, Memory, and Reconstruction
+
+
+Memory may also be interpreted geometrically.
+
+A memory trace stores information about a prior
+distribution
+
+\[
+\mu_0.
+\]
+
+Reconstruction attempts to recover
+
+\[
+\mu_0
+\]
+
+from a degraded state
+
+\[
+\mu_t.
+\]
+
+The reconstruction problem therefore becomes a transport
+problem.
+
+One seeks the minimal path restoring the lost structure.
+
+This perspective unifies memory, repair, and recovery
+within a common geometric framework.
+
+
+Summary
+
+
+Optimal transport provides a geometry of transformation.
+The Wasserstein metric measures the minimum cost of moving
+between distributions, transport couplings describe
+feasible transformations, geodesics represent optimal
+paths, and transport flows describe continuous structural
+reorganization.
+
+Within the present framework repair becomes transport,
+recoverability becomes transport distance, regeneration
+becomes preservation of transport capacity, and
+admissibility becomes constrained transport within the
+space of viable futures.
+
+For this reason optimal transport serves as one of the
+principal mathematical foundations of repair geometry,
+reachability geometry, and admissibility theory.
+(Chapter~\ref{ch:repair}).
+
+
+Large-Deviation Theory
+
+
+Many of the systems studied throughout this book possess
+an apparent paradox. They spend most of their time near
+stable states and yet occasionally undergo dramatic
+reorganizations. Ecosystems collapse. Scientific
+paradigms shift. Institutions fail. Semantic structures
+reorganize. Admissible regions suddenly contract.
+
+Such transitions are often too rare to be explained by
+ordinary perturbation theory, yet too important to be
+ignored.
+
+Large-deviation theory provides a mathematical framework
+for understanding these events. Rather than studying
+typical behavior, it studies exponentially improbable
+behavior. It asks how unlikely transitions occur, what
+paths they follow, and how their probabilities scale with
+system size.
+
+Within the present framework large-deviation theory
+provides the mathematical language of collapse,
+regeneration, boundary crossing, and admissibility
+transitions.
+
+
+Rare Events and Exponential Scaling
+
+
+Let
+
+\[
+X_n
+\]
+
+be a sequence of random variables.
+
+In many systems probabilities of large fluctuations decay
+exponentially with system size.
+
+Instead of
+
+\[
+P(X_n=x),
+\]
+
+one observes behavior of the form
+
+\[
+P(X_n\approx x)
+\sim
+e^{-nI(x)}.
+\]
+
+The function
+
+\[
+I(x)
+\]
+
+is called the rate function.
+
+\begin{definition}{Rate Function}{rate-function}
+A rate function is a lower semicontinuous function
+
+\[
+I:X\rightarrow[0,\infty]
+\]
+
+such that
+
+\[
+I(x)\ge0.
+\]
+\end{definition}
+
+The quantity
+
+\[
+I(x)
+\]
+
+measures the exponential cost of realizing a state.
+
+Small values correspond to likely states.
+
+Large values correspond to improbable states.
+
+
+Large-Deviation Principle
+
+
+\begin{definition}{Large-Deviation Principle}{large-deviation}
+A sequence of probability measures
+
+\[
+{\mu_n}
+\]
+
+satisfies a large-deviation principle with rate function
+
+\[
+I
+\]
+
+if for every measurable set
+
+\[
+A
+\]
+
+one has
+
+\[
+-\inf_{x\in A^\circ}
+I(x)
+\le
+\liminf_{n\to\infty}
+\frac1n
+\log\mu_n(A)
+\]
+
+and
+
+\[
+\limsup_{n\to\infty}
+\frac1n
+\log\mu_n(A)
+\le
+-\inf_{x\in\overline A}
+I(x).
+\]
+\end{definition}
+
+These inequalities imply
+
+\[
+\mu_n(A)
+\approx
+e^{-nI(A)}
+\]
+
+for large (n).
+
+The large-deviation principle therefore generalizes the
+familiar exponential suppression of rare events.
+
+
+The Law of Large Numbers as a Special Case
+
+
+Large-deviation theory contains the law of large numbers
+as a limiting case.
+
+Suppose
+
+\[
+X_1,\ldots,X_n
+\]
+
+are independent and identically distributed random
+variables.
+
+Define the sample mean
+
+\[
+\bar X_n
+=
+\frac1n
+\sum_{i=1}^{n}
+X_i.
+\]
+
+The law of large numbers states that
+
+\[
+\bar X_n
+\rightarrow
+\mathbb E[X]
+\]
+
+with high probability.
+
+Large-deviation theory quantifies the probability of
+deviations away from this limit.
+
+\begin{theorem}{Cramér's Theorem}{cramers-theorem}
+The sample mean satisfies a large-deviation principle with
+rate function
+
+\[
+I(x)
+=
+\sup_{\theta}
+\left(
+\theta x
+-
+\Lambda(\theta)
+\right),
+\]
+
+where
+
+\[
+\Lambda(\theta)
+=
+\log
+\mathbb E[e^{\theta X}]
+\]
+
+is the cumulant generating function.
+\end{theorem}
+
+This theorem establishes one of the foundational results
+of the subject.
+
+
+Rate Functions as Geometric Potentials
+
+
+The rate function may be interpreted geometrically.
+
+States with low
+
+\[
+I(x)
+\]
+
+occupy valleys.
+
+States with high
+
+\[
+I(x)
+\]
+
+occupy peaks.
+
+Typical trajectories descend toward minima of
+
+\[
+I.
+\]
+
+Rare transitions require climbing effective barriers.
+
+This interpretation closely parallels the admissibility
+potential introduced in earlier sections.
+
+\begin{rem}
+Many admissibility phenomena can be understood as motion
+through a large-deviation landscape.
+\end{rem}
+
+
+Path Space Large Deviations
+
+
+Many systems are better described by trajectories than by
+states.
+
+Let
+
+\[
+\gamma(t)
+\]
+
+denote a trajectory.
+
+The probability of observing a particular trajectory often
+takes the asymptotic form
+
+\[
+P[\gamma]
+\sim
+e^{-S[\gamma]}.
+\]
+
+The functional
+
+\[
+S[\gamma]
+\]
+
+is called the action.
+
+\begin{definition}{Rate Functional}{rate-functional}
+A rate functional assigns an exponential cost to an
+entire trajectory:
+
+\[
+S:
+\Gamma
+\rightarrow
+[0,\infty].
+\]
+\end{definition}
+
+The most probable trajectory minimizes
+
+\[
+S[\gamma].
+\]
+
+This principle is the probabilistic analogue of the
+principle of least action in physics.
+
+
+Freidlin--Wentzell Theory
+
+
+Consider a stochastic differential equation
+
+\[
+dx_t
+=
+f(x_t),dt
++
+\sqrt{\varepsilon},dW_t.
+\]
+
+The deterministic dynamics are governed by
+
+\[
+f(x).
+\]
+
+The parameter
+
+\[
+\varepsilon
+\]
+
+controls noise strength.
+
+As
+
+\[
+\varepsilon
+\rightarrow0,
+\]
+
+the probability of observing trajectory
+
+\[
+\gamma
+\]
+
+satisfies
+
+\[
+P[\gamma]
+\sim
+\exp
+\left(
+-\frac{1}{\varepsilon}
+S[\gamma]
+\right).
+\]
+
+The Freidlin--Wentzell action is
+
+\[
+S[\gamma]
+=
+\frac12
+\int
+|
+\dot\gamma-f(\gamma)
+|^2
+,dt.
+\]
+
+\begin{theorem}
+The most probable noise-induced transition minimizes the
+Freidlin--Wentzell action.
+\end{theorem}
+
+This theorem provides a rigorous description of rare
+escape events.
+
+
+Metastability
+
+
+Many systems spend long periods near stable states before
+undergoing sudden transitions.
+
+\begin{definition}{Metastable State}{metastable-state}
+A metastable state is locally stable but globally
+nonoptimal.
+\end{definition}
+
+Examples include:
+
+\[
+\text{supercooled liquids},
+\]
+
+\[
+\text{ecological equilibria},
+\]
+
+\[
+\text{scientific paradigms},
+\]
+
+\[
+\text{bureaucratic structures},
+\]
+
+and
+
+\[
+\text{semantic conventions}.
+\]
+
+Large-deviation theory explains why such states persist
+for long periods despite not being globally optimal.
+
+\begin{prop}
+Escape times from metastable states scale exponentially.
+\end{prop}
+
+\begin{proof}
+Escape requires crossing a positive action barrier
+
+\[
+\Delta S.
+\]
+
+Large-deviation theory yields
+
+\[
+\tau
+\sim
+e^{\Delta S/\varepsilon}.
+\]
+
+Therefore escape times grow exponentially as noise
+decreases.
+\end{proof}
+
+
+Distinction Collapse as a Rare Event
+
+
+Let
+
+\[
+D(t)
+\]
+
+denote distinction capacity.
+
+Suppose repair maintains a positive equilibrium
+
+\[
+D^*.
+\]
+
+Collapse to
+
+\[
+D=0
+\]
+
+requires a sequence of atypical fluctuations.
+
+The probability of collapse therefore satisfies
+
+\[
+P(D\rightarrow0)
+\sim
+e^{-I_{\mathrm{collapse}}}.
+\]
+
+\begin{definition}{Collapse Action}{collapse-action}
+The collapse action is the minimum rate functional
+required to drive a system from a viable distinction state
+to a collapsed state.
+\end{definition}
+
+Collapse is therefore not merely a state.
+
+It is a trajectory possessing a geometric cost.
+
+
+Repair and Action Minimization
+
+
+Suppose
+
+\[
+\gamma_D
+\]
+
+is a damaged trajectory and
+
+\[
+\gamma_R
+\]
+
+a repaired trajectory.
+
+Define repair action
+
+\[
+S_R
+=
+\int
+L_R(\gamma,\dot\gamma)
+,dt.
+\]
+
+\begin{definition}{Optimal Repair Path}{optimal-repair}
+An optimal repair path minimizes
+
+\[
+S_R.
+\]
+\end{definition}
+
+This construction links repair theory to variational
+principles.
+
+Repair becomes a path-selection problem.
+
+
+Admissibility Transitions
+
+
+One of the most important applications of large-deviation
+theory in the present framework concerns admissibility
+collapse.
+
+Let
+
+\[
+\mathcal A
+\]
+
+denote an admissible region.
+
+A trajectory initially satisfies
+
+\[
+\gamma(t)
+\in
+\mathcal A.
+\]
+
+Rare fluctuations may eventually drive the trajectory
+across
+
+\[
+\partial\mathcal A.
+\]
+
+The probability of such a transition satisfies
+
+\[
+P
+\left(
+\gamma
+\text{ exits }
+\mathcal A
+\right)
+\sim
+e^{-I_A}.
+\]
+
+\begin{definition}{Admissibility Barrier}{adm-barrier}
+The admissibility barrier is the minimum action required
+to reach
+
+\[
+\partial\mathcal A.
+\]
+\end{definition}
+
+Systems possessing large admissibility barriers are
+robust.
+
+Systems possessing small barriers are fragile.
+
+
+Quasipotentials
+
+
+For stochastic systems one may define a quasipotential
+
+\[
+V(x).
+\]
+
+The quasipotential measures the minimum action required to
+reach state
+
+\[
+x.
+\]
+
+\begin{definition}{Quasipotential}{quasipotential}
+The quasipotential is
+
+\[
+V(x)
+=
+\inf_{\gamma}
+S[\gamma].
+\]
+\end{definition}
+
+The quasipotential plays a role analogous to an energy
+landscape.
+
+Stable states correspond to minima.
+
+Collapse states correspond to distant basins separated by
+large barriers.
+
+
+Reachability and Large Deviations
+
+
+Reachability theory studies which states can be attained.
+
+Large-deviation theory studies how difficult those states
+are to attain.
+
+Combining the two yields a richer notion of future
+possibility.
+
+\begin{definition}{Reachability Cost}{reachability-cost}
+The reachability cost of state
+
+\[
+x
+\]
+
+is
+
+\[
+C_R(x)
+=
+I(x).
+\]
+\end{definition}
+
+Reachable states therefore possess differing degrees of
+accessibility.
+
+Two futures may both be reachable while differing by many
+orders of magnitude in probability.
+
+
+Generative Admissibility
+
+
+Let
+
+\[
+V_A(t)
+\]
+
+denote admissible volume.
+
+Generative systems satisfy
+
+\[
+\frac{dV_A}{dt}
+\ge0.
+\]
+
+Large-deviation theory provides a complementary
+perspective.
+
+Rather than examining average volume growth, one examines
+the action required to destroy admissibility.
+
+\begin{definition}{Generative Robustness}{generative-robustness}
+The generative robustness of a system is
+
+\[
+G
+=
+
+\inf
+S[\gamma_{\mathrm{collapse}}],
+\]
+
+the minimum action required to force admissibility
+collapse.
+\end{definition}
+
+Large values indicate strongly regenerative systems.
+
+Small values indicate fragile systems.
+
+
+Summary
+
+
+Large-deviation theory studies exponentially rare events,
+action functionals, metastability, and transition
+probabilities. Rate functions measure the cost of
+atypical states, action functionals measure the cost of
+atypical trajectories, and quasipotentials describe the
+global structure of possibility landscapes.
+
+Within the present framework distinction collapse,
+scientific revolutions, semantic shifts, repair
+trajectories, ecological transitions, and admissibility
+boundary crossings may all be interpreted as
+large-deviation phenomena. The most probable transition is
+the trajectory minimizing action, while robustness is
+measured by the action barrier protecting a system from
+collapse.
+
+Large-deviation theory therefore provides the
+mathematical language of rare but consequential events,
+complementing the dynamical and geometric methods
+developed throughout the text.
+
+
+Geometric Reachability
+
+
+The central concern of this book is not merely what a
+system is, but what a system can become.
+
+Two systems may possess identical present states while
+differing radically in their accessible futures. A seed
+and a pebble may occupy comparable volumes. A healthy
+institution and a failing institution may possess similar
+budgets. A living civilization and a dying civilization
+may possess comparable resources.
+
+The difference lies not in their current state but in
+their future possibility structure.
+
+Reachability theory provides a mathematical framework for
+describing this distinction.
+
+Throughout Chapters~13--31 reachability volume serves as
+one of the principal quantities used to characterize
+repair, regeneration, intelligence, governance,
+admissibility, and future preservation.
+
+
+Control Systems
+
+
+Let
+
+\[
+\dot x
+=
+
+f(x,u)
+\]
+
+be a controlled dynamical system.
+
+Here
+
+\[
+x(t)\in X
+\]
+
+denotes the state of the system and
+
+\[
+u(t)\in U
+\]
+
+denotes a control input.
+
+The function
+
+\[
+f
+\]
+
+determines the local dynamics.
+
+Unlike autonomous systems, controlled systems possess
+multiple possible futures.
+
+The control variable selects among them.
+
+\begin{definition}{Admissible Control}{adm-control}
+A control function
+
+\[
+u(t)
+\]
+
+is admissible if it satisfies all imposed constraints.
+\end{definition}
+
+Examples include physical force limitations, resource
+constraints, informational constraints, ecological
+constraints, and admissibility constraints.
+
+
+Reachable Sets
+
+
+\begin{definition}{Reachable Set}{reachable-set}
+Let
+
+\[
+x_0
+\]
+
+be an initial state.
+
+The reachable set at time (t) is
+
+\[
+R_t(x_0)
+=
+
+\left{
+x(t)
+:
+u(\tau)
+\text{ admissible}
+\right}.
+\]
+\end{definition}
+
+The reachable set contains every state that can be
+attained from the initial condition within time (t).
+
+Reachability therefore converts dynamics into geometry.
+
+Instead of asking what trajectory occurs, we ask what
+region of possibility remains accessible.
+
+\begin{ex}
+For
+
+\[
+\dot x=u,
+\qquad
+|u|\le1,
+\]
+
+the reachable set is
+
+\[
+R_t
+=
+
+[-t,t].
+\]
+
+Reachability grows linearly with time.
+\end{ex}
+
+
+Reachability Volume
+
+
+The size of a reachable region is measured by its volume.
+
+\begin{definition}{Reachability Volume}{reachability-volume}
+Let
+
+\[
+\mu
+\]
+
+be a measure on the state space.
+
+The reachability volume is
+
+\[
+V_R(t)
+=
+
+\mu(R_t).
+\]
+\end{definition}
+
+Reachability volume measures future flexibility.
+
+Large values indicate many accessible futures.
+
+Small values indicate restricted possibility.
+
+\begin{rem}
+Throughout this text reachability volume plays a role
+analogous to phase-space volume in statistical mechanics.
+\end{rem}
+
+
+Monotonicity of Reachability
+
+
+Reachable sets frequently expand through time.
+
+\begin{theorem}{Reachability Monotonicity}{reachability-monotonicity}
+Suppose controls remain available throughout the interval
+
+\[
+[0,t_2].
+\]
+
+Then
+
+\[
+R_{t_1}
+\subseteq
+R_{t_2}
+\]
+
+for
+
+\[
+t_1<t_2.
+\]
+\end{theorem}
+
+\begin{proof}
+Any trajectory achievable in time
+
+\[
+t_1
+\]
+
+can be followed by a period of zero control until
+
+\[
+t_2.
+\]
+
+Hence every state reachable at
+
+\[
+t_1
+\]
+
+remains reachable at
+
+\[
+t_2.
+\]
+
+Therefore
+
+\[
+R_{t_1}
+\subseteq
+R_{t_2}.
+\]
+\end{proof}
+
+\begin{corollary}
+Reachability volume is nondecreasing:
+
+\[
+V_R(t_1)
+\le
+V_R(t_2).
+\]
+\end{corollary}
+
+This result describes idealized systems.
+
+Real systems often experience reachability loss due to
+resource depletion, damage, lock-in effects, or
+admissibility collapse.
+
+
+Reachability Entropy
+
+
+The raw volume of a reachable set depends upon units and
+dimension.
+
+A more useful quantity is the logarithm of volume.
+
+\begin{definition}{Reachability Entropy}{reachability-entropy}
+The reachability entropy is
+
+\[
+S_R
+=
+
+\log V_R.
+\]
+\end{definition}
+
+Reachability entropy measures the effective number of
+future possibilities.
+
+\begin{prop}
+If
+
+\[
+R_1
+\]
+
+and
+
+\[
+R_2
+\]
+
+are independent reachable regions, then
+
+\[
+S_R(R_1\times R_2)
+=
+
+S_R(R_1)
++
+S_R(R_2).
+\]
+\end{prop}
+
+\begin{proof}
+Volumes multiply:
+
+\[
+\Vol(R_1\times R_2)
+=
+
+\Vol(R_1)\Vol(R_2).
+\]
+
+Taking logarithms yields
+
+\[
+\log
+\Vol(R_1\times R_2)
+=
+
+\log\Vol(R_1)
++
+\log\Vol(R_2).
+\]
+\end{proof}
+
+This additivity property mirrors the behavior of entropy
+throughout statistical mechanics and information theory.
+
+
+Reachability as Distinction Capacity
+
+
+Reachability may also be interpreted as a distinction
+measure.
+
+Let
+
+\[
+\epsilon
+\]
+
+denote observational resolution.
+
+The number of distinguishable future states is
+
+\[
+N_R
+\approx
+\frac{V_R}{\epsilon^n}.
+\]
+
+The corresponding distinction capacity is
+
+\[
+D_R
+=
+
+\log N_R.
+\]
+
+Substituting gives
+
+\[
+D_R
+=
+
+## \log V_R
+
+n\log\epsilon.
+\]
+
+Hence
+
+\[
+D_R
+=
+
+S_R
++
+\text{constant}.
+\]
+
+\begin{prop}
+Reachability entropy and future distinction capacity are
+equivalent up to scale.
+\end{prop}
+
+This result provides a direct bridge between reachability
+theory and the distinction framework developed in earlier
+chapters.
+
+
+Boundary Structure
+
+
+The topology of the reachable set often matters as much as
+its size.
+
+\begin{definition}{Reachability Boundary}{reachability-boundary}
+The reachability boundary is
+
+\[
+\partial R_t.
+\]
+\end{definition}
+
+Boundary points represent states that are barely
+reachable.
+
+Small perturbations may render them inaccessible.
+
+\begin{definition}{Reachability Margin}{reachability-margin}
+For state
+
+\[
+x\in R_t,
+\]
+
+the reachability margin is
+
+\[
+m(x)
+=
+
+d(x,\partial R_t).
+\]
+\end{definition}
+
+Small margins indicate fragility.
+
+Large margins indicate robust accessibility.
+
+
+Boundary Collapse
+
+
+One of the most important phenomena discussed throughout
+the book is boundary collapse.
+
+\begin{definition}{Boundary Collapse}{boundary-collapse}
+Boundary collapse occurs when
+
+\[
+V_R(t)
+\rightarrow0.
+\]
+\end{definition}
+
+Equivalently,
+
+\[
+S_R
+\rightarrow
+-\infty.
+\]
+
+The system retains fewer and fewer future options until
+only a negligible set remains.
+
+\begin{theorem}{Reachability Collapse Criterion}{reachability-collapse}
+If
+
+\[
+\lim_{t\to\infty}
+V_R(t)
+=
+
+0,
+\]
+
+then
+
+\[
+\lim_{t\to\infty}
+S_R
+=
+
+-\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+Since
+
+\[
+S_R
+=
+
+\log V_R,
+\]
+
+the result follows from
+
+\[
+\log x
+\rightarrow
+-\infty
+\]
+
+as
+
+\[
+x\rightarrow0^+.
+\]
+\end{proof}
+
+This simple observation underlies much of the geometric
+analysis developed later in the text.
+
+Collapse is often more accurately understood as
+reachability contraction than as immediate failure.
+
+
+Reachability and Intelligence
+
+
+Throughout Chapters~16--18 intelligence is interpreted in
+terms of reachability.
+
+An intelligent system is not merely one that predicts.
+
+It is one that expands accessible futures.
+
+\begin{definition}{Reachability Intelligence}{reachability-intelligence}
+The reachability intelligence of a system
+
+\[
+\Sigma
+\]
+
+is
+
+\[
+\mathcal I_R(\Sigma)
+=
+
+\frac{d}{dt}
+V_R(\Sigma).
+\]
+\end{definition}
+
+Positive values indicate future expansion.
+
+Negative values indicate future contraction.
+
+\begin{rem}
+This definition generalizes many traditional notions of
+adaptation, planning, and problem solving.
+\end{rem}
+
+
+Reachability and Repair
+
+
+Repair can be interpreted geometrically as restoration of
+lost reachability.
+
+Suppose damage changes
+
+\[
+R_t
+\]
+
+to
+
+\[
+R_t'.
+\]
+
+The reachability deficit is
+
+\[
+\Delta_R
+=
+
+## V_R
+
+V_R'.
+\]
+
+\begin{definition}{Repair Efficiency}{repair-efficiency}
+Repair efficiency is
+
+\[
+\eta_R
+=
+
+\frac{\Delta_R^{\mathrm{restored}}}
+{\Delta_R}.
+\]
+\end{definition}
+
+Perfect repair satisfies
+
+\[
+\eta_R=1.
+\]
+
+Complete failure satisfies
+
+\[
+\eta_R=0.
+\]
+
+
+Reachability and Regeneration
+
+
+Repair restores lost volume.
+
+Regeneration restores the ability to generate volume.
+
+Let
+
+\[
+G_R
+=
+
+\frac{d}{dt}
+V_R.
+\]
+
+\begin{definition}{Regenerative Capacity}{regenerative-capacity}
+The regenerative capacity is
+
+\[
+\kappa_R
+=
+
+\frac{dG_R}{dt}.
+\]
+\end{definition}
+
+Positive values indicate accelerating expansion of future
+possibility.
+
+Negative values indicate declining future flexibility.
+
+This distinction parallels the difference between repair
+and regeneration introduced earlier.
+
+
+Reachability and Admissibility
+
+
+Reachability alone is insufficient.
+
+Many futures may be reachable while remaining destructive,
+pathological, or self-terminating.
+
+Let
+
+\[
+\mathcal A
+\]
+
+denote the admissible region.
+
+Define admissible reachability volume
+
+\[
+\Vol_A
+=
+
+\mu(R_t\cap\mathcal A).
+\]
+
+\begin{definition}{Admissible Reachability}{adm-reachability}
+The admissible reachability entropy is
+
+\[
+S_A
+=
+
+\log\Vol_A.
+\]
+\end{definition}
+
+This quantity measures not merely what can happen, but
+what can happen while remaining viable.
+
+Much of the later admissibility program can be viewed as
+the study of
+
+\[
+\Vol_A
+\]
+
+rather than
+
+\[
+V_R.
+\]
+
+
+The Reachability Principle
+
+
+One of the recurring themes of the text may be stated
+formally.
+
+\begin{theorem}{Reachability Principle}{reachability-principle}
+A system possessing greater admissible reachability
+contains a larger space of future distinctions.
+\end{theorem}
+
+\begin{proof}
+Admissible reachability volume determines the number of
+accessible distinguishable future states.
+
+Larger admissible volume therefore implies greater future
+distinction capacity.
+\end{proof}
+
+This theorem forms one of the conceptual bridges between
+distinction theory and admissibility geometry.
+
+
+Summary
+
+
+Reachability theory transforms dynamics into geometry.
+Reachable sets describe accessible futures, reachability
+volume measures future flexibility, reachability entropy
+measures future distinction capacity, and boundary
+collapse corresponds to contraction of possibility space.
+
+Repair restores lost reachability. Regeneration restores
+the ability to generate reachability. Intelligence
+expands reachability. Admissibility restricts
+reachability to viable futures.
+
+For this reason reachability volume serves as one of the
+central geometric quantities appearing throughout
+Chapters~13--31 and provides much of the mathematical
+foundation for the admissibility program.
+
+
+Admissibility Geometry
+
+
+The central claim of this book is that persistence alone
+is not sufficient.
+
+A crystal persists.
+
+A bureaucracy persists.
+
+A parasite persists.
+
+A dictatorship persists.
+
+A cancer persists.
+
+Persistence therefore cannot serve as a universal measure
+of value, viability, intelligence, or success.
+
+The deeper question concerns the preservation of future
+possibility.
+
+Not every continuation preserves the conditions required
+for further continuation.
+
+A system may survive while progressively destroying the
+space of futures available to itself and others.
+
+This observation motivates the concept of admissibility.
+
+Admissibility concerns the geometry of viable future
+possibility.
+
+The primary object of study is not a state, a trajectory,
+or a utility function.
+
+It is the structure of futures that remain available.
+
+
+The Admissible Region
+
+
+Let
+
+\[
+X
+\]
+
+denote a state space, trajectory space, semantic space,
+or possibility space.
+
+\begin{definition}{Admissible Region}{adm-region}
+The admissible region is a subset
+
+\[
+\mathcal A
+\subseteq
+X
+\]
+
+consisting of all states satisfying the viability
+conditions of the system.
+\end{definition}
+
+The precise definition of admissibility depends upon the
+domain.
+
+In ecology it may correspond to sustainability.
+
+In engineering it may correspond to safety.
+
+In governance it may correspond to preservation of future
+optionality.
+
+In scientific inquiry it may correspond to preservation
+of revision and falsifiability.
+
+The mathematical structure remains the same.
+
+\begin{rem}
+Admissibility is intentionally more general than
+optimization.
+
+Optimization asks whether a state is preferred.
+
+Admissibility asks whether future preference remains
+possible.
+\end{rem}
+
+
+Admissibility Volume
+
+
+The simplest global quantity associated with an
+admissible region is its measure.
+
+\begin{definition}{Admissibility Volume}{adm-volume}
+Let
+
+\[
+\mu
+\]
+
+be a measure on (X).
+
+The admissibility volume is
+
+\[
+V_A
+=
+
+\mu(\mathcal A).
+\]
+\end{definition}
+
+Admissibility volume measures the size of the viable
+future region.
+
+Large values correspond to broad flexibility.
+
+Small values correspond to fragility.
+
+Vanishing admissibility volume corresponds to collapse.
+
+\begin{prop}
+If
+
+\[
+\mathcal A_1
+\subseteq
+\mathcal A_2,
+\]
+
+then
+
+\[
+V_A(\mathcal A_1)
+\le
+V_A(\mathcal A_2).
+\]
+\end{prop}
+
+\begin{proof}
+Monotonicity follows directly from the monotonicity of
+measures.
+
+If one set is contained within another, its measure
+cannot exceed the measure of the larger set.
+\end{proof}
+
+This simple observation provides the basis for much of
+the ordering structure used throughout later chapters.
+
+
+Admissibility Entropy
+
+
+Volume alone is often inconvenient because it depends upon
+dimension and units.
+
+As in statistical mechanics and reachability theory, it
+is useful to introduce a logarithmic quantity.
+
+\begin{definition}{Admissibility Entropy}{adm-entropy}
+The admissibility entropy is
+
+\[
+S_A
+=
+
+\log V_A.
+\]
+\end{definition}
+
+Admissibility entropy measures the effective number of
+admissible futures.
+
+\begin{prop}
+For independent admissible systems
+
+\[
+\mathcal A_1
+\]
+
+and
+
+\[
+\mathcal A_2,
+\]
+
+\[
+S_A(\mathcal A_1\times\mathcal A_2)
+=
+
+S_A(\mathcal A_1)
++
+S_A(\mathcal A_2).
+\]
+\end{prop}
+
+\begin{proof}
+Since volume is multiplicative,
+
+\[
+V_A(\mathcal A_1\times\mathcal A_2)
+=
+
+V_A(\mathcal A_1)
+V_A(\mathcal A_2).
+\]
+
+Taking logarithms gives the result.
+\end{proof}
+
+This additive property makes admissibility entropy
+analogous to thermodynamic entropy and reachability
+entropy.
+
+
+Local Admissibility Structure
+
+
+Global volume is only part of the story.
+
+The local geometry of admissibility is equally important.
+
+Let
+
+\[
+x\in\mathcal A.
+\]
+
+Small perturbations may either preserve or destroy
+admissibility.
+
+To quantify this sensitivity we introduce an
+admissibility potential.
+
+\begin{definition}{Admissibility Potential}{adm-potential}
+The admissibility potential is
+
+\[
+\Psi(x)
+=
+
+-\log V_A(x),
+\]
+
+where
+
+\[
+V_A(x)
+\]
+
+denotes the local admissible volume associated with the
+neighborhood of (x).
+\end{definition}
+
+Large values of
+
+\[
+\Psi
+\]
+
+correspond to regions where admissible futures are scarce.
+
+Small values correspond to regions possessing abundant
+future flexibility.
+
+
+Admissibility Curvature
+
+
+Curvature measures how rapidly admissibility changes.
+
+\begin{definition}{Admissibility Curvature Tensor}{adm-curvature-tensor}
+The admissibility curvature tensor is
+
+\[
+K_{ij}
+=
+
+\nabla_i\nabla_j\Psi.
+\]
+\end{definition}
+
+Equivalently,
+
+\[
+K_{ij}
+=
+
+*
+
+\nabla_i\nabla_j
+\log V_A.
+\]
+
+The tensor
+
+\[
+K_{ij}
+\]
+
+is the Hessian of the admissibility potential.
+
+It measures second-order sensitivity of future
+possibility.
+
+\begin{definition}{Scalar Admissibility Curvature}{scalar-adm-curvature}
+The scalar admissibility curvature is
+
+\[
+K_A
+=
+
+g^{ij}K_{ij}.
+\]
+\end{definition}
+
+
+Interpretation of Curvature
+
+
+The sign of admissibility curvature carries geometric
+meaning.
+
+\begin{prop}
+Positive admissibility curvature corresponds to local
+contraction of future possibility.
+\end{prop}
+
+\begin{proof}
+If
+
+\[
+K_{ij}
+=
+
+\nabla_i\nabla_j\Psi
+\]
+
+is positive semidefinite, then
+
+\[
+\Psi
+\]
+
+is locally convex.
+
+Since
+
+\[
+\Psi
+=
+
+-\log V_A,
+\]
+
+convexity of
+
+\[
+\Psi
+\]
+
+corresponds to local concavity of admissible volume.
+
+Hence nearby perturbations reduce admissible volume.
+\end{proof}
+
+\begin{prop}
+Negative admissibility curvature corresponds to local
+expansion of future possibility.
+\end{prop}
+
+\begin{proof}
+If
+
+\[
+K_{ij}
+\]
+
+is negative semidefinite then
+
+\[
+\Psi
+\]
+
+is locally concave.
+
+Therefore
+
+\[
+V_A
+\]
+
+is locally expanding.
+
+Small perturbations increase future possibility.
+\end{proof}
+
+Positive curvature therefore signals fragility.
+
+Negative curvature signals generativity.
+
+
+Boundary Geometry
+
+
+The topology of admissibility is controlled by its
+boundary.
+
+\begin{definition}{Admissibility Boundary}{adm-boundary-app}
+The admissibility boundary is
+
+\[
+\partial\mathcal A.
+\]
+\end{definition}
+
+Points near
+
+\[
+\partial\mathcal A
+\]
+
+possess heightened sensitivity.
+
+Small perturbations may move trajectories into
+inadmissible regions.
+
+\begin{definition}{Boundary Distance}{boundary-distance}
+The boundary distance of state
+
+\[
+x
+\]
+
+is
+
+\[
+d_A(x)
+=
+
+d(x,\partial\mathcal A).
+\]
+\end{definition}
+
+\begin{prop}
+Boundary distance provides a first-order measure of local
+admissibility robustness.
+\end{prop}
+
+\begin{proof}
+For sufficiently small perturbations
+
+\[
+|\delta x|
+<
+d_A(x),
+\]
+
+the perturbed state remains inside
+
+\[
+\mathcal A.
+\]
+
+Hence larger boundary distances imply larger admissible
+perturbation neighborhoods.
+\end{proof}
+
+
+The Admissibility Gradient
+
+
+The gradient of admissibility volume determines the
+direction of maximal expansion.
+
+\begin{definition}{Admissibility Gradient}{adm-gradient}
+The admissibility gradient is
+
+\[
+\nabla V_A.
+\]
+\end{definition}
+
+\begin{prop}
+The direction
+
+\[
+\nabla V_A
+\]
+
+maximizes local increase in admissible volume.
+\end{prop}
+
+\begin{proof}
+For a differentiable scalar field the gradient points in
+the direction of greatest increase.
+
+Since
+
+\[
+V_A
+\]
+
+is a scalar field, the result follows directly from
+multivariable calculus.
+\end{proof}
+
+The admissibility gradient therefore provides a natural
+direction of generative motion.
+
+
+Admissible Flows
+
+
+Let
+
+\[
+\phi_t
+\]
+
+be a flow on the state space.
+
+\begin{definition}{Admissible Flow}{adm-flow}
+A flow is admissible if
+
+\[
+\phi_t(\mathcal A)
+\subseteq
+\mathcal A
+\]
+
+for all
+
+\[
+t\ge0.
+\]
+\end{definition}
+
+Admissible flows preserve viability.
+
+Many systems satisfy this condition only approximately.
+
+Consequently admissibility must often be treated as a
+stability problem.
+
+
+Generative Admissibility
+
+
+The central geometric principle of the framework is not
+mere preservation but expansion.
+
+\begin{definition}{Generative Admissibility}{generative-adm}
+A system is generatively admissible if
+
+\[
+\frac{dV_A}{dt}
+\ge
+0.
+\]
+\end{definition}
+
+This condition states that admissible volume must remain
+constant or increase through time.
+
+\begin{theorem}{Generative Admissibility Theorem}{generative-adm-theorem}
+If
+
+\[
+\frac{dV_A}{dt}
+\ge0,
+\]
+
+then admissibility entropy satisfies
+
+\[
+\frac{dS_A}{dt}
+\ge0.
+\]
+\end{theorem}
+
+\begin{proof}
+Since
+
+\[
+S_A
+=
+
+\log V_A,
+\]
+
+differentiation yields
+
+\[
+\frac{dS_A}{dt}
+=
+
+\frac1{V_A}
+\frac{dV_A}{dt}.
+\]
+
+Because
+
+\[
+V_A>0
+\]
+
+and
+
+\[
+\frac{dV_A}{dt}\ge0,
+\]
+
+it follows that
+
+\[
+\frac{dS_A}{dt}
+\ge0.
+\]
+\end{proof}
+
+Thus generative admissibility corresponds to monotonic
+growth of admissible future possibility.
+
+
+The Collapse Condition
+
+
+The opposite regime is equally important.
+
+\begin{definition}{Admissibility Collapse}{adm-collapse}
+Admissibility collapse occurs when
+
+\[
+V_A
+\rightarrow0.
+\]
+\end{definition}
+
+\begin{theorem}{Collapse Theorem}{collapse-theorem}
+If
+
+\[
+V_A(t)
+\rightarrow0,
+\]
+
+then
+
+\[
+S_A(t)
+\rightarrow-\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+Since
+
+\[
+S_A
+=
+
+\log V_A,
+\]
+
+the result follows from
+
+\[
+\log x
+\rightarrow
+-\infty
+\]
+
+as
+
+\[
+x
+\rightarrow
+0^+.
+\]
+\end{proof}
+
+Admissibility collapse therefore represents complete
+destruction of future viable possibility.
+
+
+Admissibility and Reachability
+
+
+Reachability and admissibility are closely related but not
+identical.
+
+Reachability asks:
+
+\[
+\text{What futures can be reached?}
+\]
+
+Admissibility asks:
+
+\[
+\text{What futures should remain reachable?}
+\]
+
+Define admissible reachability volume
+
+\[
+V_{AR}
+=
+
+\mu(R_t\cap\mathcal A).
+\]

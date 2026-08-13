@@ -1,0 +1,47 @@
+                                              19
+sequences of irreversible commitments whose cumulative effect produces the observable state
+of the system.
+    Traditional semantic frameworks, including traced monoidal categories, achieve their
+power by abstracting over internal computation. The trace operator collapses feedback
+loops and identifies morphisms that exhibit the same external behavior regardless of internal
+path. For many purposes this abstraction is both elegant and appropriate. But the systems
+examined in this paper belong to a different structural class. In these systems the internal
+path cannot be discarded without losing essential information: the provenance, order, and
+content of intermediate commitments are themselves part of the identity of the process.
+    Spherepop addresses this class of systems by preserving the commitment history rather
+than collapsing it. The state is represented as the pair (Ωt , Ht ), recording both what re-
+mains possible and what has already been committed. Three primitive operators govern
+evolution: Bind restricts the option space without making a commitment; Pop performs
+an irreversible commitment and records it in the history; Collapse derives the observable
+state by composing the transformations associated with each committed element in temporal
+order.
+    The resulting structure is the free history category H(Ω), whose morphisms correspond
+to elements of the free monoid Ω∗ . No two distinct histories are identified. Where traced
+monoidal semantics constructs a quotient that collapses internal paths into external func-
+tions, Spherepop constructs a free object that preserves every causal detail.
+    This structure appears naturally across many domains: in event-sourced architectures
+that reconstruct state by replaying append-only logs; in version control systems that repre-
+sent software evolution as commit histories; in financial ledgers and blockchains that enforce
+append-only transaction sequences; in scope resolution and parser combinators within pro-
+gramming languages; in the iterative narrowing of everyday problem solving and practical
+activity; in causal set models of physical spacetime; and in the path-dependent character of
+human reasoning.
+    Across all of these domains the same structural pattern recurs. A system begins with a
+space of possibilities, evolves through contextual restrictions and irreversible commitments,
+and produces observable states by composing the effects of those commitments in temporal
+order.
+    Spherepop provides a minimal algebraic language for describing this pattern. Where
+traditional semantics begins with states and abstracts away the path that produced them,
+Spherepop begins with the path and allows the state to emerge as its shadow. In systems
+governed by irreversible commitments, history is not an auxiliary record of what happened
+but the structure that defines what the system is. When the past cannot be undone, the
+
+
+                                             20
+sequence of events that produced the present becomes inseparable from the present itself.
+
+
+
+
+                                            21
+

@@ -1,0 +1,1205 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\emph{($\Leftarrow$) Interior implies stability.}
+Suppose $\fateMap(U)\subseteq\operatorname{int}(\admRegion)$.
+Since $\operatorname{int}(\admRegion)$ is open, it contains an
+open $\varepsilon$-ball around $\fateMap(U)$ in $\fateSpace$
+for some $\varepsilon>0$. Since $\transfam$ is admissible,
+$T^*(\admRegion)\subseteq\admRegion$ for all $T\in\transfam$.
+Moreover, for operator perturbations of magnitude less than
+$\varepsilon$, the fate profile $T^*(\fateMap(U))$ remains
+within $\admRegion$ by the openness of
+$\operatorname{int}(\admRegion)$. Thus $U$ persists as an
+admissible fate-uniform region under all sufficiently small
+admissible perturbations.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Conditions on the Theorem}{obj-stability-conds}
+Two conditions in \cref{thm:obj-stability} deserve explicit
+attention. First, $\admRegion$ is required to be closed, so
+that $\partial\admRegion\subseteq\admRegion$; this ensures that
+boundary-occupying pairs are not immediately expelled.
+Second, the converse direction of the proof requires that
+operator perturbations of the appropriate scale exist; this is
+a mild condition on the operator family (that it is not
+trivially rigid) and holds for all physically and computationally
+realistic transformation families.
+\end{remark}
+
+
+Object Formation
+
+
+The Object Stability Theorem characterizes when objects persist.
+But objects must also arise. The emergence of an object ---
+object formation --- occurs when operator dynamics produce an
+extended fate-uniform region within $\operatorname{int}(\admRegion)$.
+
+\begin{proposition}{Object Formation via Operator Dynamics}
+  {obj-formation}
+Suppose the operator family $\transfam$ contains:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item a repair operator $\repair$ that reduces fate variation
+    within a region: $\fateSens{\repair(p)}
+    \le\fateSens{p}$ for all $p$;
+  \item a transport operator that synchronizes fate profiles of
+    neighboring pairs; and
+  \item an admissibility operator $\admOp$ that removes pairs
+    outside $\admRegion$.
+\end{itemize}
+Then the combined action of $\transfam$ on an initial
+distribution of distinction pairs produces connected
+$\fateUnif$ regions within $\operatorname{int}(\admRegion)$.
+\begin{proof}
+Repair reduces local fate variation, driving nearby pairs
+toward a common fate profile. Transport synchronizes fate
+profiles across larger regions. Admissibility selection removes
+pairs outside $\admRegion$. The combined effect is a reduction
+of fate variation within $\admRegion$, resulting in connected
+regions on which $\fateMap$ is approximately constant, hence
+$\fateUnif$ in the limit. These regions lie in
+$\operatorname{int}(\admRegion)$ because all pairs outside
+$\admRegion$ have been removed.
+\end{proof}
+\end{proposition}
+
+\begin{remark}{Objecthood as Ecological Achievement}
+  {obj-ecological}
+\Cref{prop:obj-formation} shows that objects are not given
+in advance. They emerge from the action of repair, transport,
+and admissibility operators on an initial distribution of
+distinction pairs. Objecthood is therefore an ecological
+achievement: it is produced by the dynamics of the operator
+family rather than being a primitive feature of the state space.
+
+This reverses the traditional ontological order. The classical
+approach begins with objects and derives their transformations.
+Fate theory begins with transformations and derives the objects
+that survive them.
+\end{remark}
+
+
+The Mathematical Climax
+
+
+Part~III of this volume has developed the following sequence:
+
+\begin{enumerate}[nosep,leftmargin=2em]
+  \item The fate map $\fateMap:\distPairs\to\fateSpace$ assigns
+    every distinction pair a structured fate profile
+    (Chapter~10).
+  \item The fate map is continuous on non-collapse regions;
+    its singularities are the locus of infinite sensitivity
+    (Chapter~11).
+  \item Singularities stratify into collapse, repair,
+    transport, and forgetting strata (Chapter~12).
+  \item Admissibility manifolds are pullbacks of fate regions
+    under $\fateMap$ (Chapter~13).
+  \item Objects are connected fate-uniform regions stable
+    within $\operatorname{int}(\admRegion)$; their boundaries
+    are fate singularities (this chapter).
+\end{enumerate}
+
+The payoff of this sequence is captured in a single
+reformulation:
+
+\begin{metatheorem}{Objects are Stable Fate Regions}{objects-fate}
+An object, in the sense common to physics, biology, cognition,
+and social science, is precisely a connected fate-uniform
+region $U\subseteq\distPairs$ satisfying
+\[
+  \fateMap(U)\;\subseteq\;\operatorname{int}(\admRegion).
+\]
+Objecthood is not a primitive ontological category. It is the
+visible residue left by the geometry of fate: the stable
+regions that survive the combined action of collapse,
+forgetting, repair, transport, and admissibility selection.
+\end{metatheorem}
+
+Everything before this chapter developed the machinery.
+Everything after will apply it.
+
+\begin{chapsummary}
+\item A fate-uniform region is a connected set of distinction
+  pairs sharing a common fate profile.
+\item An object is a fate-uniform region whose fate profile
+  lies in the interior of the admissible region.
+\item Object boundaries are fate singularities: crossings of
+  $\strataC$, $\strataR$, $\strataT$, or $\strataF$.
+\item The fate margin $m(U)$ measures the separation of a
+  region from the admissibility boundary; positive margin is
+  equivalent to stability.
+\item The Object Stability Theorem: a fate-uniform region is
+  stable iff its fate profile lies in $\operatorname{int}(\admRegion)$.
+\item Objects are not primitive; they emerge from repair,
+  transport, and admissibility dynamics acting on distinction
+  pairs.
+\end{chapsummary}
+
+\part{Fate Ecology}
+\chapter{Fate Classes and Population Dynamics}
+\label{ch:fate-classes}
+
+\begin{epigraph}{A distinction does not merely have a fate.
+  It belongs to a class of things with the same fate. The
+  class is the ecologically operative unit.}{The shift this
+  chapter makes}
+\end{epigraph}
+
+\begin{objectives}
+\item Introduce fate classes as the equivalence classes of
+  fate-profile equivalence.
+\item Define fate class populations $N_i(t)$ and derive
+  their governing ecology equation from operator actions.
+\item Show that birth, death, and migration of fate classes
+  correspond to discovery, collapse, and repair operators.
+\item Prove that persistence is a special ecological regime
+  --- equilibrium fate ecology --- rather than a primitive.
+\item Prove the Ecological Emergence Meta-Theorem: fate fields
+  arise as continuum limits of fate class populations.
+\item Bridge Part~III (individual fate geometry) to Parts~IV
+  and~V (collective fate).
+\end{objectives}
+
+Part~III developed the fate map for individual distinction
+pairs. Chapter~10 defined $\fateMap(x,y)\in\fateSpace$;
+Chapters~11--14 established its continuity, singular strata,
+admissibility pullback, and the Object Stability Theorem.
+
+At the end of Chapter~14, objects were identified as stable
+$\fateUnif$ regions of $X\times X$. But the theory so far
+speaks of one distinction pair at a time. Real systems contain
+many distinction pairs interacting simultaneously. We need
+a language for populations.
+
+The natural move is to group distinction pairs by their fate
+profiles. Two pairs with the same fate --- same survival ratio,
+same repair efficiency, same collapse status, same transport
+reach --- are, from the perspective of fate theory, the same
+type of thing. They form a \emph{fate class}. The fate class
+is the basic unit of ecology.
+
+
+Fate Classes
+
+
+\begin{definition}{Fate-Profile Equivalence (Recalled)}{fate-equiv-recall}
+Distinction pairs $(x,y),(x',y')\in X\times X$ are
+\emph{fate-equivalent}, $(x,y)\approx_\fateMap(x',y')$,
+iff $\fateMap(x,y)=\fateMap(x',y')$
+(Definition~\ref{defn:fate-equiv} of Chapter~10).
+\end{definition}
+
+\begin{proposition}{Fate-Profile Equivalence is an Equivalence
+  Relation}{fate-equiv-er}
+The relation $\approx_\fateMap$ on $X\times X$ is an
+equivalence relation.
+\begin{proof}
+Reflexivity: $\fateMap(x,y)=\fateMap(x,y)$.
+Symmetry: if $\fateMap(x,y)=\fateMap(x',y')$ then
+$\fateMap(x',y')=\fateMap(x,y)$.
+Transitivity: if $\fateMap(x,y)=\fateMap(x',y')$ and
+$\fateMap(x',y')=\fateMap(x'',y'')$ then
+$\fateMap(x,y)=\fateMap(x'',y'')$.
+All follow from the equality relation on $\fateSpace$.
+\end{proof}
+\end{proposition}
+
+\begin{definition}{Fate Classes}{fate-classes}
+The \emph{space of fate classes} is the quotient
+\[
+  \fateClasses
+  \;=\;
+  (X\times X)\,/\,{\approx_\fateMap},
+\]
+whose elements $\fateClass{x,y}$ are the equivalence classes
+of fate-profile equivalence.
+
+Each fate class $i\in\fateClasses$ corresponds to a unique
+fate profile $s_i=\fateMap(x,y)$ for any $(x,y)$ in the
+class.
+\end{definition}
+
+The conceptual progression is now complete:
+\[
+  X\times X
+  \;\xrightarrow{\;\fateMap\;}
+  \fateSpace
+  \;\xrightarrow{\;\text{quotient}\;}
+  \fateClasses.
+\]
+Distinction pairs first. Fate profiles second. Fate classes
+third. The ecology operates on the third level.
+
+
+Fate Class Populations
+
+
+\begin{definition}{Fate Class Population}{fate-pop}
+The \emph{population of fate class $i$} at time $t$ is
+\[
+  \fatePop{i}
+  \;=\;
+  \mu\bigl(\{(x,y)\in X\times X:
+  \fateMap(x,y)=s_i\}\bigr),
+\]
+the measure of distinction pairs currently belonging to
+fate class $i$.
+\end{definition}
+
+When $X$ is a finite set, $\fatePop{i}$ is a count. When $X$
+is a continuous space, $\fatePop{i}$ is the Lebesgue measure
+of the preimage $\fateMap^{-1}(\{s_i\})$. In either case the
+population obeys a dynamics determined by the operator family.
+
+
+The Ecology Equation
+
+
+\begin{definition}{Fate Ecology Equation}{ecology-eq}
+The \emph{fate ecology equation} governs the evolution of
+fate class populations:
+\begin{equation}
+  \dot{N}_i
+  \;=\;
+  b_i N_i
+  \;-\;
+  d_i N_i
+  \;+\;
+  \sum_{j\neq i} m_{ji}N_j
+  \;-\;
+  \sum_{j\neq i} m_{ij}N_i,
+  \label{eq:ecology}
+\end{equation}
+where:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item $b_i\ge 0$ is the \emph{birth rate} of class $i$:
+    the rate at which discovery operators create new distinction
+    pairs with fate profile $s_i$;
+  \item $d_i\ge 0$ is the \emph{death rate} of class $i$:
+    the rate at which collapse operators remove pairs from
+    class $i$ into $\fateComp{0}$;
+  \item $m_{ji}\ge 0$ is the \emph{migration rate} from
+    class $j$ to class $i$: the rate at which repair or
+    transport operators move pairs from fate profile $s_j$
+    to fate profile $s_i$;
+  \item $m_{ij}$ is the corresponding emigration rate from
+    $i$ to $j$.
+\end{itemize}
+\end{definition}
+
+
+Deriving the Rates from Operators
+
+
+The rates in~\eqref{eq:ecology} are not free parameters.
+They are derived from the operator family $\transfam$.
+
+\begin{proposition}{Operator-Derived Rates}{op-rates}
+Under the operator family $\transfam$:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item The death rate $d_i$ equals the rate at which
+    collapse operators acting on class-$i$ pairs drive the
+    collapse indicator from $1$ to $0$:
+    $d_i = \mu(\{T\in\transfam: T\text{ collapses class-}i
+    \text{ pairs}\})/\mu(\transfam)$.
+  \item The migration rate $m_{ji}$ equals the rate at which
+    repair operators move pairs from fate profile $s_j$ to
+    fate profile $s_i$: $m_{ji}=\mu(\{R\in\transfam:
+    R\text{ maps class-}j\text{ to class-}i\})/\mu(\transfam)$.
+  \item The birth rate $b_i$ is the rate at which discovery
+    operators $\discOp$ create new pairs with fate profile $s_i$
+    that did not previously exist in $X\times X$.
+\end{enumerate}
+\begin{proof}
+Each claim follows directly from the definitions of collapse,
+repair, and discovery operators (Chapters~6, 7, and~20
+respectively) applied to the fate class population. The
+rates are measures of the operator family restricted to
+the relevant action on each class, normalized by the total
+operator measure.
+\end{proof}
+\end{proposition}
+
+\begin{example}{Ecology of a Memory System}{memory-ecology}
+Let class~$1$ be memories with high repair efficiency
+($\repEff>0.5$), class~$2$ be memories with low repair
+efficiency ($\repEff\in(0,0.5]$), and class~$3$ be collapsed
+memories ($\collapseInd=0$).
+
+$b_1=b_2=0$ (new memories arise from experience, not from
+nothing; handled separately as input to the system).
+
+$d_1>0, d_2>d_1$ (class~2 memories collapse faster).
+
+$m_{12}>0$ (high-efficiency memories degrade to low-efficiency
+over time: forgetting increases).
+
+$m_{21}<m_{12}$ (some low-efficiency memories are consolidated
+back to high-efficiency: rehearsal, reconsolidation).
+
+$m_{13}=0, m_{23}>0$ (only low-efficiency memories collapse).
+
+The ecology then describes the full lifecycle of memory:
+formation, degradation, consolidation, and forgetting.
+\end{example}
+
+
+Persistence as a Special Ecological Regime
+
+
+The following theorem is the central conceptual inversion of
+this chapter and one of the strongest claims in the volume.
+
+\begin{theorem}{Persistence as Equilibrium Ecology}{persist-equil}
+A fate class $i$ exhibits persistence --- its population
+$\fatePop{i}$ remains bounded and positive over time ---
+if and only if the ecology equation~\eqref{eq:ecology}
+admits a stable equilibrium $N_i^*>0$ for that class.
+
+Persistence is not a primitive feature of distinction pairs.
+It is an ecological equilibrium.
+\begin{proof}
+\emph{($\Rightarrow$) Persistence implies equilibrium.}
+Suppose $\fatePop{i}$ remains bounded and positive. By
+boundedness, $\fatePop{i}$ has a limit point; by positivity,
+the limit point is positive. For the dynamics~\eqref{eq:ecology}
+to maintain $\fatePop{i}>0$, the net rate of change must
+average to zero over long intervals: the birth plus immigration
+terms must balance the death plus emigration terms. This is
+exactly the condition $\dot{N}_i^*=0$ at the limit point,
+i.e., a stable equilibrium.
+
+\emph{($\Leftarrow$) Equilibrium implies persistence.}
+If the dynamics admit a stable equilibrium $N_i^*>0$, then by
+Lyapunov stability, for initial conditions sufficiently close
+to $N_i^*$, the population $\fatePop{i}(t)\to N_i^*$ as
+$t\to\infty$. The population remains bounded and positive for
+all $t$: the class persists.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{The Inversion}{persistence-inversion}
+In \textit{Persistence Before Truth}, persistence is the
+foundational concept: the book asks why distinctions must
+persist for knowledge to be possible. That question is
+answered by showing that truth-evaluation, reference, and
+measurement all presuppose persistent distinctions.
+
+The present theorem inverts the explanatory direction.
+\emph{Within} fate theory, persistence is not fundamental.
+It is a special case of ecological equilibrium. Persistence
+arises when the rates of creation, repair, and migration
+balance the rates of destruction and collapse. This does not
+contradict PBT; it deepens it. PBT establishes that persistence
+is \emph{necessary} for knowledge. Fate theory explains
+\emph{how} persistence is \emph{achieved}.
+
+The progression is:
+\[
+  \text{Ecology}
+  \;\longrightarrow\;
+  \text{Persistence as equilibrium}
+  \;\longrightarrow\;
+  \text{Knowledge as managed persistence.}
+\]
+\end{remark}
+
+
+The Ecological Emergence Meta-Theorem
+
+
+This is the bridge theorem connecting Chapter~15 to Chapter~16.
+It shows that the fate field of Chapter~16 is not an independent
+object but the continuum limit of the fate class populations.
+
+\begin{metatheorem}{Ecological Emergence}{eco-emerge}
+As the number of fate classes $|\fateClasses|\to\infty$ and
+the diameter $\mathrm{diam}(i)\to 0$ for each class
+(fate classes become infinitesimally fine), the fate class
+populations $\{N_i(t)\}$ converge to a fate field:
+\[
+  \sum_i N_i(t)\,\mathbf{1}_{s\in\text{class }i}
+  \;\xrightarrow{\;|\fateClasses|\to\infty\;}
+  \fateField(\,\cdot\,,t):\fateSpace\to\mathbb{R}_{\ge0},
+\]
+and the ecology equation~\eqref{eq:ecology} converges to
+the fate transport equation of Chapter~16:
+\[
+  \frac{\partial\fateField}{\partial t}
+  + \fateVelField\cdot\nabla\fateField
+  \;=\;
+  \mathcal{R}_{F} - \mathcal{C}_{F},
+\]
+where $\fateVelField$ is the continuum limit of the migration
+rates and $\mathcal{R}_{F}$, $\mathcal{C}_{F}$
+are the continuum limits of birth and death rates.
+\begin{proof}
+As fate classes become dense in $\fateSpace$, the discrete
+sum $\sum_i N_i(t)\mathbf{1}_{s\in i}$ approximates a
+density function over $\fateSpace$. This is a standard
+mean-field limit: letting $\rho(s,t)=\lim N_i(t)/|i|$ where
+$|i|$ is the measure of class $i$'s region in $\fateSpace$,
+the ecology equation becomes in the limit:
+\[
+  \partial_t\rho + \nabla\cdot(\rho\, v)
+  = b(s)\rho - d(s)\rho,
+\]
+where $v(s)=\lim_{|\text{class}|\to 0}\sum_j m_{ij}(s_j-s_i)$
+is the continuum migration velocity --- exactly the fate
+transport velocity $\fateVelField$ of Chapter~16. The
+birth and death density functions $b(s)$ and $d(s)$ are
+the continuum limits of $b_i$ and $d_i$: the repair
+generation rate $\mathcal{R}_{F}$ and collapse
+generation rate $\mathcal{C}_{F}$.
+
+Therefore the fate transport equation is the
+$|\fateClasses|\to\infty$ limit of the fate ecology equation.
+Fate fields are continuum fate ecologies.
+\end{proof}
+\end{metatheorem}
+
+\begin{remark}{Why This Matters}{emergence-matters}
+The Ecological Emergence Meta-Theorem makes the transition from
+Chapter~15 to Chapter~16 \emph{mathematically inevitable}
+rather than narratively convenient. Fate fields are not an
+independent concept introduced for analytical convenience.
+They are what fate ecologies look like in the continuum limit.
+
+This means that every result proved for fate fields in
+Chapters~16--21 is, in principle, derivable from the fate
+ecology equation by taking the continuum limit. The field
+results are the large-population, fine-grained approximation
+of the discrete ecology. They exist on a continuum between
+the discrete individual (Parts~I--III), the coarse-grained
+population (Chapter~15), and the continuum field (Part~V).
+\end{remark}
+
+
+Connecting to the Outer Volumes
+
+
+\begin{trilogylink}{Fate Ecology and the Outer Volumes}
+The fate ecology equation~\eqref{eq:ecology} subsumes the
+distinction dynamics that appear throughout the outer volumes.
+
+In \textit{Persistence Before Truth}, the conditions for
+truth-evaluation presuppose distinction classes whose
+populations remain positive (persistent classes). The
+Persistence as Equilibrium Ecology theorem shows that these
+are exactly the stable fixed points of~\eqref{eq:ecology}.
+
+In \textit{The Ecology of Distinctions}, the population
+dynamics of distinction types --- their birth, death, and
+interaction --- are described qualitatively across 31 chapters.
+The fate ecology equation provides the explicit mathematical
+model underlying those qualitative descriptions. The ecology
+of EOD is a fate ecology in the sense defined here: each
+program (repair, admissibility, RSVP, coordination geometry)
+is a set of operators determining the rates $b_i, d_i, m_{ji}$
+in~\eqref{eq:ecology}.
+\end{trilogylink}
+
+\begin{chapsummary}
+\item Fate classes $\fateClasses=(X\times X)/{\approx_\fateMap}$
+  group distinction pairs by identical fate profile.
+\item Fate class populations $N_i(t)$ measure how many
+  distinction pairs currently have each fate profile.
+\item The fate ecology equation governs population dynamics:
+  birth (discovery), death (collapse), and migration (repair/
+  transport).
+\item Rates are derived from operator actions~\cite{hofbauer1998}, not free
+  parameters.
+\item The Persistence as Equilibrium Ecology Theorem:
+  persistence is not primitive --- it is a stable fixed point
+  of fate ecology. Ecology generates persistence; not the
+  reverse.
+\item The Ecological Emergence Meta-Theorem: fate fields
+  (Chapter~16) are the continuum limit of fate class
+  populations. The fate transport equation is the mean-field
+  limit of the ecology equation.
+\item Chapter~16 follows necessarily from Chapter~15.
+\end{chapsummary}
+
+\chapter{Topology of Fate Space}
+\label{ch:fate-topology}
+
+\begin{epigraph}{Some failures recur not because people are
+  stupid or institutions malicious, but because the space
+  itself contains loops.}{The topological insight of this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Define the fate image of a system as the primary
+  topological object.
+\item Classify connected components, loops, and higher
+  homology classes of the fate image.
+\item Prove the Fate Loop Theorem: irreducible loops in the
+  fate image generate recurring failure modes.
+\item Show that topological obstructions explain recurrence
+  independently of particular agents or decisions.
+\end{objectives}
+
+The preceding chapters developed the local geometry of fate
+space: distances, curvature, geodesics, and singular strata.
+This chapter turns to global structure~\cite{strogatz2015}: how many fundamentally
+different kinds of futures exist, and what constraints the
+topology of fate space places on persistence.
+
+A critical clarification: the abstract fate space $\fateSpace$
+itself has trivial topology. The non-collapse component
+$\fatePos\cong[0,1]^2\times\mathbb{R}_{\ge0}^k$ is
+contractible, so $\pi_n(\fatePos)=0$ for all $n\ge1$. The
+interesting topology lives not in $\fateSpace$ but in the
+\emph{fate image} of a specific system: the range of the fate
+map restricted to that system's distinction pairs. Different
+systems inhabit different regions of fate space, and those
+regions may have non-trivial topology even when the ambient
+space does not.
+
+
+The Fate Image
+
+
+\begin{definition}{Fate Image of a System}{fate-image}
+Let $\Sigma$ be a dynamical system with state space $X_\Sigma$
+and operative distinction pairs $\distPairs_\Sigma\subseteq
+X_\Sigma\times X_\Sigma$. The \emph{fate image} of $\Sigma$
+is
+\[
+  \fateImage{\distPairs_\Sigma}
+  \;=\;
+  \fateMap(\distPairs_\Sigma)
+  \;\subseteq\;\fateSpace.
+\]
+This is the set of fate profiles actually realized by $\Sigma$
+under its operative distinction pairs~\cite{rao1945}.
+\end{definition}
+
+The fate image is the relevant topological object because it
+encodes which regions of fate space the system actually
+inhabits. Two systems with the same abstract fate space may
+have very different fate images, and consequently very
+different topological constraints on their behavior.
+
+
+Connected Components and Fate Gaps
+
+
+\begin{definition}{Fate Gap}{fate-gap}
+A \emph{fate gap} is a connected component of
+$\fatePos\setminus\fateImage{\distPairs_\Sigma}$: a region of
+fate space that the system cannot reach from any of its current
+distinction pairs without crossing the complement of its fate
+image.
+\end{definition}
+
+Fate gaps represent unavailable futures. A system cannot
+continuously deform its fate profile from one side of a fate
+gap to the other without passing through regions it cannot
+currently inhabit. This is the topological analogue of an
+energy barrier, but it is a barrier in fate space rather than
+in state space.
+
+\begin{proposition}{Components and Disconnected Futures}
+  {fate-components-sys}
+If $\fateImage{\distPairs_\Sigma}$ has $n$ connected components,
+then the system has $n$ qualitatively distinct fate regimes that
+cannot be continuously transformed into one another.
+\begin{proof}
+Each connected component of $\fateImage{\distPairs_\Sigma}$
+is a separate region of $\fatePos$ containing some fate
+profiles of $\Sigma$. Since $\fatePos$ is a metric space,
+components are open and closed in $\fateImage{\distPairs_\Sigma}$.
+No continuous path in $\fateImage{\distPairs_\Sigma}$ connects
+points in different components. Therefore the system's fate
+profiles cannot be continuously deformed between components.
+Each component constitutes a qualitatively distinct fate regime.
+\end{proof}
+\end{proposition}
+
+
+Fate Loops and Recurrence
+
+
+\begin{definition}{Fate Loop}{fate-loop}
+A \emph{fate loop} is a continuous map
+$\ell:[0,1]\to\fateImage{\distPairs_\Sigma}$ with
+$\ell(0)=\ell(1)$. The loop is \emph{contractible} if it can
+be continuously shrunk to a point within
+$\fateImage{\distPairs_\Sigma}$. It is \emph{irreducible} (or
+\emph{non-contractible}) if no such contraction exists.
+
+The first fate homotopy group is
+\[
+  \pi_1(\fateImage{\distPairs_\Sigma}, s_0)
+\]
+for a basepoint $s_0\in\fateImage{\distPairs_\Sigma}$,
+measuring the equivalence classes of irreducible fate loops.
+\end{definition}
+
+\begin{theorem}{Fate Loop Theorem}{fate-loop}
+Let $\ell$ be an irreducible fate loop in
+$\fateImage{\distPairs_\Sigma}$. Then any admissible fate
+trajectory that begins and ends at the same fate profile
+$s_0=\ell(0)$ and whose fate image is homotopic to $\ell$
+must traverse the entire loop: no shortcut exists within the
+fate image.
+
+Consequently, any dynamical process whose fate profile traces
+an irreducible loop will recur cyclically: the system returns
+to its initial fate profile via the same qualitative sequence
+of fate states, and cannot avoid this sequence without exiting
+the fate image.
+\begin{proof}
+Let $\fateTraj:[0,T]\to\fateImage{\distPairs_\Sigma}$ be an
+admissible trajectory with $\fateTraj(0)=\fateTraj(T)=s_0$
+whose projection to the fate image is homotopic (relative to
+$s_0$) to $\ell$. If $\fateTraj$ could be continuously
+deformed to a constant map $t\mapsto s_0$ within
+$\fateImage{\distPairs_\Sigma}$, then $\ell$ would be
+contractible, contradicting irreducibility. Therefore no such
+deformation exists, and $\fateTraj$ must traverse a loop in
+the same homotopy class as $\ell$.
+
+Recurrence follows because the trajectory returns to $s_0$
+after traversing the non-contractible loop: the same sequence
+of fate states must be repeated indefinitely.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Examples of Fate Loops}{fate-loop-examples}
+The Fate Loop Theorem provides a topological explanation for
+recurrence phenomena that are otherwise explained by specific
+mechanisms.
+
+Business cycles: the fate image of an economy contains a loop
+in the $(\survRatio, \repEff)$ plane corresponding to the
+expansion--contraction cycle. The loop is irreducible because
+the admissibility constraints of credit, investment, and
+consumption force the economy through a characteristic
+sequence of fate states.
+
+Immune responses: the fate image of an immune system contains
+loops corresponding to the activation--contraction cycle of
+lymphocyte populations. The loop cannot be contracted without
+exiting the fate image defined by the immune system's operative
+distinctions.
+
+Scientific paradigms: the fate image of a research field may
+contain a loop corresponding to the rise--crisis--revolution
+cycle described by Kuhn. The loop is irreducible if the field's
+operative distinctions force it through a characteristic
+sequence of fate states before a revolution becomes possible.
+
+In each case, recurrence is not a consequence of stupidity,
+malice, or contingent circumstance. It is a consequence of
+the topology of the fate image.
+\end{remark}
+
+
+Higher Homology
+
+
+Loops are the first-dimensional topological invariant. Higher
+homology groups capture more subtle global structure.
+
+\begin{definition}{Fate Homology}{fate-homology}
+The \emph{$n$-th fate homology group} of a system $\Sigma$ is
+\[
+  \fateHom{n}{\distPairs_\Sigma},
+\]
+the $n$-th singular homology group of the fate image with
+integer coefficients.
+
+\begin{itemize}[nosep,leftmargin=2em]
+  \item $H_0$: connected components (fate gaps);
+  \item $H_1$: irreducible loops (recurring fate cycles);
+  \item $H_2$: irreducible surfaces (fate cavities --- regions
+    of fate space surrounded by the fate image but not
+    belonging to it).
+\end{itemize}
+\end{definition}
+
+Non-trivial $H_2$ indicates that the fate image surrounds an
+interior void: a fate profile that the system can \emph{approach
+from all directions} but never \emph{actually occupy}. Such a
+fate void corresponds to an impossible transition: the system
+can get arbitrarily close in fate space but cannot reach the
+target fate profile by any admissible path.
+
+\begin{chapsummary}
+\item The interesting topology of fate space lives in the fate
+  image $\fateMap(\distPairs_\Sigma)$, not in the abstract
+  $\fateSpace$ (which is contractible).
+\item Fate gaps are connected components of the complement of
+  the fate image: unavailable futures.
+\item The Fate Loop Theorem: irreducible loops in the fate image
+  generate topologically necessary recurrence.
+\item Business cycles, immune cycles, and paradigm cycles are
+  examples of topologically forced fate loops.
+\item Higher homology groups $H_n$ classify increasingly subtle
+  global structure: $H_2$ captures fate voids --- impossible
+  transitions surrounded by possible approaches.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Obstructions and No-Go Regions}
+\label{ch:obstructions}
+
+\begin{epigraph}{Not everything can be repaired. Some futures
+  are topologically foreclosed.}{The content of this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Define fate obstructions as topologically unavoidable
+  regions of fate space.
+\item Prove the No-Go Theorem: no admissible geodesic can pass
+  through a fate obstruction.
+\item Identify impossibility theorems, irreversible extinctions,
+  and fundamental physical limits as fate obstructions.
+\item Connect obstructions to the concept of the semantic
+  horizon from \EOD{Definition~5.3}.
+\end{objectives}
+
+The Fate Loop Theorem showed that some fate processes must
+recur. This chapter shows the complementary result: some
+fate transitions are impossible. Not merely unlikely, not merely
+costly, but topologically foreclosed. No amount of repair
+effort, no admissible operator sequence, can move a system's
+fate profile through a fate obstruction.
+
+
+Fate Obstructions
+
+
+\begin{definition}{Fate Obstruction}{fate-obs}
+A \emph{fate obstruction} is a closed subset
+$\obstSet\subset\fatePos$ such that:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item $\obstSet\cap\admRegion=\varnothing$: the obstruction
+    lies outside the admissible fate region;
+  \item for every admissible fate trajectory
+    $\fateTraj:[0,T]\to\admRegion$ connecting $s_0$ to $s_1$,
+    the trajectory must satisfy
+    $\fateTraj(t)\notin\operatorname{int}(\obstSet)$ for all $t$;
+  \item there exist $s_0,s_1\in\admRegion$ such that every
+    path in $\fatePos$ from $s_0$ to $s_1$ passes through
+    $\obstSet$: the obstruction separates $s_0$ from $s_1$ in
+    $\fatePos$.
+\end{enumerate}
+\end{definition}
+
+Condition~(iii) is the crucial one: a fate obstruction is not
+merely an excluded region but a region that topologically
+separates two admissible fate profiles. Any path connecting
+those profiles must pass through the obstruction, but admissible
+paths must avoid it. The two profiles are therefore topologically
+disconnected within the admissible fate region.
+
+\begin{theorem}{No-Go Theorem}{no-go}
+Let $\obstSet$ be a fate obstruction and let $s_0,s_1\in
+\admRegion$ be fate profiles separated by $\obstSet$. Then no
+admissible fate geodesic connects $s_0$ to $s_1$.
+\begin{proof}
+By condition~(i), $\obstSet\cap\admRegion=\varnothing$, so
+every admissible trajectory is confined to $\admRegion$. By
+condition~(iii), every path in $\fatePos$ from $s_0$ to $s_1$
+passes through $\obstSet$. An admissible trajectory is a path
+in $\admRegion\subseteq\fatePos\setminus\obstSet$.
+If $\obstSet$ separates $s_0$ from $s_1$ in $\fatePos$, then
+$s_0$ and $s_1$ lie in different path-components of
+$\fatePos\setminus\obstSet$. Since $\admRegion\subseteq
+\fatePos\setminus\obstSet$, the components of
+$\fatePos\setminus\obstSet$ restricted to $\admRegion$
+remain separated. Hence no admissible path connects $s_0$
+to $s_1$, and in particular no admissible geodesic does.
+\end{proof}
+\end{theorem}
+
+
+Examples of Fate Obstructions
+
+
+\begin{remark}{Impossibility Theorems as Fate Obstructions}
+  {impossibility-obs}
+Many classical impossibility theorems in mathematics and
+science correspond to fate obstructions. Arrow's impossibility
+theorem states that no voting system simultaneously satisfies
+a list of fairness conditions: the fate profile of a social
+choice mechanism cannot pass through the region of $\fateSpace$
+corresponding to simultaneous satisfaction of all conditions,
+because that region is a fate obstruction. G\"{o}del's
+incompleteness theorems state that no formal system can be
+simultaneously complete and consistent: the fate profile of a
+formal system cannot reach the region of $\fateSpace$
+corresponding to completeness-and-consistency, because that
+region is a fate obstruction. The second law of thermodynamics
+states that entropy cannot decrease in a closed system: the
+fate profile of a closed thermodynamic system cannot enter the
+region of $\fateSpace$ corresponding to decreasing entropy,
+because that region is a fate obstruction.
+
+In each case, the impossibility is not a failure of ingenuity
+but a topological fact: the target fate profile is on the wrong
+side of an obstruction.
+\end{remark}
+
+\begin{remark}{Irreversible Extinctions}{extinction-obs}
+Biological extinction creates a fate obstruction for the
+extinct lineage. Once a species' fate profile crosses
+$\strataC$ into the collapsed component $\fateComp{0}$, the
+topological gap between $\fateComp{0}$ and $\fateComp{1}$
+(established by the Collapse Discontinuity Meta-Theorem) acts
+as a fate obstruction: no admissible path returns the lineage
+to $\fateComp{1}$. The extinction is not merely practically
+irreversible but topologically irreversible.
+
+This provides a precise mathematical content to the intuition
+that extinction is categorically different from endangered status:
+endangered species have fate profiles in $\fateComp{1}$ near
+$\partial\admRegion$; extinct species have fate profiles in
+$\fateComp{0}$, on the other side of a topological gap.
+\end{remark}
+
+\begin{proposition}{Semantic Horizon as Fate Obstruction}
+  {semantic-obs}
+The semantic horizon $\partial\mathcal{S}=\{d:\reco(d)=0\}$
+from \EOD{Definition~5.3} is a fate obstruction in the
+following sense: distinctions whose recoverability reaches
+zero have fate profiles on the admissibility boundary
+$\partial\admRegion$, and the admissibility boundary
+topologically separates the interior of $\admRegion$ from the
+collapsed component.
+\begin{proof}
+A distinction $d$ with $\reco(d)=0$ has zero repair efficiency:
+$\repEff(d)=0$ in the fate profile. This places the fate
+profile on the boundary of the repair-efficiency factor $[0,1]_\repEff$
+at $\repEff=0$. Combined with the Boundary Curvature Theorem
+(\cref{thm:boundary-curv}), this is a region of diverging
+curvature and increasing barrier height. The semantic horizon
+therefore coincides with the fate obstruction at the
+admissibility boundary.
+\end{proof}
+\end{proposition}
+
+\begin{chapsummary}
+\item A fate obstruction $\obstSet$ is a closed set outside
+  $\admRegion$ that topologically separates some admissible
+  fate profiles.
+\item The No-Go Theorem: no admissible geodesic crosses a
+  fate obstruction; the separated profiles are topologically
+  unreachable from each other within $\admRegion$.
+\item Classical impossibility theorems are fate obstructions
+  in fate space.
+\item Biological extinction is a topological obstruction:
+  collapsed fate profiles cannot return to non-collapsed ones.
+\item The semantic horizon of EOD is a fate obstruction at
+  $\repEff=0$.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Reachability and Fate Volume}
+\label{ch:fate-volume}
+
+\begin{epigraph}{Persistence is not the conservation of what
+  exists. It is continued access to what can become.}
+  {The central reorientation of this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Define the reachable fate region of a distinction pair.
+\item Define fate volume as the measure of the reachable fate
+  region.
+\item Prove the Reachability--Persistence Theorem: persistence
+  is proportional to fate volume, not to present state or
+  stored resources.
+\item Derive the admissibility volume of EOD as a special case
+  of fate volume.
+\item Establish fate volume as the bridge quantity connecting
+  the local geometry of Parts III--IV to the ecology of Part V.
+\end{objectives}
+
+The local geometry developed so far describes individual fate
+profiles and paths between them. This chapter introduces the
+first genuinely global quantity: the volume of the region of
+fate space reachable from a given distinction pair. This volume
+measures not where a system is but what it can become --- and
+it is this capacity for becoming, rather than any present
+property, that determines persistence.
+
+
+Reachable Fate Regions
+
+
+\begin{definition}{Reachable Fate Region}{reachable-fate}
+The \emph{reachable fate region} from a distinction pair
+$(x,y)\in\distPairs$ is
+\[
+  \fateReach{x,y}
+  \;=\;
+  \bigl\{
+    s'\in\fatePos :
+    \exists\text{ admissible }\fateTraj\text{ s.t. }
+    \fateTraj(0)=\fateMap(x,y),\;
+    \fateTraj(T)=s'
+  \bigr\}.
+\]
+This is the set of fate profiles accessible from $(x,y)$ via
+admissible trajectories.
+\end{definition}
+
+\begin{definition}{Fate Volume}{fate-vol-defn}
+The \emph{fate volume} of a distinction pair $(x,y)$ is
+\[
+  \fateVol{x,y}
+  \;=\;
+  \Vol\bigl(\fateReach{x,y}\bigr),
+\]
+the Lebesgue measure of the reachable fate region in $\fatePos$.
+\end{definition}
+
+Fate volume is the primary quantity measuring the future
+capacity of a distinction pair. A pair with large fate volume
+has many available futures; a pair with small fate volume has
+few. A pair with zero fate volume has no available admissible
+future: it is at the semantic horizon.
+
+
+Reachability and Persistence
+
+
+\begin{theorem}{Reachability--Persistence Theorem}{reach-persist}
+The persistence capacity of a distinction pair $(x,y)$ is
+proportional to its fate volume $\fateVol{x,y}$. Specifically:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item If $\fateVol{x,y}>0$, the distinction pair has positive
+    persistence capacity: there exist admissible continuations.
+  \item If $\fateVol{x,y}=0$, the distinction pair has zero
+    persistence capacity: no admissible continuation exists.
+  \item Fate volume is monotonically related to the repair
+    capacity $\reco(x,y)$: $\reco(x,y)>0$ iff $\fateVol{x,y}>0$.
+\end{enumerate}
+\begin{proof}
+(i): $\fateVol{x,y}>0$ iff $\fateReach{x,y}$ contains an open
+set in $\fatePos$. An open set in $\fatePos$ contains
+admissible fate profiles (since $\operatorname{int}(\admRegion)$
+is non-empty and open). Hence there exist admissible
+continuations.
+
+(ii): $\fateVol{x,y}=0$ iff $\fateReach{x,y}$ has Lebesgue
+measure zero, which occurs iff the admissible trajectories from
+$\fateMap(x,y)$ form a measure-zero set in $\fatePos$. In the
+limit where $\fateMap(x,y)\in\partial\admRegion$, the
+reachable region is confined to $\partial\admRegion$ itself
+(a set of measure zero in $\fatePos$). Hence no interior
+admissible continuation exists.
+
+(iii): By the Recoverability Theorem of \EOD{Theorem~5.2},
+$\reco(d)>0$ iff there exists a reconstruction operator $R$
+such that $I(R(d);d^*)>0$. This is equivalent to the existence
+of an admissible fate continuation (a trajectory along which
+the distinction remains distinguishable), which is equivalent
+to $\fateVol{x,y}>0$.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{What Persistence Is Not}{persist-not}
+The Reachability--Persistence Theorem identifies what
+persistence is and, equally important, what it is not.
+
+Persistence is not the conservation of the present state.
+A distinction pair may change its state dramatically while
+maintaining positive fate volume.
+
+Persistence is not stored resources. A system may have large
+reserves yet have zero fate volume if its operative distinctions
+are at the semantic horizon.
+
+Persistence is not identity. A theory, an institution, or an
+organism may be thoroughly transformed while maintaining the
+fate volume that constitutes its persistence.
+
+What matters for persistence is not what a system \emph{is}
+but what it \emph{can still become}.
+\end{remark}
+
+
+Fate Volume and Admissibility
+
+
+The admissibility volume $\Vol(\adm(t))$ developed throughout
+\textit{The Ecology of Distinctions} now appears as a special
+case of fate volume.
+
+\begin{proposition}{Admissibility Volume as Fate Volume}
+  {adm-vol-fate-vol}
+The admissibility volume of \EOD{Chapter~14},
+\[
+  \Vol(\adm(x,t))
+  \;=\;
+  \Vol\bigl(\mathcal{A}(x,t)\bigr),
+\]
+is the fate volume of the distinction pairs constituting the
+system at time $t$, restricted to the admissible fate region:
+\[
+  \Vol(\adm(x,t))
+  \;=\;
+  \fateVol{(x,y)}
+  \quad\text{for }(x,y)\in\fateMap^{-1}(\adm(x,t)).
+\]
+\begin{proof}
+By the Admissibility Pullback Meta-Theorem
+(\cref{meta:adm-pullback}), $\adm(x,t)=\fateMap^{-1}(\admRegion)$.
+The volume of $\adm(x,t)$ in state space is therefore the
+volume of the pullback, which equals the volume of the
+reachable fate region $\fateReach{x,y}$ restricted to
+$\admRegion$ --- the fate volume.
+\end{proof}
+\end{proposition}
+
+This proposition closes the loop opened by the Admissibility
+Pullback Meta-Theorem. The primary conservation law of
+\textit{The Ecology of Distinctions} --- non-decreasing
+admissibility volume under generative dynamics --- is a
+consequence of non-decreasing fate volume under admissible
+operators.
+
+\begin{chapsummary}
+\item The reachable fate region $\fateReach{x,y}$ is the set of
+  fate profiles accessible from $(x,y)$ via admissible
+  trajectories.
+\item Fate volume $\fateVol{x,y}=\Vol(\fateReach{x,y})$ measures
+  future capacity, not present state.
+\item The Reachability--Persistence Theorem: persistence requires
+  positive fate volume; zero fate volume equals zero persistence.
+\item Fate volume is equivalent to positive recoverability:
+  $\reco>0$ iff $\fateVol>0$.
+\item The admissibility volume of EOD is a special case of
+  fate volume; the generative admissibility principle of EOD
+  follows from non-decreasing fate volume under admissible
+  operators.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Entropy as Fate Contraction}
+\label{ch:fate-entropy}
+
+\begin{epigraph}{Entropy is not disorder. Entropy is the removal
+  of futures.}{The reinterpretation offered here}
+\end{epigraph}
+
+\begin{objectives}
+\item Define fate entropy as the rate of fate volume contraction.
+\item Prove the Entropy--Reachability Theorem: entropy measures
+  the loss of accessible fate profiles per unit time.
+\item Show that the Second Law of Thermodynamics is a special
+  case of monotone fate volume decrease in isolated systems.
+\item Prove the Fate Conservation Law: under admissible
+  (generative) dynamics, fate entropy is non-positive ---
+  fate volume does not decrease.
+\item Unify the entropy treatments of PBT and EOD under a
+  single fate-geometric definition.
+\end{objectives}
+
+The preceding chapter introduced fate volume as the measure of
+future possibility. This chapter introduces its rate of change:
+fate entropy, defined as the rate at which fate volume
+contracts. This definition inverts the usual presentation.
+Entropy is not a measure of disorder, uncertainty, or missing
+information~\cite{shannon1948}. It is the rate at which a system loses access to
+its futures.
+
+
+Fate Entropy
+
+
+\begin{definition}{Fate Entropy}{fate-entropy-defn}
+The \emph{fate entropy} of a system $\Sigma$ at time $t$ is
+\[
+  \fateEnt(t)
+  \;=\;
+  -\frac{d}{dt}\fateVol{\Sigma}(t),
+\]
+where $\fateVol{\Sigma}(t)$ is the fate volume of $\Sigma$'s
+operative distinction pairs at time $t$.
+
+$\fateEnt(t)>0$ indicates fate contraction: the system is
+losing accessible futures. $\fateEnt(t)<0$ indicates fate
+expansion: the system is gaining accessible futures.
+$\fateEnt(t)=0$ indicates fate conservation: the volume of
+accessible futures is constant.
+\end{definition}
+
+\begin{remark}{Sign Convention}{entropy-sign}
+The sign convention $\fateEnt=-\dot{V}_{\fateMap}$ ensures
+that entropy is positive when futures are being lost, matching
+the thermodynamic convention that entropy increases in
+irreversible processes. Fate entropy is positive precisely
+when fate volume is decreasing: the system is contracting its
+range of accessible futures.
+\end{remark}
+
+
+The Entropy--Reachability Theorem
+
+
+\begin{theorem}{Entropy--Reachability Theorem}{entropy-reach}
+Fate entropy measures the rate at which distinct futures become
+inaccessible: for a small time interval $[t,t+\varepsilon]$,
+\[
+  \fateEnt(t)\cdot\varepsilon
+  \;\approx\;
+  \Vol\bigl(
+    \fateReach{\Sigma}(t)\setminus\fateReach{\Sigma}(t+\varepsilon)
+  \bigr),
+\]
+the volume of fate profiles that are accessible at time $t$
+but not at time $t+\varepsilon$.
+\begin{proof}
+By definition,
+$\fateEnt(t)=-\frac{d}{dt}\fateVol{\Sigma}(t)$. For small
+$\varepsilon>0$,
+\[
+  \fateEnt(t)\cdot\varepsilon
+  \approx \fateVol{\Sigma}(t)-\fateVol{\Sigma}(t+\varepsilon)
+  = \Vol\bigl(\fateReach{\Sigma}(t)\bigr)
+   -\Vol\bigl(\fateReach{\Sigma}(t+\varepsilon)\bigr).
+\]
+If $\fateReach{\Sigma}(t+\varepsilon)\subseteq
+\fateReach{\Sigma}(t)$ (futures can only be lost, not gained,
+in irreversible processes), then
+\[
+  \Vol\bigl(\fateReach{\Sigma}(t)\bigr)
+  -\Vol\bigl(\fateReach{\Sigma}(t+\varepsilon)\bigr)
+  = \Vol\bigl(
+    \fateReach{\Sigma}(t)\setminus\fateReach{\Sigma}(t+\varepsilon)
+  \bigr),
+\]
+the volume of newly inaccessible fate profiles.
+\end{proof}
+\end{theorem}
+
+
+The Second Law as Fate Contraction

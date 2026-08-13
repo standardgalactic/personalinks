@@ -1,0 +1,967 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{natbib}
+
+\usetikzlibrary{
+  arrows.meta,
+  calc,
+  positioning,
+  decorations.pathmorphing,
+  decorations.markings,
+  fit,
+  backgrounds
+}
+
+\geometry{margin=1.2in}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+
+\title{Identity as Event History:\\
+A Worked Introduction to Spherepop}
+\author{Flyxion}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Spherepop is a process-oriented formalism in which the identity of an object
+is determined not by its present configuration but by the irreversible sequence
+of transformations that produced it.  This essay develops the central principles
+of the framework through a worked example and then situates those principles
+within increasingly general mathematical structures: event words and normal
+forms, directed acyclic event graphs, a categorical semantics of histories as
+functors from causal index categories, a rewriting system for normalization, and
+connections to trace theory, Petri nets, and string diagram formalisms.
+Additional sections develop the order-theoretic structure of event histories as
+posets and their linear extensions, a small-step operational semantics for
+histories as labeled transition systems, measures of historical complexity
+including depth and width, the historical reconstruction problem and its
+relationship to informational irreversibility, a comparison of historical and
+structural identity criteria, a treatment of Spherepop as a free traced monoidal
+construction, and the connection to provenance graphs and distributed event logs.
+Throughout, irreversibility is treated as the fundamental feature that gives
+event histories their directed, acyclic character and that grounds a coherent
+alternative to set-membership-based ontology.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+
+Introduction
+
+\label{sec:introduction}
+
+A recurring question in the foundations of mathematics and formal ontology
+concerns the correct criterion of identity for objects that exist within
+processes rather than in isolation.  Classical set theory locates identity in
+the membership relation: two sets are equal precisely when they contain exactly
+the same elements, irrespective of how those sets came to exist or in what order
+their elements were assembled.  This extensional criterion is powerful and
+convenient, but it discards what may be the most significant feature of many
+objects encountered in physics, computation, and the theory of complex systems:
+namely, that an object's identity is inseparable from the history that generated
+it.
+
+Spherepop is a formalism developed to address this gap directly.  Its central
+claim is that objects should be represented not as static containers but as
+\emph{records of transformations}, and that identity should be adjudicated by
+comparing those records rather than by comparing present states.  The formalism
+takes irreversibility as its organising principle.  Because the transformations
+that produce objects cannot in general be undone, the historical record
+accumulates monotonically; each new event appends to a trace that cannot be
+retracted.  Two objects are therefore identical in the Spherepop sense if and
+only if they are the products of identical histories.
+
+This orientation connects Spherepop to a broad family of process-based theories.
+In category theory, the importance of morphisms over objects is a foundational
+methodological commitment \citep{MacLane1998}; histories composed of
+irreversible events are naturally interpreted as compositions of morphisms, and
+the event histories of objects become diagrams in causal categories.  In
+theoretical computer science, the notion that computational identity should be
+grounded in execution traces rather than in present memory states appears
+implicitly throughout operational semantics \citep{Abramsky1994}.  In
+concurrency theory, Mazurkiewicz traces \citep{Mazurkiewicz1987} provide an
+established formalism for treating event sequences as equivalence classes
+modulo independent commutation, and Spherepop event words can be understood as
+canonical representatives of such classes.  In the theory of concurrent
+processes, Petri nets \citep{Petri1966} provide a complementary operational
+picture.
+
+The present essay proceeds through several layers of increasing abstraction.
+Section~\ref{sec:worked} presents the primary worked example, introducing two
+processes that produce structurally similar objects by distinct histories and
+establishing the foundational identity criterion.
+Section~\ref{sec:eventwords} formalises this criterion through the notions of
+event words and normal forms.  Section~\ref{sec:categorical} develops the
+categorical interpretation, treating events as morphisms and histories as
+compositions.  Section~\ref{sec:entropy} examines the relationship between
+irreversibility and entropy.  Section~\ref{sec:dags} develops the directed
+acyclic graph representation of event histories.
+Section~\ref{sec:normalization} introduces normalization and canonical
+representations.  Section~\ref{sec:functors} provides the functorial
+perspective.  Section~\ref{sec:pushouts} examines merge events as pushout-like
+constructions.  Section~\ref{sec:landscape} interprets histories as trajectories
+across an entropy landscape.  Section~\ref{sec:posets} develops the partial-order
+structure of event histories, establishing that event words are linear extensions
+of the causal precedence relation.  Section~\ref{sec:complexity} introduces
+quantitative measures of historical complexity including depth, width, and
+branching factor.  Section~\ref{sec:operational} provides a small-step
+operational semantics in which histories arise as execution traces of labeled
+transition systems.  Section~\ref{sec:reconstruction} examines the historical
+reconstruction problem and its relationship to informational irreversibility.
+Section~\ref{sec:identity} compares the Spherepop historical identity criterion
+with the extensional criterion of classical set theory.
+Section~\ref{sec:equivalences} develops a stratified family of weaker
+equivalence relations on histories.
+Section~\ref{sec:traced} situates the framework within the theory of free
+traced monoidal categories.
+Section~\ref{sec:provenance} connects Spherepop to provenance graphs,
+distributed event logs, and blockchain-style ledgers.
+Appendices treat the BNF grammar for Spherepop expressions, the rewriting
+system for normalization, the relationship to trace theory, Petri nets, and
+string diagrams, and derived causal categories.
+
+
+
+A Worked Example
+
+\label{sec:worked}
+
+To make the core principle concrete, consider an initial region $R$ and a
+sequence of three events.  The first event, $E_1$, causes $R$ to split into
+two descendant regions $A$ and $B$.  The second event, $E_2$, is a
+transformation internal to $A$ that produces a new region $C$.  The third
+event, $E_3$, causes the regions $B$ and $C$ to merge, producing the region
+$D$.  Although the informal description is clear, the formal representation
+of this history must record not merely which events occurred but in which
+order they occurred and from which states each event proceeded.
+
+Using the normal-form notation to be fully developed in
+Section~\ref{sec:eventwords}, the history of each region is recorded as
+follows.  Both $A$ and $B$ arose directly from $R$ through the single event
+$E_1$, so their normal forms are identical:
+\[
+  (\text{spherepop}(A)) = (E_1), \qquad (\text{spherepop}(B)) = (E_1).
+\]
+The region $C$, however, arose from $A$ through the subsequent event $E_2$,
+so its history includes both events:
+\[
+  (\text{spherepop}(C)) = (E_1, E_2).
+\]
+Finally, $D$ arose through the merger of $B$ and $C$, which itself required
+all three events in order, so:
+\[
+  (\text{spherepop}(D)) = (E_1, E_2, E_3).
+\]
+
+The identity of each object is thus entirely determined by the ordered
+sequence of events that produced it.  This is already a departure from
+structural or compositional criteria: a criterion based on present structure
+would describe $D$ solely in terms of what $D$ currently contains, with no
+record of whether $D$ arose from a merger of previously split regions or from
+some entirely different sequence of transformations.
+
+To make this distinction sharp, consider a second process.  Suppose again
+that $E_1$ causes $R$ to split into $A$ and $B$, but now suppose that instead
+of $E_2$ there occurs a different event $E_3'$ that directly merges $A$ and
+$B$ into a region $D'$, without the intermediate transformation that in the
+first process generated $C$.  The normal form of $D'$ is then:
+\[
+  (\text{spherepop}(D')) = (E_1, E_3').
+\]
+Comparing the normal forms of $D$ and $D'$,
+\[
+  (\text{spherepop}(D)) = (E_1, E_2, E_3), \qquad
+  (\text{spherepop}(D')) = (E_1, E_3'),
+\]
+the two histories are evidently distinct: $D$ accumulated three events while
+$D'$ accumulated only two, and the events themselves differ.  The Spherepop
+identity criterion therefore concludes that $D$ and $D'$ are not identical
+objects, even if their present structural descriptions happen to agree.
+
+This is the core claim of the formalism.  Structural indistinguishability is
+insufficient for identity.  Two objects are identical in Spherepop precisely
+when their complete generative histories, recorded in normal form, are
+identical.
+
+
+
+Event Words and Normal Forms
+
+\label{sec:eventwords}
+
+The worked example of Section~\ref{sec:worked} illustrates the central
+representational idea intuitively.  To deploy it rigorously, the notion of a
+history must be formalized as a structured symbolic object.
+
+Let $\mathcal{E}$ denote the set of possible events in a given system.  Each
+event in $\mathcal{E}$ corresponds to an irreversible transformation that
+either produces new regions, modifies existing ones, or both.  The precise
+physical or computational content of these events may vary; what matters for
+the formalism is that they are discrete, ordered, and irreversible.
+
+\begin{definition}[Event word]
+An \emph{event word} over $\mathcal{E}$ is a finite ordered sequence
+\[
+  w = (E_{i_1}, E_{i_2}, \dots, E_{i_k})
+\]
+where each $E_{i_j} \in \mathcal{E}$.  The length of $w$ is $|w| = k$.  The
+empty event word, denoting an object with no generative history, is written
+$\varepsilon$.
+\end{definition}
+
+Because the events constituting a word are ordered, the same multiset of
+events occurring in different sequences represents a different history.  This
+ordering is not arbitrary: it encodes the causal and temporal precedence
+relations among the events, about which more will be said when branching
+histories are considered.
+
+\begin{definition}[Spherepop normal form]
+Spherepop associates to every object $X$ a canonical expression, the
+\emph{normal form} of $X$, written $(\text{spherepop}(X))$, which is defined
+to be the event word representing the complete generative history of $X$:
+\[
+  (\text{spherepop}(X)) = (E_{i_1}, E_{i_2}, \dots, E_{i_k}).
+\]
+\end{definition}
+
+The normal form is the primary identity criterion of the formalism.  Two
+objects are identical if and only if their normal forms coincide:
+\[
+  X \equiv Y
+  \quad\Longleftrightarrow\quad
+  (\text{spherepop}(X)) = (\text{spherepop}(Y)).
+\]
+This principle replaces identity criteria grounded in structural or
+compositional properties.  Objects that are structurally indistinguishable
+may nevertheless be distinct if their histories differ, and objects that
+arose through entirely different structural pathways may be identical if
+those pathways produced identical event sequences.
+
+It is useful to visualize this criterion geometrically.  Figure~\ref{fig:trace}
+represents an event word as a directed trace along a time axis, with the
+irreversible events $E_1$, $E_2$, $E_3$ appearing as marked transitions
+separating successive phases of the history.  The tick marks crossing the
+trace axis emphasize that each transition is a genuine discontinuity: no
+reversion to a prior state is possible.  The brace beneath the axis
+indicates that the normal form $(\mathrm{spherepop}(D))_{\mathrm{nf}} =
+(E_1, E_2, E_3)$ records the complete ordered content of that trace.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Latex]
+  \draw[thick,->] (0,0) -- (10,0);
+  \filldraw (1.5,0) circle (2pt) node[above=8pt] {$E_1$};
+  \filldraw (4.3,0) circle (2pt) node[above=8pt] {$E_2$};
+  \filldraw (7.2,0) circle (2pt) node[above=8pt] {$E_3$};
+  \node at (0.4,-0.45) {$R$};
+  \node at (2.9,-0.45) {$A/B$};
+  \node at (5.8,-0.45) {$C$};
+  \node at (8.7,-0.45) {$D$};
+  \foreach \x in {1.5,4.3,7.2} {
+    \draw[thick] (\x-0.15,0.22) -- (\x+0.15,-0.22);
+  }
+  \draw[decorate,decoration={brace,mirror,amplitude=8pt}]
+    (1.3,-1.0) -- (7.4,-1.0);
+  \node at (4.35,-1.55)
+    {$\bigl(\mathrm{spherepop}(D)\bigr)_{\mathrm{nf}}=(E_1,E_2,E_3)$};
+  \node at (5,0.9) {\small historical trace};
+\end{tikzpicture}
+\caption{A geometric representation of an event word as an irreversible trace.
+Tick marks indicate irreversible transitions; the brace records the
+corresponding normal form.}
+\label{fig:trace}
+\end{figure}
+
+The geometric picture reinforces a fundamental intuition: an object's position
+on this trace cannot be recovered by inspecting the object alone.  Just as a
+physical process that has dissipated energy cannot be run backwards to recover
+the initial configuration, a Spherepop object does not carry within itself the
+information necessary to reconstruct its generating history.  The normal form
+is an external record, not an intrinsic property.
+
+This historical criterion avoids several classical difficulties of set-based
+ontology.  Objects in Spherepop are not defined by membership in collections
+but by the irreversible sequences that produced them.  The ontology is
+therefore inherently process-based: objects are histories rather than
+containers, and the content of an object is its temporal structure rather than
+its spatial extension.
+
+
+
+A Categorical Interpretation of Spherepop Histories
+
+\label{sec:categorical}
+
+The representation of objects as event words suggests an immediate connection
+with category theory, where the primacy of morphisms over objects is a
+foundational methodological principle \citep{MacLane1998}.  In the categorical
+framework, processes rather than states are primary; objects emerge as the
+sources and targets of transformations, and the composition of morphisms
+encodes the sequential structure of processes.  This perspective aligns
+precisely with the Spherepop principle that identity is grounded in generative
+history.
+
+Let $\mathcal{C}$ be a category whose objects represent regions or
+configurations of a system and whose morphisms represent irreversible events.
+An event
+\[
+  E : X \rightarrow Y
+\]
+corresponds to a transformation that produces the region $Y$ from the region
+$X$.  If two events occur sequentially,
+\[
+  E_1 : X \rightarrow Y, \qquad E_2 : Y \rightarrow Z,
+\]
+their categorical composition
+\[
+  E_2 \circ E_1 : X \rightarrow Z
+\]
+represents the combined historical process producing $Z$ from $X$.  In this
+formulation, the event word introduced in Section~\ref{sec:eventwords}
+corresponds precisely to a composition of morphisms, and the normal form of
+an object is the morphism that takes the initial state to the present one.
+
+Branching and merging events, which are prominent features of the worked
+example, correspond to familiar categorical constructions.  A split event
+\[
+  E_1 : R \rightarrow A \sqcup B
+\]
+resembles a coproduct-like branching in which a single region gives rise to
+multiple descendants, while a merge event
+\[
+  E_3 : (B, C) \rightarrow D
+\]
+resembles a pushout-like construction in which two regions produced from a
+common ancestor are combined into a new one \citep{MacLane1998, Spivak2014}.
+The precise categorical status of these constructions is examined further in
+Section~\ref{sec:pushouts}; for present purposes it suffices to note that
+the full history of the worked example forms a diagram in $\mathcal{C}$ of
+the shape illustrated in Figure~\ref{fig:categorical}.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Latex]
+  \node (R) at (0,0)   {$R$};
+  \node (A) at (3,1.5) {$A$};
+  \node (B) at (3,-1.5){$B$};
+  \node (C) at (6,1.5) {$C$};
+  \node (D) at (9,0)   {$D$};
+  \draw[thick,->] (R) -- node[above left]  {$E_1$} (A);
+  \draw[thick,->] (R) -- node[below left]  {$E_1$} (B);
+  \draw[thick,->] (A) -- node[above]       {$E_2$} (C);
+  \draw[thick,->] (B) -- (D);
+  \draw[thick,->] (C) -- node[above right] {$E_3$} (D);
+  \draw[densely dashed] (A) -- (B);
+  \draw[densely dashed] (C) -- (D);
+  \node at (4.5,2.3)  {\small branching (span-like)};
+  \node at (7.4,1.0)  {\small merge (pushout-like)};
+\end{tikzpicture}
+\caption{A categorical diagram of the worked example.  The split event $E_1$
+produces a span, while the merge event $E_3$ completes a pushout-like
+construction.  The identity of $D$ is determined by the entire diagram, not
+merely by the node $D$ in isolation.}
+\label{fig:categorical}
+\end{figure}
+
+From this perspective, the identity of an object is determined by the entire
+diagram of morphisms that generated it.  Two objects are identical precisely
+when the diagrams representing their histories are identical, up to equality of
+morphisms.  This is a stronger condition than structural isomorphism of the
+resulting objects; it requires agreement at every stage of the generative
+process.
+
+The categorical viewpoint also clarifies why Spherepop naturally produces
+directed acyclic event graphs.  Cycles in a morphism-composition diagram would
+correspond to reversible processes, since a path
+\[
+  X \rightarrow Y \rightarrow \dots \rightarrow X
+\]
+implies the existence of a composite morphism returning from $X$ to itself.  In
+a setting where morphisms represent irreversible transformations, such a cycle
+would violate the irreversibility condition.  The absence of cycles is therefore
+not merely a convenient property but a structural consequence of the physical
+or computational assumption that the events under consideration are
+irreversible.  The relationship between irreversibility and directed acyclicity
+is developed further in Section~\ref{sec:dags}, and the connection to entropy
+is examined in Section~\ref{sec:entropy}.
+
+\citet{BaezStay2010} describe in detail the deep correspondences among physics,
+topology, logic, and computation through the ``Rosetta Stone'' of categorical
+structures; the Spherepop framework sits naturally within the physical and
+computational columns of that correspondence, where morphisms encode processes
+and composition encodes sequential execution.
+
+
+
+Irreversibility and Entropy in Event Histories
+
+\label{sec:entropy}
+
+The irreversibility of Spherepop events is not merely a formal stipulation; it
+reflects a substantive claim about the physical and informational character of
+the processes under consideration.  In thermodynamic systems, irreversible
+transformations correspond to processes in which entropy increases and in which
+information about prior states becomes dispersed across degrees of freedom that
+are no longer practically accessible.  The connection between irreversibility
+and entropy is therefore a natural one to explore within the Spherepop
+framework, where each event appends a new term to a historical record that
+cannot be retracted.
+
+Consider again an event $E : X \rightarrow Y$ representing a transformation
+that produces the region $Y$ from the region $X$.  In general, the inverse
+transformation does not exist: one cannot recover $X$ uniquely from $Y$ alone.
+Consequently the history of $Y$ cannot be reconstructed without additional
+information beyond what $Y$ currently contains.  Spherepop responds to this
+observation by treating the event history itself as the primary record, so
+that the normal form
+\[
+  (\text{spherepop}(X)) = (E_{i_1}, E_{i_2}, \dots, E_{i_k})
+\]
+functions as a symbolic trace of the entropy-producing sequence of operations
+that generated $X$.  Each event appends a new irreversible step to this trace,
+and the trace cannot be shortened by any transformation available within the
+system.
+
+This motivates a natural measure of historical complexity.  If $H(X)$ denotes
+the length of the event word associated with $X$,
+\[
+  H(X) = |(\text{spherepop}(X))|,
+\]
+then $H(X)$ provides a simple count of the irreversible operations that
+separates $X$ from its initial state.  Each additional event increases the
+informational content required to specify the object's origin.
+
+More sophisticated formulations may weight individual events by their
+informational or thermodynamic significance.  Define a weight function
+$w : \mathcal{E} \rightarrow \mathbb{R}_{\geq 0}$ assigning to each event $E$
+a non-negative real number $w(E)$ measuring its entropy contribution.  The
+weighted historical complexity of $X$ is then
+\[
+  S(X) = \sum_{j=1}^{k} w(E_{i_j}).
+\]
+When $w$ is chosen to reflect genuine thermodynamic quantities, $S(X)$
+provides an estimate of the total entropy produced along the history of $X$.
+In general, the choice of $w$ encodes assumptions about the relative
+significance of different classes of events, and different physical or
+computational models will motivate different choices.
+
+The geometric interpretation of this measure is illustrated in
+Figure~\ref{fig:entropy}.  As events accumulate, the historical trace widens:
+the cross-sectional thickness of the trajectory at each stage reflects the
+growing informational content required to describe the object's origin.
+Critical events that significantly increase $S(X)$ correspond to points of
+rapid widening, while low-entropy events produce only modest expansion.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.0,>=Latex]
+  \draw[thick,->] (0,0) -- (10,0);
+  \draw[thick] (0,0.25)  .. controls (2,0.35)  and (4,0.6)  .. (10,1.4);
+  \draw[thick] (0,-0.25) .. controls (2,-0.35) and (4,-0.6) .. (10,-1.4);
+  \foreach \x/\lab in {2/E_1,5/E_2,8/E_3}{
+    \draw[thick] (\x,-0.55) -- (\x,0.55);
+    \node[above] at (\x,0.65) {$\lab$};
+  }
+  \node at (1,-0.75) {$R$};
+  \node at (9.2,-1.8) {$D$};
+  \node at (7.2,1.95) {$S(X)$};
+  \draw[->] (7.0,1.75) -- (8.4,1.1);
+  \node at (5,-2.0) {\small widening trace $=$ increasing irreversible historical content};
+\end{tikzpicture}
+\caption{Irreversible history represented as geometric widening.  As events
+accumulate, the historical trace broadens, representing the growing
+informational content that would be required to reconstruct the prior state.
+The function $S(X)$ measures cumulative weighted entropy along the trace.}
+\label{fig:entropy}
+\end{figure}
+
+This interpretation connects Spherepop to a broader class of process-based
+theories in which the fundamental objects of a theory are not static states but
+trajectories through configuration space.  In such theories, the informational
+content of an object is the information required to specify its trajectory
+rather than merely its present position.  The Spherepop normal form functions
+as a compact symbolic encoding of this trajectory.
+
+The resulting ontology is one in which entropy production provides the arrow of
+time.  Because $S(X)$ is non-decreasing along any history---since all events
+are assumed to contribute non-negatively to the weighted sum---histories are
+naturally directed.  This directionality is not imposed externally as a formal
+condition but emerges from the physical assumption that irreversible processes
+increase entropy.  The directed acyclic structure of event histories, which is
+treated as a formal property in the following section, therefore has a
+thermodynamic grounding in the behaviour of $S(X)$ along any path through the
+event graph.
+
+
+
+Event Graphs and Directed Acyclic Structure
+
+\label{sec:dags}
+
+Linear event words provide a correct representation of histories in which each
+event has at most one predecessor and at most one successor.  The processes
+encountered in practice, however, frequently involve branching and merging: a
+single region may give rise to multiple descendants, and multiple regions may
+combine to produce a single new one.  In such cases the linear notation,
+though applicable after a suitable ordering is imposed, obscures the parallel
+structure of the history.  The natural representation is a directed graph.
+
+\begin{definition}[Event graph]
+An \emph{event graph} is a directed graph $G = (V, \mathcal{E})$ in which the
+vertices $V$ represent regions and each directed edge $X \rightarrow Y$
+represents an irreversible event producing the region $Y$ from the region $X$.
+\end{definition}
+
+When events produce multiple descendants or require multiple inputs, the
+corresponding vertices in $G$ carry multiple outgoing or incoming edges
+respectively.  The complete generative history of a system is encoded in the
+global structure of $G$ rather than in any single path through it.
+
+\begin{proposition}[Directed acyclicity]
+Every Spherepop event graph is a directed acyclic graph (DAG).
+\end{proposition}
+
+\begin{proof}
+Suppose for contradiction that $G$ contains a directed cycle
+$X \rightarrow Y \rightarrow \cdots \rightarrow X$.  Then there exists a
+composite event morphism that maps $X$ to itself, implying that the
+transformation can be applied repeatedly to yield a reversible process
+taking $X$ back to a state indistinguishable from $X$.  Since every
+Spherepop event is irreversible by definition, such a composite cannot exist.
+Consequently no directed cycle can occur in $G$.
+\end{proof}
+
+The directed acyclic property is not merely a convenience; it is the formal
+analogue of the thermodynamic irreversibility condition formalized in
+Section~\ref{sec:entropy}.  Every finite DAG admits a topological ordering, and
+it is precisely this ordering that will be exploited by the normalization
+procedure of Section~\ref{sec:normalization} to produce canonical event words
+from branching histories.
+
+Given an object $X$ appearing as a vertex in $G$, its identity is determined
+not by the local properties of the vertex but by the global structure of the
+subgraph that generated it.  Formally, let $\mathrm{Anc}(X)$ denote the set of
+all vertices from which $X$ is reachable by a directed path in $G$.  The
+\emph{ancestral subgraph} of $X$ is the induced subgraph
+\[
+  G_X = G[\mathrm{Anc}(X) \cup \{X\}]
+\]
+containing all vertices that contributed, directly or indirectly, to the
+production of $X$.
+
+\begin{definition}[Spherepop identity, graphical formulation]
+Two objects $X$ and $Y$ are Spherepop-identical if and only if their
+ancestral subgraphs $G_X$ and $G_Y$ are isomorphic as directed graphs with
+edges labelled by event types.
+\end{definition}
+
+This definition subsumes the event-word formulation of Section~\ref{sec:eventwords}
+as a special case: when histories are linear (no branching or merging), the
+ancestral subgraph reduces to a directed path, and graph isomorphism reduces to
+equality of the corresponding event sequences.
+
+Figure~\ref{fig:dag} illustrates a more complex event graph containing multiple
+levels of branching.  The terminal object $Z$ is determined by the entire
+layered DAG structure feeding into it.  Different subsets of the graph
+characterise different terminal objects; the identity criterion requires that
+the complete ancestral subgraph, not merely the immediately preceding events,
+be taken into account.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.0,>=Latex]
+  \node (R) at (0,0)    {$R$};
+  \node (A) at (2.5,1.5){$A$};
+  \node (B) at (2.5,0.3){$B$};
+  \node (M) at (2.5,-1.3){$M$};
+  \node (C) at (5,2.0)  {$C$};
+  \node (E) at (5,0.8)  {$E$};
+  \node (F) at (5,-0.8) {$F$};
+  \node (X) at (7.8,1.2){$X$};
+  \node (Y) at (7.8,-0.3){$Y$};
+  \node (Z) at (10,0.5) {$Z$};
+  \foreach \u/\v in {R/A,R/B,R/M,A/C,B/E,M/F,C/X,E/X,E/Y,F/Y,X/Z,Y/Z}
+    \draw[thick,->] (\u) -- (\v);
+  \begin{scope}[on background layer]
+    \node[draw,rounded corners,inner sep=8pt,
+          fit=(R)(B)(F),
+          label=below:{\small ancestral subgraph of $Z$ via $Y$}] {};
+  \end{scope}
+\end{tikzpicture}
+\caption{A layered directed acyclic event graph.  The identity of the terminal
+object $Z$ is determined by the entire ancestral subgraph that feeds into it,
+not merely by its immediate predecessors $X$ and $Y$.}
+\label{fig:dag}
+\end{figure}
+
+The DAG representation also clarifies the relationship between the event-word
+notation and the diagrammatic structure.  A linear event word corresponds to a
+directed path through the DAG.  Branching corresponds to a vertex with multiple
+outgoing edges, and merging corresponds to a vertex with multiple incoming
+edges.  The graph therefore provides a complete representation of the causal
+structure, while the event word provides a linear serialization of that
+structure.  The correspondence between these two representations is the subject
+of the normalization theory in Section~\ref{sec:normalization}, where it is
+shown that every event graph admits a canonical linear serialization.
+
+
+
+Normalization and Canonical Representation
+
+\label{sec:normalization}
+
+The event graph representation captures the full causal structure of a history,
+but different textual descriptions of the same graph may arise depending on
+the order in which causally independent events are recorded.  If two events
+act on disjoint regions without either depending on the output of the other,
+then listing them in either order produces an equivalent description of the
+same causal structure.  This equivalence must be recognized formally if the
+identity criterion is to be stable under changes of representation.
+
+\begin{definition}[Event independence]
+Two events $E_i, E_j \in \mathcal{E}$ are \emph{independent}, written
+$E_i \parallel E_j$, if neither event requires the output of the other as
+input; equivalently, there is no directed path between $E_i$ and $E_j$ in the
+event graph.
+\end{definition}
+
+Independent events may appear in either order in a linear serialization of the
+event graph without altering the graph's structure.  This motivates the
+following rewriting rule, which will be made precise in Appendix~\ref{app:rewriting}:
+
+\[
+  (E_i, E_j) \;\longrightarrow\; (E_j, E_i)
+  \quad \text{whenever } E_i \parallel E_j.
+\]
+
+Two event words are \emph{causally equivalent} if they are related by a finite
+sequence of such commutation steps.  The normalization procedure selects a
+canonical representative from each causal equivalence class.
+
+\begin{definition}[Spherepop normal form, canonical]
+The \emph{Spherepop normal form} of an object $X$ is the event word
+\[
+  (\text{spherepop}(X))_{\mathrm{nf}}
+\]
+obtained by computing a topological ordering of the event graph $G_X$ and
+serializing the events in that order, breaking ties consistently according to
+a fixed deterministic convention on event labels.
+\end{definition}
+
+Because every finite DAG admits a topological ordering, and because the
+normalization procedure is deterministic, the normal form is well-defined for
+every Spherepop object.  The canonical identity condition becomes:
+\[
+  X \equiv Y
+  \quad\Longleftrightarrow\quad
+  (\text{spherepop}(X))_{\mathrm{nf}} = (\text{spherepop}(Y))_{\mathrm{nf}}.
+\]
+
+Two objects are identical exactly when their normalized event histories
+coincide, regardless of the particular serialization that may have been used
+to describe their histories in the first instance.
+
+Figure~\ref{fig:normalization} illustrates this point concretely.  Two
+syntactically different presentations of the same history---one listing $E_i$
+before $E_j$ and the other listing $E_j$ before $E_i$ on two parallel
+branches---both normalize to the same canonical form, because the two events
+are independent and the topological ordering convention resolves the tie
+deterministically.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=0.95,>=Latex]
+  \node (R1) at (0,0)   {$R$};
+  \node (A1) at (2,1)   {$A$};
+  \node (B1) at (2,-1)  {$B$};
+  \node (C1) at (4,1)   {$C$};
+  \node (D1) at (4,-1)  {$D$};
+  \node (X1) at (6,0)   {$X$};
+  \draw[thick,->] (R1)--(A1);
+  \draw[thick,->] (R1)--(B1);
+  \draw[thick,->] (A1)-- node[above] {$E_i$} (C1);
+  \draw[thick,->] (B1)-- node[below] {$E_j$} (D1);
+  \draw[thick,->] (C1)--(X1);
+  \draw[thick,->] (D1)--(X1);
+  \node (R2) at (10,0)  {$R$};
+  \node (A2) at (12,1)  {$A$};
+  \node (B2) at (12,-1) {$B$};
+  \node (C2) at (14,1)  {$C$};
+  \node (D2) at (14,-1) {$D$};
+  \node (X2) at (16,0)  {$X$};
+  \draw[thick,->] (R2)--(A2);
+  \draw[thick,->] (R2)--(B2);
+  \draw[thick,->] (A2)-- node[above] {$E_j$} (C2);
+  \draw[thick,->] (B2)-- node[below] {$E_i$} (D2);
+  \draw[thick,->] (C2)--(X2);
+  \draw[thick,->] (D2)--(X2);
+  \draw[very thick,->] (7.2,0) -- (8.8,0);
+  \node at (8,0.45) {\small normalize};
+  \node[align=center] at (8,-2.1)
+    {$\bigl(\mathrm{spherepop}(X)\bigr)_{\mathrm{nf}}$
+     determined by causal order,\\not by arbitrary presentation};
+\end{tikzpicture}
+\caption{Two syntactically different presentations of independent events $E_i$
+and $E_j$ encoding the same causal structure.  Normalization collapses both to
+a single canonical form, since $E_i \parallel E_j$ implies their order may be
+resolved by any fixed topological convention.}
+\label{fig:normalization}
+\end{figure}
+
+The normalization procedure plays a role in Spherepop analogous to that of
+canonical forms in other mathematical frameworks: reduced words in group theory,
+row echelon form in linear algebra, beta-normal forms in the lambda calculus.
+Each of these devices converts a syntactically diverse family of equivalent
+expressions into a unique representative that can be compared directly.  In
+Spherepop, the canonical form ensures that identity depends only on causal
+structure rather than on the order in which an external observer happened to
+record causally independent events.
+
+
+
+Functorial Perspectives on Event Histories
+
+\label{sec:functors}
+
+The event graph representation and the normalization theory of
+Section~\ref{sec:normalization} can be cast in a fully categorical language by
+treating the process of mapping abstract causal structures onto concrete systems
+as a functor.  This perspective, which draws on the categorical foundations
+developed in \citet{MacLane1998} and elaborated in \citet{Spivak2014} and
+\citet{BaezStay2010}, provides the most general formulation of Spherepop
+semantics.
+
+\begin{definition}[Causal history category]
+Let $\mathcal{H}$ be a small category whose objects represent intermediate
+regions or states in a history and whose morphisms represent irreversible
+events.  Because the events are temporally ordered and irreversible, if there
+exists a morphism $X \rightarrow Y$ in $\mathcal{H}$ then there cannot exist
+a morphism $Y \rightarrow X$.  Such a category is called a \emph{causal
+history category}.
+\end{definition}
+
+In practice, $\mathcal{H}$ may be constructed directly from the event graph
+$G$ by interpreting vertices as objects and directed edges as generating
+morphisms, with composition given by directed paths.  The temporal ordering
+that the DAG structure imposes on $G$ corresponds to the ``no-back-morphism''
+condition in $\mathcal{H}$.
+
+\begin{definition}[Spherepop realization functor]
+Let $\mathcal{C}$ be a category of regions, configurations, or system states.
+A \emph{Spherepop realization} of the history $\mathcal{H}$ in $\mathcal{C}$
+is a functor
+\[
+  F : \mathcal{H} \rightarrow \mathcal{C}.
+\]
+\end{definition}
+
+The functor $F$ assigns to each node in the abstract causal history a concrete
+object in $\mathcal{C}$, and to each event morphism the corresponding
+transformation in the physical or computational system.  Functoriality ensures
+that sequential composition of events in $\mathcal{H}$ corresponds exactly to
+sequential composition of transformations in $\mathcal{C}$:
+\[
+  F(E_2 \circ E_1) = F(E_2) \circ F(E_1).
+\]
+This coherence condition is the categorical expression of the physical
+requirement that the combined effect of two sequential events is the
+composition of their individual effects, without hidden intermediate states.
+
+Terminal objects of $\mathcal{H}$ correspond to the currently existing objects
+of the system---those that have not been further transformed.  If $X$ is such a
+terminal node, then $F(X)$ represents the concrete present state produced by
+the entire chain of events that preceded it.  The identity of $F(X)$ as a
+Spherepop object is determined jointly by $F$ and by the position of $X$ in
+the causal diagram.
+
+Figure~\ref{fig:functor} illustrates the functorial picture.  The abstract
+causal history category $\mathcal{H}$ on the left carries the relational
+structure of the history---which events preceded which---without specifying
+their concrete content.  The functor $F$ maps this abstract structure into the
+category $\mathcal{C}$ of realized regions on the right, where each abstract
+node becomes a concrete object and each abstract morphism becomes a concrete
+transformation.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.0,>=Latex]
+  \node (hR) at (0,0)    {$r$};
+  \node (hA) at (2,1.2)  {$a$};
+  \node (hB) at (2,-1.2) {$b$};
+  \node (hD) at (4,0)    {$d$};
+  \draw[thick,->] (hR) -- (hA);
+  \draw[thick,->] (hR) -- (hB);
+  \draw[thick,->] (hA) -- (hD);
+  \draw[thick,->] (hB) -- (hD);
+  \node at (2,-2.0) {$\mathcal{H}$};
+  \draw[very thick,->] (5.2,0) -- (8.3,0);
+  \node at (6.7,0.45) {$F$};
+  \node (cR) at (10,0)   [circle,draw,inner sep=1.5pt] {};
+  \node (cA) at (12,1.4) [circle,draw,inner sep=1.5pt] {};
+  \node (cB) at (12,-1.4)[circle,draw,inner sep=1.5pt] {};
+  \node (cD) at (14,0)   [circle,draw,inner sep=1.5pt] {};
+  \draw[thick,->] (cR) -- (cA);
+  \draw[thick,->] (cR) -- (cB);
+  \draw[thick,->] (cA) -- (cD);
+  \draw[thick,->] (cB) -- (cD);
+  \draw[densely dashed] (9.5,-0.5) ellipse (0.8 and 0.5);
+  \draw[densely dashed] (12,1.4)   ellipse (0.9 and 0.55);
+  \draw[densely dashed] (12,-1.4)  ellipse (0.9 and 0.55);
+  \draw[densely dashed] (14,0)     ellipse (1.1 and 0.75);
+  \node at (12,-2.0) {$\mathcal{C}$};
+\end{tikzpicture}
+\caption{A Spherepop history as a functor $F : \mathcal{H} \rightarrow \mathcal{C}$
+from an abstract causal index category $\mathcal{H}$ to a category $\mathcal{C}$
+of realized regions.  The abstract structure on the left encodes causal
+precedence; the functor translates this into concrete transformations on the right.}
+\label{fig:functor}
+\end{figure}
+
+The functorial formulation also provides a clean account of when two objects
+should be considered identical.  Suppose
+\[
+  F_1 : \mathcal{H}_1 \rightarrow \mathcal{C}
+  \quad\text{and}\quad
+  F_2 : \mathcal{H}_2 \rightarrow \mathcal{C}
+\]
+are two realizations.  The resulting terminal objects coincide as Spherepop
+objects when the normalized causal structures $\mathcal{H}_1$ and $\mathcal{H}_2$
+are isomorphic as causal categories and the functors agree on the corresponding
+morphisms under this isomorphism.  This condition recovers the normal-form
+identity criterion of Section~\ref{sec:normalization} in categorical language:
+it requires agreement not merely on terminal values but on the entire
+structure of the generating process.
+
+The functorial perspective also suggests how Spherepop should handle
+abstraction.  Natural transformations between realizations---that is, morphisms
+in the functor category $[\mathcal{H}, \mathcal{C}]$---correspond to
+systematic reinterpretations of a history that change the concrete objects
+assigned to nodes while preserving the relational structure.  In this way the
+framework supports a hierarchy of increasingly abstract descriptions of the
+same underlying causal history.
+
+
+
+Merge Events as Pushouts
+
+\label{sec:pushouts}
+
+The merge events that appear prominently in Spherepop histories admit a precise
+categorical characterization as pushout constructions.  A pushout in a category
+$\mathcal{C}$ is the universal solution to the problem of combining two
+morphisms that share a common source: given morphisms $f : R \rightarrow B$ and
+$g : R \rightarrow C$, the pushout is an object $D$ together with morphisms
+$B \rightarrow D$ and $C \rightarrow D$ such that the resulting square commutes
+and $D$ is universal with this property \citep{MacLane1998}.
+
+The connection to Spherepop is direct.  In the worked example of
+Section~\ref{sec:worked}, the regions $B$ and $C$ both originated from the
+common ancestor $R$ via the split event $E_1$.  The merge event $E_3$ then
+combined $B$ and $C$ into the region $D$.  Categorically, this situation is
+described by the commuting square
+\[
+\begin{tikzcd}
+  R \arrow[r] \arrow[d] & C \arrow[d] \\
+  B \arrow[r]           & D
+\end{tikzcd}
+\]
+in which $D$ receives consistent morphisms from $B$ and $C$ and is universal
+with this property.  The merge event $E_3$ corresponds precisely to the
+completion of this pushout diagram.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Latex]
+  \node (R) at (0,0)  {$R$};
+  \node (C) at (3,2)  {$C$};
+  \node (B) at (3,-2) {$B$};
+  \node (D) at (6,0)  {$D$};
+  \draw[thick,->] (R) -- (C);
+  \draw[thick,->] (R) -- (B);
+  \draw[thick,->] (C) -- (D);
+  \draw[thick,->] (B) -- (D);
+  \node at (3,0) {$\square$};
+\end{tikzpicture}
+\caption{A merge event represented as a pushout-like square.  The common ancestor $R$
+gives rise to $B$ and $C$ via the split event; the merge event $E_3$ completes
+the square by producing the universal object $D$.}
+\label{fig:pushout}
+\end{figure}
+
+The pushout interpretation makes precise the sense in which the identity of
+$D$ depends on the entire commuting square rather than merely on the pair
+$(B, C)$ considered in isolation.  Two regions $B'$ and $C'$ could be merged
+to produce a region $D'$ with the same structural description as $D$, yet if
+$B'$ and $C'$ arose from a different common ancestor $R'$, the resulting
+pushout square would be different and $D'$ would be a different Spherepop
+object.  The pushout construction thus encodes the relational history of the
+merge event, not merely its output.
+
+This observation connects to the broader theme of the paper.  In standard
+set-theoretic or structural accounts of identity, two sets are equal when they
+contain the same elements, regardless of how those elements were assembled.
+The pushout characterization of merge events shows that in Spherepop the
+corresponding condition is far stronger: the merged object must have arisen
+from the same causal configuration, with the same common ancestor and the same
+morphisms connecting it to its predecessors.
+
+The pushout interpretation also interacts with the categorical coherence
+conditions noted in Section~\ref{sec:functors}.  A realization functor
+$F : \mathcal{H} \rightarrow \mathcal{C}$ that preserves pushouts maps each
+merge event in the abstract history to a genuine pushout in the target
+category.  When $\mathcal{C}$ is a category with all pushouts---for instance,
+a category of sets or a category of topological spaces---this preservation
+condition is automatically satisfied.  In physical applications, the relevant
+category may not have all pushouts, and the question of when merge events can
+be faithfully realized is a substantive one.
+
+
+
+Entropy Landscapes and Historical Trajectories
+
+\label{sec:landscape}
+
+A complementary geometric interpretation of Spherepop histories arises from
+the notion of an entropy landscape.  This interpretation is more impressionistic
+than the category-theoretic treatment of preceding sections, but it connects
+the formalism to physical intuitions about the role of irreversibility in
+shaping the space of possible histories.
+
+Let the configuration space of a system be represented as a manifold
+$\mathcal{M}$ whose points correspond to possible structural states.  Define an
+entropy-like functional
+\[
+  S : \mathcal{M} \rightarrow \mathbb{R}
+\]
+measuring the informational or thermodynamic complexity of each state.
+Irreversible events may then be interpreted as transitions that move the system
+along trajectories in $\mathcal{M}$ while generally increasing the value of
+$S$.  The history of an object corresponds to a directed path through this
+landscape, constrained to move in the direction of increasing $S$.

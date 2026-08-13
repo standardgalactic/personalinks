@@ -1,0 +1,1124 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+============================================================
+FILE: spherepop/01-grammar/run.py
+============================================================
+
+from spherepop import parse_operation, parse_sphere, render_expr
+
+
+if __name__ == "__main__":
+    sigma = parse_sphere("(A (B C) D)")
+    op = parse_operation("POP 1")
+    print("sigma:", render_expr(sigma))
+    print("operation:", op)
+
+============================================================
+FILE: spherepop/02-history/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import PopOp
+from spherepop.views import history_view
+
+
+if __name__ == "__main__":
+    cfg0 = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+    cfg1 = transition(cfg0, PopOp(path=(1,)))
+    print("history length:", len(cfg1.history))
+    print("history:", history_view(cfg1))
+
+============================================================
+FILE: spherepop/03-pop/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, render_expr, transition
+from spherepop.model import PopOp
+
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+    out = transition(cfg, PopOp(path=(1,)))
+    print("before:", render_expr(cfg.sigma))
+    print("after :", render_expr(out.sigma))
+
+============================================================
+FILE: spherepop/04-refuse/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import RefuseOp
+
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A B C)"), {"o1", "o2", "o3"})
+    out = transition(cfg, RefuseOp(refused=frozenset({"o2"})))
+    print("before:", sorted(cfg.option_space))
+    print("after :", sorted(out.option_space))
+
+============================================================
+FILE: spherepop/05-bind/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import BindOp
+
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A B C)"), {"alpha", "beta", "axis"})
+    out = transition(cfg, BindOp(predicate="prefix:a"))
+    print("before:", sorted(cfg.option_space))
+    print("after :", sorted(out.option_space))
+
+============================================================
+FILE: spherepop/06-collapse/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, transition
+from spherepop.model import CollapseOp
+
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    out = transition(cfg, CollapseOp(classes=(frozenset({"B", "C"}),)))
+    # sorted() directly on option_space breaks once it can hold a mix of
+    # plain strings and Quotients (not mutually orderable) -- extensional_view
+    # sorts by each option's display representative instead. See experiment
+    # 19 for why the Quotient itself, not its representative, is what
+    # option_space actually holds after a COLLAPSE.
+    print("before:", extensional_view(cfg))
+    print("after :", extensional_view(out))
+
+============================================================
+FILE: spherepop/07-confluence/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, transition
+from spherepop.model import BindOp, RefuseOp
+
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    left = transition(transition(base, BindOp("prefix:a")), RefuseOp(frozenset({"a2"})))
+    right = transition(transition(base, RefuseOp(frozenset({"b1"}))), BindOp("prefix:a"))
+    print("left view :", extensional_view(left))
+    print("right view:", extensional_view(right))
+    print("confluent extensional view:", extensional_view(left) == extensional_view(right))
+
+============================================================
+FILE: spherepop/08-divergence/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, transition
+from spherepop.model import BindOp, RefuseOp
+
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A B)"), {"alpha", "beta", "gamma"})
+    left = transition(base, BindOp("contains:a"))
+    right = transition(base, RefuseOp(frozenset({"alpha"})))
+    print("left view :", extensional_view(left))
+    print("right view:", extensional_view(right))
+    print("divergent extensional view:", extensional_view(left) != extensional_view(right))
+
+============================================================
+FILE: spherepop/09-regret/run.py
+============================================================
+
+from spherepop import history_view, make_config, parse_sphere, transition
+from spherepop.model import BindOp, RefuseOp
+
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    refused = transition(base, RefuseOp(frozenset({"a2"})))
+    then_bound = transition(refused, BindOp("prefix:a"))
+    direct_bound = transition(base, BindOp("prefix:a"))
+    print("history with regret path:", history_view(then_bound))
+    print("history direct path     :", history_view(direct_bound))
+    print("histories distinct      :", then_bound.history != direct_bound.history)
+
+============================================================
+FILE: spherepop/10-derived-views/run.py
+============================================================
+
+from spherepop import extensional_view, history_prefix_view, history_view, make_config, parse_sphere, transition
+from spherepop.model import BindOp, PopOp
+
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A (B C) D)"), {"alpha", "beta", "charlie"})
+    cfg = transition(cfg, PopOp(path=(1,)))
+    cfg = transition(cfg, BindOp("prefix:a"))
+    print("extensional:", extensional_view(cfg))
+    print("history all:", history_view(cfg))
+    print("history prefix(1):", history_prefix_view(cfg, 1))
+
+============================================================
+FILE: spherepop/11-merge-derived/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, transition
+from spherepop.model import BindOp, CollapseOp
+
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A B C)"), {"A", "B", "C", "x"})
+    bound = transition(base, BindOp("in:B,C"))
+    merged = transition(bound, CollapseOp(classes=(frozenset({"B", "C"}),)))
+
+    print("bound view        :", extensional_view(bound))
+    print("merge-derived view:", extensional_view(merged))
+    print("history length    :", len(merged.history))
+
+============================================================
+FILE: spherepop/12-default-pop/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, render_expr, transition
+from spherepop.model import PopOp
+
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A (B (C D)) E)"), {"A", "B", "C", "D", "E"})
+
+    first = transition(cfg, PopOp())  # default: deepest non-root sphere
+    second = transition(first, PopOp())  # default updates with the new shape
+
+    print("before        :", render_expr(cfg.sigma))
+    print("after pop #1  :", render_expr(first.sigma), "path:", first.history[-1].path)
+    print("after pop #2  :", render_expr(second.sigma), "path:", second.history[-1].path)
+
+============================================================
+FILE: spherepop/13-replay-determinism/run.py
+============================================================
+
+from spherepop import eval_program, extensional_view, history_view, make_config, parse_program, parse_sphere
+
+
+if __name__ == "__main__":
+    program = parse_program(
+        [
+            "# comments and blank lines are ignored",
+            "BIND contains:a",
+            "",
+            "REFUSE a2",
+            "POP 1",
+        ]
+    )
+
+    base = make_config(parse_sphere("(A (B C) D)"), {"a1", "a2", "b1"})
+    run1 = eval_program(base, program)
+    run2 = eval_program(base, program)
+
+    print("run1 extensional:", extensional_view(run1))
+    print("run2 extensional:", extensional_view(run2))
+    print("same extensional :", extensional_view(run1) == extensional_view(run2))
+    print("same history     :", history_view(run1) == history_view(run2))
+
+============================================================
+FILE: spherepop/14-admissible-check/run.py
+============================================================
+
+from spherepop import history_view, make_config, parse_sphere
+from spherepop.model import BindOp, PopOp
+from spherepop.observers import admissible
+
+if __name__ == "__main__":
+    # A flat Sphere has no nested Sphere to resolve, so POP is inadmissible.
+    flat = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    nested = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+
+    before = flat.history
+    print("POP admissible on flat sphere  :", admissible(PopOp(), flat))
+    print("POP admissible on nested sphere:", admissible(PopOp(), nested))
+    print("BIND ALL admissible on flat    :", admissible(BindOp("ALL"), flat))
+
+    # The check never commits anything: history is unchanged either way.
+    print("flat history unchanged by check:", flat.history == before)
+    print("flat history view              :", history_view(flat))
+
+============================================================
+FILE: spherepop/14-appendix-g-labels/run.py
+============================================================
+
+from spherepop import (
+    extensional_view,
+    make_config,
+    parse_appendix_g_program,
+    parse_appendix_g_sphere,
+    render_expr,
+    transition,
+)
+
+
+if __name__ == "__main__":
+    sigma = parse_appendix_g_sphere("(root: A (inner: B C) D)")
+    cfg = make_config(sigma, {"A", "B", "C", "D"})
+    for op in parse_appendix_g_program(
+        [
+            "POP(inner)",
+            "REFUSE(audit, C)",
+            "BIND(audit, ALL)",
+            "COLLAPSE(audit, B=C)",
+        ]
+    ):
+        cfg = transition(cfg, op)
+    print("sigma:", render_expr(cfg.sigma))
+    print("options:", extensional_view(cfg))
+    print("history:", cfg.history)
+
+============================================================
+FILE: spherepop/15-confluence-under-policy/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, transition
+from spherepop.model import CollapseOp, RefuseOp
+from spherepop.observers import confluent, divergent
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+
+    # Two continuations that refuse different members of {a1, a2}: their raw
+    # extensional views disagree, and no operation so far has claimed they
+    # should be treated as "the same" outcome.
+    left = transition(base, RefuseOp(frozenset({"a2"})))
+    right = transition(base, RefuseOp(frozenset({"a1"})))
+    print("left view (no policy) :", extensional_view(left))
+    print("right view (no policy):", extensional_view(right))
+
+    identify_a = CollapseOp(classes=(frozenset({"a1", "a2"}),))
+    unrelated_policy = CollapseOp(classes=(frozenset({"b1", "b2"}),))
+
+    print("confluent under a1~a2 policy   :", confluent(left, right, identify_a))
+    print("divergent under unrelated policy:", divergent(left, right, unrelated_policy))
+
+    # confluent()/divergent() never append the policy to left or right themselves.
+    print("left history unchanged  :", len(left.history) == 1)
+    print("right history unchanged :", len(right.history) == 1)
+
+============================================================
+FILE: spherepop/16-structural-divergence/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, transition
+from spherepop.model import CollapseOp, PopOp
+from spherepop.observers import divergent
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A (B C) D)"), {"x", "y"})
+
+    # left resolves the nested scope; right leaves it nested. Their sigmas
+    # differ in bracket structure, not just atom names.
+    left = transition(base, PopOp(path=(1,)))
+    right = base
+    print("left sigma :", extensional_view(left)[0])
+    print("right sigma:", extensional_view(right)[0])
+
+    # COLLAPSE only quotients atoms by an equivalence relation; it cannot
+    # restructure a Sphere's shape. So no policy over {A, B, C, D} can make
+    # these confluent -- divergence here is a structural fact, not a naming
+    # accident, and it survives regardless of which classes we try.
+    identify_bc = CollapseOp(classes=(frozenset({"B", "C"}),))
+    identify_ad = CollapseOp(classes=(frozenset({"A", "D"}),))
+    print("divergent under B~C policy:", divergent(left, right, identify_bc))
+    print("divergent under A~D policy:", divergent(left, right, identify_ad))
+
+============================================================
+FILE: spherepop/17-regret-detection/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import BindOp, RefuseOp
+from spherepop.observers import regretful
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+
+    narrow = transition(base, RefuseOp(frozenset({"a1", "a2"})))  # option_space -> {b1}
+    unrestricted = transition(base, BindOp("ALL"))  # option_space unchanged -> {a1, a2, b1}
+    incomparable = transition(base, BindOp("prefix:a"))  # option_space -> {a1, a2}
+
+    print("narrow option_space      :", sorted(narrow.option_space))
+    print("unrestricted option_space:", sorted(unrestricted.option_space))
+    print("incomparable option_space:", sorted(incomparable.option_space))
+
+    # A strict subset relative to a same-prefix sibling is regret.
+    print("narrow regrets vs unrestricted:", regretful(base, narrow, unrestricted))
+
+    # Two continuations that merely differ (neither's option_space contains
+    # the other's) are not regret -- regret is specifically about being
+    # strictly smaller, not merely different.
+    print("narrow regrets vs incomparable:", regretful(base, narrow, incomparable))
+
+    try:
+        # A candidate that doesn't actually extend base can't be judged
+        # against it: this raises rather than guessing at a shared ancestor.
+        # (Note: this check is only non-vacuous once base itself has at
+        # least one committed event -- an empty history is trivially a
+        # prefix of anything.)
+        committed_base = transition(base, BindOp("ALL"))
+        unrestricted2 = transition(committed_base, BindOp("ALL"))
+        unrelated = transition(make_config(parse_sphere("(X)"), {"z"}), RefuseOp(frozenset({"z"})))
+        regretful(committed_base, unrelated, unrestricted2)
+    except ValueError as exc:
+        print("unrelated candidate rejected:", exc)
+
+============================================================
+FILE: spherepop/18-equivalent-at-prefix/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere
+from spherepop.model import BindOp, PopOp, RefuseOp
+from spherepop.observers import equivalent_at
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A (B C) D)"), {"a1", "a2", "b1"})
+
+    shared_prefix = [BindOp("contains:a"), RefuseOp(frozenset({"a2"}))]
+    ops_left = shared_prefix + [PopOp(path=(1,))]
+    ops_right = shared_prefix + [BindOp("ALL")]
+
+    print("equivalent at k=0:", equivalent_at(base, ops_left, ops_right, 0))
+    print("equivalent at k=1:", equivalent_at(base, ops_left, ops_right, 1))
+    print("equivalent at k=2:", equivalent_at(base, ops_left, ops_right, 2))
+    # At k=3 the sequences part ways: left has popped the nested scope,
+    # right has only re-bound the (already-settled) option space.
+    print("equivalent at k=3:", equivalent_at(base, ops_left, ops_right, 3))
+
+    # base itself is untouched by any of this replay.
+    print("base history still empty:", base.history == ())
+
+============================================================
+FILE: spherepop/19-quotient-representative-independence/run.py
+============================================================
+
+from spherepop import extensional_view, make_config, parse_sphere, representative, transition
+from spherepop.model import CollapseOp, Quotient
+
+if __name__ == "__main__":
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    out = transition(cfg, CollapseOp(classes=(frozenset({"B", "C"}),)))
+
+    print("rendered sigma:", extensional_view(out)[0])
+    print("displayed options:", extensional_view(out)[1])
+
+    # The option space holds the class, not the string chosen to display it.
+    quotient = Quotient(members=frozenset({"B", "C"}))
+    print("Quotient(B,C) in option_space:", quotient in out.option_space)
+    print('"B" in option_space directly :', "B" in out.option_space)
+    print('"C" in option_space directly :', "C" in out.option_space)
+
+    # Two Quotients are equal purely by membership -- construction order,
+    # and which member views.representative happens to pick, are irrelevant
+    # to identity.
+    same_class_different_order = Quotient(members=frozenset({"C", "B"}))
+    print("Quotient(B,C) == Quotient(C,B):", quotient == same_class_different_order)
+    print("representative(...) is just a display pick:", representative(quotient))
+
+============================================================
+FILE: spherepop/20-intensional-extensional-equivalence/run.py
+============================================================
+
+from spherepop import (
+    extensionally_equivalent,
+    intensionally_equivalent,
+    make_config,
+    parse_sphere,
+    transition,
+)
+from spherepop.model import BindOp, PopOp
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+
+    # h1 pops the nested scope directly. h2 takes a detour through a
+    # no-op BIND ALL first, then pops. Different histories, same result.
+    h1 = transition(base, PopOp(path=(1,)))
+    h2 = transition(base, BindOp("ALL"))
+    h2 = transition(h2, PopOp(path=(1,)))
+
+    print("intensionally equivalent (same events):", intensionally_equivalent(h1, h2))
+    print("extensionally equivalent (same view)   :", extensionally_equivalent(h1, h2))
+
+    # Two runs that really do take the identical path are equivalent both ways.
+    left = transition(base, BindOp("ALL"))
+    right = transition(base, BindOp("ALL"))
+    print("identical paths -- intensional:", intensionally_equivalent(left, right))
+    print("identical paths -- extensional:", extensionally_equivalent(left, right))
+
+============================================================
+FILE: spherepop/21-refuse-bind-commute/run.py
+============================================================
+
+from spherepop import (
+    extensional_view,
+    extensionally_equivalent,
+    intensionally_equivalent,
+    make_config,
+    parse_sphere,
+    transition,
+)
+from spherepop.model import BindOp, CollapseOp, RefuseOp
+
+if __name__ == "__main__":
+    # Part 1: REFUSE and BIND are independent per-element filters, so
+    # applying them in either order lands on the same option_space --
+    # but the two runs still commit different event sequences.
+    base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    refuse_then_bind = transition(transition(base, RefuseOp(frozenset({"a2"}))), BindOp("prefix:a"))
+    bind_then_refuse = transition(transition(base, BindOp("prefix:a")), RefuseOp(frozenset({"a2"})))
+
+    print("REFUSE-then-BIND view:", extensional_view(refuse_then_bind))
+    print("BIND-then-REFUSE view:", extensional_view(bind_then_refuse))
+    print("extensionally equivalent:", extensionally_equivalent(refuse_then_bind, bind_then_refuse))
+    print("intensionally equivalent:", intensionally_equivalent(refuse_then_bind, bind_then_refuse))
+
+    # Part 2: that commutativity is specific to two plain filters. Once a
+    # COLLAPSE sits between them, order changes the *extensional* result
+    # too -- REFUSE-before-COLLAPSE removes a lone name; COLLAPSE-before-
+    # REFUSE has already merged that name into a class, so the same
+    # REFUSE now takes the whole class down with it.
+    identify_a = CollapseOp(classes=(frozenset({"a1", "a2"}),))
+
+    refuse_then_collapse = transition(transition(base, RefuseOp(frozenset({"a1"}))), identify_a)
+    collapse_then_refuse = transition(transition(base, identify_a), RefuseOp(frozenset({"a1"})))
+
+    print()
+    print("REFUSE-then-COLLAPSE view:", extensional_view(refuse_then_collapse))
+    print("COLLAPSE-then-REFUSE view:", extensional_view(collapse_then_refuse))
+    print(
+        "extensionally equivalent (order matters here):",
+        extensionally_equivalent(refuse_then_collapse, collapse_then_refuse),
+    )
+
+============================================================
+FILE: spherepop/22-confluence-policy-family/run.py
+============================================================
+
+from spherepop import extensional_view, irreducibly_divergent, make_config, parse_sphere, transition
+from spherepop.model import CollapseOp, PopOp, RefuseOp
+
+if __name__ == "__main__":
+    policy_family = [
+        CollapseOp(classes=(frozenset({"B", "C"}),)),
+        CollapseOp(classes=(frozenset({"A", "D"}),)),
+        CollapseOp(classes=(frozenset({"a1", "a2"}),)),
+    ]
+
+    # Structural divergence: no atom-renaming policy can fix a difference
+    # in bracket structure, so this survives the whole family.
+    structural_base = make_config(parse_sphere("(A (B C) D)"), {"x", "y"})
+    structural_left = transition(structural_base, PopOp(path=(1,)))
+    structural_right = structural_base
+    print("structural left/right sigmas:", extensional_view(structural_left)[0], "/", extensional_view(structural_right)[0])
+    print("irreducibly divergent over family:", irreducibly_divergent(structural_left, structural_right, policy_family))
+
+    # Naming divergence: divergent under most of the family, but the last
+    # policy in the family happens to be exactly the one that identifies
+    # them -- so it is divergent under *some* policies without being
+    # irreducibly divergent over this family.
+    naming_base = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    naming_left = transition(naming_base, RefuseOp(frozenset({"a2"})))
+    naming_right = transition(naming_base, RefuseOp(frozenset({"a1"})))
+    print("irreducibly divergent over same family:", irreducibly_divergent(naming_left, naming_right, policy_family))
+
+============================================================
+FILE: spherepop/23-regret-accumulation/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, regretful, transition
+from spherepop.model import BindOp, RefuseOp
+
+if __name__ == "__main__":
+    # A base with a committed event, so the common-prefix check below is
+    # non-vacuous (see the caveat on regretful()).
+    base0 = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    base = transition(base0, BindOp("ALL"))
+
+    candidate1 = transition(base, RefuseOp(frozenset({"a1", "a2"})))  # -> {b1}
+    alternative1 = transition(base, BindOp("ALL"))  # -> unchanged {a1, a2, b1}
+    print("step 1 regret:", regretful(base, candidate1, alternative1))
+
+    # Extend both branches with an identical, shape-preserving step: regret
+    # persists, because neither side's option_space changed relative to
+    # the other.
+    candidate2 = transition(candidate1, BindOp("ALL"))
+    alternative2 = transition(alternative1, BindOp("ALL"))
+    print("step 2 regret (after identical further step):", regretful(base, candidate2, alternative2))
+
+    # But regret is a claim about *this* alternative, not an absolute
+    # property of candidate2. If the alternative branch itself narrows in
+    # a way that stops containing candidate2's options, the strict-subset
+    # relation can disappear even though candidate2 never changed.
+    alternative3 = transition(alternative2, RefuseOp(frozenset({"b1"})))  # -> {a1, a2}
+    print("candidate2 option_space  :", sorted(candidate2.option_space))
+    print("alternative3 option_space:", sorted(alternative3.option_space))
+    print("regret vs narrowed alternative (now incomparable):", regretful(base, candidate2, alternative3))
+
+============================================================
+FILE: spherepop/24-replay-invariance-reordering/run.py
+============================================================
+
+from spherepop import admissible, eval_program, extensional_view, make_config, parse_program, parse_sphere
+from spherepop.model import PopOp
+
+if __name__ == "__main__":
+    # Part 1: REFUSE and BIND are independent option-space filters, so a
+    # whole program replays to the same extensional result whether they
+    # run in the order written or swapped -- reordering commuting steps
+    # doesn't disturb the outcome.
+    base1 = make_config(parse_sphere("(A (B C) D)"), {"a1", "a2", "b1"})
+    program_a = parse_program(["REFUSE a2", "BIND prefix:a", "POP 1"])
+    program_b = parse_program(["BIND prefix:a", "REFUSE a2", "POP 1"])
+    result_a = eval_program(base1, program_a)
+    result_b = eval_program(base1, program_b)
+    print("program A view:", extensional_view(result_a))
+    print("program B view:", extensional_view(result_b))
+    print("replay-invariant under REFUSE/BIND reordering:", extensional_view(result_a) == extensional_view(result_b))
+
+    # Part 2: POP targets a *position* in the current sigma, not a stable
+    # name, so two POPs do not commute the way REFUSE/BIND do. Popping
+    # path (1,) first changes what lives at every later index; popping
+    # path (2,) first targets a position that doesn't even exist yet on
+    # the original sigma.
+    base2 = make_config(parse_sphere("(A (B (C D)) E)"), {"z"})
+    forward = eval_program(base2, [PopOp(path=(1,)), PopOp(path=(2,))])
+    print()
+    print("POP(1) then POP(2):", extensional_view(forward)[0])
+    print("POP(2) admissible on the *original* sigma:", admissible(PopOp(path=(2,)), base2))
+    try:
+        eval_program(base2, [PopOp(path=(2,)), PopOp(path=(1,))])
+    except Exception as exc:  # EvalError
+        print("POP(2) then POP(1) raises:", exc)
+
+============================================================
+FILE: spherepop/25-observer-non-authority/run.py
+============================================================
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import BindOp, CollapseOp, PopOp, RefuseOp
+from spherepop.observers import (
+    admissible,
+    confluent,
+    divergent,
+    equivalent_at,
+    extensionally_equivalent,
+    intensionally_equivalent,
+    irreducibly_divergent,
+    regretful,
+)
+
+if __name__ == "__main__":
+    base = make_config(parse_sphere("(A (B C) D)"), {"a1", "a2", "b1"})
+    committed = transition(base, BindOp("ALL"))
+    other = transition(committed, RefuseOp(frozenset({"a2"})))
+    policy = CollapseOp(classes=(frozenset({"a1", "a2"}),))
+
+    snapshot = (committed.sigma, committed.history, committed.option_space, committed.collapse_log)
+
+    # Run every observer in the module against `committed`, in a way that
+    # touches each of its arguments (as base, as candidate, as either side
+    # of a comparison), and discard every result.
+    admissible(PopOp(path=(1,)), committed)
+    confluent(committed, other, policy)
+    divergent(committed, other, policy)
+    irreducibly_divergent(committed, other, [policy])
+    regretful(committed, other, committed)
+    equivalent_at(committed, [PopOp(path=(1,))], [BindOp("ALL")], 1)
+    intensionally_equivalent(committed, other)
+    extensionally_equivalent(committed, other)
+
+    after = (committed.sigma, committed.history, committed.option_space, committed.collapse_log)
+    print("every field unchanged after the full observer battery:", snapshot == after)
+    print("committed history length still:", len(committed.history))
+
+============================================================
+FILE: spherepop/26-horizon-equivalence/run.py
+============================================================
+
+from spherepop import extensionally_equivalent, horizon_equivalent, make_config, parse_sphere
+from spherepop.model import BindOp, RefuseOp
+
+if __name__ == "__main__":
+    # Two configs that look different right now...
+    left = make_config(parse_sphere("(A B)"), {"a1", "a2", "b1"})
+    right = make_config(parse_sphere("(A B)"), {"a1", "a2", "c1"})
+    print("extensionally equivalent now:", extensionally_equivalent(left, right))
+
+    # ...but under a candidate pool that only ever asks about the "a"
+    # prefix, every reachable 1-step future looks the same either way.
+    a_only_pool = [BindOp("prefix:a")]
+    print("horizon-equivalent (k=1, a-only pool):", horizon_equivalent(left, right, a_only_pool, 1))
+
+    # Widen the pool to something that *can* see the b1/c1 difference:
+    # equivalence at the same horizon disappears.
+    wider_pool = [BindOp("prefix:a"), RefuseOp(frozenset({"a1"})), RefuseOp(frozenset({"a2"}))]
+    print("horizon-equivalent (k=1, wider pool):", horizon_equivalent(left, right, wider_pool, 1))
+
+    # k=0 is exactly extensional equivalence of the current configs.
+    print("horizon-equivalent (k=0):", horizon_equivalent(left, right, [], 0))
+
+============================================================
+FILE: spherepop/27-appendix-g-grammar/run.py
+============================================================
+
+from spherepop import eval_program, extensional_view, make_config
+from spherepop.grammar import parse_event, parse_sphere
+
+if __name__ == "__main__":
+    # This sigma and these events are written in Appendix G's own concrete
+    # syntax, not the lab's convenience command language -- and they run
+    # through the exact same transition()/eval_program() as everything else.
+    sigma = parse_sphere("(outer: A (inner: B C) D)")
+    print("parsed sigma label:", sigma.label)
+    print("parsed inner label:", sigma.items[1].label)
+
+    cfg = make_config(sigma, {"a1", "a2", "b1"})
+    program = [
+        parse_event("refuse(outer, {a2})"),
+        parse_event("bind(outer, ALL)"),
+        parse_event("collapse(outer, {a1~b1})"),
+        parse_event("pop(inner)"),
+    ]
+    out = eval_program(cfg, program)
+
+    print("final view:", extensional_view(out))
+    print("event labels, in order:", [e.label for e in out.history])
+
+    # The Label on refuse/bind/collapse is recorded (Appendix G provenance)
+    # but does not yet partition option_space by label -- that is Appendix
+    # B's poset-of-option-spaces semantics, a separate planned rewrite.
+    # REFUSE/BIND/COLLAPSE here all still acted on one global option space
+    # regardless of which label was named.
+
+============================================================
+FILE: spherepop/29-multi-timescale-continuation/run.py
+============================================================
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from math import exp, log
+from statistics import mean, pstdev
+from typing import Callable, Dict, Iterable, List, Sequence, Tuple
+
+
+EPSILON = 0.05
+TIME_STEPS = 80
+STARVATION_LIMIT = 12
+
+
+@dataclass
+class ScopeState:
+    name: str
+    horizon: int
+    cost: float
+    gain: float
+    initial_gain: float
+    last_touched: int = -1
+    history_events: int = 0
+    pop_count: int = 0
+    bind_count: int = 0
+    refuse_count: int = 0
+    collapse_count: int = 0
+    local_saturation_steps: int = 0
+    active_saturation_start: int | None = None
+    recovery_latencies: List[int] = field(default_factory=list)
+    gains_over_time: List[float] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class CandidateAction:
+    scope_index: int
+    action: str
+    emcg: float
+    ratio: float
+
+
+def make_initial_scopes() -> List[ScopeState]:
+    # Horizons are intentionally heterogeneous: minute/day/week/month/year scale proxies.
+    base = [
+        ("daily-review", 1, 1.0, 0.85),
+        ("code-experiment", 3, 1.4, 1.00),
+        ("language-seed", 8, 1.1, 0.75),
+        ("math-lemma", 21, 1.8, 0.95),
+        ("book-manuscript", 55, 2.2, 0.90),
+    ]
+    return [ScopeState(name=n, horizon=h, cost=c, gain=g, initial_gain=g) for n, h, c, g in base]
+
+
+def scope_readiness(scope: ScopeState) -> float:
+    return min(1.0, scope.history_events / max(1, scope.horizon))
+
+
+def gaussian_bump(readiness: float, center: float, width: float) -> float:
+    return exp(-((readiness - center) / width) ** 2)
+
+
+def action_multiplier(action: str, scope: ScopeState) -> float:
+    readiness = scope_readiness(scope)
+    if action == "BIND":
+        # Early-stage shaping dominates; value gradually declines as scope matures.
+        return 1.00 - 0.35 * readiness
+    if action == "REFUSE":
+        # Mid-readiness exclusion window: after initial shaping but before final resolution.
+        return 0.40 + 0.15 * readiness + 0.55 * gaussian_bump(readiness, center=0.45, width=0.16)
+    if action == "COLLAPSE":
+        # Later-readiness compression window: merge distinctions before POP-heavy closure.
+        return 0.32 + 0.20 * readiness + 0.60 * gaussian_bump(readiness, center=0.78, width=0.14)
+    # POP value rises as local preparatory work accumulates.
+    return max(0.25, 0.22 + 0.90 * readiness)
+
+
+def all_candidates(scopes: Sequence[ScopeState]) -> List[CandidateAction]:
+    actions = ["BIND", "REFUSE", "COLLAPSE", "POP"]
+    out: List[CandidateAction] = []
+    for i, scope in enumerate(scopes):
+        for action in actions:
+            emcg = max(0.0, scope.gain * action_multiplier(action, scope))
+            out.append(CandidateAction(i, action, emcg, emcg / scope.cost))
+    return out
+
+
+def choose_novelty_only(scopes: Sequence[ScopeState], t: int) -> CandidateAction:
+    candidates = all_candidates(scopes)
+
+    def novelty_key(c: CandidateAction) -> Tuple[int, float]:
+        scope = scopes[c.scope_index]
+        age = t - scope.last_touched if scope.last_touched >= 0 else t + 1
+        return (age, c.emcg)
+
+    best = max(candidates, key=novelty_key)
+    return max((c for c in candidates if c.scope_index == best.scope_index), key=lambda c: c.emcg)
+
+
+def choose_shortest_task_first(scopes: Sequence[ScopeState], _: int) -> CandidateAction:
+    min_h = min(scope.horizon for scope in scopes)
+    candidates = [c for c in all_candidates(scopes) if scopes[c.scope_index].horizon == min_h]
+    return max(candidates, key=lambda c: c.emcg)
+
+
+def choose_max_emcg(scopes: Sequence[ScopeState], _: int) -> CandidateAction:
+    return max(all_candidates(scopes), key=lambda c: c.emcg)
+
+
+def choose_ratio_antistarvation(scopes: Sequence[ScopeState], t: int) -> CandidateAction:
+    candidates = all_candidates(scopes)
+    slow_horizon_cutoff = sorted(s.horizon for s in scopes)[-2]
+    slow_indices = [i for i, s in enumerate(scopes) if s.horizon >= slow_horizon_cutoff]
+    starved = []
+    for i in slow_indices:
+        scope = scopes[i]
+        idle = t - scope.last_touched if scope.last_touched >= 0 else t + 1
+        if idle > STARVATION_LIMIT:
+            starved.append(i)
+    if starved:
+        forced = [c for c in candidates if c.scope_index in starved]
+        return max(forced, key=lambda c: c.ratio)
+    return max(candidates, key=lambda c: c.ratio)
+
+
+def apply_action(scopes: List[ScopeState], action: CandidateAction, t: int) -> None:
+    active = scopes[action.scope_index]
+    active.history_events += 1
+    active.last_touched = t
+    if action.action == "POP":
+        active.pop_count += 1
+    elif action.action == "BIND":
+        active.bind_count += 1
+    elif action.action == "REFUSE":
+        active.refuse_count += 1
+    else:
+        active.collapse_count += 1
+
+    # Work on a scope tends to flatten immediate marginal gain (local saturation pressure).
+    active.gain = max(0.0, active.gain * 0.72)
+
+    # Untouched scopes recover over time; cross-scope work can also renormalize them.
+    for j, scope in enumerate(scopes):
+        if j == action.scope_index:
+            continue
+        horizon_gap = abs(scope.horizon - active.horizon)
+        cross_term = 0.012 * log(1.0 + horizon_gap)
+        passive_recovery = 0.02 + 0.0009 * scope.horizon
+        scope.gain = min(scope.initial_gain * 1.20, scope.gain + passive_recovery + cross_term)
+
+
+def update_saturation_bookkeeping(scopes: List[ScopeState], t: int) -> None:
+    for scope in scopes:
+        local_max = max(scope.gain * action_multiplier(a, scope) for a in ["BIND", "REFUSE", "COLLAPSE", "POP"])
+        scope.gains_over_time.append(local_max)
+        if local_max <= EPSILON:
+            scope.local_saturation_steps += 1
+            if scope.active_saturation_start is None:
+                scope.active_saturation_start = t
+        else:
+            if scope.active_saturation_start is not None:
+                scope.recovery_latencies.append(t - scope.active_saturation_start)
+                scope.active_saturation_start = None
+
+
+def field_saturated(scopes: Sequence[ScopeState]) -> bool:
+    return max(c.emcg for c in all_candidates(scopes)) <= EPSILON
+
+
+def simulate(policy_name: str, chooser: Callable[[Sequence[ScopeState], int], CandidateAction]) -> Dict[str, object]:
+    scopes = make_initial_scopes()
+    field_saturation_steps = 0
+
+    for t in range(TIME_STEPS):
+        update_saturation_bookkeeping(scopes, t)
+        if field_saturated(scopes):
+            field_saturation_steps += 1
+        choice = chooser(scopes, t)
+        apply_action(scopes, choice, t)
+
+    # close any open saturation episodes at horizon end
+    for scope in scopes:
+        if scope.active_saturation_start is not None:
+            scope.recovery_latencies.append(TIME_STEPS - scope.active_saturation_start)
+            scope.active_saturation_start = None
+
+    slow_horizon_cutoff = sorted(s.horizon for s in scopes)[-2]
+    slow_scopes = [s for s in scopes if s.horizon >= slow_horizon_cutoff]
+    starved_slow = 0
+    for scope in slow_scopes:
+        expected_min = TIME_STEPS / max(1, scope.horizon)
+        if scope.history_events < max(2, int(0.5 * expected_min)):
+            starved_slow += 1
+
+    all_gains = [g for scope in scopes for g in scope.gains_over_time]
+    stability = 0.0
+    if all_gains:
+        m = mean(all_gains)
+        stability = 0.0 if m == 0 else 1.0 - (pstdev(all_gains) / m)
+
+    return {
+        "policy": policy_name,
+        "time_to_first_local_saturation": min(
+            (
+                next((i for i, g in enumerate(scope.gains_over_time) if g <= EPSILON), TIME_STEPS)
+                for scope in scopes
+            ),
+            default=TIME_STEPS,
+        ),
+        "time_in_field_saturation": field_saturation_steps,
+        "mean_recovery_latency_after_switch": round(
+            mean([lat for s in scopes for lat in s.recovery_latencies]), 3
+        )
+        if any(s.recovery_latencies for s in scopes)
+        else None,
+        "long_horizon_starvation_rate": round(starved_slow / max(1, len(slow_scopes)), 3),
+        "compression_progress_stability": round(stability, 3),
+        "scope_stats": [
+            {
+                "scope": s.name,
+                "horizon": s.horizon,
+                "history_events": s.history_events,
+                "pop": s.pop_count,
+                "bind": s.bind_count,
+                "refuse": s.refuse_count,
+                "collapse": s.collapse_count,
+                "local_saturation_steps": s.local_saturation_steps,
+                "recoveries": len(s.recovery_latencies),
+            }
+            for s in scopes
+        ],
+    }
+
+
+def render_report(results: Iterable[Dict[str, object]]) -> None:
+    print("POLICY SUMMARY")
+    print("=" * 80)
+    for result in results:
+        print(f"policy: {result['policy']}")
+        print(f"  time_to_first_local_saturation: {result['time_to_first_local_saturation']}")
+        print(f"  time_in_field_saturation:       {result['time_in_field_saturation']}")
+        print(f"  mean_recovery_latency:          {result['mean_recovery_latency_after_switch']}")
+        print(f"  long_horizon_starvation_rate:   {result['long_horizon_starvation_rate']}")
+        print(f"  compression_progress_stability: {result['compression_progress_stability']}")
+        print("  per-scope:")
+        for scope in result["scope_stats"]:
+            print(
+                "    "
+                f"{scope['scope']} (tau={scope['horizon']}): "
+                f"events={scope['history_events']}, "
+                f"POP={scope['pop']}, BIND={scope['bind']}, REFUSE={scope['refuse']}, COLLAPSE={scope['collapse']}, "
+                f"sat_steps={scope['local_saturation_steps']}, recoveries={scope['recoveries']}"
+            )
+        print("-" * 80)
+
+
+if __name__ == "__main__":
+    policies: List[Tuple[str, Callable[[Sequence[ScopeState], int], CandidateAction]]] = [
+        ("novelty_only", choose_novelty_only),
+        ("shortest_task_first", choose_shortest_task_first),
+        ("max_emcg", choose_max_emcg),
+        ("emcg_over_cost_antistarvation", choose_ratio_antistarvation),
+    ]
+    outputs = [simulate(name, chooser) for name, chooser in policies]
+    render_report(outputs)
+
+============================================================
+FILE: spherepop/__init__.py
+============================================================
+
+from spherepop.model import (
+    Atom,
+    BindOp,
+    CollapseOp,
+    Config,
+    PopOp,
+    Quotient,
+    RefuseOp,
+    Sphere,
+    make_config,
+)
+from spherepop.observers import (
+    admissible,
+    confluent,
+    divergent,
+    equivalent_at,
+    extensionally_equivalent,
+    horizon_equivalent,
+    intensionally_equivalent,
+    irreducibly_divergent,
+    regretful,
+)
+from spherepop.parser import ParseError, parse_operation, parse_program, parse_sphere
+from spherepop.semantics import EvalError, eval_program, history_is_prefix, transition
+from spherepop.views import (
+    extensional_view,
+    history_prefix_view,
+    history_view,
+    make_sphere,
+    render_expr,
+    representative,
+)
+
+__all__ = [
+    "Atom",
+    "Sphere",
+    "Config",
+    "Quotient",
+    "PopOp",
+    "RefuseOp",
+    "BindOp",
+    "CollapseOp",
+    "ParseError",
+    "EvalError",
+    "make_config",
+    "parse_operation",
+    "parse_program",
+    "parse_sphere",
+    "transition",
+    "eval_program",
+    "history_is_prefix",
+    "render_expr",
+    "representative",
+    "history_view",
+    "history_prefix_view",
+    "extensional_view",
+    "make_sphere",
+    "admissible",
+    "confluent",
+    "divergent",
+    "irreducibly_divergent",
+    "regretful",
+    "equivalent_at",
+    "horizon_equivalent",
+    "intensionally_equivalent",
+    "extensionally_equivalent",
+]
+
+============================================================
+FILE: spherepop/appendix_g.py
+============================================================
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+import re
+from typing import Sequence
+
+from spherepop.model import Atom, BindOp, CollapseOp, Expr, Operation, PopOp, RefuseOp, Sphere
+
+
+class GrammarError(ValueError):
+    pass
+
+
+_LABEL_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_-]*$")
+
+
+@dataclass(frozen=True)
+class _Token:
+    kind: str
+    value: str
+
+
+def _tokenize(source: str) -> list[_Token]:
+    tokens: list[_Token] = []
+    i = 0
+    while i < len(source):
+        ch = source[i]
+        if ch.isspace():
+            i += 1
+            continue
+        if ch in "(),:;=":
+            tokens.append(_Token(ch, ch))
+            i += 1
+            continue
+        if ch == '"':
+            j = i + 1
+            while j < len(source) and source[j] != '"':
+                j += 1
+            if j >= len(source):
+                raise GrammarError("unterminated string literal")
+            tokens.append(_Token("ATOM", source[i + 1 : j]))
+            i = j + 1
+            continue
+        j = i
+        while j < len(source) and not source[j].isspace() and source[j] not in "(),:;=":
+            j += 1
+        tokens.append(_Token("ATOM", source[i:j]))
+        i = j
+    return tokens
+
+
+@dataclass
+class _Cursor:
+    tokens: list[_Token]
+    index: int = 0
+
+    def peek(self) -> _Token | None:
+        if self.index >= len(self.tokens):
+            return None
+        return self.tokens[self.index]
+
+    def pop(self) -> _Token:
+        tok = self.peek()
+        if tok is None:
+            raise GrammarError("unexpected end of input")
+        self.index += 1
+        return tok
+
+
+def _expect(cursor: _Cursor, kind: str) -> _Token:
+    tok = cursor.pop()
+    if tok.kind != kind:
+        raise GrammarError(f"expected {kind!r}, got {tok.value!r}")
+    return tok

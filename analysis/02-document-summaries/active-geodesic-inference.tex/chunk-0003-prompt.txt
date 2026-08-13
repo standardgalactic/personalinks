@@ -1,0 +1,383 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\emph{Proof sketch.} The proof proceeds by induction on the structure of typing derivations. Scope entry rules enforce local action descent. Scope exit rules enforce irreversible entropy commitment. Composition preserves energetic bounds by additivity of annotations, while branching rules restrict exploratory divergence to non-committing contexts. Together, these rules ensure that no execution step can increase total action beyond the statically derived bound, and no step can reduce committed entropy. The correspondence between energetic annotations and RSVP field energy follows from the construction in Appendix A. \qed
+
+This theorem formalizes the claim that Spherepop programs are not merely correct-by-construction but physically admissible with respect to the RSVP dynamics.
+
+
+Semantic Isomers and Typing Non-Uniqueness
+
+
+The type system admits non-unique derivations for programs that produce observationally equivalent outputs. Distinct derivations correspond to distinct internal scope graphs and distinct distributions of energetic and entropic annotations. These derivations are type-equivalent but not derivationally equivalent.
+
+This non-uniqueness is the syntactic manifestation of semantic isomers. The type system deliberately does not provide a rule for merging derivations, reflecting the impossibility of averaging incompatible RSVP minima without leaving the space of realizable histories. Any attempt to do so would require violating either action boundedness or entropy monotonicity.
+
+
+Consequences for Reasoning, Privacy, and Robustness
+
+
+Typed operational semantics clarify why long chain-of-thought reasoning is robust yet non-transferable. The internal scope structure is essential to satisfying the typing invariants; erasing or compressing it destroys the proof that the program is action-bounded. As a result, distilled traces cannot serve as valid witnesses of reasoning correctness, even when outputs agree.
+
+From this perspective, reasoning privacy is not an add-on but a corollary: internal geodesic structure is unforgeable without re-executing the variational process. Robustness follows for the same reason, as perturbations that respect the type system cannot easily disrupt global synchronization.
+
+
+Summary
+
+
+This appendix has shown that Spherepop admits a typed operational semantics in which types encode energetic and entropic constraints derived from the RSVP Hamiltonian. Well-typed programs correspond to admissible active geodesics, semantic isomers correspond to non-unique derivations, and irreversibility is enforced syntactically rather than procedurally. Spherepop thus constitutes a fully formal execution calculus for active geodesic inference, bridging field-theoretic principles and concrete computation.
+
+
+Appendix D: A No-Free-Lunch Theorem for Chain-of-Thought Distillation
+
+
+This appendix formalizes the impossibility of faithful chain-of-thought distillation within the framework of active geodesic inference. The result is not a contingent limitation of current techniques, but a structural consequence of the RSVP variational principle, entropy monotonicity, and the existence of semantic isomers. We show that any attempt to distill long chain-of-thought reasoning without re-executing the underlying geodesic dynamics must necessarily destroy information essential to reasoning stability.
+
+
+Statement of the Problem
+
+
+Consider a reasoning system governed by an action functional $\mathcal{A}$ over histories, as defined in Appendix B. Let $h$ denote a realized reasoning history that is stationary with respect to $\mathcal{A}$ and produces an externally observable output $\mathcal{O}(h)$. Chain-of-thought distillation aims to construct a surrogate history $\tilde{h}$, or a parametric model inducing such histories, using only partial information extracted from $h$, typically in the form of linearized reasoning traces or compressed summaries.
+
+The central question is whether there exists a transformation
+\[
+D : h \mapsto \tilde{h}
+\]
+such that $\mathcal{O}(\tilde{h}) = \mathcal{O}(h)$ and $\tilde{h}$ remains a stationary point of the same or an equivalent action functional, without re-executing the underlying inference dynamics.
+
+
+Theorem and Proof Sketch
+
+
+\paragraph{Theorem (No-Free-Lunch for Chain-of-Thought Distillation).}
+Let $\mathcal{H}$ denote the space of admissible histories under the axioms of active geodesic inference. There exists no surjective mapping $D : \mathcal{H} \to \mathcal{H}$ satisfying the following properties simultaneously:
+\begin{enumerate}
+\item $D$ preserves external observables: $\mathcal{O}(D(h)) = \mathcal{O}(h)$ for all $h \in \mathcal{H}$.
+\item $D$ preserves stationarity: if $\delta \mathcal{A}[h] = 0$, then $\delta \mathcal{A}[D(h)] = 0$.
+\item $D$ is non-executive, in the sense that it does not reintroduce new semantic events beyond those encoded in $h$.
+\end{enumerate}
+
+\emph{Proof sketch.} By Axiom 6 of Appendix B, there exist distinct histories $h_1 \neq h_2$ such that $\mathcal{O}(h_1) = \mathcal{O}(h_2)$ but whose internal energetic configurations correspond to distinct local minima of $\mathcal{A}$. Any transformation $D$ that maps both $h_1$ and $h_2$ to a common surrogate $\tilde{h}$ must either erase information distinguishing their internal bond topologies or implicitly choose one isomer over the other.
+
+If $D$ erases this information, then $\tilde{h}$ cannot correspond to a stationary point of $\mathcal{A}$, since the stationarity conditions depend on the full internal configuration, not merely on boundary observables. If $D$ selects one isomer, then it fails to be surjective or introduces bias not derivable from the original history alone. In either case, at least one of the stated properties is violated. \qed
+
+
+Energetic Interpretation
+
+
+From the RSVP–Ising perspective, chain-of-thought distillation corresponds to attempting to project a synchronized, low-temperature configuration onto a reduced set of degrees of freedom. This projection integrates out spin couplings that are essential for maintaining phase coherence. The resulting configuration lies outside the low-energy manifold and therefore cannot be dynamically stable.
+
+In physical terms, distillation attempts to reconstruct a protein’s tertiary structure from its amino acid count alone. While the gross composition may be preserved, the folding pathways and stabilizing bonds are irretrievably lost.
+
+
+Implications
+
+
+This theorem explains why distilled reasoning traces often appear fluent yet brittle, why ensemble averaging of strong reasoners degrades performance, and why privacy-preserving transformations of chain-of-thought are effective by construction. It also clarifies that the only way to reproduce reasoning competence is to reinstantiate the variational process itself, either through direct execution or through training regimes that induce the same action landscape.
+
+The result establishes a principled boundary between observable correctness and internal coherence, grounding empirical observations in a formal impossibility result.
+
+
+Appendix E: A Categorical Semantics for Active Geodesic Inference
+
+
+This appendix presents a categorical semantics for active geodesic inference and its Spherepop realization. The objective is to show that the structural commitments articulated in the axioms and Hamiltonian formulation admit a precise expression in category theory, and that Spherepop execution corresponds to composition in a suitably enriched and traced symmetric monoidal category. This provides a unifying semantic layer linking history sensitivity, irreversibility, energetic constraints, and non-distillability.
+
+
+The Semantic Category
+
+
+Let $\mathcal{G}$ be a symmetric monoidal category whose objects represent semantic states indexed by event histories, and whose morphisms represent admissible inference transitions. Objects are not mere state snapshots but history-bearing entities; formally, each object $A \in \mathcal{G}$ is equipped with a provenance functor
+\[
+\mathrm{Hist} : \mathcal{G} \to \mathbf{Poset},
+\]
+mapping $A$ to the partially ordered set of events that generated it.
+
+Morphisms $f : A \to B$ exist only if $\mathrm{Hist}(A) \subseteq \mathrm{Hist}(B)$, enforcing irreversibility at the categorical level. Composition is therefore history-extending rather than history-preserving, making $\mathcal{G}$ a category of irreversible processes rather than invertible transformations.
+
+
+Monoidal Structure and Parallel Semantics
+
+
+The monoidal product $\otimes$ on $\mathcal{G}$ represents parallel semantic activation. Given objects $A$ and $B$, the object $A \otimes B$ corresponds to the joint activation of two semantic regions, with history
+\[
+\mathrm{Hist}(A \otimes B) = \mathrm{Hist}(A) \sqcup \mathrm{Hist}(B),
+\]
+where $\sqcup$ denotes disjoint union followed by causal closure.
+
+This monoidal structure is symmetric but not cartesian. In particular, there are no general diagonal morphisms $A \to A \otimes A$, reflecting the impossibility of duplicating semantic history without energetic cost. This categorical fact encodes the non-clonability of reasoning trajectories and precludes naive copying or branching of committed inference paths.
+
+
+Enrichment over Energy and Entropy
+
+
+The category $\mathcal{G}$ is enriched over a partially ordered commutative monoid $(\mathbb{R}_{\geq 0} \times \mathbb{R}_{\geq 0}, \leq, +)$, whose elements represent energetic and entropic cost. Each morphism $f : A \to B$ carries an annotation
+\[
+\mathrm{cost}(f) = (\mathcal{E}_f, \mathcal{S}_f),
+\]
+corresponding to action and entropy contributions.
+
+Composition is monotone with respect to this enrichment:
+\[
+\mathrm{cost}(g \circ f) = \mathrm{cost}(f) + \mathrm{cost}(g),
+\]
+and identity morphisms carry zero cost. This enrichment enforces the variational constraint categorically: only morphisms whose accumulated cost remains below a global bound correspond to realizable inference trajectories.
+
+
+Traced Structure and Reflection
+
+
+To model reflective reasoning, $\mathcal{G}$ is equipped with a partial trace operator
+\[
+\mathrm{Tr}_{X} : \mathcal{G}(A \otimes X, B \otimes X) \to \mathcal{G}(A, B),
+\]
+defined only for morphisms whose cost annotations satisfy a reflection admissibility condition. The trace corresponds to closing a semantic feedback loop, allowing later reasoning stages to constrain earlier ones without violating irreversibility.
+
+Importantly, the trace is not total. It exists only when the induced entropy increase remains bounded and the action decrease is sufficient to compensate for the added coupling. This restriction prevents arbitrary cyclic reasoning and enforces the stabilizing, rather than destabilizing, role of reflection.
+
+
+Semantic Isomers as Non-Isomorphic Morphisms
+
+
+Semantic isomers correspond categorically to distinct morphisms
+\[
+f_1, f_2 : A \to B
+\]
+that share the same external behavior but differ in internal factorization through intermediate objects. Although $f_1$ and $f_2$ may be observationally equivalent under a forgetful functor to outputs, they are not equal in $\mathcal{G}$, nor are they generally related by isomorphism.
+
+The absence of a universal coequalizer for such morphisms reflects the impossibility of merging incompatible reasoning histories. Any attempt to identify $f_1$ and $f_2$ collapses the enrichment structure and violates either the action or entropy ordering, reproducing the failure modes of distillation at the categorical level.
+
+
+Spherepop as Internal Language
+
+
+Spherepop may now be understood as an internal language for $\mathcal{G}$. Scope creation corresponds to introducing tensor factors, scope closure to eliminating them via trace or boundary projection, and event ordering to morphism composition. The typing rules of Appendix C correspond to judgments in the internal logic of the enriched category.
+
+Because $\mathcal{G}$ lacks general diagonals and inverses, Spherepop execution inherits irreversibility, non-clonability, and history sensitivity automatically. In this sense, Spherepop is not merely compatible with the categorical semantics; it is the syntactic presentation of $\mathcal{G}$.
+
+
+Consequences
+
+
+The categorical semantics clarify why active geodesic inference unifies reasoning, robustness, and privacy. Robustness arises because small perturbations correspond to morphisms with insufficient cost to disrupt global composition. Privacy arises because internal factorization is not preserved under forgetful functors. Reasoning quality arises from the existence of low-cost, highly synchronized morphisms corresponding to stable macromolecular configurations.
+
+This categorical view completes the semantic ladder from Hamiltonian dynamics through operational execution to abstract compositional structure.
+
+
+Appendix F: Relation to FEP, Active Inference, and Integrated Information Theory
+
+
+This appendix situates active geodesic inference within the broader landscape of theoretical frameworks for cognition and intelligence, with particular emphasis on the Free Energy Principle (FEP), Active Inference, and Integrated Information Theory (IIT). The comparison is not historical or sociological but structural. The goal is to identify points of formal equivalence, points of divergence, and the specific respects in which the RSVP framework resolves known limitations of these theories.
+
+
+Relation to the Free Energy Principle
+
+
+The Free Energy Principle asserts that adaptive systems minimize a variational free energy functional that upper-bounds surprise under a generative model (Friston 2010; Friston et al. 2017). At a formal level, this principle bears a strong resemblance to the RSVP variational structure. Both posit an action-like functional whose extremization governs system dynamics, and both interpret cognition as a process of constrained entropy management rather than explicit optimization of reward.
+
+However, the resemblance is only partial. In FEP, the free energy functional is defined relative to a fixed generative model and a variational posterior, typically formulated in probabilistic terms. The geometry of inference is therefore induced by a model assumed to be given in advance. By contrast, active geodesic inference treats the semantic geometry itself as dynamically mutable. The RSVP Hamiltonian does not presuppose a fixed generative model; instead, it governs the co-evolution of semantic structure and inference trajectories.
+
+This distinction resolves a long-standing ambiguity in FEP regarding model selection and representational change. In active geodesic inference, changes to the effective model are represented as deformations of the semantic manifold and corresponding changes in the action landscape. Model learning is therefore not an external process layered atop inference, but an intrinsic component of the same variational dynamics.
+
+
+Relation to Active Inference
+
+
+Active Inference extends the Free Energy Principle by incorporating action selection, treating perception and action as jointly minimizing expected free energy. In this framework, policies are selected to reduce uncertainty about future observations while satisfying prior preferences.
+
+Active geodesic inference subsumes this picture but reverses its explanatory direction. Rather than selecting policies in a predefined state-action space, the system reshapes the space itself. Actions are not chosen among discrete alternatives but emerge as the continuation of a geodesic in a dynamically curved semantic manifold. Exploration and exploitation correspond not to different objective terms, but to different regimes of curvature and entropy tolerance along the same variational path.
+
+This reinterpretation clarifies the role of exploration. In active inference, exploration is often introduced through epistemic value terms added to the free energy objective. In the RSVP framework, exploratory behavior arises naturally as a local relaxation of energetic constraints that allows the system to escape shallow minima. No additional epistemic objective is required; exploration is a phase of the same dynamical process.
+
+
+Relation to Integrated Information Theory
+
+
+Integrated Information Theory characterizes consciousness in terms of the irreducibility of a system’s causal structure, quantified by measures such as $\Phi$ (Tononi 2008; Oizumi et al. 2014). IIT emphasizes internal integration over external function, and it explicitly treats causal structure as primary.
+
+Active geodesic inference shares IIT’s emphasis on internal structure but departs from its static ontology. In IIT, causal structure is evaluated on a fixed network with well-defined partitions. In RSVP, by contrast, causal and semantic structure are dynamical, history-dependent, and field-mediated. Integration is not a static property but an emergent consequence of synchronization across multiple coupled dimensions.
+
+The five-dimensional Ising synchronization model provides a concrete mechanism for such integration. High integration corresponds to the ordered phase in which all components of the order parameter align across extended regions of semantic space. Semantic isomers correspond to distinct integrated configurations with equivalent external behavior but different internal organization, a phenomenon that IIT recognizes but does not dynamically explain.
+
+Moreover, RSVP avoids a known pathology of IIT: the assignment of maximal integration to trivial or non-adaptive systems under certain partitions. Because integration in active geodesic inference is constrained by action minimization and entropy monotonicity, only dynamically admissible structures qualify as integrated. Static causal density without variational coherence does not suffice.
+
+
+Summary of Structural Differences
+
+
+Active geodesic inference can thus be seen as occupying a conceptual position orthogonal to these frameworks. From FEP it inherits a variational foundation, but rejects the assumption of a fixed generative model. From active inference it inherits the unification of perception and action, but reinterprets policy selection as geometric continuation. From IIT it inherits the primacy of internal structure, but replaces static causal analysis with dynamical field synchronization.
+
+The unifying contribution of the RSVP framework is to place these insights within a single mathematical structure that is simultaneously variational, thermodynamic, geometric, and executable. Spherepop provides the operational counterpart to this structure, ensuring that the theoretical commitments are not merely descriptive but computationally enforceable.
+
+In this sense, active geodesic inference does not compete with existing theories so much as absorb their valid components into a more general framework that resolves their respective limitations.
+
+\section*{Appendix G: Theorem–Corollary Formulation of Active Geodesic Inference}
+
+\subsection*{Theorem G.1 (Active Geodesic Intelligence Theorem)}
+
+Let $\mathcal{X}$ be a history-indexed configuration space equipped with a time-oriented partial order induced by irreversible events, and let $\mathcal{A}[\gamma]$ be an action functional defined on admissible trajectories $\gamma : [0,T] \to \mathcal{X}$ that couples semantic coherence, entropy regulation, and dynamical constraint, as specified by the RSVP Hamiltonian and its associated Lagrangian.  
+
+A system instantiates intelligence if and only if there exists a nonempty family $\Gamma^\ast \subset \Gamma$ of trajectories such that:
+
+\begin{enumerate}
+\item Each $\gamma \in \Gamma^\ast$ is a stationary or near-stationary solution of $\mathcal{A}$ with respect to admissible variations, i.e. it is a low-action geodesic relative to the induced semantic metric.
+\item The family $\Gamma^\ast$ is dynamically stable under bounded perturbations of internal state, environmental coupling, or representational noise.
+\item Membership in $\Gamma^\ast$ is actively maintained by the system through endogenous deformation of the effective configuration space geometry, rather than by passive traversal of a fixed landscape.
+\end{enumerate}
+
+Equivalently, intelligence is the property of a system whose realized histories remain confined to a stable geodesic family by virtue of the system’s own dynamics, rather than external enforcement or accidental parameter tuning.
+
+\subsection*{Corollary G.1 (Non-Equivalence to Optimization)}
+
+No system whose behavior is fully characterized as pointwise optimization of a static objective function over instantaneous states is intelligent in the sense of Theorem G.1.  
+
+\emph{Proof sketch.} Pointwise optimization selects isolated extrema rather than families of trajectories. Such extrema are generically unstable under perturbation and do not entail the preservation of coherent history. Since intelligence, by Theorem G.1, is a property of trajectory families rather than state optima, static optimization is insufficient. \qed
+
+\subsection*{Corollary G.2 (Semantic Isomerism)}
+
+If a system is intelligent, then there exist, in general, multiple non-equivalent internal histories $\gamma_1, \gamma_2 \in \Gamma^\ast$ that satisfy identical external boundary conditions while differing in internal structure.
+
+These histories correspond to distinct metastable minima of the action functional and are not mutually reducible without loss of stability. This establishes semantic isomerism as a necessary consequence of intelligence rather than an implementation artifact.
+
+\subsection*{Corollary G.3 (Non-Distillability)}
+
+Let $\Pi$ be any projection or compression operator that maps full trajectories $\gamma \in \Gamma^\ast$ to boundary-equivalent summaries by marginalizing internal structure. Then, in general, $\Pi(\Gamma^\ast)$ does not admit an inverse mapping that reconstructs a family of low-action trajectories equivalent to $\Gamma^\ast$.
+
+Consequently, intelligence-preserving behavior cannot be faithfully distilled from outputs or compressed traces alone without re-instantiating the underlying variational dynamics.
+
+\subsection*{Corollary G.4 (Robustness via Geodesic Width)}
+
+The robustness of an intelligent system to perturbation is proportional not to the depth of any single action minimum, but to the measure of the geodesic basin $\Gamma^\ast$ in trajectory space.
+
+Systems exhibiting broader geodesic width will demonstrate greater generalization, adaptability, and resistance to distributional shift, even when instantaneous performance metrics are matched.
+
+\subsection*{Corollary G.5 (Continuity Across Scales)}
+
+The criterion of intelligence given in Theorem G.1 is scale-invariant with respect to temporal and organizational resolution.  
+
+Evolutionary lineages, learning organisms, and reasoning processes each instantiate intelligence to the extent that they maintain low-action, entropy-regulated trajectory families in their respective configuration spaces.
+
+Thus, intelligence is not confined to cognitive architectures alone, but is a general dynamical property of systems capable of sustaining structured history.
+
+\subsection*{Remark}
+
+Theorem G.1 and its corollaries recast intelligence as a variational and geometric phenomenon rather than a computational or representational one. They formalize, in minimal axiomatic form, the central claim of this essay: that intelligence is the active preservation of viable trajectories through configuration space, and that correctness, optimization, and information processing are secondary consequences of this deeper dynamical capacity.
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{Chen2026}
+Q. Chen, Y. Du, Z. Li, J. Liu, S. Duan, J. Guo, M. Liu, J. Liu, T. Yang, G. Zhang, L. Qin, W. Che, and W. Huang.
+The molecular structure of thought: Mapping the topology of long chain-of-thought reasoning.
+\emph{arXiv preprint}, 2026.
+
+\bibitem{Dong2026}
+M. Dong, A. Adduri, D. Gautam, C. Carpenter, R. Shah, C. Ricci-Tam, Y. Kluger, D. P. Burke, and Y. H. Roohani.
+Stack: In-context learning of single-cell biology.
+\emph{bioRxiv}, 2026.
+
+\bibitem{Yue2021}
+Z. Yue, B. Kratzwald, and S. Feuerriegel.
+Contrastive domain adaptation for question answering using limited text corpora.
+\emph{arXiv preprint}, 2021.
+
+\bibitem{Yue2022}
+Z. Yue, H. Zeng, Z. Kou, L. Shang, and D. Wang.
+Defending substitution-based profile pollution attacks on sequential recommenders.
+In \emph{Proceedings of the ACM Conference on Recommender Systems}, 2022.
+
+\bibitem{Yue2024}
+Z. Yue, H. Zeng, L. Shang, Y. Liu, Y. Zhang, and D. Wang.
+Retrieval augmented fact verification by synthesizing contrastive arguments.
+\emph{arXiv preprint}, 2024.
+
+\bibitem{Jin2025}
+B. Jin, H. Zeng, Z. Yue, J. Yoon, S. \"O. Ar{\i}k, D. Wang, H. Zamani, and J. Han.
+Search-R1: Training LLMs to reason and leverage search engines with reinforcement learning.
+\emph{arXiv preprint}, 2025.
+
+\bibitem{Yue2025}
+Z. Yue, B. Jin, H. Zeng, H. Zhuang, Z. Qin, J. Yoon, L. Shang, J. Han, and D. Wang.
+Hybrid latent reasoning via reinforcement learning.
+In \emph{Advances in Neural Information Processing Systems}, 2025.
+
+\bibitem{Caprio2025}
+M. Caprio, Y. Sale, and E. H\"ullermeier.
+Conformal prediction regions are imprecise highest density regions.
+\emph{arXiv preprint}, 2025.
+
+\bibitem{Barbour1999}
+J. Barbour.
+\emph{The End of Time: The Next Revolution in Our Understanding of the Universe}.
+Oxford University Press, Oxford, 1999.
+
+\bibitem{Barbour2012}
+J. Barbour.
+Shape dynamics: An introduction.
+In \emph{Quantum Field Theory and Gravity}, edited by F. Finster et al.
+Birkh\"auser, Basel, 2012.
+
+\bibitem{Barbour2020}
+J. Barbour.
+\emph{The Janus Point: A New Theory of Time}.
+Basic Books, New York, 2020.
+
+\bibitem{Levin2019}
+M. Levin.
+The computational boundary of a “self”: Developmental bioelectricity drives multicellularity and scale-free cognition.
+\emph{Frontiers in Psychology}, 10:2688, 2019.
+
+\bibitem{Levin2022}
+M. Levin.
+Technological approach to mind everywhere: An experimentally grounded framework for understanding diverse intelligences.
+\emph{Frontiers in Systems Neuroscience}, 16:768201, 2022.
+
+\bibitem{Juarrero1999}
+A. Juarrero.
+\emph{Dynamics in Action: Intentional Behavior as a Complex System}.
+MIT Press, Cambridge, MA, 1999.
+
+\bibitem{Juarrero2009}
+A. Juarrero.
+Top-down causation and autonomy in complex systems.
+In \emph{Information and Causality}, edited by P. Davies and N. Gregersen.
+Cambridge University Press, Cambridge, 2009.
+
+\bibitem{Friston2010}
+K. Friston.
+The free-energy principle: A unified brain theory?
+\emph{Nature Reviews Neuroscience}, 11(2):127–138, 2010.
+
+\bibitem{Friston2013}
+K. Friston, J. Kilner, and L. Harrison.
+A free energy principle for the brain.
+\emph{Journal of Physiology—Paris}, 100(1–3):70–87, 2013.
+
+\bibitem{Rasmussen2001}
+S. Rasmussen, L. Chen, M. Nilsson, and S. Abe.
+Bridging nonliving and living matter.
+\emph{Artificial Life}, 7(3):213–237, 2001.
+
+\bibitem{WalkerDavies2013}
+S. I. Walker and P. C. W. Davies.
+The algorithmic origins of life.
+\emph{Journal of the Royal Society Interface}, 10:20120869, 2013.
+
+\bibitem{Fields2014}
+C. Fields.
+Boundaries, constraints, and the structure of scientific explanation.
+\emph{Journal of Mind and Behavior}, 35(3–4):263–286, 2014.
+
+\end{thebibliography}
+
+\end{document} 

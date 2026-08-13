@@ -1,0 +1,309 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Benchmark baseline tracking system for performance regression detection
+- OVERSOUL/PERFECTION-INFERENCE epistemic hygiene directive
+- Comprehensive documentation suite (3,741 lines):
+  - SPECIFICATIONS.md: Normative reference for stable core
+  - EXPERIMENT_CATALOG.md: All 29 experiments classified
+  - DESIGN_DECISIONS.md: 11 DDRs with rationale
+  - TESTING.md: Testing philosophy and guidelines
+  - OVERSOUL_PERFECTION.md: Epistemic boundary maintenance
+- Performance benchmarks measuring T(|h|, |O|, k, b)
+- Advisory configuration validation (observational, non-repairing)
+- Property-based tests with Hypothesis (12 tests)
+- Regression tests extracted from experiments (32 tests)
+- Module extraction: predicates.py, path_utils.py, validation.py
+- GitHub Actions CI/CD (lint + test matrix Python 3.12, 3.13)
+- Pre-commit hooks (ruff lint/format, file hygiene)
+- API documentation generation with pdoc3
+- JSON serialization module (`spherepop.serialization`) with Config roundtrip helpers
+- Versioned interchange schema contract `spherepop.config.v1` with deterministic ordering guarantees
+- Lab artifact commands: `export`, `inspect`, `validate`, `replay` for portable experiment outputs
+
+### Changed
+- Improved error messages with actionable context
+- Enhanced docstrings with specification references and theory status
+- Type safety: mypy strict mode on core modules
+- README.md: Complete rewrite with comprehensive overview
+
+### Fixed
+- Type hint forward references with `from __future__ import annotations`
+
+### Documentation
+- THEORY_STATUS.md: Authority for paper vs implementation (Q1-Q8)
+- CONTRIBUTING.md: Development workflow and theory discipline
+- FUTURE_DIRECTIONS.md: Research directions and unresolved continuations
+- docs/DEVELOPMENT.md: Architecture guide
+- .github/PULL_REQUEST_TEMPLATE.md: Theory status enforcement
+
+### Infrastructure
+- Modern Python packaging (pyproject.toml, PEP 621)
+- Makefile with development workflow commands
+- Test coverage tracking (73.89%, target 85%)
+- Benchmark infrastructure with structural scaling
+- Session documentation and checkpoint system
+
+## [0.1.0] - 2026-08-13
+
+### Added
+- Initial implementation of Spherepop primitives {POP, REFUSE, BIND, COLLAPSE}
+- Config model with history invariant
+- Observer functions (confluent, divergent, regretful, admissible)
+- Derived views (extensional_view, representative)
+- BNF grammar parser (Appendix G literal implementation)
+- Convenience parser for experiments
+- 29 experiments exploring stable and provisional semantics
+- Test suite: 239 tests (unit, property, regression, performance)
+
+### Theory Status
+- **Paper-licensed** (✓): 11 items including primitive semantics, observer non-authority
+- **Implementation choices** (→): 8 items including POP identity, label uniqueness
+- **Open questions** (?): 5 items including Plan B convergence, COLLAPSE composition
+- **Contrary** (⊗): 0 items - semantic purity maintained
+
+### Semantic Purity
+- P = {POP, REFUSE, BIND, COLLAPSE} remains closed (no 5th primitive)
+- S ∩ X = S ∩ I = ∅ (semantic strata separated)
+- Observer non-authority enforced (OVERSOUL §4)
+- History invariant maintained (OVERSOUL §3)
+- Validation observational (OVERSOUL §7)
+
+---
+
+## Versioning Policy
+
+**Semantic Versioning (SemVer)**:
+- **MAJOR**: Breaking changes to stable core (paper-licensed primitives)
+- **MINOR**: New features, provisional semantics, experimental additions
+- **PATCH**: Bug fixes, documentation, infrastructure improvements
+
+**What constitutes a breaking change**:
+- Changes to primitive preconditions/postconditions
+- Changes to Config invariants
+- Changes to observer contracts
+- Removal of public API functions
+- Changes that invalidate existing valid histories
+
+**What does NOT constitute a breaking change**:
+- Resolving open questions (? → ✓) if backward compatible
+- Reclassifying experimental semantics
+- Documentation improvements
+- Test additions
+- Performance improvements
+- Infrastructure changes
+
+**Pre-1.0.0 Stability**:
+During initial development (0.x.y versions):
+- Minor version changes may include breaking changes
+- Experimental features marked with `@pytest.mark.experimental`
+- Provisional semantics documented in THEORY_STATUS.md
+- API not yet stable
+
+**Post-1.0.0 Commitment**:
+After 1.0.0 release:
+- Stable core API frozen (breaking changes require major version)
+- Experimental features may still evolve in minor versions
+- Deprecation warnings for at least one minor version before removal
+- Clear migration guides for breaking changes
+
+---
+
+## Changelog Maintenance
+
+**Who updates**:
+- All contributors adding features, fixing bugs, or changing behavior
+- Maintainers during release preparation
+
+**When to update**:
+- Add entry to `[Unreleased]` section when PR is merged
+- Move entries to versioned section during release
+
+**What to document**:
+- **Added**: New features, functions, capabilities
+- **Changed**: Modifications to existing functionality
+- **Deprecated**: Features marked for future removal
+- **Removed**: Deleted features
+- **Fixed**: Bug fixes
+- **Security**: Vulnerability fixes
+- **Documentation**: Major doc updates
+- **Infrastructure**: Build, test, CI/CD changes
+
+**How to write entries**:
+```markdown
+### Added
+- Feature description starting with action verb
+- Link to issue/PR if applicable: #123
+- Theory status if semantic change: (Q3 resolved, ✓ paper-licensed)
+
+### Changed
+- What changed and why
+- Migration path if breaking: "Use `new_func()` instead of `old_func()`"
+- Impact on users: "Existing code continues to work"
+
+### Fixed
+- Bug description: what was broken
+- How it manifests: symptoms users would see
+- Root cause if interesting: "History comparison was using object identity"
+```
+
+**Theory status in changelog**:
+When semantic changes occur, mark theory status:
+- `(✓ paper-licensed)`: Now confirmed by paper
+- `(→ implementation choice)`: Chosen among alternatives
+- `(? → ✓)`: Open question resolved
+- `(provisional)`: Marked experimental, may change
+
+**Examples**:
+```markdown
+### Added
+- COLLAPSE composition semantics (Q2b resolved, ✓ paper-licensed)
+  - Nested quotients now flatten: `Quotient({Quotient({a,b}), c})` → `Quotient({a,b,c})`
+  - Breaking change: Previous versions returned error
+  - Migration: Remove error handling, behavior now defined
+
+### Changed  
+- Quotient predicate evaluation changed to universal semantics (Q3 resolved)
+  - Previous: Existential (∃ member matches)
+  - Current: Universal (∀ members match)
+  - Tests updated, `@pytest.mark.experimental` removed
+  - Migration: Review BIND operations after COLLAPSE
+```
+
+---
+
+## Release Process
+
+**Pre-release checklist**:
+1. [ ] All tests passing (including experimental if stable)
+2. [ ] Coverage ≥ 85% on stable core
+3. [ ] Documentation updated (SPECIFICATIONS, THEORY_STATUS)
+4. [ ] CHANGELOG.md updated with version and date
+5. [ ] Version bumped in pyproject.toml
+6. [ ] Git tag created: `git tag -a vX.Y.Z -m "Release X.Y.Z"`
+7. [ ] Release notes prepared (GitHub release)
+
+**Version bump locations**:
+- `pyproject.toml`: `version = "X.Y.Z"`
+- `CHANGELOG.md`: Move `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD`
+
+**Release commands**:
+```bash
+# Update changelog
+vim CHANGELOG.md  # Move Unreleased → [X.Y.Z]
+
+# Bump version
+vim pyproject.toml  # Update version
+
+# Commit release
+git add CHANGELOG.md pyproject.toml
+git commit -m "chore: Release vX.Y.Z"
+
+# Tag release
+git tag -a vX.Y.Z -m "Release X.Y.Z"
+
+# Push
+git push origin main
+git push origin vX.Y.Z
+```
+
+**Post-release**:
+1. [ ] Create GitHub release from tag
+2. [ ] Copy relevant CHANGELOG section to release notes
+3. [ ] Add "What's Changed" summary
+4. [ ] Highlight breaking changes prominently
+5. [ ] Link to migration guide if applicable
+
+---
+
+## Unreleased vs Released
+
+**[Unreleased]** section:
+- Accumulates changes since last release
+- Updated continuously as PRs merge
+- May be reorganized/consolidated before release
+- Contains work in progress
+
+**Versioned sections** (e.g., `[0.2.0]`):
+- Immutable after release
+- Historical record
+- Should not be edited except for corrections
+- Linked to git tag
+
+---
+
+## Conventional Commits (Optional)
+
+While not required, conventional commits help automate changelog generation:
+
+```
+feat: Add serialization support for Configs
+fix: REFUSE now checks nonempty subset correctly  
+docs: Update SPECIFICATIONS with COLLAPSE semantics
+chore: Bump version to 0.2.0
+test: Add property tests for history monotonicity
+refactor: Extract validation logic to separate module
+```
+
+**Types**:
+- `feat`: New feature → CHANGELOG "Added"
+- `fix`: Bug fix → CHANGELOG "Fixed"
+- `docs`: Documentation → CHANGELOG "Documentation"
+- `chore`: Infrastructure → CHANGELOG "Infrastructure"
+- `test`: Test additions → (May skip CHANGELOG if internal)
+- `refactor`: Code restructure → (CHANGELOG if API changes)
+
+**Breaking changes**:
+```
+feat!: Change quotient predicate to universal semantics
+
+BREAKING CHANGE: Quotient predicate evaluation now requires
+all members to match, not just one.
+```
+
+---
+
+## Version History
+
+- **0.1.0** (2026-08-13): Initial implementation, 29 experiments, infrastructure
+- **[Unreleased]**: Documentation suite, baselines, OVERSOUL directives
+
+---
+
+## Links
+
+- [Keep a Changelog](https://keepachangelog.com/)
+- [Semantic Versioning](https://semver.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github)
+
+---
+
+## Changelog Philosophy
+
+Per OVERSOUL/PERFECTION-INFERENCE:
+
+```
+documented(x) ⇏ resolved(x)
+changelog_complete ⇏ no_changes_occurred
+version_released ⇏ semantics_frozen
+```
+
+The changelog records observed changes.
+It does not guarantee:
+- All changes were noticed
+- All impacts were foreseen  
+- No other changes occurred
+- Future changes won't happen
+
+The changelog marks the boundary of known changes.
+The boundary is not the territory.
+
+**Update honestly. Report accurately. Don't manufacture completion.**

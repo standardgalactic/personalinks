@@ -1,0 +1,207 @@
+Conversely, one can reconstruct the benefits of mutation while retaining structural clarity by recording updates as events. The event log then restores the separation:
+
+\[
+\text{authority} = \text{append-only merge of events},
+\qquad
+\text{view} = \text{collapse by replay}.
+\]
+
+In this light, state monads and event sourcing are not stylistic choices. They are structural disciplines preventing collapse from erasing provenance.
+
+
+A Unifying Structural Summary
+
+
+We may now summarize:
+
+\begin{center}
+\begin{tabular}{lll}
+Paradigm & Structural Mechanism & Spherepop Interpretation \\
+\hline
+State monad & $S \to (A \times S)$ & region transformer with explicit state channel \\
+CPS & $(A \to R) \to R$ & explicit ``rest of pipeline'' controlling collapse staging \\
+Mutation & in-place update & untracked collapse that erases replay structure \\
+\end{tabular}
+\end{center}
+
+All three are variations on one theme: where does the system store commitment, and where is it permitted to collapse it?
+
+
+Control of Collapse as the Deep Invariant
+
+
+Across $\lambda$-calculus, types, pipes, stacks, monads, algebraic effects, state, CPS, and mutation, the same structural invariant repeats.
+
+Merge accumulates commitments.
+Collapse resolves commitments canonically.
+
+The paradigms differ only in their discipline about when collapse is permitted, and whether the history of commitment remains replayable.
+
+Spherepop provides a minimal vocabulary for this discipline.
+
+
+Final Synthesis: The Calculus of Commitment
+
+
+We are now in a position to integrate the threads developed throughout this text.
+
+We began not with machines, syntax, or evaluation rules, but with a minimal structural substrate: finite regions equipped with two primitive operations, merge and collapse. From this sparse beginning, increasingly rich computational phenomena were reconstructed. What appeared at first as a pedagogical device revealed itself as a generative core.
+
+Merge accumulates commitment. Collapse resolves commitment under equivalence. Optionality measures structural freedom. Abstraction introduces disciplined identification. Composition extends invariants across accumulated structure. These operations, taken together, generate the dynamic cycle that underlies all subsequent constructions.
+
+The $\lambda$-calculus emerged as a disciplined fragment of this substrate. Variables were interpreted as atomic commitments. Abstraction was reinterpreted as quotient introduction. Application became merge followed by canonical collapse. Confluence followed not from syntactic accident, but from associativity of accumulation and stability of projection.
+
+Type theory arose as invariant preservation under merge and collapse. Typing judgments were recast as structural guarantees: certain identifications are permitted, others prohibited. Product types reflected structured merge; function types expressed controlled region transformation; categorical semantics clarified the algebra already implicit in the base operations.
+
+Stack machines made explicit what functional semantics leaves implicit: evaluation as sequenced region transformation. Currying revealed that multi-argument computation reduces to iterated unary transformation. Unix pipelines, postfix composition, and higher-order functions were shown to share a single associative backbone. Their surface differences masked an identical structural discipline.
+
+Functional programming appeared not merely as a style, but as a commitment to replayable history. Pure evaluation preserved structural provenance. Monads were interpreted as delayed collapse: effect structure accumulated internally and was interpreted only at controlled boundaries. Algebraic effects separated description from interpretation. State, continuations, and mutation differed only in where collapse was permitted and whether commitment history remained visible.
+
+Across these domains, the same invariant recurred. Computation is not arbitrary transformation. It is structured reorganization of commitment under compositional constraint. Merge introduces distinctions. Collapse removes distinctions in accordance with chosen invariants. Abstraction governs the boundary between them.
+
+The perspective developed here does not replace established theories. It does not challenge the Church–Turing thesis, nor displace $\lambda$-calculus, type systems, or categorical semantics. Rather, it identifies a minimal algebraic substrate from which these theories can be seen as stratified refinements. Where classical presentations emphasize syntax and rule systems, the present account emphasizes structural accumulation and canonical resolution.
+
+In this light, computation acquires a geometric character. Before symbols are rewritten, commitments are accumulated. Before evaluation rules fire, equivalences are introduced. Before types are checked, invariants are selected. The visible calculi of programming languages become surface expressions of a deeper structural logic.
+
+The calculus of commitment therefore names not a new formalism, but a way of seeing. It proposes that beneath abstraction, typing, composition, effects, and control lies a simple discipline: accumulate structure, identify what is irrelevant, normalize canonically, and compose again. From that discipline, the architectures of modern computation follow.
+
+If the exposition has succeeded, the reader may now recognize familiar formalisms as particular crystallizations of this underlying dynamic. The metaphor introduced under the name \emph{Spherepop} was intended only as a compact vessel for that dynamic—a way of speaking about regions, commitment, and collapse without presupposing the vocabulary of any single tradition.
+
+What remains is refinement. The same substrate can be extended toward dependent type theory, richer categorical models, cost semantics, or effect systems with finer granularity. Yet even at this level, the central insight stands: abstraction is controlled collapse; composition is associative accumulation; computation is structured transformation of commitment.
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{Church1936}
+Alonzo Church.
+\newblock An Unsolvable Problem of Elementary Number Theory.
+\newblock \emph{American Journal of Mathematics}, 58(2):345--363, 1936.
+
+\bibitem{Turing1936}
+Alan M. Turing.
+\newblock On Computable Numbers, with an Application to the Entscheidungsproblem.
+\newblock \emph{Proceedings of the London Mathematical Society}, 42(2):230--265, 1936.
+
+\bibitem{Barendregt1984}
+Hendrik P. Barendregt.
+\newblock \emph{The Lambda Calculus: Its Syntax and Semantics}.
+\newblock North-Holland, 1984.
+
+\bibitem{Girard1989}
+Jean-Yves Girard, Yves Lafont, and Paul Taylor.
+\newblock \emph{Proofs and Types}.
+\newblock Cambridge University Press, 1989.
+
+\bibitem{MartinLof1984}
+Per Martin-L\"of.
+\newblock \emph{Intuitionistic Type Theory}.
+\newblock Bibliopolis, 1984.
+
+\bibitem{Pierce2002}
+Benjamin C. Pierce.
+\newblock \emph{Types and Programming Languages}.
+\newblock MIT Press, 2002.
+
+\bibitem{Reynolds1983}
+John C. Reynolds.
+\newblock Types, Abstraction and Parametric Polymorphism.
+\newblock \emph{Information Processing 83}, 513--523, 1983.
+
+\bibitem{Wadler1989}
+Philip Wadler.
+\newblock Theorems for Free!
+\newblock In \emph{Proceedings of the Fourth International Conference on Functional Programming Languages and Computer Architecture}, 1989.
+
+\bibitem{Landin1966}
+Peter J. Landin.
+\newblock The Next 700 Programming Languages.
+\newblock \emph{Communications of the ACM}, 9(3):157--166, 1966.
+
+\bibitem{Backus1978}
+John Backus.
+\newblock Can Programming Be Liberated from the von Neumann Style?
+\newblock \emph{Communications of the ACM}, 21(8):613--641, 1978.
+
+\bibitem{Felleisen1992}
+Matthias Felleisen and Daniel P. Friedman.
+\newblock Control Operators, the SECD Machine, and the Lambda-Calculus.
+\newblock In \emph{Formal Description of Programming Concepts}, 1992.
+
+\bibitem{Plotkin1975}
+Gordon D. Plotkin.
+\newblock Call-by-Name, Call-by-Value and the $\lambda$-Calculus.
+\newblock \emph{Theoretical Computer Science}, 1(2):125--159, 1975.
+
+\bibitem{MacLane1998}
+Saunders Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Springer, 1998.
+
+\bibitem{LambekScott1986}
+Joachim Lambek and Philip J. Scott.
+\newblock \emph{Introduction to Higher Order Categorical Logic}.
+\newblock Cambridge University Press, 1986.
+
+\bibitem{Milner1978}
+Robin Milner.
+\newblock A Theory of Type Polymorphism in Programming.
+\newblock \emph{Journal of Computer and System Sciences}, 17(3):348--375, 1978.
+
+\bibitem{Strachey1967}
+Christopher Strachey.
+\newblock Fundamental Concepts in Programming Languages.
+\newblock Oxford University Computing Laboratory Technical Monograph, 1967.
+
+\bibitem{CurryFeys1958}
+Haskell B. Curry and Robert Feys.
+\newblock \emph{Combinatory Logic}.
+\newblock North-Holland, 1958.
+
+\bibitem{MeijerHutton1995}
+Erik Meijer and Graham Hutton.
+\newblock Bananas in Space: Extending Fold and Unfold to Exponential Types.
+\newblock In \emph{Proceedings of the Seventh International Conference on Functional Programming Languages and Computer Architecture}, 1995.
+
+\bibitem{MeijerFokkingaPaterson1991}
+Erik Meijer, Maarten Fokkinga, and Ross Paterson.
+\newblock Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire.
+\newblock In \emph{Functional Programming Languages and Computer Architecture}, 1991.
+
+\bibitem{Meijer1992}
+Erik Meijer.
+\newblock Calculating Compilers.
+\newblock PhD Thesis, University of Nijmegen, 1992.
+
+\bibitem{Meijer2008}
+Erik Meijer.
+\newblock Your Mouse is a Database.
+\newblock ACM Queue, 2008.
+
+\bibitem{Wadler1995}
+Philip Wadler.
+\newblock Monads for Functional Programming.
+\newblock In \emph{Advanced Functional Programming}, 1995.
+
+\bibitem{Moggi1991}
+Eugenio Moggi.
+\newblock Notions of Computation and Monads.
+\newblock \emph{Information and Computation}, 93(1):55--92, 1991.
+
+\bibitem{BirdMeertens1998}
+Richard Bird and Lambert Meertens.
+\newblock Nested Datatypes.
+\newblock In \emph{Mathematics of Program Construction}, 1998.
+
+\bibitem{Knuth1998}
+Donald E. Knuth.
+\newblock \emph{The Art of Computer Programming}, Vol. 1: Fundamental Algorithms.
+\newblock Addison-Wesley, 3rd edition, 1998.
+
+\bibitem{Scott1970}
+Dana Scott.
+\newblock Outline of a Mathematical Theory of Computation.
+\newblock Technical Monograph PRG-2, Oxford University Computing Laboratory, 1970.
+
+\end{thebibliography}
+
+\end{document}

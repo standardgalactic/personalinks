@@ -1,0 +1,2758 @@
+\[
+(H,t)
+\Downarrow
+(H',v),
+\]
+
+then
+
+\[
+v
+\]
+
+is observationally equivalent to
+
+\[
+t.
+\]
+
+Second,
+
+normalization preserves constructive provenance.
+
+The replay history associated with
+
+\[
+v
+\]
+
+reconstructs the complete sequence of reductions establishing the normal form.
+
+No computational information is discarded.
+
+
+
+
+Complexity
+
+
+Let
+
+\[
+k
+\]
+
+denote the number of newly introduced historical events.
+
+Suppose all historical prefixes have already been normalized.
+
+Then the complexity of historical normalization satisfies
+
+\[
+O(k),
+\]
+
+rather than depending upon the total size of the mathematical library.
+
+This result follows immediately from replay caching and immutable histories.
+
+The normalization algorithm therefore scales with historical growth instead of
+historical size.
+
+
+
+
+Comparison with Conventional NbE
+
+
+Normalization by Evaluation computes canonical semantic representatives of
+lambda terms.
+
+Normalization by Historical Evaluation computes canonical semantic
+representatives together with the histories that justify them.
+
+Both algorithms produce identical observable normal forms.
+
+The historical algorithm additionally produces replay certificates,
+
+dependency graphs,
+
+incremental replay caches,
+
+and
+
+persistent constructive provenance.
+
+Consequently,
+
+historical normalization subsumes conventional normalization while providing
+the additional information required for replay verification, distributed proof
+construction, incremental compilation, and persistent mathematical archives.
+
+The historical kernel therefore performs normalization only once for each
+constructive history. Every subsequent verification reuses the normalized
+historical prefix directly, making normalization an accumulating mathematical
+resource rather than a computation that must be repeated independently for every
+proof.
+
+The following appendix develops the complete bidirectional type-checking
+algorithm, demonstrating how replay-aware normalization integrates with type
+inference, universe checking, and historical dependency analysis to produce the
+trusted verification procedure implemented by the Spherepop kernel.
+
+
+
+Bidirectional Historical Type Checking
+
+
+
+The declarative typing rules presented earlier provide the mathematical
+specification of the historical calculus. They are intentionally symmetric and
+well suited for metatheoretic reasoning. An implementation, however, requires a
+decision procedure. This appendix develops the bidirectional type-checking
+algorithm used by the Spherepop kernel.
+
+Bidirectional type checking separates two complementary computational tasks.
+
+Certain expressions naturally determine their own type.
+
+Other expressions cannot determine a type without additional information and
+must instead be verified against an expected type.
+
+This distinction substantially reduces the search space of the type checker,
+eliminates unnecessary normalization, and provides a direct computational
+interpretation of the historical typing judgments.
+
+Unlike conventional implementations, every phase of the algorithm operates over
+persistent histories rather than mutable typing contexts.
+
+
+
+
+Historical Judgments
+
+
+Two judgments are introduced.
+
+Type synthesis
+
+\[
+H
+\vdash
+t
+\Rightarrow
+A
+\]
+
+computes the type of
+
+\[
+t.
+\]
+
+Type checking
+
+\[
+H
+\vdash
+t
+\Leftarrow
+A
+\]
+
+verifies that
+
+\[
+t
+\]
+
+inhabits the expected type
+
+\[
+A.
+\]
+
+The two judgments are mutually recursive.
+
+
+
+
+Variables
+
+
+Variables synthesize their declared type.
+
+\[
+\frac{
+\operatorname{Declare}(x:A)
+\in
+H
+}{
+H
+\vdash
+x
+\Rightarrow
+A
+}
+\]
+
+No normalization is required.
+
+The declaration event uniquely determines both the observable type and its
+historical provenance.
+
+
+
+
+Universes
+
+
+Universes synthesize immediately.
+
+\[
+\frac{}{
+H
+\vdash
+\Type_i
+\Rightarrow
+\Type_{i+1}
+}
+\]
+
+Likewise,
+
+\[
+\frac{}{
+H
+\vdash
+\Prop
+\Rightarrow
+\Type_0
+}
+\]
+
+
+
+
+Applications
+
+
+Applications synthesize.
+
+Suppose
+
+\[
+H
+\vdash
+f
+\Rightarrow
+\Pi x:A.B.
+\]
+
+The argument is then checked against
+
+\[
+A.
+\]
+
+The resulting synthesized type is
+
+\[
+B[x:=a].
+\]
+
+Formally,
+
+\[
+\frac{
+H
+\vdash
+f
+\Rightarrow
+\Pi x:A.B
+\qquad
+H
+\vdash
+a
+\Leftarrow
+A
+}{
+H
+\vdash
+f\,a
+\Rightarrow
+B[x:=a]
+}
+\]
+
+Historical substitution merges the dependency graphs of
+
+\[
+f
+\]
+
+and
+
+\[
+a.
+\]
+
+
+
+
+Lambda Abstractions
+
+
+Lambda abstractions generally cannot synthesize.
+
+Instead,
+
+they are checked against an expected dependent function type.
+
+\[
+\frac{
+H,
+x:A
+\vdash
+t
+\Leftarrow
+B
+}{
+H
+\vdash
+\lambda x.t
+\Leftarrow
+\Pi x:A.B
+}
+\]
+
+The expected type therefore determines the interpretation of the parameter.
+
+
+
+
+Dependent Products
+
+
+Dependent products synthesize universe levels.
+
+Suppose
+
+\[
+H
+\vdash
+A
+\Rightarrow
+\Type_i
+\]
+
+and
+
+\[
+H,
+x:A
+\vdash
+B
+\Rightarrow
+\Type_j.
+\]
+
+Then
+
+\[
+\frac{
+H
+\vdash
+A
+\Rightarrow
+\Type_i
+\qquad
+H,x:A
+\vdash
+B
+\Rightarrow
+\Type_j
+}{
+H
+\vdash
+\Pi x:A.B
+\Rightarrow
+\Type_{\max(i,j)}
+}
+\]
+
+Universe inference therefore proceeds recursively.
+
+
+
+
+Historical Conversion
+
+
+Suppose
+
+\[
+H
+\vdash
+t
+\Rightarrow
+A.
+\]
+
+To verify
+
+\[
+t
+\Leftarrow
+B,
+\]
+
+the kernel performs replay-aware normalization.
+
+If
+
+\[
+\operatorname{Norm}(H,A)
+\equiv
+\operatorname{Norm}(H,B),
+\]
+
+then checking succeeds.
+
+Otherwise,
+
+type checking fails.
+
+Thus conversion reduces to replay normalization rather than syntactic equality.
+
+
+
+
+Historical Equality
+
+
+Equality proofs are checked rather than synthesized.
+
+Suppose the expected type is
+
+\[
+\operatorname{Eq}_A(a,b).
+\]
+
+Replay reconstructs
+
+\[
+a,
+\qquad
+b,
+\]
+
+normalizes both constructions,
+
+and verifies replay equivalence.
+
+If replay establishes equivalence,
+
+the proof is accepted.
+
+Otherwise,
+
+checking terminates immediately.
+
+
+
+
+Historical Replay Integration
+
+
+Every successful typing judgment contributes replay metadata.
+
+Suppose
+
+\[
+H
+\vdash
+t
+\Rightarrow
+A.
+\]
+
+The type checker additionally records
+
+\[
+\History(t),
+\]
+
+the replay-normal form,
+
+the dependency graph,
+
+and
+
+the replay cache identifier.
+
+Subsequent judgments referring to
+
+\[
+t
+\]
+
+reuse these structures directly.
+
+Type checking therefore accumulates historical knowledge rather than repeatedly
+reconstructing it.
+
+
+
+
+Incremental Checking
+
+
+Suppose
+
+\[
+H'
+=
+H;
+e.
+\]
+
+The historical type checker first determines the dependency region affected by
+
+\[
+e.
+\]
+
+Only constructions reachable from
+
+\[
+e
+\]
+
+require rechecking.
+
+Every unaffected typing derivation remains valid.
+
+Consequently,
+
+incremental verification is determined entirely by graph reachability.
+
+No global traversal of the proof library is required.
+
+
+
+
+Termination
+
+
+Bidirectional historical type checking terminates provided
+
+the universe hierarchy is well founded,
+
+replay terminates,
+
+historical normalization terminates,
+
+and
+
+dependency graphs remain acyclic.
+
+These conditions have already been established by the metatheory.
+
+Termination therefore follows by structural induction over replay histories.
+
+
+
+
+Correctness
+
+
+The algorithm satisfies two principal correctness properties.
+
+First,
+
+every synthesized judgment is derivable in the declarative historical calculus.
+
+Second,
+
+every successful checking judgment corresponds to a valid replayable
+construction.
+
+The implementation is therefore both logically sound and computationally
+complete with respect to the declarative specification.
+
+
+
+
+Complexity
+
+
+Let
+
+\[
+n
+\]
+
+denote the number of newly introduced historical events.
+
+Suppose historical normalization and replay caches are already available.
+
+Then synthesis,
+
+checking,
+
+conversion,
+
+and
+
+dependency analysis
+
+are all bounded by the size of the newly introduced replay region.
+
+Consequently,
+
+the overall complexity of type checking satisfies
+
+\[
+O(n),
+\]
+
+with respect to historical growth.
+
+Unlike conventional implementations, the complexity is independent of the total
+size of the accumulated mathematical archive.
+
+
+
+
+The Historical Verification Procedure
+
+
+The bidirectional algorithm completes the trusted verification pipeline.
+
+Parsing produces abstract syntax.
+
+Elaboration produces historical kernel terms.
+
+Replay reconstructs constructive provenance.
+
+Historical normalization computes canonical replay forms.
+
+Bidirectional checking verifies every typing judgment.
+
+Universe inference establishes consistency.
+
+Finally,
+
+the verified history is committed to the persistent mathematical archive.
+
+Every theorem accepted by the kernel has therefore been verified both as an
+observable proof term and as a replayable constructive history.
+
+The next appendix develops the historical universe inference algorithm in full
+detail, showing how cumulative universes, replay normalization, and dependency
+analysis cooperate to guarantee logical consistency while minimizing explicit
+universe annotations in user programs.
+
+
+
+Historical Universe Inference
+
+
+
+The cumulative universe hierarchy introduced in the core calculus guarantees the
+logical consistency of the historical kernel. Requiring programmers to annotate
+every universe level explicitly, however, would make practical programming
+extremely cumbersome. A usable implementation therefore requires an inference
+procedure capable of reconstructing the majority of universe assignments
+automatically.
+
+This appendix develops the historical universe inference algorithm. The
+algorithm extends conventional universe inference by incorporating replay,
+historical dependency analysis, and immutable construction histories into the
+constraint solving process.
+
+Rather than assigning universe levels solely from syntactic structure, the
+historical kernel derives them from the constructive history responsible for
+each declaration.
+
+
+
+
+Universe Variables
+
+
+During elaboration, explicit universe levels are replaced by fresh metavariables
+
+\[
+\alpha,
+\beta,
+\gamma,
+\ldots
+\]
+
+representing unknown universe indices.
+
+For example,
+
+\[
+\Pi x:A.B
+\]
+
+is initially assigned
+
+\[
+\Type_\alpha,
+\]
+
+where
+
+\[
+\alpha
+\]
+
+remains unresolved until sufficient constraints have been accumulated.
+
+Universe inference therefore proceeds by solving constraints rather than by
+immediate assignment.
+
+
+
+
+Constraint Generation
+
+
+Every typing rule contributes universe constraints.
+
+Suppose
+
+\[
+H
+\vdash
+A
+:
+\Type_i
+\]
+
+and
+
+\[
+H,x:A
+\vdash
+B
+:
+\Type_j.
+\]
+
+Formation of the dependent product generates
+
+\[
+k
+\geq
+i,
+\]
+
+\[
+k
+\geq
+j,
+\]
+
+together with
+
+\[
+\Pi x:A.B
+:
+\Type_k.
+\]
+
+The minimal admissible value of
+
+\[
+k
+\]
+
+is therefore
+
+\[
+\max(i,j).
+\]
+
+The inference engine accumulates these inequalities throughout elaboration.
+
+
+
+
+Historical Constraints
+
+
+The historical interpretation contributes additional information unavailable in
+ordinary type theory.
+
+Suppose two declarations share the replay history
+
+\[
+H_0.
+\]
+
+Their inferred universe assignments may also share the corresponding replay
+certificate.
+
+Consequently,
+
+identical historical prefixes need not regenerate identical universe
+constraints.
+
+Replay caching therefore applies equally to universe inference.
+
+
+
+
+Constraint Graph
+
+
+Rather than storing inequalities independently,
+
+the kernel constructs a directed graph
+
+\[
+G_U.
+\]
+
+Vertices represent universe variables.
+
+Edges represent ordering constraints,
+
+for example,
+
+\[
+\alpha
+\rightarrow
+\beta
+\]
+
+whenever
+
+\[
+\beta
+\geq
+\alpha.
+\]
+
+Constraint solving therefore becomes graph propagation rather than repeated
+symbolic substitution.
+
+
+
+
+Propagation
+
+
+Universe propagation proceeds by repeatedly applying
+
+\[
+\alpha
+\leq
+\beta,
+\qquad
+\beta
+\leq
+\gamma
+\Longrightarrow
+\alpha
+\leq
+\gamma.
+\]
+
+Propagation terminates because
+
+the constraint graph is finite,
+
+histories are finite,
+
+and
+
+cycles corresponding to
+
+\[
+\Type
+:
+\Type
+\]
+
+are prohibited.
+
+
+
+
+Replay Consistency
+
+
+Suppose replay reconstructs a previously verified declaration.
+
+Its universe assignment is reconstructed simultaneously.
+
+Replay therefore guarantees
+
+\[
+\Replay(H)
+\Longrightarrow
+U(H),
+\]
+
+where
+
+\[
+U(H)
+\]
+
+denotes the historical universe environment.
+
+Universe inference is therefore deterministic with respect to replay.
+
+The same history always reconstructs the same hierarchy.
+
+
+
+
+Minimal Assignment
+
+
+After propagation,
+
+every universe variable possesses a lower bound.
+
+The kernel assigns the smallest admissible universe satisfying all accumulated
+constraints.
+
+Formally,
+
+if
+
+\[
+L(\alpha)
+\]
+
+denotes the lower bound of
+
+\[
+\alpha,
+\]
+
+then
+
+\[
+\alpha
+=
+L(\alpha).
+\]
+
+The resulting hierarchy is therefore minimal.
+
+No declaration is placed into a larger universe than required by replay.
+
+
+
+
+Historical Universe Caching
+
+
+Universe assignments become immutable historical objects.
+
+Suppose
+
+\[
+H'
+=
+H;
+e.
+\]
+
+Only constraints introduced by
+
+\[
+e
+\]
+
+require solution.
+
+Previously reconstructed universe assignments remain valid because the histories
+that produced them are immutable.
+
+Universe inference therefore scales with historical extension rather than with
+the total size of the archive.
+
+
+
+
+Universe Soundness
+
+
+The inference procedure satisfies the following theorem.
+
+\begin{theorem}[Historical Universe Soundness]
+
+Suppose universe inference assigns
+
+\[
+\Type_i
+\]
+
+to every declaration contained in
+
+\[
+H.
+\]
+
+Then every typing judgment reconstructed by replay satisfies the cumulative
+universe rules of the declarative calculus.
+
+\end{theorem}
+
+The proof proceeds by induction over replay.
+
+Every replay event preserves the accumulated universe constraints established by
+earlier events.
+
+
+
+
+Universe Completeness
+
+
+Conversely,
+
+suppose a declaration admits a valid cumulative universe assignment.
+
+Then the inference procedure reconstructs one.
+
+\begin{theorem}[Historical Universe Completeness]
+
+Every replayable historical construction satisfying the declarative universe
+rules admits a minimal assignment generated by the historical inference
+algorithm.
+
+\end{theorem}
+
+Thus the implementation is complete with respect to the declarative
+specification.
+
+
+
+
+Historical Predicativity
+
+
+One particularly interesting consequence of the historical interpretation
+concerns predicativity.
+
+Traditional presentations forbid
+
+\[
+\Type
+:
+\Type
+\]
+
+as an axiom.
+
+The historical calculus instead interprets this prohibition operationally.
+
+Attempting to construct
+
+\[
+\Type
+:
+\Type
+\]
+
+necessarily introduces a dependency cycle into the replay graph.
+
+Such cycles violate historical admissibility.
+
+Predicativity therefore becomes a theorem concerning constructive history rather
+than an externally imposed restriction.
+
+
+
+
+Complexity
+
+
+Let
+
+\[
+m
+\]
+
+denote the number of newly introduced universe constraints.
+
+Propagation over the finite constraint graph requires
+
+\[
+O(m)
+\]
+
+time when replay caches are available.
+
+Consequently,
+
+historical universe inference scales linearly with the number of newly generated
+constraints rather than with the size of the complete mathematical development.
+
+
+
+
+Historical Interpretation
+
+
+Universe inference completes the implementation of the trusted kernel.
+
+Replay reconstructs constructive history.
+
+Normalization computes replay-normal forms.
+
+Bidirectional checking verifies typing.
+
+Universe inference reconstructs the cumulative hierarchy.
+
+Together these algorithms determine every logical judgment accepted by the
+kernel.
+
+The historical interpretation reveals that universe levels are not merely
+annotations upon types.
+
+They are themselves historical constructions whose values are determined by the
+growth of constructive knowledge.
+
+The hierarchy therefore evolves through the same replay mechanism governing
+proofs, computations, and dependency graphs.
+
+The following appendix develops the complete complexity analysis of the
+historical kernel, comparing replay-based verification with conventional
+normalization-based proof kernels and identifying the asymptotic consequences of
+persistent immutable histories.
+
+
+
+Complexity Analysis of the Historical Kernel
+
+
+
+The preceding appendices have presented the algorithms constituting the trusted
+Spherepop kernel. The present appendix analyzes their computational complexity.
+The objective is not merely to establish asymptotic bounds, but to understand
+how the historical representation alters the computational structure of proof
+verification relative to conventional normalization-based kernels.
+
+A central distinction throughout this appendix is between \emph{cold
+verification}, in which an entire mathematical archive is reconstructed from the
+empty history, and \emph{warm verification}, in which a previously verified
+historical archive already exists and only newly appended constructions require
+verification.
+
+Because the historical calculus is append-only, these two situations exhibit
+substantially different computational behavior.
+
+
+
+
+Complexity Measures
+
+
+Throughout this appendix we write
+
+\[
+N
+\]
+
+for the total number of historical events contained in a mathematical archive,
+
+\[
+M
+\]
+
+for the number of newly appended events,
+
+\[
+V
+\]
+
+for the number of historical vertices,
+
+\[
+E
+\]
+
+for the number of dependency edges,
+
+and
+
+\[
+R(H)
+\]
+
+for the reachable dependency subgraph of a history
+
+\[
+H.
+\]
+
+Unlike conventional analyses, the principal quantity is rarely
+
+\[
+N.
+\]
+
+Most verification procedures depend instead upon
+
+\[
+|R(H)|
+\]
+
+or
+
+\[
+M.
+\]
+
+
+
+
+Cold Verification
+
+
+Suppose a completely empty kernel reconstructs a mathematical archive
+containing
+
+\[
+N
+\]
+
+historical events.
+
+Replay processes every event exactly once.
+
+Every dependency edge is traversed exactly once.
+
+Assuming bounded-time primitive event execution, replay satisfies
+
+\[
+T_{\mathrm{cold}}
+=
+O(N+E).
+\]
+
+Since well-designed mathematical developments typically satisfy
+
+\[
+E
+=
+O(N),
+\]
+
+cold verification becomes linear in archive size.
+
+Unlike repeated normalization strategies, no previously reconstructed
+construction is recomputed.
+
+
+
+
+Warm Verification
+
+
+The more important case concerns incremental development.
+
+Suppose the existing archive has already been verified.
+
+A new contribution introduces
+
+\[
+M
+\]
+
+historical events.
+
+Replay begins from the previously reconstructed state.
+
+Only the new historical suffix requires execution.
+
+Consequently,
+
+\[
+T_{\mathrm{warm}}
+=
+O(M+E_M),
+\]
+
+where
+
+\[
+E_M
+\]
+
+denotes only those dependency edges introduced by the new history.
+
+The computational cost therefore depends upon mathematical growth rather than
+library size.
+
+This distinction becomes increasingly significant as the archive expands.
+
+
+
+
+Reachability-Limited Verification
+
+
+Suppose an existing theorem is modified.
+
+Traditional proof kernels frequently require normalization of every theorem
+depending, directly or indirectly, upon the modified declaration.
+
+The historical kernel instead computes the reachable dependency graph
+
+\[
+R(H).
+\]
+
+Only constructions contained within
+
+\[
+R(H)
+\]
+
+require replay.
+
+Verification therefore satisfies
+
+\[
+T
+=
+O(|R(H)|).
+\]
+
+When
+
+\[
+|R(H)|
+\ll
+N,
+\]
+
+large mathematical libraries may be updated while replaying only a very small
+fraction of previously verified mathematics.
+
+
+
+
+Normalization Complexity
+
+
+Historical normalization inherits the complexity established in the previous
+appendix.
+
+Suppose every previously encountered historical prefix has already been
+normalized.
+
+Only newly introduced reductions require evaluation.
+
+Thus
+
+\[
+T_{\mathrm{Norm}}
+=
+O(M).
+\]
+
+The normalization cost depends only upon the newly constructed history.
+
+Repeated verification of unchanged mathematics performs no additional
+normalization.
+
+
+
+
+Historical Memoization
+
+
+Persistent histories admit perfect memoization.
+
+Suppose
+
+\[
+H
+\]
+
+has already been replayed.
+
+Since histories are immutable,
+
+every subsequent replay of
+
+\[
+H
+\]
+
+returns the cached reconstruction immediately.
+
+Consequently,
+
+replay of previously verified histories approaches constant time,
+
+excluding retrieval costs.
+
+Memoization therefore improves over time as the mathematical archive grows.
+
+Unlike mutable systems,
+
+cache invalidation is determined entirely by historical reachability.
+
+
+
+
+Parallel Replay
+
+
+Suppose
+
+\[
+H_1,
+H_2,
+\ldots,
+H_k
+\]
+
+are pairwise independent.
+
+Replay proceeds concurrently,
+
+yielding
+
+\[
+T_{\mathrm{parallel}}
+=
+O
+\left(
+\max_i
+|H_i|
+\right),
+\]
+
+ignoring synchronization overhead.
+
+Parallelism therefore follows directly from the dependency graph rather than
+requiring speculative scheduling.
+
+The kernel exposes concurrency naturally through historical independence.
+
+
+
+
+Storage Complexity
+
+
+Every historical event is stored exactly once.
+
+Shared replay prefixes become shared subgraphs.
+
+Suppose two histories
+
+\[
+H_1
+=
+H_0;
+H_A
+\]
+
+and
+
+\[
+H_2
+=
+H_0;
+H_B.
+\]
+
+Only
+
+\[
+H_A
+\]
+
+and
+
+\[
+H_B
+\]
+
+require additional storage.
+
+Consequently,
+
+storage grows with genuinely new mathematical construction rather than with the
+number of proofs referencing that construction.
+
+The historical archive therefore approaches the minimal directed acyclic graph
+representing the accumulated constructive knowledge.
+
+
+
+
+Comparison with Conventional Proof Kernels
+
+
+The principal computational distinction between the historical kernel and a
+traditional normalization-based kernel concerns the unit of computation.
+
+In conventional systems,
+
+the fundamental object is the term.
+
+Verification repeatedly computes normal forms of terms.
+
+In the historical kernel,
+
+the fundamental object is the immutable construction history.
+
+Replay reconstructs histories,
+
+normalization applies only to newly introduced historical regions,
+
+and
+
+verification follows dependency graphs rather than syntactic structure.
+
+Consequently,
+
+many computations that must be repeated in conventional implementations become
+persistent mathematical objects within the historical archive itself.
+
+
+
+
+Historical Amortization
+
+
+Perhaps the most significant computational consequence concerns amortization.
+
+Every replay,
+
+every normalization,
+
+every dependency reconstruction,
+
+every universe assignment,
+
+and
+
+every replay certificate
+
+becomes part of the persistent historical archive.
+
+Future verification therefore benefits from every previous verification.
+
+The mathematical archive accumulates computational work over time.
+
+The larger the verified corpus becomes,
+
+the greater the proportion of future verification that may be satisfied by
+reusing existing replay results.
+
+Verification therefore becomes progressively less expensive on a per-theorem
+basis.
+
+
+
+
+Complexity Summary
+
+
+The historical calculus changes the asymptotic behavior of theorem verification
+by replacing repeated reconstruction with persistent constructive memory.
+
+Cold verification remains linear in the size of the mathematical archive,
+matching the expected behavior of efficient proof kernels.
+
+Warm verification scales with historical extension rather than archive size.
+
+Normalization scales with newly introduced reductions.
+
+Dependency analysis scales with graph reachability.
+
+Parallel replay scales with independent historical branches.
+
+Storage scales with genuinely new mathematical construction.
+
+The resulting implementation is therefore naturally suited to persistent,
+incrementally evolving mathematical libraries, collaborative theorem proving,
+and distributed formal verification.
+
+The next appendix presents the reference implementation of the trusted kernel in
+language-independent pseudocode. Every algorithm developed throughout the paper
+is assembled into a single executable specification demonstrating that the
+historical calculus may be realized by a surprisingly small collection of
+interacting procedures built upon immutable constructive histories.
+
+
+
+Reference Kernel Pseudocode
+
+
+
+The preceding appendices have presented the mathematical specification of the
+historical kernel together with its operational semantics, replay algorithm,
+normalization procedure, type checker, universe inference algorithm, and
+complexity analysis. This appendix assembles these components into a unified
+reference implementation written in language-independent pseudocode.
+
+The objective is not to optimize execution for any particular architecture.
+
+Instead,
+
+the algorithms presented here define the computational behavior required of any
+conforming implementation.
+
+Different implementations may choose different internal data structures,
+
+parallel execution strategies,
+
+or
+
+persistent storage mechanisms,
+
+provided the observable replay semantics remain identical.
+
+
+
+
+Kernel State
+
+
+The trusted kernel maintains a single immutable state
+
+\[
+S.
+\]
+
+Conceptually,
+
+\[
+S
+=
+(H,\Gamma,D,U,C),
+\]
+
+where
+
+\[
+H
+\]
+
+is the historical event sequence,
+
+\[
+\Gamma
+\]
+
+is the reconstructed typing environment,
+
+\[
+D
+\]
+
+is the dependency graph,
+
+\[
+U
+\]
+
+is the universe environment,
+
+and
+
+\[
+C
+\]
+
+is the replay cache.
+
+Every kernel operation returns a new state rather than modifying an existing
+one.
+
+
+
+
+Kernel Entry Point
+
+
+The principal verification routine accepts a candidate history
+
+\[
+H_{\mathrm{new}}.
+\]
+
+Conceptually,
+
+verification proceeds according to
+
+\[
+\operatorname{Verify}
+:
+S
+\times
+H_{\mathrm{new}}
+\rightarrow
+S'.
+\]
+
+The algorithm performs
+
+history validation,
+
+replay,
+
+normalization,
+
+type checking,
+
+universe inference,
+
+dependency reconstruction,
+
+and
+
+cache extension.
+
+Only after every phase succeeds is the resulting state committed.
+
+
+
+
+Replay Procedure
+
+
+Replay forms the computational center of the implementation.
+
+The algorithm may be described abstractly as follows.
+
+\begin{verbatim}
+Replay(history):
+
+    state ← EmptyState()
+
+    for event in history:
+
+        state ← Execute(event, state)
+
+    return state
+\end{verbatim}
+
+The procedure is deterministic.
+
+Every replay of the same history reconstructs precisely the same kernel state.
+
+
+
+
+Event Execution
+
+
+Each primitive event possesses a corresponding execution procedure.
+
+Conceptually,
+
+\begin{verbatim}
+Execute(event, state):
+
+    switch event.kind
+
+        Declare:
+            return Declare(state,event)
+
+        Bind:
+            return Bind(state,event)
+
+        Pop:
+            return Pop(state,event)
+
+        Refuse:
+            return Refuse(state,event)
+
+        Collapse:
+            return Collapse(state,event)
+
+        Meld:
+            return Meld(state,event)
+
+        Reduce:
+            return Reduce(state,event)
+
+        Replay:
+            return Replay(event.history)
+\end{verbatim}
+
+Every observable computation ultimately reduces to repeated execution of these
+primitive operations.
+
+
+
+
+Normalization
+
+
+Historical normalization follows the algorithm developed previously.
+
+\begin{verbatim}
+Normalize(term,state):
+
+    semantic ← Evaluate(term,state)
+
+    return Reify(semantic)
+\end{verbatim}
+
+Evaluation preserves historical provenance.
+
+Reification reconstructs canonical syntax together with replay metadata.
+
+
+
+
+Bidirectional Type Checking
+
+
+The implementation follows the mutually recursive synthesis and checking
+procedures.
+
+\begin{verbatim}
+Infer(term,state):
+
+    match term
+
+        Variable:
+            return Lookup(term,state)
+
+        Application:
+            ...
+
+        Product:
+            ...
+
+        Universe:
+            ...
+
+        otherwise:
+            fail
+\end{verbatim}
+
+Checking is defined similarly.
+
+\begin{verbatim}
+Check(term,type,state):
+
+    inferred ← Infer(term,state)
+
+    inferred ← Normalize(inferred,state)
+
+    expected ← Normalize(type,state)
+
+    return ReplayEquivalent(inferred,expected)
+\end{verbatim}
+
+Normalization therefore appears only at conversion boundaries.
+
+
+
+
+Universe Solver
+
+
+Universe inference constructs a constraint graph.
+
+Conceptually,
+
+\begin{verbatim}
+SolveUniverses(graph):
+
+    repeat
+
+        propagate constraints
+
+    until fixed point
+
+    return minimal assignment
+\end{verbatim}
+
+Replay guarantees that every previously solved historical prefix remains valid.
+
+
+
+
+Dependency Maintenance
+
+
+Dependency reconstruction proceeds incrementally.
+
+\begin{verbatim}
+AddDependency(parent,child,state):
+
+    if CreatesCycle(parent,child):
+
+        fail
+
+    insert edge
+
+    return updated state
+\end{verbatim}
+
+Cycle detection therefore occurs locally rather than globally.
+
+
+
+
+Replay Cache
+
+
+Replay results are cached by historical identifier.
+
+\begin{verbatim}
+LookupReplay(history):
+
+    if history in cache:
+
+        return cache[history]
+
+    result ← Replay(history)
+
+    cache[history] ← result
+
+    return result
+\end{verbatim}
+
+Because histories are immutable,
+
+cache entries never require modification.
+
+
+
+
+Incremental Verification
+
+
+Suppose a new historical suffix
+
+\[
+H'
+\]
+
+extends an existing verified archive.
+
+The implementation performs
+
+\begin{verbatim}
+IncrementalVerify(H'):
+
+    prefix ← LongestCachedPrefix(H')
+
+    state ← LookupReplay(prefix)
+
+    replay suffix
+
+    verify
+
+    commit
+\end{verbatim}
+
+Only newly introduced events require replay.
+
+Previously verified histories remain untouched.
+
+
+
+
+Commit
+
+
+Successful verification extends the persistent archive.
+
+\begin{verbatim}
+Commit(state):
+
+    append history
+
+    extend dependency graph
+
+    extend replay cache
+
+    extend universe environment
+
+    return persistent archive
+\end{verbatim}
+
+No existing mathematical object is modified.
+
+The archive grows monotonically.
+
+
+
+
+Trusted Computing Base
+
+
+The reference implementation reveals that remarkably little code belongs inside
+the trusted kernel.
+
+Only
+
+the event interpreter,
+
+the replay engine,
+
+historical normalization,
+
+bidirectional type checking,
+
+dependency validation,
+
+and
+
+universe inference
+
+must be trusted.
+
+Everything else—
+
+surface syntax,
+
+interactive tactics,
+
+automation,
+
+proof search,
+
+compiler optimizations,
+
+integrated development environments,
+
+module systems,
+
+package managers,
+
+and
+
+editor tooling—
+
+may be implemented entirely outside the trusted computing base.
+
+Their correctness is established only after replay reconstructs their output
+inside the kernel.
+
+
+
+
+Kernel Simplicity
+
+
+Perhaps the most striking consequence of the historical architecture is that the
+entire trusted implementation reduces to a surprisingly small collection of
+deterministic algorithms operating upon immutable histories.
+
+The expressive richness of the language does not arise from a complicated
+kernel.
+
+Instead,
+
+it emerges from repeated composition of a small event algebra together with
+replay over persistent constructive histories.
+
+This economy of implementation mirrors the mathematical economy established
+throughout the paper.
+
+A minimal collection of primitive operations generates a remarkably expressive
+foundation for computation, proof, and constructive mathematics.
+
+The remaining appendix presents a denotational semantics for the historical
+kernel using categories with families and indexed historical fibrations. That
+semantic model demonstrates that the operational algorithms developed
+throughout this specification admit a mathematically precise interpretation
+independent of any particular implementation strategy.
+
+
+
+Denotational Semantics
+
+
+
+The operational semantics developed throughout this specification describe how
+the historical kernel evaluates computations and verifies proofs. Operational
+semantics, however, explain only how computation proceeds. They do not by
+themselves explain what computations mean.
+
+The purpose of this appendix is to provide a denotational semantics for the
+historical calculus. Rather than interpreting terms as ordinary set-theoretic
+functions, the historical interpretation assigns semantic meaning to entire
+construction histories. Programs, proofs, universes, and dependent types are
+therefore interpreted as objects inside a category of constructive histories.
+
+The resulting semantics demonstrate that replay is not merely an implementation
+technique. It possesses an intrinsic mathematical interpretation independent of
+the operational algorithms used by the kernel.
+
+
+
+
+The Semantic Category
+
+
+Let
+
+\[
+\mathcal H
+\]
+
+denote the category introduced in Chapter~15.
+
+Objects are replayable constructive histories
+
+\[
+H_1,H_2,\ldots
+\]
+
+while morphisms are replay-preserving historical transformations.
+
+Composition is ordinary composition of replay morphisms,
+
+\[
+g\circ f.
+\]
+
+Identity morphisms are given by replay without additional construction.
+
+Thus
+
+\[
+(\mathcal H,\circ,\operatorname{id})
+\]
+
+forms a category.
+
+
+
+
+Semantic Contexts
+
+
+The historical calculus replaces ordinary typing contexts with histories.
+
+Accordingly,
+
+a semantic context is interpreted by
+
+\[
+\llbracket H\rrbracket
+\in
+\operatorname{Ob}(\mathcal H).
+\]
+
+Context extension corresponds to historical extension,
+
+\[
+\llbracket
+H;e
+\rrbracket
+=
+\llbracket H\rrbracket
+\oplus
+\llbracket e\rrbracket,
+\]
+
+where
+
+\[
+\oplus
+\]
+
+denotes admissible historical growth.
+
+Unlike ordinary context extension,
+
+historical extension preserves temporal ordering.
+
+
+
+
+Semantic Types
+
+
+Every type
+
+\[
+A
+\]
+
+is interpreted as a family of admissible constructions over a history,
+
+\[
+\llbracket
+A
+\rrbracket
+:
+\llbracket H\rrbracket
+\rightarrow
+\mathcal U,
+\]
+
+where
+
+\[
+\mathcal U
+\]
+
+denotes the semantic universe.
+
+Dependent types therefore become fibrations over histories rather than families
+over ordinary contexts.
+
+
+
+
+Terms
+
+
+Suppose
+
+\[
+H
+\vdash
+t
+:
+A.
+\]
+
+Its denotation is
+
+\[
+\llbracket
+t
+\rrbracket
+:
+\llbracket
+H
+\rrbracket
+\rightarrow
+\llbracket
+A
+\rrbracket.
+\]
+
+Every semantic term therefore preserves historical provenance.
+
+Evaluation is interpreted as composition of replay morphisms rather than
+rewriting of syntax.
+
+
+
+
+Dependent Products
+
+
+The dependent product
+
+\[
+\Pi
+x:A.
+B
+\]
+
+is interpreted by the right adjoint to historical substitution.
+
+Consequently,
+
+\[
+\llbracket
+\Pi
+x:A.B
+\rrbracket
+\]
+
+classifies replay-preserving historical functions whose outputs depend upon
+their constructive inputs.
+
+Thus dependent products retain their usual categorical interpretation while
+being indexed by histories rather than ordinary contexts.
+
+
+
+
+Dependent Sums
+
+
+Dependent sums
+
+\[
+\Sigma
+x:A.
+B
+\]
+
+are interpreted by historical fibrations.
+
+Every semantic pair consists of
+
+an observable construction,
+
+together with
+
+its dependent historical continuation.
+
+The semantic object therefore records both value and provenance.
+
+
+
+
+Replay Morphisms
+
+
+Replay is interpreted as an endofunctor
+
+\[
+\mathcal R
+:
+\mathcal H
+\rightarrow
+\mathcal H.
+\]
+
+For every history
+
+\[
+H,
+\]
+
+\[
+\mathcal R(H)
+=
+H.
+\]
+
+For every replay-preserving morphism
+
+\[
+f,
+\]
+
+\[
+\mathcal R(f)
+=
+f.
+\]
+
+Replay therefore acts as an identity-on-objects reconstruction functor.
+
+Operational replay corresponds precisely to semantic reconstruction.
+
+
+
+
+Collapse
+
+
+Collapse is interpreted as a coequalizer.
+
+Suppose
+
+\[
+f,g
+:
+H_1
+\rightarrow
+H_2.
+\]
+
+If replay establishes
+
+\[
+f
+\simeq
+g,
+\]
+
+then
+
+\[
+\Collapse(f,g)
+\]
+
+constructs the universal morphism identifying the two histories while preserving
+their provenance.
+
+Unlike classical quotients,
+
+the original morphisms remain present in the semantic category.
+
+
+
+
+Meld
+
+
+Suppose
+
+\[
+H_0
+\]
+
+is a shared historical prefix.
+
+The diagram
+
+\[
+H_1
+\leftarrow
+H_0
+\rightarrow
+H_2
+\]
+
+admits a pushout whenever compatibility holds.
+
+The semantic interpretation of
+
+\[
+\Meld(H_1,H_2)
+\]
+
+is precisely this pushout.
+
+Consequently,
+
+parallel constructive development possesses a universal characterization.
+
+
+
+
+Historical Fibrations
+
+
+Dependent types naturally organize themselves into an indexed category
+
+\[
+\pi
+:
+\mathcal E
+\rightarrow
+\mathcal H.
+\]
+
+The fiber above
+
+\[
+H
+\]
+
+contains precisely those constructions admissible after replay of
+
+\[
+H.
+\]
+
+Historical extension therefore induces re-indexing functors between fibers.
+
+The resulting structure resembles a category with families while making
+historical provenance explicit.
+
+
+
+
+Comprehension
+
+
+Every dependent type determines a comprehension object.
+
+Suppose
+
+\[
+A
+\]
+
+is interpreted over
+
+\[
+H.
+\]
+
+Then the comprehension object
+
+\[
+(H,A)
+\]
+
+corresponds to extending the history by an admissible declaration event.
+
+Comprehension therefore becomes historical growth.
+
+Rather than adding assumptions to a context,
+
+the semantics add irreversible construction events.
+
+
+
+
+Soundness
+
+
+The denotational semantics satisfy the following fundamental theorem.
+
+\begin{theorem}[Semantic Soundness]
+
+Suppose
+
+\[
+H
+\vdash
+t
+:
+A.
+\]
+
+Then
+
+\[
+\llbracket
+t
+\rrbracket
+\in
+\llbracket
+A
+\rrbracket.
+\]
+
+Furthermore,
+
+every replay step preserves denotational meaning.
+
+\end{theorem}
+
+Operational evaluation and semantic interpretation therefore coincide.
+
+
+
+
+Completeness
+
+
+Conversely,
+
+every semantic construction generated by the historical category is represented
+by a replayable kernel derivation.
+
+Thus the operational and denotational semantics coincide on all well-formed
+historical constructions.
+
+
+
+
+Historical Interpretation
+
+
+The denotational semantics complete the mathematical development of the
+historical calculus.
+
+The operational semantics explain how histories evolve.
+
+The metatheory explains why replay is logically sound.
+
+The implementation demonstrates how replay is realized computationally.
+
+The denotational semantics explain what replay means independently of any
+particular implementation.
+
+Together these four perspectives—
+
+syntax,
+
+operations,
+
+algorithms,
+
+and
+
+semantics—
+
+provide a mathematically complete specification of the Spherepop kernel.
+
+The historical interpretation therefore extends beyond implementation strategy.
+It defines a coherent semantic foundation in which constructive histories serve
+as the primitive mathematical objects from which computation, proof, dependent
+types, equality, and categorical structure all emerge naturally. This completes
+the formal specification of the historical kernel underlying Spherepop.
+
+\newpage
+
+
+\begin{thebibliography}{99}
+
+\bibitem{Barendregt1992}
+H. P. Barendregt.
+\newblock Lambda Calculi with Types.
+\newblock In S. Abramsky, D. M. Gabbay, and T. S. E. Maibaum (eds.),
+\emph{Handbook of Logic in Computer Science}, Vol. 2.
+Oxford University Press, 1992.
+
+\bibitem{Barendregt1984}
+H. P. Barendregt.
+\newblock \emph{The Lambda Calculus: Its Syntax and Semantics}.
+\newblock North-Holland, revised edition, 1984.
+
+\bibitem{Church1940}
+Alonzo Church.
+\newblock A Formulation of the Simple Theory of Types.
+\newblock \emph{Journal of Symbolic Logic}, 5(2):56--68, 1940.
+
+\bibitem{CoquandHuet1988}
+Thierry Coquand and Gérard Huet.
+\newblock The Calculus of Constructions.
+\newblock \emph{Information and Computation}, 76(2--3):95--120, 1988.
+
+\bibitem{MartinLof1984}
+Per Martin-Löf.
+\newblock \emph{Intuitionistic Type Theory}.
+\newblock Bibliopolis, 1984.
+
+\bibitem{NordstromPeterssonSmith1990}
+Bengt Nordström, Kent Petersson, and Jan M. Smith.
+\newblock \emph{Programming in Martin-Löf's Type Theory}.
+\newblock Oxford University Press, 1990.
+
+\bibitem{Pierce2002}
+Benjamin C. Pierce.
+\newblock \emph{Types and Programming Languages}.
+\newblock MIT Press, 2002.
+
+\bibitem{Harper2016}
+Robert Harper.
+\newblock \emph{Practical Foundations for Programming Languages}.
+\newblock Cambridge University Press, Second Edition, 2016.
+
+\bibitem{Girard1989}
+Jean-Yves Girard.
+\newblock \emph{Proofs and Types}.
+\newblock Cambridge University Press, 1989.
+
+\bibitem{LambekScott1986}
+J. Lambek and P. J. Scott.
+\newblock \emph{Introduction to Higher-Order Categorical Logic}.
+\newblock Cambridge University Press, 1986.
+
+\bibitem{Awodey2010}
+Steve Awodey.
+\newblock \emph{Category Theory}.
+\newblock Oxford University Press, Second Edition, 2010.
+
+\bibitem{MacLane1998}
+Saunders Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Springer, Second Edition, 1998.
+
+\bibitem{Jacobs1999}
+Bart Jacobs.
+\newblock \emph{Categorical Logic and Type Theory}.
+\newblock Elsevier, 1999.
+
+\bibitem{Dybjer1996}
+Peter Dybjer.
+\newblock Internal Type Theory.
+\newblock In S. Berardi and M. Coppo (eds.),
+\emph{Types for Proofs and Programs}.
+Springer, 1996.
+
+\bibitem{Hofmann1997}
+Martin Hofmann.
+\newblock Syntax and Semantics of Dependent Types.
+\newblock In A. Pitts and P. Dybjer (eds.),
+\emph{Semantics and Logics of Computation}.
+Cambridge University Press, 1997.
+
+\bibitem{AltenkirchKaposi2016}
+Thorsten Altenkirch and Ambrus Kaposi.
+\newblock Type Theory in Type Theory Using Quotient Inductive Types.
+\newblock In \emph{Proceedings of POPL}, 2016.
+
+\bibitem{Abel2013}
+Andreas Abel.
+\newblock Normalization by Evaluation: Dependent Types and Impredicativity.
+\newblock In \emph{Proceedings of the 18th International Conference on Functional Programming}, 2013.
+
+\bibitem{BergerSchwichtenberg1991}
+Ulrich Berger and Helmut Schwichtenberg.
+\newblock An Inverse of the Evaluation Functional for Typed Lambda Calculus.
+\newblock In \emph{Proceedings of LICS}, 1991.
+
+\bibitem{Coquand2018}
+Thierry Coquand, Simon Huber, and Anders Mörtberg.
+\newblock On Higher Inductive Types in Cubical Type Theory.
+\newblock In \emph{Proceedings of LICS}, 2018.
+
+\bibitem{Univalent2013}
+The Univalent Foundations Program.
+\newblock \emph{Homotopy Type Theory: Univalent Foundations of Mathematics}.
+\newblock Institute for Advanced Study, 2013.
+
+\bibitem{Huet1975}
+Gérard Huet.
+\newblock A Unification Algorithm for Typed Lambda Calculus.
+\newblock \emph{Theoretical Computer Science}, 1(1):27--57, 1975.
+
+\bibitem{Milner1978}
+Robin Milner.
+\newblock A Theory of Type Polymorphism in Programming.
+\newblock \emph{Journal of Computer and System Sciences}, 17(3):348--375, 1978.
+
+\bibitem{Tarjan1972}
+Robert Tarjan.
+\newblock Depth-First Search and Linear Graph Algorithms.
+\newblock \emph{SIAM Journal on Computing}, 1(2):146--160, 1972.
+
+\bibitem{Driscoll1989}
+James R. Driscoll, Neil Sarnak, Daniel D. Sleator, and Robert E. Tarjan.
+\newblock Making Data Structures Persistent.
+\newblock \emph{Journal of Computer and System Sciences}, 38(1):86--124, 1989.
+
+\bibitem{Okasaki1999}
+Chris Okasaki.
+\newblock \emph{Purely Functional Data Structures}.
+\newblock Cambridge University Press, 1999.
+
+\bibitem{Fowler2017}
+Martin Fowler.
+\newblock Event Sourcing.
+\newblock martinfowler.com, 2017.
+
+\bibitem{Hewitt1977}
+Carl Hewitt.
+\newblock Viewing Control Structures as Patterns of Passing Messages.
+\newblock \emph{Artificial Intelligence}, 8(3):323--364, 1977.
+
+\bibitem{Milner1989}
+Robin Milner.
+\newblock \emph{Communication and Concurrency}.
+\newblock Prentice Hall, 1989.
+
+\bibitem{Plotkin1981}
+Gordon D. Plotkin.
+\newblock A Structural Approach to Operational Semantics.
+\newblock Aarhus University Technical Report DAIMI FN-19, 1981.
+
+\bibitem{Winskel1993}
+Glynn Winskel.
+\newblock \emph{The Formal Semantics of Programming Languages}.
+\newblock MIT Press, 1993.
+
+\bibitem{Crole1993}
+Roy L. Crole.
+\newblock \emph{Categories for Types}.
+\newblock Cambridge University Press, 1993.
+
+\end{thebibliography}
+
+\end{document}

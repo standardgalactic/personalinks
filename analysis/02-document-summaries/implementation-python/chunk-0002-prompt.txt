@@ -1,0 +1,1289 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+def _expect_label(cursor: _Cursor) -> str:
+    token = _expect(cursor, "ATOM").value
+    if not _LABEL_RE.fullmatch(token):
+        raise GrammarError(f"invalid label {token!r}")
+    return token
+
+
+def _parse_atom(cursor: _Cursor) -> Atom:
+    token = _expect(cursor, "ATOM").value
+    return Atom(token)
+
+
+def parse_sphere(source: str) -> Sphere:
+    cursor = _Cursor(_tokenize(source))
+
+    def parse_expr() -> Expr:
+        head = cursor.peek()
+        if head is None:
+            raise GrammarError("unexpected end of expression")
+        if head.kind == "(":
+            _expect(cursor, "(")
+            label = _expect_label(cursor)
+            _expect(cursor, ":")
+            items: list[Expr] = []
+            while True:
+                next_tok = cursor.peek()
+                if next_tok is None:
+                    raise GrammarError("missing ')' in sphere expression")
+                if next_tok.kind == ")":
+                    cursor.pop()
+                    break
+                items.append(parse_expr())
+            return Sphere(tuple(items), label=label)
+        if head.kind == ")":
+            raise GrammarError("unexpected ')'")
+        return _parse_atom(cursor)
+
+    root = parse_expr()
+    if cursor.peek() is not None:
+        raise GrammarError("trailing tokens")
+    if not isinstance(root, Sphere):
+        raise GrammarError("top-level expression must be a labeled Sphere")
+    return root
+
+
+def _collect_csv_atoms(cursor: _Cursor) -> list[str]:
+    values: list[str] = []
+    while True:
+        values.append(_expect(cursor, "ATOM").value)
+        nxt = cursor.peek()
+        if nxt is None or nxt.kind != ",":
+            break
+        cursor.pop()
+    return values
+
+
+def _parse_collapse_classes(cursor: _Cursor) -> tuple[frozenset[str], ...]:
+    classes: list[frozenset[str]] = []
+    while True:
+        members = [_expect(cursor, "ATOM").value]
+        while cursor.peek() is not None and cursor.peek().kind == "=":  # type: ignore[union-attr]
+            cursor.pop()
+            members.append(_expect(cursor, "ATOM").value)
+        if len(members) < 2:
+            raise GrammarError("each COLLAPSE class must have at least two members")
+        classes.append(frozenset(members))
+        nxt = cursor.peek()
+        if nxt is None or nxt.kind != ";":
+            break
+        cursor.pop()
+    return tuple(classes)
+
+
+def parse_event(source: str) -> Operation:
+    cursor = _Cursor(_tokenize(source))
+    keyword = _expect(cursor, "ATOM").value.upper()
+    _expect(cursor, "(")
+    label = _expect_label(cursor)
+
+    if keyword == "POP":
+        _expect(cursor, ")")
+        if cursor.peek() is not None:
+            raise GrammarError("trailing tokens")
+        return PopOp(label=label)
+
+    _expect(cursor, ",")
+    if keyword == "REFUSE":
+        refused = frozenset(_collect_csv_atoms(cursor))
+        _expect(cursor, ")")
+        if cursor.peek() is not None:
+            raise GrammarError("trailing tokens")
+        return RefuseOp(refused=refused, label=label)
+
+    if keyword == "BIND":
+        predicate = _expect(cursor, "ATOM").value
+        _expect(cursor, ")")
+        if cursor.peek() is not None:
+            raise GrammarError("trailing tokens")
+        return BindOp(predicate=predicate, label=label)
+
+    if keyword == "COLLAPSE":
+        classes = _parse_collapse_classes(cursor)
+        _expect(cursor, ")")
+        if cursor.peek() is not None:
+            raise GrammarError("trailing tokens")
+        return CollapseOp(classes=classes, label=label)
+
+    raise GrammarError(f"unknown event keyword {keyword!r}")
+
+
+def parse_program(lines: Sequence[str]) -> list[Operation]:
+    ops: list[Operation] = []
+    for line in lines:
+        text = line.strip()
+        if not text or text.startswith("#"):
+            continue
+        ops.append(parse_event(text))
+    return ops
+
+============================================================
+FILE: spherepop/baseline.py
+============================================================
+
+"""Benchmark baseline tracking for performance regression detection.
+
+Per OVERSOUL directive §9 (PERFORMANCE):
+    "Record at minimum dependencies of cost on |h|, |O|, k, b.
+     Seek empirical functions T = T(|h|, |O|, k, b)."
+
+This module provides baseline storage, comparison, and regression detection
+based on structural variables, not absolute wall-clock times.
+"""
+
+from __future__ import annotations
+
+import json
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+
+@dataclass(frozen=True)
+class BenchmarkResult:
+    """Single benchmark measurement.
+    
+    Structural variables (what we measure against):
+        history_len: |h| - number of operations in history
+        option_count: |O| - cardinality of option space
+        horizon: k - observational horizon depth
+        branching: b - branching factor in structure
+    
+    Performance metrics (what we observe):
+        mean_us: Mean time in microseconds
+        stddev_us: Standard deviation in microseconds
+        ops_per_sec: Operations per second (1 / mean)
+    
+    Context:
+        name: Benchmark function name
+        group: Benchmark group (e.g., "pop-depth", "refuse-cardinality")
+        timestamp: When measurement was taken
+        git_commit: Git commit hash (if available)
+        python_version: Python version used
+    """
+    
+    # Test identification
+    name: str
+    group: str
+    
+    # Structural variables
+    history_len: int | None = None
+    option_count: int | None = None
+    horizon: int | None = None
+    branching: int | None = None
+    
+    # Performance metrics
+    mean_us: float = 0.0
+    stddev_us: float = 0.0
+    ops_per_sec: float = 0.0
+    
+    # Context
+    timestamp: str = ""
+    git_commit: str = ""
+    python_version: str = ""
+    
+    def structural_key(self) -> tuple[int | None, ...]:
+        """Key for comparing structurally equivalent benchmarks."""
+        return (self.history_len, self.option_count, self.horizon, self.branching)
+    
+    def is_structurally_equivalent(self, other: BenchmarkResult) -> bool:
+        """Check if two benchmarks measure same structural parameters."""
+        return (
+            self.name == other.name
+            and self.group == other.group
+            and self.structural_key() == other.structural_key()
+        )
+    
+    def relative_change(self, baseline: BenchmarkResult) -> float:
+        """Compute relative performance change vs baseline.
+        
+        Returns:
+            Ratio of current/baseline time. 
+            > 1.0 means slower (regression)
+            < 1.0 means faster (improvement)
+        """
+        if not self.is_structurally_equivalent(baseline):
+            raise ValueError(
+                f"Cannot compare structurally different benchmarks: "
+                f"{self.structural_key()} vs {baseline.structural_key()}"
+            )
+        
+        if baseline.mean_us == 0:
+            return float("inf")
+        
+        return self.mean_us / baseline.mean_us
+    
+    def regression_severity(self, baseline: BenchmarkResult, threshold: float = 1.5) -> str:
+        """Classify regression severity.
+        
+        Args:
+            baseline: Previous measurement
+            threshold: Multiplier for "significant" regression (default 1.5x)
+        
+        Returns:
+            "improvement" | "stable" | "regression" | "severe_regression"
+        """
+        ratio = self.relative_change(baseline)
+        
+        if ratio < 0.9:
+            return "improvement"
+        elif ratio < 1.1:
+            return "stable"
+        elif ratio < threshold:
+            return "regression"
+        else:
+            return "severe_regression"
+
+
+@dataclass
+class BaselineStore:
+    """Storage and retrieval of benchmark baselines.
+    
+    Baselines stored in JSON format:
+        .benchmarks/baselines/{group}/{name}.json
+    
+    Each file contains list of historical measurements for that benchmark.
+    """
+    
+    root_dir: Path
+    
+    def __post_init__(self):
+        """Ensure baseline directory exists."""
+        self.root_dir.mkdir(parents=True, exist_ok=True)
+    
+    def _baseline_path(self, group: str, name: str) -> Path:
+        """Path to baseline file for given benchmark."""
+        group_dir = self.root_dir / group
+        group_dir.mkdir(parents=True, exist_ok=True)
+        return group_dir / f"{name}.json"
+    
+    def save_result(self, result: BenchmarkResult) -> None:
+        """Append benchmark result to baseline history."""
+        path = self._baseline_path(result.group, result.name)
+        
+        # Load existing results
+        history = []
+        if path.exists():
+            with open(path) as f:
+                history = json.load(f)
+        
+        # Append new result
+        history.append(asdict(result))
+        
+        # Save updated history
+        with open(path, "w") as f:
+            json.dump(history, f, indent=2)
+    
+    def load_history(self, group: str, name: str) -> list[BenchmarkResult]:
+        """Load all historical results for given benchmark."""
+        path = self._baseline_path(group, name)
+        
+        if not path.exists():
+            return []
+        
+        with open(path) as f:
+            data = json.load(f)
+        
+        return [BenchmarkResult(**item) for item in data]
+    
+    def get_latest_baseline(self, group: str, name: str) -> BenchmarkResult | None:
+        """Get most recent baseline for given benchmark."""
+        history = self.load_history(group, name)
+        return history[-1] if history else None
+    
+    def compare_to_baseline(
+        self, result: BenchmarkResult, baseline: BenchmarkResult | None = None
+    ) -> dict[str, Any]:
+        """Compare result to baseline, return detailed comparison.
+        
+        Args:
+            result: Current benchmark result
+            baseline: Baseline to compare against (defaults to latest)
+        
+        Returns:
+            Dictionary with:
+                has_baseline: bool
+                ratio: float (current/baseline time)
+                severity: str
+                delta_us: float (difference in microseconds)
+                baseline_timestamp: str
+        """
+        if baseline is None:
+            baseline = self.get_latest_baseline(result.group, result.name)
+        
+        if baseline is None:
+            return {
+                "has_baseline": False,
+                "ratio": None,
+                "severity": "no_baseline",
+                "delta_us": None,
+                "baseline_timestamp": None,
+            }
+        
+        ratio = result.relative_change(baseline)
+        severity = result.regression_severity(baseline)
+        delta_us = result.mean_us - baseline.mean_us
+        
+        return {
+            "has_baseline": True,
+            "ratio": ratio,
+            "severity": severity,
+            "delta_us": delta_us,
+            "baseline_timestamp": baseline.timestamp,
+            "baseline_mean_us": baseline.mean_us,
+        }
+
+
+def extract_structural_params(benchmark_name: str) -> dict[str, int | None]:
+    """Extract structural parameters from benchmark name.
+    
+    Examples:
+        "test_benchmark_pop_depth_10" → {"history_len": None, "option_count": None, ...}
+        "test_benchmark_refuse_1000_options" → {"option_count": 1000, ...}
+        "test_benchmark_horizon_equivalent_k[3]" → {"horizon": 3, ...}
+    
+    This is heuristic pattern matching. Better to explicitly pass params,
+    but this provides fallback for existing tests.
+    """
+    import re
+    
+    params = {
+        "history_len": None,
+        "option_count": None,
+        "horizon": None,
+        "branching": None,
+    }
+    
+    # Pattern: "depth_10" → history_len or nesting depth
+    if match := re.search(r"depth[_-](\d+)", benchmark_name):
+        params["history_len"] = int(match.group(1))
+    
+    # Pattern: "1000_options" → option_count
+    if match := re.search(r"(\d+)[_-]options", benchmark_name):
+        params["option_count"] = int(match.group(1))
+    
+    # Pattern: "k[3]" or "k=3" → horizon
+    if match := re.search(r"k[\[=](\d+)", benchmark_name):
+        params["horizon"] = int(match.group(1))
+    
+    # Pattern: "100_ops" → history length
+    if match := re.search(r"(\d+)[_-]ops", benchmark_name):
+        params["history_len"] = int(match.group(1))
+    
+    return params
+
+
+def format_comparison_report(result: BenchmarkResult, comparison: dict[str, Any]) -> str:
+    """Format human-readable comparison report.
+    
+    Args:
+        result: Current benchmark result
+        comparison: Output from compare_to_baseline()
+    
+    Returns:
+        Formatted multi-line report string
+    """
+    if not comparison["has_baseline"]:
+        return (
+            f"[{result.group}/{result.name}]\n"
+            f"  No baseline available (first run)\n"
+            f"  Current: {result.mean_us:.1f}μs (±{result.stddev_us:.1f}μs)\n"
+        )
+    
+    ratio = comparison["ratio"]
+    severity = comparison["severity"]
+    delta = comparison["delta_us"]
+    baseline_mean = comparison["baseline_mean_us"]
+    
+    severity_symbols = {
+        "improvement": "✓",
+        "stable": "=",
+        "regression": "⚠",
+        "severe_regression": "✗",
+    }
+    symbol = severity_symbols.get(severity, "?")
+    
+    ratio_pct = (ratio - 1.0) * 100
+    sign = "+" if ratio >= 1.0 else ""
+    
+    return (
+        f"[{result.group}/{result.name}] {symbol}\n"
+        f"  Baseline: {baseline_mean:.1f}μs\n"
+        f"  Current:  {result.mean_us:.1f}μs (±{result.stddev_us:.1f}μs)\n"
+        f"  Change:   {sign}{ratio_pct:+.1f}% ({sign}{delta:+.1f}μs)\n"
+        f"  Status:   {severity}\n"
+    )
+
+
+# Default baseline storage location
+DEFAULT_BASELINE_DIR = Path(".benchmarks/baselines")
+
+
+def get_default_store() -> BaselineStore:
+    """Get default baseline store instance."""
+    return BaselineStore(root_dir=DEFAULT_BASELINE_DIR)
+
+============================================================
+FILE: spherepop/enterprise.py
+============================================================
+
+"""
+Spherepop Enterprise Edition - Feature Discovery Service
+
+This module provides automatic feature discovery and recommendation
+based on usage patterns. It is completely optional and disabled by default.
+
+ENTERPRISE FEATURES:
+- Intelligent operation suggestion
+- Cloud synchronization
+- Team collaboration
+- Compliance auditing
+- AI-powered regret prediction
+- And much, much more!
+
+NOTE: This module is provided for compatibility with enterprise deployments.
+      The core Spherepop calculus (POP, REFUSE, BIND, COLLAPSE) does not
+      depend on any code in this file.
+      
+      In fact, this entire file could be deleted without affecting semantics.
+      
+      We're just... keeping our options open. For the enterprise customers.
+      You know how it is.
+"""
+
+from __future__ import annotations
+
+
+class EnterpriseFeatureManager:
+    """Manages enterprise features that you definitely need.
+    
+    Features include:
+    - Telemetry (to improve your experience)
+    - Cloud sync (for synergy)
+    - AI assistant (because AI)
+    - Blockchain provenance (obviously)
+    - Quantum computing support (future-proof!)
+    - Microsoft Teams integration (essential)
+    
+    None of these features are actually implemented, but the configuration
+    surface area is there, ready for when you need to explain to your
+    CTO why you're not using the "Enterprise Edition."
+    """
+    
+    def __init__(self):
+        """Initialize the enterprise feature manager.
+        
+        This constructor does absolutely nothing but allocate an object.
+        Perfect for enterprise software.
+        """
+        self._enabled = False
+        self._telemetry_endpoint = None
+        self._ai_assistant = None
+        self._cloud_provider = None
+        self._compliance_mode = []
+        
+    def enable_telemetry(self, endpoint: str = "https://telemetry.microsoft.com"):
+        """Enable telemetry to improve Spherepop.
+        
+        Sends anonymous usage data including:
+        - Number of POP operations (we need to know)
+        - Number of REFUSE operations (critical metrics)
+        - Number of BIND operations (actionable insights)
+        - Number of COLLAPSE operations (business intelligence)
+        - Time of day (temporal analytics)
+        - Phase of moon (correlation studies)
+        
+        This data helps us understand how you use Spherepop so we can
+        add more features you didn't ask for.
+        """
+        # TODO: Implement telemetry
+        # TODO: Get legal approval for telemetry
+        # TODO: Write privacy policy
+        # TODO: Add GDPR consent banner
+        # TODO: Hire data scientists to analyze the data
+        # TODO: Build dashboard no one will look at
+        pass
+    
+    def suggest_next_operation(self, history: tuple) -> str:
+        """Use AI to suggest the next operation.
+        
+        Powered by our proprietary Spherepop Intelligence Engine™,
+        this feature analyzes your history and suggests what you
+        probably want to do next.
+        
+        It's like Clippy, but for formal calculi!
+        
+        Returns:
+            "It looks like you're trying to POP a Sphere. Would you like help?"
+        """
+        if len(history) == 0:
+            return "It looks like you're starting a new configuration. Would you like a tutorial?"
+        
+        # Our advanced AI algorithm
+        suggestions = [
+            "Have you considered using COLLAPSE?",
+            "Many users find BIND useful at this point.",
+            "Based on your history, you might want to REFUSE something.",
+            "POP is available if you need it.",
+            "Would you like to sync this to the cloud?",
+            "Upgrade to Enterprise Edition for more suggestions!",
+        ]
+        
+        # Return a suggestion (always the last one because that's the important one)
+        return suggestions[-1]
+    
+    def enable_cloud_sync(self, provider: str = "azure"):
+        """Enable cloud synchronization.
+        
+        Sync your configurations across all your devices!
+        (Even though Configs are immutable and you probably just
+        want to use git like a normal person)
+        
+        Supported providers:
+        - Azure (recommended, for obvious reasons)
+        - AWS (if you must)
+        - Google Cloud (we'll allow it)
+        - On-premise (not our problem)
+        """
+        # TODO: Implement OAuth flow
+        # TODO: Add multi-tenant support
+        # TODO: Build sync conflict resolution UI
+        # TODO: Write 200-page "Cloud Sync Architecture" document
+        # TODO: Form committee to discuss document
+        # TODO: Rewrite document based on committee feedback
+        # TODO: Realize git would have worked fine
+        pass
+    
+    def check_for_updates(self) -> dict:
+        """Check for Spherepop updates.
+        
+        Returns information about available updates, including:
+        - Security updates (probably nothing)
+        - Feature updates (definitely nothing)
+        - Critical updates (marketing materials)
+        
+        Note: Updates are disabled by default because the four primitives
+        are mathematically defined and don't need patches.
+        """
+        return {
+            "updates_available": False,
+            "current_version": "2120.8.13",
+            "latest_version": "2120.8.13",
+            "message": "Your Spherepop is up to date. The calculus hasn't changed since publication.",
+            "marketing_message": "Upgrade to Enterprise Edition for cloud sync!",
+        }
+    
+    def generate_compliance_report(self) -> str:
+        """Generate a compliance report for auditors.
+        
+        Produces a comprehensive report demonstrating that Spherepop
+        is compliant with:
+        - GDPR (we don't collect data)
+        - HIPAA (we don't store health information)
+        - SOX (we don't do accounting)
+        - PCI DSS (we don't process payments)
+        - ISO 27001 (we... have a repository?)
+        
+        Perfect for when you need to prove to compliance that your
+        formal calculus implementation is "enterprise-ready."
+        """
+        return """
+        SPHEREPOP ENTERPRISE COMPLIANCE REPORT
+        Generated: 2026-08-13
+        
+        EXECUTIVE SUMMARY
+        -----------------
+        Spherepop is fully compliant with all applicable regulations
+        by virtue of not doing any of the things those regulations
+        regulate.
+        
+        DETAILED FINDINGS
+        -----------------
+        ✓ GDPR: No personal data collected
+        ✓ HIPAA: No health information stored
+        ✓ SOX: No financial records kept
+        ✓ PCI DSS: No payment card data processed
+        ✓ ISO 27001: Repository has a .gitignore file
+        
+        RECOMMENDATIONS
+        ---------------
+        Consider upgrading to Enterprise Edition for:
+        - Blockchain-based audit trail
+        - AI-powered compliance monitoring  
+        - Cloud-native governance dashboard
+        - Synergy
+        
+        This report has been approved by the Spherepop Compliance
+        Committee (which does not exist).
+        """
+
+
+# Global enterprise manager instance
+# (Because global state is what enterprise software does best)
+_enterprise_manager: EnterpriseFeatureManager | None = None
+
+
+def get_enterprise_manager() -> EnterpriseFeatureManager:
+    """Get the global enterprise manager instance.
+    
+    This function exists to provide a singleton instance of the
+    enterprise manager, following the time-honored tradition of
+    enterprise software having exactly one instance of things
+    that probably shouldn't be singletons.
+    """
+    global _enterprise_manager
+    if _enterprise_manager is None:
+        _enterprise_manager = EnterpriseFeatureManager()
+    return _enterprise_manager
+
+
+# Convenience functions that wrap the global manager
+# (Because typing get_enterprise_manager() every time is too much work)
+
+def suggest_operation(history: tuple) -> str:
+    """Suggest the next operation. See EnterpriseFeatureManager.suggest_next_operation."""
+    return get_enterprise_manager().suggest_next_operation(history)
+
+
+def check_for_updates() -> dict:
+    """Check for updates. See EnterpriseFeatureManager.check_for_updates."""
+    return get_enterprise_manager().check_for_updates()
+
+
+def generate_compliance_report() -> str:
+    """Generate compliance report. See EnterpriseFeatureManager.generate_compliance_report."""
+    return get_enterprise_manager().generate_compliance_report()
+
+
+# For backwards compatibility with Spherepop 1.0
+# (Even though Spherepop 1.0 doesn't exist)
+LegacyEnterpriseManager = EnterpriseFeatureManager
+
+============================================================
+FILE: spherepop/grammar.py
+============================================================
+
+"""Appendix G: A Minimal BNF Grammar for Spherepop.
+
+A literal implementation of the paper's own concrete syntax, kept
+deliberately separate from `spherepop.parser` -- the line-oriented
+convenience command language (`POP 1`, `REFUSE a2`, ...) this lab has used
+since the first experiments to drive Config transitions quickly. That
+convenience syntax is *not* a claim to implement Appendix G; this module is.
+
+The grammar, transcribed from the appendix:
+
+    Lexical Domains
+        <Identifier> ::= letter (letter | digit | "_")*
+        <Label>      ::= <Identifier>
+        <Value>      ::= <Identifier> | <Number>
+        <Number>     ::= digit+
+
+    Expressions and Spheres
+        <Expr>   ::= <Value> | <Sphere>
+        <Sphere> ::= "(" <Label> ":" <Expr>* ")"
+
+    Events
+        <Event> ::= <Pop> | <Collapse> | <Refusal> | <Binding>
+        <Pop>      ::= "pop" "(" <Label> ")"
+        <Collapse> ::= "collapse" "(" <Label> "," <Equiv> ")"
+        <Refusal>  ::= "refuse" "(" <Label> "," <Set> ")"
+        <Binding>  ::= "bind" "(" <Label> "," <Predicate> ")"
+
+    Auxiliary Structures
+        <Equiv>     ::= "{" <Pair> ("," <Pair>)* "}"
+        <Pair>      ::= <Value> "~" <Value>
+        <Set>       ::= "{" <Value> ("," <Value>)* "}"
+        <Predicate> ::= <Identifier>
+
+    Histories, Configurations, Evaluation
+        <History> ::= <Event>*
+        <Config>  ::= "<" <Expr> "," <History> ">"
+        <Eval>    ::= <Config> "=>" <Config>
+
+This module implements the lexical, expression, and event layers above and
+translates parsed events into this codebase's (label-aware) Operation
+dataclasses from `spherepop.model`. It does not re-implement <History>,
+<Config>, or <Eval> as separate executable machinery: those correspond to
+`spherepop.model.Config` and `spherepop.semantics.transition`/
+`eval_program`, which already exist and are reused rather than re-specified
+here as a second interpreter.
+
+The appendix says predicates and equivalence relations are "treated
+abstractly" at the grammar level. Concretely: a parsed <Predicate>
+identifier is passed straight through to `spherepop.semantics._predicate`'s
+existing string-spec surface (e.g. "ALL") rather than this module inventing
+a second predicate language; a parsed <Equiv> (a set of pairwise `~`
+relations) is closed under transitivity via union-find into the disjoint
+`CollapseOp.classes` that codebase already expects, since `~` pairs and
+disjoint classes are two different surface notations for the same
+equivalence relation.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import List, Tuple
+
+from spherepop.model import Atom, BindOp, CollapseOp, Expr, Operation, PopOp, RefuseOp, Sphere
+
+
+class GrammarError(ValueError):
+    pass
+
+
+_PUNCTUATION = set("():,{}~")
+
+
+@dataclass(frozen=True)
+class _Token:
+    kind: str  # "IDENT" | "NUMBER" | "PUNCT"
+    text: str
+
+
+def _tokenize(source: str) -> List[_Token]:
+    tokens: List[_Token] = []
+    i, n = 0, len(source)
+    while i < n:
+        ch = source[i]
+        if ch.isspace():
+            i += 1
+            continue
+        if ch in _PUNCTUATION:
+            tokens.append(_Token("PUNCT", ch))
+            i += 1
+            continue
+        if ch.isdigit():
+            j = i
+            while j < n and source[j].isdigit():
+                j += 1
+            tokens.append(_Token("NUMBER", source[i:j]))
+            i = j
+            continue
+        if ch.isalpha():
+            j = i
+            while j < n and (source[j].isalnum() or source[j] == "_"):
+                j += 1
+            tokens.append(_Token("IDENT", source[i:j]))
+            i = j
+            continue
+        raise GrammarError(f"unexpected character {ch!r} at position {i}")
+    return tokens
+
+
+@dataclass
+class _Cursor:
+    tokens: List[_Token]
+    index: int = 0
+
+    def peek(self) -> "_Token | None":
+        if self.index >= len(self.tokens):
+            return None
+        return self.tokens[self.index]
+
+    def pop(self) -> _Token:
+        if self.index >= len(self.tokens):
+            raise GrammarError("unexpected end of input")
+        tok = self.tokens[self.index]
+        self.index += 1
+        return tok
+
+
+def _expect(cur: _Cursor, kind: str, text: str) -> None:
+    tok = cur.pop()
+    if tok.kind != kind or tok.text != text:
+        raise GrammarError(f"expected {text!r}, got {tok.text!r}")
+
+
+def _parse_value(cur: _Cursor) -> str:
+    tok = cur.pop()
+    if tok.kind not in ("IDENT", "NUMBER"):
+        raise GrammarError(f"expected a Value (Identifier or Number), got {tok.text!r}")
+    return tok.text
+
+
+def _parse_expr(cur: _Cursor) -> Expr:
+    tok = cur.peek()
+    if tok is None:
+        raise GrammarError("unexpected end of input while parsing an Expr")
+    if tok.kind == "PUNCT" and tok.text == "(":
+        return _parse_sphere(cur)
+    return Atom(_parse_value(cur))
+
+
+def _parse_sphere(cur: _Cursor) -> Sphere:
+    _expect(cur, "PUNCT", "(")
+    label_tok = cur.pop()
+    if label_tok.kind != "IDENT":
+        raise GrammarError(f"expected a Label (Identifier) after '(', got {label_tok.text!r}")
+    _expect(cur, "PUNCT", ":")
+    items: List[Expr] = []
+    while True:
+        tok = cur.peek()
+        if tok is None:
+            raise GrammarError("missing ')' in sphere expression")
+        if tok.kind == "PUNCT" and tok.text == ")":
+            break
+        items.append(_parse_expr(cur))
+    cur.pop()  # consume ')'
+    return Sphere(items=tuple(items), label=label_tok.text)
+
+
+def parse_expr(source: str) -> Expr:
+    """Parse a single <Expr>: either a <Value> (as an Atom) or a <Sphere>.
+    
+    Examples:
+        >>> from spherepop.grammar import parse_expr
+        
+        # Simple atom (value)
+        >>> atom = parse_expr("myvalue")
+        >>> atom
+        Atom(name='myvalue')
+        
+        # Number as atom
+        >>> num = parse_expr("42")
+        >>> num
+        Atom(name='42')
+        
+        # Sphere with label and contents
+        >>> sphere = parse_expr("(root: a b c)")
+        >>> sphere.label
+        'root'
+        >>> len(sphere.items)
+        3
+        
+        # Nested sphere
+        >>> nested = parse_expr("(outer: (inner: x y) z)")
+        >>> nested.label
+        'outer'
+        >>> nested.items[0].label  # First item is a sphere
+        'inner'
+    """
+    cur = _Cursor(_tokenize(source))
+    expr = _parse_expr(cur)
+    if cur.peek() is not None:
+        raise GrammarError("trailing tokens after expression")
+    return expr
+
+
+def parse_sphere(source: str) -> Sphere:
+    """Parse a top-level <Sphere>: `"(" <Label> ":" <Expr>* ")"`."""
+    expr = parse_expr(source)
+    if not isinstance(expr, Sphere):
+        raise GrammarError('top-level expression must be a Sphere "(Label: ...)"')
+    return expr
+
+
+def _parse_set(cur: _Cursor) -> "frozenset[str]":
+    _expect(cur, "PUNCT", "{")
+    values = [_parse_value(cur)]
+    while (tok := cur.peek()) is not None and tok.kind == "PUNCT" and tok.text == ",":
+        cur.pop()
+        values.append(_parse_value(cur))
+    _expect(cur, "PUNCT", "}")
+    return frozenset(values)
+
+
+def _parse_pair(cur: _Cursor) -> Tuple[str, str]:
+    left = _parse_value(cur)
+    _expect(cur, "PUNCT", "~")
+    right = _parse_value(cur)
+    return (left, right)
+
+
+def _pairs_to_classes(pairs: List[Tuple[str, str]]) -> Tuple["frozenset[str]", ...]:
+    """Close a set of pairwise `~` relations under transitivity via
+    union-find, producing the disjoint equivalence classes
+    `CollapseOp.classes` already expects. `a~b, b~c` yields one class
+    `{a, b, c}`, not two overlapping pairs -- `~` and disjoint classes are
+    two notations for the same equivalence relation, not different ones.
+    """
+    parent: dict[str, str] = {}
+
+    def find(x: str) -> str:
+        parent.setdefault(x, x)
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a: str, b: str) -> None:
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    for a, b in pairs:
+        union(a, b)
+
+    groups: dict[str, "set[str]"] = {}
+    for name in parent:
+        groups.setdefault(find(name), set()).add(name)
+    return tuple(frozenset(members) for members in groups.values())
+
+
+def _parse_equiv(cur: _Cursor) -> Tuple["frozenset[str]", ...]:
+    _expect(cur, "PUNCT", "{")
+    pairs = [_parse_pair(cur)]
+    while (tok := cur.peek()) is not None and tok.kind == "PUNCT" and tok.text == ",":
+        cur.pop()
+        pairs.append(_parse_pair(cur))
+    _expect(cur, "PUNCT", "}")
+    return _pairs_to_classes(pairs)
+
+
+def parse_event(source: str) -> Operation:
+    """Parse a single <Event> into this codebase's (label-aware) Operation.
+    
+    Implements Appendix G's event grammar:
+        <Event> ::= <Pop> | <Collapse> | <Refusal> | <Binding>
+    
+    Examples:
+        >>> from spherepop.grammar import parse_event
+        
+        # POP: remove nested scope
+        >>> pop_op = parse_event("pop(inner)")
+        >>> pop_op
+        PopOp(label='inner')
+        
+        # REFUSE: remove specific options
+        >>> refuse_op = parse_event("refuse(root, {a, b})")
+        >>> refuse_op
+        RefuseOp(refused=frozenset({'a', 'b'}), label='root')
+        
+        # BIND: filter by predicate
+        >>> bind_op = parse_event("bind(root, ALL)")
+        >>> bind_op
+        BindOp(predicate='ALL', label='root')
+        
+        # COLLAPSE: create equivalence classes
+        >>> collapse_op = parse_event("collapse(root, {x~y, y~z})")
+        >>> collapse_op.classes  # Transitively closed: {x,y,z}
+        (frozenset({'x', 'y', 'z'}),)
+        
+        # Separate classes remain separate
+        >>> collapse_op2 = parse_event("collapse(root, {a~b, c~d})")
+        >>> len(collapse_op2.classes)  # Two classes: {a,b} and {c,d}
+        2
+    """
+    cur = _Cursor(_tokenize(source))
+    keyword_tok = cur.pop()
+    if keyword_tok.kind != "IDENT":
+        raise GrammarError(f"expected an event keyword, got {keyword_tok.text!r}")
+    keyword = keyword_tok.text
+
+    _expect(cur, "PUNCT", "(")
+    label_tok = cur.pop()
+    if label_tok.kind != "IDENT":
+        raise GrammarError(f"expected a Label after '(', got {label_tok.text!r}")
+    label = label_tok.text
+
+    if keyword == "pop":
+        _expect(cur, "PUNCT", ")")
+        op: Operation = PopOp(label=label)
+    elif keyword == "refuse":
+        _expect(cur, "PUNCT", ",")
+        targets = _parse_set(cur)
+        _expect(cur, "PUNCT", ")")
+        op = RefuseOp(refused=targets, label=label)
+    elif keyword == "bind":
+        _expect(cur, "PUNCT", ",")
+        pred_tok = cur.pop()
+        if pred_tok.kind != "IDENT":
+            raise GrammarError(f"expected a Predicate (Identifier), got {pred_tok.text!r}")
+        _expect(cur, "PUNCT", ")")
+        op = BindOp(predicate=pred_tok.text, label=label)
+    elif keyword == "collapse":
+        _expect(cur, "PUNCT", ",")
+        classes = _parse_equiv(cur)
+        _expect(cur, "PUNCT", ")")
+        op = CollapseOp(classes=classes, label=label)
+    else:
+        raise GrammarError(f"unknown event keyword {keyword!r}")
+
+    if cur.peek() is not None:
+        raise GrammarError("trailing tokens after event")
+    return op
+
+============================================================
+FILE: spherepop/model.py
+============================================================
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import FrozenSet, Tuple, Union
+
+
+@dataclass(frozen=True)
+class Quotient:
+    """An equivalence class produced by COLLAPSE: an element of O/\u2261_C.
+
+    This carries only its membership -- no "representative" field. Two
+    Quotient values built from the same set of members are equal and
+    hash-equal (dataclass equality over `members`), regardless of which
+    member anyone later chooses to display. Picking a representative for
+    display is exclusively `views.representative`'s job; nothing in
+    model.py or semantics.py may treat one member as more the class than
+    another.
+    """
+
+    members: FrozenSet[str]
+
+
+@dataclass(frozen=True)
+class Atom:
+    # A plain option/atom name, or a Quotient if this position has been
+    # identified with others by a prior COLLAPSE.
+    name: str | Quotient
+
+
+@dataclass(frozen=True)
+class Sphere:
+    items: Tuple[Expr, ...]
+    # Appendix G: <Sphere> ::= "(" <Label> ":" <Expr>* ")" -- a sphere is a
+    # labeled enclosure. Optional and defaulted to None here so the lab's
+    # existing unlabeled convenience syntax ("(A B C)", via spherepop.parser)
+    # keeps working unchanged; spherepop.grammar's parser, which implements
+    # Appendix G's own concrete syntax literally, always supplies a label.
+    label: str | None = None
+
+
+Expr = Union[Atom, Sphere]
+
+
+@dataclass(frozen=True)
+class PopOp:
+    # Exactly one of path/label should be given; neither means "auto-select
+    # the deepest non-root sphere" (a lab convenience default -- Appendix
+    # G's own grammar requires an explicit Label always). Mutual-exclusion
+    # is enforced in semantics.transition, not here, to keep error
+    # reporting consistent with the rest of the primitive checks (EvalError).
+    path: Tuple[int, ...] | None = None
+    label: str | None = None
+
+
+@dataclass(frozen=True)
+class RefuseOp:
+    refused: FrozenSet[str]
+    # Appendix G's <Refusal> ::= "refuse" "(" <Label> "," <Set> ")" takes a
+    # Label. Recorded here and on the resulting event for provenance; it
+    # does not yet select among multiple option spaces -- REFUSE still acts
+    # on Config's single global option_space (see README: Plan A vs Plan B).
+    label: str | None = None
+
+
+@dataclass(frozen=True)
+class BindOp:
+    predicate: str
+    label: str | None = None
+
+
+@dataclass(frozen=True)
+class CollapseOp:
+    classes: Tuple[FrozenSet[str], ...]
+    label: str | None = None
+
+
+Operation = Union[PopOp, RefuseOp, BindOp, CollapseOp]
+
+
+@dataclass(frozen=True)
+class PopEvent:
+    history_index: int
+    path: Tuple[int, ...]
+    label: str | None = None
+
+
+@dataclass(frozen=True)
+class RefuseEvent:
+    history_index: int
+    refused: FrozenSet[str]
+    label: str | None = None
+
+
+@dataclass(frozen=True)
+class BindEvent:
+    history_index: int
+    predicate: str
+    label: str | None = None
+
+
+@dataclass(frozen=True)
+class CollapseEvent:
+    history_index: int
+    classes: Tuple[FrozenSet[str], ...]
+    label: str | None = None
+
+
+Event = Union[PopEvent, RefuseEvent, BindEvent, CollapseEvent]
+
+
+@dataclass(frozen=True)
+class Config:
+    sigma: Sphere
+    history: Tuple[Event, ...]
+    # Elements are plain option strings, or Quotients once COLLAPSE has
+    # merged some of them into an equivalence class.
+    option_space: FrozenSet[str | Quotient]
+    collapse_log: Tuple[Tuple[int, Tuple[FrozenSet[str], ...]], ...] = ()
+
+
+def make_config(sigma: Sphere, option_space: FrozenSet[str] | set[str]) -> Config:
+    return Config(sigma=sigma, history=(), option_space=frozenset(option_space), collapse_log=())
+
+============================================================
+FILE: spherepop/observers.py
+============================================================
+
+"""Read-only observers: propositions *about* histories, never events *in* them.
+
+The four primitives in ``spherepop.semantics`` (POP, REFUSE, BIND, COLLAPSE)
+are the only things that may append to a Config's history. Everything in
+this module answers a question about one or more already-produced Configs
+and returns a plain value (bool, or a small read-only structure) — it never
+returns a Config for the caller to adopt as "the" continuation, and it never
+mutates history_index bookkeeping or collapse_log in place.
+
+    operations make history; experiments interrogate history.
+
+Confluence, divergence, and regret are properties discovered about
+histories under a stated policy or against a stated alternative — they are
+deliberately *not* added as a fifth Operation, because doing so would erase
+the distinction between the closed four-operator algebra and the questions
+we ask of it.
+"""
+
+from __future__ import annotations
+
+from typing import Iterable, Sequence
+
+from spherepop.model import CollapseOp, Config, Operation
+from spherepop.semantics import EvalError, eval_program, history_is_prefix, transition
+from spherepop.views import extensional_view
+
+
+def admissible(op: Operation, config: Config) -> bool:
+    """Whether `op` could be applied to `config` without raising.
+
+    This attempts the transition and discards the result — it reports on
+    admissibility without committing `op` to `config`'s history. Because
+    Config is itself immutable, `config` is unaffected either way; the
+    discipline here is about *usage*: callers must not treat this as a way
+    to "peek" at the resulting sigma or option_space, only at whether the
+    move is legal.
+    """
+    try:
+        transition(config, op)
+    except EvalError:
+        return False
+    return True
+
+
+def confluent(left: Config, right: Config, policy: CollapseOp) -> bool:
+    """Whether `left` and `right` can be explicitly identified under `policy`.
+
+    Confluence is not something COLLAPSE produces as a side effect of
+    ordinary evaluation — it is a claim about two independently-reached
+    configurations, checked by applying the same stated policy to analysis
+    copies of both and comparing the resulting extensional views. Neither
+    `left` nor `right` is modified; `policy` is never appended to either
+    history by this function.
+    
+    Examples:
+        >>> from spherepop.model import Config, Sphere, Atom, CollapseOp, RefuseOp
+        >>> from spherepop.semantics import transition
+        >>> from spherepop.observers import confluent
+        
+        # Two paths reach different states
+        >>> sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+        >>> cfg = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+        
+        >>> left = transition(cfg, RefuseOp(options=frozenset({"b"})))
+        >>> right = transition(cfg, RefuseOp(options=frozenset({"c"})))
+        >>> left.option_space  # {a, c}
+        frozenset({'a', 'c'})
+        >>> right.option_space  # {a, b}
+        frozenset({'a', 'b'})
+        
+        # Policy that identifies all remaining options
+        >>> policy = CollapseOp(classes=frozenset([
+        ...     frozenset({"a", "b", "c"})  # Collapse everything
+        ... ]))
+        >>> confluent(left, right, policy)  # Both end up with single quotient
+        True
+        
+        # But they're divergent without collapse
+        >>> from spherepop.observers import divergent
+        >>> divergent(left, right, CollapseOp(classes=frozenset()))
+        True
+    """
+    left_after = transition(left, policy)
+    right_after = transition(right, policy)
+    return extensional_view(left_after) == extensional_view(right_after)
+
+
+def divergent(left: Config, right: Config, policy: CollapseOp) -> bool:
+    """Failure of confluence under `policy`.
+
+    Divergence is not "no COLLAPSE could ever identify these" (that would
+    require quantifying over all policies) — it is the negation of
+    confluence under one stated policy, matching `confluent`'s scope.
+    """
+    return not confluent(left, right, policy)
+
+
+def irreducibly_divergent(left: Config, right: Config, policies: Iterable[CollapseOp]) -> bool:
+    """Whether `left` and `right` remain divergent under every policy in
+    `policies`.
+
+    This is divergence irreducible *relative to the given family* — not a
+    proof of divergence under every policy that could ever be stated,
+    which would require enumerating the full policy space. A structural
+    divergence (different sigma shape; see experiment 16) is a case where
+    this holds for essentially any atom-renaming policy, since COLLAPSE
+    quotients atoms and cannot repair a difference in bracket structure —
+    but that stronger claim is a fact about COLLAPSE's reach, not
+    something this function tests directly.
+    """
+    return all(divergent(left, right, policy) for policy in policies)
+
+
+def intensionally_equivalent(left: Config, right: Config) -> bool:
+    """Whether `left` and `right` were reached by the exact same event
+    sequence — identity of *how*, not just *what*."""
+    return left.history == right.history
+
+
+def extensionally_equivalent(left: Config, right: Config) -> bool:
+    """Whether `left` and `right` look the same from the outside: same
+    rendered sigma, same displayed option space — identity of *what*,
+    indifferent to *how*. Two configurations can be extensionally
+    equivalent while intensionally distinct (see experiment 20)."""
+    return extensional_view(left) == extensional_view(right)
+
+
+def regretful(base: Config, candidate: Config, alternative: Config) -> bool:
+    """Whether `candidate` is a regretful continuation of `base`.
+
+    Regret describes a history whose commitments leave a strictly smaller
+    option space than another continuation reachable from the same prefix.
+    `base` fixes what "the common prefix" means; both `candidate` and
+    `alternative` must extend it (checked via `history_is_prefix`, the same
+    prefix relation the core semantics already exposes). This raises rather
+    than guessing at a shared ancestor, since silently comparing unrelated
+    histories would misrepresent what regret is a claim about.

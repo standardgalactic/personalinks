@@ -1,0 +1,262 @@
+You are analyzing one document from a large theoretical and
+computational research repository called Spherepop.
+
+Produce a dense scholarly summary.
+
+Identify:
+
+1. the central thesis;
+2. definitions and primitive concepts;
+3. mathematical claims;
+4. important equations or formal structures;
+5. mechanisms and processes;
+6. philosophical commitments;
+7. connections to computation;
+8. connections to other likely parts of Spherepop;
+9. unresolved questions;
+10. contradictions, ambiguities, or weaknesses;
+11. concepts that appear unusually important and should survive
+    later compression.
+
+Do not merely paraphrase section by section.
+
+Preserve technical distinctions. Do not invent claims absent from
+the source.
+
+SOURCE DOCUMENT
+===============
+
+# Test Coverage Report
+
+**Generated:** 2026-08-13  
+**Overall Coverage:** 73.89%  
+**Target:** 85%+
+
+## Summary
+
+Current test coverage is **73.89%**, below our 85% target. This document identifies coverage gaps and prioritizes areas for improvement.
+
+### Coverage by Module
+
+| Module | Stmts | Miss | Branch | BrPart | Cover | Priority |
+|--------|-------|------|--------|--------|-------|----------|
+| **Core Modules** |
+| `model.py` | 60 | 0 | 0 | 0 | **100.00%** | ✅ Complete |
+| `path_utils.py` | 41 | 0 | 18 | 0 | **100.00%** | ✅ Complete |
+| `poset.py` | 28 | 0 | 8 | 0 | **100.00%** | ✅ Complete |
+| `predicates.py` | 23 | 0 | 10 | 0 | **100.00%** | ✅ Complete |
+| `semantics.py` | 114 | 16 | 52 | 10 | **83.13%** | 🔴 High |
+| `observers.py` | 50 | 3 | 12 | 1 | **93.55%** | 🟡 Medium |
+| `grammar.py` | 170 | 11 | 64 | 12 | **90.17%** | 🟡 Medium |
+| `parser.py` | 111 | 16 | 56 | 14 | **82.04%** | 🔴 High |
+| `views.py` | 39 | 7 | 12 | 2 | **78.43%** | 🔴 High |
+| **Utilities** |
+| `__init__.py` | 6 | 0 | 0 | 0 | **100.00%** | ✅ Complete |
+| **Legacy/Optional** |
+| `appendix_g.py` | 157 | 157 | 64 | 0 | **0.00%** | ⚪ Excluded |
+| `29-multi-timescale/run.py` | 155 | 16 | 52 | 3 | **88.89%** | ⚪ Experiment |
+
+## Priority Gaps
+
+### 🔴 HIGH PRIORITY (Below 85%)
+
+#### 1. `semantics.py` - 83.13% coverage
+
+**Missing Lines:** 39, 43-45, 48, 52, 57, 63-66, 70, 134-135, 207, 224
+
+**Analysis:**
+- **Lines 39-70**: Error handling branches in `transition()`
+  - Missing: Invalid operation type handling
+  - Missing: Specific error message paths
+  - **Action:** Add tests for malformed operations and edge cases
+  
+- **Lines 134-135**: `_pop` error branch
+  - Missing: Pop failure scenarios
+  - **Action:** Test attempting to pop when no scopes exist or invalid label
+  
+- **Lines 207, 224**: `_bind` and `_refuse` edge cases
+  - Missing: Empty predicate results
+  - Missing: REFUSE with empty target set
+  - **Action:** Test boundary conditions
+
+**Tests to Add:**
+```python
+# tests/test_semantics.py or new test_semantics_errors.py
+- test_transition_invalid_operation_type()
+- test_pop_empty_scope_stack()
+- test_pop_nonexistent_label()
+- test_bind_empty_result()
+- test_refuse_empty_target()
+- test_refuse_invalid_options()
+```
+
+#### 2. `parser.py` - 82.04% coverage
+
+**Missing Lines:** 25, 47, 60, 65, 70, 77, 84, 87-88, 90, 96, 101, 109, 128, 133, 141
+
+**Analysis:**
+- Parser error handling for malformed expressions
+- Edge cases in `parse_atom()`, `parse_sphere()`, `parse_expr()`
+- Token boundary conditions
+
+**Tests to Add:**
+```python
+# tests/test_parser.py (new file)
+- test_parse_empty_string()
+- test_parse_invalid_tokens()
+- test_parse_unclosed_sphere()
+- test_parse_invalid_atom_syntax()
+- test_parse_nested_error_recovery()
+```
+
+#### 3. `views.py` - 78.43% coverage
+
+**Missing Lines:** 52-54, 58, 79, 83-84
+
+**Analysis:**
+- **Lines 52-54, 58**: `format_available_paths()` edge cases
+  - Empty tree case
+  - Single path case
+  
+- **Lines 79, 83-84**: `format_available_options()` edge cases
+  - Empty option space
+  - Large option space formatting
+
+**Tests to Add:**
+```python
+# tests/test_views.py (new file)
+- test_format_available_paths_empty_tree()
+- test_format_available_paths_single_path()
+- test_format_available_options_empty()
+- test_format_available_options_large_set()
+- test_representative_quotient_members()
+```
+
+### 🟡 MEDIUM PRIORITY (85-95%)
+
+#### 4. `grammar.py` - 90.17% coverage
+
+**Missing Lines:** 105, 121, 136, 143, 153, 159, 172, 219, 246, 252, 267, 279
+
+**Analysis:**
+- Error handling in grammar parsing
+- Edge cases in operation constructors
+- Already has good coverage, just needs edge case hardening
+
+**Tests to Add:**
+```python
+# tests/test_grammar.py (extend existing)
+- test_parse_operation_invalid_syntax()
+- test_parse_collapse_malformed_classes()
+- test_parse_bind_invalid_predicate()
+```
+
+#### 5. `observers.py` - 93.55% coverage
+
+**Missing Lines:** 119, 182-183
+
+**Analysis:**
+- **Line 119**: Edge case in `divergent()`
+- **Lines 182-183**: Edge case in `regretful()`
+- Very good coverage already
+
+**Tests to Add:**
+```python
+# tests/test_observers.py (extend existing)
+- test_divergent_empty_intersection()
+- test_regretful_boundary_conditions()
+```
+
+## Excluded from Target
+
+### `appendix_g.py` - 0% coverage
+
+**Status:** Legacy reference implementation of Appendix G grammar.
+
+**Rationale:** This module contains the original Appendix G parser that has been superseded by `grammar.py` and `parser.py`. It is kept for reference but is not part of the active codebase.
+
+**Action:** Mark as excluded from coverage requirements. Consider moving to `docs/reference/` or adding `# pragma: no cover`.
+
+### Experiment Scripts (e.g., `29-multi-timescale-continuation/run.py`)
+
+**Status:** Experiment runner scripts have 88.89% coverage (better than core!).
+
+**Rationale:** These are exploratory scripts that demonstrate Spherepop capabilities. While it's great they have good coverage, they're not part of the library API.
+
+**Action:** These naturally get covered when tests extract regression cases from them.
+
+## Action Plan
+
+### Phase 1: Reach 85% (Priority: High)
+
+1. **Create `tests/test_semantics_errors.py`**
+   - Test all error branches in `transition()`
+   - Test edge cases in `_pop`, `_bind`, `_refuse`, `_collapse`
+   - **Expected coverage gain:** +8-10%
+
+2. **Create `tests/test_views.py`**
+   - Test error message formatting helpers
+   - Test `representative()` edge cases
+   - **Expected coverage gain:** +3-4%
+
+3. **Create `tests/test_parser.py`**
+   - Test parser error handling
+   - Test malformed input recovery
+   - **Expected coverage gain:** +4-5%
+
+**Estimated Total:** 73.89% → 88-93%
+
+### Phase 2: Reach 90%+ (Priority: Medium)
+
+4. **Extend `tests/test_grammar.py`**
+   - Add edge cases for all operation types
+   - **Expected coverage gain:** +2-3%
+
+5. **Extend `tests/test_observers.py`**
+   - Add boundary condition tests
+   - **Expected coverage gain:** +1-2%
+
+**Estimated Total:** 88-93% → 91-96%
+
+## Coverage Workflow
+
+### Running Coverage Locally
+
+```bash
+# Full report
+make test-cov
+
+# HTML report (opens in browser)
+pytest --cov=spherepop --cov-report=html
+xdg-open htmlcov/index.html
+
+# Check specific module
+pytest --cov=spherepop.semantics --cov-report=term-missing tests/test_semantics.py
+```
+
+### CI Integration
+
+Coverage should be enforced in CI:
+- **Fail if below 85%** (after Phase 1 complete)
+- **Report coverage delta** on PRs
+- **Badge in README.md** showing current coverage
+
+## Theory Status Notes
+
+Some gaps are **intentional** and relate to provisional semantics:
+
+- **BIND existential semantics** (predicates.py): Fully tested, but marked `@pytest.mark.experimental` per THEORY_STATUS.md Q3
+- **COLLAPSE composition** (semantics.py): Currently returns error for successive collapse on quotients (Q2b) - this is correct provisional behavior
+- **Label uniqueness enforcement** (path_utils.py): Implementation choice (Q8), well-tested
+
+See `THEORY_STATUS.md` for details on what's paper-licensed vs provisional.
+
+## Review Schedule
+
+- **Update this document** after adding each new test suite
+- **Re-run coverage** before each release
+- **Review gaps** monthly to ensure new code is tested
+
+---
+
+**Next Update:** After Phase 1 completion (target: tests/test_semantics_errors.py, test_views.py, test_parser.py)

@@ -1,0 +1,1019 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+        sigma = grammar_parse_sphere("(outer: A (inner: B C) D)")
+        cfg = make_config(sigma, {"x"})
+        by_label = transition(cfg, PopOp(label="inner"))
+        by_path = transition(cfg, PopOp(path=(1,)))
+        self.assertEqual(render_expr(by_label.sigma), render_expr(by_path.sigma))
+        self.assertEqual(by_label.history[-1].label, "inner")
+        self.assertIsNone(by_path.history[-1].label)
+
+    def test_pop_rejects_both_path_and_label(self):
+        cfg = make_config(parse_sphere("(A (B C) D)"), {"x"})
+        with self.assertRaises(EvalError):
+            transition(cfg, PopOp(path=(1,), label="inner"))
+
+    def test_pop_by_label_not_found(self):
+        cfg = make_config(parse_sphere("(A (B C) D)"), {"x"})
+        with self.assertRaises(EvalError):
+            transition(cfg, PopOp(label="nonexistent"))
+
+    def test_pop_by_label_ambiguous(self):
+        from spherepop.grammar import parse_sphere as grammar_parse_sphere
+
+        # Two sibling spheres sharing a label -- resolution must refuse to
+        # guess which one "inner" means.
+        sigma = grammar_parse_sphere("(outer: (inner: A) (inner: B))")
+        cfg = make_config(sigma, {"x"})
+        with self.assertRaises(EvalError):
+            transition(cfg, PopOp(label="inner"))
+
+    def test_append_only_history_prefix_monotonicity(self):
+        cfg0 = make_config(parse_sphere("(A (B C) D)"), {"o1", "o2", "o3"})
+        cfg1 = transition(cfg0, PopOp(path=(1,)))
+        cfg2 = transition(cfg1, RefuseOp(frozenset({"o2"})))
+        cfg3 = transition(cfg2, BindOp("prefix:o"))
+        self.assertTrue(history_is_prefix(cfg0, cfg1))
+        self.assertTrue(history_is_prefix(cfg1, cfg2))
+        self.assertTrue(history_is_prefix(cfg2, cfg3))
+        self.assertEqual([e.history_index for e in cfg3.history], [0, 1, 2])
+
+    def test_refuse_is_option_space_subtraction(self):
+        cfg = make_config(parse_sphere("(A B)"), {"x", "y", "z"})
+        out = transition(cfg, RefuseOp(frozenset({"y", "missing"})))
+        self.assertEqual(out.option_space, frozenset({"x", "z"}))
+        self.assertEqual(cfg.option_space, frozenset({"x", "y", "z"}))
+
+    def test_refuse_requires_nonempty_target_appendix_e(self):
+        cfg = make_config(parse_sphere("(A B)"), {"x", "y", "z"})
+        # Every requested name is absent from the option space, so nothing
+        # is actually being refused -- Appendix E requires R nonempty.
+        with self.assertRaises(EvalError):
+            transition(cfg, RefuseOp(frozenset({"missing", "also-missing"})))
+        with self.assertRaises(ParseError):
+            parse_operation("REFUSE")
+
+    def test_bind_is_predicate_filter(self):
+        cfg = make_config(parse_sphere("(A B)"), {"alpha", "beta", "axis"})
+        out = transition(cfg, BindOp("prefix:a"))
+        self.assertEqual(out.option_space, frozenset({"alpha", "axis"}))
+
+    def test_collapse_is_equivalence_quotient_not_destruction(self):
+        cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+        out = transition(cfg, CollapseOp(classes=(frozenset({"B", "C"}),)))
+
+        # Display renders a chosen representative ("B", sorted-first)...
+        self.assertEqual(render_expr(out.sigma), "(A B B)")
+
+        # ...but the option space holds the class itself, not that string.
+        # "B" and "C" individually are no longer present at all: only the
+        # Quotient is, so no downstream code can privilege the
+        # representative by comparing against "B" directly.
+        quotient = Quotient(members=frozenset({"B", "C"}))
+        self.assertEqual(out.option_space, frozenset({"A", quotient}))
+        self.assertNotIn("B", out.option_space)
+        self.assertNotIn("C", out.option_space)
+
+        self.assertEqual(len(out.collapse_log), 1)
+        self.assertEqual(out.collapse_log[0][0], 0)
+
+    def test_quotient_equality_ignores_construction_order(self):
+        # Two Quotients built from the same members are equal regardless
+        # of the order the members were supplied in -- there is no
+        # representative field to disagree about.
+        self.assertEqual(Quotient(frozenset({"B", "C"})), Quotient(frozenset({"C", "B"})))
+        self.assertEqual(representative(Quotient(frozenset({"B", "C"}))), "B")
+
+    def test_extensional_view_sorts_mixed_string_and_quotient_options(self):
+        # A raw sorted(option_space) breaks once it can hold a mix of
+        # strings and Quotients (not mutually orderable); extensional_view
+        # must not have that problem.
+        cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+        out = transition(cfg, CollapseOp(classes=(frozenset({"B", "C"}),)))
+        self.assertEqual(extensional_view(out), ("(A B B)", ("A", "B")))
+
+    def test_bind_after_collapse_is_existential_over_class_members(self):
+        cfg = make_config(parse_sphere("(A B C)"), {"alpha", "beta", "gamma"})
+        collapsed = transition(cfg, CollapseOp(classes=(frozenset({"alpha", "gamma"}),)))
+        # "beta" stays a plain string; {"alpha","gamma"} becomes one Quotient.
+        out = transition(collapsed, BindOp("prefix:a"))
+        # The class is admitted because "alpha" (one of its members)
+        # matches, even though "gamma" does not -- the provisional
+        # existential reading documented in semantics._predicate.
+        self.assertEqual(out.option_space, frozenset({Quotient(frozenset({"alpha", "gamma"}))}))
+
+    def test_refuse_after_collapse_removes_whole_class(self):
+        cfg = make_config(parse_sphere("(A B C)"), {"alpha", "beta", "gamma"})
+        collapsed = transition(cfg, CollapseOp(classes=(frozenset({"alpha", "gamma"}),)))
+        out = transition(collapsed, RefuseOp(frozenset({"alpha"})))
+        # Naming one member of the class refuses the whole class.
+        self.assertEqual(out.option_space, frozenset({"beta"}))
+        # The event records only what was actually named, not the
+        # collateral member swept out with it.
+        self.assertEqual(out.history[-1].refused, frozenset({"alpha"}))
+
+    def test_distinct_histories_can_share_extensional_view(self):
+        base = make_config(parse_sphere("(A (B C) D)"), {"A", "B", "C", "D"})
+        h1 = transition(base, PopOp(path=(1,)))
+        h2 = transition(base, BindOp("ALL"))
+        h2 = transition(h2, PopOp(path=(1,)))
+        self.assertNotEqual(history_view(h1), history_view(h2))
+        self.assertEqual(extensional_view(h1), extensional_view(h2))
+
+    def test_derived_views_do_not_mutate_authoritative_history(self):
+        cfg = make_config(parse_sphere("(A (B C) D)"), {"o1", "o2"})
+        cfg = transition(cfg, PopOp(path=(1,)))
+        before = cfg.history
+        _ = history_view(cfg)
+        _ = extensional_view(cfg)
+        self.assertEqual(cfg.history, before)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+============================================================
+FILE: tests/test_validation.py
+============================================================
+
+"""Tests for configuration validation.
+
+Tests the advisory validation layer that diagnoses Config structural
+invariants without altering configurations.
+"""
+
+from __future__ import annotations
+
+import pytest
+
+from spherepop import make_config, parse_sphere, transition
+from spherepop.model import (
+    Atom,
+    BindOp,
+    CollapseEvent,
+    CollapseOp,
+    Config,
+    Quotient,
+    RefuseEvent,
+    RefuseOp,
+    Sphere,
+)
+from spherepop.validation import assert_valid_config, validate_config
+
+
+# ============================================================================
+# Valid Configurations
+# ============================================================================
+
+
+def test_validate_simple_config():
+    """Valid simple config passes all checks."""
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    violations = validate_config(cfg)
+    assert violations == []
+
+
+def test_validate_after_refuse():
+    """Config after REFUSE is valid (option_space subset)."""
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    cfg_refused = transition(cfg, RefuseOp(refused=frozenset({"C"})))
+    
+    violations = validate_config(cfg_refused)
+    assert violations == []
+
+
+def test_validate_after_bind():
+    """Config after BIND is valid (option_space subset)."""
+    # Option names must match sigma atoms
+    sigma = Sphere((Atom("a1"), Atom("a2"), Atom("b1")), label="root")
+    cfg = make_config(sigma, {"a1", "a2", "b1"})
+    cfg_bound = transition(cfg, BindOp(predicate="prefix:a"))
+    
+    violations = validate_config(cfg_bound)
+    assert violations == []
+
+
+def test_validate_after_collapse():
+    """Config after COLLAPSE is valid (quotients with provenance)."""
+    cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    cfg_collapsed = transition(cfg, CollapseOp(classes=(frozenset({"B", "C"}),)))
+    
+    violations = validate_config(cfg_collapsed)
+    assert violations == []
+
+
+def test_validate_nested_sigma():
+    """Config with deeply nested sigma is valid."""
+    sigma = Sphere((
+        Atom("a"),
+        Sphere((
+            Atom("b"),
+            Sphere((Atom("c"), Atom("d")), label="inner")
+        ), label="middle")
+    ), label="root")
+    cfg = make_config(sigma, {"a", "b", "c", "d"})
+    
+    violations = validate_config(cfg)
+    assert violations == []
+
+
+# ============================================================================
+# Invariant 1: Sigma Well-Formedness
+# ============================================================================
+
+
+def test_validate_detects_invalid_expr_type():
+    """Validation detects non-Expr in sigma tree.
+    
+    Note: This is a pathological case that can't happen through normal API
+    but validates the defensive checking in validation logic.
+    """
+    # Construct malformed sphere by bypassing type checks
+    # Use object.__setattr__ to bypass frozen dataclass protection
+    bad_sphere = Sphere.__new__(Sphere)
+    object.__setattr__(bad_sphere, 'items', (Atom("a"), "not_an_expr"))  # type: ignore
+    object.__setattr__(bad_sphere, 'label', "root")
+    
+    cfg = Config(
+        sigma=bad_sphere,
+        option_space=frozenset({"a"}),
+        history=()
+    )
+    
+    violations = validate_config(cfg)
+    assert any("is invalid: got str" in v for v in violations)
+
+
+# ============================================================================
+# Invariant 2: Option Provenance
+# ============================================================================
+
+
+def test_validate_detects_option_not_in_sigma():
+    """Validation detects options not corresponding to sigma atoms."""
+    cfg = Config(
+        sigma=Sphere((Atom("A"), Atom("B")), label="root"),
+        option_space=frozenset({"X", "Y"}),  # Not in sigma
+        history=()
+    )
+    
+    violations = validate_config(cfg)
+    assert any("not found in sigma atoms" in v for v in violations)
+    assert any("'X'" in v for v in violations)
+
+
+def test_validate_detects_invalid_quotient_member():
+    """Validation detects Quotient members without provenance."""
+    # Manually create Quotient with unprovable members
+    bad_quotient = Quotient(members=frozenset({"phantom1", "phantom2"}))
+    cfg = Config(
+        sigma=Sphere((Atom("A"),), label="root"),
+        option_space=frozenset({bad_quotient}),
+        history=()  # No collapse event to establish provenance
+    )
+    
+    violations = validate_config(cfg)
+    assert any("not found in sigma atoms or collapse provenance" in v for v in violations)
+
+
+def test_validate_accepts_quotient_with_collapse_provenance():
+    """Validation accepts Quotient when collapse history establishes provenance."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    cfg_collapsed = transition(cfg, CollapseOp(classes=(frozenset({"A", "B"}),)))
+    
+    # After COLLAPSE, quotient members have provenance via CollapseEvent
+    violations = validate_config(cfg_collapsed)
+    assert violations == []
+
+
+# ============================================================================
+# Invariant 3: History Sequential
+# ============================================================================
+
+
+def test_validate_detects_non_sequential_history_index():
+    """Validation detects history events with wrong indices."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    cfg_step1 = transition(cfg, RefuseOp(refused=frozenset({"B"})))
+    
+    # Manually corrupt history index
+    bad_event = RefuseEvent(history_index=99, refused=frozenset({"A"}), label=None)
+    cfg_bad = Config(
+        sigma=cfg_step1.sigma,
+        option_space=cfg_step1.option_space,
+        history=cfg_step1.history + (bad_event,)
+    )
+    
+    violations = validate_config(cfg_bad)
+    assert any("history_index=99, expected 1" in v for v in violations)
+
+
+def test_validate_detects_missing_history_index():
+    """Validation detects events missing history_index attribute."""
+    # Create event-like object without history_index
+    class FakeEvent:
+        pass
+    
+    cfg = Config(
+        sigma=Sphere((Atom("A"),), label="root"),
+        option_space=frozenset({"A"}),
+        history=(FakeEvent(),)  # type: ignore
+    )
+    
+    violations = validate_config(cfg)
+    assert any("missing history_index" in v for v in violations)
+
+
+# ============================================================================
+# Invariant 4: Collapse Log Consistency
+# ============================================================================
+
+
+def test_validate_detects_collapse_log_out_of_range():
+    """Validation detects collapse_log indices beyond history length."""
+    cfg = Config(
+        sigma=Sphere((Atom("A"),), label="root"),
+        option_space=frozenset({"A"}),
+        history=(),
+        collapse_log=((99, ()),)  # No events in history
+    )
+    
+    violations = validate_config(cfg)
+    assert any("collapse_log contains index 99" in v for v in violations)
+
+
+def test_validate_detects_collapse_log_pointing_to_non_collapse():
+    """Validation detects collapse_log pointing to non-CollapseEvent."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    cfg_refused = transition(cfg, RefuseOp(refused=frozenset({"B"})))
+    
+    # Manually add collapse_log pointing to RefuseEvent
+    cfg_bad = Config(
+        sigma=cfg_refused.sigma,
+        option_space=cfg_refused.option_space,
+        history=cfg_refused.history,
+        collapse_log=((0, ()),)  # Points to RefuseEvent, not CollapseEvent
+    )
+    
+    violations = validate_config(cfg_bad)
+    assert any("points to RefuseEvent, not CollapseEvent" in v for v in violations)
+
+
+# ============================================================================
+# Invariant 5: Quotient Uniqueness
+# ============================================================================
+
+
+def test_validate_detects_duplicate_quotients():
+    """Validation would detect duplicate Quotients, but frozenset prevents it.
+    
+    Note: Because Quotient uses dataclass equality (based on members), Python's
+    frozenset automatically deduplicates equal Quotients. This test documents
+    that the validation logic exists, even though it can't be triggered through
+    normal Python operations.
+    """
+    q1 = Quotient(members=frozenset({"A", "B"}))
+    q2 = Quotient(members=frozenset({"A", "B"}))
+    
+    # Verify Python semantics: equal quotients hash equal
+    assert q1 == q2
+    assert hash(q1) == hash(q2)
+    
+    # Therefore frozenset automatically deduplicates
+    assert len(frozenset({q1, q2})) == 1
+    
+    # So this config is actually valid (only 1 quotient despite 2 references)
+    cfg = Config(
+        sigma=Sphere((Atom("A"), Atom("B")), label="root"),
+        option_space=frozenset({q1, q2}),
+        history=(CollapseEvent(history_index=0, classes=(frozenset({"A", "B"}),), label=None),)
+    )
+    
+    violations = validate_config(cfg)
+    assert violations == []  # Valid because frozenset deduplicated
+
+
+# ============================================================================
+# Invariant 6: Label Uniqueness
+# ============================================================================
+
+
+def test_validate_detects_duplicate_labels():
+    """Validation detects non-unique Sphere labels (implementation choice Q8)."""
+    sigma = Sphere((
+        Sphere((Atom("a"),), label="dup"),
+        Sphere((Atom("b"),), label="dup"),  # Duplicate label
+    ), label="root")
+    cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+    
+    violations = validate_config(cfg)
+    assert any("Label 'dup' appears at multiple paths" in v for v in violations)
+
+
+def test_validate_accepts_none_labels():
+    """Validation accepts Spheres with label=None (no uniqueness requirement)."""
+    sigma = Sphere((
+        Sphere((Atom("a"),), label=None),
+        Sphere((Atom("b"),), label=None),
+    ), label="root")
+    cfg = make_config(sigma, {"a", "b"})
+    
+    violations = validate_config(cfg)
+    assert violations == []
+
+
+# ============================================================================
+# Strict Validation Wrapper
+# ============================================================================
+
+
+def test_assert_valid_config_passes_valid():
+    """assert_valid_config doesn't raise for valid config."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    assert_valid_config(cfg)  # Should not raise
+
+
+def test_assert_valid_config_raises_invalid():
+    """assert_valid_config raises ValueError for invalid config."""
+    cfg = Config(
+        sigma=Sphere((Atom("A"),), label="root"),
+        option_space=frozenset({"X"}),  # Not in sigma
+        history=()
+    )
+    
+    with pytest.raises(ValueError, match="Config validation failed"):
+        assert_valid_config(cfg)
+
+
+# ============================================================================
+# Integration: Validation Throughout Normal Operations
+# ============================================================================
+
+
+def test_validate_sequence_of_operations():
+    """Validation passes at each step of normal operation sequence."""
+    sigma = Sphere((Atom("a1"), Atom("a2"), Atom("b1"), Atom("c1")), label="root")
+    cfg = make_config(sigma, {"a1", "a2", "b1", "c1"})
+    assert validate_config(cfg) == []
+    
+    cfg = transition(cfg, RefuseOp(refused=frozenset({"c1"})))
+    assert validate_config(cfg) == []
+    
+    cfg = transition(cfg, BindOp(predicate="prefix:a"))
+    assert validate_config(cfg) == []
+    
+    cfg = transition(cfg, CollapseOp(classes=(frozenset({"a1", "a2"}),)))
+    assert validate_config(cfg) == []
+
+
+def test_validate_does_not_alter_config():
+    """Validation is purely observational - never alters config."""
+    cfg = make_config(parse_sphere("(A B)"), {"A", "B"})
+    original_sigma = cfg.sigma
+    original_space = cfg.option_space
+    original_history = cfg.history
+    
+    validate_config(cfg)
+    
+    assert cfg.sigma is original_sigma
+    assert cfg.option_space is original_space
+    assert cfg.history is original_history
+
+============================================================
+FILE: tests/test_validation_edge_cases.py
+============================================================
+
+"""Additional validation tests targeting edge case coverage gaps.
+
+Extends test_validation.py to hit specific uncovered branches:
+- Lines 151-154: Expr type validation
+- Lines 257-260: collapse_log structure validation  
+- Lines 288-292: Duplicate quotient detection (Python prevents naturally)
+
+These are defensive edge cases that can't occur through normal API but
+validate the invariant checking is comprehensive.
+"""
+import pytest
+from spherepop.model import Atom, CollapseEvent, Config, Quotient, Sphere
+from spherepop.validation import validate_config
+
+
+class TestExprTypeValidation:
+    """Test sigma must be Atom or Sphere, not other types."""
+
+    def test_sigma_as_string_rejected(self):
+        """sigma as plain string is detected."""
+        cfg = Config(
+            sigma="not an expr",  # type: ignore
+            option_space=frozenset(),
+            history=()
+        )
+        
+        violations = validate_config(cfg)
+        assert any("Invalid Expr type" in v and "expected Atom or Sphere" in v
+                   for v in violations)
+
+    def test_sigma_as_dict_rejected(self):
+        """sigma as dict is detected."""
+        cfg = Config(
+            sigma={"not": "expr"},  # type: ignore
+            option_space=frozenset(),
+            history=()
+        )
+        
+        violations = validate_config(cfg)
+        assert any("Invalid Expr type" in v for v in violations)
+
+    def test_sphere_items_not_tuple_rejected(self):
+        """Sphere.items as list instead of tuple is detected."""
+        bad_sphere = Sphere.__new__(Sphere)
+        object.__setattr__(bad_sphere, 'items', [Atom("a")])  # type: ignore - list not tuple
+        object.__setattr__(bad_sphere, 'label', "root")
+        
+        cfg = Config(
+            sigma=bad_sphere,
+            option_space=frozenset({"a"}),
+            history=()
+        )
+        
+        violations = validate_config(cfg)
+        assert any("Sphere.items" in v and "must be tuple" in v for v in violations)
+
+
+class TestOptionSpaceTypeValidation:
+    """Test option_space elements must be str or Quotient."""
+
+    def test_option_space_with_integer_rejected(self):
+        """option_space containing integer is detected."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a", 123}),  # type: ignore
+            history=()
+        )
+        
+        violations = validate_config(cfg)
+        assert any("Invalid option_space element type" in v for v in violations)
+
+    def test_option_space_with_none_rejected(self):
+        """option_space containing None is detected."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a", None}),  # type: ignore
+            history=()
+        )
+        
+        violations = validate_config(cfg)
+        assert any("Invalid option_space element type" in v for v in violations)
+
+
+class TestCollapseLogStructureValidation:
+    """Test collapse_log structure validation."""
+
+    def test_collapse_log_entry_not_tuple_rejected(self):
+        """collapse_log entry that is not a tuple is detected."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(CollapseEvent(history_index=0, classes=(), label=None),),
+            collapse_log=("not a tuple",)  # type: ignore - should be tuple of tuples
+        )
+        
+        violations = validate_config(cfg)
+        assert any("collapse_log entry has invalid structure" in v for v in violations)
+
+    def test_collapse_log_entry_wrong_length_rejected(self):
+        """collapse_log entry with wrong number of elements is detected."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(CollapseEvent(history_index=0, classes=(), label=None),),
+            collapse_log=((0,),)  # type: ignore - should be (index, classes) tuple
+        )
+        
+        violations = validate_config(cfg)
+        assert any("collapse_log entry has invalid structure" in v for v in violations)
+
+    def test_collapse_log_entry_three_elements_rejected(self):
+        """collapse_log entry with three elements is detected."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),), label="root"),
+            option_space=frozenset({"a"}),
+            history=(CollapseEvent(history_index=0, classes=(), label=None),),
+            collapse_log=((0, (), "extra"),)  # type: ignore - too many elements
+        )
+        
+        violations = validate_config(cfg)
+        assert any("collapse_log entry has invalid structure" in v for v in violations)
+
+
+class TestDuplicateQuotientValidation:
+    """Test duplicate Quotient detection.
+    
+    Note: Python's frozenset automatically deduplicates equal Quotients
+    because they use dataclass equality (based on members). These tests
+    document that the validation logic exists, even though it can't be
+    triggered through normal Python operations.
+    """
+
+    def test_python_prevents_duplicate_quotients_naturally(self):
+        """Verify frozenset deduplicates equal Quotients automatically."""
+        q1 = Quotient(members=frozenset({"a", "b"}))
+        q2 = Quotient(members=frozenset({"a", "b"}))
+        
+        # Equal quotients
+        assert q1 == q2
+        assert hash(q1) == hash(q2)
+        
+        # frozenset deduplicates
+        space = frozenset({q1, q2})
+        assert len(space) == 1
+
+    def test_validation_accepts_deduplicated_quotients(self):
+        """Config with naturally deduplicated Quotients is valid."""
+        q1 = Quotient(members=frozenset({"a", "b"}))
+        q2 = Quotient(members=frozenset({"a", "b"}))
+        
+        cfg = Config(
+            sigma=Sphere((Atom("a"), Atom("b")), label="root"),
+            option_space=frozenset({q1, q2}),  # Automatically becomes single element
+            history=(CollapseEvent(history_index=0, classes=(frozenset({"a", "b"}),), label=None),)
+        )
+        
+        violations = validate_config(cfg)
+        # Should be valid - frozenset deduplicated automatically
+        assert violations == []
+
+    def test_validation_rejects_distinct_quotients_with_overlap(self):
+        """Validation accepts distinct Quotients even with overlapping members."""
+        q1 = Quotient(members=frozenset({"a", "b"}))
+        q2 = Quotient(members=frozenset({"b", "c"}))  # Different set
+        
+        cfg = Config(
+            sigma=Sphere((Atom("a"), Atom("b"), Atom("c")), label="root"),
+            option_space=frozenset({q1, q2}),
+            history=(
+                CollapseEvent(history_index=0, classes=(frozenset({"a", "b"}),), label=None),
+                CollapseEvent(history_index=1, classes=(frozenset({"b", "c"}),), label=None),
+            )
+        )
+        
+        violations = validate_config(cfg)
+        # This is valid - different Quotients can coexist
+        assert violations == []
+
+
+class TestMalformedNestedStructures:
+    """Test deeply nested malformed structures."""
+
+    def test_nested_invalid_expr_detected(self):
+        """Invalid Expr deep in nested Sphere is detected."""
+        bad_inner = Sphere.__new__(Sphere)
+        object.__setattr__(bad_inner, 'items', (Atom("a"), 42))  # type: ignore
+        object.__setattr__(bad_inner, 'label', "inner")
+        
+        outer = Sphere((bad_inner,), label="root")
+        
+        cfg = Config(
+            sigma=outer,
+            option_space=frozenset({"a"}),
+            history=()
+        )
+        
+        violations = validate_config(cfg)
+        assert any("items[1]" in v and "invalid" in v for v in violations)
+
+============================================================
+FILE: tests/test_views.py
+============================================================
+
+"""Test views.py formatting and presentation functions.
+
+Coverage targets (views.py):
+- Lines 77-79: format_available_paths() edge cases
+- Line 83: format_available_options() empty case
+- Lines 108-109: format_available_options() large set formatting
+
+These test read-only presentation functions that produce human-readable
+output for errors and debugging.
+"""
+import pytest
+from spherepop.model import Atom, Config, Quotient, Sphere
+from spherepop.views import (
+    extensional_view,
+    format_available_options,
+    format_available_paths,
+    history_prefix_view,
+    history_view,
+    make_sphere,
+    render_event,
+    render_expr,
+    representative,
+)
+
+
+class TestRepresentative:
+    """Test representative() Quotient display function."""
+
+    def test_representative_plain_string(self):
+        """Plain strings pass through unchanged."""
+        assert representative("option_a") == "option_a"
+        assert representative("x") == "x"
+        assert representative("zebra") == "zebra"
+
+    def test_representative_quotient_picks_first_sorted(self):
+        """Quotients display lexicographically first member."""
+        q = Quotient(members=frozenset({"zebra", "apple", "banana"}))
+        assert representative(q) == "apple"
+
+    def test_representative_quotient_deterministic(self):
+        """Same members produce same representative regardless of order."""
+        q1 = Quotient(members=frozenset({"z", "x", "y"}))
+        q2 = Quotient(members=frozenset({"x", "y", "z"}))
+        assert representative(q1) == representative(q2) == "x"
+
+    def test_representative_quotient_single_member(self):
+        """Single-member Quotient returns that member."""
+        q = Quotient(members=frozenset({"only"}))
+        assert representative(q) == "only"
+
+
+class TestRenderExpr:
+    """Test render_expr() tree rendering."""
+
+    def test_render_atom(self):
+        """Atom renders as its name."""
+        atom = Atom("a")
+        assert render_expr(atom) == "a"
+
+    def test_render_quotient_atom(self):
+        """Atom with Quotient name renders representative."""
+        q = Quotient(members=frozenset({"b", "a", "c"}))
+        atom = Atom(q)
+        assert render_expr(atom) == "a"  # Sorted first
+
+    def test_render_empty_sphere(self):
+        """Empty Sphere renders as empty parens."""
+        sphere = Sphere(())
+        assert render_expr(sphere) == "()"
+
+    def test_render_nested_sphere(self):
+        """Nested Spheres render recursively."""
+        inner = Sphere((Atom("a"), Atom("b")))
+        outer = Sphere((inner, Atom("c")))
+        assert render_expr(outer) == "((a b) c)"
+
+
+class TestRenderEvent:
+    """Test render_event() history formatting."""
+
+    def test_render_event_sorted_keys(self):
+        """Events render with sorted keys for determinism."""
+        from spherepop.model import PopEvent
+
+        event = PopEvent(history_index=0, path=(0,), label=None)
+        rendered = render_event(event)
+        assert rendered.startswith("PopEvent(")
+        assert "history_index=0" in rendered
+        assert "path=(0,)" in rendered
+
+    def test_render_event_preserves_repr(self):
+        """Event rendering uses repr for values."""
+        from spherepop.model import RefuseEvent
+
+        event = RefuseEvent(
+            history_index=1, refused=frozenset({"a", "b"}), label="test"
+        )
+        rendered = render_event(event)
+        assert "'test'" in rendered or '"test"' in rendered  # String repr
+
+
+class TestHistoryView:
+    """Test history_view() rendering."""
+
+    def test_history_view_empty(self):
+        """Empty history renders as empty tuple."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)), option_space=frozenset({"a"}), history=()
+        )
+        assert history_view(cfg) == ()
+
+    def test_history_view_multiple_events(self):
+        """Multiple events render in order."""
+        from spherepop.model import PopEvent, RefuseEvent
+
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+                RefuseEvent(history_index=1, refused=frozenset({"b"}), label=None),
+            ),
+        )
+        result = history_view(cfg)
+        assert len(result) == 2
+        assert "PopEvent" in result[0]
+        assert "RefuseEvent" in result[1]
+
+
+class TestExtensionalView:
+    """Test extensional_view() rendering."""
+
+    def test_extensional_view_plain_strings(self):
+        """Plain string options render sorted."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"), Atom("b"))),
+            option_space=frozenset({"b", "a", "c"}),
+            history=(),
+        )
+        expr_render, opts = extensional_view(cfg)
+        assert expr_render == "(a b)"
+        assert opts == ("a", "b", "c")
+
+    def test_extensional_view_with_quotients(self):
+        """Quotients render via representative."""
+        q = Quotient(members=frozenset({"z", "x", "y"}))
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)), option_space=frozenset({"a", q}), history=()
+        )
+        expr_render, opts = extensional_view(cfg)
+        # q's representative is "x"
+        assert opts == ("a", "x") or opts == ("x", "a")  # Sorted by repr
+
+
+class TestHistoryPrefixView:
+    """Test history_prefix_view() truncation."""
+
+    def test_history_prefix_view_negative_length(self):
+        """Negative length raises ValueError."""
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)), option_space=frozenset({"a"}), history=()
+        )
+        with pytest.raises(ValueError, match="non-negative"):
+            history_prefix_view(cfg, -1)
+
+    def test_history_prefix_view_zero_length(self):
+        """Zero length returns empty tuple."""
+        from spherepop.model import PopEvent
+
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)),
+            option_space=frozenset({"a"}),
+            history=(PopEvent(history_index=0, path=(0,), label=None),),
+        )
+        assert history_prefix_view(cfg, 0) == ()
+
+    def test_history_prefix_view_partial(self):
+        """Partial prefix returns first N events."""
+        from spherepop.model import PopEvent, RefuseEvent
+
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)),
+            option_space=frozenset({"a"}),
+            history=(
+                PopEvent(history_index=0, path=(0,), label=None),
+                RefuseEvent(history_index=1, refused=frozenset({"b"}), label=None),
+                PopEvent(history_index=2, path=(1,), label=None),
+            ),
+        )
+        result = history_prefix_view(cfg, 2)
+        assert len(result) == 2
+        assert "PopEvent" in result[0]
+        assert "RefuseEvent" in result[1]
+
+    def test_history_prefix_view_exceeds_length(self):
+        """Prefix longer than history returns full history."""
+        from spherepop.model import PopEvent
+
+        cfg = Config(
+            sigma=Sphere((Atom("a"),)),
+            option_space=frozenset({"a"}),
+            history=(PopEvent(history_index=0, path=(0,), label=None),),
+        )
+        result = history_prefix_view(cfg, 100)
+        assert len(result) == 1
+
+
+class TestMakeSphere:
+    """Test make_sphere() convenience constructor."""
+
+    def test_make_sphere_empty(self):
+        """Empty args produce empty Sphere."""
+        sphere = make_sphere()
+        assert sphere.items == ()
+
+    def test_make_sphere_multiple(self):
+        """Multiple args produce Sphere with Atom children."""
+        sphere = make_sphere("a", "b", "c")
+        assert len(sphere.items) == 3
+        assert all(isinstance(item, Atom) for item in sphere.items)
+        assert [item.name for item in sphere.items] == ["a", "b", "c"]
+
+
+class TestFormatAvailablePaths:
+    """Test format_available_paths() error message formatting."""
+
+    def test_format_available_paths_no_nested_spheres(self):
+        """Sphere with no nested Spheres reports none available."""
+        # Only root - no nested Spheres
+        expr = Sphere((Atom("a"), Atom("b")))
+        result = format_available_paths(expr)
+        assert "no nested Spheres available" in result
+        assert "only root" in result
+
+    def test_format_available_paths_single_nested(self):
+        """Single nested Sphere lists that path."""
+        inner = Sphere((Atom("a"),), label="inner")
+        expr = Sphere((inner, Atom("b")), label="root")
+        result = format_available_paths(expr)
+        assert "valid paths:" in result
+        assert "(0,)" in result
+
+    def test_format_available_paths_multiple_nested(self):
+        """Multiple nested Spheres list all paths."""
+        inner1 = Sphere((Atom("a"),), label="inner1")
+        inner2 = Sphere((Atom("b"),), label="inner2")
+        expr = Sphere((inner1, inner2), label="root")
+        result = format_available_paths(expr)
+        assert "valid paths:" in result
+        assert "(0,)" in result
+        assert "(1,)" in result
+
+    def test_format_available_paths_deeply_nested(self):
+        """Deeply nested Spheres show all paths."""
+        deepest = Sphere((Atom("a"),), label="deep")
+        middle = Sphere((deepest,), label="middle")
+        expr = Sphere((middle,), label="root")
+        result = format_available_paths(expr)
+        assert "(0,)" in result
+        assert "(0, 0)" in result
+
+
+class TestFormatAvailableOptions:
+    """Test format_available_options() error message formatting."""
+
+    def test_format_available_options_empty(self):
+        """Empty option space reports empty."""
+        result = format_available_options(frozenset())
+        assert "option space is empty" in result
+
+    def test_format_available_options_single(self):
+        """Single option shows that option."""
+        result = format_available_options(frozenset({"a"}))
+        assert "available options:" in result
+        assert "{a}" in result or "{'a'}" in result
+
+    def test_format_available_options_few(self):
+        """Few options (≤5) show all."""
+        result = format_available_options(frozenset({"a", "b", "c"}))
+        assert "available options:" in result
+        assert "a" in result
+        assert "b" in result
+        assert "c" in result
+
+    def test_format_available_options_many(self):
+        """Many options (>5) truncate with count."""
+        large_set = frozenset(f"option_{i}" for i in range(20))
+        result = format_available_options(large_set)
+        assert "available options:" in result
+        assert "..." in result
+        assert "20 total" in result
+        # Should show first 5 sorted
+        assert "option_0" in result
+        assert "option_1" in result
+
+    def test_format_available_options_with_quotients(self):
+        """Quotients display via representative."""
+        q1 = Quotient(members=frozenset({"z", "x", "y"}))
+        q2 = Quotient(members=frozenset({"b", "a", "c"}))
+        result = format_available_options(frozenset({q1, q2, "d"}))
+        # Representatives: "x" (from q1), "a" (from q2), "d"
+        assert "a" in result
+        assert "x" in result
+        assert "d" in result
+
+    def test_format_available_options_exactly_five(self):
+        """Exactly 5 options show all without truncation."""
+        opts = frozenset({"a", "b", "c", "d", "e"})
+        result = format_available_options(opts)
+        assert "..." not in result
+        assert "total" not in result
+        for opt in opts:
+            assert opt in result
+
+    def test_format_available_options_six_triggers_truncation(self):
+        """Six options trigger truncation."""
+        opts = frozenset({"a", "b", "c", "d", "e", "f"})
+        result = format_available_options(opts)
+        assert "..." in result
+        assert "6 total" in result

@@ -1,0 +1,317 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+Complexity may be parameterized by the following quantities: the depth of merge chains, the number of primitive regions, the complexity of geometric representation (voxel resolution, mesh polygon count, implicit level-set resolution), and the analytic cost of collapse. Parameterized complexity theory allows incomplete evaluation under resource constraints, analogous to approximate reduction in functional programming or approximate inference in probabilistic programming.
+
+For example, voxel Spherepop with resolution $n^3$ and bounded collapse radius admits evaluation in time $O(n^3)$ per collapse step. Under sparsity assumptions, complexity decreases significantly. Mesh implementations with bounded polygon count yield complexity proportional to surface complexity. Implicit implementations depend on PDE discretization and step size.
+
+
+Discussion
+
+
+Spherepop inherits the undecidability and worst-case complexity of classical computation, while admitting tractable behavior in restricted fragments. These results demonstrate that geometric models of computation enjoy expressive power equivalent to symbolic ones, and that geometric abstraction does not compromise theoretical strength. Future work should explore fragments with guaranteed termination, characterize expressive subsets, and develop resource-bounded semantics analogous to those in functional and logic programming.
+
+\newpage
+
+Theoretical Properties, Open Problems, and Research Directions
+
+
+The preceding development presents Spherepop as a computationally complete, semantically rigorous, and geometrically grounded model of computation. However, the model raises a number of theoretical questions whose answers would deepen its mathematical foundations and clarify its relationship to established formalisms. This section articulates these questions in formal terms and proposes directions for further research. The open problems fall into several categories, including semantic foundations, algebraic structure, computational properties, continuous variants, and applications to learning.
+
+
+Hierarchy of Collapse Operators
+
+
+A central theoretical question concerns the expressive hierarchy induced by collapse operators. Collapse plays multiple semantic roles: it enforces canonicalization, eliminates interior structure, and induces nonlinear computation. Different collapse operators yield different computational behaviors. One may ask whether there exists a hierarchy of collapse operators
+\[
+C_0 \prec C_1 \prec C_2 \prec \cdots
+\]
+ordered by expressive strength, analogous to hierarchies found in recursion theory or typed lambda calculi. It remains open whether stronger collapse operators yield strictly more expressive computational systems, or whether all reasonable collapse operators collapse to a common expressive ceiling.
+
+
+Semantic Stability and Confluence
+
+
+Confluence refers to the property that evaluation order should not affect the final semantic result. Since Spherepop computations may interleave merge and collapse in multiple orders, whether the resulting configuration is unique up to equivalence is a nontrivial question. Formally, given a term $t$ and two evaluation sequences
+\[
+t \rightsquigarrow^* t_1,\qquad t \rightsquigarrow^* t_2,
+\]
+do we obtain $t_1 \simeq t_2$? If collapse is idempotent and merge satisfies suitable regularity conditions, then confluence holds under certain geometric assumptions. However, arbitrary collapse rules may violate confluence. Determining necessary and sufficient conditions for confluence constitutes a major open problem.
+
+
+Geometric Invariants of Normal Forms
+
+
+Normal forms are canonical configurations from which no further collapse or merge steps are possible. The geometry of normal forms remains poorly understood. Given a representation space $\mathcal{G}$ and collapse operator $C$, can we characterize the set
+\[
+\mathcal{N}=\{A\in\mathcal{G}\mid C(A)=A\}
+\]
+in geometric or topological terms? Are normal forms convex, smooth, contractible, or do they exhibit richer structure? Are normal forms unique representatives of equivalence classes, or can different canonical regions represent the same semantic value? These questions call for deeper analysis of collapse semantics and geometric invariants.
+
+
+Resource-Bounded Semantics
+
+
+General Spherepop computation admits undecidable termination. In practice, resource-bounded evaluation should impose limits on merge and collapse complexity. One may define a resource-sensitive semantics in which collapse is truncated after a fixed number of iterations or merge is restricted to bounded arity. The resulting semantics resemble bounded reduction in lambda calculus or bounded-resource models of algorithms. A resource-bounded theory of Spherepop would clarify practical implementations and provide connections to complexity theory.
+
+
+Continuous Collapse and Differentiable Structure
+
+
+Continuous and differentiable Spherepop raises questions concerning differentiable manifolds of regions. If $\mathcal{G}$ is a Banach manifold representing implicit surfaces or level sets, collapse becomes a projection onto a submanifold of canonical representatives. The geometry of this submanifold determines computational capacity. It remains unknown whether canonical submanifolds admit simple geometric characterizations or whether collapse generates intricate or fractal limiting surfaces. Analytical results may depend upon properties of differential equations governing collapse flows.
+
+
+Monoidal and Cartesian Structure
+
+
+Categorical semantics interpreted merge as a monoidal operator and collapse as a quotient functor. A precise identification of monoidal and Cartesian structure remains outstanding. If merge is associative up to isomorphism, Spherepop may admit monoidal closure; if collapse identifies internal detail, Spherepop may admit a Cartesian structure up to equivalence. Establishing formal categorical structure is crucial for comparing geometric computation with algebraic computation, and may reveal deep relationships between geometric collapse and abstract logical systems.
+
+
+Comparison with Established Models
+
+
+Although preliminary comparisons have been drawn, formal equivalences and inequivalences between Spherepop and established computational models remain to be investigated. Does Spherepop correspond to a known rewriting formalism? Can Spherepop be presented as a kind of interaction net, graph rewriting system, membrane computing model, or chemical reaction network? A comprehensive classification relative to known universality results would place geometric computation within the broader landscape of theoretical computer science.
+
+
+Computational Geometry and Learning
+
+
+Finally, differentiable Spherepop suggests applications in geometric learning, neural implicit representations, and differentiable rendering. Theoretical questions concerning approximation power, generalization, and optimization remain open. What kinds of functions can differentiable Spherepop approximate efficiently? Does Spherepop enjoy universal approximation properties analogous to neural networks? Can differentiable collapse learn canonical representations that outperform algebraic abstraction in traditional learning systems? These questions invite interdisciplinary research connecting computational geometry, differential equations, and machine learning.
+
+
+Future Directions
+
+
+Spherepop represents a geometric foundation for computation whose semantic structure is only partially understood. The integration of collapse and merge with classical notions of abstraction and composition provides a novel framework for reasoning about computation visually, geometrically, and formally. Future work should develop rigorous semantics, identify expressive boundaries, classify collapse operators, analyze normal forms, and establish confluence properties. The resulting theory may reveal geometric foundations underlying computation, and advance a unifying perspective in which abstraction, composition, and learning emerge from geometric interaction.
+
+\newpage
+
+Conclusion
+
+
+The purpose of this work has been to develop a rigorous theoretical framework for Spherepop as a geometric model of computation. While earlier presentations have emphasized pedagogical motivation or visual intuition, the present exposition has focused on formal semantics, computational expressiveness, geometric implementation, differentiable structure, and open theoretical questions. By treating merge as geometric union (or approximations thereof) followed by collapse as canonicalization, Spherepop defines computation as successive abstraction of geometric configurations. These abstractions preserve global semantic structure while eliminating interior detail, thereby inducing a natural notion of geometric computation that parallels—but does not depend on—algebraic representations.
+
+We have argued that Spherepop is computationally complete and therefore inherits classical undecidability and complexity results. Nevertheless, Spherepop also admits meaningful geometric restrictions, enabling tractable, resource-bounded computation. The tension between expressive generality and practical implementation underscores the importance of geometric data structures, canonical collapse rules, differentiability conditions, and analytic flows for geometric canonicalization. These considerations place Spherepop at the intersection of computational geometry, lambda calculus, differentiated programming frameworks, and theoretical computer science.
+
+Conceptually, geometric abstraction via collapse plays the same semantic role as contraction and activation in algebraic models while providing a continuous geometric interpretation. This duality motivates a deeper investigation of the relationships between geometric and algebraic computation, suggesting that traditional tensor-based representations may be specialized projections of more general geometric interactions. The theory developed here provides the foundations for such investigations, while identifying multiple open directions for future research, including categorical semantics, analytic characterization of canonical manifolds, complexity theory of collapse hierarchies, and differentiable learning in geometric spaces.
+
+Spherepop therefore stands not merely as a computational system, but as an organizing principle unifying geometry, abstraction, and computation. Its geometric semantics invite a reconceptualization of computation itself, in which operations are not symbolic re-writings but geometric interactions governed by continuous flows and canonical reductions. Much work remains to establish the mathematical, algorithmic, and empirical implications of this perspective. The present exposition aims to lay the foundation for such work and to open a path toward a comprehensive geometric theory of computation.
+
+\vfill
+\newpage
+\appendix
+
+Notation and Conventions
+
+
+Spherepop computations are expressed in terms of geometric regions, merge operations, and collapse operators. This appendix collects the principal notational conventions and semantic definitions used throughout the text.
+
+
+Geometric Space
+
+
+All geometric objects are elements of a representation space $\mathcal{G}$ modeled as a subset of a Euclidean space $\mathbb{R}^n$. Throughout the paper, $n=3$ is assumed for concreteness, although lower or higher dimensional formulations are possible. Points in $\mathbb{R}^n$ are denoted by $x=(x_1,\dots,x_n)$. A geometric region $A$ is a subset of $\mathbb{R}^n$ equipped with additional structure depending on representation (e.g.\ boundary, mesh, implicit function, voxel occupancy).
+
+
+Merge
+
+
+Merge is denoted by the binary operator $\diamond$,
+\[
+A\diamond B = C\bigl(U(A,B)\bigr),
+\]
+where $U$ is a geometric union operator and $C$ is a collapse operator. Merge combines geometric objects by forming a union and then applying canonicalization. When context is clear, $A\diamond B$ may be written $AB$.
+
+
+Collapse
+
+
+Collapse is denoted by $C:\mathcal{G}\to\mathcal{G}$ and satisfies
+\[
+C(C(A))=C(A),
+\]
+for all $A\in\mathcal{G}$. Collapse eliminates interior structure, smooths geometric detail, and identifies geometrically distinct regions according to a canonicalization rule. Different collapse operators yield different computational properties, and collapse may depend on additional parameters $\theta$.
+
+
+Operational Semantics
+
+
+Evaluation steps are denoted by $\rightsquigarrow$. A Spherepop term is a finite composition of merge and collapse operations applied to primitive geometric regions. Evaluation proceeds by repeatedly applying merge--collapse until no further reduction is possible.
+
+
+Equivalence
+
+
+Two regions $A,B\in\mathcal{G}$ are semantically equivalent, written $A\simeq B$, if collapse yields the same canonical representative,
+\[
+C(A)=C(B).
+\]
+Equivalence classes define semantic values, while geometric representatives differ only up to collapse. Thus, Spherepop semantics identify regions modulo collapse.
+
+
+Differentiability
+
+
+Differentiable variants of merge and collapse are parameterized by $(\varepsilon,\theta)$ and denoted $M_{\varepsilon,\theta}$. Differentiability refers to smoothness in the Fréchet sense for implicit-surface representations, or smoothness on manifolds for mesh-based representations.
+
+
+Measures
+
+
+A geometric measure is denoted $\mu(A)$, representing volume, area, or another measure depending on dimension and representation. In certain fragments, merge strictly reduces or preserves measures, enforcing termination.
+
+
+Evaluation
+
+
+A computation is a sequence
+\[
+t_0 \rightsquigarrow t_1 \rightsquigarrow t_2 \rightsquigarrow \cdots,
+\]
+terminating when a normal form is reached. If evaluation does not terminate, Spherepop exhibits the same non-termination phenomena as universal computation.
+
+\vspace{0.5cm}
+
+\newpage
+
+Operational Semantics and Collapse Rules
+
+
+This appendix provides a more formal account of merge--collapse semantics, including reduction rules, canonical representatives, and conditions for confluence.
+
+
+Primitive Regions
+
+
+Primitive regions are denoted by lowercase letters $a,b,c$ and represent atomic spheres or geometric primitives. Without loss of generality, primitive regions are assumed to be closed and bounded.
+
+
+Reduction by Merge
+
+
+Operational reduction is defined by the rule
+\[
+A\diamond B \rightsquigarrow C\bigl(U(A,B)\bigr).
+\]
+If $U(A,B)$ contains interior geometric detail, collapse eliminates such detail by replacing $U(A,B)$ with a simpler canonical representative. Although $U(A,B)$ depends on representation, its operational semantics are explicitly defined by reduction to a canonical form.
+
+
+Canonical Representatives
+
+
+A region $A$ is canonical if $C(A)=A$. Canonical representatives form a subspace $\mathcal{N}\subseteq\mathcal{G}$ of normal forms. Evaluation terminates precisely when a term is canonical. Canonical representatives depend on the choice of collapse operator and may vary across implementations.
+
+
+Idempotence
+
+
+Collapse rules must satisfy idempotence,
+\[
+C(C(A))=C(A),
+\]
+ensuring that repeated collapse operations have no effect beyond the first. Idempotence implies that normal forms are fixed points of collapse and that collapse enforces unique representatives modulo equivalence.
+
+
+Confluence (Conditional)
+
+
+Evaluation is confluent if for any term $t$ and evaluation sequences
+\[
+t \rightsquigarrow^* t_1,\qquad t \rightsquigarrow^* t_2,
+\]
+we have $t_1\simeq t_2$. Confluence holds under suitable regularity assumptions on collapse, such as strict geometric contraction or convex canonicalization. In general, confluence is not guaranteed without such assumptions, and determining when collapse ensures confluence is an open problem.
+
+\vspace{0.5cm}
+
+\newpage
+
+Implementation Representations and PDE Formulations
+
+
+Collapse and merge may be implemented by discrete or continuous representations. This appendix outlines two principal implementation strategies—discrete voxel/surface representations and continuous implicit representations—and provides a general formulation of continuous collapse using PDEs.
+
+
+Discrete Representation
+
+
+Discrete implementations approximate geometric regions by voxels or meshes. Collapse may be implemented by thresholding or smoothing operators that eliminate internal detail. This approach is computationally tractable and parallelizable, but discrete collapse depends on resolution and introduces approximation error.
+
+
+Implicit Representation
+
+
+Implicit implementations represent geometric regions as zero level sets,
+\[
+A = \{ x \in \mathbb{R}^n \mid f(x)=0 \},
+\]
+for some differentiable function $f:\mathbb{R}^n\to\mathbb{R}$. Merge is approximated by blending implicit functions, e.g.
+\[
+U(f,g)=\min(f,g),
+\]
+while collapse corresponds to smoothing or reinitializing implicit functions via curvature flows.
+
+
+Continuous Collapse via PDEs
+
+
+Continuous collapse may be formulated as the solution of a partial differential equation,
+\[
+\frac{\partial A}{\partial t} = -\kappa(A),
+\]
+where $\kappa$ is curvature or another functional that decreases interior detail. The solution converges to a canonical representative
+\[
+A_\infty=C(A_0).
+\]
+PDE-based collapse is differentiable, analytically tractable, and well-suited for continuous learning frameworks.
+
+
+Hamiltonian and Lagrangian Formulations
+
+
+Collapse may also be expressed in variational form. Given an energy functional
+\[
+E(A)=\int_{\partial A} \mathcal{L}(A,\nabla A)\,ds,
+\]
+collapse reduces $E(A)$ by gradient descent,
+\[
+\frac{\partial A}{\partial t}=-\nabla E(A).
+\]
+A corresponding Hamiltonian formulation treats collapse as evolution under a Hamiltonian vector field. These continuous formulations provide analytical tools for studying convergence and stability of collapse flows and suggest a geometric interpretation of computation as energy minimization.
+
+\vspace{0.5cm}
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{cartan} Cartan, Élie.
+\textit{Geometry of Riemannian Spaces}. Princeton University Press.
+
+\bibitem{needham} Needham, Tristan.
+\textit{Visual Differential Geometry and Forms}. Princeton University Press, 2021.
+
+\bibitem{grigoryan} Grigor'yan, Alexander.
+\textit{Heat Kernel and Analysis on Manifolds}. AMS, 2009.
+
+\bibitem{osher} Osher, Stanley and Fedkiw, Ronald.
+\textit{Level Set Methods and Dynamic Implicit Surfaces}. Springer, 2003.
+
+\bibitem{bishop} Bishop, Richard and Goldberg, Samuel.
+\textit{Tensor Analysis on Manifolds}. Dover Publications.
+
+\bibitem{sullivan} Sullivan, John M.
+``Curvatures of Smooth and Discrete Surfaces.'' \textit{Discrete Differential Geometry}, Springer, 2008.
+
+\end{thebibliography}
+
+\end{document}

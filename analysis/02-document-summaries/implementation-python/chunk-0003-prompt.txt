@@ -1,0 +1,1307 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+    Caveat: `history_is_prefix` treats an empty history as a prefix of any
+    history, so a `base` with no committed events cannot rule out an
+    unrelated `candidate` or `alternative` -- pass a `base` with at least
+    one event already committed for this check to be non-vacuous.
+    
+    Examples:
+        >>> from spherepop.model import Config, Sphere, Atom, RefuseOp
+        >>> from spherepop.semantics import transition
+        >>> from spherepop.observers import regretful
+        
+        # Start with three options
+        >>> sigma = Sphere((Atom("a"), Atom("b"), Atom("c")), label="root")
+        >>> base = Config(sigma=sigma, option_space=frozenset({"a", "b", "c"}), history=())
+        
+        # Candidate: refuse two options, left with one
+        >>> candidate = transition(base, RefuseOp(options=frozenset({"b", "c"})))
+        >>> candidate.option_space
+        frozenset({'a'})
+        
+        # Alternative: refuse only one option, left with two
+        >>> alternative = transition(base, RefuseOp(options=frozenset({"c"})))
+        >>> alternative.option_space
+        frozenset({'a', 'b'})
+        
+        # Candidate is regretful: alternative has strictly more options
+        >>> regretful(base, candidate, alternative)
+        True
+        
+        # Not regretful if candidate has same or more options
+        >>> regretful(base, alternative, candidate)
+        False
+    """
+    if not history_is_prefix(base, candidate):
+        raise ValueError("candidate does not continue from base")
+    if not history_is_prefix(base, alternative):
+        raise ValueError("alternative does not continue from base")
+    return candidate.option_space < alternative.option_space
+
+
+def equivalent_at(
+    base: Config,
+    ops_left: Iterable[Operation],
+    ops_right: Iterable[Operation],
+    k: int,
+) -> bool:
+    """Whether two *specific* operation sequences, replayed from `base`,
+    agree at step k.
+
+    This is a witness-level check over one stated pair of sequences, not
+    Appendix F's `\u2248_k` (see `horizon_equivalent` for that): agreement of
+    one pair of continuations does not establish that the full sets of
+    k-step continuations coincide. Config does not retain a snapshot per
+    history index, so agreement here is answered by replaying the first k
+    operations of each sequence from the same base via `eval_program` and
+    comparing extensional views. This is a read: it produces two
+    disposable analysis Configs and returns a bool, and appends nothing to
+    `base` itself.
+    """
+    if k < 0:
+        raise ValueError("k must be non-negative")
+    left = eval_program(base, list(ops_left)[:k])
+    right = eval_program(base, list(ops_right)[:k])
+    return extensional_view(left) == extensional_view(right)
+
+
+def horizon_equivalent(
+    left: Config,
+    right: Config,
+    candidate_ops: Sequence[Operation],
+    k: int,
+) -> bool:
+    """Appendix F's h1 \u2248_k h2: whether `left` and `right` admit exactly the
+    same *set* of extensional outcomes reachable by k further events, not
+    merely whether one chosen pair of continuations happens to agree
+    (that weaker, witness-level question is `equivalent_at`).
+
+    The paper quantifies over "admissible events" without fixing a
+    concrete alphabet; this lab requires the caller to supply a finite
+    `candidate_ops` pool to quantify over, since enumerating every
+    syntactically expressible Operation (arbitrary REFUSE sets, arbitrary
+    BIND predicates, ...) is unbounded. The result is therefore \u2248_k
+    *relative to* `candidate_ops` -- widening the pool can only grow each
+    side's reachable set, never shrink it, so equivalence relative to a
+    smaller pool does not imply equivalence relative to a larger one.
+
+    Exponential in k and len(candidate_ops); fine for the small pools and
+    small k this lab works with, not intended for production-scale search.
+    """
+    if k < 0:
+        raise ValueError("k must be non-negative")
+
+    def reachable(config: Config, remaining: int) -> set[tuple[str, tuple[str, ...]]]:
+        if remaining == 0:
+            return {extensional_view(config)}
+        outcomes: set[tuple[str, tuple[str, ...]]] = set()
+        for op in candidate_ops:
+            try:
+                nxt = transition(config, op)
+            except EvalError:
+                continue
+            outcomes |= reachable(nxt, remaining - 1)
+        return outcomes
+
+    return reachable(left, k) == reachable(right, k)
+
+============================================================
+FILE: spherepop/parser.py
+============================================================
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import List, Sequence, Tuple
+
+from spherepop.model import Atom, BindOp, CollapseOp, Expr, Operation, PopOp, RefuseOp, Sphere
+
+
+class ParseError(ValueError):
+    pass
+
+
+@dataclass
+class _Tokens:
+    values: List[str]
+    index: int = 0
+
+    def peek(self) -> str | None:
+        if self.index >= len(self.values):
+            return None
+        return self.values[self.index]
+
+    def pop(self) -> str:
+        if self.index >= len(self.values):
+            raise ParseError("unexpected end of input")
+        value = self.values[self.index]
+        self.index += 1
+        return value
+
+
+def _tokenize_expr(source: str) -> List[str]:
+    tokens: List[str] = []
+    token: List[str] = []
+    for ch in source:
+        if ch in "()":
+            if token:
+                tokens.append("".join(token))
+                token = []
+            tokens.append(ch)
+        elif ch.isspace():
+            if token:
+                tokens.append("".join(token))
+                token = []
+        else:
+            token.append(ch)
+    if token:
+        tokens.append("".join(token))
+    return tokens
+
+
+def parse_expr(source: str) -> Expr:
+    tokens = _Tokens(_tokenize_expr(source))
+
+    def parse_one() -> Expr:
+        tok = tokens.pop()
+        if tok == "(":
+            items: List[Expr] = []
+            while tokens.peek() != ")":
+                if tokens.peek() is None:
+                    raise ParseError("missing ')' in sphere expression")
+                items.append(parse_one())
+            tokens.pop()  # consume ')'
+            return Sphere(tuple(items))
+        if tok == ")":
+            raise ParseError("unexpected ')'")
+        return Atom(tok)
+
+    expr = parse_one()
+    if tokens.peek() is not None:
+        raise ParseError("trailing tokens after expression")
+    return expr
+
+
+def parse_sphere(source: str) -> Sphere:
+    expr = parse_expr(source)
+    if not isinstance(expr, Sphere):
+        raise ParseError("top-level expression must be a Sphere '(...)'")
+    return expr
+
+
+def _parse_path(source: str) -> Tuple[int, ...]:
+    source = source.strip()
+    if not source:
+        raise ParseError("empty POP path")
+    try:
+        parts = tuple(int(p) for p in source.split("."))
+    except ValueError as exc:
+        raise ParseError(f"invalid POP path '{source}'") from exc
+    if any(p < 0 for p in parts):
+        raise ParseError("POP path indices must be non-negative")
+    return parts
+
+
+def _parse_classes(source: str) -> Tuple[frozenset[str], ...]:
+    if not source.strip():
+        raise ParseError("COLLAPSE requires at least one equivalence class")
+    classes = []
+    for group in source.split(";"):
+        members = [p.strip() for p in group.replace(",", "=").split("=") if p.strip()]
+        if len(members) < 2:
+            raise ParseError("each COLLAPSE class must have at least two members")
+        classes.append(frozenset(members))
+    return tuple(classes)
+
+
+def parse_operation(line: str) -> Operation:
+    text = line.strip()
+    if not text:
+        raise ParseError("operation line cannot be empty")
+
+    head, *rest = text.split(maxsplit=1)
+    tail = rest[0] if rest else ""
+    keyword = head.upper()
+
+    if keyword == "POP":
+        return PopOp(path=_parse_path(tail) if tail else None)
+    if keyword == "REFUSE":
+        refused = [p.strip() for p in tail.replace(",", " ").split() if p.strip()]
+        if not refused:
+            # Appendix E: a refusal targets a nonempty subset. This is a
+            # syntactic check (was anything named at all); transition()
+            # separately enforces the semantic version (is any of it
+            # still present in the current option space).
+            raise ParseError("REFUSE requires at least one target (Appendix E: R must be nonempty)")
+        return RefuseOp(refused=frozenset(refused))
+    if keyword == "BIND":
+        if not tail:
+            raise ParseError("BIND requires a predicate expression")
+        return BindOp(predicate=tail.strip())
+    if keyword == "COLLAPSE":
+        return CollapseOp(classes=_parse_classes(tail))
+
+    raise ParseError(f"unknown operation '{head}'")
+
+
+def parse_program(lines: Sequence[str]) -> list[Operation]:
+    ops = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        ops.append(parse_operation(stripped))
+    return ops
+
+============================================================
+FILE: spherepop/path_utils.py
+============================================================
+
+"""Path resolution and navigation utilities for Sphere expressions.
+
+This module provides functions for navigating and querying the tree structure
+of Sphere expressions using integer-indexed paths. Paths are represented as
+tuples of integers, where each integer is an index into a Sphere's items.
+
+Path Conventions
+----------------
+
+- The root Sphere is represented by the empty path ``()``
+- A path ``(0,)`` refers to the first item of the root Sphere
+- A path ``(1, 2)`` refers to the third item (index 2) of the second item
+  (index 1) of the root Sphere
+- The root Sphere itself cannot be POPped (only nested Spheres can be resolved)
+
+Label Resolution
+----------------
+
+Spheres may carry optional labels (Appendix G). Label-based POP operations
+resolve a label to a concrete path. Labels must be unique among non-root
+Spheres to be unambiguous.
+
+Examples
+--------
+
+    >>> from spherepop.model import Sphere, Atom
+    >>> from spherepop.path_utils import path_exists, all_sphere_paths, expr_at
+    >>>
+    >>> # Build a nested structure
+    >>> inner = Sphere((Atom("a"), Atom("b")))
+    >>> outer = Sphere((Atom("x"), inner, Atom("y")))
+    >>>
+    >>> # Check path existence
+    >>> path_exists(outer, ())  # Root always exists
+    True
+    >>> path_exists(outer, (1,))  # Second item (inner sphere)
+    True
+    >>> path_exists(outer, (5,))  # Out of range
+    False
+    >>>
+    >>> # Find all Sphere paths
+    >>> paths = all_sphere_paths(outer)
+    >>> sorted(paths)
+    [(), (1,)]
+    >>>
+    >>> # Navigate to an expression
+    >>> expr = expr_at(outer, (1,))
+    >>> expr == inner
+    True
+
+See Also
+--------
+
+- ``spherepop.semantics.transition`` : Uses these utilities for POP operations
+- ``spherepop.model.Sphere`` : The tree structure being navigated
+"""
+
+from __future__ import annotations
+
+from typing import Tuple
+
+from spherepop.model import Atom, Expr, Sphere
+
+
+class PathError(ValueError):
+    """Raised when a path operation fails (invalid path, label ambiguity, etc)."""
+
+    pass
+
+
+def path_exists(expr: Expr, path: Tuple[int, ...]) -> bool:
+    """Check whether a path is valid for a given expression.
+
+    A path is valid if:
+    1. Each step traverses through a Sphere (not an Atom)
+    2. Each index is within the bounds of the Sphere's items
+
+    Parameters
+    ----------
+    expr : Expr
+        The root expression to check against.
+    path : Tuple[int, ...]
+        The path to validate (empty tuple for root).
+
+    Returns
+    -------
+    bool
+        True if the path can be traversed, False otherwise.
+
+    Examples
+    --------
+    >>> from spherepop.model import Sphere, Atom
+    >>> s = Sphere((Atom("a"), Atom("b")))
+    >>> path_exists(s, ())
+    True
+    >>> path_exists(s, (0,))
+    True
+    >>> path_exists(s, (2,))  # Out of range
+    False
+    >>> path_exists(s, (0, 0))  # Can't traverse through Atom
+    False
+    """
+    cursor = expr
+    for idx in path:
+        if not isinstance(cursor, Sphere):
+            return False
+        if idx < 0 or idx >= len(cursor.items):
+            return False
+        cursor = cursor.items[idx]
+    return True
+
+
+def all_sphere_paths(expr: Expr, prefix: Tuple[int, ...] = ()) -> list[Tuple[int, ...]]:
+    """Find all paths that lead to Sphere nodes in an expression tree.
+
+    This recursively traverses the expression tree and returns paths to
+    every Sphere encountered, including the root (represented by the prefix).
+    Atom nodes are not included in the results.
+
+    Parameters
+    ----------
+    expr : Expr
+        The root expression to search.
+    prefix : Tuple[int, ...], optional
+        Internal parameter for recursion (the path to this expr from root).
+
+    Returns
+    -------
+    list[Tuple[int, ...]]
+        Paths to all Sphere nodes. The empty path ``()`` represents the root
+        if it's a Sphere. Order is depth-first: parent before children.
+
+    Examples
+    --------
+    >>> from spherepop.model import Sphere, Atom
+    >>> inner = Sphere((Atom("a"),))
+    >>> outer = Sphere((inner, Atom("b")))
+    >>> paths = all_sphere_paths(outer)
+    >>> sorted(paths)
+    [(), (0,)]
+    """
+    out: list[Tuple[int, ...]] = []
+    if isinstance(expr, Sphere):
+        out.append(prefix)
+        for idx, child in enumerate(expr.items):
+            out.extend(all_sphere_paths(child, prefix + (idx,)))
+    return out
+
+
+def deepest_non_root_sphere(expr: Sphere) -> Tuple[int, ...]:
+    """Find the deepest nested non-root Sphere in an expression.
+
+    This is used as a default when a POP operation doesn't specify a path
+    or label: it resolves the most deeply nested Sphere. If multiple Spheres
+    are tied for deepest, the lexicographically smallest path is chosen.
+
+    Parameters
+    ----------
+    expr : Sphere
+        The root Sphere to search.
+
+    Returns
+    -------
+    Tuple[int, ...]
+        Path to the deepest non-root Sphere.
+
+    Raises
+    ------
+    PathError
+        If there are no nested Spheres (only the root exists).
+
+    Examples
+    --------
+    >>> from spherepop.model import Sphere, Atom
+    >>> inner1 = Sphere((Atom("a"),))
+    >>> inner2 = Sphere((Atom("b"),))
+    >>> outer = Sphere((inner1, inner2))
+    >>> deepest_non_root_sphere(outer)  # Both at depth 1, choose first
+    (0,)
+    >>>
+    >>> deeper = Sphere((Atom("x"),))
+    >>> middle = Sphere((deeper,))
+    >>> root = Sphere((middle,))
+    >>> deepest_non_root_sphere(root)  # Deepest is at depth 2
+    (0, 0)
+
+    Notes
+    -----
+    The root Sphere itself (path ``()``) is never returned, even if it's
+    the only Sphere. This matches the semantics that the root cannot be
+    POPped.
+    """
+    paths = [p for p in all_sphere_paths(expr) if p]  # Exclude root (empty path)
+    if not paths:
+        raise PathError("POP requires at least one nested Sphere to resolve")
+    # Sort by depth (length) descending, then lexicographically ascending
+    paths.sort(key=lambda p: (-len(p), p))
+    return paths[0]
+
+
+def find_label_path(expr: Sphere, label: str) -> Tuple[int, ...]:
+    """Resolve a label to the path of the Sphere carrying that label.
+
+    This implements Appendix G's label-based POP resolution: ``pop(Label)``
+    finds the Sphere with the given label and returns its path. The root
+    Sphere is excluded from the search (it cannot be POPped, so a label on
+    the root is not a valid POP target).
+
+    **Theory Status**: Global label uniqueness is an **implementation choice**
+    for concrete-syntax convenience, not a theoretical requirement. See
+    THEORY_STATUS.md Q8. Appendix G does not mandate unique labels; scoped
+    labels (e.g., ``root.left.x`` vs ``root.right.x``) would be plausible.
+
+    Parameters
+    ----------
+    expr : Sphere
+        The root Sphere to search.
+    label : str
+        The label to find.
+
+    Returns
+    -------
+    Tuple[int, ...]
+        Path to the Sphere carrying the label.
+
+    Raises
+    ------
+    PathError
+        If no Sphere has the label, or if multiple Spheres have it (ambiguous).
+
+    Examples
+    --------
+    >>> from spherepop.model import Sphere, Atom
+    >>> inner = Sphere((Atom("a"),), label="inner")
+    >>> outer = Sphere((inner, Atom("b")), label="outer")
+    >>> find_label_path(outer, "inner")
+    (0,)
+
+    Notes
+    -----
+    A label on the root Sphere is ignored (will raise PathError even if
+    it matches) because the root cannot be POPped.
+    """
+    # Find all non-root Spheres with the given label
+    matches = [
+        p
+        for p in all_sphere_paths(expr)
+        if p  # Exclude root
+        and isinstance(expr_at(expr, p), Sphere)
+        and expr_at(expr, p).label == label  # type: ignore[union-attr]
+    ]
+    if not matches:
+        raise PathError(f"no Sphere labeled {label!r} found")
+    if len(matches) > 1:
+        raise PathError(f"label {label!r} is ambiguous: {len(matches)} spheres carry it")
+    return matches[0]
+
+
+def expr_at(expr: Expr, path: Tuple[int, ...]) -> Expr:
+    """Navigate to the expression at a given path.
+
+    This traverses the tree following the path indices and returns the
+    expression at that location. The path must be valid (use :func:`path_exists`
+    to check first, or catch the assertion failure).
+
+    Parameters
+    ----------
+    expr : Expr
+        The root expression to start from.
+    path : Tuple[int, ...]
+        The path to navigate (empty tuple returns the root itself).
+
+    Returns
+    -------
+    Expr
+        The expression (Atom or Sphere) at the path.
+
+    Raises
+    ------
+    AssertionError
+        If the path is invalid (traverses through an Atom or uses out-of-range index).
+
+    Examples
+    --------
+    >>> from spherepop.model import Sphere, Atom
+    >>> s = Sphere((Atom("a"), Atom("b")))
+    >>> expr_at(s, ())  # Root
+    Sphere(items=(Atom(name='a'), Atom(name='b')), label=None)
+    >>> expr_at(s, (1,))  # Second item
+    Atom(name='b')
+
+    Notes
+    -----
+    This function uses assertions for path validation (assumes the caller
+    has already verified the path is valid). For user-facing code, prefer
+    checking with :func:`path_exists` first or using operations that raise
+    :class:`PathError` explicitly.
+    """
+    cursor = expr
+    for idx in path:
+        assert isinstance(cursor, Sphere), f"Cannot traverse through non-Sphere at {path}"
+        assert 0 <= idx < len(cursor.items), f"Index {idx} out of range at {path}"
+        cursor = cursor.items[idx]
+    return cursor
+
+============================================================
+FILE: spherepop/poset.py
+============================================================
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import FrozenSet, Sequence, Tuple
+
+from spherepop.model import Quotient
+
+
+class PosetError(ValueError):
+    pass
+
+
+@dataclass(frozen=True)
+class OptionSpace:
+    label: str
+    content: FrozenSet[str | Quotient]
+
+
+def preceq(a: OptionSpace, b: OptionSpace) -> bool:
+    return a.content <= b.content
+
+
+def extensionally_equivalent(a: OptionSpace, b: OptionSpace) -> bool:
+    return a.content == b.content
+
+
+def minimal_elements(poset: Sequence[OptionSpace]) -> Tuple[OptionSpace, ...]:
+    result = []
+    for x in poset:
+        if not any(other.content < x.content for other in poset if other is not x):
+            result.append(x)
+    return tuple(result)
+
+
+def pop_minimal(poset: Sequence[OptionSpace], label: str) -> Tuple[OptionSpace, ...]:
+    by_label = {space.label: space for space in poset}
+    if label not in by_label:
+        raise PosetError(f"no scope labeled {label!r} in this poset")
+    target = by_label[label]
+    if target not in minimal_elements(poset):
+        raise PosetError(f"scope {label!r} is not currently minimal -- cannot pop it")
+    return tuple(space for space in poset if space.label != label)
+
+============================================================
+FILE: spherepop/predicates.py
+============================================================
+
+"""Predicate logic for BIND operations.
+
+This module defines the predicate DSL used by the BIND operation to filter
+option spaces. Predicates are stated over plain strings but generalized to
+handle Quotient elements (equivalence classes from COLLAPSE).
+
+Predicate Syntax
+----------------
+
+The predicate DSL supports:
+
+- ``"ALL"``: Matches any option (identity predicate)
+- ``"prefix:X"``: Matches options starting with X
+- ``"contains:X"``: Matches options containing X as a substring
+- ``"in:A,B,C"``: Matches options in the explicit set {A, B, C}
+- Exact match: Any other string matches only that exact option
+
+Examples
+--------
+
+    >>> from spherepop.predicates import string_test, predicate
+    >>> from spherepop.model import Quotient
+    >>>
+    >>> # String predicates
+    >>> test = string_test("prefix:user")
+    >>> test("user_id")
+    True
+    >>> test("admin")
+    False
+    >>>
+    >>> # Quotient handling (existential semantics)
+    >>> pred = predicate("prefix:user")
+    >>> q = Quotient(frozenset({"user_id", "admin"}))
+    >>> pred(q)  # True because "user_id" matches
+    True
+
+Quotient Handling
+-----------------
+
+When a BIND predicate encounters a Quotient (an option merged by a prior
+COLLAPSE), it applies existential semantics: the Quotient is admitted if
+*any* of its members would match the predicate.
+
+This is a provisional modeling choice pending clarification in Appendix G.
+The alternative (universal semantics: admit only if *all* members match)
+would be more restrictive but potentially more intuitive for some use cases.
+
+See Also
+--------
+
+- ``spherepop.semantics.transition`` : Uses predicates in BindOp handling
+- ``spherepop.model.Quotient`` : Equivalence classes handled by predicates
+"""
+
+from __future__ import annotations
+
+from typing import Callable
+
+from spherepop.model import Quotient
+
+
+def string_test(spec: str) -> Callable[[str], bool]:
+    """Build a predicate function that tests plain strings.
+
+    This is the core predicate logic for BIND operations, stated over
+    individual option names (plain strings). For handling Quotients, see
+    :func:`predicate`.
+
+    Parameters
+    ----------
+    spec : str
+        Predicate specification using the DSL syntax:
+        - ``"ALL"`` → matches everything
+        - ``"prefix:X"`` → matches strings starting with X
+        - ``"contains:X"`` → matches strings containing X
+        - ``"in:A,B,C"`` → matches strings in {A, B, C}
+        - Any other string → exact match only
+
+    Returns
+    -------
+    Callable[[str], bool]
+        A function that tests whether a string satisfies the predicate.
+
+    Examples
+    --------
+    >>> test = string_test("prefix:user")
+    >>> test("user_id")
+    True
+    >>> test("user_name")
+    True
+    >>> test("admin")
+    False
+
+    >>> test_in = string_test("in:a1,a2,a3")
+    >>> test_in("a1")
+    True
+    >>> test_in("a4")
+    False
+    """
+    if spec == "ALL":
+        return lambda _: True
+    if spec.startswith("prefix:"):
+        prefix = spec.split(":", 1)[1]
+        return lambda option: option.startswith(prefix)
+    if spec.startswith("contains:"):
+        chunk = spec.split(":", 1)[1]
+        return lambda option: chunk in option
+    if spec.startswith("in:"):
+        members = {p.strip() for p in spec.split(":", 1)[1].split(",") if p.strip()}
+        return lambda option: option in members
+    return lambda option: option == spec
+
+
+def predicate(spec: str) -> Callable[[str | Quotient], bool]:
+    """Build a predicate function that handles both strings and Quotients.
+
+    This generalizes :func:`string_test` to work with option-space elements
+    that may be plain strings or Quotient equivalence classes (from prior
+    COLLAPSE operations).
+
+    For Quotients, this uses **existential semantics**: a Quotient is
+    admitted if the predicate would admit *any* one of its members. 
+
+    **Theory Status**: This is **PROVISIONAL** semantics. The paper
+    (Appendix E) does not specify how predicates should lift to quotient
+    classes. See THEORY_STATUS.md Q3 for three plausible alternatives:
+    existential (current), universal, or well-defined-on-classes.
+
+    Parameters
+    ----------
+    spec : str
+        Predicate specification (same DSL as :func:`string_test`).
+
+    Returns
+    -------
+    Callable[[str | Quotient], bool]
+        A function that tests option-space elements (strings or Quotients).
+
+    Examples
+    --------
+    >>> from spherepop.model import Quotient
+    >>> pred = predicate("prefix:user")
+    >>> pred("user_id")  # Plain string
+    True
+    >>> pred("admin")
+    False
+    >>> q = Quotient(frozenset({"user_id", "admin"}))
+    >>> pred(q)  # Quotient - existential: any member matches
+    True
+
+    Notes
+    -----
+    The existential reading for Quotients means that if even one member
+    of a merged class would pass the predicate, the entire class is kept.
+    This may be surprising in cases where you expect all members to match.
+
+    Alternative (not implemented): Universal semantics would require *all*
+    members to match before admitting the Quotient. This would make
+    ``predicate("prefix:user")`` reject ``Quotient({"user_id", "admin"})``
+    because "admin" doesn't match.
+
+    See Also
+    --------
+    THEORY_STATUS.md : Full discussion of BIND predicate semantics
+    """
+    test = string_test(spec)
+
+    def pred(option: str | Quotient) -> bool:
+        if isinstance(option, Quotient):
+            # Existential semantics: admit if any member matches
+            return any(test(member) for member in option.members)
+        return test(option)
+
+    return pred
+
+============================================================
+FILE: spherepop/semantics.py
+============================================================
+
+from __future__ import annotations
+
+from dataclasses import replace
+from typing import Iterable, Tuple
+
+from spherepop.model import (
+    Atom,
+    BindEvent,
+    BindOp,
+    CollapseEvent,
+    CollapseOp,
+    Config,
+    Expr,
+    Operation,
+    PopEvent,
+    PopOp,
+    Quotient,
+    RefuseEvent,
+    RefuseOp,
+    Sphere,
+)
+from spherepop.path_utils import (
+    PathError,
+    deepest_non_root_sphere,
+    expr_at,
+    find_label_path,
+    path_exists,
+)
+from spherepop.predicates import predicate as make_predicate
+from spherepop.views import format_available_options, format_available_paths
+
+
+class EvalError(ValueError):
+    pass
+
+
+def _pop_path(expr: Sphere, path: Tuple[int, ...]) -> Sphere:
+    if not path:
+        raise EvalError("POP must target a nested Sphere path, not the root")
+
+    def recurse(node: Expr, target: Tuple[int, ...]) -> Expr:
+        if not target:
+            if not isinstance(node, Sphere):
+                raise EvalError("POP target must be a Sphere")
+            return node  # caller handles splicing
+
+        if not isinstance(node, Sphere):
+            raise EvalError("POP path traverses through non-Sphere")
+
+        idx = target[0]
+        if idx < 0 or idx >= len(node.items):
+            raise EvalError("POP path is out of range")
+
+        child = node.items[idx]
+        if len(target) == 1:
+            if not isinstance(child, Sphere):
+                raise EvalError("POP target must be a Sphere")
+            new_items = list(node.items[:idx]) + list(child.items) + list(node.items[idx + 1 :])
+            # Rebuilding `node` (the parent) with the child's items spliced
+            # in -- preserve node's own label, not the popped child's.
+            return Sphere(tuple(new_items), label=node.label)
+
+        new_child = recurse(child, target[1:])
+        new_items = list(node.items)
+        new_items[idx] = new_child
+        return Sphere(tuple(new_items), label=node.label)
+
+    popped = recurse(expr, path)
+    if not isinstance(popped, Sphere):
+        raise EvalError("POP must preserve top-level Sphere")
+    return popped
+
+
+
+
+def _quotient_map(classes: Iterable[frozenset[str]]) -> dict[str, Quotient]:
+    mapping: dict[str, Quotient] = {}
+    for cls in classes:
+        quotient = Quotient(members=frozenset(cls))
+        for member in cls:
+            mapping[member] = quotient
+    return mapping
+
+
+def _rename_expr(expr: Expr, mapping: dict[str, Quotient]) -> Expr:
+    if isinstance(expr, Atom):
+        if isinstance(expr.name, str) and expr.name in mapping:
+            return Atom(mapping[expr.name])
+        return expr
+    return Sphere(tuple(_rename_expr(item, mapping) for item in expr.items), label=expr.label)
+
+
+def _flatten_option_names(option_space: frozenset[str | Quotient]) -> frozenset[str]:
+    """All plain-string names present in an option space, unpacking any
+    Quotient's members. Used to resolve a REFUSE's named targets against
+    an option space that may already contain merged classes.
+    """
+    names: set[str] = set()
+    for option in option_space:
+        if isinstance(option, Quotient):
+            names |= option.members
+        else:
+            names.add(option)
+    return frozenset(names)
+
+
+def _option_names_any_of(option: str | Quotient, names: frozenset[str]) -> bool:
+    if isinstance(option, Quotient):
+        return bool(option.members & names)
+    return option in names
+
+
+def transition(config: Config, op: Operation) -> Config:
+    """Apply a single operation to a Config, returning a new Config.
+    
+    The four primitive operations (POP, REFUSE, BIND, COLLAPSE) are the only
+    operations that append to Config.history. This is the sole entry point
+    for mutating transitions — all other functions are read-only observers.
+    
+    Examples:
+        >>> from spherepop.model import Config, Sphere, Atom, PopOp, RefuseOp
+        >>> from spherepop.semantics import transition
+        
+        # POP: Remove nested scope, promoting its contents
+        >>> sigma = Sphere((Sphere((Atom("a"), Atom("b")), label="inner"),), label="root")
+        >>> cfg = Config(sigma=sigma, option_space=frozenset({"a", "b"}), history=())
+        >>> cfg_popped = transition(cfg, PopOp(label="inner"))
+        >>> cfg_popped.sigma
+        Sphere(items=(Atom(name='a'), Atom(name='b')), label='root')
+        
+        # REFUSE: Remove unwanted options
+        >>> cfg_refused = transition(cfg, RefuseOp(options=frozenset({"b"})))
+        >>> cfg_refused.option_space
+        frozenset({'a'})
+        
+        # BIND: Filter by predicate
+        >>> from spherepop.model import BindOp
+        >>> cfg_bound = transition(cfg, BindOp(predicate="prefix:a"))
+        >>> cfg_bound.option_space  # Only options starting with 'a'
+        frozenset({'a'})
+        
+        # COLLAPSE: Create equivalence classes
+        >>> from spherepop.model import CollapseOp
+        >>> cfg_collapsed = transition(cfg, CollapseOp(classes=frozenset([frozenset({"a", "b"})])))
+        >>> len(cfg_collapsed.option_space)  # Now a single Quotient
+        1
+    
+    Args:
+        config: Current configuration (immutable).
+        op: Operation to apply (POP, REFUSE, BIND, or COLLAPSE).
+    
+    Returns:
+        New Config with operation applied and appended to history.
+    
+    Raises:
+        EvalError: If operation cannot be applied (e.g., invalid path,
+                   empty result, malformed operation).
+    """
+    history_index = len(config.history)
+
+    if isinstance(op, PopOp):
+        if op.path is not None and op.label is not None:
+            raise EvalError(
+                "PopOp: specify at most one of path or label. "
+                f"Received both: path={op.path}, label={op.label!r}"
+            )
+        try:
+            if op.label is not None:
+                path = find_label_path(config.sigma, op.label)
+            elif op.path is not None:
+                path = op.path
+            else:
+                path = deepest_non_root_sphere(config.sigma)
+        except PathError as e:
+            # Convert PathError to EvalError with added context
+            paths_info = format_available_paths(config.sigma)
+            raise EvalError(f"{e}. {paths_info}") from e
+        if not path_exists(config.sigma, path):
+            paths_info = format_available_paths(config.sigma)
+            raise EvalError(
+                f"POP path does not exist: {path}. {paths_info}"
+            )
+        sigma_prime = _pop_path(config.sigma, path)
+        pop_event = PopEvent(history_index=history_index, path=path, label=op.label)
+        return replace(config, sigma=sigma_prime, history=config.history + (pop_event,))
+
+    if isinstance(op, RefuseOp):
+        # Resolve the requested names against whatever is actually present
+        # -- including names living inside an already-merged Quotient.
+        # Refusing one member of a Quotient refuses the whole class (a
+        # Quotient is the atomic option-space element post-COLLAPSE), but
+        # the recorded event names only what was actually requested and
+        # present, not every member swept out along with it.
+        #
+        # op.label is recorded on the event for Appendix G provenance but
+        # does not (yet) select among multiple option spaces: REFUSE still
+        # acts on Config's single global option_space. Partitioning
+        # option spaces by label is Appendix B's poset semantics, out of
+        # scope for this increment -- see README.
+        present_names = _flatten_option_names(config.option_space)
+        refused = frozenset(present_names & op.refused)
+        if not refused:
+            # Appendix E: a refusal event is (O_h, R) with R a *nonempty*
+            # subset of O_h. A REFUSE whose requested targets are all
+            # already absent from the current option space is not a
+            # degenerate no-op refusal -- it is not a refusal at all.
+            options_info = format_available_options(config.option_space)
+            requested = ', '.join(sorted(op.refused))
+            raise EvalError(
+                f"REFUSE requires a nonempty subset of the current option space (Appendix E). "
+                f"Requested: {{{requested}}}, but {options_info}"
+            )
+        option_prime = frozenset(
+            o for o in config.option_space if not _option_names_any_of(o, refused)
+        )
+        refuse_event = RefuseEvent(history_index=history_index, refused=refused, label=op.label)
+        return replace(config, option_space=option_prime, history=config.history + (refuse_event,))
+
+    if isinstance(op, BindOp):
+        # See the label note on the RefuseOp branch above: recorded, not
+        # yet partitioning.
+        pred = make_predicate(op.predicate)
+        option_prime = frozenset(o for o in config.option_space if pred(o))
+        bind_event = BindEvent(history_index=history_index, predicate=op.predicate, label=op.label)
+        return replace(config, option_space=option_prime, history=config.history + (bind_event,))
+
+    if isinstance(op, CollapseOp):
+        mapping = _quotient_map(op.classes)
+        sigma_prime_expr = _rename_expr(config.sigma, mapping)
+        assert isinstance(sigma_prime_expr, Sphere), "COLLAPSE must preserve top-level Sphere"
+        # Theory Status: Composing successive COLLAPSE operations is OPEN.
+        # The paper (Appendix C) specifies COLLAPSE as irreversible identification
+        # but does not define composition law for overlapping relations.
+        # Current: mapping's keys are plain strings, so an option that is already
+        # a Quotient from an earlier COLLAPSE is left untouched here rather than
+        # merged into new classes.
+        # Mathematically natural extension: take equivalence closure (transitive).
+        # See THEORY_STATUS.md Q2b.
+        option_prime = frozenset(
+            mapping[o] if isinstance(o, str) and o in mapping else o
+            for o in config.option_space
+        )
+        collapse_event = CollapseEvent(history_index=history_index, classes=op.classes, label=op.label)
+        return replace(
+            config,
+            sigma=sigma_prime_expr,
+            option_space=option_prime,
+            history=config.history + (collapse_event,),
+            collapse_log=config.collapse_log + ((history_index, op.classes),),
+        )
+
+    raise EvalError(
+        f"Unsupported operation type: {type(op).__name__}. "
+        f"Valid operation types: PopOp, RefuseOp, BindOp, CollapseOp"
+    )
+
+
+def eval_program(config: Config, operations: Iterable[Operation]) -> Config:
+    current = config
+    for op in operations:
+        current = transition(current, op)
+    return current
+
+
+def history_is_prefix(old: Config, new: Config) -> bool:
+    old_hist = old.history
+    new_hist = new.history
+    if len(old_hist) > len(new_hist):
+        return False
+    return old_hist == new_hist[: len(old_hist)]
+
+============================================================
+FILE: spherepop/validation.py
+============================================================
+
+"""Configuration validation: advisory diagnostics for Config invariants.
+
+This module provides **observational** validation — it inspects Config instances
+and returns lists of violations without altering them. Validation is explicitly
+invoked by tests, experiment runners (via --validate), or debugging workflows;
+it is never implicitly part of transition().
+
+The validated invariants correspond to structural well-formedness properties
+that should hold across the stable Spherepop semantics, while being careful
+not to choose answers to unresolved theoretical questions.
+
+Theory Status
+-------------
+- Validation covers only paper-licensed and implementation-choice semantics
+- When encountering provisional behavior (COLLAPSE composition, quotient
+  predicate lifting), validation reports "unsupported" rather than choosing
+  a semantic interpretation
+- See THEORY_STATUS.md Q1-Q8 for what is established vs open
+"""
+
+from __future__ import annotations
+
+from typing import FrozenSet
+
+from spherepop.model import Atom, CollapseEvent, Config, Expr, Quotient, Sphere
+
+
+def validate_config(config: Config) -> list[str]:
+    """Validate a Config's structural invariants.
+    
+    Returns an empty list if the config is valid, or a list of human-readable
+    violation messages describing what is malformed.
+    
+    Validated Invariants
+    --------------------
+    1. **Sigma well-formedness**: All Sphere.items are valid Expr instances,
+       no dangling references
+    
+    2. **Option provenance**: Option space elements trace back to atoms
+       representable in sigma or to explicit collapse provenance:
+       - Plain strings must correspond to Atom names in sigma
+       - Quotient members must have been admissible atoms
+       - After REFUSE/BIND, option_space ⊆ original atoms (asymmetric)
+    
+    3. **History sequential**: History indices are consecutive starting at 0
+    
+    4. **Collapse log consistency**: collapse_log indices reference actual
+       CollapseEvents in history at those positions
+    
+    5. **Quotient uniqueness**: No duplicate Quotients with identical members
+    
+    6. **Label uniqueness** (if present): Sphere labels are globally unique
+       within sigma (implementation choice per THEORY_STATUS.md Q8)
+    
+    Provisional Semantics
+    ---------------------
+    - Successive COLLAPSE on already-quoted options: reported as unsupported
+      (THEORY_STATUS.md Q2b - composition semantics open)
+    - Quotient predicate semantics: not validated (Q3 - existential vs
+      universal vs well-defined lifting)
+    
+    Parameters
+    ----------
+    config : Config
+        Configuration to validate
+    
+    Returns
+    -------
+    list[str]
+        Empty if valid, otherwise violation messages
+    
+    Examples
+    --------
+    >>> from spherepop import make_config, parse_sphere
+    >>> from spherepop.validation import validate_config
+    >>> cfg = make_config(parse_sphere("(A B C)"), {"A", "B", "C"})
+    >>> validate_config(cfg)
+    []
+    
+    >>> # Malformed: option not in sigma
+    >>> bad_cfg = Config(
+    ...     sigma=Sphere((Atom("A"),), label="root"),
+    ...     option_space=frozenset({"X"}),
+    ...     history=()
+    ... )
+    >>> violations = validate_config(bad_cfg)
+    >>> len(violations) > 0
+    True
+    """
+    violations: list[str] = []
+    
+    # Invariant 1: Sigma well-formedness
+    violations.extend(_validate_sigma(config.sigma))
+    
+    # Invariant 2: Option provenance
+    violations.extend(_validate_option_provenance(config))
+    
+    # Invariant 3: History sequential
+    violations.extend(_validate_history_sequential(config))
+    
+    # Invariant 4: Collapse log consistency
+    violations.extend(_validate_collapse_log(config))
+    
+    # Invariant 5: Quotient uniqueness
+    violations.extend(_validate_quotient_uniqueness(config))
+    
+    # Invariant 6: Label uniqueness (if labels present)
+    violations.extend(_validate_label_uniqueness(config.sigma))
+    
+    return violations
+
+
+def assert_valid_config(config: Config) -> None:
+    """Strict validation: raises ValueError if config is invalid.
+    
+    This is a convenience wrapper around validate_config() for contexts
+    that want validation as a gate rather than as a diagnostic.
+    
+    Raises
+    ------
+    ValueError
+        If validate_config() returns any violations
+    """
+    violations = validate_config(config)
+    if violations:
+        msg = "Config validation failed:\n  " + "\n  ".join(violations)
+        raise ValueError(msg)
+
+
+# ============================================================================
+# Private Validation Helpers
+# ============================================================================
+
+
+def _validate_sigma(sigma: Expr) -> list[str]:
+    """Check that sigma is a well-formed expression tree."""
+    violations: list[str] = []
+    
+    def recurse(expr: Expr, path: str) -> None:
+        if isinstance(expr, Atom):
+            # Atoms are always well-formed
+            return
+        
+        if not isinstance(expr, Sphere):
+            violations.append(
+                f"Invalid Expr type at {path}: expected Atom or Sphere, got {type(expr).__name__}"
+            )
+            return
+        
+        if not isinstance(expr.items, tuple):
+            violations.append(
+                f"Sphere.items at {path} must be tuple, got {type(expr.items).__name__}"
+            )
+            return
+        
+        for i, item in enumerate(expr.items):
+            if not isinstance(item, (Atom, Sphere)):
+                violations.append(
+                    f"Sphere.items[{i}] at {path} is invalid: got {type(item).__name__}"
+                )
+            else:
+                recurse(item, f"{path}.items[{i}]")
+    
+    recurse(sigma, "sigma")
+    return violations
+
+
+def _collect_atoms(expr: Expr) -> FrozenSet[str]:
+    """Recursively collect all Atom names from an expression tree."""
+    if isinstance(expr, Atom):
+        # Handle both plain string names and Quotient names (from old collapsed atoms)
+        if isinstance(expr.name, str):
+            return frozenset({expr.name})
+        elif isinstance(expr.name, Quotient):
+            return expr.name.members
+        else:
+            return frozenset()
+    
+    if not isinstance(expr, Sphere):
+        # Malformed expr - return empty set, _validate_sigma will catch it
+        return frozenset()
+    
+    atoms: set[str] = set()
+    for item in expr.items:
+        atoms.update(_collect_atoms(item))
+    return frozenset(atoms)
+
+
+def _validate_option_provenance(config: Config) -> list[str]:
+    """Validate that option_space elements trace to sigma atoms or collapse provenance.
+    
+    Asymmetric invariant: options ⊆ atoms(sigma) before quotienting.
+    After COLLAPSE, validate provenance rather than reconstructing identity.
+    """
+    violations: list[str] = []
+    
+    # Collect atoms from sigma
+    sigma_atoms = _collect_atoms(config.sigma)
+    
+    # Track which atoms have been collapsed into quotients via history
+    collapsed_members: set[str] = set()
+    for event in config.history:
+        if isinstance(event, CollapseEvent):
+            for cls in event.classes:
+                collapsed_members.update(cls)
+    
+    # Validate each option
+    for option in config.option_space:
+        if isinstance(option, str):
+            # Plain string: must be in sigma atoms
+            if option not in sigma_atoms:
+                violations.append(
+                    f"Option '{option}' not found in sigma atoms: {sorted(sigma_atoms)}"
+                )
+        elif isinstance(option, Quotient):
+            # Quotient: members must trace to admitted atoms or collapse provenance
+            for member in option.members:
+                if member not in sigma_atoms and member not in collapsed_members:
+                    violations.append(
+                        f"Quotient member '{member}' not found in sigma atoms or collapse provenance"
+                    )
+        else:
+            violations.append(
+                f"Invalid option_space element type: {type(option).__name__}"
+            )
+    
+    return violations

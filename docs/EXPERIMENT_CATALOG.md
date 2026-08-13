@@ -1,0 +1,798 @@
+# Spherepop Experiment Catalog
+
+**Purpose**: Systematic catalog of all experiments with theory status, purpose, and results  
+**Maintenance**: Update when experiments added/modified  
+**Authority**: Experiments explore, tests verify, specifications prescribe
+
+---
+
+## Experiment Classification
+
+### By Epistemic Status
+
+**Class S (Stable)**: Verifies paper-licensed semantics
+- Purpose: Confirm implementation matches paper
+- Tests extracted from these are non-experimental
+- Examples: 01-grammar, 02-history, 03-pop, 04-refuse
+
+**Class X (Experimental)**: Explores provisional semantics
+- Purpose: Test implementation choices awaiting theoretical resolution
+- Tests from these marked `@pytest.mark.experimental`
+- Examples: 05-bind (quotient predicates), 06-collapse (composition)
+
+**Class Q (Research)**: Investigates open questions
+- Purpose: Gather empirical evidence for unresolved theory
+- May produce conjectures, not specifications
+- Examples: 16-structural-divergence, 26-horizon-equivalence
+
+**Class I (Infrastructure)**: Tests tooling, not semantics
+- Purpose: Verify observers, validators, parsers, formatters
+- Examples: 10-derived-views, 14-admissible-check, 25-observer-non-authority
+
+### By Dependency Layer
+
+**Layer 0 (Primitives)**: Tests individual operations
+- 03-pop, 04-refuse, 05-bind, 06-collapse
+
+**Layer 1 (Observers)**: Tests derived properties
+- 07-confluence, 08-divergence, 09-regret, 14-admissible-check
+
+**Layer 2 (Interactions)**: Tests operation compositions
+- 21-refuse-bind-commute, 22-confluence-policy-family
+
+**Layer 3 (Invariants)**: Tests system-wide properties
+- 13-replay-determinism, 24-replay-invariance-reordering
+
+---
+
+## Complete Experiment Catalog
+
+### 01-grammar (Class S, Layer 0)
+
+**Purpose**: Verify Appendix G BNF grammar implementation
+
+**Theory Status**: Paper-licensed (Appendix G literal)
+
+**What it tests**:
+- Atom parsing: `"a"` → `Atom("a")`
+- Unlabeled sphere: `"(a,b,c)"` → `Sphere((a,b,c), label=None)`
+- Labeled sphere: `"(a,b):L"` → `Sphere((a,b), label="L")`
+- Nested structures: `"((a,b):inner):outer"`
+- Error cases: malformed syntax
+
+**Success criteria**:
+- ✓ All BNF productions parse correctly
+- ✓ Parse errors on invalid syntax
+- ✓ Round-trip: `parse(format(x)) == x`
+
+**Key learnings**: Grammar is deliberately minimal; convenience extensions live in separate parser
+
+**Regression tests**: test_grammar.py (18 tests)
+
+---
+
+### 02-history (Class S, Layer 0)
+
+**Purpose**: Verify history monotonicity invariant
+
+**Theory Status**: Paper-licensed (Section 4, OVERSOUL §3)
+
+**What it tests**:
+```
+∀ transition (σₜ, hₜ) → (σₜ₊₁, hₜ₊₁):
+  hₜ ⪯ hₜ₊₁ where hₜ₊₁ = hₜ · e for exactly one e
+```
+
+**Success criteria**:
+- ✓ History length increases by 1 per transition
+- ✓ No operation removes history
+- ✓ History order preserved under all primitives
+
+**Key learnings**: History is **intensional identity** - two configs with same current state but different histories are distinct
+
+**Regression tests**: test_properties.py::test_property_history_monotone
+
+---
+
+### 03-pop (Class S, Layer 0)
+
+**Purpose**: Verify POP operation (Appendix C)
+
+**Theory Status**: Paper-licensed core, implementation choice for identity-on-content
+
+**What it tests**:
+- POP flattens labeled sphere into parent
+- Label resolution in nested structures
+- Option space unchanged (structural operation only)
+- Error: label not found
+- Error: cannot POP atom
+
+**Success criteria**:
+- ✓ Sphere items promoted to parent level
+- ✓ Popped label no longer resolvable
+- ✓ `len(option_space)` unchanged
+- ✓ History records PopOp
+
+**Implementation notes**:
+- Identity-on-content: identical spheres treated as equivalent
+- Label uniqueness enforced (Q8 implementation choice)
+
+**Regression tests**: test_semantics.py::test_pop_*
+
+---
+
+### 04-refuse (Class S, Layer 0)
+
+**Purpose**: Verify REFUSE operation (Appendix E)
+
+**Theory Status**: Paper-licensed
+
+**What it tests**:
+- Removes specified options from option_space
+- Requires nonempty subset: `∅ ⊂ refused ⊂ option_space`
+- Structure (sigma) unchanged
+- Quotients atomic under REFUSE (Q4 paper-licensed)
+
+**Success criteria**:
+- ✓ `option_space' = option_space \ refused`
+- ✓ Error on empty refused set
+- ✓ Error on full refused set (would leave ∅)
+- ✓ Error on non-subset
+- ✓ Refusing quotient removes all members atomically
+
+**Key learnings**: REFUSE is pure option elimination, never structural
+
+**Regression tests**: test_semantics.py::test_refuse_*
+
+---
+
+### 05-bind (Class X, Layer 0)
+
+**Purpose**: Verify BIND operation (Appendix D)
+
+**Theory Status**: Core paper-licensed, quotient lifting PROVISIONAL
+
+**What it tests**:
+- Filters option_space by predicate
+- Predicate types: "ALL", "prefix:", "contains:", "in:L", exact match
+- Structure unchanged
+- Quotient predicate evaluation (existential semantics - **PROVISIONAL**)
+
+**Success criteria**:
+- ✓ Only matching options remain
+- ✓ Empty result allowed (terminal state)
+- ✓ "ALL" preserves all options
+- ✓ "in:L" requires label L exists
+
+**Provisional behavior** (Q3):
+```python
+# Current: existential
+predicate(Quotient({a, b})) = ∃x∈{a,b}: predicate(x)
+
+# Alternative: universal (unexplored)
+predicate(Quotient({a, b})) = ∀x∈{a,b}: predicate(x)
+```
+
+**Experimental markers**: Tests with quotient predicates marked `@pytest.mark.experimental`
+
+**Regression tests**: test_semantics.py::test_bind_*, test_predicates.py
+
+---
+
+### 06-collapse (Class X, Layer 0)
+
+**Purpose**: Verify COLLAPSE operation (Appendix F)
+
+**Theory Status**: Single-level paper-licensed, composition UNRESOLVED
+
+**What it tests**:
+- Creates equivalence classes (quotients)
+- Replaces class members with single Quotient
+- Classes must be disjoint, non-empty
+- Collapse logged with history index
+
+**Success criteria**:
+- ✓ `|option_space'| = |option_space| - Σ(|C|-1)`
+- ✓ Quotient equality by member set
+- ✓ Error on overlapping classes
+- ✓ Collapse provenance in collapse_log
+
+**Unresolved** (Q2b): Successive collapse composition
+```python
+COLLAPSE({{a,b}}) → {Quotient({a,b}), ...}
+COLLAPSE({{Quotient({a,b}), c}}) → ???
+```
+
+Current: Returns error (conservative)  
+Alternatives: Flatten, nest, or reject  
+Status: Awaiting theory
+
+**Experimental markers**: Composition tests (if added) would be experimental
+
+**Regression tests**: test_semantics.py::test_collapse_*
+
+---
+
+### 07-confluence (Class S, Layer 1)
+
+**Purpose**: Verify confluent() observer
+
+**Theory Status**: Paper-licensed concept
+
+**What it tests**:
+```
+confluent(c, ops) = true ⇔
+  ∀ permutations π: eval_program(c, π(ops)) reaches same state
+```
+
+**Success criteria**:
+- ✓ REFUSE operations commute (order-independent)
+- ✓ Detects non-confluent sequences
+- ✓ Observer non-authoritative (doesn't modify config)
+
+**Complexity**: O(n!), exponential in |ops|
+
+**Key learnings**: Confluence is observation, not requirement. Non-confluent sequences are valid.
+
+**Regression tests**: test_observers.py::test_confluent_*
+
+---
+
+### 08-divergence (Class S, Layer 1)
+
+**Purpose**: Verify divergent() observer
+
+**Theory Status**: Paper-licensed concept (dual of confluence)
+
+**What it tests**:
+```
+divergent(c, ops) = ¬confluent(c, ops)
+```
+
+**Success criteria**:
+- ✓ Detects order-sensitive sequences
+- ✓ Example: POP then REFUSE vs REFUSE then POP may differ
+
+**Key learnings**: Divergence reveals operation dependencies
+
+**Regression tests**: test_observers.py::test_divergent_*
+
+---
+
+### 09-regret (Class X, Layer 1)
+
+**Purpose**: Verify regretful() observer
+
+**Theory Status**: PROVISIONAL definition (Q6)
+
+**What it tests** (current interpretation):
+```
+regretful(c, op) = true ⇔
+  ∃ op_next: admissible(op_next, c) ∧ ¬admissible(op_next, c')
+  where c' = transition(c, op)
+```
+
+**Success criteria**:
+- ✓ Detects operations that close future continuations
+- ✓ Observer non-authoritative (regret ≠ error)
+
+**Alternative interpretations** (unexplored):
+- Future-regret: `∃ futures unreachable after op`
+- Pareto-regret: `op reduces options more than necessary`
+
+**Experimental markers**: Marked experimental pending theory clarification
+
+**Regression tests**: test_observers.py::test_regretful_*
+
+---
+
+### 10-derived-views (Class I, Layer 1)
+
+**Purpose**: Test extensional_view() and representative()
+
+**Theory Status**: Implementation infrastructure, non-authoritative
+
+**What it tests**:
+- `extensional_view(c)` returns observable option set
+- `representative(q)` picks quotient member for display
+- View equality doesn't imply config equality
+
+**Success criteria**:
+- ✓ Quotient displayed via representative
+- ✓ V(c₁) = V(c₂) ⇏ c₁ = c₂ (non-authority)
+- ✓ representative() is only function picking quotient member
+
+**Key learnings**: Views for observation/display only, never for authorization
+
+**Regression tests**: test_views.py
+
+---
+
+### 11-merge-derived (Class I, Layer 1)
+
+**Purpose**: Test merging of derived views
+
+**Theory Status**: Infrastructure exploration
+
+**What it tests**:
+- Combining multiple derived views
+- View composition properties
+- Non-authoritative aggregation
+
+**Success criteria**:
+- ✓ Merged views preserve non-authority
+- ✓ No inverse causal edges introduced
+
+**Regression tests**: test_views.py
+
+---
+
+### 12-default-pop (Class S, Layer 0)
+
+**Purpose**: Test POP with default label resolution
+
+**Theory Status**: Paper-licensed
+
+**What it tests**:
+- POP resolves labels depth-first
+- Ambiguous labels handled (error or policy)
+
+**Success criteria**:
+- ✓ Unambiguous labels resolve correctly
+- ✓ Ambiguous labels produce error
+
+**Regression tests**: test_semantics.py::test_pop_*
+
+---
+
+### 13-replay-determinism (Class S, Layer 3)
+
+**Purpose**: Verify replay determinism
+
+**Theory Status**: Paper-licensed invariant
+
+**What it tests**:
+```
+eval_program(c, ops) = eval_program(c, ops)  (deterministic)
+```
+
+**Success criteria**:
+- ✓ Same input → same output (no hidden state)
+- ✓ Replay produces identical history
+- ✓ No non-deterministic choices in semantics
+
+**Key learnings**: Spherepop is fully deterministic given operations sequence
+
+**Regression tests**: test_properties.py::test_property_replay_determinism
+
+---
+
+### 14-admissible-check (Class I, Layer 1)
+
+**Purpose**: Test admissible() precondition checking
+
+**Theory Status**: Infrastructure
+
+**What it tests**:
+```
+admissible(op, c) = true ⇔ transition(c, op) succeeds
+```
+
+**Success criteria**:
+- ✓ admissible() matches transition() preconditions exactly
+- ✓ No false positives/negatives
+- ✓ Cheaper than actual transition (when possible)
+
+**Regression tests**: test_observers.py::test_admissible_*
+
+---
+
+### 15-confluence-under-policy (Class Q, Layer 2)
+
+**Purpose**: Explore confluence restricted to policy subsets
+
+**Theory Status**: Research question
+
+**What it tests**:
+- Given allowed ops = {op₁, op₂}, is any sequence confluent?
+- Policy-restricted confluence vs full confluence
+
+**Success criteria**:
+- ✓ Empirical data on policy families
+- ✓ Conjectures for further investigation
+
+**Status**: Research, not specification
+
+**Regression tests**: None (research output)
+
+---
+
+### 16-structural-divergence (Class Q, Layer 2)
+
+**Purpose**: Investigate divergence based on structure not just order
+
+**Theory Status**: Research question
+
+**What it tests**:
+- When does structure (nested vs flat) affect reachability?
+- Structural equivalence classes
+
+**Success criteria**:
+- ✓ Examples of structural divergence
+- ✓ Characterization of equivalence
+
+**Status**: Research, not specification
+
+**Regression tests**: None (research output)
+
+---
+
+### 17-regret-detection (Class X, Layer 1)
+
+**Purpose**: Test regret detection with various operation types
+
+**Theory Status**: Depends on Q6 resolution
+
+**What it tests**:
+- Which operation types cause regret?
+- Regret accumulation over sequences
+
+**Success criteria**:
+- ✓ Regret correctly detected (per current definition)
+- ✓ May need revision when Q6 resolved
+
+**Experimental markers**: All tests marked experimental
+
+**Regression tests**: test_observers.py::test_regretful_*
+
+---
+
+### 18-equivalent-at-prefix (Class S, Layer 1)
+
+**Purpose**: Test equivalent_at() with prefix matching
+
+**Theory Status**: Implementation choice (Q7)
+
+**What it tests**:
+```
+equivalent_at(c, ops1, ops2, k) checks k-prefix equivalence
+```
+
+**Success criteria**:
+- ✓ Matches first k operations
+- ✓ Ignores differences beyond k
+
+**Regression tests**: test_observers.py::test_equivalent_at_*
+
+---
+
+### 19-quotient-representative-independence (Class S, Layer 1)
+
+**Purpose**: Verify quotient identity independent of representative
+
+**Theory Status**: Paper-licensed (quotients are sets)
+
+**What it tests**:
+```
+Quotient({a,b}) == Quotient({b,a})  (order irrelevant)
+representative(q) ∈ q.members  (arbitrary choice)
+```
+
+**Success criteria**:
+- ✓ Quotient equality by member set only
+- ✓ representative() consistent but arbitrary
+- ✓ No "canonical" representative (all members equivalent)
+
+**Key learnings**: Representative for display only, never for identity
+
+**Regression tests**: test_regressions.py::test_regression_quotient_representative_independence
+
+---
+
+### 20-intensional-extensional-equivalence (Class S, Layer 3)
+
+**Purpose**: Demonstrate extensional equality ≠ intensional identity
+
+**Theory Status**: Paper-licensed core principle (Q5)
+
+**What it tests**:
+```
+# 2120: Two histories, same view
+affliction = Sphere(...)
+infliction = Sphere(...)
+assert extensional_view(affliction) == extensional_view(infliction)
+assert history(affliction) != history(infliction)
+```
+
+**Success criteria**:
+- ✓ Same current state, different histories remain distinct
+- ✓ Observers see same view
+- ✓ Configs are not equal
+
+**Key learnings**: **History is identity** - surface form insufficient
+
+**Cross-corpus reference**: Test uses affliction/infliction and 2120 (unidimary base-3/2)
+
+**Regression tests**: test_regressions.py::test_regression_intensional_vs_extensional
+
+---
+
+### 21-refuse-bind-commute (Class S, Layer 2)
+
+**Purpose**: Test REFUSE/BIND commutativity conditions
+
+**Theory Status**: Paper-licensed (both reduce option_space)
+
+**What it tests**:
+```
+When do REFUSE then BIND = BIND then REFUSE?
+```
+
+**Success criteria**:
+- ✓ Commute when targeting disjoint options
+- ✓ May not commute when overlapping
+
+**Key learnings**: Both operations reduce option_space monotonically
+
+**Regression tests**: test_regressions.py::test_regression_refuse_bind_commute
+
+---
+
+### 22-confluence-policy-family (Class Q, Layer 2)
+
+**Purpose**: Study confluence across policy families
+
+**Theory Status**: Research question
+
+**What it tests**:
+- Given policy P = {op types}, characterize confluent subsets
+- Policy families that guarantee confluence
+
+**Success criteria**:
+- ✓ Empirical classification
+- ✓ Conjectures for theory development
+
+**Status**: Research, not specification
+
+**Regression tests**: None (research output)
+
+---
+
+### 23-regret-accumulation (Class X, Layer 2)
+
+**Purpose**: Study regret accumulation over sequences
+
+**Theory Status**: Depends on Q6
+
+**What it tests**:
+- How does regret accumulate?
+- Can regret be "recovered"?
+
+**Success criteria**:
+- ✓ Empirical patterns
+- ✓ Input to theory refinement
+
+**Experimental markers**: All tests experimental
+
+**Regression tests**: None (research)
+
+---
+
+### 24-replay-invariance-reordering (Class S, Layer 3)
+
+**Purpose**: Test replay under permutation
+
+**Theory Status**: Paper-licensed (determinism)
+
+**What it tests**:
+```
+eval_program(c, ops) deterministic
+replay(history) = original config
+```
+
+**Success criteria**:
+- ✓ Replay produces exact same result
+- ✓ No hidden state dependence
+
+**Regression tests**: test_properties.py::test_property_replay_determinism
+
+---
+
+### 25-observer-non-authority (Class S, Layer 3)
+
+**Purpose**: Verify observer non-authority principle (OVERSOUL §4)
+
+**Theory Status**: Paper-licensed core principle
+
+**What it tests**:
+```
+For every observer V:
+  V(h) ↛ h  (no inverse causal edge)
+  V(h₁) = V(h₂) ⇏ h₁ = h₂  (non-authoritative)
+```
+
+**Success criteria**:
+- ✓ Observers compute properties only
+- ✓ Observers never modify configs
+- ✓ Observer equality doesn't establish config identity
+
+**Key learnings**: **THE THREE OBSERVERS MAY AGREE. THEIR AGREEMENT DOES NOT CONSTITUTE AUTHORITY.**
+
+**Regression tests**: test_regressions.py::test_regression_observer_non_authority
+
+---
+
+### 26-horizon-equivalence (Class Q, Layer 2)
+
+**Purpose**: Explore k-step horizon equivalence
+
+**Theory Status**: Research question, expensive
+
+**What it tests**:
+```
+horizon_equivalent(c1, c2, ops, k)
+= reachable_k(c1, ops) == reachable_k(c2, ops)
+```
+
+**Success criteria**:
+- ✓ Correct reachability computation
+- ✓ Complexity: O(|ops|^k), exponential
+
+**Key learnings**: Expensive observer, use sparingly with small k
+
+**Regression tests**: test_observers.py::test_horizon_equivalent_*
+
+---
+
+### 27-appendix-g-grammar (Class S, Layer 0)
+
+**Purpose**: Comprehensive Appendix G grammar testing
+
+**Theory Status**: Paper-licensed literal implementation
+
+**What it tests**:
+- All BNF productions
+- Error cases
+- Round-trip parsing
+
+**Success criteria**:
+- ✓ Grammar matches paper exactly
+- ✓ No convenience extensions
+
+**Regression tests**: test_grammar.py (full suite)
+
+---
+
+### 28-poset-pop-commutation (Class Q, Layer 3)
+
+**Purpose**: Probe Appendix B minimal-pop behavior on labeled option spaces
+
+**Theory Status**: Research (Plan B isolated)
+
+**What it tests**:
+- Equal-content minimal elements with distinct labels
+- POP-order behavior across multiple minimal choices
+- Rejection of non-minimal POP targets
+
+**Success criteria**:
+- ✓ Equal-content minima remain jointly poppable
+- ✓ Removing equal-content minima in either order reaches the same remainder
+- ✓ Non-minimal POP is rejected
+
+**Regression tests**: test_poset.py, test_poset_pop_commutation.py
+
+---
+
+### 29-multi-timescale-continuation (Class Q, Layer 3)
+
+**Purpose**: Explore multi-timescale scheduling (FUTURE_DIRECTIONS)
+
+**Theory Status**: Research, future work
+
+**What it tests**:
+- Fast/slow/long clock interactions
+- Temporal horizon selection
+- Continuation policies
+
+**Success criteria**:
+- ✓ Empirical exploration
+- ✓ Input to future theory
+
+**Status**: Research, highly experimental
+
+**Regression tests**: None (research)
+
+---
+
+## Experiment Dependencies
+
+```
+Layer 0 (Primitives): 01, 02, 03, 04, 05, 06, 12, 27
+  ↓
+Layer 1 (Observers): 07, 08, 09, 10, 11, 14-check, 17, 18, 19
+  ↓
+Layer 2 (Interactions): 15, 16, 21, 22, 23, 26
+  ↓
+Layer 3 (Invariants): 13, 20, 24, 25, 28, 29
+```
+
+**Critical path**: 01 → 02 → 03,04,05,06 → 07,08,09 → all others
+
+---
+
+## Adding New Experiments
+
+**Before creating experiment N+1**:
+
+1. **Classify**: Is it S, X, Q, or I?
+2. **Document purpose**: What specific question does it answer?
+3. **Check theory status**: Does it explore paper-licensed (✓), provisional (→), or open (?) semantics?
+4. **Mark experimental**: If X or Q, add `@pytest.mark.experimental` to any extracted tests
+5. **Add to catalog**: Update this document with experiment entry
+6. **Cross-reference**: Link to THEORY_STATUS.md questions if applicable
+
+**Experiment template**:
+```python
+"""
+Experiment N: <Title>
+
+CLASS: S | X | Q | I
+LAYER: 0 | 1 | 2 | 3
+THEORY STATUS: Paper-licensed | Provisional | Research
+
+PURPOSE:
+  <One-sentence question or hypothesis>
+
+PAPER REFERENCE:
+  <Appendix X or Section Y, if applicable>
+
+SUCCESS CRITERIA:
+  - <Observable outcome 1>
+  - <Observable outcome 2>
+
+THEORY QUESTIONS:
+  - Explores Q# (if applicable)
+
+EXPECTED OUTCOME:
+  <What success looks like>
+
+FAILURE MODES:
+  <What would indicate a problem>
+"""
+```
+
+---
+
+## Experiment Maintenance
+
+**When to update experiments**:
+- ✓ When specifications change (rebuild tests)
+- ✓ When theory questions resolved (reclassify S/X/Q)
+- ✓ When new primitives added (never, per OVERSOUL)
+- ✓ When observers added (document in catalog)
+
+**When NOT to update**:
+- ✗ To "fix" research results (document surprising outcomes)
+- ✗ To force convergence (research ≠ engineering)
+- ✗ To resolve open questions by implementation default
+
+**Remember**: Experiments explore. Tests verify. Specifications prescribe. Keep these roles distinct.
+
+---
+
+## Cross-References
+
+- **THEORY_STATUS.md**: Authority for open vs resolved questions
+- **SPECIFICATIONS.md**: Normative reference for stable semantics
+- **CONTRIBUTING.md**: How to propose new experiments
+- **test_regressions.py**: Regression tests extracted from experiments
+
+---
+
+## Version History
+
+- **2026-08-13**: Initial catalog (29 experiments documented)
+  - Classified all experiments by status (S/X/Q/I) and layer (0-3)
+  - Documented theory status for each
+  - Cross-referenced THEORY_STATUS.md
+  - Established experiment template

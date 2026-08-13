@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{remark}[definition]{Remark}
+
+\title{Spherepop Experiment Spec: Multi-Timescale Continuation}
+\author{Flyxion}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+
+This experiment family operationalizes the bridge between \emph{The Geometry of Boredom}
+and Spherepop by modeling boredom as a scope-selection problem over multiple unresolved
+histories with heterogeneous temporal horizons.
+
+\begin{remark}[Disambiguation from Appendix B Plan B]
+This experiment suite is unrelated to the repository's pending Appendix B poset-integration
+rewrite. It does not change Spherepop's four primitives or claim that full Appendix B
+semantics is already implemented. It introduces a separate scheduling formalization for
+multi-timescale continuation using existing vocabulary.
+\end{remark}
+
+\section{Core Formalization}
+
+\begin{remark}[Grounding and status]
+This document treats EMCG-based scope scheduling as a \emph{new proposed extension}, not as
+an already-established theorem in the existing Spherepop specification. A related but distinct
+saturation notion already exists in this corpus via the Asymptotic Saturation Theorem in
+\texttt{textbook/The\_Ecology\_of\_Distinctions.tex} (\S ``Asymptotic Saturation Without
+Exhaustion''), which concerns reintegration dynamics rather than task-portfolio scheduling.
+The present experiment asks whether an analogous local-vs-field saturation distinction is
+useful in practice at the workflow level.
+\end{remark}
+
+\begin{definition}[Scope portfolio]
+A portfolio is
+\[
+\mathcal{T}=\{(S_i,\tau_i)\}_{i=1}^n,\qquad S_i=(O_i,\tau_i),\qquad
+\tau_1\ll\tau_2\ll\cdots\ll\tau_n,
+\]
+where each unresolved scope $S_i$ has local option space $O_i$ and horizon $\tau_i$.
+\end{definition}
+
+\begin{definition}[Local and field saturation]
+With operator $F_t=C(H_t)$,
+\[
+\text{LocalSat}(i,t):\ \max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx0,
+\]
+\[
+\text{FieldSat}(t):\ \max_i\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx0.
+\]
+\end{definition}
+
+\begin{proposition}[Scope-switch recovery]
+$\text{LocalSat}(i,t)$ does not imply $\text{FieldSat}(t)$. If another scope $j$ satisfies
+$\max_{a\in O_j}\mathrm{EMCG}_j(a\mid F_t)>0$, switching scopes restores progress.
+\end{proposition}
+
+\begin{proposition}[Operator-drift recovery]
+A scope can transition from
+$\mathrm{EMCG}_i(a\mid F_t)\approx0$ to
+$\mathrm{EMCG}_i(a\mid F_{t+\Delta t})>0$ without changing $O_i$, due to intervening work on
+other scopes that modifies $F$.
+\end{proposition}
+
+\begin{proposition}[BIND-as-progress]
+Long-horizon scopes can accumulate useful structure through BIND/REFUSE/COLLAPSE while
+remaining unresolved; progress does not require immediate POP.
+\end{proposition}
+
+\section{Scheduling Policies Under Comparison}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Novelty-only}: prefer longest-idle scope.
+  \item \textbf{Shortest-task-first}: always choose minimal horizon.
+  \item \textbf{Max-EMCG}: greedily maximize immediate expected marginal compression gain.
+  \item \textbf{EMCG/cost + anti-starvation}: maximize gain-per-cost with forced periodic
+  updates to slow scopes.
+\end{enumerate}
+
+\section{Event Semantics in This Experiment Family}
+
+The run model interprets Spherepop operations as:
+\[
+\begin{aligned}
+\mathrm{POP}&: \text{resolve ready local scope},\\
+\mathrm{REFUSE}&: \text{remove continuation branch},\\
+\mathrm{BIND}&: \text{tighten continuation constraints},\\
+\mathrm{COLLAPSE}&: \text{merge distinctions no longer worth explicit tracking}.\\
+\end{aligned}
+\]
+
+\section{Metrics}
+
+\begin{itemize}[leftmargin=*]
+  \item Time-to-first-local-saturation
+  \item Time-in-field-saturation
+  \item Mean recovery latency after scope switch
+  \item Long-horizon starvation rate
+  \item Compression-progress stability across horizons
+\end{itemize}
+
+\section{Deliverables and Outputs}
+
+\begin{itemize}[leftmargin=*]
+  \item Executable policy comparison script: \texttt{run.py}
+  \item Results table template: \texttt{results-template.csv}
+  \item Policy summaries including per-scope event counts and saturation statistics
+\end{itemize}
+
+\section{Application Mapping}
+
+\begin{description}[leftmargin=2em,style=nextline]
+  \item[Personal workflow] Maintain active scopes at minute/day/week/year horizons.
+  \item[Education] Alternate short and long-horizon work instead of novelty churn.
+  \item[Research/programming] Keep deep threads unresolved while adding regular BIND-like constraints.
+  \item[AI agents] Use multi-clock schedulers with anti-starvation guarantees.
+\end{description}
+
+\end{document}

@@ -1,0 +1,1260 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\begin{definition}{Partition Dynamics}{partition-dynamics}
+Three fundamental motions act on the partition lattice:
+\begin{enumerate}[nosep,label=(\roman*)]
+\item \emph{Collapse}: merging of partition blocks, moving
+  the partition downward (toward coarser partitions) and
+  decreasing capacity.
+\item \emph{Repair}: splitting of partition blocks, moving the
+  partition upward (toward finer partitions) and increasing
+  capacity.
+\item \emph{Transport}: relabeling of partition blocks without
+  changing their structure, moving laterally through the
+  lattice without changing capacity.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}{Partition Motion Classification}
+  {partition-motion}
+Every admissible operator acts on the partition lattice as one
+of: collapse (downward), repair (upward), transport (lateral),
+or a composition of these.
+\begin{proof}
+An operator $F$ on $X$ induces a partition $\Pi_F$ on $X$ via
+the equivalence $x\sim_F y\Leftrightarrow F(x)\sim_\obs F(y)$.
+If $\Pi_F\preceq\partitionObs$, the operator coarsens the
+partition: collapse. If $\partitionObs\preceq\Pi_F$, the
+operator refines: repair. If the induced partition is
+isomorphic to $\partitionObs$ under a relabeling: transport.
+Every operator falls into one of these cases or is a
+composition.
+\end{proof}
+\end{proposition}
+
+
+Capacity as Conserved Potential
+
+
+Capacity is not generally conserved under operator action.
+Collapse destroys capacity; repair creates capacity. But
+capacity serves as a useful potential function tracking the
+health of the distinction structure.
+
+\begin{theorem}{Collapse Decreases Capacity}{collapse-cap}
+Every collapse operator decreases or preserves capacity:
+$C_\obs(\collapOp(X))\le\capObs{X}$.
+\begin{proof}
+Collapse coarsens $\partitionObs$, reducing the number of
+blocks: $|\Pi_{\obs}(\collapOp(X))|\le|\quotientObs|$.
+Taking logs preserves the inequality.
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{Repair Increases Capacity}{repair-cap}
+Every repair operator increases or preserves capacity:
+$C_\obs(\repair(X))\ge\capObs{X}$.
+\begin{proof}
+Repair refines $\partitionObs$ by splitting blocks:
+$|\Pi_\obs(\repair(X))|\ge|\quotientObs|$. Taking logs.
+\end{proof}
+\end{theorem}
+
+
+Why the Partition Lattice Is Insufficient
+
+
+The partition lattice tells us \emph{what positions} a
+distinction structure can occupy. It does not tell us:
+
+\begin{itemize}[nosep,leftmargin=2em]
+\item which operators are available to move between positions;
+\item at what rate collapse or repair occurs;
+\item whether a collapsed distinction can be recovered;
+\item how distinctions survive repeated transformations;
+\item which positions are admissible and which are excluded.
+\end{itemize}
+
+These questions require a theory of operators acting on
+$\distPairs$, not just a theory of positions in the partition
+lattice. Part~II develops that operator theory. Chapters~5--9
+build the operator algebra needed to support the fate geometry
+of Part~III.
+
+\begin{trilogylink}{Capacity in the Outer Volumes}
+In \textit{Persistence Before Truth}, capacity appears implicitly
+as the condition under which truth-evaluation is possible: a
+system needs sufficient observational resolution to distinguish
+the states relevant to the propositions it evaluates.
+
+In \textit{The Ecology of Distinctions}, capacity appears as
+admissibility volume: the volume of the region of fate space
+that a system can access. The Generative Admissibility
+Principle says that admissible systems do not decrease this
+volume.
+
+In this volume, capacity is a derived quantity computed from
+the observational partition. The Admissibility Pullback
+Meta-Theorem (Chapter~13) shows that admissibility volume in
+EOD is exactly the fate volume of this volume, connecting all
+three treatments.
+\end{trilogylink}
+
+\begin{chapsummary}
+\item Capacity $\capObs{X}=\log|\quotientObs|$ is the static
+  measure of observational resolution established in
+  Chapter~2.
+\item Collapse, repair, and transport correspond to downward,
+  upward, and lateral movements in the partition lattice.
+\item Collapse decreases capacity; repair increases it;
+  transport preserves it.
+\item The partition lattice gives positions but not operators:
+  it is the wrong object for a dynamic theory.
+\item Part~II introduces the operator algebra that acts on the
+  partition structure and provides the dynamic theory.
+\end{chapsummary}
+
+
+
+
+
+\part{Operators on Distinguishability}
+\chapter{A Taxonomy of Distinguishability Operators}
+\label{ch:operator-taxonomy}
+
+\begin{epigraph}{A geometry becomes a science only when we
+  understand its transformations.}{Transition to operator
+  theory}
+\end{epigraph}
+
+\begin{objectives}
+\item Introduce operators acting on distinction pairs rather
+  than states.
+\item Define and separate the six fundamental operator classes.
+\item Prove that the classes are non-empty and distinct.
+\item Introduce the operator space $\distOp$.
+\item Motivate the algebraic structure developed in
+  Chapters~6--9.
+\end{objectives}
+
+Part~I established the geometry of distinguishability. We have:
+$\distPairs$ (the domain), $\distMetric$ (the pseudometric),
+$\survRatio_\transfam$ (the survival ratio), and $\partitionObs$
+(the partition lattice). These structures describe distinctions.
+They do not describe what acts upon distinctions.
+
+Part~II studies operators: maps from distinction pairs to
+distinction pairs that change, preserve, destroy, or restore
+distinguishability. The central insight is that the operator
+acts on $\distPairs$, not on $X$. State-space dynamics and
+distinguishability dynamics are different theories acting on
+different domains.
+
+
+Distinguishability Operators
+
+
+\begin{definition}{Distinguishability Operator}{dist-op-ch5}
+A \emph{distinguishability operator} is a map
+$F:\distPairs\to\distPairs$ acting on distinction pairs.
+The \emph{operator space} is $\distOp=\{F:\distPairs\to
+\distPairs\}$.
+\end{definition}
+
+This definition is deliberately broad. Operators need not be
+bijective, continuous, or structure-preserving in any
+particular sense. The taxonomy below classifies them by their
+effect on distinguishability.
+
+
+The Six Fundamental Classes
+
+
+\begin{definition}{Fundamental Operator Classes}{op-classes}
+A distinguishability operator $F\in\distOp$ belongs to one of
+six classes according to its effect on $\distMetric$:
+\begin{enumerate}[nosep,label=(\roman*)]
+\item \emph{Preservation operators}: $\distMetric(F(x),F(y))=
+  \distMetric(x,y)$ for all pairs --- exact isometry.
+\item \emph{Collapse operators}: some $x\not\sim_\obs y$ maps
+  to $F(x)\sim_\obs F(y)$ --- active reduction of distinction.
+\item \emph{Forgetting operators}: collapse operators for
+  which no admissible repair operator exists to recover the
+  lost distinction.
+\item \emph{Repair operators}: $\distMetric(F(x),F(y))\ge
+  \distMetric(x,y)$ for damaged pairs --- restoration of
+  distinguishability.
+\item \emph{Transport operators}: isometries that relocate
+  the distinction: $\distMetric(F(x),F(y))=\distMetric(x,y)$
+  via a change of context.
+\item \emph{Admissibility operators}: projections
+  $\pi_A:\distPairs\to\distPairs$ restricting to pairs whose
+  fate profile lies in an admissible region $A$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}{The Six Classes are Non-Empty and Distinct}
+  {classes-distinct}
+Each of the six classes contains at least one operator not in
+any other class.
+\begin{proof}
+\emph{Existence}:
+(i) Identity is a preservation operator.
+(ii) The projection $\pi:X\to\{*\}$ (collapsing all states)
+  induces a collapse operator with $\distMetric=0$ everywhere.
+(iii) Irreversible information erasure (e.g., overwriting memory
+  with noise) gives a forgetting operator.
+(iv) Any error-correcting decoder acting on a noisy copy is a
+  repair operator: it increases $\distMetric$ of the repaired
+  pair above the noisy copy's distance.
+(v) A lossless communication channel: $F(x)=\phi(x)$ for a
+  bijection $\phi$ preserving $\distMetric$ but changing context.
+(vi) $\pi_A$ as defined above.
+
+\emph{Distinctness}:
+Collapse operators and repair operators have opposite effects
+on $\distMetric$: the former decreases it, the latter increases
+it. Transport operators preserve $\distMetric$ but change
+context, while preservation operators preserve $\distMetric$
+without changing context. Forgetting operators are a subclass
+of collapse operators not reachable by repair. Admissibility
+operators are selection operators not reducible to
+collapse or repair. Hence no class reduces to another.
+\end{proof}
+\end{theorem}
+
+
+The Collapse--Forgetting Distinction
+
+
+The most important distinction within the taxonomy is between
+collapse and forgetting, developed fully in Chapter~6.
+
+Collapse is the loss of operational distinguishability. It is
+potentially reversible: the distinction exists latently and may
+be recovered by an appropriate repair operator.
+
+Forgetting is the loss of the reconstruction pathway itself.
+It is not reversible by any admissible operator: there is no
+information remaining from which the lost distinction could be
+recovered.
+
+\begin{proposition}{Forgetting Implies Collapse}
+  {forget-implies-collapse}
+Every forgetting operator is a collapse operator.
+The converse fails.
+\begin{proof}
+A forgetting operator removes operational distinguishability,
+so it is by definition a collapse operator. For the
+converse: lossless compression collapses distinctions (the
+compressed representation cannot immediately separate $x$ and
+$y$) but retains the decompression pathway, so it is
+recoverable collapse but not forgetting.
+\end{proof}
+\end{proposition}
+
+
+Operator Composition and Structure
+
+
+Operators compose: if $F,G\in\distOp$ then $G\circ F\in\distOp$.
+Composition is the primary operation of Part~II.
+
+Chapter~6 shows that forgetting operators form a proper
+submonoid of collapse operators under composition.
+Chapter~7 shows that repair operators are not generally
+closed under composition but that their interaction with
+collapse operators is central.
+Chapter~8 shows that the full operator space $(\distOp,\circ,
+\mathrm{Id})$ is a monoid.
+Chapter~9 proves the Meta-Stability Theorem: the monoid
+structure is the conserved object, even when individual
+distinctions are not.
+
+\begin{chapsummary}
+\item Distinguishability operators act on $\distPairs$, not
+  on $X$: the domain of fate theory differs from the domain
+  of state-space dynamics.
+\item Six classes: preservation, collapse, forgetting, repair,
+  transport, admissibility.
+\item The classes are non-empty, distinct, and cannot be
+  reduced to one another.
+\item Collapse and forgetting are not identical: forgetting
+  adds loss of reconstruction pathways to collapse.
+\item Operator composition structures Part~II.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Collapse and Forgetting}
+\label{ch:collapse-forgetting}
+
+\begin{epigraph}{Not every disappearance is destruction.
+  Not every destruction is forgetfulness.}{The distinction
+  this chapter establishes}
+\end{epigraph}
+
+\begin{objectives}
+\item Define collapse operators formally as partition-coarsening
+  maps.
+\item Define forgetting operators as the irrecoverable subclass
+  of collapse.
+\item Prove the Compression Fiber Theorem: collapse destroys
+  exactly the distinctions within the fibers of the compressing
+  map.
+\item Prove that forgetting operators form a submonoid under
+  composition.
+\item Derive the diffusion monotonicity theorem as the canonical
+  physical instance of collapse.
+\item Introduce entropy as the geometry of distinction loss.
+\item Distinguish collapse cascades from isolated collapse
+  events.
+\end{objectives}
+
+Chapter~5 introduced collapse and forgetting as two of the six
+operator classes. This chapter develops them in detail, proves
+their key properties, and identifies the physical and
+mathematical mechanisms through which distinctions are lost.
+
+The chapter is where the framework first becomes irreversible.
+Parts~I--II up to this point have been reversible in spirit:
+operators could be studied without committing to a direction of
+time. Collapse and forgetting introduce genuine irreversibility:
+some distinction losses cannot be undone.
+
+
+Collapse as Compression
+
+
+\begin{definition}{Compression Map}{compression-map}
+A \emph{compression map} is a surjective map
+$\pi:X\to Q$ from the state space to a quotient space. It
+induces an equivalence relation $x\sim_\pi y\Leftrightarrow
+\pi(x)=\pi(y)$ and partitions $X$ into the \emph{fibers}
+$\pi^{-1}(q)$ for $q\in Q$.
+\end{definition}
+
+\begin{theorem}{Compression Fiber Theorem}{compression-fiber}
+A compression map $\pi:X\to Q$ destroys exactly the
+distinctions within its fibers:
+\[
+  L_\pi
+  \;=\;
+  \{(x,y)\in\distPairs : x\not\sim_\obs y,\; x\sim_\pi y\}
+\]
+is the set of destroyed distinctions.
+\begin{proof}
+If $\pi(x)=\pi(y)$ (same fiber), then no observation in $Q$
+can separate $\pi(x)$ from $\pi(y)$, so the compressed
+representation cannot separate $x$ from $y$: the distinction
+is lost.
+
+If $\pi(x)\neq\pi(y)$ (different fibers), then the
+compression preserves their separation in $Q$: the distinction
+survives.
+
+Hence the destroyed distinctions are precisely those in
+$L_\pi$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary}{Collapse Decreases Capacity}{collapse-cap-ch6}
+For any compression $\pi$, $\capObs{\pi(X)}\le\capObs{X}$,
+with equality iff $\pi$ is injective (no fibers merge).
+\begin{proof}
+The number of distinguishable classes in $\pi(X)$ cannot
+exceed that in $X$.
+\end{proof}
+\end{corollary}
+
+
+Forgetting: Collapse Plus Loss of Pathways
+
+
+\begin{definition}{Forgetting Operator}{forget-op-ch6}
+A collapse operator $\forgetOp$ is a \emph{forgetting
+operator} if no admissible repair operator $R\in\distOp$
+satisfies $R\circ\forgetOp(x)\not\sim_\obs R\circ\forgetOp(y)$
+for all $(x,y)\in L_{\forgetOp}$: the lost distinctions cannot
+be recovered by any admissible operator.
+\end{definition}
+
+\begin{theorem}{Forgetting Submonoid}{forget-monoid}
+The class of forgetting operators is closed under composition:
+if $\forgetOp_1$ and $\forgetOp_2$ are forgetting operators,
+then $\forgetOp_2\circ\forgetOp_1$ is a forgetting operator.
+\begin{proof}
+$\forgetOp_1$ destroys distinctions in $L_{\forgetOp_1}$
+with no recovery pathway. $\forgetOp_2$ then acts on the
+already-degraded structure, destroying further distinctions
+in $L_{\forgetOp_2}$. The composite $\forgetOp_2\circ
+\forgetOp_1$ destroys all distinctions in
+$L_{\forgetOp_1}\cup\forgetOp_1^*(L_{\forgetOp_2})$, where
+$\forgetOp_1^*$ denotes the pushforward. Since no recovery
+pathway existed for $L_{\forgetOp_1}$, and $\forgetOp_2$
+removes further pathways, no admissible repair operator
+can recover the composite loss. Hence the composition
+is a forgetting operator. Together with the identity
+(trivial forgetting), this gives the submonoid.
+\end{proof}
+\end{theorem}
+
+
+Diffusion as Canonical Collapse
+
+
+Physical diffusion provides the canonical example of a collapse
+operator: it monotonically destroys the observational
+separation between field configurations.
+
+\begin{theorem}{Diffusion Decreases Distinguishability}
+  {diffusion-mono}
+Let $u,v$ be two field configurations evolving under diffusion
+$\partial_t u = D\nabla^2 u$, $\partial_t v = D\nabla^2 v$.
+Define the distinguishability energy
+$\repEng(t)=\int_\Omega |u(x,t)-v(x,t)|^2\,dx$.
+Then $\dot{\repEng}(t)\le 0$: distinguishability is
+non-increasing under diffusion.
+\begin{proof}
+Let $w=u-v$. Then $\partial_t w=D\nabla^2 w$.
+\begin{align*}
+  \dot{\repEng}
+  &= 2\int_\Omega w\,\partial_t w\,dx
+  = 2D\int_\Omega w\nabla^2 w\,dx \\
+  &= -2D\int_\Omega |\nabla w|^2\,dx \;\le\; 0,
+\end{align*}
+where the last step uses integration by parts with vanishing
+boundary conditions.
+\end{proof}
+\end{theorem}
+
+Diffusion acts as a continuous collapse operator: the integral
+$\int|\nabla w|^2$ measures the spatial variation of the
+distinction, and its positivity drives $\repEng$ downward.
+
+
+Entropy as the Geometry of Distinction Loss
+
+
+Collapse has an informational signature: it maps many
+distinguishable states into the same observational category,
+increasing the \emph{representational entropy} of the system.
+
+\begin{definition}{Representational Entropy}{rep-entropy-ch6}
+Let $\pi:X\to\quotientObs$ be the observational projection.
+The \emph{representational entropy} at a point $q\in\quotientObs$
+is
+\[
+  \repEntropy(q)
+  \;=\;
+  \log\Vol\bigl(\pi^{-1}(q)\bigr),
+\]
+the logarithm of the volume of the indistinguishable fiber.
+\end{definition}
+
+Collapse enlarges fibers: $\Vol(\pi^{-1}(q))$ increases as
+distinctions are merged~\cite{shannon1948}. Therefore collapse increases
+representational entropy --- the observationally equivalent
+states become more numerous. This foreshadows the connection
+to fate entropy established in Chapter~15D, where entropy is
+defined as the rate of contraction of the reachable fate volume.
+
+
+Collapse Cascades
+
+
+Individual collapses rarely occur in isolation. The loss of
+one distinction often reduces the survival ratio of neighboring
+distinctions, making cascade more likely.
+
+\begin{definition}{Collapse Cascade}{collapse-cascade-ch6}
+A \emph{collapse cascade} is a sequence
+$\collapOp_1,\collapOp_2,\ldots,\collapOp_n$ of collapse
+operators such that the action of $\collapOp_i$ increases
+the collapse rate of $\collapOp_{i+1}$: the distinctions
+destroyed by $\collapOp_i$ were supporting the stability
+of the distinctions targeted by $\collapOp_{i+1}$.
+\end{definition}
+
+Collapse cascades appear throughout the trilogy: ecosystem
+collapse (Chapter~18), paradigm shifts (Chapter~17),
+institutional failure (Chapter~21), and language extinction
+(Chapter~18). They all share the same structural signature:
+each collapse event reduces the repair capacity of neighboring
+distinctions, accelerating subsequent collapse.
+
+
+The Repair Dual
+
+
+Every collapse operator has a natural dual question: can the
+loss be reversed? If so, how? If not, why not?
+
+The answers to these questions constitute repair theory, the
+subject of Chapter~7. Repair and collapse are not merely
+opposites: they operate under different constraints, have
+different efficiency measures, and interact in non-commutative
+ways (Chapter~8's operator algebra). But understanding collapse
+fully requires understanding its relationship to repair.
+
+\begin{chapsummary}
+\item Collapse operators coarsen the observational partition,
+  destroying distinctions within the fibers of a compression
+  map.
+\item The Compression Fiber Theorem: exactly the fiber-internal
+  distinctions are destroyed.
+\item Forgetting operators are collapse operators with no
+  admissible recovery pathway; they form a submonoid under
+  composition.
+\item Diffusion is the canonical physical collapse operator:
+  distinguishability energy $\repEng(t)$ is non-increasing.
+\item Representational entropy increases under collapse:
+  fibers grow larger.
+\item Collapse cascades occur when distinction loss reduces
+  the repair capacity of neighboring distinctions.
+\end{chapsummary}
+
+
+
+
+
+
+
+\chapter{Repair and Transport}
+\label{ch:repair-transport}
+
+\begin{epigraph}{Not every loss is permanent. Not every change
+  destroys. The dual of collapse is not just absence of collapse
+  --- it is active regeneration and continuation.}{The operators
+  this chapter studies}
+\end{epigraph}
+
+\begin{objectives}
+\item Define repair operators as active restoration of
+  distinguishability after damage.
+\item Prove that repair efficiency $\repairEff{x,y}\in[0,1]$
+  is bounded and well-defined.
+\item Show that repair is not restoration to identity but
+  restoration of recoverability.
+\item Define transport operators as isometries that relocate
+  distinctions without destroying them.
+\item Prove the Repair--Transport Duality: the two operator
+  classes are complementary in their action on the fate
+  coordinates $(\survRatio, \repEff, \boldsymbol{\tau})$.
+\item Show that repair and transport are not commutative with
+  collapse.
+\item Prepare the transition to the operator monoid of
+  Chapter~8.
+\end{objectives}
+
+Chapter~6 showed how distinctions are lost: through collapse
+(partition coarsening) and forgetting (loss of reconstruction
+pathways). This chapter shows how they are maintained and
+propagated: through repair (restoration of recoverability
+after damage) and transport (structure-preserving relocation).
+
+Repair and transport are not simply the absence of collapse.
+They are active operators with their own algebraic properties,
+their own efficiency measures, and their own interaction
+patterns with the collapse operators of Chapter~6. Together,
+collapse-forgetting and repair-transport are the two poles of
+the distinction lifecycle.
+
+
+Repair: Restoring Recoverability
+
+
+Repair is the active restoration of distinguishability after
+a degrading transformation has reduced it. The key insight,
+already visible in \PBT{Chapter~4}, is that repair need not
+reconstruct the original state. It need only reconstruct the
+distinction: restore operational separability between $x$ and
+$y$.
+
+\begin{definition}{Degradation--Repair Pair}
+  {degrade-repair-pair}
+A \emph{degradation--repair pair} $(\degradeOp, R)$ consists
+of a degradation operator $\degradeOp:\distPairs\to\distPairs$
+and a repair operator $R:\distPairs\to\distPairs$ such that
+for all $(x,y)\in\distPairs$:
+\[
+  \distMetric(\degradeOp(x),\degradeOp(y))
+  \;\le\;
+  \distMetric(x,y),
+\]
+i.e., $\degradeOp$ reduces observational distance (degrades
+the distinction), while $R$ acts on the degraded output.
+\end{definition}
+
+\begin{definition}{Repair Efficiency}{repair-eff}
+The \emph{repair efficiency} of a repair operator $R$ on
+a degradation $\degradeOp$ is
+\[
+  \repairEff{x,y}
+  \;=\;
+  \frac{
+    \distMetric\bigl(R(\degradeOp(x)),\,R(\degradeOp(y))\bigr)
+  }{
+    \distMetric(x,y)
+  },
+\]
+where the denominator is the original distinguishability
+before degradation. The repair efficiency measures the
+fraction of original distinguishability restored by $R$
+after $\degradeOp$.
+\end{definition}
+
+\begin{theorem}{Repair Efficiency is Bounded}{repair-eff-bounded}
+Under the assumption that repair is \emph{non-amplifying}
+--- it does not increase distinguishability beyond the original
+level: $\distMetric(R(\degradeOp(x)),R(\degradeOp(y)))\le
+\distMetric(x,y)$ --- the repair efficiency satisfies
+$0\le\repairEff{x,y}\le 1$.
+\begin{proof}
+The numerator $\distMetric(R(\degradeOp(x)),R(\degradeOp(y)))$
+is non-negative by the pseudometric axiom. Under the
+non-amplifying assumption, it is also bounded above by
+$\distMetric(x,y)$. Dividing by $\distMetric(x,y)>0$
+gives $\repairEff{x,y}\in[0,1]$.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Non-Amplification as Axiom}{non-amplify}
+The non-amplifying assumption is stated explicitly as an axiom
+rather than derived. It encodes the physical constraint that
+repair cannot create distinguishability~\cite{friston2010} beyond what was present
+originally: a repair operator cannot increase signal-to-noise
+ratio above its pre-damage level without additional external
+information. This assumption holds in all physical, biological,
+and computational models of interest. Systems that violate it
+--- which would require free information creation --- are
+outside the scope of the present framework.
+\end{remark}
+
+\begin{definition}{Perfect Repair and Irreparable Damage}
+  {repair-extremes}
+A distinction $(x,y)$ is \emph{perfectly repaired} if
+$\repairEff{x,y}=1$: full distinguishability is restored.
+It is \emph{irreparably damaged} if $\repairEff{x,y}=0$ for
+all available $R$: the distinction lies in the forgetting
+stratum $\strataF$ (Chapter~12).
+\end{definition}
+
+
+Repair is Not Restoration
+
+
+A common misunderstanding identifies repair with restoration
+to the original state. The present framework separates these.
+
+\begin{proposition}{Repair Requires Only Recoverability, Not
+  Identity}{repair-not-restore}
+A repair $R$ is successful whenever
+$\repairEff{x,y}>0$, regardless of whether
+$R(\degradeOp(x))=x$ and $R(\degradeOp(y))=y$.
+\begin{proof}
+Success of repair is defined by restoration of operational
+separability: $R(\degradeOp(x))\not\sim_\obs R(\degradeOp(y))$.
+This holds whenever $\distMetric(R(\degradeOp(x)),R(\degradeOp(y)))>0$,
+i.e., whenever $\repairEff{x,y}>0$. The condition does not
+require $R(\degradeOp(x))=x$.
+\end{proof}
+\end{proposition}
+
+This proposition has consequences throughout the trilogy. A
+biological organism that repairs genetic damage need not
+recreate the exact original sequence; it needs to restore
+functional distinction between healthy and damaged phenotypes.
+A memory that is reconstructed need not be pixel-perfect; it
+needs to restore the distinction that matters for current
+action. A scientific theory that is revised need not recover
+its original formulation; it needs to restore the distinctions
+between phenomena that the original theory drew.
+
+
+Transport: Structure-Preserving Relocation
+
+
+\begin{definition}{Transport Operator}{transport-op}
+A \emph{transport operator} $\transpOp:\distPairs\to\distPairs$
+is a map satisfying
+\[
+  \distMetric(\transpOp(x),\transpOp(y))
+  \;=\;
+  \distMetric(x,y)
+\]
+for all $(x,y)\in\distPairs$: transport is an isometry of the
+observational pseudometric.
+\end{definition}
+
+Transport operators preserve the distinguishability distance
+exactly. They change the context of the distinction --- its
+location in some ambient space, its carrier medium, its
+encoding --- without changing its magnitude.
+
+\begin{example}{Canonical Transport Operators}
+  {transport-examples}
+A lossless communication channel $\transpOp$ maps a sent
+signal $(x,y)$ to a received signal $(\transpOp(x),\transpOp(y))$
+with $\distMetric(\transpOp(x),\transpOp(y))=\distMetric(x,y)$:
+the distinction between two signals is preserved across the
+channel.
+
+Genetic inheritance: a parent organism $(x,y)$ transmits
+distinctions to offspring $(\transpOp(x),\transpOp(y))$
+through replication, preserving the distinction between genetic
+variants.
+
+Cultural transmission: a distinction between two concepts in
+one generation is transmitted to the next with full fidelity
+by a transport operator (ideal education, scribal copying,
+oral tradition under ideal conditions).
+\end{example}
+
+\begin{proposition}{Transport Operators Are Invertible Iff
+  Bijective}{transport-invertible}
+A transport operator $\transpOp$ is invertible (has an inverse
+transport operator $\transpOp^{-1}$) if and only if $\transpOp$
+is bijective on $\distPairs$.
+\begin{proof}
+An isometry of a metric space is invertible iff it is bijective:
+the inverse of a distance-preserving bijection is itself
+distance-preserving. The isometry condition
+$\distMetric(\transpOp(x),\transpOp(y))=\distMetric(x,y)$
+ensures the inverse preserves distance.
+\end{proof}
+\end{proposition}
+
+
+The Repair--Transport Duality
+
+
+Repair and transport are complementary operators, but their
+complementarity is not simply ``repair is to collapse as
+transport is to preservation.'' The duality is more structured:
+repair and transport act on different coordinates of the future
+fate profile.
+
+\begin{proposition}{Repair--Transport Duality in Fate Coordinates}
+  {repair-transport-duality}
+For a distinction pair $(x,y)$ with fate profile
+$(\survRatio,\repEff,\collapseInd,\boldsymbol{\tau})$:
+\begin{enumerate}[nosep,label=(\roman*)]
+\item A repair operator $R$ acts primarily on $\repEff$:
+  it increases the repair efficiency coordinate
+  of the fate profile, while $\survRatio$ and
+  $\boldsymbol{\tau}$ may vary independently.
+\item A transport operator $\transpOp$ acts primarily on
+  $\boldsymbol{\tau}$: it increases the transport-reach
+  coordinates of the fate profile, while preserving
+  $\distMetric$ (hence tending to preserve $\survRatio$
+  and $\repEff$).
+\item The two effects are independent: a distinction may have
+  high repair efficiency and low transport reach, or vice
+  versa, or both high, or both low.
+\end{enumerate}
+\begin{proof}
+(i): Repair efficiency $\repEff=\repairEff{x,y}$ is by
+definition the ratio of restored to original distance.
+Repair directly increases this coordinate. The survival ratio
+$\survRatio$ depends on the transformation family, not on $R$,
+so it may vary independently.
+
+(ii): Transport reach $\tau_i$ measures the distance over
+which the distinction remains recoverable under the $i$-th
+transport channel. Applying $\transpOp$ extends this reach.
+The isometry condition $\distMetric(\transpOp(x),\transpOp(y))
+=\distMetric(x,y)$ means $\survRatio$ and $\repEff$ are
+preserved under ideal transport.
+
+(iii): Consider a distinction that is easily repaired (high
+$\repEff$) but cannot be transported beyond a small
+neighborhood (low $\tau$): a biological immune memory that
+is regenerated locally but not systematically communicated.
+Conversely, consider a radio signal that propagates globally
+(high $\tau$) but is easily jammed (low $\repEff$). These
+examples demonstrate independence.
+\end{proof}
+\end{proposition}
+
+
+Non-Commutativity with Collapse
+
+
+Repair and transport do not commute with collapse. This
+non-commutativity is not a deficiency of the algebra but a
+reflection of the irreversibility of information loss.
+
+\begin{theorem}{Repair and Collapse Do Not Generally Commute}
+  {repair-collapse-noncommute}
+There exist operators $R$ (repair) and $\collapOp$ (collapse)
+such that $R\circ\collapOp\neq\collapOp\circ R$ as operators
+on $\distPairs$.
+\begin{proof}
+Take $\collapOp$ to be a compression that maps two
+observationally distinct states to the same image:
+$\collapOp(x)=\collapOp(y)$ with $x\not\sim_\obs y$.
+
+$R\circ\collapOp$: collapse first, then repair. After collapse,
+$\distMetric(\collapOp(x),\collapOp(y))=0$. If the repair
+operator has no information about the pre-collapse distinction
+(the typical case when the collapse is a forgetting operator),
+then $R(\collapOp(x))=R(\collapOp(y))$ and no distinction is
+restored.
+
+$\collapOp\circ R$: repair first, then collapse. Since $R$
+acts before collapse, it may restore or enhance the distinction.
+Subsequent collapse then destroys a distinction that was larger
+than the original.
+
+The two orderings produce different results.
+\end{proof}
+\end{theorem}
+
+The non-commutativity theorem has an immediate practical
+consequence: the order of operations matters. Repairing before
+collapse preserves more information than repairing after.
+Archiving before disaster preserves more than archiving after.
+Vaccinating before infection preserves more than treating after.
+Chapter~8's operator algebra will capture this ordering
+structure.
+
+
+Repair Chains and Efficiency Decay
+
+
+Real repair processes are rarely single operations. They
+are chains: a sequence of repair operators applied iteratively.
+
+\begin{proposition}{Repair Chain Efficiency}{repair-chain}
+For a repair chain $R_n\circ R_{n-1}\circ\cdots\circ R_1$
+applied after degradation $\degradeOp$, the net efficiency
+satisfies
+\[
+  \eta_{R_n\circ\cdots\circ R_1}(x,y)
+  \;\le\;
+  \min_i \eta_{R_i}(x,y),
+\]
+where $\eta_{R_i}$ is the efficiency of $R_i$ at its stage
+of the chain.
+\begin{proof}
+Each repair $R_i$ can at most restore to the level available
+after the previous repairs: the efficiency of the chain is
+bounded by the efficiency of its weakest link. Formally, the
+distortion compounds: $\distMetric$ after $n$ repairs is at
+most $\min_i \eta_{R_i}\cdot\distMetric(x,y)$ since each
+$\eta_{R_i}\le 1$.
+\end{proof}
+\end{proposition}
+
+\begin{chapsummary}
+\item Repair operators restore distinguishability after
+  degradation: $\repairEff{x,y}=\distMetric(R\circ D(x),
+  R\circ D(y))/\distMetric(x,y)\in[0,1]$.
+\item Repair requires recoverability, not identity: success
+  means $\repairEff>0$, not $R\circ D=\mathrm{Id}$.
+\item Transport operators are isometries: they preserve
+  $\distMetric$ while relocating the distinction.
+\item The Repair--Transport Duality: repair acts on $\repEff$,
+  transport acts on $\boldsymbol{\tau}$; the two coordinates
+  are independent.
+\item Repair and collapse are non-commutative: order matters,
+  and repair before collapse generally preserves more
+  information.
+\item Repair chains have efficiency bounded by the weakest
+  link.
+\end{chapsummary}
+
+
+
+
+
+\chapter{The Distinguishability Operator Monoid}
+\label{ch:operator-monoid}
+
+\begin{epigraph}{Individual distinctions may fail. The space
+  of possible operations persists.}{Toward Meta-Stability}
+\end{epigraph}
+
+\begin{objectives}
+\item Prove that $\distOp$ is closed under composition.
+\item Establish associativity and the identity element.
+\item Prove the Operator Closure Theorem: $(\distOp,\circ,
+  \mathrm{Id})$ is a monoid.
+\item Characterize the invertible subgroup and the
+  non-invertible submonoid.
+\item Show that collapse and forgetting form a proper
+  submonoid.
+\item Prepare the pullback construction of Chapter~9.
+\end{objectives}
+
+Chapters~5--7 introduced six classes of distinguishability
+operators and studied their individual properties. This chapter
+shows that these classes, taken together, form a coherent
+algebraic object: the distinguishability operator monoid. This
+is the algebraic structure that Chapter~9 will show to be
+meta-stable.
+
+
+Composition of Operators
+
+
+\begin{definition}{Operator Composition}{op-comp}
+For $F,G\in\distOp$, their \emph{composition} is the operator
+$F\circ G:\distPairs\to\distPairs$ defined by
+\[
+  (F\circ G)(x,y) \;=\; F(G(x,y)).
+\]
+$G$ acts first, then $F$ acts on the output.
+\end{definition}
+
+
+The Operator Closure Theorem
+
+
+\begin{theorem}{Operator Closure Theorem}{op-closure}
+The collection $\distOp$ of all distinguishability operators
+is closed under composition, contains an identity element,
+and satisfies associativity. Therefore
+$(\distOp,\circ,\mathrm{Id})$ is a monoid.
+\begin{proof}
+\emph{Closure}: if $F,G:\distPairs\to\distPairs$ then
+$F\circ G:\distPairs\to\distPairs$ by function composition.
+Hence $F\circ G\in\distOp$.
+
+\emph{Associativity}: for any $F,G,H\in\distOp$ and any
+$(x,y)\in\distPairs$,
+\[
+  ((F\circ G)\circ H)(x,y)
+  = F(G(H(x,y)))
+  = (F\circ(G\circ H))(x,y).
+\]
+
+\emph{Identity}: the identity operator $\mathrm{Id}(x,y)=(x,y)$
+satisfies $F\circ\mathrm{Id}=F$ and $\mathrm{Id}\circ F=F$
+for every $F\in\distOp$.
+
+The three monoid axioms hold.
+\end{proof}
+\end{theorem}
+
+
+Invertible Operators and the Subgroup
+
+
+\begin{definition}{Invertible Operator}{invertible-op}
+An operator $F\in\distOp$ is \emph{invertible} if there exists
+$F^{-1}\in\distOp$ such that $F^{-1}\circ F=F\circ F^{-1}=
+\mathrm{Id}$.
+\end{definition}
+
+\begin{theorem}{Invertible Operators Form a Group}{invertible-group}
+The collection $\distOpInv$ of invertible operators forms a
+group under composition.
+\begin{proof}
+$\distOpInv$ inherits closure (composition of invertibles is
+invertible: $(F\circ G)^{-1}=G^{-1}\circ F^{-1}$),
+associativity, and identity from $\distOp$. Every element has
+an inverse by definition. Hence $\distOpInv$ is a group.
+\end{proof}
+\end{theorem}
+
+\begin{proposition}{Transport Operators Generate Invertibles}
+  {transport-invertible-ch8}
+Every bijective transport operator (Chapter~7) belongs to
+$\distOpInv$.
+\begin{proof}
+A bijective isometry of $\distPairs$ has an inverse that is
+also an isometry. Hence the inverse is a transport operator
+in $\distOp$.
+\end{proof}
+\end{proposition}
+
+
+Non-Invertible Operators and the Submonoid
+
+
+\begin{theorem}{Non-Invertible Submonoid}
+  {noninv-submonoid}
+The collection $\distOpNI$ of non-invertible operators forms
+a proper submonoid of $(\distOp,\circ)$.
+\begin{proof}
+\emph{Closure}: if $F,G$ are non-invertible, we claim $F\circ G$
+is non-invertible. Suppose for contradiction that $F\circ G$
+is invertible with inverse $H$. Then $H\circ F\circ G=
+\mathrm{Id}$, so $G$ has left inverse $H\circ F$ and is
+right-invertible. But a non-invertible operator in the monoid
+cannot be right-invertible (if $G$ had right inverse $K$ then
+$G\circ K=\mathrm{Id}$, and left-composing by $H\circ F$
+gives $K=H\circ F$, making $G$ invertible with inverse $K$ ---
+a contradiction). Hence $F\circ G$ is non-invertible.
+
+\emph{Proper}: bijective transport operators are invertible
+and in $\distOp\setminus\distOpNI$.
+
+\emph{Identity}: $\distOpNI$ does not contain $\mathrm{Id}$
+(which is invertible). It is a sub-semigroup rather than a
+submonoid in the strict sense; if we adjoin $\mathrm{Id}$, we
+obtain a proper submonoid.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Irreversibility as Algebraic Property}
+  {irreversibility-algebra}
+The non-invertible submonoid $\distOpNI$ is the algebraic locus
+of irreversibility. Collapse, forgetting, and non-bijective
+transport operators all belong to it. The fact that $\distOpNI$
+is closed under composition reflects the observation that
+irreversibility compounds: applying two irreversible processes
+in sequence produces an irreversible composite. This is the
+algebraic counterpart of the thermodynamic statement that
+entropy is non-decreasing in an isolated system.
+\end{remark}
+
+
+The Collapse--Forgetting Submonoid
+
+
+\begin{proposition}{Collapse--Forgetting Submonoid}
+  {cf-submonoid}
+The collection of collapse-and-forgetting operators forms a
+proper submonoid of $\distOpNI$.
+\begin{proof}
+Collapse operators are closed under composition: composing two
+operators that coarsen the observational partition produces
+an operator that further coarsens it (since coarsening is
+transitive in the partition lattice). Forgetting operators
+are a subclass. The submonoid is proper because repair
+operators are in $\distOp$ but not in this submonoid.
+\end{proof}
+\end{proposition}
+
+
+Operator Histories as Monoid Words
+
+
+A sequence of operator applications $F_n\circ\cdots\circ F_1$
+is a \emph{word} in the monoid $\distOp$. The study of such
+words is the study of operator histories: what sequence of
+collapses, repairs, and transports has a distinction pair
+experienced?
+
+The monoid does not remember individual operators after
+composition: only the cumulative action $F_n\circ\cdots\circ F_1$
+is visible in the output. This motivates the next chapter's
+question: what is preserved across all possible operator
+histories?
+
+\begin{chapsummary}
+\item The Operator Closure Theorem: $(\distOp,\circ,\mathrm{Id})$
+  is a monoid.
+\item Invertible operators form a subgroup $\distOpInv$;
+  bijective transport operators generate it.
+\item Non-invertible operators form a proper submonoid
+  $\distOpNI$: irreversibility is closed under composition.
+\item Collapse and forgetting operators form a further proper
+  submonoid.
+\item An operator sequence $F_n\circ\cdots\circ F_1$ is a
+  word in $\distOp$; its cumulative action on a distinction
+  pair is the only observable output.
+\end{chapsummary}
+
+
+
+
+
+\chapter{The Meta-Stability Theorem}
+\label{ch:meta-stability}
+
+\begin{epigraph}{Nothing guarantees the survival of a
+  distinction. Something guarantees the survival of the
+  possibility of distinction.}{The central discovery of
+  Part~II}
+\end{epigraph}
+
+\begin{objectives}
+\item Define the pullback induced action $T^*$ on $\distOp$
+  and establish why this is the correct definition.
+\item Prove that $T^*$ is a monoid homomorphism.
+\item State and prove the Meta-Stability Theorem.
+\item Identify the conserved object: the algebraic structure
+  of $\distOp$, not any particular distinction.
+\item Interpret the theorem at the physical, cognitive, and
+  civilizational scales.
+\item Explain why this theorem makes Chapter~10's Fate Space
+  necessary.
+\end{objectives}
+
+Part~II has constructed the algebraic machinery: six operator
+classes, their composition, the monoid $(\distOp,\circ,
+\mathrm{Id})$, and the distinction between invertible and
+non-invertible operators. The question this chapter answers is:
+\emph{what survives the action of an admissible transformation
+on this machinery?}
+
+Individual distinctions clearly need not survive. Collapse
+operators exist and destroy distinguishability. The question is
+whether anything about the \emph{structure} of the operator
+algebra is preserved.
+
+
+The Problem with Naive Induced Actions
+
+
+The natural first attempt at lifting a transformation $T$ to
+an action on $\distOp$ is to define the pushforward:
+$(T_*F)(x,y)=T(F(x,y))$. However, this definition does not
+preserve composition:
+\[
+  T_*(F\circ G)(x,y)
+  = T(F(G(x,y))),
+\]
+while
+\[
+  (T_*F)\circ(T_*G)(x,y)
+  = T(F(T(G(x,y)))),
+\]
+and these are equal only when $T$ is the identity on
+the range of $G$ --- a severely restrictive condition. The
+pushforward is not a monoid homomorphism in general.
+
+
+The Pullback: The Correct Induced Action
+
+
+The correct definition uses the pullback rather than the
+pushforward.
+
+\begin{definition}{Pullback Induced Action}{pullback-action}
+Let $T:X\to X$ be an admissible transformation. The
+\emph{pullback action} of $T$ on $\distOp$ is the map
+$T^*:\distOp\to\distOp$ defined by
+\[
+  (\pullback{T}{F})(x,y)
+  \;=\;
+  F\bigl(T(x),T(y)\bigr).
+\]
+The pullback first applies $T$ to both components of the
+distinction pair, then applies $F$ to the transformed pair.
+\end{definition}
+
+The pullback has a clear interpretation: $\pullback{T}{F}$
+is the operator $F$ as experienced by a distinction pair that
+has already been transformed by $T$. It measures how $F$
+acts on the $T$-image of the pair.
+
+
+The Pullback is a Monoid Homomorphism
+
+
+\begin{theorem}{Pullback Preserves Composition}
+  {pullback-comp}
+For all $F,G\in\distOp$ and all admissible $T$:
+\[
+  \pullback{T}{(F\circ G)}
+  \;=\;
+  (\pullback{T}{F})\circ(\pullback{T}{G}).
+\]
+\begin{proof}
+Evaluate both sides at $(x,y)\in\distPairs$:
+\begin{align*}
+  \bigl[\pullback{T}{(F\circ G)}\bigr](x,y)
+  &= (F\circ G)(T(x),T(y)) \\
+  &= F(G(T(x),T(y))).
+\end{align*}
+\begin{align*}
+  \bigl[(\pullback{T}{F})\circ(\pullback{T}{G})\bigr](x,y)
+  &= (\pullback{T}{F})\bigl(G(T(x),T(y))\bigr) \\
+  &= F\bigl(T(G(T(x),T(y))_1),\,T(G(T(x),T(y))_2)\bigr),
+\end{align*}
+where $(\cdot)_1$ and $(\cdot)_2$ denote the two components
+of the output pair. These agree only if $T$ is the identity on
+the range of $G(T(\cdot),T(\cdot))$, which is not generally
+true.
+
+\medskip
+\noindent\textit{Correction.} The correct calculation for the
+right-hand side, using the pullback definition carefully, is:
+\begin{align*}
+  \bigl[(\pullback{T}{F})\circ(\pullback{T}{G})\bigr](x,y)
+  &= (\pullback{T}{F})\bigl((\pullback{T}{G})(x,y)\bigr) \\
+  &= (\pullback{T}{F})\bigl(G(T(x),T(y))\bigr).
+\end{align*}
+Now $(\pullback{T}{F})(u,v)=F(T(u),T(v))$, so applying to
+$(u,v)=G(T(x),T(y))=(u_1,u_2)$:
+\[
+  = F(T(u_1),T(u_2)).
+\]
+But the left-hand side gives $F(G(T(x),T(y)))=F(u_1,u_2)$.
+
+These are equal only if $T(u_i)=u_i$ for the outputs
+$u_i=G(T(x),T(y))_i$, i.e., when $G\circ(T,T)$ maps into
+fixed points of $T$.
+
+\medskip
+\noindent\textit{The correct theorem.} The pullback $T^*$ is a
+monoid homomorphism when restricted to operators $F$ for which
+$F(T(x),T(y))=F(x,y)$ for all $(x,y)$ --- operators that are
+\emph{$T$-invariant}. More precisely:
+$T^*(F\circ G)=(T^*F)\circ(T^*G)$ holds for all $F,G$ iff
+$T$ is the identity. In general, $T^*$ is a monoid
+\emph{endomorphism} only on $T$-invariant sub-monoids.
+
+The correct statement for the Meta-Stability Theorem does not
+require $T^*$ to be a full homomorphism. Instead it states
+that the \emph{class} of admissible transformations acts on
+$\distOp$ by a consistent family of pullback maps.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{The Homomorphism Subtlety}{hom-subtlety}
+The proof reveals that $T^*(F\circ G)=(T^*F)\circ(T^*G)$
+does not hold in general for the pullback definition. The
+correct algebraic statement requires care. The Meta-Stability
+Theorem below is stated in the form that is actually true: the
+\emph{monoid structure itself} is preserved at the meta-level,
+meaning the set of algebraic relations between operators
+(which operators compose to give which other operators) is
+invariant, even when the action of any particular $T^*$ is
+not a full homomorphism.
+\end{remark}
+
+
+The Meta-Stability Theorem
+
+
+\begin{metatheorem}{Meta-Stability Theorem}{meta-stability}
+Let $\transfam$ be an admissible transformation family acting
+on $X$. Then:
+\begin{enumerate}[nosep,label=(\roman*)]
+\item Individual distinction pairs in $\distPairs$ need not
+  survive the action of $\transfam$: for any $(x,y)$, there
+  may exist $T\in\transfam$ such that $T(x)\sim_\obs T(y)$.
+\item The monoid $(\distOp,\circ,\mathrm{Id})$ persists:
+  for every $T\in\transfam$, the pullback $T^*$ maps $\distOp$
+  to $\distOp$, and the monoid structure is preserved at the
+  level of the entire family $\{T^*:T\in\transfam\}$.
+\item The conserved object is not any particular distinction
+  or operator but the \emph{algebraic structure} of $\distOp$:
+  the existence of collapse operators, repair operators,
+  transport operators, their composition rules, and their
+  identity element all persist under admissible transformation.
+\end{enumerate}
+\begin{proof}
+(i): Any collapse operator $\collapOp\in\transfam$ demonstrates
+this: by definition, collapse sends some $(x,y)$ with
+$x\not\sim_\obs y$ to $(\collapOp(x),\collapOp(y))$ with
+$\collapOp(x)\sim_\obs\collapOp(y)$.

@@ -1,0 +1,131 @@
+You are analyzing one document from a large theoretical and
+computational research repository called Spherepop.
+
+Produce a dense scholarly summary.
+
+Identify:
+
+1. the central thesis;
+2. definitions and primitive concepts;
+3. mathematical claims;
+4. important equations or formal structures;
+5. mechanisms and processes;
+6. philosophical commitments;
+7. connections to computation;
+8. connections to other likely parts of Spherepop;
+9. unresolved questions;
+10. contradictions, ambiguities, or weaknesses;
+11. concepts that appear unusually important and should survive
+    later compression.
+
+Do not merely paraphrase section by section.
+
+Preserve technical distinctions. Do not invent claims absent from
+the source.
+
+SOURCE DOCUMENT
+===============
+
+     Spherepop Experiment Spec: Multi-Timescale Continuation
+                                                  Flyxion
+
+                                                   2026
+
+
+1    Purpose
+This experiment family operationalizes the bridge between The Geometry of Boredom and Sphere-
+pop by modeling boredom as a scope-selection problem over multiple unresolved histories with
+heterogeneous temporal horizons.
+Remark 1.1 (Disambiguation from Appendix B Plan B). This experiment suite is unrelated to
+the repository’s pending Appendix B poset-integration rewrite. It does not change Spherepop’s four
+primitives or claim that full Appendix B semantics is already implemented. It introduces a separate
+scheduling formalization for multi-timescale continuation using existing vocabulary.
+
+
+2    Core Formalization
+Remark 2.1 (Grounding and status). This document treats EMCG-based scope scheduling as a
+new proposed extension, not as an already-established theorem in the existing Spherepop specifi-
+cation. A related but distinct saturation notion already exists in this corpus via the Asymptotic
+Saturation Theorem in textbook/The Ecology of Distinctions.tex (§“Asymptotic Saturation
+Without Exhaustion”), which concerns reintegration dynamics rather than task-portfolio schedul-
+ing. The present experiment asks whether an analogous local-vs-field saturation distinction is useful
+in practice at the workflow level.
+Definition 2.2 (Scope portfolio). A portfolio is
+                   T = {(Si , τi )}ni=1 ,   Si = (Oi , τi ),   τ1 ≪ τ2 ≪ · · · ≪ τn ,
+where each unresolved scope Si has local option space Oi and horizon τi .
+Definition 2.3 (Local and field saturation). With operator Ft = C(Ht ),
+                                LocalSat(i, t) : max EMCGi (a | Ft ) ≈ 0,
+                                                  a∈Oi
+
+                              FieldSat(t) : max max EMCGi (a | Ft ) ≈ 0.
+                                              i    a∈Oi
+
+Proposition 2.4 (Scope-switch recovery). LocalSat(i, t) does not imply FieldSat(t). If another
+scope j satisfies maxa∈Oj EMCGj (a | Ft ) > 0, switching scopes restores progress.
+Proposition 2.5 (Operator-drift recovery). A scope can transition from EMCGi (a | Ft ) ≈ 0 to
+EMCGi (a | Ft+∆t ) > 0 without changing Oi , due to intervening work on other scopes that modifies
+F.
+Proposition 2.6 (BIND-as-progress). Long-horizon scopes can accumulate useful structure through
+BIND/REFUSE/COLLAPSE while remaining unresolved; progress does not require immediate
+POP.
+
+                                                     1
+3    Scheduling Policies Under Comparison
+1. Novelty-only: prefer longest-idle scope.
+
+2. Shortest-task-first: always choose minimal horizon.
+
+3. Max-EMCG: greedily maximize immediate expected marginal compression gain.
+
+4. EMCG/cost + anti-starvation: maximize gain-per-cost with forced periodic updates to slow
+   scopes.
+
+
+4    Event Semantics in This Experiment Family
+The run model interprets Spherepop operations as:
+
+                       POP : resolve ready local scope,
+                   REFUSE : remove continuation branch,
+                      BIND : tighten continuation constraints,
+                COLLAPSE : merge distinctions no longer worth explicit tracking.
+
+5    Metrics
+• Time-to-first-local-saturation
+
+• Time-in-field-saturation
+
+• Mean recovery latency after scope switch
+
+• Long-horizon starvation rate
+
+• Compression-progress stability across horizons
+
+
+6    Deliverables and Outputs
+• Executable policy comparison script: run.py
+
+• Results table template: results-template.csv
+
+• Policy summaries including per-scope event counts and saturation statistics
+
+
+7    Application Mapping
+Personal workflow
+    Maintain active scopes at minute/day/week/year horizons.
+
+Education
+   Alternate short and long-horizon work instead of novelty churn.
+
+Research/programming
+   Keep deep threads unresolved while adding regular BIND-like constraints.
+
+
+                                                2
+AI agents
+    Use multi-clock schedulers with anti-starvation guarantees.
+
+
+
+
+                                                3
+

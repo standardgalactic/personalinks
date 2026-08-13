@@ -1,0 +1,1195 @@
+\emph{Convergence.} Bateson's definition of information as
+``a difference that makes a difference'' anticipates this
+book's central claim that distinction, not substance, is the
+basic unit of analysis \parencite{bateson1972}. Bateson
+explicitly rejects object-first ontology in favour of pattern
+and relationship, a commitment this chapter shares without
+qualification.
+
+\emph{Divergence.} Bateson's phrase is a definition offered
+without a supporting formal apparatus for measuring how much a
+difference matters, to what, or for how long. This chapter's
+distinction cost $C(\partition)$, and the History Primacy
+Theorem proved in Chapter~\ref{ch:history}
+(\cref{thm:history-primacy}), give Bateson's intuition exact
+quantitative content: a difference makes a difference precisely
+to the extent that it changes downstream recoverable history, a
+claim this book can compute rather than only assert.
+
+\emph{Open question.} Bateson extends his framework to mind and
+ecology as systems of differences propagating across levels.
+Whether this book's distinction ecologies
+(Chapter~\ref{ch:distinction-ecology}) formalise that specific
+Batesonian picture, or constitute a structurally distinct
+framework that happens to use similar language, remains open;
+the comparison deserves more careful treatment than this
+chapter can give it.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Distinction is prior to objecthood, information,
+        and entropy (\cref{axm:dist-axiom}).
+  \item Nontrivial observation requires nontrivial
+        distinction
+        (\cref{thm:observational-nontriviality}).
+  \item Objects are equivalence classes induced by
+        distinctions (\cref{thm:object-equivalence}).
+  \item Refinement increases capacity at nonnegative cost
+        (\cref{thm:refinement-capacity,thm:refinement-cost}).
+  \item Every surjective projection has a nontrivial
+        blind spot (\cref{thm:blind-spot-thm}).
+  \item Object, capacity, cost, and blind spot are
+        co-produced by the act of partitioning
+        (\cref{thm:first-distinction}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  Let $X = \{0,1\}^8$ and let $\pi(x)$ return the parity
+  bit of $x$. Describe the equivalence classes of
+  $\sim_\pi$, compute $|\pi^{-1}(y)|$ for each $y$,
+  and interpret the blind spot. What information is
+  irrecoverably lost?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  A cell membrane separates interior from exterior.
+  Identify the distinction being maintained, its cost
+  (in ATP), and one biological repair mechanism that
+  restores it when breached.
+\end{exercise}
+
+\begin{exercise}
+  Prove that if $\partition_1 \preceq \partition_2
+  \preceq \partition_3$ then
+  $D(\partition_1) \le D(\partition_2) \le D(\partition_3)$.
+\end{exercise}
+
+\begin{exercise}
+  Give an example of a projection with high distinction
+  capacity but a large blind spot. Why does high capacity
+  alone not imply adequacy of representation?
+\end{exercise}
+
+\begin{exercise}[CS]
+  Interpret a cryptographic hash function $h: X \to Y$
+  (with $|Y| \ll |X|$) as a projection. What is its
+  blind spot? Under what conditions does collision
+  resistance reduce but not eliminate projection loss?
+\end{exercise}
+
+
+
+
+
+\chapter{Distinction and Information}
+\label{ch:information}
+
+\begin{epigraph}{Information is a difference that makes
+  a difference.}
+  {Gregory Bateson \parencite{bateson1972}}
+\end{epigraph}
+
+\begin{objectives}
+  \item Derive Shannon entropy from partition structure.
+  \item Prove the Information--Distinction Theorem.
+  \item Define projection loss and representational entropy.
+  \item Prove the Representation Limit Theorem.
+  \item Connect distinguishability geometry to sequence
+        alignment (Bio) and hashing (CS).
+\end{objectives}
+
+
+Information as Distinction Structure
+
+\label{sec:ch2-info}
+
+Classical information theory begins with messages and
+probabilities \parencite{shannon1948,cover2006}.
+The present framework begins one layer beneath this,
+asking what conditions must hold before a message can
+be said to differ from another. The answer remains
+distinction. \index{information!as distinction count|textbf}
+
+A string of bits contains information only because
+alternative strings are distinguishable. A genetic
+sequence contains information only because alternative
+nucleotide arrangements are distinguishable. A scientific
+measurement contains information only because alternative
+outcomes are distinguishable. If all possible outcomes
+were identified under a single equivalence class,
+information would vanish regardless of how much material
+substrate remained.
+
+Chapter~\ref{ch:distinction} established the Axiom of
+Distinction (\cref{axm:dist-axiom}): every nontrivial
+observation presupposes a partition of some domain. This
+chapter asks what follows once that axiom is taken seriously
+as a foundation for information itself, rather than treated
+as a side remark before getting on with probability theory.
+
+
+Why Shannon's Theory Needs a Foundation
+
+\label{sec:ch2-shannon-foundation}
+
+Claude Shannon's mathematical theory of communication begins,
+by design, with a probability space already in hand
+\parencite{shannon1948,shannon1949}. A source emits symbols
+drawn from an alphabet with known or estimable probabilities;
+entropy is then defined as the expected surprisal of those
+symbols. This starting point is enormously productive --- it
+underwrites the sampling theorem, channel capacity, and
+source coding theorems that make modern communication
+engineering possible \parencite{cover2006,mackay2003} --- but
+it is a starting point, not a foundation. Shannon's theory
+does not ask, and does not need to ask for its own engineering
+purposes, where the alphabet of distinguishable symbols comes
+from, or why some signal differences count as informative
+while others are discarded as noise before the probability
+space is even written down.
+
+The present framework treats this prior question as the more
+fundamental one. Before a source can be assigned a probability
+distribution over an alphabet, the alphabet itself --- the set
+of mutually exclusive, jointly exhaustive symbols --- must
+already have been carved out of whatever physical or formal
+substrate carries the signal. That carving is a distinction in
+the sense of Chapter~\ref{ch:distinction}. Shannon entropy, on
+this reading, is not an alternative to distinction-counting; it
+is what distinction-counting becomes once a probability measure
+has been layered on top of an already-fixed partition. The
+formal content of this equivalence is made precise in the
+Information--Distinction Theorem below; the conceptual point to
+hold onto first is that probability presupposes partition, and
+partition is the more primitive of the two notions.
+
+This is not a criticism of Shannon's theory on its own terms.
+For an engineer designing a channel code, the alphabet is
+typically given by the hardware and need not be re-derived from
+first principles. The criticism, if it is one, applies only to
+the stronger philosophical claim --- sometimes made, rarely
+defended --- that information \emph{is}, fundamentally,
+whatever Shannon's formalism measures. That claim treats a
+derived quantity as though it were primitive. The present
+chapter's task is to show exactly what is being presupposed
+when it is not.
+
+\section{Common Misinterpretations of Information as
+  Distinction}
+\label{sec:ch2-misinterpretations}
+
+It is worth heading off three readings of this chapter's claim
+that would make it either trivial or false.
+
+The first is that ``information is distinction'' merely
+restates Shannon's theory in different words --- that nothing
+of substance is added beyond relabelling $H(\partition)$ as
+``distinction entropy.'' This understates the claim. The
+Information--Distinction Theorem shows that entropy is a
+\emph{consequence} of partition structure together with a
+probability measure, not a free-standing primitive that happens
+to coincide with it numerically. The distinction comes first;
+the probability measure, and hence the Shannon entropy it
+generates, comes after.
+
+The second is that, because information is grounded in
+distinction, information requires an observer or a mind to
+exist. This repeats a confusion addressed in
+Chapter~\ref{ch:distinction}: distinctions can be drawn by
+physical structure as readily as by minds. A DNA polymerase
+distinguishes a correctly paired base from a mismatched one
+without possessing beliefs about base pairing; the distinction,
+and the information it carries, is present in the molecular
+machinery itself.
+
+The third is that distinguishability is a purely quantitative
+matter --- that more distinctions simply means more
+information, full stop, with nothing further to say. The
+Representation Limit Theorem proved later in this chapter
+complicates this picture considerably: a representation can
+discard distinguishability even while preserving an apparently
+large amount of structure, and the chapter's treatment of
+projection loss is precisely an account of how and where that
+discarding occurs. Quantity of distinction and fidelity of
+representation are related but distinct questions, and
+conflating them is one of the more common errors this chapter
+is written to prevent.
+
+By the chapter's end, two theorems will have been established:
+that distinction entropy reduces to ordinary Shannon entropy
+under a probability measure (the Information--Distinction
+Theorem), and that representations of a distinction structure
+can lose information even when no single observation does (the
+Representation Limit Theorem). Chapter~\ref{ch:entropy} then
+asks the next question in the sequence: if information is
+distinguishability made quantitative, what is concealed
+\emph{beneath} a distinction once it has been drawn? That
+question is entropy's.
+
+\begin{definition}{Distinction Entropy (Information)}{dist-entropy-ch2}
+  The \emph{distinction entropy} of partition $\partition$
+  with cell probabilities $\{p_i\}$ is
+  \[
+    H(\partition) = -\sum_i p_i \log p_i.
+  \]
+  Under a uniform distribution,
+  $H(\partition) = \log|\partition| = D(\partition)$.
+\end{definition}
+
+\begin{theorem}{Entropy--Distinction Duality}{entropy-duality}
+  Let $\partition_1 \preceq \partition_2$ be finite
+  partitions with uniform probabilities. Then
+  $H(\partition_1) \le H(\partition_2)$.
+\end{theorem}
+
+\begin{proof}
+  Under uniform distribution, $H(\partition) = \log|\partition|$.
+  Since $\partition_1 \preceq \partition_2$ implies
+  $|\partition_1| \le |\partition_2|$ and $\log$ is
+  monotone, $H(\partition_1) \le H(\partition_2)$.
+\end{proof}
+
+
+Information as Distinction Selection
+
+\label{sec:ch2-selection}
+
+Suppose an observer knows only that a system lies
+somewhere within partition $\partition = \{P_1,\ldots,P_n\}$.
+Observation identifies one cell. The informational event
+is the reduction of uncertainty over cells:
+$I(P_i) = -\log p_i$ \parencite{shannon1948,mackay2003}.
+
+This is Shannon's surprisal, but interpreted
+distinction-theoretically: it measures how strongly the
+observation refines the distinction structure.
+
+\begin{envelopeaside}{Why Filing Cabinets Exist}
+Suppose a filing cabinet contains $N$ documents. Finding a
+document by brute force requires approximately $N$
+inspections.
+
+Adding labels creates partitions. A binary distinction cuts
+the search space roughly in half. After $k$ useful
+distinctions,
+\[
+  N \to \frac{N}{2^k}.
+\]
+
+Organisation is stored distinction. Chaos is expensive
+because search replaces memory.
+\end{envelopeaside}
+
+
+The Compression Theorem
+
+\label{sec:ch2-compression}
+
+\begin{theorem}{Compression Theorem}{compression}
+  For surjective $\pi: X \to Y$, $H(Y) \le H(X)$.
+\end{theorem}
+
+\begin{proof}
+  A surjective map merges fibres $\pi^{-1}(y)$.
+  Merging states cannot increase the number of
+  distinguishable outcomes. The induced partition on $Y$
+  is coarser than on $X$. By the Entropy--Distinction
+  Duality, $H(Y) \le H(X)$.
+\end{proof}
+
+\begin{remark}{Compression is controlled distinction loss}
+  {compression-loss}
+  Every representation compresses. Every model compresses.
+  Every theory compresses. The question is never whether
+  compression occurs but which distinctions survive.
+  Later chapters will show that many failures of science,
+  governance, and computation arise when a system mistakes
+  the absence of represented difference for the absence
+  of real difference.
+\end{remark}
+
+\begin{envelopeaside}{Why Compression Is Dangerous}
+Suppose a dashboard replaces one thousand variables with one
+KPI. Compression ratio: $1000{:}1$.
+
+Best case: 999 irrelevant variables disappear. Worst case:
+999 critical variables disappear.
+
+Compression and blindness are mathematically inseparable.
+\end{envelopeaside}
+
+
+Representational Entropy
+
+\label{sec:ch2-rep}
+
+\begin{definition}{Representational Entropy}{rep-entropy}
+  Let $\pi: X \to M$ be a representation. The
+  \emph{representational entropy} at $m$ is
+  $S_\pi(m) = \log|\pi^{-1}(m)|$,
+  measuring the size of the hidden region collapsed
+  beneath the representation.
+\end{definition}
+
+Large $S_\pi$ indicates many indistinguishable underlying
+states — high compression with correspondingly large
+blind spot.\index{blind spot!relation to partition refinement}
+
+
+The Representation Limit Theorem
+
+\label{sec:ch2-limit}
+
+\begin{theorem}{Representation Limit Theorem}{rep-limit}
+  No finite representation can preserve every distinction
+  of an infinite domain.
+\end{theorem}
+
+\begin{proof}
+  Let $|X| = \infty$, $|M| < \infty$. Any $\pi: X \to M$
+  must assign infinitely many states to at least one
+  fibre $\pi^{-1}(m)$ by the pigeonhole principle.
+  Hence infinitely many distinctions are collapsed.
+\end{proof}
+
+This theorem is the first formal appearance of what
+later chapters call projection failure. No bounded
+representation can preserve all distinctions of an
+unbounded reality. Loss is not an implementation flaw
+— it is a mathematical necessity.
+
+\begin{distinctionaside}{The Corporate Dashboard}
+A manager receives a weekly report containing exactly one
+number: Productivity = 87.3.
+
+Thousands of distinct activities, decisions, conversations,
+mistakes, and successes have been projected into a single
+coordinate. The dashboard appears informative precisely
+because it hides almost everything.
+
+Information and blindness increase together.
+\end{distinctionaside}
+
+\begin{distinctionaside}{Map versus Territory}
+Look at a map. Then look at the territory.
+
+Count how many distinctions disappeared.
+
+The difference is projection loss.
+\end{distinctionaside}
+
+
+The Fundamental Information Theorem
+
+\label{sec:ch2-fund}
+
+\begin{theorem}{Fundamental Information Theorem}{fund-info}
+  Every informational quantity can be expressed as a
+  property of a distinction structure.
+  \index{information!fundamental theorem}
+\end{theorem}
+
+\begin{proof}
+  Information requires distinguishable alternatives, which
+  define a partition. Probability distributions are defined
+  over partition cells. Entropy is computed from those
+  probabilities. Mutual information measures shared
+  refinement relations between partitions. Compression
+  measures distinction collapse. Channel capacity measures
+  transmissible distinctions. Each quantity depends solely
+  on partition structure; hence each is a property of
+  distinctions.
+\end{proof}
+
+\begin{remark}{The inverted hierarchy}{inverted-hierarchy}
+  The traditional hierarchy places objects first and
+  derives information from them. The Fundamental
+  Information Theorem inverts this:
+  $\text{Distinctions} \to \text{Information} \to \text{Objects}$.
+  Objects are informational artefacts generated by
+  distinction-preserving compressions.
+\end{remark}
+
+
+Related Frameworks
+
+\label{sec:ch2-related-frameworks}
+
+\subsection*{Shannon: Information Theory}
+
+The chapter's central engagement with Shannon's theory was
+given in full above (\cref{sec:ch2-shannon-foundation}); this
+subsection restates it in the plan's comparative terms.
+
+\emph{Convergence.} Shannon's theory correctly identifies
+information with the resolution of uncertainty over a space of
+possibilities, and its formal apparatus --- entropy, mutual
+information, channel capacity --- remains exactly correct once
+a probability space is given \parencite{shannon1948,shannon1949}.
+
+\emph{Divergence.} Shannon's formalism presupposes the
+alphabet and its probability measure as given inputs. This
+chapter's Fundamental Information Theorem
+(\cref{thm:fund-info}) locates the uncertainty-reducing act ---
+distinction --- as prior to that probability space, not as an
+informal preliminary to it: the alphabet is itself the output
+of a partitioning operation in the sense of
+Chapter~\ref{ch:distinction}, and Shannon entropy is recovered
+as the special case in which a measure has already been laid
+over an already-fixed partition.
+
+\emph{Open question.} Whether every quantity of practical
+interest in Shannon's theory --- in particular channel capacity
+under adversarial or non-stationary noise --- has a clean
+distinction-theoretic counterpart, or whether some Shannon-
+theoretic results resist this reduction, is not settled here.
+
+\subsection*{Spencer-Brown: Marks Without Measure}
+
+\emph{Convergence.} Chapter~\ref{ch:distinction} already
+established that Spencer-Brown's calculus of indications and
+this book's distinction structures share the same starting
+primitive: a mark drawn on an otherwise unmarked space
+\parencite{spencer-brown1969}.
+
+\emph{Divergence.} \emph{Laws of Form} is a calculus of pure
+form: it shows what logic follows from marks and their
+re-entry, but it has no measure-theoretic apparatus and
+therefore no notion of how much a given mark distinguishes.
+This chapter's distinction capacity $D(\partition)$
+(\cref{defn:dist-capacity}) is exactly the missing measure:
+where Spencer-Brown's calculus tells us a distinction has been
+drawn, this chapter's apparatus tells us how much information
+that drawing produced.
+
+\emph{Open question.} Spencer-Brown's calculus is complete as a
+logic without ever requiring a measure; this chapter's
+information-theoretic apparatus requires one from the start.
+Whether a measure-free analogue of distinction capacity could
+be defined directly within Spencer-Brown's calculus, recovering
+something information-like without presupposing probability at
+all, is an open formal question this book does not pursue.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Information is not primitive; it is the
+        quantitative expression of distinctions
+        (\cref{thm:fund-info}).
+  \item Refinement increases entropy; coarsening decreases
+        it (\cref{thm:entropy-duality}).
+  \item Compression destroys distinctions
+        (\cref{thm:compression}).
+  \item No finite representation preserves all distinctions
+        of an infinite domain (\cref{thm:rep-limit}).
+  \item The correct hierarchy is Distinction $\to$
+        Information $\to$ Objects.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  Show that no lossless compression algorithm can reduce
+  average description length below $H(X)$. What does this
+  say about distinction capacity?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Treat each DNA codon (triplet) as a partition cell over
+  the 64 possible codons. Compute $H(\partition)$ assuming
+  uniform usage. Interpret the result as genetic
+  distinction capacity. How does degeneracy in the
+  genetic code affect this calculation?
+\end{exercise}
+
+\begin{exercise}
+  Prove that mutual information $I(X;Y) = H(X) - H(X|Y)$
+  measures the refinement that $Y$ induces on the
+  partition of $X$. Interpret this geometrically.
+\end{exercise}
+
+\begin{exercise}[CS]
+  A lossy image compression algorithm reduces a 24-bit
+  RGB image to an 8-bit palette. Model this as a
+  projection $\pi: X \to M$. Compute the maximum
+  possible projection loss. Under what conditions is
+  the loss perceptually acceptable despite being
+  informationally large?
+\end{exercise}
+
+
+
+
+
+\chapter{Distinction and Entropy}
+\label{ch:entropy}
+
+\begin{epigraph}{The increase of entropy is not a law of
+  chaos. It is a law about the progressive loss of
+  recoverable structure.}{Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Reinterpret entropy as distinction multiplicity.
+  \item Prove the Distinction--Entropy Duality as a law.
+  \item Derive the Second Law as a distinction-erosion
+        theorem.
+  \item Distinguish local order from global entropy growth.
+  \item Identify entropy-increasing processes in genomes
+        and networks.
+\end{objectives}
+
+
+The Traditional Interpretation and Its Limits
+
+\label{sec:ch3-trad}
+
+Entropy occupies a peculiar position in scientific
+thought. In thermodynamics it is associated with heat
+and irreversibility \parencite{boltzmann1877,gibbs1902}.
+In statistical mechanics it is associated with
+multiplicity. In information theory it is associated with
+uncertainty \parencite{jaynes1957}. In cosmology it is
+associated with the arrow of time. In computation it is
+associated with erasure \parencite{landauer1961irreversibility}.
+
+Each interpretation captures something important. Yet all
+appear to describe different phenomena. The central claim
+of this chapter is that these interpretations arise from
+a common geometric structure: \emph{entropy measures
+latent indistinguishability hidden beneath a distinction
+structure}.
+
+Entropy is not fundamentally disorder. Entropy is not
+fundamentally randomness. Entropy is the multiplicity
+concealed beneath a distinction.
+
+
+From Distinction to Multiplicity
+
+\label{sec:ch3-from-distinction}
+
+Chapter~\ref{ch:information} showed that information,
+properly grounded, is distinguishability made quantitative:
+a partition together with a probability measure yields
+Shannon entropy as a derived quantity. This chapter asks the
+complementary question. A distinction divides a domain into
+cells, but a cell itself need not be a single,
+further-indivisible point. It may conceal an entire
+population of underlying states that the distinction does
+not resolve. What measures the size of what a distinction
+leaves unresolved?
+
+The traditional answer is entropy, understood physically as
+a count of microstates compatible with a macrostate
+\parencite{boltzmann1877,gibbs1902}, or understood
+informationally as a measure of uncertainty over outcomes
+\parencite{jaynes1957}. Both answers are correct as far as
+they go, and the Distinction--Entropy Duality proved later
+in this chapter recovers both of them as special cases. But
+stating the duality as a theorem, rather than treating it as
+a brute coincidence between two historically separate
+fields, requires first identifying the structure both fields
+are independently describing: the multiplicity hidden
+beneath a partition's cells. Once that structure is named
+explicitly, thermodynamic entropy, statistical-mechanical
+entropy, and information-theoretic entropy turn out to be
+three readings of a single quantity, recovered by varying
+which distinction is held fixed.
+
+\section{Common Misinterpretations of Entropy as
+  Multiplicity}
+\label{sec:ch3-misinterpretations}
+
+A first misreading treats this chapter's central claim as a
+denial that entropy increases, or as a claim that the Second
+Law is somehow optional. Neither is intended. The Second Law
+of Distinction Dynamics is re-derived, not discarded, later
+in this chapter (\cref{law:second-law-dist}) --- distinction
+erosion is shown to entail exactly the entropy increase the
+classical theory predicts; what changes is the explanation of
+\emph{why} it must increase, not whether it does.
+
+A second misreading treats ``entropy is hidden multiplicity''
+as applying only to physical systems with literal microstates
+--- gas molecules, spins, and the like. The framework is
+deliberately broader. A genome conceals a multiplicity of
+mutational neighbours behind the single sequence currently
+observed. A social institution conceals a multiplicity of
+counterfactual configurations behind the single arrangement
+currently in force. Wherever a distinction is drawn, something
+is left unresolved beneath it, and that something has a size.
+Entropy, in this chapter's sense, is that size, regardless of
+substrate.
+
+A third misreading conflates high entropy with disorder in
+the pejorative sense --- chaos, randomness, the absence of
+structure. High entropy means only that many underlying
+configurations are compatible with the current distinction. A
+perfectly uniform gas and a perfectly shuffled deck of cards
+are both high-entropy relative to coarse macroscopic
+distinctions, but nothing about either state is disordered at
+the level of its own microscopic description; each
+configuration is exactly as particular as any other. What
+entropy tracks is the coarseness of the distinction doing the
+looking, not an intrinsic property of disorder in the system
+being looked at.
+
+By the chapter's end, the Distinction--Entropy Duality
+(\cref{law:entropy-dual}) will have shown precisely how
+thermodynamic, statistical, and information-theoretic entropy
+coincide, and the Second Law of Distinction Dynamics
+(\cref{law:second-law-dist}) will have re-derived entropy
+increase as a consequence of distinction erosion rather than
+an independent postulate. Chapter~\ref{ch:history} then asks
+what this erosion means at the level of an entire trajectory
+rather than a single moment: if a state's entropy measures
+what is concealed right now, what does an entire history
+conceal, and what is lost when that history is compressed
+down to the state that survives it?
+
+
+Distinction Spaces and Hidden Multiplicity
+
+\label{sec:ch3-hidden}
+
+\begin{definition}{Hidden Multiplicity}{hidden-mult}
+  Let $P_i \in \partition$ be a partition cell.
+  The \emph{hidden multiplicity} of $P_i$ is
+  $\Omega(P_i) = |P_i|$: the number of underlying
+  states collapsed beneath the distinction.
+  \index{hidden multiplicity}
+\end{definition}
+
+\begin{definition}{Distinction Entropy (Statistical)}{dist-entropy-b}
+  For partition cell $P_i$,
+  $S(P_i) = k \log \Omega(P_i)$
+  \parencite{boltzmann1877}.
+  This measures the logarithmic volume of states
+  collapsed beneath an observation.
+\end{definition}
+
+\begin{distinctionaside}{The Sock Drawer}
+A carefully organised sock drawer contains many
+distinctions: work socks, hiking socks, running socks,
+mystery socks. Over time the distinctions erode.
+
+Entropy has not created more socks. It has merely increased
+the number of ways the same socks can occupy
+indistinguishable positions.
+\end{distinctionaside}
+
+
+The Distinction--Entropy Duality
+
+\label{sec:ch3-duality}
+
+\begin{law}{Distinction--Entropy Duality}{entropy-dual}
+  Every distinction simultaneously produces information
+  and entropy. Information measures separation between
+  partition cells. Entropy measures multiplicity within
+  partition cells. Increasing one generally decreases the
+  other. \index{entropy!as distinction multiplicity|textbf}
+\end{law}
+
+\begin{proof}
+  Let $\partition = \{P_1,\ldots,P_n\}$. The number of
+  distinguishable cells $N_D = |\partition|$ contributes
+  to information: $H = \log N_D$. The multiplicity within
+  each cell $\Omega(P_i) = |P_i|$ contributes to entropy:
+  $S(P_i) = k\log\Omega(P_i)$. Both arise from the same
+  partition; they are dual descriptions of the same
+  distinction structure viewed from opposite directions.
+  Refinement increases $N_D$ while reducing average
+  $\Omega(P_i)$; coarsening does the reverse.
+\end{proof}
+
+
+Entropy Production as Distinction Erosion
+
+\label{sec:ch3-production}
+
+\begin{theorem}{Entropy Production Theorem}{entropy-production}
+  Coarsening of distinction structure increases hidden
+  multiplicity and therefore increases entropy.
+\end{theorem}
+
+\begin{proof}
+  Suppose cells $P_i$ and $P_j$ are merged. Before
+  merging: $\Omega_i = |P_i|$, $\Omega_j = |P_j|$.
+  After merging: $\Omega' = |P_i| + |P_j|$.
+  Since $a + b > \max(a,b)$, we have $\log\Omega' >
+  \log\Omega_i$ and $\log\Omega' > \log\Omega_j$.
+  Entropy increases in both affected cells.
+\end{proof}
+
+This gives the distinction interpretation of the Second
+Law \parencite{prigogine1984}: entropy increases because
+distinction structures become progressively less specific.
+
+
+The Geometry of Irreversibility
+
+\label{sec:ch3-irrev}
+
+\begin{theorem}{Irreversibility Theorem}{irreversibility}
+  Irreversibility emerges whenever history projection
+  $\pi_H: \hist \to X$ is many-to-one.
+\end{theorem}
+
+\begin{proof}
+  Let $h_1 \ne h_2$ with $\pi_H(h_1) = \pi_H(h_2) = x$.
+  Knowledge of the present state $x$ cannot determine
+  which history occurred. The inverse map $\pi_H^{-1}$
+  is not unique; evolution toward the past is ambiguous.
+  Hence macroscopic irreversibility emerges from the
+  many-to-one character of history projection.
+\end{proof}
+
+
+Local Order and Global Entropy
+
+\label{sec:ch3-local}
+
+\begin{theorem}{Local--Global Compatibility Theorem}
+  {local-global}
+  Local distinction concentration is compatible with
+  global entropy growth.
+\end{theorem}
+
+\begin{proof}
+  Let subsystem $\Sigma$ decrease its entropy by
+  $|\Delta S_\Sigma|$. The Second Law requires
+  $\Delta S_\mathrm{total} \ge 0$, so the environment
+  must absorb $\Delta S_E \ge |\Delta S_\Sigma|$.
+  Local order formation is exactly balanced or exceeded
+  by global disorder export \parencite{schrodinger1944}.
+\end{proof}
+
+\begin{remark}{Life, complexity, and entropy}
+  {life-complexity}
+  This theorem explains why galaxies, organisms,
+  languages, and civilisations can form and persist.
+  They are local concentrations of distinction density
+  sustained by exporting entropy to their environments.
+  Repair and regeneration are thermodynamically costly
+  precisely because they maintain local order against
+  the global tendency toward distinction erosion.
+\end{remark}
+
+
+The Entropy--Reachability Connection
+
+\label{sec:ch3-reach}
+
+\begin{theorem}{Entropy--Reachability Relation}
+  {entropy-reach-pre}
+  If distinction capacity decreases monotonically,
+  effective reachability volume decreases monotonically.
+\end{theorem}
+
+\begin{proof}
+  Each reachable future state corresponds to a distinct
+  future distinction structure. If partition cells merge,
+  previously distinct future trajectories become
+  observationally equivalent. The number of effective
+  futures contracts. Hence reachability volume decreases
+  with distinction capacity.
+\end{proof}
+
+This theorem foreshadows the central argument of
+Chapters~\ref{ch:reachability}--\ref{ch:geometry-futures}.
+Entropy is not merely about disorder; it is about future
+possibility.
+
+\begin{envelopeaside}{Why Entropy Feels Like Clutter}
+If there are $n$ distinguishable locations where an object
+might be, search cost scales approximately as $O(n)$.
+
+Entropy is not merely disorder. Entropy is future labour.
+Someone must eventually pay the search cost. Usually you.
+\end{envelopeaside}
+
+
+The Second Law Reinterpreted
+
+\label{sec:ch3-second}
+
+\begin{law}{Second Law of Distinction Dynamics}
+  {second-law-dist}
+  In the absence of repair, distinction-generating
+  dynamics, or external intervention, recoverable
+  distinction capacity tends to decrease:
+  $\frac{dD}{dt} \le 0$.
+  \index{entropy!Second Law reinterpreted}
+\end{law}
+
+Equivalently, entropy increase is the shadow cast by
+distinction loss. The law describes progressive movement
+from fine distinction structures toward coarse ones —
+erosion of recoverability, contraction of future
+possibility, and accumulation of projection loss.
+
+
+Related Frameworks
+
+\label{sec:ch3-related-frameworks}
+
+\subsection*{Shannon: Entropy as Uncertainty}
+
+\emph{Convergence.} Shannon's entropy
+$H = -\sum_i p_i \log p_i$ and this chapter's Distinction
+Entropy (\cref{defn:dist-entropy-b}) are, numerically, the same
+quantity wherever both are defined: a measure of how much
+multiplicity is concealed within a probability distribution
+over outcomes \parencite{shannon1948,jaynes1957}. Wherever a
+partition cell carries a probability measure over its hidden
+contents, this chapter's apparatus and Shannon's formalism
+agree exactly.
+
+\emph{Divergence.} Shannon's $H$ is typically presented as a
+property of a source or a channel: a fact about the physical or
+informational system being measured. The Hidden Multiplicity
+definition (\cref{defn:hidden-mult}) and the
+Distinction--Entropy Duality (\cref{law:entropy-dual}) make
+explicit what Shannon's formalism leaves implicit: entropy is
+relative to the distinction drawn, not an intrinsic property of
+the underlying system. The same physical ensemble has different
+entropies under different partitions, because a coarser
+distinction conceals more multiplicity than a finer one carving
+the same domain. Shannon entropy is the special case in which
+the relevant partition has already been fixed and is no longer
+in question.
+
+\emph{Open question.} Jaynes's maximum-entropy principle
+\parencite{jaynes1957} treats entropy maximisation as a
+rule for inference under a fixed hypothesis space, not as a
+claim about which partition is correct. Whether this chapter's
+distinction-relativity of entropy is compatible with, or in
+tension with, Jaynes's use of entropy as an inference principle
+rather than a physical quantity is not resolved here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Entropy measures latent multiplicity hidden beneath
+        a distinction structure, not disorder
+        (\cref{law:entropy-dual}).
+  \item Coarsening increases entropy; refinement decreases
+        it (\cref{thm:entropy-production}).
+  \item Irreversibility arises from many-to-one history
+        projection (\cref{thm:irreversibility}).
+  \item Local order formation is compatible with global
+        entropy growth (\cref{thm:local-global}).
+  \item Entropy growth contracts future reachability
+        (\cref{thm:entropy-reach-pre}).
+  \item The Second Law is a theorem about distinction
+        erosion (\cref{law:second-law-dist}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Bio]
+  Mitochondria maintain a proton gradient across their
+  inner membrane. Using distinction cost, explain what
+  happens to local and global distinction density when
+  the gradient collapses. Which cell of the partition
+  expands? Which shrinks?
+\end{exercise}
+
+\begin{exercise}[CS]
+  A cache replacement policy (LRU, LFU, random) can be
+  thought of as a repair operator on temporal distinction
+  structure. Compare LRU and random replacement in terms
+  of distinction preservation. Which maintains higher
+  $D$ for a given cache size?
+\end{exercise}
+
+\begin{exercise}
+  Prove that the entropy of a mixture is greater than
+  the weighted average entropy of its components:
+  $H(\lambda P + (1-\lambda)Q) \ge
+   \lambda H(P) + (1-\lambda)H(Q)$.
+  Interpret this as a statement about distinction
+  structure under mixing.
+\end{exercise}
+
+\begin{exercise}
+  The Maxwell's demon thought experiment involves an
+  agent that appears to decrease entropy without cost.
+  Using Landauer's principle \parencite{landauer1961irreversibility}
+  and the distinction cost framework, explain why the
+  demon cannot violate the Second Law.
+\end{exercise}
+
+
+
+
+
+
+\part{Histories and Recoverability}
+
+
+\chapter{History Before State}
+\label{ch:history}
+
+\begin{epigraph}{The present does not contain its own
+  explanation. Every present is the residue of many
+  possible pasts.}{Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define history space $\hist(X)$ and the terminal
+        projection $\pi_t$.
+  \item Prove the History Primacy Theorem.
+  \item Explain the Markov assumption as history
+        compression.
+  \item Prove the Information Loss Theorem.
+  \item Relate path dependence to version control (CS)
+        and phylogeny (Bio).
+\end{objectives}
+
+
+The State Ontology Problem
+
+\label{sec:ch4-state}
+
+Most scientific theories are state-based. Physics describes
+positions and momenta. Economics describes prices and
+inventories. Biology describes gene frequencies. Computer
+science describes machine states. The common assumption is
+that the state is fundamental: a system exists in a state,
+the state changes, computation proceeds.
+
+This picture is useful but incomplete. A state rarely
+contains sufficient information to determine how it came
+to exist. The present is generally compatible with many
+possible histories \parencite{whitehead1929,bergson1896}.
+Consequently the state cannot be the deepest ontological
+object. The deeper object is the history from which the
+state emerges.
+
+
+Why Entropy Alone Cannot Explain the Present
+
+\label{sec:ch4-why-not-state}
+
+Chapter~\ref{ch:entropy} showed that entropy measures the
+multiplicity concealed beneath a distinction at a single
+moment, and that the Second Law of Distinction Dynamics
+(\cref{law:second-law-dist}) describes how that concealed
+multiplicity tends to grow over time in the absence of
+repair. This chapter asks what is lost if the analysis stops
+there.
+
+A state-space description, however carefully its entropy is
+tracked, characterises a system at an instant. It says how
+much is currently concealed, but not how the system arrived
+at the particular configuration whose concealment is being
+measured. Two systems with identical entropy at time $t$ can
+have arrived by entirely different routes, and those routes
+can matter enormously for what is reachable from $t$ onward
+--- a question taken up directly in
+Chapter~\ref{ch:reachability}, but already implicit here. A
+state, in other words, is compatible with many possible
+histories, and the entropy of a state says nothing about
+which of those histories actually obtained.
+
+This is the specific limitation of state-space dynamics ---
+the framework shared by classical mechanics, much of
+theoretical computer science's automata theory
+\parencite{turing1936}, and most economic modelling --- that
+this chapter addresses. State-space dynamics treats the
+state as the fundamental unit: a system occupies a state,
+transitions move it to another state, and the model's entire
+explanatory burden is carried by the transition rule together
+with the current state. Nothing in this picture requires, or
+even permits, asking which path was actually taken. Two
+trajectories arriving at the same state are, by construction,
+indistinguishable from that point onward. The present chapter
+argues that this indistinguishability is an artefact of the
+state-space framework's own simplifying assumption, not a
+discovery about the world; histories that differ can leave
+differently structured futures behind even when their
+terminal states coincide.
+
+
+Common Misinterpretations of History Primacy
+
+\label{sec:ch4-misinterpretations}
+
+It is tempting to read this chapter as an argument that
+states are useless, or that any model using a state-space
+description is making a mistake. Neither is intended.
+State-space models remain enormously useful approximations
+whenever path-dependence genuinely washes out --- the Markov
+Compression Theorem proved later in this chapter
+characterises precisely the conditions under which a
+state-based description loses nothing relevant. The claim is
+narrower and more precise: that the state-based description
+is a compression of the history-based one, valid exactly when
+the compression is lossless, and silently inaccurate
+otherwise.
+
+A second misreading takes ``history is ontologically prior
+to state'' as a deterministic claim --- that if history is
+fundamental, the future must be fully fixed by the past. This
+does not follow, and nothing in this chapter's formalism
+assumes it. History primacy is a claim about what must be
+specified to characterise a system fully, not a claim about
+whether that specification, once given, determines a unique
+future. A history-based ontology is entirely compatible with
+genuine indeterminism at the level of which history is
+realised.
+
+A third misreading treats this chapter's argument as
+anti-scientific --- as undermining the legitimate use of
+state-space models throughout physics and engineering. The
+opposite is intended. By making explicit exactly when a
+state-space compression is lossless
+(\cref{thm:history-primacy}) and when it discards
+decision-relevant structure (\cref{thm:history-info-loss}),
+this chapter aims to put the use of state-space models on a
+more principled footing, not to discourage their use.
+
+By the chapter's end, history will have been given a formal
+definition as a space of trajectories, the Law of Historical
+Compression will establish exactly how much a state discards
+relative to the history that produced it, and the Markov
+assumption will be reframed as a compression hypothesis
+rather than a metaphysical commitment.
+Chapter~\ref{ch:recoverability} then asks the question this
+chapter's compression result makes urgent: once historical
+information has been discarded by projection onto a state,
+under what conditions can any of it still be recovered?
+
+\begin{definition}{History Space}{history-space}
+  Let $X$ be a state space. The corresponding
+  \emph{history space} is
+  $\hist = \{\gamma : [t_0, t] \to X\}$,
+  the collection of all trajectories into $X$.
+  Elements of $\hist$ are trajectories rather than states.
+  \index{history space|textbf}
+\end{definition}
+
+\begin{definition}{Terminal Projection}{terminal-proj}
+  The \emph{terminal projection}
+  $\pi_H: \hist \to X$ is defined by
+  $\pi_H(\gamma) = \gamma(t)$.
+  It assigns each history its terminal state.
+\end{definition}
+
+
+States as Equivalence Classes of Histories
+
+\label{sec:ch4-equiv}
+
+\begin{proposition}{States are Equivalence Classes of
+  Histories}{states-as-equiv}
+  Fix time $t$. Define $h_1 \sim_t h_2$ whenever
+  $h_1(t) = h_2(t)$. This equivalence relation
+  partitions $\hist$; each class is the set of histories
+  terminating at the same state.
+\end{proposition}
+
+\begin{proof}
+  Reflexivity: $h \sim_t h$ since $h(t) = h(t)$.
+  Symmetry and transitivity follow immediately from
+  equality of terminal states.
+  The resulting partition assigns each state $x \in X$
+  the equivalence class $[h]_t = \{h' : h'(t) = x\}$.
+\end{proof}
+
+This mirrors the result of Chapter~\ref{ch:distinction}:
+objects are equivalence classes of distinctions; states are
+equivalence classes of histories.
+
+
+The History Surplus
+
+\label{sec:ch4-surplus}
+
+\begin{definition}{History Surplus}{history-surplus}
+  The \emph{history surplus} of state $x$ at time $t$ is
+  $\Omega_H(x,t) = |\pi_H^{-1}(x)|$,
+  the number of histories compatible with the observed state.
+  \index{history!entropy}
+\end{definition}
+
+States with large history surplus conceal substantial
+historical structure. Historical entropy:
+$S_H(x) = \log\Omega_H(x,t)$.
+
+
+The Law of Historical Compression
+
+\label{sec:ch4-law}
+
+\begin{law}{Law of Historical Compression}{hist-compression}
+  Every state description is a compression of a larger
+  history description. History ontology strictly contains
+  state ontology.
+  \index{history!primacy theorem}
+  \index{history!vs. state|textbf}
+\end{law}
+
+\begin{theorem}{History Primacy Theorem}{history-primacy}
+  For any nontrivial dynamical system,
+  $|\hist| > |X|$ and $\pi_H$ is many-to-one.
+  State ontology is strictly contained in history ontology.
+\end{theorem}
+
+\begin{proof}
+  Distinct histories $h_1 \ne h_2$ may terminate at the
+  same state: $\pi_H(h_1) = \pi_H(h_2) = x$. This is
+  possible whenever the dynamics are not invertible.
+  Hence $\pi_H$ is non-injective and $|\hist| > |X|$.
+  Every state $x = \pi_H(h)$ for at least one history,
+  so $X = \pi_H(\hist)$, but $\hist \supsetneq X$ strictly.
+  Given $H_n$ one reconstructs $s_n$, but given $s_n$
+  alone the inverse is generally not unique.
+\end{proof}
+
+\begin{distinctionaside}{The Suspiciously Healthy Lawn}
+A perfectly green lawn is a state. Fertilising, watering,
+pulling weeds, fighting insects, quiet panic — these are
+histories.
+
+The lawn is visible. The work that produced it is not.
+
+States are compressed histories.
+\end{distinctionaside}
+
+\begin{theorem}{Information Loss Theorem}{history-info-loss}
+  For any non-injective $\pi_H$: $H(\hist) > H(X)$.
+\end{theorem}
+
+\begin{proof}
+  Non-injective $\pi_H$ is a compression in the sense of
+  Chapter~\ref{ch:information}. By the Compression Theorem
+  (\cref{thm:compression}), $H(X) \le H(\hist)$, with
+  strict inequality when fibres are non-trivial.
+\end{proof}
+
+
+The Markov Assumption as Compression
+
+\label{sec:ch4-markov}
+
+\begin{theorem}{Markov Compression Theorem}
+  {markov-compression}
+  The Markov property is a projection of history space
+  onto state space. A process is Markov iff the
+  path-dependence index
+  $P_D = I(H_t; x_{t+1} \mid x_t) = 0$.
+\end{theorem}
+
+\begin{proof}
+  Full dynamics depend on histories
+  $H_t = (x_0,\ldots,x_t)$. The Markov assumption
+  replaces $H_t$ with $x_t$, which is the projection
+  $\Pi: \hist \to X$. Since many histories share the
+  same final state, $\Pi$ is many-to-one: a compression.
+  $P_D = 0$ iff $P(x_{t+1} \mid H_t, x_t)
+  = P(x_{t+1} \mid x_t)$, exactly the Markov condition.
+\end{proof}

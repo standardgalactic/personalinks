@@ -1,0 +1,450 @@
+You are analyzing one document from a large theoretical and
+computational research repository called Spherepop.
+
+Produce a dense scholarly summary.
+
+Identify:
+
+1. the central thesis;
+2. definitions and primitive concepts;
+3. mathematical claims;
+4. important equations or formal structures;
+5. mechanisms and processes;
+6. philosophical commitments;
+7. connections to computation;
+8. connections to other likely parts of Spherepop;
+9. unresolved questions;
+10. contradictions, ambiguities, or weaknesses;
+11. concepts that appear unusually important and should survive
+    later compression.
+
+Do not merely paraphrase section by section.
+
+Preserve technical distinctions. Do not invent claims absent from
+the source.
+
+SOURCE DOCUMENT
+===============
+
+# Personalinks/Spherepop Improvement Plan
+
+**Status**: Planning Complete  
+**Created**: 2026-08-13  
+**Total Tasks**: 26  
+**Estimated Effort**: 3-4 weeks (1 developer)
+
+---
+
+## 📋 Executive Summary
+
+This plan upgrades the Spherepop implementation from a research prototype to a production-ready Python package with modern tooling, comprehensive testing, and professional documentation. The work is organized into 7 phases with explicit dependencies.
+
+### Key Improvements
+- **Infrastructure**: Modern Python packaging (pyproject.toml), developer tooling
+- **Code Quality**: Type safety (mypy strict), modular refactoring, better error messages
+- **Documentation**: API docs, contributing guide, architecture documentation
+- **Testing**: 85%+ coverage, property-based tests, CI/CD with GitHub Actions
+- **Performance**: Memoization, optimized operations, performance regression tests
+- **Advanced**: Config validation, CLI interface, JSON serialization
+
+---
+
+## 🎯 Phase Overview
+
+### Phase 1: Infrastructure (3 tasks, ~2 days)
+**Goal**: Establish modern Python project structure
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `setup-pyproject` | Creating pyproject.toml | None | 🔴 Critical |
+| `setup-gitignore` | Creating comprehensive .gitignore | setup-pyproject | 🔴 Critical |
+| `setup-makefile` | Creating Makefile for common tasks | setup-pyproject | 🟡 High |
+
+**Deliverables**:
+- `pyproject.toml` with PEP 621 metadata, build system, dependencies
+- `.gitignore` covering Python, IDE, OS artifacts
+- `Makefile` with targets: install, test, test-cov, lint, format, type-check, clean
+
+**Ready to Start**: ✅ All 3 tasks have no blockers
+
+---
+
+### Phase 2: Code Quality & Type Safety (5 tasks, ~3 days)
+**Goal**: Achieve type-safe, modular, maintainable codebase
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `refactor-type-hints` | Remove unnecessary string quotes | setup-pyproject | 🟡 High |
+| `add-mypy-config` | Configure mypy strict checking | refactor-type-hints, setup-pyproject | 🟡 High |
+| `extract-predicate-module` | Extract to spherepop/predicates.py | refactor-type-hints | 🟢 Medium |
+| `extract-path-utils` | Extract to spherepop/path_utils.py | refactor-type-hints | 🟢 Medium |
+| `improve-error-messages` | Enhance with context/suggestions | extract-path-utils | 🟢 Medium |
+
+**Deliverables**:
+- Clean type hints throughout (Python 3.12+ native union syntax)
+- Mypy strict mode passing with <5 `type: ignore` comments
+- New modules: `spherepop/predicates.py`, `spherepop/path_utils.py`
+- Actionable error messages with suggestions and context
+- Unit tests: `tests/test_predicates.py`, `tests/test_path_utils.py`
+
+**Key Decisions**:
+- Extract helpers before mypy strict to reduce refactoring iterations
+- Predicates.py exports `string_test()` and `predicate()` as public API
+- Path utilities maintain current semantics, just reorganized
+
+---
+
+### Phase 3: Documentation (4 tasks, ~3 days)
+**Goal**: Professional documentation for contributors and users
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `create-contributing-guide` | CONTRIBUTING.md | None | 🟡 High |
+| `create-dev-setup-guide` | docs/DEVELOPMENT.md | None | 🟡 High |
+| `add-docstring-examples` | Add Examples to docstrings | extract-predicate-module, extract-path-utils | 🟢 Medium |
+| `generate-api-docs` | API docs with pdoc | add-docstring-examples, setup-pyproject | 🟢 Medium |
+
+**Deliverables**:
+- `CONTRIBUTING.md` covering setup, code style, testing, PR process
+- `docs/DEVELOPMENT.md` explaining architecture, philosophy, common pitfalls
+- Comprehensive docstring examples in reStructuredText format
+- `docs/generate.sh` script for generating API documentation
+- API docs excluded from git but reproducible locally
+
+**Documentation Standards**:
+- Use reStructuredText format for docstrings
+- Include `Examples:` section with `>>>` style code
+- Explain *why* not just *what* in architecture docs
+- Link to specific Appendix sections in paper
+
+---
+
+### Phase 4: Testing Infrastructure (4 tasks, ~4 days)
+**Goal**: Achieve 85%+ coverage with property-based and regression tests
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `add-pytest-config` | Configure pytest with coverage | setup-pyproject | 🔴 Critical |
+| `add-coverage-tests` | Run coverage analysis | add-pytest-config | 🟡 High |
+| `add-property-tests` | Property-based tests with Hypothesis | add-pytest-config | 🟡 High |
+| `add-regression-tests` | Extract from experiments 01-29 | add-pytest-config | 🟢 Medium |
+
+**Deliverables**:
+- Pytest config with markers (`slow`, `integration`), coverage settings
+- Coverage report identifying gaps → documented in `tests/COVERAGE.md`
+- `tests/test_properties.py` with Hypothesis strategies for Operations
+- `tests/test_regressions.py` with fast (<100ms) regression tests
+- Coverage threshold: 85% (stretch: 90%)
+
+**Property Tests** should verify:
+1. `transition()` never shortens history
+2. `history_is_prefix()` is reflexive and transitive
+3. `eval_program(cfg, [])` is identity
+4. REFUSE/BIND commute when disjoint
+5. COLLAPSE is idempotent on same classes
+6. `extensional_view()` is deterministic
+7. `admissible(op, cfg)` matches `transition()` success/failure
+
+**Regression Tests** extract from experiments:
+- 01: Grammar parsing edge cases
+- 03: POP nested resolution
+- 06: Quotient equality/hashing
+- 15: Confluence under stated policy
+- 23: Regret accumulation across continuations
+- 26: Horizon equivalence with k=2,3
+- 29: Multi-timescale continuation metrics
+
+---
+
+### Phase 5: CI/CD Pipeline (3 tasks, ~2 days)
+**Goal**: Automated testing and quality checks on every commit
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `create-github-actions-tests` | Test workflow | add-pytest-config, add-coverage-tests | 🔴 Critical |
+| `create-github-actions-lint` | Lint workflow | add-mypy-config | 🔴 Critical |
+| `add-precommit-hooks` | Pre-commit hooks | add-mypy-config | 🟡 High |
+
+**Deliverables**:
+- `.github/workflows/test.yml` - Run tests on Python 3.12, 3.13
+- `.github/workflows/lint.yml` - Run ruff, mypy
+- `.pre-commit-config.yaml` - Local developer hooks
+- Status badges in README.md (tests passing, coverage %)
+
+**GitHub Actions Configuration**:
+- Matrix: Python [3.12, 3.13] × OS [ubuntu-latest]
+- Cache pip dependencies for faster runs
+- Upload coverage to Codecov on main branch
+- Fail if coverage drops below 85%
+- Annotate PRs with linting errors
+
+**Pre-commit Hooks** (<5s total):
+- ruff check (linting)
+- ruff format --check (formatting)
+- mypy (type checking)
+- Standard hooks: trailing-whitespace, end-of-file-fixer, check-yaml
+
+---
+
+### Phase 6: Performance Optimizations (3 tasks, ~3 days)
+**Goal**: Optimize hot paths with measurable improvements
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `add-performance-tests` | Performance benchmark suite | add-pytest-config | 🟢 Medium |
+| `add-functools-cache` | Memoize expensive recursions | add-performance-tests | 🟢 Medium |
+| `optimize-option-space-ops` | Optimize REFUSE/BIND | add-performance-tests | 🟢 Medium |
+
+**Deliverables**:
+- `tests/test_performance.py` with benchmarks (pytest -m slow)
+- Memoization on `all_sphere_paths()`, `reachable()` in `horizon_equivalent()`
+- Optimized option space operations in `semantics.py`
+- Performance thresholds: <1ms for 1000-option REFUSE/BIND
+
+**Benchmark Scenarios**:
+1. POP on deeply nested Sphere (depth: 10, 20, 50)
+2. REFUSE on large option space (100, 1K, 10K options)
+3. BIND with complex predicates (contains:, in: with 100 values)
+4. COLLAPSE merging many classes (10, 50, 100 classes)
+5. `horizon_equivalent()` with k=3, 4, 5
+6. `eval_program()` with 100-operation sequence
+
+**Optimization Targets**:
+- `horizon_equivalent()`: 10x speedup via memoization (measured on exp 26)
+- REFUSE/BIND: <1ms for 1000 options, <10ms for 10K options
+- All benchmarks must pass with thresholds before merge
+
+---
+
+### Phase 7: Advanced Features (4 tasks, ~4 days)
+**Goal**: Production-ready validation, tooling, and serialization
+
+| Task ID | Title | Dependencies | Priority |
+|---------|-------|--------------|----------|
+| `add-config-validation` | Config invariant checks | extract-predicate-module, extract-path-utils | 🟢 Medium |
+| `improve-repr-display` | Better __repr__ and formatting | add-config-validation | 🔵 Low |
+| `add-cli-interface` | Interactive CLI with click | add-config-validation, improve-repr-display | 🔵 Low |
+| `add-serialization` | JSON serialization | add-config-validation | 🔵 Low |
+
+**Deliverables**:
+- `spherepop/validation.py` with `validate_config()` checking 6+ invariants
+- Enhanced `__repr__()` on all dataclasses + pretty-print in `views.py`
+- `spherepop/cli.py` with click-based commands (repl, eval, validate, visualize, compare)
+- `spherepop/serialization.py` with `to_json()` / `from_json()` roundtrip
+- `tests/test_validation.py`, `tests/test_cli.py`, `tests/test_serialization.py`
+
+**Config Validation Invariants**:
+1. Sigma is well-formed (no dangling Atoms, valid Sphere structure)
+2. Option space elements match sigma atoms
+3. History indices are consecutive starting at 0
+4. Collapse log indices reference actual CollapseEvents
+5. No duplicate Quotients with same members
+6. Label uniqueness when present
+
+**CLI Commands**:
+```bash
+spherepop repl                    # Interactive REPL
+spherepop eval program.txt        # Execute operations from file
+spherepop validate program.txt    # Parse and validate
+spherepop visualize config.json   # Generate graphviz diagram
+spherepop compare cfg1.json cfg2.json --observers all
+```
+
+---
+
+## 📊 Dependency Graph
+
+```mermaid
+graph TD
+    A[setup-pyproject] --> B[setup-gitignore]
+    A --> C[setup-makefile]
+    A --> D[refactor-type-hints]
+    A --> E[add-pytest-config]
+    
+    D --> F[add-mypy-config]
+    D --> G[extract-predicate-module]
+    D --> H[extract-path-utils]
+    
+    H --> I[improve-error-messages]
+    G --> J[add-docstring-examples]
+    H --> J
+    J --> K[generate-api-docs]
+    
+    E --> L[add-coverage-tests]
+    E --> M[add-property-tests]
+    E --> N[add-regression-tests]
+    E --> O[add-performance-tests]
+    
+    L --> P[create-github-actions-tests]
+    F --> Q[create-github-actions-lint]
+    F --> R[add-precommit-hooks]
+    
+    O --> S[add-functools-cache]
+    O --> T[optimize-option-space-ops]
+    
+    G --> U[add-config-validation]
+    H --> U
+    U --> V[improve-repr-display]
+    U --> W[add-serialization]
+    V --> X[add-cli-interface]
+    U --> X
+```
+
+---
+
+## 🚀 Execution Strategy
+
+### Week 1: Foundation (Phases 1-2)
+**Days 1-2**: Infrastructure
+- Start with `setup-pyproject` (unblocks everything)
+- Immediate benefits: proper dependency management, reproducible installs
+- Add gitignore and Makefile once pyproject.toml exists
+
+**Days 3-5**: Code Quality
+- Refactor type hints (mechanical, low-risk)
+- Extract predicates and path_utils (most impactful for Phase 4+)
+- Configure mypy strict and fix issues
+- Improve error messages last (builds on extracted modules)
+
+**Checkpoint**: Can run `make install`, `make test`, `make lint`, `make type-check`
+
+---
+
+### Week 2: Documentation & Testing (Phases 3-4)
+**Days 6-7**: Documentation
+- CONTRIBUTING.md and DEVELOPMENT.md in parallel (no dependencies)
+- Add docstring examples after code refactoring stabilizes
+- Generate API docs last
+
+**Days 8-10**: Testing Infrastructure
+- Configure pytest on Day 8 (unblocks all other tests)
+- Run coverage analysis and property tests in parallel
+- Extract regression tests (can parallelize with property tests)
+
+**Checkpoint**: 85%+ coverage, comprehensive test suite, clear contribution path
+
+---
+
+### Week 3: Automation & Performance (Phases 5-6)
+**Days 11-12**: CI/CD
+- GitHub Actions for tests and linting in parallel
+- Pre-commit hooks after local testing confirms stability
+- Add status badges to README
+
+**Days 13-15**: Performance
+- Create benchmark suite on Day 13
+- Add memoization and optimize operations in parallel
+- Verify 10x speedup on `horizon_equivalent()` before merge
+
+**Checkpoint**: Automated quality gates, measurable performance improvements
+
+---
+
+### Week 4: Advanced Features (Phase 7)
+**Days 16-17**: Validation & Display
+- Config validation (highest value in Phase 7)
+- Improve repr (builds on validation)
+
+**Days 18-19**: CLI & Serialization
+- CLI interface for interactive exploration
+- JSON serialization for persistence/interchange
+
+**Days 20-21**: Buffer & Polish
+- Address any Phase 1-6 issues discovered late
+- Update README with new capabilities
+- Write blog post or changelog summarizing improvements
+
+**Final Checkpoint**: Production-ready package, ready for external users
+
+---
+
+## 📈 Success Metrics
+
+### Quantitative
+- ✅ Test coverage ≥85% (stretch: ≥90%)
+- ✅ All mypy strict checks passing
+- ✅ CI/CD pipeline: all checks green on main
+- ✅ Performance: `horizon_equivalent()` 10x faster
+- ✅ Performance: REFUSE/BIND <1ms for 1K options
+- ✅ Zero ruff violations
+- ✅ 100% of experiments still passing
+
+### Qualitative
+- ✅ New contributors can set up dev environment in <5 minutes
+- ✅ API documentation is clear and complete
+- ✅ Error messages guide users to solutions
+- ✅ Pre-commit hooks run in <5 seconds
+- ✅ Codebase is modular and maintainable
+
+---
+
+## ⚠️ Risks & Mitigations
+
+### Risk 1: Mypy strict uncovers deep type issues
+**Impact**: Medium | **Probability**: Low  
+**Mitigation**: Refactor type hints first, then enable strict incrementally. Allow targeted `type: ignore` with explanatory comments for genuinely complex cases.
+
+### Risk 2: Performance optimizations break semantics
+**Impact**: High | **Probability**: Low  
+**Mitigation**: Add performance tests before optimizations. Run full test suite after each optimization. Memoization on immutable Configs is safe by design.
+
+### Risk 3: Refactoring breaks existing experiments
+**Impact**: Medium | **Probability**: Medium  
+**Mitigation**: Extract to new modules without changing semantics first. Run experiments 01-29 after each refactor. Add regression tests to catch breakage early.
+
+### Risk 4: CI/CD costs exceed budget
+**Impact**: Low | **Probability**: Low  
+**Mitigation**: GitHub Actions free tier is 2000 min/month for public repos. Estimated usage: ~20 min/day = 600 min/month. Cache dependencies aggressively.
+
+### Risk 5: Scope creep in Phase 7
+**Impact**: Low | **Probability**: Medium  
+**Mitigation**: Phase 7 features are all optional polish. Phases 1-5 deliver core value. Can defer Phase 7 to future milestone if timeline pressure.
+
+---
+
+## 📝 Notes
+
+### Design Principles
+1. **Preserve semantics**: All refactoring must maintain exact behavior
+2. **Test first**: Add tests before optimizations
+3. **Incremental**: Small PRs, frequent integration
+4. **Documentation**: Every public function has examples
+5. **Type safety**: Strict mypy, minimal type: ignore
+
+### Out of Scope (Future Milestones)
+- Appendix B poset integration (Plan B) - major research/implementation effort
+- Multi-label option space partitioning - requires Plan B first
+- Web-based visualization - would add significant dependencies
+- Package publishing to PyPI - wait for external user feedback first
+
+### Questions for User
+1. **Priority**: Should any phase be accelerated/deferred?
+2. **Tooling**: Any strong preferences for ruff vs black/flake8/pylint?
+3. **CI/CD**: Need private repo support or only public GitHub?
+4. **Documentation**: Want readthedocs.io hosting or local-only?
+5. **Performance**: Are there specific slow operations in practice to prioritize?
+
+---
+
+## 🎬 Next Steps
+
+### Immediate (Today)
+1. Review and approve this plan
+2. Start Phase 1: `setup-pyproject`
+3. Create feature branch: `feature/improvements-phase-1`
+
+### This Week
+1. Complete Phase 1 (Infrastructure)
+2. Complete Phase 2 (Code Quality)
+3. Begin Phase 3 (Documentation)
+
+### This Month
+1. Complete all 7 phases
+2. Publish blog post about improvements
+3. Open-source announcement (if applicable)
+
+---
+
+**Plan Status**: ✅ Ready for Execution  
+**Last Updated**: 2026-08-13  
+**Maintained By**: Development Team

@@ -1,0 +1,500 @@
+# Contributing to Spherepop
+
+Thank you for your interest in contributing to Spherepop! This document explains our development workflow, code standards, and the critical distinction between paper-licensed semantics and implementation choices.
+
+---
+
+## 🎯 Core Principle
+
+> **Don't turn an unanswered semantic question into an implementation default and then later mistake the default for Spherepop theory.**
+
+Before contributing, please read [`THEORY_STATUS.md`](./THEORY_STATUS.md) to understand what's explicitly stated in the paper versus what's an implementation choice or genuinely open question.
+
+---
+
+## 📋 Quick Start
+
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/standardgalactic/personalinks.git
+cd personalinks
+
+# Install in development mode with dev dependencies
+make install-dev
+
+# Verify setup
+make test
+```
+
+You should see all tests passing. If not, please open an issue.
+
+### 2. Development Workflow
+
+```bash
+# Before making changes
+git checkout -b feature/your-feature-name
+
+# Install pre-commit hooks (one-time setup)
+pre-commit install
+
+# Make your changes, then:
+make format        # Format code with ruff
+make lint          # Check linting
+make type-check    # Verify types with mypy
+make test          # Run all tests
+
+# Generate API docs to verify docstrings render correctly
+./docs/generate.sh
+
+# When everything passes:
+git add .
+git commit -m "feat: Your descriptive commit message"
+
+# Push and open a PR
+git push origin feature/your-feature-name
+```
+
+---
+
+## 📚 Project Structure
+
+```
+spherepop/
+├── model.py           # Core types (Config, Operation, Event, Quotient)
+├── semantics.py       # The four primitives (POP, REFUSE, BIND, COLLAPSE)
+├── observers.py       # Read-only analysis (confluence, regret, etc.)
+├── views.py           # Derived read-only views
+├── predicates.py      # BIND predicate logic
+├── path_utils.py      # Path navigation for Sphere trees
+├── poset.py           # Plan B: poset semantics (isolated, not integrated)
+├── parser.py          # Convenience syntax ("POP 1", "REFUSE a2")
+├── grammar.py         # Appendix G literal syntax (labeled spheres)
+└── [01-29]-*/         # Staged experiments
+
+tests/
+├── test_spherepop.py  # Core semantics tests
+├── test_observers.py  # Observer correctness
+├── test_predicates.py # Predicate logic tests
+├── test_path_utils.py # Path resolution tests
+├── test_grammar.py    # Appendix G grammar tests
+└── test_poset.py      # Plan B poset tests
+```
+
+### Key Distinctions
+
+- **Operations** (`model.py`) vs **Events** (`model.py`): Operations are requests; Events are committed history
+- **Operations make history** (`semantics.py`) vs **Experiments interrogate history** (`observers.py`)
+- **Primitives** (POP, REFUSE, BIND, COLLAPSE) are the closed four-operator algebra
+- **Observers** (confluent, divergent, regretful, etc.) are properties discovered about histories, NOT a fifth operation
+
+---
+
+## 🧪 Code Standards
+
+### Python Version
+
+- **Minimum**: Python 3.12
+- Use modern syntax: `str | None` (not `Optional[str]`)
+- `from __future__ import annotations` at top of files
+
+### Type Hints
+
+- **All public functions must have type hints**
+- Use `mypy --strict` mode (already configured in `pyproject.toml`)
+- Avoid `Any` unless genuinely necessary (document why)
+
+```python
+# Good
+def admissible(op: Operation, config: Config) -> bool:
+    """Check if operation is admissible without committing it."""
+    ...
+
+# Bad (no return type)
+def admissible(op: Operation, config: Config):
+    ...
+```
+
+### Docstrings
+
+Use **reStructuredText** format with:
+- One-line summary
+- Extended description
+- Parameters section
+- Returns section
+- Examples section (when helpful)
+- Theory Status (if semantics are provisional)
+
+```python
+def predicate(spec: str) -> Callable[[str | Quotient], bool]:
+    """Build a predicate function that handles both strings and Quotients.
+
+    This generalizes :func:`string_test` to work with option-space elements
+    that may be plain strings or Quotient equivalence classes.
+
+    **Theory Status**: This is **PROVISIONAL** semantics. The paper
+    (Appendix E) does not specify how predicates should lift to quotient
+    classes. See THEORY_STATUS.md Q3.
+
+    Parameters
+    ----------
+    spec : str
+        Predicate specification using the DSL syntax.
+
+    Returns
+    -------
+    Callable[[str | Quotient], bool]
+        A function that tests option-space elements.
+
+    Examples
+    --------
+    >>> pred = predicate("prefix:user")
+    >>> pred("user_id")
+    True
+    >>> pred("admin")
+    False
+
+    See Also
+    --------
+    string_test : The plain-string version
+    THEORY_STATUS.md : Full discussion of BIND semantics
+    """
+```
+
+### Code Style
+
+We use **Ruff** for formatting and linting:
+
+```bash
+make format      # Auto-format all code
+make lint        # Check for violations
+```
+
+**Key conventions**:
+- Line length: 100 characters (enforced by ruff)
+- Use dataclasses for immutable structures
+- Prefer functional style: pure functions that don't mutate
+- Comment only what needs clarification (not obvious code)
+
+### Testing Requirements
+
+**All contributions must include tests.**
+
+1. **Unit tests** for new functions
+2. **Integration tests** for new operations or observers
+3. **Edge case tests** (empty inputs, boundary conditions)
+4. Mark **experimental tests** appropriately (see below)
+
+```python
+import unittest
+from spherepop.predicates import predicate
+
+class TestPredicate(unittest.TestCase):
+    def test_prefix_on_plain_string(self) -> None:
+        """Prefix predicate matches strings starting with prefix."""
+        pred = predicate("prefix:user")
+        self.assertTrue(pred("user_id"))
+        self.assertFalse(pred("admin"))
+```
+
+#### Experimental Tests
+
+If you're testing **provisional semantics** (see `THEORY_STATUS.md`), mark the test:
+
+```python
+import pytest
+
+@pytest.mark.experimental
+def test_bind_existential_on_quotient():
+    """BIND existential semantics (PROVISIONAL - see THEORY_STATUS.md Q3)."""
+    pred = predicate("prefix:user")
+    q = Quotient(frozenset({"user_id", "admin"}))
+    # Current implementation: existential (any member matches)
+    assert pred(q) == True
+```
+
+This allows us to:
+- Track which behaviors are paper-licensed vs implementation choices
+- Update tests when theory clarifies open questions
+- Prevent accidental hardening of provisional choices
+
+### Test Coverage
+
+Run coverage analysis:
+
+```bash
+make test-cov
+```
+
+Open `htmlcov/index.html` to see coverage report.
+
+**Target**: ≥85% coverage for core modules (model, semantics, observers).
+
+---
+
+## 🏗️ Adding New Features
+
+### 1. Operations (Core Primitives)
+
+**⚠️ WARNING**: The four primitives (POP, REFUSE, BIND, COLLAPSE) form a **closed algebra**. Adding a fifth operation would be a fundamental theoretical change.
+
+If you believe a new operation is needed:
+1. Open an issue for discussion first
+2. Provide theoretical justification (paper reference or proof sketch)
+3. Explain why it can't be derived from existing primitives
+
+### 2. Observers (Analysis Functions)
+
+Observers are read-only functions that answer questions about histories. They:
+- **Never** append to `Config.history`
+- **Never** return a `Config` for the caller to adopt as continuation
+- Return plain values (bool, int, tuple, etc.)
+
+```python
+# Good: Observer pattern
+def my_observer(config: Config) -> bool:
+    """Check some property of the configuration."""
+    # Analyze config.history, config.sigma, config.option_space
+    return result
+
+# Bad: Modifies history (this would be an operation, not observer)
+def bad_observer(config: Config) -> Config:
+    return replace(config, history=config.history + (new_event,))
+```
+
+Add new observers to `spherepop/observers.py` with:
+- Clear docstring explaining what property is being checked
+- Tests in `tests/test_observers.py`
+- Non-mutation verification test
+
+### 3. Experiments
+
+Experiments are numbered and follow a convention:
+
+```bash
+spherepop/30-your-experiment-name/
+├── run.py           # Main experiment script
+├── README.md        # What this experiment investigates
+└── expected.txt     # Expected output (optional)
+```
+
+Experiment naming:
+- Use next available number (30, 31, etc.)
+- Use kebab-case for descriptive name
+- Examples: `30-collapse-transitivity`, `31-bind-universal-semantics`
+
+### 4. Plan B Integration
+
+Plan B (poset semantics from Appendix B) is currently **isolated** in `spherepop/poset.py`.
+
+Before integrating:
+1. Read `THEORY_STATUS.md` Q1a-c carefully
+2. Create experiments to investigate convergence (Q1c)
+3. Discuss integration strategy in an issue
+4. Integration is a major refactor — not a casual PR
+
+---
+
+## 🔍 Theory and Semantics
+
+### Provisional vs Paper-Licensed
+
+Read [`THEORY_STATUS.md`](./THEORY_STATUS.md) before contributing semantic changes.
+
+**Status categories**:
+- ✓ **Paper-Licensed**: Explicitly stated in the paper (implement as specified)
+- → **Implementation Choice**: A chosen realization (document alternatives)
+- ? **Open**: Underdetermined by theory (mark as experimental)
+- ⊗ **Contrary**: Would violate stated theory (don't implement)
+
+### When Theory is Silent
+
+If you encounter a semantic question the paper doesn't address:
+
+1. **Document it as open** in code comments
+2. Reference `THEORY_STATUS.md` or add a new entry
+3. Implement a **reasonable default** with clear documentation
+4. Mark tests as `@pytest.mark.experimental`
+5. Consider creating an experiment to explore alternatives
+
+**Example** (from BIND predicate):
+
+```python
+def predicate(spec: str) -> Callable[[str | Quotient], bool]:
+    """
+    **Theory Status**: PROVISIONAL - see THEORY_STATUS.md Q3.
+    
+    Appendix E does not specify how predicates lift to quotients.
+    Current: existential (admit if ANY member matches).
+    Alternatives: universal (ALL members), well-defined on classes.
+    """
+    # Implementation with explicit choice documented
+```
+
+---
+
+## 📝 Commit Messages
+
+We follow **Conventional Commits**:
+
+```
+type(scope): Short description
+
+Longer explanation if needed.
+
+- Bullet points for details
+- Reference issues: Fixes #123
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+```
+
+**Types**:
+- `feat`: New feature
+- `fix`: Bug fix
+- `refactor`: Code restructuring without behavior change
+- `docs`: Documentation only
+- `test`: Adding or updating tests
+- `chore`: Maintenance (dependencies, tooling)
+
+**Examples**:
+
+```
+feat(observers): Add irreducibly_divergent observer
+
+Checks divergence under a family of COLLAPSE policies.
+See THEORY_STATUS.md Q2b for composition semantics.
+
+- Add irreducibly_divergent() to observers.py
+- Add tests in test_observers.py
+- Mark as experimental pending collapse composition resolution
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+```
+
+```
+refactor(predicates): Extract predicate logic to separate module
+
+Moves _string_test and _predicate from semantics.py to predicates.py
+for better modularity. No behavior change.
+
+All 72 tests passing (57 original + 15 new predicates tests).
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+```
+
+---
+
+## 🧭 Pull Request Process
+
+1. **Open an issue first** for significant changes
+2. Keep PRs focused (one feature/fix per PR)
+3. Ensure all checks pass:
+   ```bash
+   make lint
+   make type-check
+   make test
+   ```
+4. Update documentation if you're adding public API
+5. Add tests for new functionality
+6. Reference the issue in your PR description
+
+### PR Checklist
+
+- [ ] Tests added and passing
+- [ ] Documentation updated (docstrings, README if needed)
+- [ ] Type hints complete and mypy passes
+- [ ] Code formatted with ruff
+- [ ] Theory status documented if semantics are provisional
+- [ ] Experimental markers added if appropriate
+- [ ] Commit message follows conventional commits
+
+---
+
+## 🎓 Learning Resources
+
+### Understanding the Codebase
+
+1. **Start here**: Read `README.md` for project overview
+2. **Theory foundation**: Read `THEORY_STATUS.md` for semantics status
+3. **Architecture**: Read `docs/DEVELOPMENT.md` (you're here!)
+4. **Run experiments**: Try `PYTHONPATH=. python3 spherepop/03-pop/run.py`
+5. **Read tests**: Tests are documentation — see `tests/test_spherepop.py`
+
+### Key Papers/Appendices
+
+The implementation references:
+- **Appendix A**: Identity and configurations
+- **Appendix B**: Poset structure (Plan B, not yet integrated)
+- **Appendix C**: COLLAPSE and quotients
+- **Appendix D**: View functors
+- **Appendix E**: REFUSE and BIND
+- **Appendix F**: Horizon equivalence ≈_k
+- **Appendix G**: Labeled sphere grammar
+
+These are assumed to be in "The History of Spherepop" paper.
+
+---
+
+## 🐛 Reporting Issues
+
+### Bug Reports
+
+Include:
+- Python version: `python3 --version`
+- Spherepop version/commit hash
+- Minimal reproduction code
+- Expected vs actual behavior
+- Full error traceback
+
+### Theory Questions
+
+If you find a discrepancy between code and paper:
+
+1. Check `THEORY_STATUS.md` first
+2. If not addressed there, open an issue with:
+   - Specific code location
+   - Paper reference (Appendix, section, equation)
+   - Your interpretation vs current implementation
+   - Suggested resolution
+
+---
+
+## 💬 Communication
+
+- **GitHub Issues**: Bug reports, feature requests, theory questions
+- **Pull Requests**: Code contributions with discussion
+- **Code Comments**: Inline explanations and theory status markers
+
+---
+
+## ❓ Common Questions
+
+**Q: Can I add a new operation (fifth primitive)?**  
+A: Only with strong theoretical justification. The four-operator algebra is intentional. Open an issue first.
+
+**Q: What if the paper doesn't specify something?**  
+A: Document it as provisional, implement a reasonable default, mark tests as experimental. See `THEORY_STATUS.md`.
+
+**Q: When should I use `@pytest.mark.experimental`?**  
+A: When testing provisional semantics (see THEORY_STATUS.md "? Open" items) or implementation choices with known alternatives.
+
+**Q: How do I run just one test?**  
+A: `python3 -m unittest tests.test_predicates.TestPredicate.test_prefix_on_plain_string`
+
+**Q: Can I refactor existing code?**  
+A: Yes! But preserve exact semantics unless fixing a bug. Add tests to verify behavior matches before/after.
+
+**Q: Where do experiments go?**  
+A: `spherepop/NN-descriptive-name/run.py` with next available number NN.
+
+---
+
+## 🙏 Thank You
+
+Your contributions help advance both the implementation and our understanding of the theoretical model. Every clarification of provisional semantics, every test that distinguishes paper-licensed from implementation choice, and every experiment that investigates open questions moves the project forward.
+
+---
+
+**Maintained by**: Spherepop contributors  
+**Last updated**: 2026-08-13  
+**See also**: [`THEORY_STATUS.md`](./THEORY_STATUS.md), [`docs/DEVELOPMENT.md`](./docs/DEVELOPMENT.md), [`README.md`](./README.md)

@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.6">
+<title>spherepop.path_utils API documentation</title>
+<meta name="description" content="Path resolution and navigation utilities for Sphere expressions …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
+})</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>spherepop.path_utils</code></h1>
+</header>
+<section id="section-intro">
+<p>Path resolution and navigation utilities for Sphere expressions.</p>
+<p>This module provides functions for navigating and querying the tree structure
+of Sphere expressions using integer-indexed paths. Paths are represented as
+tuples of integers, where each integer is an index into a Sphere's items.</p>
+<h2 id="path-conventions">Path Conventions</h2>
+<ul>
+<li>The root Sphere is represented by the empty path <code>()</code></li>
+<li>A path <code>(0,)</code> refers to the first item of the root Sphere</li>
+<li>A path <code>(1, 2)</code> refers to the third item (index 2) of the second item
+(index 1) of the root Sphere</li>
+<li>The root Sphere itself cannot be POPped (only nested Spheres can be resolved)</li>
+</ul>
+<h2 id="label-resolution">Label Resolution</h2>
+<p>Spheres may carry optional labels (Appendix G). Label-based POP operations
+resolve a label to a concrete path. Labels must be unique among non-root
+Spheres to be unambiguous.</p>
+<h2 id="examples">Examples</h2>
+<pre><code>&gt;&gt;&gt; from spherepop.model import Sphere, Atom
+&gt;&gt;&gt; from spherepop.path_utils import path_exists, all_sphere_paths, expr_at
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Build a nested structure
+&gt;&gt;&gt; inner = Sphere((Atom("a"), Atom("b")))
+&gt;&gt;&gt; outer = Sphere((Atom("x"), inner, Atom("y")))
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Check path existence
+&gt;&gt;&gt; path_exists(outer, ())  # Root always exists
+True
+&gt;&gt;&gt; path_exists(outer, (1,))  # Second item (inner sphere)
+True
+&gt;&gt;&gt; path_exists(outer, (5,))  # Out of range
+False
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Find all Sphere paths
+&gt;&gt;&gt; paths = all_sphere_paths(outer)
+&gt;&gt;&gt; sorted(paths)
+[(), (1,)]
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Navigate to an expression
+&gt;&gt;&gt; expr = expr_at(outer, (1,))
+&gt;&gt;&gt; expr == inner
+True
+</code></pre>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><code><a title="spherepop.semantics.transition" href="semantics.html#spherepop.semantics.transition">transition()</a></code> : Uses these utilities for POP operations</li>
+<li><code><a title="spherepop.model.Sphere" href="model.html#spherepop.model.Sphere">Sphere</a></code> : The tree structure being navigated</li>
+</ul>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="spherepop.path_utils.all_sphere_paths"><code class="name flex">
+<span>def <span class="ident">all_sphere_paths</span></span>(<span>expr: Expr, prefix: Tuple[int, ...] = ()) ‑> list[typing.Tuple[int, ...]]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def all_sphere_paths(expr: Expr, prefix: Tuple[int, ...] = ()) -&gt; list[Tuple[int, ...]]:
+    &#34;&#34;&#34;Find all paths that lead to Sphere nodes in an expression tree.
+
+    This recursively traverses the expression tree and returns paths to
+    every Sphere encountered, including the root (represented by the prefix).
+    Atom nodes are not included in the results.
+
+    Parameters
+    ----------
+    expr : Expr
+        The root expression to search.
+    prefix : Tuple[int, ...], optional
+        Internal parameter for recursion (the path to this expr from root).
+
+    Returns
+    -------
+    list[Tuple[int, ...]]
+        Paths to all Sphere nodes. The empty path ``()`` represents the root
+        if it&#39;s a Sphere. Order is depth-first: parent before children.
+
+    Examples
+    --------
+    &gt;&gt;&gt; from spherepop.model import Sphere, Atom
+    &gt;&gt;&gt; inner = Sphere((Atom(&#34;a&#34;),))
+    &gt;&gt;&gt; outer = Sphere((inner, Atom(&#34;b&#34;)))
+    &gt;&gt;&gt; paths = all_sphere_paths(outer)
+    &gt;&gt;&gt; sorted(paths)
+    [(), (0,)]
+    &#34;&#34;&#34;
+    out: list[Tuple[int, ...]] = []
+    if isinstance(expr, Sphere):
+        out.append(prefix)
+        for idx, child in enumerate(expr.items):
+            out.extend(all_sphere_paths(child, prefix + (idx,)))
+    return out</code></pre>
+</details>
+<div class="desc"><p>Find all paths that lead to Sphere nodes in an expression tree.</p>
+<p>This recursively traverses the expression tree and returns paths to
+every Sphere encountered, including the root (represented by the prefix).
+Atom nodes are not included in the results.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Expr</code></dt>
+<dd>The root expression to search.</dd>
+<dt><strong><code>prefix</code></strong> :&ensp;<code>Tuple[int, &hellip;]</code>, optional</dt>
+<dd>Internal parameter for recursion (the path to this expr from root).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list[Tuple[int, &hellip;]]</code></dt>
+<dd>Paths to all Sphere nodes. The empty path <code>()</code> represents the root
+if it's a Sphere. Order is depth-first: parent before children.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Sphere, Atom
+&gt;&gt;&gt; inner = Sphere((Atom(&quot;a&quot;),))
+&gt;&gt;&gt; outer = Sphere((inner, Atom(&quot;b&quot;)))
+&gt;&gt;&gt; paths = all_sphere_paths(outer)
+&gt;&gt;&gt; sorted(paths)
+[(), (0,)]
+</code></pre></div>
+</dd>
+<dt id="spherepop.path_utils.deepest_non_root_sphere"><code class="name flex">
+<span>def <span class="ident">deepest_non_root_sphere</span></span>(<span>expr: Sphere) ‑> Tuple[int, ...]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deepest_non_root_sphere(expr: Sphere) -&gt; Tuple[int, ...]:
+    &#34;&#34;&#34;Find the deepest nested non-root Sphere in an expression.
+
+    This is used as a default when a POP operation doesn&#39;t specify a path
+    or label: it resolves the most deeply nested Sphere. If multiple Spheres
+    are tied for deepest, the lexicographically smallest path is chosen.
+
+    Parameters
+    ----------
+    expr : Sphere
+        The root Sphere to search.
+
+    Returns
+    -------
+    Tuple[int, ...]
+        Path to the deepest non-root Sphere.
+
+    Raises
+    ------
+    PathError
+        If there are no nested Spheres (only the root exists).
+
+    Examples
+    --------
+    &gt;&gt;&gt; from spherepop.model import Sphere, Atom
+    &gt;&gt;&gt; inner1 = Sphere((Atom(&#34;a&#34;),))
+    &gt;&gt;&gt; inner2 = Sphere((Atom(&#34;b&#34;),))
+    &gt;&gt;&gt; outer = Sphere((inner1, inner2))
+    &gt;&gt;&gt; deepest_non_root_sphere(outer)  # Both at depth 1, choose first
+    (0,)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; deeper = Sphere((Atom(&#34;x&#34;),))
+    &gt;&gt;&gt; middle = Sphere((deeper,))
+    &gt;&gt;&gt; root = Sphere((middle,))
+    &gt;&gt;&gt; deepest_non_root_sphere(root)  # Deepest is at depth 2
+    (0, 0)
+
+    Notes
+    -----
+    The root Sphere itself (path ``()``) is never returned, even if it&#39;s
+    the only Sphere. This matches the semantics that the root cannot be
+    POPped.
+    &#34;&#34;&#34;
+    paths = [p for p in all_sphere_paths(expr) if p]  # Exclude root (empty path)
+    if not paths:
+        raise PathError(&#34;POP requires at least one nested Sphere to resolve&#34;)
+    # Sort by depth (length) descending, then lexicographically ascending
+    paths.sort(key=lambda p: (-len(p), p))
+    return paths[0]</code></pre>
+</details>
+<div class="desc"><p>Find the deepest nested non-root Sphere in an expression.</p>
+<p>This is used as a default when a POP operation doesn't specify a path
+or label: it resolves the most deeply nested Sphere. If multiple Spheres
+are tied for deepest, the lexicographically smallest path is chosen.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Sphere</code></dt>
+<dd>The root Sphere to search.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Tuple[int, &hellip;]</code></dt>
+<dd>Path to the deepest non-root Sphere.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="spherepop.path_utils.PathError" href="#spherepop.path_utils.PathError">PathError</a></code></dt>
+<dd>If there are no nested Spheres (only the root exists).</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Sphere, Atom
+&gt;&gt;&gt; inner1 = Sphere((Atom(&quot;a&quot;),))
+&gt;&gt;&gt; inner2 = Sphere((Atom(&quot;b&quot;),))
+&gt;&gt;&gt; outer = Sphere((inner1, inner2))
+&gt;&gt;&gt; deepest_non_root_sphere(outer)  # Both at depth 1, choose first
+(0,)
+&gt;&gt;&gt;
+&gt;&gt;&gt; deeper = Sphere((Atom(&quot;x&quot;),))
+&gt;&gt;&gt; middle = Sphere((deeper,))
+&gt;&gt;&gt; root = Sphere((middle,))
+&gt;&gt;&gt; deepest_non_root_sphere(root)  # Deepest is at depth 2
+(0, 0)
+</code></pre>
+<h2 id="notes">Notes</h2>
+<p>The root Sphere itself (path <code>()</code>) is never returned, even if it's
+the only Sphere. This matches the semantics that the root cannot be
+POPped.</p></div>
+</dd>
+<dt id="spherepop.path_utils.expr_at"><code class="name flex">
+<span>def <span class="ident">expr_at</span></span>(<span>expr: Expr, path: Tuple[int, ...]) ‑> <a title="spherepop.model.Atom" href="model.html#spherepop.model.Atom">Atom</a> | <a title="spherepop.model.Sphere" href="model.html#spherepop.model.Sphere">Sphere</a></span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def expr_at(expr: Expr, path: Tuple[int, ...]) -&gt; Expr:
+    &#34;&#34;&#34;Navigate to the expression at a given path.
+
+    This traverses the tree following the path indices and returns the
+    expression at that location. The path must be valid (use :func:`path_exists`
+    to check first, or catch the assertion failure).
+
+    Parameters
+    ----------
+    expr : Expr
+        The root expression to start from.
+    path : Tuple[int, ...]
+        The path to navigate (empty tuple returns the root itself).
+
+    Returns
+    -------
+    Expr
+        The expression (Atom or Sphere) at the path.
+
+    Raises
+    ------
+    AssertionError
+        If the path is invalid (traverses through an Atom or uses out-of-range index).
+
+    Examples
+    --------
+    &gt;&gt;&gt; from spherepop.model import Sphere, Atom
+    &gt;&gt;&gt; s = Sphere((Atom(&#34;a&#34;), Atom(&#34;b&#34;)))
+    &gt;&gt;&gt; expr_at(s, ())  # Root
+    Sphere(items=(Atom(name=&#39;a&#39;), Atom(name=&#39;b&#39;)), label=None)
+    &gt;&gt;&gt; expr_at(s, (1,))  # Second item
+    Atom(name=&#39;b&#39;)
+
+    Notes
+    -----
+    This function uses assertions for path validation (assumes the caller
+    has already verified the path is valid). For user-facing code, prefer
+    checking with :func:`path_exists` first or using operations that raise
+    :class:`PathError` explicitly.
+    &#34;&#34;&#34;
+    cursor = expr
+    for idx in path:
+        assert isinstance(cursor, Sphere), f&#34;Cannot traverse through non-Sphere at {path}&#34;
+        assert 0 &lt;= idx &lt; len(cursor.items), f&#34;Index {idx} out of range at {path}&#34;
+        cursor = cursor.items[idx]
+    return cursor</code></pre>
+</details>
+<div class="desc"><p>Navigate to the expression at a given path.</p>
+<p>This traverses the tree following the path indices and returns the
+expression at that location. The path must be valid (use :func:<code><a title="spherepop.path_utils.path_exists" href="#spherepop.path_utils.path_exists">path_exists()</a></code>
+to check first, or catch the assertion failure).</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Expr</code></dt>
+<dd>The root expression to start from.</dd>
+<dt><strong><code>path</code></strong> :&ensp;<code>Tuple[int, &hellip;]</code></dt>
+<dd>The path to navigate (empty tuple returns the root itself).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Expr</code></dt>
+<dd>The expression (Atom or Sphere) at the path.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>AssertionError</code></dt>
+<dd>If the path is invalid (traverses through an Atom or uses out-of-range index).</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Sphere, Atom
+&gt;&gt;&gt; s = Sphere((Atom(&quot;a&quot;), Atom(&quot;b&quot;)))
+&gt;&gt;&gt; expr_at(s, ())  # Root
+Sphere(items=(Atom(name='a'), Atom(name='b')), label=None)
+&gt;&gt;&gt; expr_at(s, (1,))  # Second item
+Atom(name='b')
+</code></pre>
+<h2 id="notes">Notes</h2>
+<p>This function uses assertions for path validation (assumes the caller
+has already verified the path is valid). For user-facing code, prefer
+checking with :func:<code><a title="spherepop.path_utils.path_exists" href="#spherepop.path_utils.path_exists">path_exists()</a></code> first or using operations that raise
+:class:<code><a title="spherepop.path_utils.PathError" href="#spherepop.path_utils.PathError">PathError</a></code> explicitly.</p></div>
+</dd>
+<dt id="spherepop.path_utils.find_label_path"><code class="name flex">
+<span>def <span class="ident">find_label_path</span></span>(<span>expr: Sphere, label: str) ‑> Tuple[int, ...]</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_label_path(expr: Sphere, label: str) -&gt; Tuple[int, ...]:
+    &#34;&#34;&#34;Resolve a label to the path of the Sphere carrying that label.
+
+    This implements Appendix G&#39;s label-based POP resolution: ``pop(Label)``
+    finds the Sphere with the given label and returns its path. The root
+    Sphere is excluded from the search (it cannot be POPped, so a label on
+    the root is not a valid POP target).
+
+    **Theory Status**: Global label uniqueness is an **implementation choice**
+    for concrete-syntax convenience, not a theoretical requirement. See
+    THEORY_STATUS.md Q8. Appendix G does not mandate unique labels; scoped
+    labels (e.g., ``root.left.x`` vs ``root.right.x``) would be plausible.
+
+    Parameters
+    ----------
+    expr : Sphere
+        The root Sphere to search.
+    label : str
+        The label to find.
+
+    Returns
+    -------
+    Tuple[int, ...]
+        Path to the Sphere carrying the label.
+
+    Raises
+    ------
+    PathError
+        If no Sphere has the label, or if multiple Spheres have it (ambiguous).
+
+    Examples
+    --------
+    &gt;&gt;&gt; from spherepop.model import Sphere, Atom
+    &gt;&gt;&gt; inner = Sphere((Atom(&#34;a&#34;),), label=&#34;inner&#34;)
+    &gt;&gt;&gt; outer = Sphere((inner, Atom(&#34;b&#34;)), label=&#34;outer&#34;)
+    &gt;&gt;&gt; find_label_path(outer, &#34;inner&#34;)
+    (0,)
+
+    Notes
+    -----
+    A label on the root Sphere is ignored (will raise PathError even if
+    it matches) because the root cannot be POPped.
+    &#34;&#34;&#34;
+    # Find all non-root Spheres with the given label
+    matches = [
+        p
+        for p in all_sphere_paths(expr)
+        if p  # Exclude root
+        and isinstance(expr_at(expr, p), Sphere)
+        and expr_at(expr, p).label == label  # type: ignore[union-attr]
+    ]
+    if not matches:
+        raise PathError(f&#34;no Sphere labeled {label!r} found&#34;)
+    if len(matches) &gt; 1:
+        raise PathError(f&#34;label {label!r} is ambiguous: {len(matches)} spheres carry it&#34;)
+    return matches[0]</code></pre>
+</details>
+<div class="desc"><p>Resolve a label to the path of the Sphere carrying that label.</p>
+<p>This implements Appendix G's label-based POP resolution: <code>pop(Label)</code>
+finds the Sphere with the given label and returns its path. The root
+Sphere is excluded from the search (it cannot be POPped, so a label on
+the root is not a valid POP target).</p>
+<p><strong>Theory Status</strong>: Global label uniqueness is an <strong>implementation choice</strong>
+for concrete-syntax convenience, not a theoretical requirement. See
+THEORY_STATUS.md Q8. Appendix G does not mandate unique labels; scoped
+labels (e.g., <code>root.left.x</code> vs <code>root.right.x</code>) would be plausible.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Sphere</code></dt>
+<dd>The root Sphere to search.</dd>
+<dt><strong><code>label</code></strong> :&ensp;<code>str</code></dt>
+<dd>The label to find.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Tuple[int, &hellip;]</code></dt>
+<dd>Path to the Sphere carrying the label.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="spherepop.path_utils.PathError" href="#spherepop.path_utils.PathError">PathError</a></code></dt>
+<dd>If no Sphere has the label, or if multiple Spheres have it (ambiguous).</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Sphere, Atom
+&gt;&gt;&gt; inner = Sphere((Atom(&quot;a&quot;),), label=&quot;inner&quot;)
+&gt;&gt;&gt; outer = Sphere((inner, Atom(&quot;b&quot;)), label=&quot;outer&quot;)
+&gt;&gt;&gt; find_label_path(outer, &quot;inner&quot;)
+(0,)
+</code></pre>
+<h2 id="notes">Notes</h2>
+<p>A label on the root Sphere is ignored (will raise PathError even if
+it matches) because the root cannot be POPped.</p></div>
+</dd>
+<dt id="spherepop.path_utils.path_exists"><code class="name flex">
+<span>def <span class="ident">path_exists</span></span>(<span>expr: Expr, path: Tuple[int, ...]) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def path_exists(expr: Expr, path: Tuple[int, ...]) -&gt; bool:
+    &#34;&#34;&#34;Check whether a path is valid for a given expression.
+
+    A path is valid if:
+    1. Each step traverses through a Sphere (not an Atom)
+    2. Each index is within the bounds of the Sphere&#39;s items
+
+    Parameters
+    ----------
+    expr : Expr
+        The root expression to check against.
+    path : Tuple[int, ...]
+        The path to validate (empty tuple for root).
+
+    Returns
+    -------
+    bool
+        True if the path can be traversed, False otherwise.
+
+    Examples
+    --------
+    &gt;&gt;&gt; from spherepop.model import Sphere, Atom
+    &gt;&gt;&gt; s = Sphere((Atom(&#34;a&#34;), Atom(&#34;b&#34;)))
+    &gt;&gt;&gt; path_exists(s, ())
+    True
+    &gt;&gt;&gt; path_exists(s, (0,))
+    True
+    &gt;&gt;&gt; path_exists(s, (2,))  # Out of range
+    False
+    &gt;&gt;&gt; path_exists(s, (0, 0))  # Can&#39;t traverse through Atom
+    False
+    &#34;&#34;&#34;
+    cursor = expr
+    for idx in path:
+        if not isinstance(cursor, Sphere):
+            return False
+        if idx &lt; 0 or idx &gt;= len(cursor.items):
+            return False
+        cursor = cursor.items[idx]
+    return True</code></pre>
+</details>
+<div class="desc"><p>Check whether a path is valid for a given expression.</p>
+<p>A path is valid if:
+1. Each step traverses through a Sphere (not an Atom)
+2. Each index is within the bounds of the Sphere's items</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>expr</code></strong> :&ensp;<code>Expr</code></dt>
+<dd>The root expression to check against.</dd>
+<dt><strong><code>path</code></strong> :&ensp;<code>Tuple[int, &hellip;]</code></dt>
+<dd>The path to validate (empty tuple for root).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the path can be traversed, False otherwise.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; from spherepop.model import Sphere, Atom
+&gt;&gt;&gt; s = Sphere((Atom(&quot;a&quot;), Atom(&quot;b&quot;)))
+&gt;&gt;&gt; path_exists(s, ())
+True
+&gt;&gt;&gt; path_exists(s, (0,))
+True
+&gt;&gt;&gt; path_exists(s, (2,))  # Out of range
+False
+&gt;&gt;&gt; path_exists(s, (0, 0))  # Can't traverse through Atom
+False
+</code></pre></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="spherepop.path_utils.PathError"><code class="flex name class">
+<span>class <span class="ident">PathError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PathError(ValueError):
+    &#34;&#34;&#34;Raised when a path operation fails (invalid path, label ambiguity, etc).&#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<div class="desc"><p>Raised when a path operation fails (invalid path, label ambiguity, etc).</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.ValueError</li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<div class="toc">
+<ul>
+<li><a href="#path-conventions">Path Conventions</a></li>
+<li><a href="#label-resolution">Label Resolution</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#see-also">See Also</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="spherepop.path_utils.all_sphere_paths" href="#spherepop.path_utils.all_sphere_paths">all_sphere_paths</a></code></li>
+<li><code><a title="spherepop.path_utils.deepest_non_root_sphere" href="#spherepop.path_utils.deepest_non_root_sphere">deepest_non_root_sphere</a></code></li>
+<li><code><a title="spherepop.path_utils.expr_at" href="#spherepop.path_utils.expr_at">expr_at</a></code></li>
+<li><code><a title="spherepop.path_utils.find_label_path" href="#spherepop.path_utils.find_label_path">find_label_path</a></code></li>
+<li><code><a title="spherepop.path_utils.path_exists" href="#spherepop.path_utils.path_exists">path_exists</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="spherepop.path_utils.PathError" href="#spherepop.path_utils.PathError">PathError</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
+</footer>
+</body>
+</html>
