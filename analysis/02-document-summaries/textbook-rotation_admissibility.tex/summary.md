@@ -1,151 +1,168 @@
-Below is a detailed explanation of the key ideas presented in the essay, or[2D[K
-organized by its major sections:
+**Scholarly Synthesis of *textbook‑rotation_admissibility.tex***
 
 ---
 
-### 1. Operational Witnesses and Factorization
+### 1. Thesis  
 
-**Concept Overview**
-
-- **Operational witnesses** are measurable quantities (e.g., transition pro[3D[K
-probabilities, expectation values) that remain unchanged under certain tran[4D[K
-transformations.
-- In quantum mechanics these witnesses are functions of the gauge orbit—i.e[9D[K
-orbit—i.e., they reflect properties invariant under symmetry operations.
-
-**Key Point**
-
-- The identity  
-  \[
-  S(|\psi\rangle)T T(A)S(|\psi\rangle)=\langle\psi|A|\psi\rangle
-  \]
-  (often referred to as the expectation-value identity) guarantees that ope[3D[K
-operational witnesses preserve their value across representations. This ens[3D[K
-ensures that what is physically real—i.e., invariant under the quotient—is [K
-captured by these measures.
-
-**Implication**
-
-- Since W factor through the quotient and cannot distinguish between differ[6D[K
-different representations, they serve as reliable “witnesses” of the underl[6D[K
-underlying reality rather than mere bookkeeping tools.
+The core claim of the essay is that **the geometric structure encoded by ro[2D[K
+rotations—rather than the specific algebraic symbols (e.g., complex numbers[7D[K
+numbers)—is what fundamentally matters in quantum mechanics**. This view is[2D[K
+is supported by an historical analogy: just as scaling and rotation were in[2D[K
+initially obscured when complex analysis became a powerful computational to[2D[K
+tool, many of the apparent distinctions between “complex” versus “real” des[3D[K
+descriptions are merely representational.
 
 ---
 
-### 2. Geometry versus Algebra
+### 2. Primitives / Definitions  
 
-**Core Insight**
-
-- In many mathematical frameworks (e.g., complex numbers), algebraic struct[6D[K
-structures can obscure their geometric origins.
-- The slogan “what persists across representations is what is real” suggest[7D[K
-suggests that only those properties invariant under all permissible transfo[7D[K
-transformations are physically meaningful.
-
-**Example: Complex Numbers**
-
-- Historically, the original geometric meaning of complex numbers—represent[17D[K
-numbers—representing rotations and scaling in the plane (as per Wessel, Arg[3D[K
-Argand, and Gauss)—was often lost as they were formalized into algebraic ob[2D[K
-objects.
-- This mirrors how quantum mechanics initially treated complex Hilbert spac[4D[K
-spaces without fully appreciating their geometric underpinnings.
+| Primitive | Definition |
+|-----------|------------|
+| **Operational Witness** | A measurable quantity (e.g., expectation values[6D[K
+values or interference patterns) that remains invariant under gauge transfo[7D[K
+transformations, thereby exposing which distinctions have ontological conte[5D[K
+content. |
+| **Admissibility Quotient** | The quotient of the full state‑space by the [K
+equivalence relation ∼A isolates those properties that survive any possible[8D[K
+possible representation change; physical ontology is thus dependent solely [K
+on this invariant structure. |
+| **Real Description** | A formulation expressed entirely in terms of rotat[5D[K
+rotation matrices (the “Jacobian” or Lie algebra) that yields identical exp[3D[K
+experimental predictions to the standard complex‑number approach. |
 
 ---
 
-### 3. The Ontology of Quantum Mechanics
+### 3. Formalism  
 
-**Philosophical Conclusion**
+The essay introduces a three‑step logical architecture (Figure 7):
 
-- Complex numbers are not strictly necessary for describing quantum phenome[7D[K
-phenomena; a real-number formulation is equally valid (as demonstrated by B[1D[K
-Barrios et al.’s construction).
-- Physical reality is determined solely by the invariant structure preserve[8D[K
-preserved under quotienting, not by the specific algebraic representation.
+1. **Rotation → Equivalence → Admissibility**  
+   - *Rotation* represents the underlying geometric operation common to bot[3D[K
+both complex and real formulations.  
+   - *Equivalence (∼A)* groups states that differ only by redundant algebra[7D[K
+algebraic representations, preserving physical meaning across coordinate ch[2D[K
+choices.  
+   - *Admissibility Quotient* isolates invariant properties (those survivin[8D[K
+surviving any gauge transformation), grounding ontology in this quotient ra[2D[K
+rather than the specific symbols used.
 
-**Layered Structure**
-
-1. **Coordinates:** How one chooses to represent states.
-2. **Representations:** The mathematical structures (e.g., complex vs. real[4D[K
-real Hilbert spaces) that encode these coordinates.
-3. **Invariant Structure:** The set of admissible representations sharing a[1D[K
-a common quotient—this is what determines physical content.
-
-**Ontological Invariance**
-
-- Proposition 9 formalizes this idea: If an isomorphism preserves all opera[5D[K
-operational witnesses between two admissible representations, they share id[2D[K
-identical ontological content.
-- Thus, differences between representations (like choosing complex vs. real[4D[K
-real coordinates) are purely representational and do not imply a difference[10D[K
-difference in physical reality.
+The formal proof rests on showing that **every physically distinct state ca[2D[K
+can be expressed uniquely within this quotient**, confirming that the compl[5D[K
+complex‑number formalism is not indispensable for describing quantum realit[6D[K
+reality.
 
 ---
 
-### 4. Logical Architecture of the Argument
+### 4. Mechanisms  
 
-**Figure 7 (Illustration)**
-
-```
-Rotation ──► Equivalence ──► Admissibility
-        │                       │
-        ▼                       ▼
-Complex          Flag         Invariant Structure
-Numbers            Representation
-                      (Quotient)
-```
-
-- **Rotation:** The geometric operation of rotation.
-- **Equivalence:** Correspondence between different representations that sh[2D[K
-share the same invariant properties.
-- **Admissibility:** The quotient structure—i.e., the set of admissible sta[3D[K
-states (states allowed by the physical theory).
-
-**Key Takeaway**
-
-The essay transitions from viewing complex numbers as mere symbols to recog[5D[K
-recognizing them as coordinate choices. The deeper insight is that quantum [K
-mechanics can be reformulated using real numbers without altering its predi[5D[K
-predictions, provided one respects the invariant structure.
+1. **Invariant Witnesses**  
+   - Expectation values and interference patterns serve as witnesses becaus[6D[K
+because they are unchanged under gauge transformations, revealing which asp[3D[K
+aspects of a theory are genuinely physical versus merely calculational.  
+2. **Geometric Encoding**  
+   - Rotations (expressed via the Lie algebra generators \(J_F\)) encode th[2D[K
+the same information that complex numbers do; any apparent loss of “complex[8D[K
+“complexity” is compensated by richer geometric representation.  
+3. **Equivalence Relation**  
+   - The relation ∼A formally collapses all mathematically equivalent but p[1D[K
+physically distinct representations, ensuring that only invariant content c[1D[K
+contributes to physical predictions.
 
 ---
 
-### 5. Needham’s Contribution
+### 5. Major Arguments  
 
-- **Not Just a Rotational Interpretation:** While earlier work showed that [K
-*i* corresponds to rotation in the complex plane, this essay extends the ar[2D[K
-argument by emphasizing how algebraic structures compress geometric informa[7D[K
-information.
-- **Principle of Witness Preservation:** By insisting on witness preservati[10D[K
-preservation across all representations, the approach reveals which distinc[7D[K
-distinctions are truly physical (invariant) and which are merely descriptiv[10D[K
-descriptive artifacts.
-
----
-
-### 6. Summary
-
-The essay integrates:
-
-1. **Operational Witnesses** to ensure only invariant properties survive tr[2D[K
-transformation.
-2. **Geometric vs. Algebraic Views** to highlight how algebra can mask geom[4D[K
-geometry.
-3. A **layered ontology** that separates coordinates, representations, and [K
-invariant structure.
-4. The **Ontological Invariance Proposition** to formalize the idea that id[2D[K
-identical witness preservation implies identical physical content.
-
-Ultimately, this perspective suggests that quantum mechanics is fundamental[11D[K
-fundamentally about rotations (and scaling) in a real vector space rather t[1D[K
-than the complex abstraction, preserving experimental predictions while off[3D[K
-offering a more geometrically intuitive framework.
+1. **Ontological Priority of Geometry**  
+   - Since measurement outcomes are independent of how we symbolically repr[4D[K
+represent states, the underlying reality must be captured by geometric oper[4D[K
+operations (rotations) rather than algebraic ones.  
+2. **Admissibility as Physical Criterion**  
+   - The admissibility quotient provides a principled criterion for what co[2D[K
+constitutes physical content: only properties invariant under all represent[9D[K
+representations are truly “real.”  
+3. **Bridging History and Theory**  
+   - By invoking historical developments (e.g., the early loss of scaling i[1D[K
+in complex analysis), the essay shows that current debates about “complex v[1D[K
+vs. real” descriptions stem from similar representational choices.
 
 ---
 
-This structured breakdown should help clarify how each section of the essay[5D[K
-essay contributes to its overarching conclusion: that the choice of algebra[7D[K
-algebraic representation does not alter physical reality if it preserves th[2D[K
-the invariant structures—exemplified by the recovery and reinterpretation o[1D[K
-of rotation as a real matrix operation.
+### 6. Dependencies Between Concepts  
 
+- **Complex Numbers ↔ Rotations**: Complex numbers encode rotations compact[7D[K
+compactly; thus, any claim about “complexity being essential” is equivalent[10D[K
+equivalent to asserting a dependence on rotation geometry when the physical[8D[K
+physical content is invariant.  
+- **Gauge Transformations ↔ Witness Invariance**: The requirement that witn[4D[K
+witnesses be invariant under gauge transformations directly ties back to th[2D[K
+the need for geometric (rotation‑based) descriptions.  
+- **State Space Equivalence ↔ Admissibility Quotient**: Only by collapsing [K
+equivalent representations via ∼A can one isolate truly distinct physical s[1D[K
+states, making the quotient indispensable.
+
+---
+
+### 7. Implications  
+
+1. **Predictive Power**  
+   - Since experimental predictions depend only on invariant geometric prop[4D[K
+properties, any reformulation of quantum mechanics that preserves these rot[3D[K
+rotations will reproduce existing results without altering ontology.  
+2. **Theoretical Simplicity**  
+   - Adopting a real rotation‑based description may simplify conceptualizat[14D[K
+conceptualization for novices and clarify the role of symmetry in quantum t[1D[K
+theory.  
+3. **Philosophical Reassessment**  
+   - The essay challenges the notion that complex numbers carry ontological[11D[K
+ontological weight, suggesting instead that they are a convenient shorthand[9D[K
+shorthand rather than an essential ingredient.
+
+---
+
+### 8. Unresolved Problems  
+
+1. **Cultural Resistance to Reformulation**  
+   - Despite formal equivalence, there remains resistance among practitione[11D[K
+practitioners to abandon complex notation; this may be due to entrenched ha[2D[K
+habit or perceived computational efficiency.  
+2. **Generalization Beyond Hilbert Spaces**  
+   - The current discussion is limited to finite‑dimensional Hilbert spaces[6D[K
+spaces; extending the argument to topological or path‑integral formulations[12D[K
+formulations requires further investigation.  
+3. **Interpretational Ambiguities**  
+   - While invariant properties are clear, some interpretive questions (e.g[4D[K
+(e.g., measurement postulate) may still be underexplored within a purely ge[2D[K
+geometric framework.
+
+---
+
+### 9. Internal Tensions  
+
+- **Historical vs. Modern Perspectives**: The essay juxtaposes historical d[1D[K
+developments of complex numbers with contemporary algebraic practices, high[4D[K
+highlighting tension between tradition and modern abstraction.  
+- **Mathematical Convenience vs. Ontological Rigor**: There is an ongoing t[1D[K
+tension between the pragmatic use of complex notation (for brevity and comp[4D[K
+computational ease) versus a rigorously ontologically motivated description[11D[K
+description via rotations alone.  
+
+---
+
+### 10. References (as per fragment summaries)
+
+The cited literature includes:
+
+- **Needham, J.** *Visual Complex Analysis* (1997), providing historical co[2D[K
+context on the development of complex numbers and their loss of geometric i[1D[K
+interpretation.  
+- **Barrios et al., 2026**, offering recent empirical or theoretical work t[1D[K
+that supports the claim that real rotation descriptions are experimentally [K
+indistinguishable from complex ones.
+
+These references collectively substantiate the arguments regarding both his[3D[K
+historical evolution and contemporary validity of rotating‑based quantum me[2D[K
+mechanics.
+
+---
+
+**End of Synthesis**.

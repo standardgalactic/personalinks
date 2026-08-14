@@ -1,0 +1,1923 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+(none yet)
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-dependent-type-theory.tex
+
+NEW CHUNK
+=========
+
+
+
+
+
+
+
+
+
+
+
+\documentclass[12pt,oneside]{article}
+
+
+
+
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+
+
+
+
+
+\usepackage[a4paper,
+margin=1.2in,
+top=1.3in,
+bottom=1.3in]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+
+
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}
+
+
+
+
+
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{
+arrows.meta,
+calc,
+matrix,
+positioning,
+decorations.pathmorphing,
+shapes.geometric
+}
+
+
+
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+
+
+
+\usepackage{enumitem}
+
+
+
+
+
+\usepackage[
+colorlinks=true,
+linkcolor=black,
+citecolor=black,
+urlcolor=black
+]{hyperref}
+
+
+
+
+
+\usepackage{microtype}
+
+
+
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+
+\newtheorem{remark}[theorem]{Remark}
+
+
+
+
+
+\newcommand{\Hist}{\mathcal{H}}
+\newcommand{\Type}{\mathsf{Type}}
+\newcommand{\Prop}{\mathsf{Prop}}
+\newcommand{\Ctx}{\Gamma}
+\newcommand{\Sphere}{\mathsf{Sphere}}
+\newcommand{\Pop}{\mathsf{Pop}}
+\newcommand{\Refuse}{\mathsf{Refuse}}
+\newcommand{\Bind}{\mathsf{Bind}}
+\newcommand{\Collapse}{\mathsf{Collapse}}
+\newcommand{\Meld}{\mathsf{Meld}}
+\newcommand{\Event}{\mathcal{E}}
+\newcommand{\Term}{\mathcal{T}}
+\newcommand{\Proof}{\mathcal{P}}
+\newcommand{\Judgement}{\vdash}
+\newcommand{\reduces}{\longrightarrow}
+\newcommand{\normal}{\Downarrow}
+\newcommand{\whnf}{\operatorname{whnf}}
+\newcommand{\erase}{\mathcal{E}}
+\newcommand{\kernel}{\mathcal{K}}
+
+\DeclareMathOperator{\History}{History}
+\DeclareMathOperator{\Replay}{Replay}
+\DeclareMathOperator{\ReplayEq}{ReplayEq}
+\DeclareMathOperator{\Normalize}{Normalize}
+\DeclareMathOperator{\Depends}{Depends}
+\DeclareMathOperator{\Witness}{Witness}
+\DeclareMathOperator{\Admissible}{Admissible}
+
+
+
+
+
+\title{
+{\Large\bfseries Building a Type Calculus and the\\
+Calculus of Constructions in Spherepop}\\
+{\large
+A Historical Foundation for Dependent Type Theory}
+}
+
+\author{Flyxion\\
+Independent Researcher}
+
+\date{June 2026}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+
+\vspace{1em}
+
+\begin{abstract}
+
+Spherepop proposes an event-oriented foundation for constructive mathematics in which irreversible historical events, rather than mutable states or extensional set membership, constitute the primitive objects of reasoning. This paper develops a dependent type calculus directly from these principles and demonstrates that a complete Calculus of Constructions may be reconstructed within an event-native kernel. Instead of adopting the traditional viewpoint that contexts are unordered collections of assumptions, Spherepop interprets every derivation as a growing history of constructive events. Structural rules become transformations of histories, substitution becomes provenance-preserving historical substitution, equality becomes historical equivalence, and proof objects become immutable event traces that may be replayed to reconstruct their logical origin.
+
+Beginning from a minimal event algebra, we derive historical typing judgments, dependent products, cumulative universes, polymorphism, equality types, inductive families, and a bidirectional type checking algorithm. We then establish the relationship between the historical calculus and the conventional Calculus of Constructions by introducing a history-erasure functor that recovers ordinary dependent type theory as a conservative abstraction. The resulting kernel unifies programming, proof construction, provenance, and event sourcing within a single mathematical framework while remaining sufficiently compact to serve as the trusted foundation of the Spherepop language.
+
+\end{abstract}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+
+
+Introduction
+
+
+
+The design of a programming language is ultimately determined by the primitive objects from which it chooses to build its mathematics. Every proof assistant, compiler, and formal verification system inherits assumptions about identity, computation, and construction from its underlying logical calculus. These assumptions are often so deeply embedded that they become invisible. Variables are introduced into unordered contexts, functions are regarded as the primitive computational objects, and evaluation is understood as the reduction of expressions until a normal form is obtained. The surrounding logical machinery is then constructed upon these foundations.
+
+Spherepop begins from a different observation. Computation does not merely transform symbolic expressions; it records the irreversible sequence of constructive events by which those expressions came into existence. Every meaningful object possesses a provenance. Every proof has a history. Every program is not merely a function from inputs to outputs but an accumulated record of admissible constructions whose order cannot, in general, be ignored.
+
+The central hypothesis of this paper is therefore that historical construction, rather than state transformation or extensional membership, should be regarded as the primitive notion from which dependent type theory is derived. Instead of treating histories as metadata attached to an otherwise conventional proof calculus, Spherepop elevates histories to the status of first-class mathematical objects. Contexts become histories. Structural rules become operations upon histories. Equality becomes equivalence of constructive provenance. The familiar machinery of the lambda calculus is recovered as a disciplined method for composing historical constructions rather than as the primitive ontology of computation.
+
+This change of perspective is subtle but significant. Conventional dependent type theories begin with judgments of the form
+
+\[
+\Gamma \vdash t : A,
+\]
+
+where $\Gamma$ denotes a context consisting of assumptions. The context is typically regarded as an unordered collection satisfying structural rules such as weakening, exchange, and contraction. The semantics of the language are then determined by substitution and normalization within this context.
+
+Spherepop instead begins with judgments of the form
+
+\[
+H \vdash t : A,
+\]
+
+where $H$ is not an unordered context but an irreversible constructive history. A history is an ordered sequence of admissible events whose temporal structure contributes directly to the identity of every derived object. Consequently,
+
+\[
+e_1 ; e_2
+\neq
+e_2 ; e_1
+\]
+
+unless the two events are demonstrably independent. Ordering therefore becomes an intrinsic mathematical property rather than a merely operational artifact.
+
+This historical viewpoint aligns naturally with the philosophy that underlies the remainder of the Spherepop language. Programs are histories rather than mutable states. Data structures are accumulated constructions rather than containers whose contents are repeatedly overwritten. Deletion is represented by explicit refusal events rather than physical removal. Quotients become recorded collapse events. Parallel computation is represented through constructive melding of compatible histories rather than through implicit synchronization over mutable memory.
+
+These observations suggest that the conventional structural rules of type theory should themselves be reinterpreted. Weakening corresponds to extending an admissible history without invalidating earlier derivations. Exchange becomes conditional upon historical independence. Substitution records provenance rather than merely replacing variables syntactically. Equality becomes a relation between histories instead of a primitive axiom imposed upon extensional objects.
+
+Remarkably, these reinterpretations preserve the expressive power of ordinary dependent type theory. The dependent product remains the fundamental constructor from which ordinary functions, polymorphism, higher-order type operators, and dependent families all arise. Universes retain their cumulative hierarchy. Curry--Howard continues to identify propositions with types and proofs with programs. Beta reduction remains the computational engine of evaluation. What changes is not the computational content of the calculus but the ontology from which that content is derived.
+
+Throughout this paper we therefore pursue two complementary objectives. The first objective is constructive. Beginning with a minimal algebra of historical events, we develop a complete dependent type calculus capable of supporting polymorphism, inductive families, equality types, and verified computation. The second objective is comparative. We demonstrate that the resulting historical calculus forms a conservative extension of the traditional Calculus of Constructions through an explicit history-erasure functor that recovers ordinary dependent type theory whenever provenance is intentionally ignored.
+
+The resulting system occupies an intermediate position between programming language semantics, proof theory, and event-sourced computation. Every theorem possesses both logical meaning and constructive provenance. Every computation simultaneously evaluates a term and extends a history. Every proof object becomes replayable, allowing logical correctness and historical origin to be reconstructed from the same immutable artifact.
+
+From this perspective, the familiar lambda calculus is no longer the beginning of the story but one chapter within a broader theory of historical construction. The remaining sections develop this foundation systematically, beginning with the algebra of events from which every subsequent notion of typing, computation, and proof will be derived.
+
+
+
+The Historical Ontology of Spherepop
+
+
+
+The development of a formal calculus begins by specifying its primitive ontology. Classical set theory takes membership as primitive. Category theory begins with objects and morphisms. The lambda calculus begins with abstraction and application. Conventional dependent type theories adopt contexts, variables, and substitution as their irreducible notions. Spherepop instead begins with constructive events.
+
+An event is not simply an operation performed during execution. It is the fundamental unit from which mathematical identity is assembled. Every object exists because some finite history of admissible events produced it. Consequently, the kernel of the language is concerned not with describing static mathematical objects but with describing the irreversible accumulation of constructive history.
+
+This perspective deliberately separates identity from representation. Two values may possess identical observable behaviour while nevertheless differing in the histories that produced them. Conversely, two apparently distinct constructions may later become identified by an explicit historical collapse. Identity therefore becomes a dynamic notion governed by constructive provenance rather than an extensional predicate assumed a priori.
+
+\begin{definition}[Historical Event]
+A \emph{historical event} is an indivisible constructive action that extends an admissible history. If $H$ denotes an existing history and $e$ denotes an event, then
+
+\[
+H' = H ; e
+\]
+
+is called the historical extension of $H$ by $e$.
+\end{definition}
+
+Unlike state transitions, events are irreversible. Once an event has entered the historical record it is never removed. Later events may reinterpret, collapse, refine, or refuse earlier constructions, but they do not erase them. Histories therefore possess a monotone structure.
+
+\begin{axiom}[Historical Monotonicity]
+For every admissible history $H$ and every admissible event $e$,
+
+\[
+H
+\subseteq
+H;e.
+\]
+
+Every extension preserves the complete provenance of the previous history.
+\end{axiom}
+
+This monotonicity distinguishes historical reasoning from mutable computation. Traditional operational semantics overwrite machine states repeatedly during execution. Spherepop instead records every admissible transformation. Evaluation therefore accumulates information rather than replacing it.
+
+The existence of a permanent historical record immediately changes the meaning of mathematical identity.
+
+Suppose two objects $x$ and $y$ have respective construction histories
+
+\[
+\History(x)
+\quad\text{and}\quad
+\History(y).
+\]
+
+Spherepop regards these histories as primary.
+
+\begin{definition}[Historical Identity]
+Two objects are historically identical whenever their constructive histories are equivalent:
+
+\[
+x \equiv_H y
+\Longleftrightarrow
+\History(x)
+\simeq
+\History(y),
+\]
+
+where $\simeq$ denotes admissible historical equivalence.
+\end{definition}
+
+Notice that this definition differs from extensional equality. Extensional equality compares completed objects. Historical equality compares the constructive processes that generated those objects. Extensional equality therefore appears only as a derived notion after historical equivalence has been established.
+
+The distinction becomes particularly important for proof objects. Two proofs may establish precisely the same theorem while exhibiting entirely different constructions. Conventional proof assistants frequently erase this distinction by normalizing both proofs to equivalent terms. Spherepop instead preserves both derivations as independent historical artifacts whose provenance remains available for later inspection, optimization, or replay.
+
+A history itself is defined recursively.
+
+\begin{definition}[Constructive History]
+
+The set of histories is generated inductively by
+
+\[
+H
+::=
+\varepsilon
+\mid
+H;e,
+\]
+
+where $\varepsilon$ denotes the empty history and $e$ denotes an admissible event.
+
+\end{definition}
+
+The recursive definition is intentionally minimal. No assumptions have yet been made regarding the nature of admissible events. Those operations will be introduced systematically in the following section. At this stage the only structure imposed upon histories is sequential composition.
+
+Sequential composition is associative.
+
+\[
+(H;e_1);e_2
+=
+H;(e_1;e_2),
+\]
+
+allowing parentheses to be omitted whenever no ambiguity arises. In contrast, commutativity generally fails.
+
+\[
+H;e_1;e_2
+\neq
+H;e_2;e_1.
+\]
+
+The order of construction contributes directly to the mathematical identity of every derived object. Only under carefully specified independence conditions will later sections permit historical exchange.
+
+This asymmetry has important logical consequences. Conventional structural proof theory often treats contexts as multisets whose ordering is irrelevant. Spherepop rejects this assumption at the foundational level. Dependencies are not merely relations among variables but among historical events. Every variable introduced into the system possesses a definite origin, and subsequent constructions inherit that provenance.
+
+The ontology therefore distinguishes between two kinds of mathematical object. The first consists of observable terms, types, proofs, and programs. The second consists of the histories that generated those observable constructions. Ordinary dependent type theory concerns itself almost exclusively with the former. Spherepop treats both as equally fundamental.
+
+One may therefore regard the observable language as the visible projection of a richer historical substrate. Computation manipulates observable terms while simultaneously extending the hidden but persistent historical record. Proof checking validates both the logical correctness of a derivation and the admissibility of its constructive history. Every theorem consequently possesses two inseparable components: its mathematical content and its provenance.
+
+The remaining development of the calculus proceeds by enriching this minimal ontology with an algebra of primitive historical operations. These operations will serve the role traditionally occupied by structural rules, quotient constructions, mutable updates, and synchronization primitives, while preserving the central principle that every admissible computation is represented by an irreversible extension of constructive history.
+
+
+
+The Event Algebra
+
+
+
+Having established histories as the primitive mathematical objects of the
+Spherepop kernel, we now specify the elementary operations by which histories
+are extended. These operations form the constructive alphabet from which every
+program, proof, derivation, and data structure is assembled. They occupy a role
+analogous to the primitive inference rules of proof theory or the primitive
+combinators of the lambda calculus. Unlike those systems, however, the
+operations of Spherepop manipulate histories rather than isolated symbolic
+expressions.
+
+The objective is not merely to define a programming language. Rather, the event
+algebra specifies the smallest collection of irreversible constructive actions
+from which the remainder of the type calculus may be derived. Every higher-level
+language feature is ultimately translated into combinations of these primitive
+historical events.
+
+
+Primitive Historical Operations
+
+
+Let
+
+\[
+H
+\]
+
+denote an admissible history. Every primitive operation accepts one or more
+histories and produces another admissible history.
+
+The kernel introduces five primitive historical constructors,
+
+\[
+\Pop,
+\qquad
+\Refuse,
+\qquad
+\Bind,
+\qquad
+\Collapse,
+\qquad
+\Meld.
+\]
+
+Additional language constructs are regarded as derived operations obtained by
+composition of these primitives.
+
+
+The Pop Operation
+
+
+The first primitive operation records constructive commitment.
+
+During computation there frequently exist several admissible continuations. A
+choice among these possibilities should itself become part of the permanent
+historical record. Rather than silently selecting one branch, Spherepop records
+the decision explicitly.
+
+\begin{definition}[Pop]
+
+Suppose
+
+\[
+b
+\]
+
+is an admissible continuation from history
+
+\[
+H.
+\]
+
+The operation
+
+\[
+\Pop(H,b)
+=
+H'
+\]
+
+extends the history by recording that branch
+
+\[
+b
+\]
+
+has been constructively selected.
+
+\end{definition}
+
+The operation does not merely evaluate a branch. It records the commitment to
+that branch as part of the mathematical identity of all future constructions.
+
+Consequently,
+
+\[
+\Pop(H,b_1)
+\neq
+\Pop(H,b_2)
+\]
+
+whenever
+
+\[
+b_1\neq b_2.
+\]
+
+Even if both branches later compute identical observable values, their
+provenance remains distinct until an explicit collapse event identifies them.
+
+
+The Refuse Operation
+
+
+Selection alone is insufficient to describe constructive computation. Equally
+important is the permanent rejection of alternatives.
+
+Traditional programming languages usually represent rejection implicitly through
+failed conditions or discarded execution paths. Spherepop instead promotes
+refusal to a primitive historical operation.
+
+\begin{definition}[Refuse]
+
+Suppose
+
+\[
+a
+\]
+
+is an admissible alternative under history
+
+\[
+H.
+\]
+
+Then
+
+\[
+\Refuse(H,a)
+=
+H'
+\]
+
+extends the history by permanently recording that
+
+\[
+a
+\]
+
+has been constructively rejected.
+
+\end{definition}
+
+Unlike logical negation, refusal is historical rather than truth-functional.
+
+Negation merely states that a proposition does not hold.
+
+Refusal records the constructive act by which a possibility was intentionally
+excluded.
+
+Future reasoning may therefore inspect not only what was chosen but also what
+was deliberately abandoned.
+
+This distinction becomes particularly valuable during proof search,
+backtracking, optimization, and distributed computation, where the rejected
+alternatives may themselves carry useful provenance.
+
+
+The Bind Operation
+
+
+Dependency is introduced through historical binding.
+
+Suppose
+
+\[
+x:A
+\]
+
+and
+
+\[
+f:A\rightarrow B.
+\]
+
+Instead of viewing the application of
+
+\[
+f
+\]
+
+to
+
+\[
+x
+\]
+
+as an isolated symbolic substitution, Spherepop records the dependency itself.
+
+\begin{definition}[Bind]
+
+The historical binding operation is
+
+\[
+\Bind(H,x,f)
+=
+H'
+\]
+
+where
+
+\[
+H'
+\]
+
+records that every subsequent construction of
+
+\[
+f(x)
+\]
+
+depends historically upon
+
+\[
+x.
+\]
+
+\end{definition}
+
+This dependency graph becomes part of the provenance of every future
+construction.
+
+Consequently, substitutions performed later in the type checker preserve not
+only values but also dependency histories.
+
+
+The Collapse Operation
+
+
+Many mathematical constructions eventually identify objects that were initially
+constructed independently.
+
+Set theory introduces quotient sets.
+
+Type theory introduces definitional equality.
+
+Category theory introduces coequalizers.
+
+Spherepop instead records explicit historical collapse.
+
+\begin{definition}[Collapse]
+
+Given two constructions
+
+\[
+a
+\]
+
+and
+
+\[
+b,
+\]
+
+the operation
+
+\[
+\Collapse(H,a,b)
+=
+H'
+\]
+
+extends the history with the constructive assertion that
+
+\[
+a
+\]
+
+and
+
+\[
+b
+\]
+
+are thereafter regarded as historically equivalent.
+
+\end{definition}
+
+Notice that no previous provenance is erased.
+
+Both construction histories remain available for inspection.
+
+The collapse merely records an additional event identifying them.
+
+Consequently,
+
+\[
+\History(a)
+\]
+
+and
+
+\[
+\History(b)
+\]
+
+remain individually recoverable even after the collapse has occurred.
+
+This explicit treatment of identification will later provide the basis for
+historical equality types and quotient constructions.
+
+
+The Meld Operation
+
+
+Constructive histories need not evolve sequentially.
+
+Independent computations may proceed concurrently before eventually being
+combined.
+
+Rather than representing concurrency through mutable shared state, Spherepop
+introduces a primitive historical merge operation.
+
+\begin{definition}[Meld]
+
+Suppose
+
+\[
+H_1
+\]
+
+and
+
+\[
+H_2
+\]
+
+are compatible histories.
+
+Their constructive merge is
+
+\[
+\Meld(H_1,H_2),
+\]
+
+which produces a history containing the provenance of both components while
+preserving every dependency relation.
+
+\end{definition}
+
+Compatibility is intentionally left abstract at this stage.
+
+Later chapters define admissibility conditions under which two histories may be
+melded without violating dependency constraints.
+
+Operationally, Meld generalizes event sourcing, distributed logs, version
+control, and concurrent proof construction.
+
+Mathematically, it resembles categorical pushouts while remaining entirely
+constructive.
+
+
+Closure Under Historical Composition
+
+
+The primitive operations introduced above are not isolated commands but
+constructors of a historical algebra.
+
+Every finite computation is represented by repeated application of these
+constructors.
+
+Thus the collection of admissible histories is generated inductively by
+
+\[
+H
+::=
+\varepsilon
+\mid
+H;e
+\mid
+\Pop(H,b)
+\mid
+\Refuse(H,a)
+\mid
+\Bind(H,x,f)
+\mid
+\Collapse(H,a,b)
+\mid
+\Meld(H_1,H_2).
+\]
+
+This grammar should not be interpreted merely as syntax.
+
+Each constructor possesses operational meaning, typing rules, normalization
+behavior, and historical semantics that will be developed throughout the
+remainder of this paper.
+
+Taken together, these five primitive operations form the constructive substrate
+upon which the Spherepop kernel is built. Conventional notions such as mutable
+assignment, quotienting, synchronization, substitution, branching, and proof
+construction emerge as derived concepts within this historical algebra rather
+than appearing as independent primitives. The subsequent section introduces the
+notion of historical contexts and demonstrates how the event algebra replaces
+the unordered assumptions of conventional dependent type theory.
+
+
+
+Historical Contexts
+
+
+
+The introduction of the event algebra permits a fundamental reexamination of the
+role played by contexts in dependent type theory. Conventional presentations of
+the lambda calculus and the Calculus of Constructions begin with a typing context
+
+\[
+\Gamma
+=
+x_1:A_1,\,
+x_2:A_2,\,
+\ldots,\,
+x_n:A_n,
+\]
+
+whose purpose is to record the assumptions under which a judgment is derived.
+Although the notation suggests an ordering, most systems subsequently introduce
+structural rules showing that the order is largely irrelevant. Weakening,
+exchange, and contraction together imply that contexts behave much like finite
+multisets of assumptions.
+
+Spherepop adopts a different interpretation.
+
+A context is not merely a collection of assumptions. It is an irreversible
+construction history. Every declaration represents an event whose position
+within the historical record contributes to the identity of all later
+derivations. Consequently, contexts cease to be unordered environments and
+instead become temporally ordered histories generated by the event algebra of
+the previous section.
+
+
+Historical Judgments
+
+
+The fundamental typing judgment of the Spherepop kernel has the familiar
+syntactic appearance
+
+\[
+H \vdash t : A,
+\]
+
+but its interpretation differs substantially from the conventional reading.
+
+Rather than asserting that the term \(t\) has type \(A\) under a collection of
+assumptions, the judgment states that the construction of \(t\) as an inhabitant
+of \(A\) is admissible after the historical sequence \(H\) has occurred.
+
+Thus a typing derivation simultaneously establishes two facts.
+
+First, the term is well typed.
+
+Second, the historical evolution that produced the term is itself admissible.
+
+Logical correctness and constructive provenance therefore become inseparable.
+
+
+Historical Formation
+
+
+The empty history is denoted by
+
+\[
+\varepsilon.
+\]
+
+It represents the absence of prior constructive events.
+
+Every non-empty history is generated recursively by historical extension,
+
+\[
+H' = H ; e,
+\]
+
+where \(e\) denotes an admissible event.
+
+Accordingly,
+
+\[
+\varepsilon
+\subseteq
+H
+\subseteq
+H;e
+\subseteq
+H;e;e'
+\subseteq
+\cdots
+\]
+
+forms a monotone chain of historical growth.
+
+No operation of the kernel removes events from an existing history.
+
+Every theorem therefore possesses a complete constructive provenance extending
+back to the empty history.
+
+
+Historical Declarations
+
+
+Variable declarations become historical events.
+
+Instead of viewing
+
+\[
+x:A
+\]
+
+as a static assumption inserted into an environment, Spherepop interprets it as
+an irreversible declaration event,
+
+\[
+e_x
+=
+\operatorname{Declare}(x:A).
+\]
+
+Appending the declaration extends the history,
+
+\[
+H
+\longmapsto
+H;
+\operatorname{Declare}(x:A).
+\]
+
+Variables therefore acquire historical identity.
+
+Every subsequent reference to \(x\) may be traced uniquely to the declaration
+event that introduced it.
+
+Two variables having identical observable types but distinct declaration events
+remain historically distinguishable.
+
+
+Historical Scope
+
+
+Lexical scope acquires a historical interpretation.
+
+A variable is available precisely when its declaration occurs earlier than every
+event depending upon it.
+
+If
+
+\[
+e_x
+<
+e_t,
+\]
+
+where \(e_t\) denotes the construction of a term \(t\), then
+
+\[
+t
+\]
+
+may legitimately reference
+
+\[
+x.
+\]
+
+Conversely, attempting to reference a declaration that has not yet occurred
+violates historical admissibility.
+
+This interpretation replaces the traditional notion of environments with an
+explicit dependency ordering embedded directly into the event history.
+
+
+Historical Reachability
+
+
+Every object possesses a unique construction path through the history.
+
+\begin{definition}[Historical Reachability]
+
+Let
+
+\[
+H=e_1;e_2;\cdots;e_n.
+\]
+
+A construction \(c\) is historically reachable if there exists a finite sequence
+of admissible dependencies
+
+\[
+e_{i_1}
+\prec
+e_{i_2}
+\prec
+\cdots
+\prec
+e_{i_k}
+\]
+
+whose final event produces \(c\).
+
+\end{definition}
+
+Reachability therefore replaces the informal notion of "being in scope."
+
+Objects are available precisely because their construction histories are
+reachable from the current historical state.
+
+This perspective aligns naturally with the broader philosophy of Spherepop, in
+which accessibility is determined by constructive reachability rather than
+membership in an abstract environment.
+
+
+Dependency Graphs
+
+
+Although histories are recorded sequentially, their internal dependency
+structure forms a directed acyclic graph.
+
+Each historical event contributes one or more dependency edges,
+
+\[
+e_i
+\longrightarrow
+e_j,
+\]
+
+indicating that the construction represented by
+
+\[
+e_j
+\]
+
+depends upon the earlier event
+
+\[
+e_i.
+\]
+
+The sequential ordering guarantees acyclicity, while the dependency graph
+captures the finer structure of constructive provenance.
+
+Thus every history admits two complementary descriptions.
+
+The first is the chronological sequence
+
+\[
+e_1;
+e_2;
+\cdots;
+e_n.
+\]
+
+The second is the induced dependency graph
+
+\[
+(H,\Depends).
+\]
+
+The sequential representation preserves temporal order, whereas the graph
+representation exposes logical dependence.
+
+Both descriptions encode the same historical object.
+
+
+Observable Contexts as Projections
+
+
+Conventional typing contexts may now be recovered as projections of historical
+contexts.
+
+Define the projection operator
+
+\[
+\pi_{\Gamma}
+:
+H
+\rightarrow
+\Gamma
+\]
+
+to erase every event except variable declarations and type assumptions.
+
+The resulting context
+
+\[
+\Gamma
+=
+\pi_{\Gamma}(H)
+\]
+
+is precisely the environment expected by an ordinary dependent type checker.
+
+Consequently, traditional contexts are not discarded but derived.
+
+They represent observable summaries of richer historical structures whose
+additional provenance information has been intentionally forgotten.
+
+This observation foreshadows one of the principal results of the present paper:
+ordinary dependent type theory will emerge as the image of the historical
+calculus under an appropriate erasure functor.
+
+
+Historical Well-Formedness
+
+
+Not every finite sequence of events constitutes a valid history.
+
+A history must satisfy several admissibility conditions.
+
+Every dependency must reference an earlier event.
+
+Every declaration must precede its use.
+
+Every collapse must identify previously constructed objects.
+
+Every meld must preserve dependency consistency.
+
+These conditions collectively define the class of well-formed histories.
+
+\begin{definition}[Well-Formed History]
+
+A history \(H\) is well formed if every event occurring in \(H\) satisfies the
+admissibility constraints imposed by the event algebra and all dependency
+relations are acyclic.
+
+\end{definition}
+
+The remainder of the calculus assumes that every typing judgment is interpreted
+relative to a well-formed historical context.
+
+This assumption replaces the conventional requirement that typing contexts be
+well formed, while simultaneously encoding considerably richer structural
+information.
+
+Having established histories as the environments in which every derivation
+takes place, we are now prepared to reconsider the structural rules of dependent
+type theory themselves. The next section shows that weakening, exchange,
+contraction, and substitution are no longer primitive logical rules but emerge
+as admissible transformations of constructive histories.
+
+
+
+Structural Rules as Historical Transformations
+
+
+
+One of the most distinctive features of conventional type theory is its reliance
+upon structural rules. These rules determine how contexts may be manipulated
+independently of the logical connectives themselves. Weakening allows unused
+assumptions to be introduced. Exchange permits assumptions to be reordered.
+Contraction identifies duplicate assumptions. Substitution propagates completed
+constructions throughout a derivation.
+
+Historically, these rules originate in Gentzen's structural proof theory, where
+contexts are regarded as collections of assumptions rather than constructive
+objects in their own right. Since assumptions possess no intrinsic temporal
+ordering, they may be duplicated, permuted, or discarded without altering the
+meaning of a proof.
+
+The historical interpretation developed in the preceding sections fundamentally
+changes this situation.
+
+A Spherepop context is an irreversible construction history. Every declaration,
+branch selection, collapse, refusal, and dependency contributes to the identity
+of the derivation. Consequently, structural rules can no longer be regarded as
+axiomatic manipulations of an unordered environment. Instead, they become
+properties of admissible historical transformations.
+
+This shift from syntactic manipulation to historical transformation constitutes
+one of the principal conceptual differences between the Spherepop kernel and
+conventional dependent type theory.
+
+
+Historical Extension
+
+
+The most basic structural operation is historical growth.
+
+Suppose
+
+\[
+H
+\]
+
+is a well-formed history and
+
+\[
+e
+\]
+
+is an admissible event independent of an existing derivation.
+
+Appending
+
+\[
+e
+\]
+
+cannot invalidate constructions that have already been completed.
+
+This observation gives rise to the historical analogue of weakening.
+
+\begin{theorem}[Historical Weakening]
+
+If
+
+\[
+H
+\vdash
+t:A
+\]
+
+and
+
+\[
+e
+\]
+
+is an admissible extension that introduces no dependency upon the derivation of
+\(t\), then
+
+\[
+H;e
+\vdash
+t:A.
+\]
+
+\end{theorem}
+
+\begin{proof}
+
+The derivation of
+
+\[
+t
+\]
+
+depends only upon events already contained in
+
+\[
+H.
+\]
+
+Since the appended event introduces no new dependencies into the construction of
+
+\[
+t,
+\]
+
+the dependency graph of the original derivation remains unchanged. Historical
+monotonicity therefore preserves the typing judgment.
+
+\end{proof}
+
+Unlike ordinary weakening, this theorem is not simply an axiom of context
+formation. It is a consequence of the monotonic nature of historical
+construction.
+
+
+Conditional Exchange
+
+
+Conventional proof theory assumes that assumptions may be reordered freely.
+
+For example,
+
+\[
+x:A,
+\;
+y:B
+\]
+
+is interchangeable with
+
+\[
+y:B,
+\;
+x:A.
+\]
+
+Spherepop rejects unrestricted exchange.
+
+If one declaration depends upon another, reversing their order destroys the
+construction history that produced the derivation.
+
+Instead, exchange becomes conditional upon historical independence.
+
+\begin{definition}[Historical Independence]
+
+Two events
+
+\[
+e_i
+\]
+
+and
+
+\[
+e_j
+\]
+
+are historically independent if neither depends directly or indirectly upon the
+other.
+
+We write
+
+\[
+e_i
+\perp
+e_j.
+\]
+
+\end{definition}
+
+Only under this condition may their order be exchanged.
+
+\begin{theorem}[Conditional Exchange]
+
+Suppose
+
+\[
+e_i
+\perp
+e_j.
+\]
+
+Then
+
+\[
+H;
+e_i;
+e_j
+\equiv
+H;
+e_j;
+e_i.
+\]
+
+\end{theorem}
+
+Thus exchange becomes a derived theorem rather than a primitive structural rule.
+
+The dependency graph determines precisely when commutation is admissible.
+
+This interpretation resembles Mazurkiewicz traces and partially ordered event
+structures, where concurrency is characterized by commutation of independent
+events rather than by arbitrary permutation.
+
+
+Historical Contraction
+
+
+Ordinary contraction identifies duplicate assumptions.
+
+For example,
+
+\[
+x:A,
+\;
+x:A
+\]
+
+may be replaced by a single occurrence.
+
+Such a rule is appropriate when contexts merely describe logical assumptions.
+
+Historical contexts, however, distinguish between repeated assumptions and
+repeated construction events.
+
+Two declaration events may introduce observably identical objects while
+possessing distinct provenance.
+
+Consequently,
+
+\[
+H;
+e;
+e
+\]
+
+is generally not equivalent to
+
+\[
+H;
+e.
+\]
+
+Instead, contraction is replaced by explicit historical collapse.
+
+If two constructions are intended to become identical, the kernel records
+
+\[
+\Collapse(H,a,b),
+\]
+
+thereby preserving both original histories while introducing a new event that
+constructively identifies them.
+
+Duplicate constructions are therefore never silently erased.
+
+They become historically related through explicit evidence.
+
+
+Historical Erasure
+
+
+Conventional proof systems frequently remove unused assumptions.
+
+Within the Spherepop kernel such removal cannot occur internally because every
+event contributes to historical provenance.
+
+Instead, removal becomes an external projection.
+
+Define the history-erasure operator
+
+\[
+\erase
+:
+H
+\rightarrow
+\Gamma,
+\]
+
+which forgets every event except the observable declarations required for type
+checking.
+
+This operator is not part of the trusted kernel.
+
+Rather, it is an abstraction used when comparing the historical calculus with
+ordinary dependent type theory.
+
+Consequently, information may be forgotten by external observers without ever
+being destroyed inside the constructive history itself.
+
+
+Structural Preservation
+
+
+Because structural transformations are interpreted as historical operations,
+their admissibility follows from the dependency graph.
+
+\begin{proposition}
+
+Every admissible structural transformation preserves the dependency graph up to
+historical equivalence.
+
+\end{proposition}
+
+\begin{proof}
+
+Weakening extends the graph without modifying existing edges.
+
+Conditional exchange merely permutes incomparable vertices.
+
+Historical collapse introduces an identification event while leaving previous
+vertices intact.
+
+History erasure removes observable information only after construction has been
+completed.
+
+Each transformation therefore preserves the dependency relation modulo the
+appropriate notion of historical equivalence.
+
+\end{proof}
+
+This proposition replaces the informal intuition that contexts may be
+manipulated ``without affecting the proof.'' In the historical calculus every
+transformation has explicit constructive meaning.
+
+
+Structural Rules as Derived Computation
+
+
+The reinterpretation developed in this section has an important philosophical
+consequence.
+
+Traditional proof theory separates logical rules from structural rules.
+
+Logical rules manipulate propositions.
+
+Structural rules manipulate contexts.
+
+Spherepop removes this distinction.
+
+Contexts themselves are mathematical objects generated by constructive events.
+
+Consequently, every structural rule becomes another computational process acting
+upon histories.
+
+Weakening is historical extension.
+
+Exchange is conditional commutation.
+
+Contraction is constructive collapse.
+
+Erasure is external projection.
+
+None of these operations exists independently of the historical semantics.
+
+The familiar structural calculus therefore emerges as a special case of a more
+general algebra of constructive histories. Having established this
+reinterpretation, we next examine substitution itself. Rather than treating
+substitution as purely syntactic replacement, the Spherepop kernel will redefine
+it as a provenance-preserving transformation that transports both values and
+their construction histories simultaneously.
+
+
+
+Historical Substitution
+
+
+
+Substitution occupies a central position in every formulation of dependent type
+theory. The lambda calculus derives its computational behavior almost entirely
+from beta reduction, while dependent types rely upon substitution to instantiate
+families of types and propositions. Nearly every metatheoretic result,
+including preservation, normalization, and subject reduction, ultimately
+depends upon the properties of substitution.
+
+In conventional presentations, substitution is regarded as a purely syntactic
+operation. Given a term
+
+\[
+t,
+\]
+
+a variable
+
+\[
+x,
+\]
+
+and another term
+
+\[
+a,
+\]
+
+one simply writes
+
+\[
+t[x:=a],
+\]
+
+meaning that every free occurrence of
+
+\[
+x
+\]
+
+is replaced by
+
+\[
+a.
+\]
+
+The correctness of the operation depends only upon avoiding variable capture.
+Once substitution has been performed, the origin of the substituted object plays
+no further role in the formal system.
+
+Spherepop adopts a richer interpretation.
+
+A substituted object is not merely a symbolic expression but a completed
+historical construction. Replacing one variable by another therefore transports
+not only observable syntax but also the constructive provenance responsible for
+that syntax. Historical substitution is consequently an operation upon histories
+rather than upon expressions alone.
+
+
+Historical Environments
+
+
+Suppose
+
+\[
+H
+\vdash
+a:A
+\]
+
+has already been established.
+
+The derivation of
+
+\[
+a
+\]
+
+is itself represented by a finite dependency graph embedded inside the history
+
+\[
+H.
+\]
+
+Introducing
+
+\[
+a
+\]
+
+into another derivation should therefore preserve this dependency structure
+rather than discarding it.
+
+Accordingly, substitutions are represented by historical environments
+
+\[
+\sigma
+=
+\{
+x_1 \mapsto (a_1,H_1),
+\;
+x_2 \mapsto (a_2,H_2),
+\;
+\ldots
+\},
+\]
+
+where every substituted object is paired with the history that constructed it.
+
+The environment records both semantic value and constructive provenance.
+
+
+Historical Substitution
+
+
+Instead of the ordinary notation
+
+\[
+t[x:=a],
+\]
+
+the Spherepop kernel employs
+
+\[
+t[H,x\mapsto a],
+\]
+
+which denotes substitution relative to a specific constructive history.
+
+The notation emphasizes that substitution is never history-free.
+
+Every replacement occurs within an admissible historical context that determines
+the provenance inherited by the resulting construction.
+
+\begin{definition}[Historical Substitution]
+
+Suppose
+
+\[
+H
+\vdash
+a:A
+\]
+
+and
+
+\[
+H;
+\operatorname{Declare}(x:A)
+\vdash
+t:B.
+\]
+
+The historical substitution
+
+\[
+t[H,x\mapsto a]
+\]
+
+is obtained by replacing every free occurrence of
+
+\[
+x
+\]
+
+with
+
+\[
+a,
+\]
+
+while simultaneously extending every dependency of
+
+\[
+t
+\]
+
+to include the construction history of
+
+\[
+a.
+\]
+
+\end{definition}
+
+Unlike syntactic substitution, this operation modifies both the observable term
+and its underlying dependency graph.
+
+The resulting object therefore possesses a richer provenance than either of its
+components considered separately.
+
+
+Dependency Preservation
+
+
+Historical substitution satisfies a fundamental invariance property.
+
+\begin{theorem}[Dependency Preservation]
+
+Let
+
+\[
+D(t)
+\]
+
+denote the dependency graph of
+
+\[
+t.
+\]
+
+If
+
+\[
+t'
+=
+t[H,x\mapsto a],
+\]
+
+then
+
+\[
+D(t')
+=
+D(t)
+\cup
+D(a),
+\]
+
+together with the dependency edges introduced by the substitution itself.
+
+\end{theorem}
+
+\begin{proof}
+
+Every dependency previously attached to
+
+\[
+t
+\]
+
+remains unchanged.
+
+Every dependency required for constructing
+
+\[
+a
+\]
+
+must also remain available because the substituted object is now part of the
+construction of
+
+\[
+t'.
+\]
+
+The dependency graph is therefore the union of the original graphs together
+with the edges connecting the substitution site to the substituted
+construction.
+
+\end{proof}
+
+Thus substitution never destroys provenance.
+
+It enlarges the constructive explanation carried by the resulting term.
+
+
+Compositionality
+
+
+Multiple substitutions compose naturally.
+
+Suppose
+
+\[
+\sigma_1
+=
+\{
+x\mapsto(a,H_a)
+\},
+\]
+
+and
+
+\[
+\sigma_2
+=
+\{
+y\mapsto(b,H_b)
+\}.
+\]
+
+Then
+
+\[
+t[\sigma_1][\sigma_2]
+\]
+
+is equivalent to
+
+\[
+t[\sigma_2\circ\sigma_1]
+\]
+
+provided the substitutions satisfy the usual capture-avoidance conditions and
+their dependency graphs are compatible.
+
+Composition therefore preserves both semantic correctness and historical
+provenance.
+
+
+Substitution and Beta Reduction
+
+
+The historical interpretation modifies the understanding of beta reduction
+without changing its observable computational result.
+
+Ordinary beta reduction is written
+
+\[
+(\lambda x.t)\,a
+\longrightarrow
+t[x:=a].
+\]
+
+Spherepop instead interprets the reduction as
+
+\[
+(H,
+(\lambda x.t)\,a)
+\longrightarrow
+(H',
+t[H,x\mapsto a]),
+\]
+
+where
+
+\[
+H'
+\]
+
+extends
+
+\[
+H
+\]
+
+by recording the substitution event itself.
+
+Evaluation therefore becomes simultaneously
+
+\begin{enumerate}[label=(\roman*)]
+
+\item
+construction of a new observable term,
+
+\item
+construction of a new historical event documenting how that term arose.
+
+\end{enumerate}
+
+Every beta reduction therefore contributes permanently to constructive
+provenance.
+
+
+Historical Capture Avoidance
+
+
+Traditional substitution must avoid accidental variable capture.
+
+The historical calculus imposes an additional requirement.
+
+Not only must variables remain distinct, but historical identities must remain
+distinct as well.
+
+Suppose two variables possess identical observable names while originating from
+different declaration events,
+
+\[
+e_x
+\neq
+e_x'.
+\]
+
+The substitution algorithm distinguishes them by their provenance rather than by
+their textual spelling alone.
+
+Consequently, alpha conversion becomes a historical renaming operation acting
+upon declaration events instead of merely upon symbols.
+
+This interpretation naturally accommodates hygienic macros, proof replay,
+distributed proof construction, and incremental compilation because every bound
+variable carries a globally unique historical identity.
+
+
+Historical Substitution Lemma
+
+
+The ordinary substitution lemma extends directly to the historical setting.
+
+\begin{theorem}[Historical Substitution Lemma]
+
+Suppose
+
+\[
+H
+\vdash
+a:A
+\]
+
+and
+
+\[
+H;
+\operatorname{Declare}(x:A)
+\vdash
+t:B.
+\]
+
+Then
+
+\[
+H
+\vdash
+t[H,x\mapsto a]
+:
+B[H,x\mapsto a].
+\]
+
+Furthermore, the dependency graph of the resulting derivation is precisely the
+historical composition of the dependency graphs of
+
+\[
+t
+\]
+
+and
+
+\[
+a.
+\]
+
+\end{theorem}

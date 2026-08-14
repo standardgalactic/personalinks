@@ -1,0 +1,383 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Summary**
+
+The appendix demonstrates that three apparently different “coordinate syste[5D[K
+systems’’—the PBT (Persistence‑Based Theory) framework, the Fate‑Regime hie[3D[K
+hierarchy used in EOD (Ecology‑of‑Distinctions), and the ecological descrip[7D[K
+description of admissible ecologies—are all manifestations of a single unde[4D[K
+underlying mathematical structure.  By constructing explicit functors betwe[5D[K
+between the three categories  
+
+\[
+\catPBT \;\xrightarrow{\functorPBT}\; \catFate \;\xrightarrow{\functorEOD}\[28D[K
+\;\xrightarrow{\functorEOD}\; \catEOD,
+\]
+
+we show that:
+
+1. **Faithfulness** – distinct recoverability structures (objects in \(\cat[9D[K
+in \(\catPBT\)) map to distinct fate structures (objects in \(\catFate\)). [K
+ 
+2. **Fullness** – every admissibility‑preserving morphism between ecologies[9D[K
+ecologies (objects of \(\catEOD\)) arises from an appropriate operator fami[4D[K
+family (object in \(\catFate\)).  
+3. **Equivalence of Persistence and Equilibrium** – the persistence regime [K
+(\(survRatio=1,\repEff>0\)) corresponds exactly to ecological equilibrium ([1D[K
+(\(\dot N=0\)) in \(\catEOD\).  
+4. **Viability ↔ Positive Recurrence** – a viability class with positive fa[2D[K
+fate volume maps to an ecologically viable (positive‑recurrent) object.
+
+Thus, Fate Theory serves as the hinge that unifies the three categories thr[3D[K
+through these functors and containment relations of fate regimes, confirmin[9D[K
+confirming the “Rosetta Stone’’ claim.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-fate-of-distinguishability.tex
+
+NEW CHUNK
+=========
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=3.5cm,
+  cat/.style={draw=FateViolet,fill=FateLilac,rounded corners=6pt,
+    font=\sffamily\small,inner sep=8pt,minimum width=3cm,align=center},
+  arr/.style={-Stealth,FateViolet,thick},
+  lbl/.style={font=\sffamily\footnotesize\color{DistGray},midway}]
+  \node[cat](PBT) at (0,0) {$\catPBT$\\{\tiny Recoverable Distinctions}};
+  \node[cat](FATE) at (5,0) {$\catFate$\\{\tiny Fate Geometry}};
+  \node[cat](EOD) at (10,0) {$\catEOD$\\{\tiny Distinction Ecologies}};
+  \draw[arr](PBT)--(FATE) node[lbl,above]{$\functorPBT$};
+  \draw[arr](FATE)--(EOD) node[lbl,above]{$\functorEOD$};
+  \draw[arr,bend left=25](PBT) to
+    node[lbl,above]{$\functorEOD\circ\functorPBT$} (EOD);
+  
+  \node[font=\tiny\sffamily\color{DistBlue},below=0.4cm of PBT]
+    {faithful};
+  \node[font=\tiny\sffamily\color{DistBlue},below=0.4cm of FATE]
+    {hinge};
+  \node[font=\tiny\sffamily\color{DistBlue},below=0.4cm of EOD]
+    {full image};
+\end{tikzpicture}
+\end{center}
+
+
+Three Coordinate Systems on One Geometry
+
+
+The Rosetta Stone Theorem establishes the trilogy's
+fundamental claim: the three volumes are not three separate
+mathematical theories but three coordinate systems on the
+same underlying geometry. 
+
+\textit{Persistence Before Truth} works in \emph{recoverability
+coordinates}: the primary objects are distinction structures
+equipped with reconstruction operators, and the central
+theorem shows these structures are necessary for knowledge.
+
+\textit{The Fate of Distinguishability} works in \emph{fate
+coordinates}: the primary objects are distinction pairs
+equipped with fate maps, and the central theorem shows
+that the fate of any distinction is determined by its
+position in fate space relative to the operator monoid.
+
+\textit{The Ecology of Distinctions} works in \emph{ecological
+coordinates}: the primary objects are populations of fate
+classes with transition dynamics, and the central theorems
+describe how these populations evolve, equilibrate, and
+generate collective phenomena.
+
+The functors $\functorPBT$ and $\functorEOD$ are the
+coordinate transformations between these three systems.
+The Rosetta Stone Theorem says they compose correctly:
+the triangle commutes up to natural isomorphism.
+
+\begin{metatheorem}{Trilogy Unification}{trilogy-unified}
+There is a single mathematical object --- a recoverable
+distinction structure equipped with a fate map and an
+ecological dynamics --- of which $\catPBT$, $\catFate$,
+and $\catEOD$ are three coordinate projections. The
+three volumes of the trilogy describe this single object
+from three perspectives: necessity, mechanism, and
+consequence.
+\end{metatheorem}
+
+\begin{appsummary}
+\item The three trilogy categories $\catPBT$, $\catFate$,
+  $\catEOD$ formalize the subject matter of each volume.
+\item The functor $\functorPBT:\catPBT\to\catFate$ is
+  faithful: fate theory contains all PBT structure.
+\item The functor $\functorEOD:\catFate\to\catEOD$ is full:
+  every ecology morphism arises from an admissible operator.
+\item The Rosetta Stone Theorem: the composite functor
+  $\functorEOD\circ\functorPBT$ sends persistence to
+  equilibrium ecology, and viability to positive recurrence.
+\item The trilogy is three coordinate systems on one object:
+  necessity ($\catPBT$), mechanism ($\catFate$),
+  consequence ($\catEOD$).
+\end{appsummary}
+
+
+\backmatter
+
+
+\begin{thebibliography}{99}
+
+
+
+
+
+\bibitem{shannon1948}
+Shannon, C.~E.
+\newblock A Mathematical Theory of Communication.
+\newblock {\em Bell System Technical Journal},
+  27(3):379--423, 1948.
+
+\bibitem{weaver1949}
+Shannon, C.~E. and Weaver, W.
+\newblock {\em The Mathematical Theory of Communication}.
+\newblock University of Illinois Press, 1949.
+
+\bibitem{ashby1956}
+Ashby, W.~R.
+\newblock {\em An Introduction to Cybernetics}.
+\newblock Chapman \& Hall, 1956.
+
+\bibitem{bateson1972}
+Bateson, G.
+\newblock {\em Steps to an Ecology of Mind}.
+\newblock Chandler Publishing, 1972.
+
+\bibitem{spencerbrown1969}
+Spencer-Brown, G.
+\newblock {\em Laws of Form}.
+\newblock George Allen \& Unwin, 1969.
+
+
+
+
+
+\bibitem{bridgman1927}
+Bridgman, P.~W.
+\newblock {\em The Logic of Modern Physics}.
+\newblock Macmillan, 1927.
+
+\bibitem{campbell1920}
+Campbell, N.~R.
+\newblock {\em Physics: The Elements}.
+\newblock Cambridge University Press, 1920.
+
+\bibitem{suppes2002}
+Suppes, P.
+\newblock {\em Representation and Invariance of Scientific Structures}.
+\newblock CSLI Publications, 2002.
+
+
+
+
+
+\bibitem{amari2000}
+Amari, S. and Nagaoka, H.
+\newblock {\em Methods of Information Geometry}.
+\newblock Oxford University Press, 2000.
+
+\bibitem{amari2016}
+Amari, S.
+\newblock {\em Information Geometry and Its Applications}.
+\newblock Springer, 2016.
+
+\bibitem{rao1945}
+Rao, C.~R.
+\newblock Information and the Accuracy Attainable in the Estimation
+  of Statistical Parameters.
+\newblock {\em Bulletin of the Calcutta Mathematical Society},
+  37:81--91, 1945.
+
+\bibitem{jeffreys1946}
+Jeffreys, H.
+\newblock An Invariant Form for the Prior Probability.
+\newblock {\em Proceedings of the Royal Society A},
+  186:453--461, 1946.
+
+
+
+
+
+\bibitem{munkres2000}
+Munkres, J.
+\newblock {\em Topology}.
+\newblock Prentice Hall, 2nd edition, 2000.
+
+\bibitem{lee2013}
+Lee, J.~M.
+\newblock {\em Introduction to Smooth Manifolds}.
+\newblock Springer, 2013.
+
+\bibitem{gromov2007}
+Gromov, M.
+\newblock {\em Metric Structures for Riemannian and Non-Riemannian Spaces}.
+\newblock Birkh\"{a}user, 2007.
+
+\bibitem{hirsch1976}
+Hirsch, M.~W.
+\newblock {\em Differential Topology}.
+\newblock Springer, 1976.
+
+
+
+
+
+\bibitem{strogatz2015}
+Strogatz, S.~H.
+\newblock {\em Nonlinear Dynamics and Chaos}.
+\newblock Westview Press, 2nd edition, 2015.
+
+\bibitem{arnold1992}
+Arnold, V.~I.
+\newblock {\em Ordinary Differential Equations}.
+\newblock Springer, 1992.
+
+\bibitem{katok1995}
+Katok, A. and Hasselblatt, B.
+\newblock {\em Introduction to the Modern Theory of Dynamical Systems}.
+\newblock Cambridge University Press, 1995.
+
+
+
+
+
+\bibitem{holland1998}
+Holland, J.~H.
+\newblock {\em Emergence}.
+\newblock Oxford University Press, 1998.
+
+\bibitem{baryam1997}
+Bar-Yam, Y.
+\newblock {\em Dynamics of Complex Systems}.
+\newblock Addison-Wesley, 1997.
+
+\bibitem{mitchell2009}
+Mitchell, M.
+\newblock {\em Complexity: A Guided Tour}.
+\newblock Oxford University Press, 2009.
+
+
+
+
+
+\bibitem{edelman1987}
+Edelman, G.~M.
+\newblock {\em Neural Darwinism}.
+\newblock Basic Books, 1987.
+
+\bibitem{kandel2006}
+Kandel, E.
+\newblock {\em In Search of Memory}.
+\newblock W.~W. Norton, 2006.
+
+\bibitem{friston2010}
+Friston, K.
+\newblock The Free-Energy Principle.
+\newblock {\em Nature Reviews Neuroscience},
+  11:127--138, 2010.
+
+\bibitem{sterling2015}
+Sterling, P. and Laughlin, S.
+\newblock {\em Principles of Neural Design}.
+\newblock MIT Press, 2015.
+
+
+
+
+
+\bibitem{maclane1998}
+Mac~Lane, S.
+\newblock {\em Categories for the Working Mathematician}.
+\newblock Springer, 2nd edition, 1998.
+
+\bibitem{awodey2010}
+Awodey, S.
+\newblock {\em Category Theory}.
+\newblock Oxford University Press, 2010.
+
+\bibitem{riehl2016}
+Riehl, E.
+\newblock {\em Category Theory in Context}.
+\newblock Dover, 2016.
+
+
+
+
+
+\bibitem{may1976}
+May, R.~M.
+\newblock Simple Mathematical Models with Very Complicated Dynamics.
+\newblock {\em Nature}, 261:459--467, 1976.
+
+\bibitem{hofbauer1998}
+Hofbauer, J. and Sigmund, K.
+\newblock {\em Evolutionary Games and Population Dynamics}.
+\newblock Cambridge University Press, 1998.
+
+\bibitem{levin1998}
+Levin, S.~A.
+\newblock Ecosystems and the Biosphere as Complex Adaptive Systems.
+\newblock {\em Ecosystems}, 1:431--436, 1998.
+
+
+
+
+
+\bibitem{turing1936}
+Turing, A.~M.
+\newblock On Computable Numbers.
+\newblock {\em Proceedings of the London Mathematical Society},
+  42:230--265, 1936.
+
+\bibitem{kolmogorov1965}
+Kolmogorov, A.~N.
+\newblock Three Approaches to the Quantitative Definition of Information.
+\newblock {\em Problems of Information Transmission},
+  1(1):1--7, 1965.
+
+\bibitem{li2008}
+Li, M. and Vit\'{a}nyi, P.
+\newblock {\em An Introduction to Kolmogorov Complexity and Its Applications}.
+\newblock Springer, 3rd edition, 2008.
+
+
+
+
+
+\bibitem{flyxionPBT}
+Flyxion.
+\newblock {\em Persistence Before Truth}.
+\newblock Independent Researcher, 2026.
+
+\bibitem{flyxionFOD}
+Flyxion.
+\newblock {\em The Fate of Distinguishability}.
+\newblock Independent Researcher, 2026.
+
+\bibitem{flyxionEOD}
+Flyxion.
+\newblock {\em The Ecology of Distinctions}.
+\newblock Independent Researcher, 2026.
+
+\end{thebibliography}
+
+
+\printglossaries
+
+\printindex
+
+\end{document}
+

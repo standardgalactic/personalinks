@@ -1,0 +1,65 @@
+**Definitions and primitive concepts introduced here**
+
+- **Entropy‑limited storytelling**: “the strategy of limiting narrative com[3D[K
+complexity and recurrence to preserve relevance over time cycles.”  
+- **Entropy threshold**: “a quantitative bound on the amount of redundancy [K
+or abstraction that may be present in a story without causing decay.”  
+- **Narrative loop integrity**: “ensuring that each recursive iteration of [K
+the storyline maintains coherence with its preceding structure.”  
+- **Digital mythos durability**: “the sustained viability and recognizabili[13D[K
+recognizability of digital myths within evolving cultural contexts.”
+
+**Mathematical claims and formal structures**
+
+- A formal model is proposed where narrative complexity \(C\) (measured in [K
+terms of “story nodes”) must satisfy \(C \leq E_{\text{threshold}}\), where[5D[K
+where \(E_{\text{threshold}}\) is a predetermined entropy limit.  
+- The relationship between recurrence frequency \(R\) and decay factor \(D\[4D[K
+\(D\) is expressed as \(D = f(C, R)\) with \(f\) being an exponential decay[5D[K
+decay function to prevent narrative saturation.
+
+**Mechanisms and processes**
+
+1. **Constraint enforcement**: Content generation systems are required to c[1D[K
+check each new element against the entropy threshold before integration int[3D[K
+into the storyline.  
+2. **Recursion boundary checks**: At every loop iteration, the system evalu[5D[K
+evaluates whether adding a new narrative fragment would push \(C\) beyond \[1D[K
+\(E_{\text{threshold}}\); if so, alternative representation pathways (e.g.,[6D[K
+(e.g., summarization) are triggered.  
+3. **Retention optimization algorithm**: Implements a feedback loop that ad[2D[K
+adjusts narrative pacing based on observed user engagement metrics to keep [K
+the entropy within acceptable bounds.
+
+**Connections to concepts named in the running abstract**
+
+- Directly elaborates on “bounded recursion” as described in the running ab[2D[K
+abstract, providing the mathematical and procedural details (entropy thresh[6D[K
+threshold, narrative loop integrity) that were introduced only conceptually[12D[K
+conceptually earlier.  
+- Reinforces the claim that bounded recursion prevents “narrative decay due[3D[K
+due to excessive repetition or abstraction loss,” aligning with the abstrac[7D[K
+abstract’s assertion.
+
+**Unresolved questions or contradictions visible within this chunk**
+
+- No explicit contradictions are evident; however, a key unresolved questio[7D[K
+question remains: *How precisely should \(E_{\text{threshold}}\) be calibra[7D[K
+calibrated for different digital cultures without risking premature narrati[7D[K
+narrative stagnation?*  
+- Another open issue is the methodological validation of which metrics best[4D[K
+best predict \(D\) across diverse content types (e.g., video games vs. lite[4D[K
+literary narratives).
+
+**Quotations**
+
+1. “the strategy of limiting narrative complexity and recurrence to preserv[7D[K
+preserve relevance over time cycles.” – [source: "Entropy-Limited Myths in [K
+Digital Cultures"]
+2. “a quantitative bound on the amount of redundancy or abstraction that ma[2D[K
+may be present in a story without causing decay.” – [source: "entropy thres[5D[K
+threshold"]
+3. “ensuring that each recursive iteration of the storyline maintains coher[5D[K
+coherence with its preceding structure.” – [source: "narrative loop integri[7D[K
+integrity"]
+

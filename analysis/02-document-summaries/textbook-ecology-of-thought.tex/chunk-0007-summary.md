@@ -1,81 +1,50 @@
-**Durable Theoretical Information Extracted**
+**1. Definitions & Primitive Concepts Introduced**
 
-1. **Conceptual Framework – Historical Organization**  
-   - Defined as a *primitive mathematical object* that cannot be fully redu[4D[K
-reduced to existing disciplines (e.g., arithmetic, geometry).  
-   - Captures the idea that “present configuration alone fails to determine[9D[K
-determine future behavior”; instead, *developmental structure* accumulated [K
-through prior construction determines admissible futures.
-
-2. **Category Theory Formalization**  
-   - Introduces a category \(\mathfrak H\) of historically organized system[6D[K
-systems:  
-     \[
-     X = (S,\;H,\;\Gamma)
-     \]  
-     where  
-     - \(S\): current observable organization,  
-     - \(H\): accumulated developmental history,  
-     - \(\Gamma\): admissible continuation operator induced by that history[7D[K
+- **Historically Organized System (HOS)** – A tuple \(X = (S,H,\Gamma)\) wh[2D[K
+where  
+  - *\(S\)* is the present observable organization,  
+  - *\(H\)* is the accumulated developmental history, and  
+  - *\(\Gamma\)* is the admissible continuation operator induced by that hi[2D[K
 history.  
-   - Highlights the *irreducibility* of this structure: knowledge of any si[2D[K
-single component (e.g., \(S\) or \(H\)) does not uniquely determine another[7D[K
-another without \(\Gamma\).
 
-3. **Historical Equivalence**  
-   - Two systems \(X\) and \(Y\) are historically equivalent if a morphism [K
-\(\Granite : X \rightarrow Y\) preserves the continuation structure (\(\Gam[7D[K
-(\(\Gamma_X \simeq \Gamma_Y\)) but may not preserve present configuration o[1D[K
-or detailed history.  
-   - This generalizes ordinary isomorphism to *future computational possibi[7D[K
-possibility* rather than static representation.
+- **Historical Equivalence** – Two HOS \(X\) and \(Y\) are equivalent if th[2D[K
+there exists a morphism \(\Granite: X\rightarrow Y\) preserving the continu[7D[K
+continuation structure (\(\Gamma_X \simeq \Gamma_Y\)), not necessarily thei[4D[K
+their current states or full histories.
 
-4. **Invariants and Quantities**  
-   - Several natural invariants are proposed: historical depth, continuatio[11D[K
-continuation volume, repair complexity, ecological curvature, developmental[13D[K
-developmental dimension, reachability entropy, interaction density.  
-   - None belong exclusively to any existing mathematical discipline; they [K
-characterize the *organization of histories* rather than mere states.
+**2. Mathematical Claims & Formal Structures**
 
-5. **Irreversibility and Conservation Laws**  
-   - Introduces *developmental irreversibility*: a transformation \(\Phi : [K
-X \rightarrow Y\) is historically reversible only if there exists a reverse[7D[K
-reverse \(\Psi : Y \rightarrow X\) such that \(\Psi\circ\Granite = \operato[8D[K
-\operatorname{id}\). Many real-world processes (e.g., scientific discipline[10D[K
-disciplines, software ecosystems) become irreversibly transformed despite r[1D[K
-retaining static information.  
-   - Suggests the need for conservation laws distinct from classical mechan[6D[K
-mechanics to account for changes in continuation structure.
+- The category \(\mathfrak H\) of historically organized systems is defined[7D[K
+defined with objects \(X=(S,H,\Gamma)\) and morphisms preserving the contin[6D[K
+continuation operator.
+- Invariants such as *historical depth*, *continuation volume*, *repair com[3D[K
+complexity*, *ecological curvature*, *developmental dimension*, and *reacha[7D[K
+*reachability entropy* are introduced, each drawing from graph theory, cate[4D[K
+category theory, topology, information geometry, etc., but none belongs exc[3D[K
+exclusively to a single discipline.
 
-6. **Implications for Mathematical Explanation**  
-   - The goal is not reduction to more primitive structures but *structural[11D[K
-*structural unification*: explaining phenomena by identifying common forms [K
-of historical organization across seemingly unrelated domains (biology, sof[3D[K
-software, mathematics, institutions, economies).  
+**3. Mechanisms & Processes**
 
-7. **Cross‑Disciplinary Manifestations**  
-   - Historical organization appears in diverse fields: biological evolutio[8D[K
-evolution, computational version histories, language change, ecological hab[3D[K
-habitats, legal precedent, scientific methodological fragmentation, technol[7D[K
-technological infrastructure assembly.  
+- **Historical Irreversibility:** Transformation \(\Phi: X\rightarrow Y\) i[1D[K
+is historically reversible only if an inverse \(\Psi: Y\rightarrow X\) exis[4D[K
+exists such that \(\Psi\circ\Granite = \operatorname{id}\). Many real‑world[10D[K
+real‑world processes (e.g., scientific discipline fragmentation) are irreve[6D[K
+irreversible despite informational reversibility.
+- **Conservation Laws for Historical Continuation:** Unlike classical mecha[5D[K
+mechanics, continuation structure may expand, contract, or fragment while p[1D[K
+preserving information content and dynamical stability.
 
-8. **Theoretical Position**  
-   - The proposed mathematics should be viewed as occupying an *intermediat[12D[K
-*intermediate* position between existing disciplines and the specific pheno[5D[K
-phenomenon it studies, drawing on graph theory, category theory, topology, [K
-information geometry, dynamical systems, proof theory, computability, and c[1D[K
-complexity to formalize historical organization.
+**4. Connections to Concepts Named in the Running Abstract**
 
-9. **Philosophical Consequences**  
-   - If correct, this framework may justify a new domain of mathematical in[2D[K
-inquiry focused on *historical mathematics*, emphasizing the richness of or[2D[K
-organized history as a legitimate object of study rather than merely an anc[3D[K
-ancillary record.
+- Directly mirrors the running abstract’s central themes: *Historically Org[3D[K
+Organized Systems* ↔ “Historically Organized Mathematical Object”; *Continu[8D[K
+*Continuation Operator* ↔ “Organizing Geometry of Future Possibility”.
+- The notion of **historical equivalence** parallels the idea of treating h[1D[K
+history as a structured mathematical object rather than mere chronology.
 
-These elements constitute the core theoretical backbone extracted from the [K
-fragment, preserving definitions, equations (in spirit), distinctions betwe[5D[K
-between components, mechanisms for equivalence and irreversibility, argumen[7D[K
-arguments about unification versus reduction, conjectures on conservation l[1D[K
-laws, dependencies among concepts, and unresolved questions regarding its f[1D[K
-full maturation.
+**5. Key References**
 
+The bibliography lists foundational works (e.g., Turing 1950, Mac Lane 1998[4D[K
+1998) that underpin concepts such as computation theory, category theory, a[1D[K
+and the extended mind hypothesis, providing context for these definitions a[1D[K
+and invariants.

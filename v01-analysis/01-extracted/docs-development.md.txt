@@ -1,0 +1,240 @@
+# Spherepop Developer Guide
+
+This guide explains the architecture, design philosophy, and common patterns. Read this to understand **why** the code is structured the way it is, not just **what** it does.
+
+---
+
+## 🎯 Core Philosophy
+
+### Operations Make History; Experiments Interrogate History
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  The four primitives (POP, REFUSE, BIND, COLLAPSE)          │
+│  are the ONLY things that may append to Config.history.     │
+│                                                              │
+│  Observers (confluent, regretful, etc.) analyze histories   │
+│  but NEVER modify them.                                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Why this matters**:
+- Confluence, divergence, regret are **properties discovered about histories**
+- They are deliberately NOT added as a fifth Operation
+- This preserves the closed four-operator algebra from the paper
+
+**Code manifestation**:
+- `spherepop/semantics.py`: Operations that construct histories
+- `spherepop/observers.py`: Functions that interrogate histories
+- Observers return plain values (bool, int, tuple), never `Config`
+
+---
+
+## 🏛️ Module Architecture
+
+| Module | Responsibility | Key Types/Functions |
+|--------|---------------|---------------------|
+| `model.py` | Core types (zero behavior) | Config, Operation, Event, Quotient |
+| `semantics.py` | The four primitives | transition(), eval_program() |
+| `observers.py` | Read-only analysis | confluent(), regretful(), admissible() |
+| `views.py` | Derived display | extensional_view(), representative() |
+| `predicates.py` | BIND predicate logic | predicate(), string_test() |
+| `path_utils.py` | Sphere tree navigation | expr_at(), find_label_path() |
+| `parser.py` | Convenience syntax | parse_program() ("POP 1") |
+| `grammar.py` | Appendix G literal syntax | parse_appendix_g() (labeled) |
+| `poset.py` | Plan B (isolated) | preceq(), minimal_elements() |
+
+---
+
+## 🔑 Key Abstractions
+
+### Config: The Authoritative State
+
+```python
+Config = (σ, h, O, collapse_log)
+```
+
+- **σ (sigma)**: Current Sphere expression
+- **h (history)**: Append-only event log (never deleted/reordered)
+- **O (option_space)**: Available options (strings or Quotients)
+- **collapse_log**: Provenance for COLLAPSE operations
+
+**Immutability**: `Config` is frozen. Every operation returns a new one.
+
+### Operation vs Event
+
+**Operation**: A *request* to modify state (can fail validation)  
+**Event**: A *committed* modification in history (what actually happened)
+
+Why split: Clarifies the request/commit distinction.
+
+### Quotient: Equivalence Classes
+
+```python
+@dataclass(frozen=True)
+class Quotient:
+    members: FrozenSet[str]
+    # NO "representative" field!
+```
+
+**Critical**: A Quotient carries only membership, no privileged representative.
+
+**Why**: Two `Quotient({a, b})` built in different orders must be equal and hash-equal.
+
+**Consequences**:
+1. **BIND**: Existential semantics (any member matches) — PROVISIONAL
+2. **REFUSE**: Refusing one member refuses whole class (atomic)
+
+See THEORY_STATUS.md Q3-Q4.
+
+---
+
+## 🎨 Design Patterns
+
+### Pattern 1: Immutable Transitions
+
+```python
+# Good
+def transition(config: Config, op: Operation) -> Config:
+    return replace(config, sigma=new_sigma, history=config.history + (event,))
+
+# Bad (mutates input)
+def transition(config: Config, op: Operation) -> Config:
+    config.history.append(event)  # ERROR: immutable anyway
+    return config
+```
+
+### Pattern 2: Observer Non-Authority
+
+```python
+# Good: Observer
+def confluent(left: Config, right: Config, policy: CollapseOp) -> bool:
+    left_after = transition(left, policy)   # Analysis copy
+    right_after = transition(right, policy)
+    return extensional_view(left_after) == extensional_view(right_after)
+
+# Bad: Observer that creates "the" answer
+def confluent(...) -> Config:  # Don't return Config as authoritative!
+    return merged_somehow(left, right)
+```
+
+### Pattern 3: Theory Status Documentation
+
+```python
+def predicate(spec: str) -> Callable[[str | Quotient], bool]:
+    """
+    **Theory Status**: PROVISIONAL - see THEORY_STATUS.md Q3.
+    
+    Appendix E does not specify how predicates lift to quotients.
+    Current: existential (any member matches).
+    """
+```
+
+---
+
+## 🚨 Common Pitfalls
+
+1. **Treating observers as operations**: Observers inform, don't prescribe
+2. **Choosing Quotient representatives in semantics**: Only `views.representative()` may pick
+3. **Implementing open semantics as if settled**: Mark experimental, reference THEORY_STATUS.md
+4. **Mutating Config**: Always `replace()`, never mutate
+
+---
+
+## 📖 Reading the Codebase (Recommended Order)
+
+1. `README.md` — Project overview
+2. `THEORY_STATUS.md` — Paper vs implementation
+3. `model.py` — Core types (10 min)
+4. `semantics.py:transition()` — The four branches (15 min)
+5. `observers.py:confluent()` — Example observer (5 min)
+6. Experiment 03 (`spherepop/03-pop/run.py`) — See it in action
+7. `tests/test_spherepop.py` — Tests document behavior
+
+---
+
+## 🎓 Theory → Code Mapping
+
+| Paper | Code | Notes |
+|-------|------|-------|
+| σ | `Config.sigma` | Current expression |
+| h | `Config.history` | Append-only events |
+| O | `Config.option_space` | FrozenSet[str \| Quotient] |
+| POP | `transition(PopOp)` | Resolve nested scope |
+| REFUSE | `transition(RefuseOp)` | Exclude subset (Appendix E) |
+| BIND | `transition(BindOp)` | Filter by predicate |
+| COLLAPSE | `transition(CollapseOp)` | Equivalence (Appendix C) |
+| ⊑ preorder | `poset.preceq` | Plan B (isolated) |
+| h₁ ≈_k h₂ | `horizon_equivalent` | k-step futures (Appendix F) |
+| Regret | `regretful` | Strictly smaller options |
+
+---
+
+## 🛠️ Development Tools
+
+```bash
+make install-dev     # Install with dev dependencies
+make test            # Run all tests
+make test-cov        # Tests with coverage
+make lint            # Ruff linting
+make format          # Auto-format
+make type-check      # Mypy strict
+make experiments     # Run all experiments
+```
+
+---
+
+## 🔮 Future Directions
+
+### Plan B Integration (Major)
+
+**Status**: `poset.py` isolated; integration is substantial work
+
+**Prerequisites**:
+1. Experiments investigating Q1c convergence
+2. Design for per-label option spaces
+3. Minimal-element elimination semantics
+
+Not a casual refactor — this is research.
+
+### COLLAPSE Composition (Medium)
+
+**Current**: Second COLLAPSE over Quotient unsupported  
+**Natural**: Equivalence closure (transitive)  
+**Action**: Experiment first, then core integration
+
+See THEORY_STATUS.md Q2b.
+
+### BIND Semantics Exploration (Small)
+
+**Current**: Existential (any member)  
+**Alternatives**: Universal (all members), well-defined on classes  
+**Action**: Create comparative experiment
+
+See THEORY_STATUS.md Q3.
+
+---
+
+## ❓ FAQ
+
+**Q: Why are Operations and Events separate?**  
+A: Operations can fail. Events represent committed history.
+
+**Q: Why is Config immutable?**  
+A: Guarantees append-only history, prevents accidental mutation, enables safe sharing.
+
+**Q: Can I add memoization to observers?**  
+A: Yes. Config immutability makes caching safe. Use `@functools.cache`, document in docstring.
+
+**Q: How do I handle semantic questions the paper doesn't address?**  
+A: Document as provisional, implement reasonable default, mark tests experimental, reference THEORY_STATUS.md.
+
+---
+
+**See also**: 
+- [`CONTRIBUTING.md`](../CONTRIBUTING.md) — Development workflow
+- [`THEORY_STATUS.md`](../THEORY_STATUS.md) — Paper vs implementation
+- [`README.md`](../README.md) — Project overview
+
+**Maintained by**: Spherepop contributors  
+**Last updated**: 2026-08-13

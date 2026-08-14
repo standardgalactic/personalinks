@@ -1,15 +1,199 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 3 of a document called
+"the-calculus-of-commitment.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**State, Continuations, and Mutation through the Merge‑Collapse Lens**
 
-TEXT
-====
+Below we reinterpret three constructs that are often treated as unrelated i[1D[K
+in standard presentations—state monads, continuation‑passing style (CPS), a[1D[K
+and mutable state—using the unified structural picture of *merge* followed [K
+by *collapse*. In this view every computation is fundamentally a sequence o[1D[K
+of effect atoms that accumulate into an “event log”, which is then interpre[8D[K
+interpreted (collapsed) to produce observable side effects.
+
+---
+
+### 1. The State Monad as an Explicit Evolving Region
+
+**Traditional description:**  
+A stateful value is modeled as  
+
+\[
+\texttt{State}\;S\;A \;\cong\; S \to (A \times S),
+\]
+
+i.e., a function that consumes the current environment \(S\) and returns bo[2D[K
+both a result \(A\) and an updated state.
+
+**Merge‑Collapse view:**  
+
+1. **Region as a log:**  
+   The type \(S\) is not just a carrier of values; it represents *regions* [K
+(or “commitments”) that record what has happened so far. Think of each poss[4D[K
+possible \(S\) as a distinct page in an append‑only event log.
+
+2. **Execution as staged merge:**  
+   Running a stateful program updates the region through successive merges:[7D[K
+merges:
+
+   \[
+   S_{t+1}= \operatorname{collapse}\big(S_t \oplus \Delta_t\big),
+   \]
+
+   where \(\Delta_t\) is the atomic change contributed by the current step.[5D[K
+step. The operation *is not destructive* in a functional sense—it creates a[1D[K
+a new region rather than rewriting an existing one.
+
+3. **Compositional history:**  
+   Because each update produces a new region, composition of multiple state[5D[K
+stateful steps yields a sequence of regions:
+
+   \[
+   S_{t+2}= \operatorname{collapse}\big(S_{t+1} \oplus \Delta_{t+1}\big),
+   \]
+
+   preserving the algebraic identity that concatenation (merge) is associat[8D[K
+associative and has an empty region as its identity.
+
+**Result:**  
+State monads encode exactly this pattern: they accumulate effect atoms in a[1D[K
+a mutable “region” \(S\) and later collapse it to produce results. No hidde[5D[K
+hidden side‑effects are introduced; everything is visible as part of the ev[2D[K
+event log.
+
+---
+
+### 2. Continuation‑Passing Style (CPS) as Explicit Control of What Happens[7D[K
+Happens Next
+
+**Traditional description:**  
+A CPS transformation replaces a function’s return value with an extra argum[5D[K
+argument—*the continuation* \(k\)—so that control is explicitly passed forw[4D[K
+forward:
+
+\[
+A \;\to\; (A \to R) \to R.
+\]
+
+In other words, instead of yielding a result immediately, the current compu[5D[K
+computation hands off its remaining work to another function.
+
+**Merge‑Collapse view:**  
+
+1. **Continuations are future collapses:**  
+   In our language, continuations represent *what will happen next* in the [K
+pipeline. They carry with them the promise (or “plan”) for subsequent merge[5D[K
+merge and collapse operations that will materialize later.
+
+2. **Staged merging:**  
+   When a CPS function produces an intermediate value \(a\), it yields a co[2D[K
+continuation that consumes this value and subsequently decides how to norma[5D[K
+normalize it (i.e., perform its own collapse). This mirrors the staged‑merg[11D[K
+staged‑merge pattern:
+
+   \[
+   s \xrightarrow{m} s' \xrightarrow{k(a)} s''.
+   \]
+
+3. **Control of when/what collapses:**  
+   By passing a continuation, we can defer the moment and manner in which a[1D[K
+any intermediate effect is collapsed (interpreted). This gives us fine‑grai[9D[K
+fine‑grained control over where collapse occurs—whether immediately after e[1D[K
+each step or only at higher levels.
+
+**Result:**  
+CPS therefore becomes not just a stylistic transformation but a mechanism f[1D[K
+for controlling the *stage* of collapse. It emphasizes that computation is [K
+fundamentally about *how and when* we merge effect atoms into observable re[2D[K
+results, rather than merely producing values instantly.
+
+---
+
+### 3. Mutation as Untracked Collapse at the Boundary
+
+**Traditional description:**  
+Mutable state often means “overwriting” a variable in place; it breaks refe[4D[K
+referential transparency because the new value replaces (and discards) hist[4D[K
+history.
+
+**Merge‑Collapse view:**  
+
+1. **Mutation = collapse without recording history:**  
+   In our framework, mutation corresponds to *collapsing* an effect atom in[2D[K
+into its current region **without preserving a record of that atom in the e[1D[K
+event log**. Formally:
+
+   \[
+   S_{t+1} \leftarrow S_{t+2},
+   \]
+
+   where \(S_{t+1}\) is overwritten by the new state, and no entry for the [K
+former state (or its effect atoms) remains.
+
+2. **Loss of replayability:**  
+   Because the prior region becomes unavailable as a stable semantic object[6D[K
+object, we lose the ability to *replay* or *undo* that portion of history—s[9D[K
+history—something that would be trivial with an append‑only log.
+
+3. **Boundary collapse:**  
+   This “boundary” collapse happens at the highest level where the system t[1D[K
+treats mutable state as instantaneous change rather than a cumulative merge[5D[K
+merge operation. It is thus not captured by our free monoid event‑log model[5D[K
+model, which assumes each step leaves a traceable entry in the log.
+
+**Result:**  
+Mutation appears paradoxical when viewed through the lens of algebraic effe[4D[K
+effects: it’s simply a collapse that deliberately discards the structural e[1D[K
+evidence (the previous region) rather than adding it to an evolving event l[1D[K
+log. Understanding mutation this way clarifies why reasoning about mutable [K
+programs can be so much harder—because we are intentionally ignoring part o[1D[K
+of the computation history.
+
+---
+
+### Unified Takeaway
+
+All three constructs—**state monads, CPS continuations, and mutation**—shar[15D[K
+mutation**—share a common underlying principle: they differ only in *where*[7D[K
+*where* collapse occurs relative to the accumulation (merge) stage. In each[4D[K
+each case:
+
+- **Merge** records effect atoms as parts of an evolving region/event log.
+- **Collapse** interprets these accumulated structures into observable resu[4D[K
+results.
+
+Whether the collapse happens immediately after every step (pure functions),[11D[K
+functions), deferred via continuations, or outright discarding prior histor[6D[K
+history (mutation), the essential invariant remains: *computation is a seri[4D[K
+series of merges that are interpreted later.* This perspective unifies what[4D[K
+what often feels like disparate concepts by exposing their shared algebraic[9D[K
+algebraic structure.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 
 A function type

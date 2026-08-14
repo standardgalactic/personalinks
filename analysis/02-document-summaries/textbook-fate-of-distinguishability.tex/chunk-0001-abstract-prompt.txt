@@ -1,0 +1,1413 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+(none yet)
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-fate-of-distinguishability.tex
+
+NEW CHUNK
+=========
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\documentclass[12pt,twoside,openright]{book}
+
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont[Scale=0.85]{TeX Gyre Cursor}
+
+
+
+
+
+
+
+
+\usepackage[paperwidth=17cm,paperheight=24cm,
+  top=2.5cm,bottom=2.8cm,inner=2.8cm,outer=2.2cm,
+  marginparwidth=1.4cm,marginparsep=0.3cm]{geometry}
+
+
+
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\definecolor{DistBlue}  {HTML}{1B4F72}
+\definecolor{DistTeal}  {HTML}{117A65}
+\definecolor{DistAmber} {HTML}{B7770D}
+\definecolor{DistRed}   {HTML}{922B21}
+\definecolor{DistGray}  {HTML}{566573}
+\definecolor{DistGold}  {HTML}{7D6608}
+\definecolor{DistLight} {HTML}{EAF4FB}
+\definecolor{DistLightG}{HTML}{E9F7EF}
+\definecolor{DistGoldBg}{HTML}{FEF9E7}
+\definecolor{DistSage}  {HTML}{5B7553}
+\definecolor{DistSageBg}{HTML}{F1F5EF}
+
+\definecolor{FateViolet}{HTML}{4A235A}
+\definecolor{FateLilac} {HTML}{F5EEF8}
+\definecolor{FateStrata}{HTML}{7D3C98}
+
+
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,
+  decorations.pathmorphing,backgrounds,fit,calc,matrix,patterns}
+\tikzset{
+  thmnode/.style={rectangle,rounded corners=4pt,
+    draw=DistTeal,fill=DistLight,font=\sffamily\footnotesize,
+    text width=4.2cm,align=center,inner sep=4pt},
+  lawnode/.style={rectangle,rounded corners=4pt,
+    draw=DistGold,fill=DistGoldBg,
+    font=\sffamily\footnotesize\bfseries,
+    text width=4.2cm,align=center,inner sep=4pt},
+  fatenode/.style={rectangle,rounded corners=4pt,
+    draw=FateViolet,fill=FateLilac,
+    font=\sffamily\footnotesize,
+    text width=4.2cm,align=center,inner sep=4pt},
+  thmedge/.style={-Stealth,DistTeal,thick},
+  fateedge/.style={-Stealth,FateViolet,thick},
+  distnode/.style={circle,draw=DistBlue,fill=DistLight,
+    minimum size=7mm,font=\small\sffamily},
+  distedge/.style={-Stealth,DistTeal,thick},
+}
+
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\color{DistBlue}\huge}
+  {\color{DistTeal}\sffamily\Large\chaptername\ \thechapter}
+  {0.5ex}{\titlerule[1pt]\vspace{0.8ex}}[\vspace{0.4ex}\titlerule]
+\titleformat{\section}
+  {\sffamily\bfseries\large\color{DistBlue}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\sffamily\bfseries\normalsize\color{DistGray}}{\thesubsection}{1em}{}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\sffamily\color{DistGray}\leftmark}
+\fancyhead[RO]{\small\sffamily\color{DistGray}\rightmark}
+\fancyfoot[C]{\small\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[most]{tcolorbox}
+
+
+
+
+
+
+\tcbset{thmbase/.style={enhanced,breakable,
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+  fonttitle=\sffamily\bfseries,separator sign={.}}}
+
+
+\newtcbtheorem[number within=chapter]{axiom}{Axiom}{
+  thmbase,colback=DistGoldBg,colframe=DistGold,coltitle=white,
+  borderline west={3pt}{0pt}{DistGold},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGold,rounded corners}}{axm}
+\newtcbtheorem[use counter from=axiom]{law}{Law}{
+  thmbase,colback=DistGoldBg,colframe=DistGold!80,coltitle=white,
+  borderline west={3pt}{0pt}{DistGold!80},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGold!80,rounded corners}}{law}
+\newtcbtheorem[use counter from=axiom]{principle}{Principle}{
+  thmbase,colback=DistGoldBg,colframe=DistGold!60,coltitle=white,
+  borderline west={3pt}{0pt}{DistGold!60},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGold!60,rounded corners}}{prc}
+
+
+\newtcbtheorem[number within=chapter]{theorem}{Theorem}{
+  thmbase,colback=DistLight,colframe=DistTeal,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistTeal,rounded corners}}{thm}
+
+
+
+
+\newtcbtheorem[use counter from=theorem]{metatheorem}{Meta-Theorem}{
+  thmbase,colback=FateLilac,colframe=FateViolet,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=FateViolet,rounded corners}}{meta}
+
+
+\newtcbtheorem[use counter from=theorem]{proposition}{Proposition}{
+  thmbase,colback=DistLight,colframe=DistBlue,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistBlue,rounded corners}}{prop}
+
+
+\newtcbtheorem[use counter from=theorem]{lemma}{Lemma}{
+  thmbase,colback=DistLight,colframe=DistGray,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGray,rounded corners}}{lem}
+\newtcbtheorem[use counter from=theorem]{corollary}{Corollary}{
+  thmbase,colback=DistLight,colframe=DistTeal!50,coltitle=DistBlue,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistTeal!50,rounded corners}}{cor}
+
+
+
+
+
+\newtcbtheorem[use counter from=theorem]{conjecture}{Conjecture}{
+  thmbase,colback=DistGoldBg,colframe=DistAmber,coltitle=white,
+  borderline west={3pt}{0pt}{DistAmber},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistAmber,rounded corners}}{conj}
+
+
+\newtcbtheorem[number within=chapter]{definition}{Definition}{
+  thmbase,colback=DistLightG,colframe=DistTeal,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistTeal,rounded corners}}{defn}
+\newtcbtheorem[number within=chapter]{example}{Example}{
+  thmbase,colback=orange!5,colframe=DistAmber!80,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistAmber!80,rounded corners}}{ex}
+\newtcbtheorem[number within=chapter]{remark}{Remark}{
+  thmbase,colback=yellow!6,colframe=DistAmber,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistAmber,rounded corners}}{rmk}
+
+
+\newenvironment{defn}{\begin{definition}{}{}}{\end{definition}}
+\newenvironment{thm}{\begin{theorem}{}{}}{\end{theorem}}
+\newenvironment{lem}{\begin{lemma}{}{}}{\end{lemma}}
+\newenvironment{cor}{\begin{corollary}{}{}}{\end{corollary}}
+\newenvironment{prop}{\begin{proposition}{}{}}{\end{proposition}}
+\newenvironment{ex}{\begin{example}{}{}}{\end{example}}
+\newenvironment{rem}{\begin{remark}{}{}}{\end{remark}}
+
+\renewcommand{\qedsymbol}{\textcolor{DistTeal}{$\blacksquare$}}
+
+
+\usepackage{graphicx,booktabs,longtable,array,caption,subcaption}
+\captionsetup{font=small,labelfont={sf,bf,color=DistBlue}}
+
+
+\usepackage{fontawesome5,enumitem}
+\newcommand{\csicon} {\marginpar{\tiny\color{DistBlue}\faCode}}
+\newcommand{\bioicon}{\marginpar{\tiny\color{DistTeal}\faDna}}
+\newcommand{\physicon}{\marginpar{\tiny\color{DistGray}\faAtom}}
+\newcommand{\fateicon}{\marginpar{\tiny\color{FateViolet}\faSitemap}}
+
+
+\usepackage{makeidx}
+\makeindex
+
+
+\usepackage[colorlinks=true,linkcolor=DistBlue,
+  citecolor=DistTeal,urlcolor=DistAmber,
+  pdftitle={The Fate of Distinguishability},
+  pdfauthor={Flyxion}]{hyperref}
+\usepackage{cleveref}
+\crefname{tcb@cnt@theorem}{theorem}{theorems}
+\Crefname{tcb@cnt@theorem}{Theorem}{Theorems}
+\crefname{tcb@cnt@axiom}{axiom}{axioms}
+\Crefname{tcb@cnt@axiom}{Axiom}{Axioms}
+\crefname{tcb@cnt@definition}{definition}{definitions}
+\Crefname{tcb@cnt@definition}{Definition}{Definitions}
+\crefname{tcb@cnt@example}{example}{examples}
+\Crefname{tcb@cnt@example}{Example}{Examples}
+\crefname{tcb@cnt@remark}{remark}{remarks}
+\Crefname{tcb@cnt@remark}{Remark}{Remarks}
+
+
+
+
+
+
+
+
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{microtype}
+
+
+
+
+
+
+
+
+\newcommand{\vfield}{\vec{v}}
+\newcommand{\partition}{\mathcal{P}}
+\newcommand{\hist}{\mathcal{H}}
+
+\newcommand{\adm}{\mathcal{A}}            
+\newcommand{\repair}{\mathfrak{R}}        
+\newcommand{\reco}{\mathfrak{rec}}        
+\newcommand{\Vol}{\operatorname{Vol}}     
+
+
+
+
+\newcommand{\transfam}{\mathcal{T}}       
+\newcommand{\distset}{\mathcal{D}}        
+
+
+\newcommand{\recon}{\mathcal{R}_{\mathrm{rec}}}   
+\newcommand{\reach}{\mathcal{R}_{\mathrm{reach}}} 
+
+
+
+
+
+
+
+
+
+
+
+
+\newcommand{\distPairs}{X\times X}
+
+
+
+\newcommand{\fateClasses}{\Delta_{\mathfrak{F}}}
+
+
+\newcommand{\obs}{\mathcal{O}}
+
+
+\newcommand{\fateMap}{\mathfrak{F}}
+
+
+\newcommand{\fateSpace}{\mathcal{S}}
+
+
+\newcommand{\survRatio}{\rho}             
+\newcommand{\repEff}{\eta}               
+\newcommand{\collapseInd}{c}             
+
+
+\newcommand{\distOp}{\mathsf{DistOp}}
+
+
+
+\newcommand{\fateClass}[1]{[#1]_{\mathfrak{F}}}
+
+
+
+\newcommand{\fatePop}[1]{N_{#1}(t)}
+
+
+
+\newcommand{\distMetric}{d_{\mathcal{O}}}
+
+
+\newcommand{\survSet}[1]{S_{\mathcal{T}}(#1)}    
+\newcommand{\survRat}[1]{\rho_{\mathcal{T}}(#1)} 
+
+
+\newcommand{\admFate}{\mathcal{A}_{\mathfrak{F}}}
+
+
+\newcommand{\fateBdy}{\partial\mathcal{A}}
+
+
+\newcommand{\persDur}[1]{\tau(#1)}
+
+
+
+
+\newcommand{\PBT}[1]{\textit{#1} [\textsc{pbt}]}
+\newcommand{\EOD}[1]{\textit{#1} [\textsc{eod}]}
+
+
+
+
+\newcommand{\fateDist}[2]{d_{\fateSpace}(#1,#2)}
+
+
+\newcommand{\distDist}[2]{d_{\mathcal{O}}(#1,#2)}
+
+
+\newcommand{\fateSens}[1]{\sigma_{\fateMap}(#1)}
+
+
+\newcommand{\singSet}{\partial_{\!\mathcal{A}}}
+
+
+\newcommand{\strataC}{\Sigma_{C}}   
+\newcommand{\strataR}{\Sigma_{R}}   
+\newcommand{\strataT}{\Sigma_{T}}   
+\newcommand{\strataF}{\Sigma_{F}}   
+
+
+\newcommand{\fateMargin}[1]{m(#1)}
+
+
+\newcommand{\admRegion}{A}
+
+
+\newcommand{\admOp}{\pi_{\!\admRegion}}
+
+
+\newcommand{\objBdy}{\partial O}
+
+
+\newcommand{\fateUnif}{\text{fate-uniform}}
+
+
+\newcommand{\fateLip}{L_{\fateMap}}
+
+
+\newcommand{\fateComp}[1]{\fateSpace_{\collapseInd=#1}}
+
+
+
+
+
+\newcommand{\catDist}{\mathbf{Dist}}
+
+\newcommand{\catFate}{\mathbf{Fate}}
+
+
+\newcommand{\civFunc}{\mathcal{C}}
+
+
+
+
+
+\newenvironment{epigraph}[2]{
+  \vspace{1em}\begin{flushright}
+  \begin{minipage}{0.72\textwidth}
+  \itshape\small #1\\[0.4em]
+  \upshape\footnotesize\sffamily\color{DistGray}--- #2
+  \end{minipage}\end{flushright}\vspace{1.5em}}{}
+
+
+\newenvironment{objectives}{
+  \begin{tcolorbox}[colback=DistBlue!5,colframe=DistBlue,
+    title={\faCheckCircle\enspace Chapter Objectives},
+    fonttitle=\sffamily\bfseries\color{white},
+    attach boxed title to top left={yshift=-2mm,xshift=4mm},
+    boxed title style={colback=DistBlue},breakable]
+  \begin{itemize}[leftmargin=*,nosep]}{
+  \end{itemize}\end{tcolorbox}\vspace{1em}}
+
+
+\newenvironment{chapsummary}{
+  \begin{tcolorbox}[colback=DistBlue!5,colframe=DistBlue,
+    title={\faBookOpen\enspace Summary},
+    fonttitle=\sffamily\bfseries\color{white},
+    attach boxed title to top left={yshift=-2mm,xshift=4mm},
+    boxed title style={colback=DistBlue,rounded corners}]
+  \begin{itemize}[nosep,leftmargin=*]}{
+  \end{itemize}\end{tcolorbox}}
+
+
+
+\newtcolorbox{fatediagram}[1]{
+  enhanced,breakable,
+  colback=FateLilac,colframe=FateViolet,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faSitemap\enspace Fate Structure: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=FateViolet,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt
+}
+
+
+
+\newtcolorbox{trilogylink}[1]{
+  enhanced,breakable,
+  colback=DistGoldBg,colframe=DistAmber,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faLink\enspace Trilogy Connection: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistAmber,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+  fontupper=\small
+}
+
+
+
+
+
+
+
+
+
+
+\newtcolorbox{partmap}[2]{
+  enhanced,breakable,
+  colback=FateLilac!40,colframe=FateViolet!60,
+  fonttitle=\sffamily\bfseries\large\color{FateViolet},
+  title={#1\\[0.2em]{\small\normalfont\sffamily\color{DistGray}#2}},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=FateLilac,colframe=FateViolet,rounded corners},
+  left=12pt,right=12pt,top=10pt,bottom=10pt,
+  width=0.65\textwidth,center}
+
+
+\newcommand{\partnode}[1]{
+  \begin{center}
+  \begin{tikzpicture}
+    \node[draw=FateViolet,fill=white,rounded corners=5pt,
+      font=\sffamily\small,inner sep=6pt,
+      minimum width=5cm,align=center]{#1};
+  \end{tikzpicture}
+  \end{center}}
+\newcommand{\partarrow}{
+  \begin{center}
+  \begin{tikzpicture}
+    \draw[-Stealth,FateViolet,line width=1.2pt](0,0)--(0,-0.5);
+  \end{tikzpicture}
+  \end{center}}
+\newenvironment{exercise}[1][]{
+  \refstepcounter{exercise}
+  \noindent\textbf{\sffamily\color{DistBlue}
+  Exercise~\thechapter.\theexercise
+  \ifx&#1&\else~(#1)\fi.}\enspace}{\par\medskip}
+
+
+
+
+\usepackage[acronym,toc,nonumberlist]{glossaries}
+\makeglossaries
+
+
+\newacronym{rsvp}{RSVP}{Relativistic Scalar Vector Plenum}
+\newacronym{tartan}{TARTAN}{Trajectory-Aware Recursive Tiling with Annotated Noise}
+\newacronym{hydra}{HYDRA}{Hybrid Dynamic Reasoning Architecture}
+
+
+\newglossaryentry{fate-map}{name={fate map},
+  description={The map $\fateMap:\distPairs\to\fateSpace$ assigning
+  to each distinction pair its fate profile under the operator family
+  (Ch.\,10)}}
+\newglossaryentry{fate-space}{name={fate space},
+  description={The product space $\fateSpace =
+  [0,1]_\survRatio\times[0,1]_\repEff\times\{0,1\}_\collapseInd
+  \times\mathbb{R}^k_{\ge0}$ encoding all fate-relevant quantities
+  (Ch.\,10)}}
+\newglossaryentry{operator-monoid}{name={operator monoid},
+  description={The monoid $(\distOp,\circ,\mathrm{Id})$ of admissible
+  distinguishability operators; the conserved structure at the
+  meta-level (Ch.\,8--9)}}
+\newglossaryentry{fate-class}{name={fate class},
+  description={An equivalence class of distinction pairs sharing the
+  same fate profile; the state variable of distinction ecology
+  (Ch.\,15)}}
+\newglossaryentry{collapse-stratum}{name={collapse stratum},
+  description={The locus $\{c=0\}\cup\{c=1\}$ in $\fateSpace$ across
+  which no continuous path exists; the topological signature of
+  irreversibility (Ch.\,10--12)}}
+
+
+
+
+
+
+
+
+
+
+\providecommand{\partitionObs}{\Pi_{\obs}}
+\providecommand{\quotientObs}{X/{\sim_{\obs}}}
+\providecommand{\capObs}[1]{C_{\obs}(#1)}
+\providecommand{\survivalSet}[1]{S_{\transfam}(#1)}
+\providecommand{\collapOp}{\mathsf{C}}
+\providecommand{\forgetOp}{\mathsf{F}}
+\providecommand{\repEng}{E}
+\providecommand{\repEntropy}{S_{\pi}}
+\providecommand{\engDot}{\dot{\repEng}}
+
+
+\providecommand{\repairEff}[1]{\eta_{R}(#1)}
+\providecommand{\degradeOp}{D}
+\providecommand{\transpOp}{\mathsf{T}}
+\providecommand{\pullback}[2]{#1^{*}#2}
+\providecommand{\distOpNI}{\distOp_{\mathrm{NI}}}
+\providecommand{\distOpInv}{\distOp^{\times}}
+\providecommand{\strataC}{\Sigma_{C}}
+\providecommand{\strataR}{\Sigma_{R}}
+\providecommand{\strataT}{\Sigma_{T}}
+\providecommand{\strataF}{\Sigma_{F}}
+
+
+\providecommand{\fatePos}{\fateSpace^{+}}
+\providecommand{\fateComp}[1]{\fateSpace_{\collapseInd=#1}}
+\providecommand{\fateDist}[2]{d_{\fateSpace}(#1,#2)}
+\providecommand{\distDist}[2]{d_{\mathcal{O}}(#1,#2)}
+\providecommand{\fateSens}[1]{\sigma_{\fateMap}(#1)}
+\providecommand{\singSet}{\partial_{\!\mathcal{A}}}
+\providecommand{\fateMargin}[1]{m(#1)}
+\providecommand{\admRegion}{A}
+\providecommand{\admOp}{\pi_{\!\admRegion}}
+\providecommand{\objBdy}{\partial O}
+\providecommand{\fateUnif}{\text{fate-uniform}}
+\providecommand{\fateLip}{L_{\fateMap}}
+\providecommand{\fatePot}{V}
+\providecommand{\fateKurv}{K_{\fateMap}}
+\providecommand{\fateTan}[1]{T_{#1}\fatePos}
+\providecommand{\contCost}{C}
+\providecommand{\contAction}{\mathcal{J}}
+\providecommand{\fateTraj}{\gamma}
+\providecommand{\fateGeo}{\fateTraj^{*}}
+\providecommand{\fateVel}{u}
+\providecommand{\fateAcc}{a}
+\providecommand{\fateImage}[1]{\fateMap(#1)}
+\providecommand{\fateLoop}[1]{\pi_1(\fateImage{#1})}
+\providecommand{\fateHom}[2]{H_{#1}(\fateImage{#2})}
+\providecommand{\obstSet}{\mathcal{O}_{\perp}}
+\providecommand{\fateReach}[1]{\mathcal{R}_{\fateMap}(#1)}
+\providecommand{\fateVol}[1]{V_{\fateMap}(#1)}
+\providecommand{\fateEnt}{S_{\fateMap}}
+
+
+\providecommand{\fateClasses}{\Delta_{\mathfrak{F}}}
+\providecommand{\fateClass}[1]{[#1]_{\mathfrak{F}}}
+\providecommand{\fatePop}[1]{N_{#1}(t)}
+\providecommand{\fateField}{\Phi_{F}}
+\providecommand{\discOp}{\beta}
+\providecommand{\discRate}{D_{C}}
+\providecommand{\lossRate}{L_{C}}
+\providecommand{\repairRate}{R_{C}}
+\providecommand{\fateVelField}{v_{F}}
+
+
+\providecommand{\collapDens}[1]{\rho_{C}(#1)}
+\providecommand{\repairDens}[1]{\rho_{R}(#1)}
+\providecommand{\persistDens}[1]{\rho_{P}(#1)}
+\providecommand{\memField}{\Psi_{M}}
+\providecommand{\memSet}{\mathcal{M}}
+\providecommand{\distNet}{G}
+\providecommand{\distNetV}{V}
+\providecommand{\distNetE}{E}
+\providecommand{\collFate}{\mathfrak{F}_{G}}
+\providecommand{\depDepth}[1]{\delta(#1)}
+\providecommand{\netPersist}[1]{P(#1)}
+\providecommand{\discHorizon}{H_{D}}
+\providecommand{\civFate}{\mathfrak{F}_{C}}
+\providecommand{\civReach}{V_{C}}
+\providecommand{\orderParam}{M}
+\providecommand{\critThresh}{M_{c}}
+\providecommand{\localCollapse}[1]{c_{#1}}
+
+
+\providecommand{\catDist}{\mathbf{Dist}}
+\providecommand{\catFate}{\mathbf{Fate}}
+\providecommand{\civFunc}{\mathcal{C}}
+
+
+\usetikzlibrary{cd}
+\newenvironment{appsummary}{
+  \begin{tcolorbox}[colback=DistBlue!5,colframe=DistBlue,
+    title={\faBookOpen\enspace Appendix Summary},
+    fonttitle=\sffamily\bfseries\color{white},
+    attach boxed title to top left={yshift=-2mm,xshift=4mm},
+    boxed title style={colback=DistBlue,rounded corners}]
+  \begin{itemize}[nosep,leftmargin=*]}{
+  \end{itemize}\end{tcolorbox}}
+
+
+\providecommand{\collapIdeal}{\mathcal{C}}
+\providecommand{\repairSemi}{\mathcal{R}_{\mathrm{rep}}}
+\providecommand{\pushFate}{\nu}
+\providecommand{\transRate}{K}
+\providecommand{\statDist}{\pi}
+\providecommand{\fateEntropy}{H_{F}}
+\providecommand{\catPBT}{\mathbf{PBT}}
+\providecommand{\catEOD}{\mathbf{EOD}}
+\providecommand{\functorPBT}{\Phi_{\mathrm{PBT}}}
+\providecommand{\functorEOD}{\Phi_{\mathrm{EOD}}}
+\providecommand{\natTrans}{\Rightarrow}
+\providecommand{\secondForm}{\mathrm{II}}
+\providecommand{\stateMeasure}{\mu}
+\providecommand{\pairMeasure}{\stateMeasure\times\stateMeasure}
+\providecommand{\persRegime}{\mathfrak{P}}
+\providecommand{\knowRegime}{\mathfrak{K}}
+\providecommand{\viabRegime}{\mathfrak{V}}
+\providecommand{\catDistOp}{\mathbf{DistOp}}
+
+\begin{document}
+\frontmatter
+
+
+\begin{titlepage}
+\centering\vspace*{2.5cm}
+{\sffamily\Huge\bfseries\color{DistBlue}
+  The Fate of Distinguishability}\\[0.9em]
+{\sffamily\Large\color{DistGray}
+  A Formal Theory of Distinction Pairs\\
+  Under Transformation}\\[2.2cm]
+{\large Flyxion}\\[0.4em]
+{\sffamily\color{DistGray}Independent Researcher}\\[2.5cm]
+
+\begin{tikzpicture}
+  \node[distnode,minimum size=2cm](D)at(0,0)
+    {$\distPairs$};
+  \node[fatenode,minimum size=2cm](S)at(5,0)
+    {$\fateSpace$};
+  \draw[fateedge,line width=1.5pt](D)--(S)
+    node[midway,above,font=\sffamily\small\color{FateViolet}]
+    {$\fateMap$};
+  \node[below=0.5cm of D,font=\tiny\sffamily\color{DistGray}]
+    {distinction pairs};
+  \node[below=0.5cm of S,font=\tiny\sffamily\color{DistGray}]
+    {fate profiles};
+\end{tikzpicture}\\[2cm]
+{\sffamily\color{DistGray}First Edition~·~2026}\\[0.5em]
+{\sffamily\small\color{DistGray}
+  Volume II of the Distinction Trilogy}
+\end{titlepage}
+
+
+\cleardoublepage
+\vspace*{5cm}
+\begin{center}
+{\sffamily\large\color{DistGray}The Distinction Trilogy}\\[1em]
+{\sffamily\normalsize\color{DistBlue}
+  I.\quad Persistence Before Truth}\\[0.3em]
+{\sffamily\normalsize\bfseries\color{FateViolet}
+  II.\quad The Fate of Distinguishability}\\[0.3em]
+{\sffamily\normalsize\color{DistBlue}
+  III.\quad The Ecology of Distinctions}
+\end{center}
+\cleardoublepage
+
+
+\tableofcontents
+
+
+\chapter*{Preface: The Hinge Book}
+\addcontentsline{toc}{chapter}{Preface}
+
+This is the middle volume of a trilogy. The first volume,
+\textit{Persistence Before Truth}, establishes why distinguishability
+is necessary: if no distinctions survive or can be reconstructed
+across transformation, then reference, measurement, communication,
+and truth-evaluation all become impossible. The third volume,
+\textit{The Ecology of Distinctions}, demonstrates what happens
+when distinguishability operates in the wild: how distinctions
+are born, how they die, how they compete, migrate, repair, and
+regenerate across physical, biological, cognitive, and social
+systems.
+
+This volume asks the question that sits between those two:
+\emph{what mathematical structures govern distinguishability?}
+
+The primary object of study here is not a state, not an object,
+not a memory, and not a proposition. It is a distinction pair
+$(x,y)\in X\times X$ together with its \emph{fate}\ under
+a family of operators. The fate map
+$\fateMap:\distPairs\to\fateSpace$
+assigns to each distinction pair a structured record of how it
+fares under compression, forgetting, repair, transport, and
+admissibility selection. Everything else in this volume is derived
+from that object.
+
+The central mathematical result is the Meta-Stability Theorem
+(\cref{meta:meta-stability}): individual distinctions are not
+conserved, but the operator algebra acting on them is. What
+persists across all transformations is not any particular
+distinction but the capacity to produce, destroy, and regenerate
+distinguishability. This theorem is the formal answer to the
+conservation question raised in \textit{Persistence Before
+Truth\/} and the structural backbone underlying the population
+dynamics of \textit{The Ecology of Distinctions}.
+
+Readers of either outer volume will find that the concepts they
+encountered there --- persistence, recoverability, repair,
+admissibility, reachability, the preservation hierarchy --- all
+appear here as special cases of a single operator-algebraic
+framework. The goal is not to supersede those treatments but to
+expose the formal skeleton they were always implicitly using.
+
+\bigskip
+\noindent\textit{How to read this book.}
+Parts~I and~II establish the mathematical language. Part~III
+develops the genuinely new material: fate geometry, fate
+singularities, and the collapse stratum. Part~IV gives the
+ecology dynamics in properly typed form. Part~V translates the
+concepts of the outer volumes into fate-theoretic language.
+Part~VI is the synthesis. A reader already fluent in
+\textit{The Ecology of Distinctions\/} may enter at Part~III.
+A reader coming from \textit{Persistence Before Truth\/} should
+read Parts~I--III before skipping ahead.
+
+\mainmatter
+
+\part{Distinguishability Spaces}
+
+
+
+
+
+
+\chapter{Distinction Pairs and Observational Equivalence}
+\label{ch:distinction-pairs}
+
+\begin{epigraph}{The world does not present itself as objects.
+  It presents itself as differences.}{The founding observation}
+\end{epigraph}
+
+\begin{objectives}
+\item Introduce distinction pairs as the primitive objects of
+  the theory.
+\item Explain why distinguishability is prior to classification.
+\item Define observational families and observational equivalence.
+\item Prove that observational equivalence is an equivalence
+  relation and induces a partition of the state space.
+\item Motivate the use of $X\times X$ rather than $X$ as the
+  foundational domain.
+\item Map the conceptual dependencies for the rest of the book.
+\end{objectives}
+
+
+Why Begin With Distinctions?
+
+
+Most formal theories begin with objects. A set $X$ is given,
+its elements are assumed to be identifiable, and the theory
+proceeds to study their properties and relations. This approach
+conceals a prior question: how did the elements of $X$ become
+identifiable in the first place?
+
+Before an entity can be measured, classified, or named, it must
+first be distinguishable from something else. Distinguishability
+is therefore prior to objecthood. An object is not a primitive
+of the world but a cognitive and operational achievement: it is
+what remains stable enough to be treated as a unit.
+
+This volume begins not with objects but with distinctions. The
+primitive is not a state $x\in X$ but a pair $(x,y)\in X\times X$
+together with the information that $x$ and $y$ \emph{can be
+told apart}. Everything else — objects, memories, persistence,
+admissibility, knowledge, civilization — will be derived from
+this starting point.
+
+
+State Spaces and Observation
+
+
+Let $X$ be a set whose elements represent possible states of a
+system. The elements of $X$ are not assumed to be immediately
+distinguishable. Distinguishability is conferred by observation.
+
+\begin{definition}{Observational Family}{obs-family-ch1}
+An \emph{observational family} is a collection
+$\obs=\{o:X\to Y\}$ of maps from the state space into a
+measurement space $Y$ equipped with a notion of equality.
+Each $o\in\obs$ is an \emph{admissible observation}.
+\end{definition}
+
+An observational family encodes the set of measurements
+available to an observer or system. Different choices of $\obs$
+reflect different observational capabilities. The same pair of
+states may be distinguishable under one family and
+indistinguishable under another.
+
+
+Observational Equivalence
+
+
+\begin{definition}{Observational Equivalence}{obs-equiv-ch1}
+Two states $x,y\in X$ are \emph{observationally equivalent}
+with respect to $\obs$, written $x\sim_\obs y$, if
+\[
+  o(x) = o(y) \quad\text{for every }o\in\obs.
+\]
+A pair $(x,y)$ is \emph{operationally distinguishable} if
+$x\not\sim_\obs y$.
+\end{definition}
+
+\begin{proposition}{Observational Equivalence is an Equivalence
+  Relation}{obs-equiv-er-ch1}
+The relation $\sim_\obs$ is reflexive, symmetric, and transitive.
+\begin{proof}
+Reflexivity: $o(x)=o(x)$ for every $o$.
+Symmetry: if $o(x)=o(y)$ then $o(y)=o(x)$.
+Transitivity: if $o(x)=o(y)$ and $o(y)=o(z)$ for every
+$o\in\obs$, then $o(x)=o(z)$ for every $o\in\obs$.
+All three hold for equality in $Y$.
+\end{proof}
+\end{proposition}
+
+\begin{corollary}{Partition of the State Space}{state-partition}
+The relation $\sim_\obs$ partitions $X$ into equivalence classes:
+\[
+  [x]_\obs \;=\; \{x'\in X : x'\sim_\obs x\}.
+\]
+The collection $\partitionObs = \{[x]_\obs : x\in X\}$ is the
+\emph{observational partition} of $X$.
+\end{corollary}
+
+Each class in $\partitionObs$ contains states that cannot be
+distinguished by any admissible observation. The partition
+captures everything that is observationally accessible about
+the state space structure.
+
+
+Why Pairs, Not States
+
+
+Traditional dynamical theories study the evolution of a single
+state $x(t)\in X$. This approach is appropriate when the state
+itself is the object of interest. But the questions driving
+this volume are different:
+
+Can this distinction \emph{survive} transformation?
+Can it be \emph{repaired} after damage?
+Can it be \emph{transported} to another context?
+Does it \emph{collapse} under entropy?
+
+None of these questions make sense for a single state. They
+make sense for a \emph{pair} of states: a distinction consists
+in the difference between $x$ and $y$, and it is the fate of
+that difference that the theory studies.
+
+The natural domain of fate theory is therefore not $X$ but
+$\distPairs$.
+
+\begin{definition}{Distinction Pair}{dist-pair-ch1}
+A \emph{distinction pair} is an ordered pair
+$(x,y)\in\distPairs$ such that $x\not\sim_\obs y$: some
+admissible observation separates $x$ from $y$.
+\end{definition}
+
+The set of all distinction pairs is a subset of $\distPairs$
+determined by $\obs$. The complement --- pairs $(x,y)$ with
+$x\sim_\obs y$ --- are \emph{indistinguishable pairs}: states
+the observation family cannot separate.
+
+\begin{remark}{Objects as Derived Concepts}{objects-derived}
+The theory does not deny the existence of objects. It derives
+them. An object is what emerges when a collection of distinction
+pairs is stable enough to be treated as a unit. Formally,
+objects are equivalence classes of observationally
+indistinguishable states: the elements of $\quotientObs$.
+They are derived from the partition, not given in advance. This
+derivation is made precise in Chapter~14.
+\end{remark}
+
+
+What This Chapter Has Not Explained
+
+
+Several important questions are deferred to later chapters.
+
+Chapter~2 asks: how is distinguishability measured? The answer
+requires geometry on the pair space, developed via the
+observational pseudometric.
+
+Chapter~3 asks: how do distinctions behave under transformation?
+The answer requires the survival ratio.
+
+Chapters~5--9 ask: what are the operators that act on
+distinctions? The answer requires the operator taxonomy.
+
+Chapter~10 asks: what happens to a distinction in the long run?
+The answer requires the fate map and the fate space.
+
+\begin{chapsummary}
+\item The primitive object of the theory is the distinction
+  pair $(x,y)\in X\times X$, not the state $x\in X$.
+\item Distinguishability is conferred by an observational
+  family $\obs$ and is not intrinsic to the state space.
+\item Observational equivalence $\sim_\obs$ is an equivalence
+  relation partitioning $X$ into the observational partition
+  $\partitionObs$.
+\item Objects are derived as equivalence classes of
+  indistinguishable states.
+\item The remainder of the volume studies what happens to
+  distinction pairs under transformation, operator action,
+  and ecological dynamics.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Distinguishability Spaces}
+\label{ch:dist-spaces}
+
+\begin{epigraph}{A distinction is not merely present or absent.
+  Distinctions possess geometry.}{The transition to measurement}
+\end{epigraph}
+
+\begin{objectives}
+\item Define observational distance as a pseudometric on $X$.
+\item Prove the triangle inequality from the metric on $Y$.
+\item Characterize zero-distance pairs as exactly the
+  observationally equivalent ones.
+\item Show that the quotient $\quotientObs$ carries a genuine
+  metric.
+\item Define distinguishability capacity.
+\item Prove capacity monotonicity under observational refinement.
+\item Explain why capacity is the right static measure before
+  dynamics are introduced.
+\end{objectives}
+
+Chapter~1 introduced observational equivalence as a binary
+relation. Two states are either observationally equivalent or
+they are not. Most real systems require a finer description:
+some distinctions are robust, others fragile; some are
+detectable by many observations, others only by one. The
+purpose of this chapter is to quantify degrees of
+distinguishability.
+
+
+Observational Distance
+
+
+Assume the measurement space $Y$ carries a metric $d_Y$.
+
+\begin{definition}{Observational Distance}{obs-dist}
+The \emph{observational distance} between $x,y\in X$ is
+\[
+  \distMetric(x,y)
+  \;=\;
+  \sup_{o\in\obs} d_Y(o(x),o(y)).
+\]
+\end{definition}
+
+The observational distance measures the largest separability
+achievable by any single admissible observation~\cite{shannon1948}. It represents
+the maximum observational evidence available for distinguishing
+the two states.
+
+\begin{theorem}{Observational Distance is a Pseudometric}
+  {obs-pseudometric}
+The function $\distMetric:X\times X\to\mathbb{R}_{\ge0}$ is a
+pseudometric: non-negative, symmetric, satisfying the triangle
+inequality, and zero on the diagonal.
+\begin{proof}
+\emph{Non-negativity}: $d_Y\ge 0$ so $\distMetric\ge 0$.
+
+\emph{Symmetry}: $d_Y(o(x),o(y))=d_Y(o(y),o(x))$ for every
+$o$, so $\distMetric(x,y)=\distMetric(y,x)$.
+
+\emph{Triangle inequality}: for every $o\in\obs$ and every
+$z\in X$,
+\[
+  d_Y(o(x),o(z))
+  \;\le\;
+  d_Y(o(x),o(y)) + d_Y(o(y),o(z))
+  \;\le\;
+  \distMetric(x,y) + \distMetric(y,z).
+\]
+Taking suprema over $o$:
+$\distMetric(x,z)\le\distMetric(x,y)+\distMetric(y,z)$.
+
+\emph{Diagonal}: $d_Y(o(x),o(x))=0$ for every $o$, so
+$\distMetric(x,x)=0$.
+\end{proof}
+\end{theorem}
+
+\begin{proposition}{Kernel Characterization}{kernel-char}
+$\distMetric(x,y)=0$ if and only if $x\sim_\obs y$.
+\begin{proof}
+If $x\sim_\obs y$ then $o(x)=o(y)$ for every $o$, so every
+term in the supremum is zero. Conversely, if
+$\distMetric(x,y)=0$ then $d_Y(o(x),o(y))=0$ for every $o$,
+hence $o(x)=o(y)$ for every $o$, i.e., $x\sim_\obs y$.
+\end{proof}
+\end{proposition}
+
+The pseudometric fails to be a genuine metric precisely when
+distinct states are observationally indistinguishable. This is
+not a deficiency; it is the formal expression of the fundamental
+fact that distinguishability depends on observation.
+
+
+The Metric Quotient
+
+
+\begin{theorem}{Metric on the Quotient}{metric-quotient}
+The observational distance descends to a genuine metric
+$\bar{d}_\obs$ on $\quotientObs$.
+\begin{proof}
+Define $\bar{d}_\obs([x],[y])=\distMetric(x,y)$. This is
+well-defined because $\distMetric$ is constant on equivalence
+classes: if $x\sim_\obs x'$ and $y\sim_\obs y'$ then
+$o(x)=o(x')$ and $o(y)=o(y')$ for all $o$, so
+$d_Y(o(x),o(y))=d_Y(o(x'),o(y'))$ for all $o$, hence
+$\distMetric(x,y)=\distMetric(x',y')$.
+
+The only metric axiom not inherited from $\distMetric$ is
+$\bar{d}_\obs([x],[y])=0\Rightarrow [x]=[y]$. But
+$\bar{d}_\obs([x],[y])=0$ means $\distMetric(x,y)=0$, which
+by Proposition~\ref{prop:kernel-char} means $x\sim_\obs y$,
+i.e., $[x]=[y]$.
+\end{proof}
+\end{theorem}
+
+The metric space $(\quotientObs,\bar{d}_\obs)$ is the
+\emph{distinguishability space} induced by $\obs$. It is the
+geometric object that carries all observationally accessible
+information about the state space.
+
+
+The Partition Lattice
+
+
+The observational partition $\partitionObs$ is one of many
+possible partitions of $X$. Comparing partitions is natural:
+one partition may be finer than another.
+
+\begin{definition}{Refinement}{refinement-ch2}
+A partition $\Pi_1$ \emph{refines} $\Pi_2$, written
+$\Pi_1\preceq\Pi_2$, if every block of $\Pi_1$ is contained
+in some block of $\Pi_2$.
+\end{definition}
+
+\begin{theorem}{Partitions Form a Lattice}{partition-lattice}
+The set of all partitions of $X$ is a lattice under $\preceq$:
+any two partitions have a greatest lower bound (common
+refinement) and a least upper bound (coarsest common
+coarsening).
+\begin{proof}
+Given $\Pi_1,\Pi_2$: their meet is the partition whose blocks
+are all non-empty sets of the form $B_1\cap B_2$ with
+$B_i\in\Pi_i$ --- the common refinement. Their join is the
+partition generated by $\Pi_1\cup\Pi_2$ under transitivity
+of block intersection --- the coarsest common coarsening. Both
+constructions produce valid partitions, giving the lattice.
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{Refinement Monotonicity}{refinement-mono}
+If $\obs_1\subseteq\obs_2$ then
+$\partitionObs[_{\obs_2}]\preceq\partitionObs[_{\obs_1}]$:
+a larger observational family induces a finer partition.
+\begin{proof}
+If $x\sim_{\obs_2}y$ then $o(x)=o(y)$ for every
+$o\in\obs_2\supseteq\obs_1$, hence in particular for every
+$o\in\obs_1$, so $x\sim_{\obs_1}y$. Every
+$\sim_{\obs_2}$-class is contained in a $\sim_{\obs_1}$-class.
+\end{proof}
+\end{theorem}
+
+
+Distinguishability Capacity
+
+
+\begin{definition}{Distinguishability Capacity}{capacity-ch2}
+For a finite state space $X$, the \emph{distinguishability
+capacity} is
+\[
+  \capObs{X} \;=\; \log|\quotientObs|,
+\]
+the logarithm of the number of observationally distinguishable
+categories.
+\end{definition}
+
+Capacity is the information-theoretic measure of observational
+resolution. It counts how many operationally distinct things
+can be told apart.
+
+\begin{theorem}{Capacity Bounds}{capacity-bounds}
+$0\le\capObs{X}\le\log|X|$.
+\begin{proof}
+$|\quotientObs|\ge 1$ (at least one class) and
+$|\quotientObs|\le|X|$ (at most one class per state).
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{Capacity Monotonicity}{capacity-mono}
+If $\obs_1\subseteq\obs_2$ then $\capObs[_{\obs_1}]{X}\le
+\capObs[_{\obs_2}]{X}$.
+\begin{proof}
+By Refinement Monotonicity, $\Pi_{\obs_2}$ is finer than
+$\Pi_{\obs_1}$, so $|\quotientObs[_{\obs_2}]|\ge
+|\quotientObs[_{\obs_1}]|$. Applying $\log$ preserves the
+inequality.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Why Only a Static Measure}{static-capacity}
+Capacity characterizes the observational resolution of the
+current state but says nothing about what \emph{happens} to
+distinctions under transformation. Two systems with the same
+capacity may differ completely in how that capacity behaves
+over time: one may maintain it, the other may lose it rapidly.
+The theory of how capacity evolves under transformation begins
+in Chapter~3.
+\end{remark}
+
+\begin{chapsummary}
+\item The observational distance $\distMetric(x,y)=\sup_{o\in\obs}
+  d_Y(o(x),o(y))$ is a pseudometric on $X$.
+\item Zero distance corresponds exactly to observational
+  equivalence: $\distMetric(x,y)=0$ iff $x\sim_\obs y$.
+\item The quotient $(\quotientObs,\bar{d}_\obs)$ is a genuine
+  metric space: the distinguishability space.
+\item Observational partitions form a lattice under refinement;
+  larger observation families produce finer partitions.
+\item Distinguishability capacity $\capObs{X}=\log|\quotientObs|$
+  measures observational resolution.
+\item Capacity is monotone: more observations yield more
+  capacity.
+\item Capacity is a static measure; Chapter~3 introduces
+  the dynamics.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Transformation Classes and Survival}
+\label{ch:transformation-survival}
+
+\begin{epigraph}{A distinction that exists only momentarily is
+  not yet part of the world.}{Persistence as a geometric
+  property}
+\end{epigraph}
+
+\begin{objectives}
+\item Introduce transformation families as the dynamical input.
+\item Define distinction survival and the survival set.
+\item Define the survival ratio $\survRatio_\transfam(x,y)$.
+\item Prove that survival ratios lie in $[0,1]$.
+\item Prove that invariant distinctions have unit survival ratio.
+\item Show that survival is weaker and more general than
+  invariance.
+\item Identify the survival ratio as the first coordinate of
+  the fate space (deferred to Chapter~10).
+\end{objectives}
+
+Chapters~1 and~2 established the geometry of distinguishability
+at a single instant. Chapter~3 introduces time: transformation
+families that act on the state space, and the question of
+whether distinctions survive their action.
+
+
+Transformation Families
+
+
+\begin{definition}{Transformation Family}{trans-family-ch3}
+A \emph{transformation family} is a measurable collection
+$\transfam=\{T:X\to X\}$ of maps on the state space,
+equipped with a probability measure $\mu$ on $\transfam$.
+The measure $\mu$ weights the relative likelihood of each
+transformation occurring.
+\end{definition}
+
+Examples include physical time evolution (where $\transfam$ is
+a one-parameter group), stochastic degradation (where $\mu$
+weights random perturbations), communication channels (where
+each $T$ models a possible transmission error), and biological
+mutation (where $\mu$ weights mutation rates).
+
+
+Distinction Survival
+
+
+\begin{definition}{Surviving Transformation}{surviving-T}
+A transformation $T\in\transfam$ \emph{preserves} the
+distinction $(x,y)$ if $T(x)\not\sim_\obs T(y)$: the
+transformed states remain operationally distinguishable.
+\end{definition}
+
+\begin{definition}{Survival Set}{survival-set-ch3}
+The \emph{survival set} of a distinction pair $(x,y)$ under
+$\transfam$ is
+\[
+  \survivalSet{x,y}
+  \;=\;
+  \{T\in\transfam : T(x)\not\sim_\obs T(y)\}.
+\]
+\end{definition}
+
+The survival set contains every transformation that preserves
+the distinction. Its size, relative to the full transformation
+family, measures robustness.
+
+
+The Survival Ratio
+
+
+\begin{definition}{Survival Ratio}{surv-ratio-ch3}
+The \emph{survival ratio} of a distinction pair is
+\[
+  \survRatio_\transfam(x,y)
+  \;=\;
+  \frac{\mu(\survivalSet{x,y})}{\mu(\transfam)}.
+\]
+\end{definition}
+
+The survival ratio is the probability that a randomly chosen
+admissible transformation preserves the distinction. It
+quantifies persistence as a measurable property rather than a
+binary fact.
+
+\begin{theorem}{Survival Ratio Bounds}{surv-bounds}
+$0\le\survRatio_\transfam(x,y)\le 1$ for every distinction pair.
+\begin{proof}
+$\survivalSet{x,y}\subseteq\transfam$, so
+$\mu(\survivalSet{x,y})\le\mu(\transfam)$. Non-negativity
+of $\mu$ gives the lower bound.
+\end{proof}
+\end{theorem}
+
+\begin{definition}{Complete Collapse and Perfect Persistence}
+  {extreme-surv}
+A distinction pair has \emph{complete collapse} if
+$\survRatio_\transfam(x,y)=0$: no admissible transformation
+preserves it. It has \emph{perfect persistence} if
+$\survRatio_\transfam(x,y)=1$: every admissible transformation
+preserves it.
+\end{definition}
+
+
+Invariance and Survival
+
+
+\begin{theorem}{Invariant Distinctions Have Unit Survival}
+  {invariant-unit}
+If $T(x)\not\sim_\obs T(y)$ for every $T\in\transfam$, then
+$\survRatio_\transfam(x,y)=1$.
+\begin{proof}
+The hypothesis means $\survivalSet{x,y}=\transfam$, so
+$\mu(\survivalSet{x,y})=\mu(\transfam)$, giving $\survRatio=1$.
+\end{proof}
+\end{theorem}
+
+The converse is not true in general: $\survRatio=1$ holds when
+the survival set has full measure, which allows exceptional
+transformations of measure zero to destroy the distinction.
+
+\begin{remark}{Survival is Weaker Than Invariance}
+  {surv-vs-inv}
+Invariance requires exact preservation under every
+transformation. Survival requires only that the distinction
+remain recoverable under a measure-$1$ set of transformations.
+
+A repaired memory is not identical to its original encoding.
+A translated sentence is not syntactically identical to the
+original. A regenerated tissue is not molecularly identical
+to its predecessor. Yet all may survive: the distinction
+between them and the alternative remains operationally
+accessible after reconstruction~\cite{spencerbrown1969}.
+
+Persistence theory therefore studies recoverability rather
+than invariance. This distinction is the conceptual foundation
+of the repair theory developed in Chapter~7.
+\end{remark}
+
+
+Survival as a Field on Pair Space
+
+
+The survival ratio defines a function
+\[
+  \survRatio_\transfam:\distPairs\to[0,1].
+\]
+This is the first coordinate of the fate space introduced in
+Chapter~10. Two additional coordinates ($\repEff$ and
+$\boldsymbol{\tau}$) and the collapse indicator $\collapseInd$
+will be added there to complete the fate profile. The survival
+ratio is where the geometry of fate begins.
+
+\begin{remark}{What Survival Does Not Capture}
+  {surv-limits}
+The survival ratio measures resistance to transformation. It
+does not measure recoverability after damage: two distinctions
+with identical survival ratios may differ completely in whether
+they can be reconstructed after a transformation does destroy
+them. That additional structure --- repair efficiency --- is
+the subject of Chapter~7 and the second coordinate of the fate
+space.
+\end{remark}
+
+\begin{chapsummary}
+\item A transformation family $\transfam$ is a measurable~\cite{katok1995}
+  collection of maps on $X$, with probability measure $\mu$.
+\item A transformation preserves a distinction if the
+  transformed pair remains operationally distinguishable.
+\item The survival set $\survivalSet{x,y}$ contains the
+  preserving transformations.
+\item The survival ratio $\survRatio_\transfam(x,y)\in[0,1]$
+  quantifies robustness.
+\item Invariant distinctions have unit survival ratio; the
+  converse holds only up to measure zero.
+\item Survival is weaker than invariance: it requires
+  recoverability, not exact preservation.
+\item The survival ratio is the first coordinate of the fate
+  map defined in Chapter~10.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Capacity and the Partition Lattice}
+\label{ch:capacity}
+
+\begin{epigraph}{Every observation partitions the world.
+  Capacity measures how many pieces remain.}{Resolution and
+  information}
+\end{epigraph}
+
+\begin{objectives}
+\item Revisit distinguishability capacity as the capstone of
+  Part~I's static theory.
+\item Show that collapse, repair, and transport correspond to
+  downward, upward, and lateral movements in the partition
+  lattice.
+\item Prove that the partition lattice is the wrong object for
+  a dynamic theory --- motivating the operator framework of
+  Part~II.
+\item Introduce capacity as a conserved potential that
+  operators act upon.
+\item Bridge from partition geometry to operator algebra.
+\end{objectives}
+
+Parts~I's first three chapters introduced distinction pairs
+(Chapter~1), their geometry (Chapter~2), and their survival
+under transformation (Chapter~3). This chapter closes Part~I
+by situating capacity and the partition lattice as the static
+substrate upon which Part~II's operator theory will act.
+
+
+Capacity as Observational Resolution
+
+
+The distinguishability capacity $\capObs{X}=\log|\quotientObs|$
+from Chapter~2 measures how many operationally distinct
+categories exist relative to a given observation family. It is
+a property of the pair $(\obs, X)$, not of any individual
+distinction.
+
+Capacity has a natural interpretation in information theory:
+it is the maximum number of bits needed to identify a state
+up to observational equivalence. A system with capacity $k$
+requires $k$ binary observations to fully classify its states.
+
+
+Partition Dynamics
+
+
+The partition lattice is not merely a static structure.
+Transformations and operators move systems through it.

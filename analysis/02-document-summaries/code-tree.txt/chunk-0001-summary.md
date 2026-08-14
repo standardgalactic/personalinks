@@ -1,0 +1,68 @@
+**1. Definitions and primitive concepts introduced**
+
+- **Pop grammars**: A family of grammar definitions used throughout the cor[3D[K
+corpus for processing abstract syntax trees (ASTs).  
+- **Structural divergence & confluence under policy families**: Concepts de[2D[K
+describing how different AST transformations can diverge or converge when a[1D[K
+applied within specific policy constraints.  
+- **Regret detection**: Mechanism to identify “regret” – situations where a[1D[K
+a transformation results in later undoing of progress.  
+- **Horizon equivalence**: A notion that two states are equivalent if they [K
+remain indistinguishable over a given horizon (time window).  
+
+**2. Mathematical claims and formal structures**
+
+- The corpus defines operations such as *admissible checks* (ensuring trans[5D[K
+transformations preserve desired properties) and *equivalent‑at‑prefix comp[4D[K
+comparisons* (comparing ASTs up to a certain depth).  
+- It introduces *observer/non‑authority semantics*, distinguishing between [K
+observers that have authority over state changes from those that do not.  
+
+**3. Mechanisms and processes**
+
+- **Run scripts per module**: Each of the modules 01–25 contains a `run.py`[8D[K
+`run.py` script (e.g., `06-collapse/run.py`, `19-intensional-extensional-eq[30D[K
+`19-intensional-extensional-equivalence/run.py`) that encapsulates specific[8D[K
+specific transformation or analysis tasks.  
+- **Utility scripts for automation & validation**: Tools like `analyze-sphe[13D[K
+`analyze-spherepop.sh`, `build_tex_pdfs.sh`, and various tests in the `test[5D[K
+`tests/` directory automate generation, validation, and regression testing [K
+of grammar behavior across modules.  
+
+**4. Connections to concepts named in the running abstract**
+
+- The new chunk directly extends the suite described earlier (e.g., *struct[7D[K
+*structural divergence*, *confluence under policy families*, *regret detect[6D[K
+detection*, *horizon equivalence*) by providing concrete executable scripts[7D[K
+scripts for each concept.  
+- It also builds on validation and testing frameworks (`tests/`) that ensur[5D[K
+ensure correctness of grammar parsing, path utilities, and performance regr[4D[K
+regressions as mentioned in the running abstract.  
+
+**5. Unresolved questions or contradictions visible within this chunk**
+
+- No explicit contradictions are evident; however, the breadth of modules ([1D[K
+(covering 25 distinct concepts) raises an implicit question about consisten[9D[K
+consistency across all implementations: *Are there hidden dependencies or a[1D[K
+assumptions between modules that could lead to non‑trivial behavior when ru[2D[K
+run together?*  
+- The lack of a high-level documentation explaining how these modules inter[5D[K
+interoperate may leave open questions regarding the intended composability [K
+and robustness of the full Spherepop codebase.  
+
+**Quotations**
+
+- “Pop grammars” – *“introduces a comprehensive codebase for analyzing and [K
+manipulating abstract syntax trees (ASTs) within the context of pop grammar[7D[K
+grammars.”*  
+- “Structural divergence, confluence under policy families, regret detectio[8D[K
+detection, and horizon equivalence” – *“Key primitives include mechanisms f[1D[K
+for structural divergence, confluence under policy families, regret detecti[7D[K
+detection, and horizon equivalence.”*  
+- “Admissible checks, equivalent‑at‑prefix comparisons, observer/non-author[19D[K
+observer/non-authority semantics” – *“The corpus defines operations such as[2D[K
+as admissible checks, equivalent-at-prefix comparisons, and observer/non-au[15D[K
+observer/non-authority semantics.”*  
+
+These elements collectively outline the new functionality added to the Sphe[4D[K
+Spherepop repository while maintaining continuity with prior documentation.

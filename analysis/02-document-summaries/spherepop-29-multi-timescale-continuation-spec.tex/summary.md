@@ -1,97 +1,156 @@
-**Dense Scholarly Summary**
+**Spherepop‑29: Multi‑Timescale Continuation Theory – Unified Theoretical S[1D[K
+Synthesis**
 
-1. **Central Thesis**  
-   The document proposes a formal framework—“Spherepop Experiment Spec: Mul[3D[K
-Multi‑Timescale Continuation”—to treat boredom as a scope‑selection problem[7D[K
-problem across heterogeneous temporal horizons (minute, day, week, year). I[1D[K
-It introduces an EMCG‑based scheduling mechanism that distinguishes between[7D[K
-between *local saturation* (where immediate compression gains vanish) and *[1D[K
-*field saturation* (global gain approximation), allowing work to be paused [K
-or switched without loss of progress.
+---
 
-2. **Definitions & Primitive Concepts**  
-   - **Scope Portfolio (T):** A collection \((S_i, \tau_i)\) where each unr[3D[K
-unresolved scope \(S_i = (O_i, \tau_i)\) carries a local option space \(O_i[5D[K
-\(O_i\) and a temporal horizon \(\tau_1 < \tau_2 < … < \tau_n\).  
-   - **Local Saturation (LocalSat(i,t)):** When the expected marginal compr[5D[K
-compression gain EMCG_i(a|F_t) ≈ 0 for all options \(a\) in the local space[5D[K
-space.  
-   - **Field Saturation (FieldSat(t)):** Global condition where max_{i} max[3D[K
-max_{a∈O_i} EMCG_i(a|F_t) ≈ 0, indicating no overall progress on any unreso[6D[K
-unresolved scope.  
+### 1. Thesis & Core Premise  
+The document proposes a **scope‑portfolio framework** for managing multi‑ti[8D[K
+multi‑timescale decision processes in a bounded rationality setting (see *“[2D[K
+*“Operationalizes boredom as a scope‑selection problem”*). Its central thes[4D[K
+thesis is that **local saturation of individual scopes does not guarantee f[1D[K
+field‑wide progress**, and therefore mechanisms must be designed to detect,[7D[K
+detect, recover from, and exploit cross‑scope dependencies. The theory oper[4D[K
+operationalises “boredom” as the inability to find new rewarding work withi[5D[K
+within any active scope, thereby motivating continual re‑allocation across [K
+horizons.
 
-3. **Mathematical Claims**  
-   - *LocalSat(i,t)* does not guarantee *FieldSat(t)*; a higher‑horizon sco[3D[K
-scope can still contribute positive compression gains (Proposition 2.4).  
-   - Operator drift caused by intervening work on other scopes can cause EM[2D[K
-EMCG_i(a|F_{t+∆t}) to rise despite unchanged \(O_i\) (Proposition 2.5).  
+---
 
-4. **Important Equations / Formal Structures**  
-   The core operator is \(F_t = C(H_t)\), where \(C\) maps a horizon‑depend[14D[K
-horizon‑dependent state \(H_t\). Saturation conditions are expressed as:  
+### 2. Primitive Concepts & Definitions  
 
+| Concept | Formal Definition (as introduced) |
+|---|---|
+| **Scope portfolio** \(T = \{(S_i ,\tau_i)\}_{i=1}^n\) | A collection of *[1D[K
+*unresolved* scopes, each with a local option space \(O_i\) and horizon \(\[3D[K
+\(\tau_i\). The global state at time \(t\) is the set of currently active u[1D[K
+unresolved scopes. |
+| **Local saturation** \(LocalSat(i,t)\) | Holds when the maximal expected [K
+marginal compression gain (EMCG) for any action \(a\in O_i\) satisfies \(ma[4D[K
+\(max_{a\in O_i} EMCG_i(a|F_t)\approx0\). Indicates that immediate progress[8D[K
+progress within scope \(i\) is exhausted. |
+| **Field saturation** \(FieldSat(t)\) | Holds when \(\forall i,\; max_{j}\[8D[K
+max_{j}\, max_{a\in O_j} EMCG_j(a|F_t)\approx0\). Signals that no unresolve[9D[K
+unresolved scope currently yields positive compression gains across the who[3D[K
+whole portfolio. |
+| **Spherepop operations** (POP, REFUSE, BIND, COLLAPSE) | - **POP**: Resol[5D[K
+Resolves a ready local scope by committing its resources to external evalua[6D[K
+evaluation.<br>- **REFUSE**: Discards continuation branches for scopes deem[4D[K
+deemed insufficiently promising.<br>- **BIND**: Tightens constraints on unr[3D[K
+unresolved scopes to prevent premature divergence.<br>- **COLLAPSE**: Merge[5D[K
+Merges distinct but overlapping distinctions, reducing explicit tracking wh[2D[K
+when they cease being differentially important. |
+
+*(Sources: “Definition 2.2 (Scope portfolio)”, “Definition 2.3 (Local and f[1D[K
+field saturation)”)*  
+
+---
+
+### 3. Formalism & Mathematical Claims  
+
+1. **Proposition 2.4** – *Non‑implication of local from global*:  
    \[
-   \text{LocalSat}(i,t): \max_{a\in O_i} \text{EMCG}_i(a|F_t) \approx 0
+   LocalSat(i,t)\;\not\Rightarrow\;FieldSat(t)
    \]
+   If another scope \(j\) satisfies \(\max_{a\in O_j} EMCG_j(a|F_t) > 0\), [K
+then progress is possible by switching scopes, restoring overall advancemen[10D[K
+advancement. *(Source: “Proposition 2.4 (Scope‑switch recovery)”)*  
 
-   \[
-   \text{FieldSat}(t): \max_{i}\,\max_{a\in O_i} \text{EMCG}_i(a|F_t) \appr[5D[K
-\approx 0.
-   \]  
+2. **Proposition 2.5** – *Operator‑drift recovery*:  
+   A scope can move from \(EMCG_i(a|F_t)\approx0\) to \(EMCG_i(a|F_{t+\Delt[21D[K
+\(EMCG_i(a|F_{t+\Delta t})>0\) without altering its option space, because i[1D[K
+intervening work on other scopes reshapes the global state \(F\). *(Source:[9D[K
+*(Source: “Proposition 2.5 (Operator‑drift recovery)”)*  
 
-5. **Mechanisms & Processes**  
-   - **Scope‑Switch Recovery:** When a higher‑horizon scope \(j\) yields no[2D[K
-non‑zero EMCG, switching restores progress (Proposition 2.4).  
-   - **Operator‑Drift Recovery:** Temporal work on other scopes can re‑acti[7D[K
-re‑activate dormant compression potential (Proposition 2.5).  
-   - **BIND/REFUSE/COLLAPSE** operations model workflow dynamics: `POP` res[3D[K
-resolves ready local scope, `REFUSE` removes stalled branches, and `BIND` t[1D[K
-tightens constraints without immediate POP.  
+3. **Proposition 2.6** – *BIND as progress*:  
+   Long‑horizon scopes may accumulate useful structure through BIND/REFUSE/[12D[K
+BIND/REFUSE/COLLAPSE while remaining unresolved; such accumulation can cons[4D[K
+constitute genuine progress without immediate POP. *(Source: “Proposition 2[14D[K
+“Proposition 2.6 (BIND‑as‑progress)”)*  
 
-6. **Philosophical Commitments**  
-   The experiment embraces a pragmatic view of boredom as “scope‑selection [K
-fatigue,” rather than an intrinsic inefficacy. It commits to the notion tha[3D[K
-that progress need not be realized instantaneously; unresolved horizons can[3D[K
-can retain structural value (BIND concept).  
+---
 
-7. **Connections to Computation**  
-   By encoding temporal horizons and saturation conditions within EMCG oper[4D[K
-operators, the framework provides a computationally tractable scheduler for[3D[K
-for multi‑clock environments—crucial for AI agents that operate across disp[4D[K
-disparate time scales. The scheduling policies map directly onto algorithmi[10D[K
-algorithmic decision rules (e.g., novelty‑only, shortest‑task‑first) implem[6D[K
-implementable via `run.py`.  
+### 4. Mechanisms & Policy Designs  
 
-8. **Connections to Other Parts of Spherepop**  
-   This spec dovetails with existing notions in Spherepop such as the Asymp[5D[K
-Asymptotic Saturation Theorem (§“Asymptotic Saturation Without Exhaustion”)[12D[K
-Exhaustion”), which deals with reintegration dynamics, albeit at a higher l[1D[K
-level. It also relates to the pending Appendix B plan B rewrite but remains[7D[K
-remains distinct from any poset‑integration semantics slated for future imp[3D[K
-implementation.  
+Four competing policy families are defined to resolve the tension between *[1D[K
+**local vs. field saturation**:
 
-9. **Unresolved Questions**  
-   - How do resource constraints (e.g., computational budget) interact with[4D[K
-with saturation thresholds across horizons?  
-   - What long‑term empirical evidence exists that demonstrates the stabili[7D[K
-stability of compression progress under dynamic horizon switching?  
+| Policy | Design Principle |
+|---|---|
+| **Novelty‑only** | Selects the *longest‑idle* scope, preserving momentum [K
+across horizons by maintaining a “boredom” buffer. |
+| **Shortest‑task‑first (STF)** | Always picks the minimal horizon scope, f[1D[K
+favoring rapid local saturation and quick feedback loops. |
+| **Max‑EMCG** | Greedily maximizes immediate expected marginal compression[11D[K
+compression gain per scope, driving the system toward locally optimal actio[5D[K
+actions. |
+| **EMCG/cost + anti‑starvation** | Balances gain‑per‑cost with periodic up[2D[K
+updates to “slow” scopes (anti‑starvation), preventing starvation of long‑t[6D[K
+long‑term horizons while keeping short‑term efficiency high. |
 
-10. **Contradictions, Ambiguities, or Weaknesses**  
-    - The claim that LocalSat(i,t) does not imply FieldSat(t) may be seen a[1D[K
-as a weakness in models expecting eventual global convergence.  
-    - Operator‑drift recovery assumes intervening work will always affect E[1D[K
-EMCG favorably; cases of destabilization due to unrelated scope changes rem[3D[K
-remain unaddressed.  
+These policies are interdependent; the choice among them reflects trade‑off[9D[K
+trade‑offs between **local freshness**, **global stability**, and **resourc[9D[K
+**resource allocation fairness**.
 
-11. **Concepts Likely to Survive Compression**  
-   - The notion of *local vs. field saturation* as a clear operational dist[4D[K
-distinction for multi‑clock scheduling.  
-   - The `BIND` operation, which captures the idea that progress can accumu[6D[K
-accumulate through structural tightening without immediate POP, will likely[6D[K
-likely persist in compressed models due to its utility across diverse domai[5D[K
-domains (personal workflow, education, research).  
+---
 
-These elements collectively outline a robust yet flexible approach to manag[5D[K
-managing boredom as a temporal coordination problem within Spherepop’s comp[4D[K
-computational ecosystem.
+### 5. Connections to Related Concepts  
 
+- **Operationalizing boredom**: The document extends this notion by treatin[7D[K
+treating “boredom” as a diagnostic signal (no new rewarding work within any[3D[K
+any active scope) rather than a purely subjective feeling.  
+- **Local vs. field saturation**: Distinguishes from the *Asymptotic Satura[6D[K
+Saturation Theorem* in Appendix B, which addresses reintegration dynamics w[1D[K
+without focusing on portfolio scheduling.  
+- **EMCG, \(F_t = C(H_t)\), and progress stability**: Directly maps to metr[4D[K
+metrics tracked: time‑to‑local saturation, starvation rates, and recovery l[1D[K
+latencies for long‑term horizons.
+
+---
+
+### 6. Unresolved Problems & Internal Tensions  
+
+1. **Longitudinal systemic relevance** – The claim that *LocalSat(i,t) does[4D[K
+does not imply FieldSat(t)* raises the question of whether meaningful syste[5D[K
+systemic progress can ever be achieved when individual scopes remain unsatu[6D[K
+unsaturated; no theoretical justification for eventual integration is provi[5D[K
+provided yet.  
+2. **Progress without POP** – Proposition 2.6 suggests that useful structur[8D[K
+structure may accumulate via BIND/REFUSE/COLLAPSE even if POP never occurs,[7D[K
+occurs, creating tension with earlier statements about preserving deep thre[4D[K
+threads indefinitely. This requires empirical validation or a more formal a[1D[K
+account of “latent progress.”  
+
+These open issues highlight the experimental nature of the specification an[2D[K
+and point to areas where further theoretical development (e.g., cross‑horiz[11D[K
+cross‑horizon convergence criteria) or empirical testing is needed.
+
+---
+
+### 7. Implications for Cluster & Cross‑Corpus Synthesis  
+
+- **Cluster synthesis**: The framework naturally partitions the portfolio i[1D[K
+into *local* vs. *global* dimensions, enabling clustering of scopes by satu[4D[K
+saturation status and policy sensitivity.  
+- **Cross‑corpus implications**: By formalising local/field saturation and [K
+scope‑switch recovery mechanisms, the theory provides a common vocabulary f[1D[K
+for integrating multi‑scale models from other domains (e.g., reinforcement [K
+learning’s “curiosity” signals, hierarchical Bayesian inference’s “model ev[2D[K
+evidence”).  
+
+---
+
+**References (as per fragment summaries)**  
+- Definition 2.2 (Scope portfolio) – *“Definition 2.2 (Scope portfolio)”*  [K
+
+- Definition 2.3 (Local and field saturation) – *“Definition 2.3 (Local and[3D[K
+and field saturation)”*  
+- Proposition 2.4 (Scope‑switch recovery) – *“Proposition 2.4 (Scope‑switch[13D[K
+(Scope‑switch recovery)”*  
+- Proposition 2.5 (Operator‑drift recovery) – *“Proposition 2.5 (Operator‑d[11D[K
+(Operator‑drift recovery)”*  
+- Proposition 2.6 (BIND‑as‑progress) – *“Proposition 2.6 (BIND‑as‑progress)[18D[K
+(BIND‑as‑progress)”*  
+
+--- 
+
+*End of unified synthesis.*

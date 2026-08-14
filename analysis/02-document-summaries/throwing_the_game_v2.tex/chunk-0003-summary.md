@@ -1,80 +1,87 @@
-**Extracted durable theoretical information**
+**1. Definitions and primitive concepts introduced**
 
-1. **Conceptual distinction – “refusal”**  
-   - Refusal is treated as a *structurally distinct* cognitive act that is [K
-**irreversible** and functions as a **deletion operation in a branching fut[3D[K
-future space**, rather than merely ranking fixed options (Spherepop formali[7D[K
-formalism).
+- **Refusal as an irreversible cognitive act**: “refusal is a structurally [K
+distinct irreversible cognitive act that permanently eliminates admissible [K
+futures, binding an agent to its history.”  
+  *[source: “The paper's central claim … refusal … is an irreversible opera[5D[K
+operation …”]*  
 
-2. **Public legibility of refusal**  
-   - Because refusal eliminates admissible futures, it becomes publicly leg[3D[K
-legible as *reliability*: the agent’s commitment is transparent to others.
+- **Non‑commutative monoid for event algebra**: “The event algebra of Spher[5D[K
+Spherepop is a non‑commutative, non‑invertible monoid.”  
+  *[source: “The event algebra of Spherepop is a non-commutative, non-inver[9D[K
+non-invertible monoid.”]*  
 
-3. **Equilibrium‑shifting power**  
-   - Refusal can shift strategic equilibria because its irreversible nature[6D[K
-nature creates a new boundary in the game‑theoretic landscape (referenced f[1D[K
-from Schelling 1960).
+- **Collapse as quotient functor and Karoubi completion**: “Collapse serves[6D[K
+serves as an idempotent quotient functor whose fixed‑point category (the Ka[2D[K
+Karoubi completion) represents the maximally collapsed world with erased di[2D[K
+distinctions.”  
+  *[source: same sentence as above]*  
 
-4. **Difficulty of “strategy stealing”**  
-   - It is hard to copy or imitate refusal without undergoing some transfor[8D[K
-transformation, preserving its uniqueness.
+- **Genuine refusal as obstruction to localization**: “Genuine refusal … is[2D[K
+is the structure that cannot be reached from within this completion; it is [K
+the obstruction to localization.”  
+  *[source: same sentence as above]*  
 
-5. **Relation to closure and localization**  
-   - Refusal is *genuine* only when it cannot be reached from within the Ka[2D[K
-Karoubi‑completion (collapsed) world; otherwise it remains an obstruction t[1D[K
-that prevents further localisation of the agent’s trajectory.
+**2. Mathematical claims and formal structures**
 
-6. **Worldhood as accumulated non‑commutativity**  
-   - Worldhood = the total non‑commutative history of events in the event s[1D[K
-sequence, which cannot be rearranged once refusal has occurred.
+- The event algebra is modeled as a **non‑commutative, non‑invertible monoi[5D[K
+monoid**, emphasizing that order of operations matters and no inverse eleme[5D[K
+elements exist.  
+  *[source: “The event algebra … is a non-commutative, non-invertible monoi[5D[K
+monoid.”]*  
 
-7. **Event algebra formalism**  
-   - The event algebra is a **non‑commutative, non‑invertible monoid**, wit[3D[K
-with *Collapse* as an idempotent quotient functor whose fixed‑point categor[7D[K
-category is the Karoubi completion (the “maximally collapsed” world).
+- Collapse is described as an **idempotent quotient functor** on the monoid[6D[K
+monoid, producing its fixed‑point category (the Karoubi completion) where a[1D[K
+all historical distinctions are erased.  
+  *[source: same sentence as above]*  
 
-8. **Three equivalent lenses on refusal**
+**3. Mechanisms and processes**
 
-   **a. Information‑theoretic lens**  
-   - Refusal = *endogenous support restriction* rather than Bayesian updati[6D[K
-updating; it deliberately raises KL divergence from the prior trajectory di[2D[K
-distribution and keeps that increase as a constraint.
+- **Refusal process**: Refusal acts like a deletion in the branching future[6D[K
+future space of events, preventing agents from revisiting eliminated future[6D[K
+futures.  
 
-   **b. Operational (future‑space) lens**  
-   - Refusal = future‑space pruning performed by a non‑invertible morphism,[9D[K
-morphism, with Collapse serving uniquely as the expansion operator that res[3D[K
-restores full space after refusal.
+- **Collapse mechanism**: Collapse functions as an expansion operator that [K
+yields the Karoubi completion, effectively “pruning” the future‑space topol[5D[K
+topology by merging all historical branches into a single collapsed state. [K
+ 
 
-   **c. Algebraic (monoid) lens**  
-   - Refusal = accumulation of non‑commuting morphisms within the monoid; t[1D[K
-this builds depth that cannot be shortcut or bypassed by alternative paths.[6D[K
-paths.
+- **Operational lens (future‑space pruning)**: Treats refusal as a non‑inve[8D[K
+non‑invertible morphism that prunes possible futures, with Collapse being t[1D[K
+the unique operator that restores expansibility.  
 
-9. **Survival of value without winning every competition**  
-   - The ability to enforce irreversible exclusion (closures) preserves rel[3D[K
-relationships, stabilises cooperation, and prevents optimisation from erodi[5D[K
-eroding meaning—i.e., survival does not require dominance in all contests b[1D[K
-but only the capacity for lasting closures.
+**4. Connections to concepts named in the running abstract**
 
-10. **Refusal as non‑defective intelligence**  
-    - Refusal is *not* a defect of intelligence; it is an essential event t[1D[K
-that enables agents to create new worlds, distinct from merely predictive o[1D[K
-or updating behaviours (contrasting with prediction models such as Friston [8D[K
-Friston 2010 and Clark 2016).
+- **Refusal vs ranking**: Extends the running abstract’s notion of “history[8D[K
+“history” by replacing simple ranking of options with an irreversible delet[5D[K
+deletion mechanism, explaining why refusal is legible as reliability and af[2D[K
+affects equilibrium shifts.  
 
-11. **Dependencies & unresolved questions**
+- **Reliability and strategy stealing**: Connects to the idea that public l[1D[K
+legibility arises from refusal, making it difficult for rivals (“strategy s[1D[K
+steal”) because no reversible path exists back to prior states.  
 
-   - **Dependency**: The durability of refusal hinges on the underlying non[3D[K
-non‑commutative event algebra; any change that commutes events would render[6D[K
-render refusal indistinguishable from ranking.
-   - **Unresolved question**: How precisely does Collapse map individual ir[2D[K
-irreversible acts onto the Karoubi completion, and what constraints (if any[3D[K
-any) limit which subsets of histories can be collapsed while preserving mea[3D[K
-meaningful distinction?
+- **Worldhood and non‑commutativity**: Relates “world” (accumulated non‑com[7D[K
+non‑commutativity) in the running abstract to the concept of “worldhood” he[2D[K
+here as a history that cannot be rearranged, underscoring permanence of irr[3D[K
+irreversible acts.  
 
-These points capture the core theoretical contributions—definitions, equati[6D[K
-equations (algebraic structure), mechanisms (irreversibility, future‑space [K
-pruning), arguments (legibility, equilibrium shifting), conjectures (closur[7D[K
-(closure as obstructions), and open issues (dependency on event algebra) pr[2D[K
-presented in the fragment.
+**5. Unresolved questions or contradictions visible**
 
+- **Contradiction regarding reacreachability**: The claim that “Genuine ref[3D[K
+refusal … is the obstruction to localization; it is the obstruction to loca[4D[K
+localization.” raises the question: *Can any agent ever escape this complet[7D[K
+completion once genuine refusal has occurred?* No explicit mechanism for re[2D[K
+reversal is provided.  
+
+- **Interpretation of Collapse as unique expansion operator**: While Collap[6D[K
+Collapse is described as “the unique expansion operator,” the justification[13D[K
+justification that no other morphism can achieve a similar ‘restoration’ wi[2D[K
+without altering non‑commutative structure remains under‑specified; this ma[2D[K
+may be an unresolved technical assumption.  
+
+- **Implication for intelligence models**: The statement that “Refusal is n[1D[K
+not a defect in intelligence” contrasts with existing literature (e.g., Sch[3D[K
+Schelling’s discussion of strategic decision-making) where refusal can some[4D[K
+sometimes signal suboptimal rationality, leaving open how the model reconci[7D[K
+reconciles this claim without dismissing empirical observations.

@@ -1,66 +1,96 @@
-**Summary**
+**Productive Incompletion – A Computational View**
 
-The passage explores how *incompleteness*—the persistence of unfinished wor[3D[K
-work—is a crucial computational mechanism for sustaining cognition and prob[4D[K
-problem‑solving across time. Key ideas include:
+1. **What Is “Incompletion”?**  
+   An artifact *a* (e.g., a painting, a proof page, an unfinished book) is [K
+said to be in an *incompletion state* \(I(a)\) when its current configurati[11D[K
+configuration \(c(a)\) differs from the intended final form \(\pi(a)\) by m[1D[K
+more than a small threshold \(\delta\). Formally,
 
-1. **Productive Incompletion as Forward Momentum**  
-   - Unlike traditional advice to “complete” tasks before moving on, unfini[6D[K
-unfinished artifacts (e.g., half‑finished paintings, open proofs) retain *c[2D[K
-*cognitive load* that keeps related problems active in mind.  
-   - The gap between the current state and the intended final form is quant[5D[K
-quantified by a distance metric; if this gap exceeds a threshold $\delta$, [K
-the artifact is deemed “incompletion state”.
+   \[
+   d(c(a),\pi(a)) > \delta,
+   \]
+
+   where *d* is a distance metric over “configuration space.” The artifact’[9D[K
+artifact’s value therefore lies in its persistent, visible gap.
 
 2. **Recruitment Potential**  
-   - An unfinished artifact’s *recruitment potential* $\rho(a)$ depends on [K
-three factors: visibility (how often it’s encountered), salience of its unr[3D[K
-unresolved structure, and proximity to ongoing activity in the environment.[12D[K
-environment.  
-   - This makes incomplete work a persistent attractor for mental engagemen[9D[K
-engagement.
+   The computational role of that gap is captured by the *recruitment poten[5D[K
+potential*  
+
+   \[
+   \rho(a) = \text{Visibility}(a)\times\text{Salience}(I(a))\times\text{Pro[62D[K
+\text{Visibility}(a)\times\text{Salience}(I(a))\times\text{Proximity}(a,\te\text{Visibility}(a)\times\text{Salience}(I(a))\times\text{Proimity}(a,\text{traffic}),
+   \]
+
+   meaning an unfinished item stays cognitively “alive” because it is (i) v[1D[K
+visible, (ii) carries unresolved weight, and (iii) frequently encountered i[1D[K
+in ordinary movement.
 
 3. **Zeigarnik Effect Extended**  
-   - The classic Zeigarnik effect shows that unfinished tasks are remembere[9D[K
-remembered better than completed ones because they maintain a state of read[4D[K
-readiness (cognitive tension).  
-   - Formally, the *cognitive load* $\Lambda(a)$ for an artifact is split i[1D[K
-into explicit and implicit components. For incomplete artifacts, both remai[5D[K
-remain significant, leading to long‑term mental engagement.
+   The classic Zeigarnik effect shows that interrupted tasks are remembered[10D[K
+remembered better than completed ones. Extending this:
+
+   - Let \(\Lambda(a)\) be the total cognitive load imposed by *a*:
+   
+     \[
+     \Lambda(a)=\Lambda_{\text{explicit}}(a)+\Lambda_{\text{implicit}}(a).
+     \]
+
+   - For a completed artifact, \(\Lambda_{\text{explicit}}\approx0\) and \([2D[K
+\(\Lambda_{\text{implicit}}\) decays quickly.  
+   - For an unfinished one, both components remain substantial for longer:
+
+     \[
+     P_{\text{engage}}(a,t)=P_0 e^{-t/\tau_{\text{incomplete}}},
+     \]
+
+     where \(\tau_{\text{incomplete}}\gg\tau_{\text{complete}}\). Thus unfi[4D[K
+unfinished artifacts continuously recruit attention.
 
 4. **Suspended Execution**  
-   - Intellectual processes are not limited to single sessions; they can be[2D[K
-be *suspended*. When the environment later encounters related unfinished ar[2D[K
-artifacts, these restore context (registers, memory) that allows resumption[10D[K
-resumption without needing explicit planning.  
-   - This mirrors how operating systems preserve process states when resour[6D[K
-resources are temporarily reassigned.
+   Scientific and mathematical work often involves *suspended processes*: a[1D[K
+a proof page left open, a sketch of an argument still to be filled in. When[4D[K
+When such artifacts are present,
+
+   \[
+   \text{State}(P,t+\Delta t)\approx\text{State}(P,t)\oplus\text{Context}(A[48D[K
+t)\approx\text{State}(P,t)\oplus\text{Context}(A_{\text{suspend}}),
+   \]
+
+   meaning the process is not lost but automatically “resumed” by encounter[9D[K
+encountering its surrounding context. This mirrors how an OS preserves a ru[2D[K
+running process’s registers and memory until it can be re‑started.
 
 5. **Order vs. Clutter**  
-   - High visual clutter does not imply inefficiency; it often reflects mul[3D[K
-multiple partially executed processes sharing space. Removing traces may si[2D[K
-simplify appearance but can erase crucial information about where work paus[4D[K
-paused.  
-   - *Process density* $\Pi(E)$ quantifies the weighted sum of active incom[5D[K
-incompletion states, guiding whether an environment is optimally structured[10D[K
-structured for simultaneous project advancement.
+   The notion that visual disorder indicates computational richness challen[7D[K
+challenges conventional tidy‑up advice:
 
-6. **Optimal Incompletion Density**  
-   - The optimal balance between progress on multiple projects and distract[8D[K
-distraction depends on process density. There exists a non‑zero threshold w[1D[K
-where additional incompletion yields diminishing returns due to attentional[11D[K
-attentional overhead.
-   - Mathematically, this optimum $\Pi^*(E)$ maximizes the net benefit of a[1D[K
-advancement versus distraction across all active projects.
+   - Define *process density*  
 
-**Conclusion**
+     \[
+     \Pi(E)=\sum_{a\in E}\mathbf{1}_{I(a>0)}\cdot\rho(a),
+     \]
 
-The framework demonstrates that *productive incompleteness* is not merely a[1D[K
-an artifact of poor organization but a deliberate computational strategy. B[1D[K
-By intentionally leaving work in an executable rather than archival state a[1D[K
-and preserving visibility within physical environments, we maintain the “fo[3D[K
-“forward momentum” needed for solving complex problems over extended period[6D[K
-periods. This approach aligns with both psychological insights (Zeigarnik e[1D[K
-effect) and practical observations about how scientific and mathematical wo[2D[K
-work naturally persists through repeated exposure to unfinished artifacts.
+     the weighted sum of all unfinished states. High \(\Pi\) reflects many [K
+suspended executions, while low \(\Pi\) may strip away needed context for r[1D[K
+resuming complex work.
 
+   - **Theorem (Optimal Incompletion):** For an environment \(E\) supportin[9D[K
+supporting \(N\) concurrent projects,
+
+     \[
+     \Pi^*(E)=\arg\max_{\Pi}\Bigl[\sum_{i=1}^{N}\text{Progress}_i(\Pi)-\tex[70D[K
+\Pi^*(E)=\arg\max_{\Pi}\Bigl[\sum_{i=1}^{N}\text{Progress}_i(\Pi)-\text{Dis\Pi^*(E)=\arg\max_{\Pi}\Bigl[\sum_{i=1}^{N}\text{Progress}_i(\Pi)-\tex{Distraction}(\Pi)\Bigr],
+     \]
+
+     where progress is facilitated by suspended execution states, and distr[5D[K
+distraction arises when too many threads are collapsed. An optimal environm[8D[K
+environment retains a non‑zero level of incompletion.
+
+---
+
+**Key Takeaway:** Incomplete artifacts act as “hooks” that keep relevant id[2D[K
+ideas alive, allowing continuous mental work without the need for deliberat[9D[K
+deliberate scheduling. This makes productive incompletion not just a by‑pro[6D[K
+by‑product but an essential design principle for environments supporting co[2D[K
+complex thought.

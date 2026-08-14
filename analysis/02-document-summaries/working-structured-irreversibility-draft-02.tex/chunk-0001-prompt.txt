@@ -1,15 +1,204 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 2 of a document called
+"working-structured-irreversibility-draft-02.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Worked Example – A Four‑Event History**
 
-TEXT
-====
+Below we walk through a concrete example that illustrates how the objects a[1D[K
+and morphisms of **$\SP$ (the “space‑of‑probabilities” category)** are real[4D[K
+realized in $\RSVP$ (the “Renormalization‑Group‐Valued Programs”) via the f[1D[K
+functor $F$.  
+We consider a simple scenario with four events \(A,B,C,D\) on a set \(\Omeg[7D[K
+\(\Omega=\{a,b,c,d\}\) and show how the sequence  
+
+\[
+e_D\circ e_C\circ e_B\circ e_A
+\]
+
+is transformed by $F$ into its realization in $\RSVP$. Throughout we keep t[1D[K
+track of:
+
+* **Probability measures** on each stage,
+* **Slack** (the entropy difference recorded after a coarse‑graining step),[6D[K
+step),
+* **Composition rules** for the four generators.
+
+---
+
+### 1. Initial State – The Events
+
+| Stage | Description |
+|-------|-------------|
+| \(\Omega_0\) | Set of four possible states: \(\{a,b,c,d\}\). Each event \[1D[K
+\(e_X\) corresponds to picking one state (probability = 1/4) and “removing”[10D[K
+“removing” that outcome from the next stage. |
+
+The initial probability distribution is uniform:
+\[
+p_0 = \frac14 (\delta_a+\delta_b+\delta_c+\delta_d).
+\]
+
+---
+
+### 2. First Event – \(e_A\) (Elimination of \(A\))
+
+**Generator rule:**  
+\(e_X\) corresponds to a *Pop* operation: the event occurs, and all states [K
+containing that element are merged into a single “rest” state.
+
+**Effect on distribution**
+
+* Remove state \(a\). The remaining three outcomes \(\{b,c,d\}\) become one[3D[K
+one coarse class.
+* New uniform measure over two objects:
+  \[
+  p_1 = \frac13 (\delta_{[bc]}+\delta_d).
+  \]
+
+**Slack produced:**  
+Because we discarded a pure outcome, the Shannon entropy drops by exactly t[1D[K
+the amount of information lost. For a uniform split,
+\[
+\eta_A = \SF_{\Omega}(p_0)-\SF_{\Omega/A}(p_1)=\log_2(4)-\log_2(3)\approx 0[1D[K
+0.415.
+\]
+
+---
+
+### 3. Second Event – \(e_B\) (Elimination of \(B\))
+
+**Effect on distribution**
+
+* Remove state \(b\). The remaining outcomes \(\{c,d\}\) are now a single c[1D[K
+coarse class.
+* New uniform measure over two objects:
+  \[
+  p_2 = \frac12 (\delta_c+\delta_d).
+  \]
+
+**Slack produced:**  
+Again, eliminating a pure outcome reduces entropy by the log of the new car[3D[K
+cardinality:
+\[
+\eta_B = \SF_{\Omega/A}(p_1)-\SF_{\Omega/A/B}(p_2)=\log_2(3)-\log_2(2)\appr[66D[K
+\SF_{\Omega/A}(p_1)-\SF_{\Omega/A/B}(p_2)=\log_2(3)-\log_2(2)\approx 0.585.[6D[K
+0.585.
+\]
+
+---
+
+### 4. Third Event – \(e_C\) (Elimination of \(C\))
+
+**Effect on distribution**
+
+* Remove state \(c\). The remaining outcome is only \(d\), so the whole sys[3D[K
+system collapses to a single point:
+  \[
+  p_3 = \delta_d.
+  \]
+
+**Slack produced:**  
+The entropy drops from two possibilities (\(c,d\)) to one, giving
+\[
+\eta_C = \SF_{\Omega/A/B}(p_2)-\SF_{\text{point}}(p_3)=1-0=1\;\text{(bit)}.[66D[K
+\SF_{\Omega/A/B}(p_2)-\SF_{\text{point}}(p_3)=1-0=1\;\text{(bit)}.
+\]
+
+---
+
+### 5. Fourth Event – \(e_D\) (Elimination of \(D\))
+
+**Effect on distribution**
+
+* Remove state \(d\). At this point all events have been applied, leaving t[1D[K
+the empty set:
+  \[
+  p_4 = \delta_\emptyset .
+  \]
+
+**Slack produced:**  
+No further entropy can be released because we are already in a deterministi[12D[K
+deterministic (entropy‑zero) configuration; hence
+\[
+\eta_D = \SF_{\text{point}}(p_3)-\SF_{\text{point}}(p_4)=0.
+\]
+
+---
+
+### 6. Composition of the Four Events – $e_D\circ e_C\circ e_B\circ e_A$
+
+Applying composition rules (Lemma F‑comp) we stack the slacks additively:
+
+\[
+\eta_{DCEA}= \eta_D + \eta_C + \eta_B + \eta_A
+               \approx 0 + 1 + 0.585 + 0.415 = 2\;\text{bits}.
+\]
+
+The final realized state in $\RSVP$ is the point measure \(p_4=\delta_\empt[18D[K
+\(p_4=\delta_\emptyset\) with slack = 2, reflecting that we have discarded [K
+all original degrees of freedom.
+
+---
+
+### 7. Summary in Diagrammatic Form
+
+```
+(Ω)                (Ω/A)            (Ω/A/B)           (Ω/A/B/C)
+p0 = uniform on 4 → p1 = uniform on 3    → p2 = uniform on 2   → p3 = point[5D[K
+point
+η_A ≈ 0.415          η_B ≈ 0.585       η_C = 1               η_D = 0
+```
+
+Each step corresponds to a single generator \(e_X\); the accumulated slack [K
+\(\eta_{DCEA}=2\) is exactly the total entropy loss that $F$ records in $\R[3D[K
+$\RSVP$.
+
+---
+
+### 8. Interpretation
+
+* **Entropy‑Monotonicity:** Every morphism in $\SP$ (here, each \(e_X\)) re[2D[K
+reduces Shannon entropy by at least the amount of slack it produces; no ste[3D[K
+step increases overall information content.
+* **Functorial Realization:** The functor $F$ maps the abstract sequence \([2D[K
+\((e_D,e_C,e_B,e_A)\) to the concrete realization \((p_4,\eta_{DCEA})\) in [K
+$\RSVP$, preserving identity and composition as required by Lemma F‑comp.
+* **Structural Asymmetry:** Although the four events together achieve a det[3D[K
+deterministic outcome, this is not possible without performing *all* reduct[6D[K
+reductions; thus $\SP$ captures discrete, irreversible histories that canno[5D[K
+cannot be undone in $\RSVP$, embodying the asymmetry highlighted in Theorem[7D[K
+Theorem asymmetry.
+
+This worked example demonstrates how a concrete chain of “event elimination[11D[K
+eliminations” translates into a measurable drop of entropy and slack via $F[2D[K
+$F$, while also illustrating why $\SP$ and $\RSVP$ are not equivalent categ[5D[K
+categories.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[12pt,a4paper]{article}
 

@@ -1,0 +1,1256 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+Below is a high‑level overview of the major points raised in your text, org[3D[K
+organized by theme. This should help you see how Spherepop integrates vario[5D[K
+various computational ideas into a unified framework based on “history” rat[3D[K
+rather than static symbols or channels.
+
+---
+
+### 1. Philosophical and Structural Foundations
+
+**Spherepop vs. Combinatory Logic & Naive Symbolic Substitution**
+
+- **Combinatory Logic:** Traditionally focuses on the manipulation of funct[5D[K
+functions without explicit variables. Spherepop retains a functional flavor[6D[K
+flavor but introduces “computational regions” (contexts) that evolve over t[1D[K
+time.
+- **Naïve Symbolic Substitution:** Treats symbols as immutable placeholders[12D[K
+placeholders. In contrast, Spherepop’s histories are *dynamic*—they record [K
+actual constructions and can be replayed or repaired.
+
+**Readability vs. Implicit Variables**
+
+- Explicit variables in traditional calculi give immediate insight into wha[3D[K
+what is being manipulated. Spherepop recovers much of that readability by m[1D[K
+making the history visible while keeping the focus on regions rather than e[1D[K
+ephemeral symbols.
+
+---
+
+### 2. Connection to Process Calculi (π‑calculus)
+
+**Key Features of π‑calculus**
+
+- Emphasizes communication as a first‑class object: channels are created, t[1D[K
+transmitted, and composed into complex networks.
+  
+**How Spherepop Extends This Idea**
+
+- Instead of focusing on channels, Spherepop treats *independent Spheres* ([1D[K
+(computational regions) that evolve through the Merge operator. Communicati[11D[K
+Communication is expressed as historical dependency between these spheres r[1D[K
+rather than a primitive notion of concurrency.
+
+---
+
+### 3. Parallel with Linear Logic
+
+**Linear Logic’s Resource Discipline**
+
+- Distinguishes unrestricted structural rules (weakening, contraction, exch[4D[K
+exchange) from resource‑aware operations.
+  
+**Spherepop’s Historical Interpretation**
+
+- Histories in Spherepop cannot be arbitrarily duplicated or erased because[7D[K
+because they record real computational construction. Replay, Refusal, and h[1D[K
+historical monotonicity enforce disciplined resource management without nee[3D[K
+needing a separate logical foundation.
+
+---
+
+### 4. Relation to Dependent Type Theory
+
+**Dependence as Construction**
+
+- Dependent types allow contexts (assumptions) to influence type judgments [K
+(types are sets of values).  
+- In Spherepop:
+  - **Contexts become histories**—they record the evolution of computationa[12D[K
+computational regions.
+  - **Types become refusal structures**, ensuring that only admissible cont[4D[K
+continuations extend a history.
+  - **Dependent functions become continuation policies** and dependent pair[4D[K
+pairs become staged constructions.
+
+**Preservation of Power**
+
+- All logical power of dependent type theory is retained; the objects simpl[5D[K
+simply acquire an explicit historical semantics, aligning with the idea tha[3D[K
+that computation is inherently sequential.
+
+---
+
+### 5. Impact on Proof Assistants & Compiler Theory
+
+**Current State (Lean, Coq, Agda, Idris)**
+
+- These systems manipulate symbolic derivations and rely heavily on type‑th[7D[K
+type‑theoretic foundations.
+  
+**Spherepop’s Vision**
+
+- Spherepop proposes that proof assistants could instead manipulate *histor[7D[K
+*historical constructions* whose provenance (Replay, Refusal) remains expli[5D[K
+explicit. This shift may enable new kinds of optimization or verification s[1D[K
+strategies.
+
+**Compiler Theory**
+
+- Traditional compiler stages remain intact (lexical analysis, ASTs, etc.).[6D[K
+etc.). The historical interpretation reframes these stages as handling repr[4D[K
+representations of computational history rather than static syntax.
+  
+**Result:** A broader conceptual framework where existing techniques are se[2D[K
+seen as special cases of a unified “history‑aware” semantics.
+
+---
+
+### 6. Future Directions & Open Questions
+
+1. **Historical Equivalence**
+   - Characterize when two histories can be considered observationally equi[4D[K
+equivalent despite differing intermediate states (analogous to bisimulation[12D[K
+bisimulation or contextual equivalence).
+
+2. **Normalization & Confluence**
+   - Extend classical normalization theory to the probabilistic fragment in[2D[K
+introduced via Choice, addressing almost‑sure normalization and confluence [K
+under stochastic evaluation.
+
+3. **Incremental Computation**
+   - Formalize a mathematical theory of incremental computation directly in[2D[K
+in terms of historical continuation, unifying existing practices (increment[10D[K
+(incremental compilers, reactive systems, etc.).
+
+4. **Distributed & Persistent Histories**
+   - Explore adaptive compression strategies for histories, balancing recon[5D[K
+reconstruction cost with execution efficiency—potentially leading to new ru[2D[K
+runtime designs.
+
+5. **Verification Paradigms**
+   - Investigate whether reasoning about programs via their historical evol[4D[K
+evolution simplifies verification tasks (proof obligations, resource constr[6D[K
+constraints).
+
+6. **Machine Learning & Beyond**
+   - Consider if the historical perspective could unify symbolic reasoning,[10D[K
+reasoning, differentiable optimization, probabilistic inference, and neural[6D[K
+neural computation under a common graph of evolving histories.
+
+---
+
+### Summary
+
+Spherepop is presented as an *interdisciplinary* calculus that recasts trad[4D[K
+traditional computational ideas—functional abstraction (λ‑calculus), commun[6D[K
+communication (π‑calculus), resource management (linear logic), logical con[3D[K
+construction (dependent types), and compiler stages—through the lens of **c[3D[K
+**computational history**. By doing so, it aims to provide a unified semant[6D[K
+semantic substrate where these seemingly disparate paradigms coexist natura[6D[K
+naturally.
+
+The document explicitly acknowledges that Spherepop is not meant to replace[7D[K
+replace existing systems but rather to suggest an alternative conceptual fo[2D[K
+foundation—one in which the *state* of computation (its history) becomes as[2D[K
+as central as its current symbolic representation. This positions Spherepop[9D[K
+Spherepop at the intersection of theoretical computer science, formal metho[5D[K
+methods, and emerging practical applications such as distributed systems, m[1D[K
+machine learning, and verification.
+
+Feel free to ask for deeper elaboration on any specific section or concept!
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-beyond-parentheses.tex
+
+NEW CHUNK
+=========
+
+The central proposal of this paper is intentionally modest despite its broad
+ambitions. Every student already learns the essential computational operation
+during elementary arithmetic: locate the innermost computational scope,
+evaluate it, and continue outward until no unresolved scopes remain.
+Spherepop argues that this familiar procedure is more fundamental than the
+syntactic notation traditionally used to express it. By replacing parentheses
+with explicit computational regions and replacing symbolic rewriting with the
+historical evolution of those regions, the calculus seeks not to overturn the
+existing foundations of computation, but to reveal a common historical
+structure underlying them. Whether this historical foundation ultimately
+becomes a useful basis for future programming languages, proof assistants,
+compiler architectures, and concurrent systems remains a question for future
+research, but it is a question whose investigation appears both mathematically
+natural and computationally promising.
+
+
+Meta-Theoretical Properties
+
+
+A computational calculus is valuable not merely because it admits elegant
+programs, but because its fundamental operations satisfy predictable
+mathematical properties. Throughout the development of the Spherepop Calculus,
+we have progressively replaced traditional syntactic notions with historical
+ones. Parentheses became Spheres. Substitution became Replay. Type checking
+became admissibility. Reduction became Pop. Histories replaced mutable states.
+These reinterpretations naturally raise the question of whether the resulting
+calculus preserves the familiar guarantees expected of modern programming
+languages and proof systems. The purpose of this section is not to provide
+fully formal proofs of every theorem—which are deferred to the appendices—but
+to establish the principal meta-theoretical properties that characterize the
+historical semantics.
+
+The first and perhaps most fundamental property is the monotonicity of
+histories. Unlike conventional operational semantics, where machine states are
+replaced by successor states during evaluation, Spherepop never destroys an
+admitted computational event. Every successful evaluation extends an existing
+history. Formally, if
+
+\[
+H
+\longrightarrow
+H'
+\]
+
+is a valid operational transition, then
+
+\[
+H
+\subseteq
+H'.
+\]
+
+This inclusion should not be interpreted as ordinary set inclusion, since
+histories possess an intrinsic ordering determined by computational
+construction. Rather, it expresses the fact that every event admitted into a
+history remains part of every future continuation. New events may be appended,
+Replay may reconstruct previous continuations, and Refusal may prevent
+inadmissible extensions, but no admitted event is erased. This monotonicity
+provides the semantic foundation for provenance, incremental computation,
+historical replay, and reproducibility.
+
+A second property concerns the preservation of admissibility. Traditional type
+theory establishes the Preservation Theorem, asserting that well-typed
+programs remain well typed throughout evaluation. Spherepop generalizes this
+principle from types to histories. Suppose that
+
+\[
+\Gamma \vdash H
+\]
+
+is an admissible historical construction, and suppose that
+
+\[
+H
+\longrightarrow
+H'
+\]
+
+is an operational transition generated by Replay, Pop, Merge, or Choice. Then
+the extended history likewise satisfies
+
+\[
+\Gamma'
+\vdash
+H',
+\]
+
+where
+
+\[
+\Gamma'
+\]
+
+denotes the enlarged historical context produced by the transition. The
+significance of this theorem lies in the interpretation of contexts as
+histories. Preservation no longer states merely that values retain their
+types. It states that admissible historical construction remains admissible
+throughout the evolution of the computation. Correctness therefore becomes a
+property of historical growth rather than static classification.
+
+The corresponding Progress Theorem requires more careful interpretation. In
+traditional operational semantics, progress asserts that every well-typed term
+is either already a value or admits another reduction step. Such a theorem is
+appropriate for deterministic rewriting systems in which evaluation must
+always continue whenever possible. Spherepop deliberately weakens this
+principle. Histories may legitimately reach situations where no immediate Pop
+is admissible because additional information must first become available,
+because a probabilistic Choice has not yet been resolved, because an external
+resource has not yet responded, or because a continuation has been explicitly
+refused. Rather than forcing evaluation into artificial reductions, the
+Spherepop Progress Theorem states that every admissible history is either
+historically complete, admits at least one admissible continuation, or enters
+a deferred state awaiting future admissible construction. Deferred computation
+is therefore treated as a first-class semantic object rather than as an
+implementation inconvenience. This weakening reflects the practical realities
+of concurrent, distributed, interactive, and probabilistic computation more
+faithfully than classical formulations.
+
+Replay itself satisfies an important correctness property. Operationally,
+Replay reconstructs historical continuations rather than performing symbolic
+substitution. The Replay Correctness Theorem asserts that every Replay
+operation preserves observational behavior. If a continuation constructed
+through Replay produces an observable value
+
+\[
+v,
+\]
+
+then every admissible future continuation observes the same value that would
+have been obtained through the corresponding symbolic substitution. Replay
+therefore strictly generalizes substitution. Ordinary substitution appears as
+the special case in which historical provenance is intentionally discarded.
+The theorem guarantees that retaining provenance does not alter computational
+meaning.
+
+Merge introduces additional questions concerning concurrency. Because Merge
+represents logical independence rather than processor scheduling, independent
+histories should remain insensitive to arbitrary execution order. This
+property may be expressed through historical commutativity. Whenever two
+computational regions possess no dependency relation, exchanging the order of
+their Pops yields observationally equivalent histories. Consequently, semantic
+correctness depends only upon causal structure rather than scheduler behavior.
+This theorem provides the mathematical justification for parallel execution,
+distributed evaluation, speculative computation, and asynchronous scheduling
+within the Universal Operator Machine.
+
+Choice requires a corresponding adequacy result. Operationally, Choice may
+either sample an immediate continuation or propagate an explicit probability
+distribution. Denotationally, both interpretations represent different views
+of the same historical construction. Adequacy therefore states that repeated
+operational sampling converges to the probability measure specified by the
+denotational semantics. Although a complete proof depends upon the chosen
+probability model and is deferred to future work, the historical semantics has
+been deliberately constructed so that probabilistic commitment affects only
+the interpretation of operators rather than the underlying computational
+graph. This separation substantially simplifies the relationship between
+deterministic and probabilistic computation.
+
+Refusal possesses perhaps the simplest meta-theoretical characterization.
+Unlike exceptions or runtime failures, Refusal preserves historical coherence.
+An inadmissible continuation never becomes part of the computational history.
+Consequently, every reachable history remains admissible by construction.
+There exists no operational rule capable of extending a history by an event
+that violates the continuation discipline. This property transforms many
+traditional safety arguments into immediate consequences of the operational
+semantics. Safety is preserved not because incorrect states are later
+repaired, but because incoherent histories are never admitted in the first
+place.
+
+Finally, the historical ontology itself satisfies a conservation principle.
+Every computational object possesses a provenance. Every observable value
+admits a historical explanation. Every explanation consists of a finite
+sequence of admissible events whose Replay reconstructs the value without
+introducing additional assumptions. In this sense, computation satisfies a
+form of historical completeness: nothing observable appears without an
+admissible construction, and every admissible construction remains available,
+at least semantically, for future replay. This principle distinguishes the
+Spherepop Calculus from purely state-based operational semantics and forms the
+conceptual foundation upon which provenance tracking, incremental execution,
+repair-oriented programming, and historical verification are built.
+
+Taken together, these properties suggest that the historical interpretation
+retains the mathematical discipline traditionally associated with operational
+semantics while extending its expressive scope to encompass provenance,
+concurrency, deferred computation, probabilistic evaluation, and historical
+repair. The familiar guarantees of preservation, progress, compositionality,
+and correctness are not discarded. Rather, they are reformulated in terms of
+the growth and admissibility of computational histories, reflecting the
+central philosophical claim of this work that computation is more naturally
+understood as irreversible historical construction than as transient symbolic
+state transformation.
+
+
+Implementation Case Studies
+
+
+The mathematical development of the Spherepop Calculus establishes a general
+theory of historical computation. Nevertheless, the practical value of any
+computational framework ultimately depends upon its ability to express familiar
+programs naturally while preserving the advantages of its semantic foundation.
+The purpose of this section is therefore to illustrate how the historical
+interpretation applies across increasingly sophisticated computational
+examples. Rather than introducing new primitives, these case studies
+demonstrate that arithmetic, functional programming, concurrent execution,
+logical reasoning, probabilistic computation, and differentiable systems all
+emerge from the same small collection of operations: Sphere, Pop, Replay,
+Merge, Choice, Refusal, and Collapse.
+
+The simplest example is ordinary arithmetic. Consider the expression
+
+\[
+((2+3)\times(4+5)).
+\]
+
+Traditional operational semantics interprets this as a syntax tree whose
+interior expressions are repeatedly rewritten until a normal form is reached.
+The Spherepop interpretation begins one level earlier. The parser identifies
+three nested computational regions. Two interior Spheres contain independent
+additions, while the enclosing Sphere contains the multiplication that depends
+upon their completion. The scheduler immediately recognizes that both interior
+regions are simultaneously admissible because neither depends upon the other.
+Two independent Pops therefore become available. Once both additions have
+completed, Replay propagates their values into the enclosing computational
+region, rendering the multiplication admissible. The final Pop dissolves the
+outer Sphere, completing the history. The numerical answer is identical to
+that produced by conventional evaluation, yet the execution history now
+contains explicit information concerning computational independence,
+dependency, evaluation order, and provenance.
+
+Recursive computation illustrates a second aspect of the historical semantics.
+Suppose the factorial function is defined recursively. Traditional execution
+creates a sequence of stack frames whose lifetime is determined by return
+order. Once evaluation completes, these frames disappear. Within Spherepop,
+each recursive invocation becomes a new Sphere extending the existing history.
+Every recursive descent opens another computational region whose eventual Pop
+contributes to the historical construction. The resulting history therefore
+forms a nested sequence of computational boundaries rather than a transient
+call stack. Tail-call optimization, recursion elimination, and memoization may
+still be performed by the compiler whenever historical equivalence can be
+established, but these optimizations are understood as transformations of
+historical construction rather than merely manipulations of stack frames.
+
+Concurrent computation demonstrates the importance of Merge. Consider two
+independent numerical simulations that eventually contribute to a common
+optimization problem. Traditional runtimes typically create separate threads,
+tasks, or asynchronous futures. Spherepop instead represents both simulations
+as independent computational histories connected through a Merge operation.
+Neither simulation requires knowledge of the other during execution. Their
+histories evolve independently until the optimization stage introduces the
+first dependency between them. At that moment Replay constructs the historical
+context required for the optimization itself. The scheduler remains entirely
+agnostic concerning processor allocation, execution order, or hardware
+architecture. It need only preserve the dependency structure encoded by the
+histories. Parallelism therefore appears as a semantic consequence of
+historical independence rather than as a distinct programming construct.
+
+Probabilistic computation illustrates the complementary role of Choice.
+Suppose an algorithm repeatedly samples candidate solutions according to a
+probability distribution before selecting the most promising continuation.
+Traditional probabilistic programming often introduces specialized execution
+engines for sampling, inference, and distribution propagation. Within
+Spherepop, each uncertain decision simply becomes a Choice node within the
+historical composition graph. If immediate execution is required, the Choice
+operator samples a continuation and records the resulting commitment within
+the computational history. Alternatively, the runtime may preserve the entire
+probability distribution as a first-class historical object, delaying Collapse
+until subsequent evidence becomes available. The surrounding execution engine
+remains unchanged. Only the operator library determines whether uncertainty is
+resolved immediately or propagated symbolically.
+
+The same historical interpretation extends naturally to fuzzy computation.
+Suppose the computational graph represents a control system whose logical
+operators evaluate degrees of truth rather than binary propositions. The graph
+itself requires no modification. Nodes previously interpreted as Boolean
+conjunctions now implement continuous \(t\)-norms, while disjunctions become
+their corresponding \(t\)-conorms. Histories continue to evolve exactly as
+before. Replay propagates intermediate values, Merge exposes independent
+evaluation opportunities, and Pop dissolves completed computational regions.
+Only the local interpretation of operators changes. The execution engine
+therefore remains completely independent of the chosen logical framework.
+
+Differentiable computation provides perhaps the most compelling demonstration
+of the Universal Operator Machine. Modern machine learning systems often
+construct explicit computational graphs through which gradients propagate
+during backpropagation. From the historical perspective, such graphs differ
+remarkably little from those developed throughout this paper. Forward
+evaluation constructs an admissible computational history. Reverse-mode
+automatic differentiation simply traverses the same historical construction in
+the opposite direction, propagating derivatives instead of values. Replay
+already records the provenance required to reconstruct every intermediate
+computation. Consequently, gradient propagation emerges as another form of
+historical continuation rather than as a fundamentally distinct execution
+mechanism. Symbolic reasoning, probabilistic inference, and neural
+optimization therefore become different semantic interpretations of a common
+historical substrate.
+
+Logic circuits provide another illuminating example. A combinational digital
+circuit may be interpreted as a directed acyclic graph whose gates become
+admissible whenever their input signals have stabilized. Each gate therefore
+corresponds naturally to a computational Sphere. Input propagation extends the
+history through Replay, while each gate output becomes available only after
+its local computation has completed. Entire collections of independent gates
+may be evaluated simultaneously through Merge. Replacing Boolean operators by
+continuous activation functions immediately transforms the same graph into a
+differentiable neural computation. Replacing them again by probabilistic
+operators produces a Bayesian network. The graph remains invariant throughout
+these transformations. Only the operator semantics vary.
+
+These examples collectively illustrate a recurring theme that has appeared
+throughout the development of the Spherepop Calculus. The underlying
+computational graph is remarkably stable across domains. Arithmetic,
+functional programming, concurrency, symbolic logic, fuzzy reasoning,
+probabilistic inference, circuit simulation, and differentiable optimization
+all share essentially the same historical organization. Their apparent
+differences arise primarily from the local semantics assigned to operators
+rather than from fundamentally different execution models. The Universal
+Operator Machine therefore achieves its generality not by supporting many
+different runtimes, but by recognizing that a single history-preserving
+composition engine suffices for an unexpectedly broad range of computational
+paradigms. This observation reinforces the central thesis of the paper:
+computation is most naturally understood as the historical evolution of
+bounded computational regions, while individual programming paradigms emerge
+through different interpretations of the operators acting upon those regions.
+
+
+Practical Runtime Architecture
+
+
+The historical semantics developed throughout this work intentionally separates
+the mathematical foundations of computation from the engineering decisions
+required to implement an efficient runtime. This distinction is important.
+Spherepop does not propose replacing decades of compiler research with an
+entirely new implementation methodology. Existing parsers, lexical analyzers,
+optimizers, dependency analyzers, memory allocators, and code generators have
+been refined over many decades and remain highly effective. Instead, the
+Spherepop runtime provides a different semantic interpretation of these
+components. Traditional compiler pipelines manipulate symbolic structures
+whose meaning is expressed through operational rewriting. The Spherepop
+runtime manipulates historical constructions whose meaning is expressed through
+the evolution of computational regions. The engineering remains largely
+familiar; the ontology changes.
+
+Compilation begins in the conventional manner. Source text is transformed into
+tokens through lexical analysis, after which a parser constructs an Abstract
+Syntax Tree representing the grammatical organization of the program. At this
+stage, the implementation differs little from contemporary compiler
+architectures. The parser identifies lexical scope, operator precedence,
+declarations, and expression boundaries exactly as it would for an ordinary
+functional language. Spherepop deliberately preserves this mature engineering
+practice because the AST remains an excellent representation of syntactic
+structure. The historical interpretation begins only after parsing has been
+completed.
+
+The first transformation unique to Spherepop converts the abstract syntax tree
+into a graph of computational regions. Every syntactic scope becomes an
+explicit Sphere, every dependency becomes an edge within the composition
+graph, and every lexical declaration contributes a new historical event rather
+than merely extending a symbol table. Although the resulting graph frequently
+resembles the dependency graphs already employed by optimizing compilers, its
+nodes possess richer semantic content. Each node records not only its operator
+and dependencies but also the historical conditions under which it becomes
+admissible for evaluation. The graph therefore describes both computational
+structure and historical evolution simultaneously.
+
+The scheduler forms the operational heart of the runtime. Rather than
+recursively traversing syntax trees searching for reducible expressions, the
+scheduler maintains a frontier of computational regions whose dependencies
+have all been satisfied. Every node on this frontier represents an admissible
+Sphere ready for Pop. Independent regions may therefore be evaluated
+concurrently without requiring additional semantic machinery. The scheduler is
+concerned solely with historical dependency. Processor allocation, thread
+management, asynchronous execution, and distributed deployment remain
+implementation decisions delegated to lower levels of the runtime. Because the
+semantic notion of readiness is separated from physical scheduling, the same
+program may execute correctly on a single processor, a multicore workstation,
+or a distributed cluster without altering its historical meaning.
+
+The history manager constitutes the principal innovation of the runtime.
+Traditional interpreters frequently discard intermediate computational state
+once evaluation has completed. Spherepop instead records the sequence of
+historical events responsible for constructing every observable value. This
+does not imply that every intermediate object must remain permanently resident
+in memory. The runtime distinguishes semantic persistence from physical
+representation. Histories may be compressed, checkpointed, serialized,
+archived, reconstructed through Replay, or discarded from active memory
+provided that their observable behavior remains recoverable. The history
+manager therefore resembles a transactional journal combined with an
+incremental dependency database. Its purpose is not merely to record execution
+for debugging, but to provide the semantic substrate upon which Replay,
+incremental recompilation, provenance analysis, historical verification, and
+repair-oriented programming naturally operate.
+
+Replay itself is implemented as a dependency reconstruction mechanism rather
+than a symbolic substitution engine. Whenever a computational region requires
+the output of previous regions, the runtime reconstructs the admissible
+historical context necessary for continuation. In many situations, Replay
+requires no explicit reconstruction because the relevant history remains
+resident within the dependency graph. When portions of the history have been
+compressed or archived, Replay reconstructs only those computational events
+whose provenance remains necessary for the requested continuation. This
+property allows historical persistence to coexist with practical resource
+management, preventing the semantic richness of the calculus from imposing
+unreasonable storage requirements upon implementations.
+
+The operator library forms an independent layer within the runtime. Every node
+in the composition graph specifies only the operator to be applied together
+with its dependencies. The runtime itself possesses no intrinsic knowledge of
+Boolean logic, arithmetic, fuzzy inference, probabilistic sampling,
+differentiable optimization, or symbolic theorem proving. These behaviors are
+provided entirely by interchangeable operator libraries implementing a common
+interface. Consequently, extending the language to support new computational
+domains rarely requires modifications to the scheduler or history manager.
+Instead, developers introduce new operator collections whose local semantics
+integrate immediately with the existing historical execution model. The
+Universal Operator Machine therefore separates execution from interpretation
+with unusual clarity.
+
+Memory management likewise acquires a historical interpretation. Conventional
+garbage collectors determine whether objects remain reachable from active
+program roots. Spherepop introduces a richer notion of reachability. Active
+objects participate directly in ongoing computation. Dormant historical
+objects no longer influence current execution but remain semantically relevant
+for future Replay. Archived histories have been compressed or externalized yet
+remain reconstructible. The runtime therefore manages several distinct forms
+of persistence simultaneously, balancing execution efficiency against future
+historical requirements. This layered interpretation of memory suggests new
+opportunities for adaptive storage systems capable of predicting which
+historical regions are most likely to require future Replay.
+
+Finally, the runtime architecture illustrates one of the central philosophical
+claims of the Spherepop Calculus. Compilers, virtual machines, dependency
+graphs, schedulers, parsers, symbol tables, and optimizers continue to exist
+almost exactly as they do within contemporary programming language
+implementations. The novelty lies not in replacing these mature technologies,
+but in recognizing that they collectively manipulate a richer mathematical
+object than has traditionally been acknowledged. The execution engine no
+longer views a program merely as a mutable symbolic expression undergoing
+successive rewrites. Instead, it interprets the program as an evolving history
+of bounded computational regions whose openings, interactions, refusals,
+replays, and Pops collectively constitute the computation itself. This
+historical interpretation allows familiar engineering techniques to coexist
+with a substantially broader semantic foundation, providing a practical bridge
+between established compiler construction and the historical ontology
+developed throughout this work.
+
+
+
+Conclusion
+
+
+The central claim of this paper has been deliberately developed from the
+simplest possible starting point. Before students encounter formal logic,
+compiler theory, category theory, or programming language semantics, they
+already know how to perform a computation. They are taught to locate the
+innermost parenthesized expression, evaluate it, replace it by its result, and
+repeat until no unresolved scope remains. This elementary arithmetic procedure
+is so familiar that its conceptual significance is easily overlooked. Yet it
+contains, in embryonic form, the essential mechanics of symbolic computation.
+The Spherepop Calculus begins by asking whether this procedure, rather than
+the symbolic notation traditionally used to describe it, should be regarded as
+the true primitive of computation.
+
+From this modest observation emerges a different computational ontology.
+Parentheses cease to be viewed as punctuation marks decorating symbolic
+expressions and instead become explicit computational regions. Evaluation is
+no longer interpreted primarily as syntactic rewriting but as the dissolution
+of admissible computational boundaries through the Pop operation. Functions,
+blocks, namespaces, modules, recursive calls, concurrent tasks, and logical
+subproofs all become manifestations of the same geometric principle: the
+creation and eventual resolution of bounded computational regions. The
+language of trees, scopes, stacks, and environments is therefore unified under
+a single interpretation of nested historical construction.
+
+The historical perspective developed throughout this work changes the role of
+nearly every familiar concept in programming language theory while preserving
+their practical usefulness. Contexts become histories rather than collections
+of assumptions. Substitution becomes Replay, reconstructing historical
+continuation instead of replacing isolated symbols. Types become refusal
+structures governing admissible extension rather than merely classifying
+completed values. Identity becomes repair between computational histories.
+Merge expresses logical independence, while Choice separates uncertainty from
+commitment. None of these reinterpretations discard the mathematical insights
+of classical theory. Instead, they place them within a framework where
+provenance, dependency, concurrency, incremental execution, and historical
+reconstruction become intrinsic semantic properties rather than auxiliary
+engineering concerns.
+
+One of the recurring themes of this paper has been the separation of execution
+from interpretation. The Universal Operator Machine does not distinguish
+between arithmetic, Boolean logic, fuzzy reasoning, probabilistic inference,
+symbolic manipulation, or differentiable optimization through specialized
+execution engines. Instead, it executes a single historical composition graph
+whose local operator library determines the semantics of individual nodes. The
+same computational history may therefore be interpreted under multiple logical
+regimes without changing its structural organization. Computation becomes the
+construction of history, while logic becomes a property of operators rather
+than of the runtime itself. This separation provides a conceptual simplicity
+that is often obscured by the proliferation of specialized computational
+frameworks.
+
+Equally important is the relationship between the Spherepop Calculus and
+existing compiler architecture. Throughout this work, no attempt has been made
+to replace parsers, abstract syntax trees, dependency graphs, symbol tables,
+Static Single Assignment, register allocation, or graph rewriting. These
+remain indispensable achievements of compiler engineering. The contribution of
+Spherepop lies instead in providing a semantic interpretation capable of
+unifying these structures under a common historical ontology. Abstract syntax
+describes computational geography. Dependency graphs describe admissible
+continuation. Scheduling identifies computational regions ready for Pop.
+Optimization simplifies historical construction while preserving future
+Replay. The engineering remains familiar precisely because the calculus seeks
+to reinterpret, rather than replace, existing implementation practice.
+
+The historical interpretation also offers a different perspective on software
+correctness. Conventional verification often treats correctness as a property
+of completed programs or terminal machine states. Spherepop instead views
+correctness as the preservation of admissible historical growth. Every
+successful computation extends an already coherent history. Every Refusal
+prevents incoherent extension before commitment occurs. Every Replay preserves
+historical provenance. Every Pop records an irreversible computational event.
+Correctness therefore emerges continuously throughout execution rather than
+appearing only at its conclusion. This shift aligns naturally with
+incremental compilation, distributed systems, provenance tracking,
+repair-oriented programming, and interactive theorem proving, suggesting that
+many apparently unrelated computational disciplines may ultimately share a
+common historical foundation.
+
+The broader significance of the Spherepop Calculus lies less in any individual
+primitive than in the conceptual perspective it offers. Computation is no
+longer viewed as the manipulation of isolated symbolic expressions passing
+through successive machine states. Instead, it becomes the irreversible
+construction of an evolving historical object whose boundaries open, interact,
+replay, refuse, merge, and ultimately dissolve through Pop. The emphasis moves
+from static description toward constructive evolution, from symbolic
+replacement toward historical continuation, and from transient state toward
+persistent computational provenance. This historical viewpoint does not claim
+to supersede the remarkable achievements of lambda calculus, dependent type
+theory, compiler construction, or operational semantics. Rather, it suggests
+that these diverse traditions may be understood as complementary descriptions
+of a deeper process governing the evolution of bounded computational regions.
+
+Whether this historical foundation ultimately proves advantageous for future
+programming languages, proof assistants, compiler architectures, distributed
+systems, or machine learning frameworks remains an empirical question. The
+purpose of this work has not been to establish that Spherepop is the unique
+foundation of computation, but to demonstrate that a coherent and mathematically
+disciplined alternative exists—one that begins not with abstract symbolic
+rewriting, but with the simple computational intuition learned in elementary
+arithmetic. Every computation begins by identifying a bounded region, resolving
+its interior, and continuing outward until no unresolved regions remain.
+Spherepop argues that this familiar procedure is not merely a pedagogical
+technique for evaluating arithmetic expressions, but a fundamental organizing
+principle capable of supporting a broad and unified theory of computation.
+
+
+Design Philosophy and Historical Perspective
+
+
+Every formal system begins by deciding what it considers fundamental. Euclid
+began with points and lines. Newton began with particles and forces. Church
+began with abstraction and application. Turing began with symbolic tapes and
+state transitions. These foundational choices determine not only the notation
+of a theory but the kinds of questions that become natural to ask. The
+Spherepop Calculus arises from the observation that much of contemporary
+computation continues to inherit an ontology developed during the earliest
+decades of theoretical computer science, when programs were naturally viewed
+as symbolic expressions manipulated according to syntactic rules. This
+perspective has been extraordinarily successful, yet it also encourages us to
+think of computation primarily as the transformation of static objects rather
+than the evolution of constructive processes.
+
+The historical development of programming languages reflects this emphasis.
+Programs are written as text, parsed into syntax trees, transformed into
+intermediate representations, optimized through rewriting, and eventually
+executed as sequences of state transitions. Throughout this process, syntax
+occupies a privileged position. Even sophisticated semantic theories often
+begin with terms whose principal purpose is to be rewritten. The operational
+history leading from one expression to another is frequently treated as an
+auxiliary artifact useful for debugging, optimization, or explanation rather
+than as the central mathematical object itself.
+
+Spherepop begins from a different observation. Long before programmers learn
+about lambda calculus or operational semantics, they already possess a correct
+algorithm for symbolic computation. Every child who evaluates arithmetic has
+learned to identify the innermost computational region, resolve it, replace it
+with its result, and continue until no unresolved regions remain. This
+procedure is not an approximation to computation. It is computation. The
+parentheses merely provide a notation for identifying computational scope.
+They are not themselves the fundamental objects being manipulated.
+
+Once this distinction is recognized, an alternative ontology becomes possible.
+Instead of treating syntax as primary, Spherepop treats computational regions
+as primary. Parentheses become one possible notation for describing those
+regions. Abstract syntax trees become another. Dependency graphs become
+another. None of these representations is the computation itself. They are
+different descriptions of the same underlying historical construction. The
+computation consists of the opening of computational regions, their internal
+evolution, and their eventual resolution through admissible Pops. History
+therefore precedes syntax rather than emerging as a by-product of execution.
+
+This historical viewpoint also explains several design decisions that might
+otherwise appear unusual. Replay replaces substitution because historical
+construction is more informative than symbolic replacement. Refusal replaces
+late-stage failure because preventing incoherent historical extension is
+simpler than repairing corrupted computational states. Contexts become
+histories because assumptions are themselves constructive events whose order
+matters. Types become refusal structures because their essential role is not
+to classify completed values but to govern which computational continuations
+remain admissible. These choices are not independent innovations but different
+consequences of adopting history as the primary computational object.
+
+Another guiding principle concerns commitment. Classical operational semantics
+often encourages immediate reduction whenever a reducible expression becomes
+available. Spherepop instead distinguishes between availability and
+commitment. A computational region may become admissible without requiring
+immediate Collapse. Histories may continue symbolically, probabilistically, or
+through Replay before an irreversible commitment is made. This distinction is
+particularly valuable in concurrent, distributed, and interactive systems,
+where delaying commitment often preserves opportunities for optimization,
+correction, negotiation, or additional information. Commitment therefore
+becomes an explicit semantic operation rather than an implicit consequence of
+evaluation.
+
+Equally important is the deliberate separation between execution and
+interpretation. Contemporary computing frequently develops specialized
+execution engines for symbolic reasoning, numerical computation, fuzzy logic,
+probabilistic inference, differentiable programming, and machine learning.
+Although these systems differ mathematically, they often share remarkably
+similar dependency structures. Spherepop therefore proposes that execution
+should concern itself only with the evolution of computational histories,
+while logical interpretation should reside entirely within the operator
+library. The Universal Operator Machine embodies this philosophy by executing
+a single historical composition graph regardless of whether the operators
+represent Boolean conjunction, probabilistic sampling, tensor multiplication,
+or gradient propagation. Logic becomes a property of operators rather than of
+the runtime.
+
+This philosophy also clarifies the relationship between Spherepop and existing
+compiler engineering. Nothing in this work argues that parsers, abstract syntax
+trees, control-flow graphs, Static Single Assignment, balanced search trees,
+dependency analysis, or graph rewriting should be abandoned. These techniques
+represent decades of accumulated engineering insight. Spherepop instead argues
+that they already manipulate richer mathematical objects than their traditional
+descriptions acknowledge. Syntax trees describe computational geography.
+Dependency graphs describe admissible continuation. Schedulers discover
+computational regions ready for Pop. Optimizers simplify historical
+construction while preserving observational behavior. The implementation
+techniques remain largely unchanged because they are already effective. The
+contribution of Spherepop is to reinterpret their common semantic foundation.
+
+Perhaps the most significant philosophical consequence of this historical
+ontology is that explanation becomes intrinsic rather than external. Modern
+software systems devote substantial effort to provenance tracking, debugging,
+logging, execution tracing, version control, reproducibility, and incremental
+recompilation. These facilities are typically added after the computational
+model has already been defined. Spherepop instead incorporates historical
+construction directly into the semantics. Every observable value possesses a
+provenance. Every provenance may be reconstructed through Replay. Every
+historical extension satisfies explicit admissibility conditions. Explanation
+therefore ceases to be an auxiliary service layered upon execution. It becomes
+one of the defining characteristics of computation itself.
+
+The broader ambition of the Spherepop Calculus is therefore neither to reject
+nor to supersede the established traditions of theoretical computer science.
+Lambda calculus, dependent type theory, process calculi, compiler theory, and
+proof assistants remain among the most profound achievements in the field.
+Spherepop instead proposes that these traditions may be viewed through a
+common historical lens. Computation is not fundamentally the rewriting of
+symbols, the transition between machine states, or the execution of isolated
+instructions. It is the irreversible construction of computational history
+through the continual opening, interaction, replay, refusal, and dissolution
+of bounded computational regions. Whether this perspective ultimately proves
+to be a more useful foundation for future programming languages and formal
+systems remains to be determined, but it offers a coherent conceptual
+framework within which many seemingly disparate aspects of computation appear
+as natural consequences of a single historical principle.
+
+\newpage 
+\section*{Appendices}
+
+\appendix
+
+
+
+Formal Grammar of the Spherepop Calculus
+
+
+
+Let
+
+\[
+\mathcal{V}
+=
+\{x,y,z,\ldots\}
+\]
+
+denote the countable set of variables,
+
+\[
+\mathcal{C}
+=
+\{c_1,c_2,\ldots\}
+\]
+
+the constants,
+
+and
+
+\[
+\mathcal{O}
+=
+\{
+\operatorname{Sphere},
+\operatorname{Pop},
+\operatorname{Merge},
+\operatorname{Choice},
+\operatorname{Replay},
+\operatorname{Refuse},
+\operatorname{Collapse},
+\operatorname{Bind}
+\}
+\]
+
+the primitive operators.
+
+The grammar of terms is defined inductively by
+
+\[
+\begin{array}{rcl}
+t
+&::=&
+x
+\\
+&|&
+c
+\\
+&|&
+\operatorname{Sphere}(x:A.t)
+\\
+&|&
+\operatorname{Pop}(t)
+\\
+&|&
+\operatorname{Merge}(t,t)
+\\
+&|&
+\operatorname{Choice}(p,t,t)
+\\
+&|&
+\operatorname{Replay}(t,t)
+\\
+&|&
+\operatorname{Refuse}(r)
+\\
+&|&
+\operatorname{Collapse}(t)
+\\
+&|&
+\operatorname{Bind}(t,t).
+\end{array}
+\]
+
+Contexts are histories,
+
+\[
+\Gamma
+::=
+\emptyset
+\mid
+\Gamma,e,
+\]
+
+where
+
+\[
+e
+\in
+\{
+\operatorname{Open},
+\operatorname{Pop},
+\operatorname{Replay},
+\operatorname{Merge},
+\operatorname{Choice},
+\operatorname{Collapse},
+\operatorname{Refuse}
+\}.
+\]
+
+Histories satisfy
+
+\[
+H
+::=
+(e_1,e_2,\ldots,e_n).
+\]
+
+Well-formed histories satisfy
+
+\[
+e_i
+\prec
+e_j
+\Longrightarrow
+i<j,
+\]
+
+where
+
+\[
+\prec
+\]
+
+is the dependency order.
+
+A Sphere is recursively defined by
+
+\[
+S=(B,I)
+\]
+
+where
+
+\[
+B
+\]
+
+is a computational boundary and
+
+\[
+I
+\]
+
+is a finite computation graph.
+
+Every interior node belongs to exactly one Sphere.
+
+Nested Spheres satisfy
+
+\[
+S_i
+\subset
+S_j
+\Longrightarrow
+\partial S_i
+\cap
+\partial S_j
+=
+\varnothing.
+\]
+
+The parser therefore generates a rooted forest of computational regions whose
+transitive closure forms the dependency graph used throughout the operational
+semantics.
+
+Every admissible program corresponds to a finite directed acyclic graph
+
+\[
+G=(V,E)
+\]
+
+equipped with a sphere assignment
+
+\[
+\sigma
+:
+V
+\rightarrow
+\mathcal S
+\]
+
+satisfying
+
+\[
+(u,v)\in E
+\Longrightarrow
+\sigma(u)
+\subseteq
+\sigma(v)
+\vee
+\sigma(v)
+\subseteq
+\sigma(u)
+\vee
+\sigma(u)
+\parallel
+\sigma(v),
+\]
+
+where
+
+\[
+\parallel
+\]
+
+denotes independent computational regions.
+
+The operational scheduler acts only upon admissible sphere assignments.
+
+The language therefore possesses both syntactic well-formedness and
+geometric well-formedness.
+
+
+\subsection*{Formation Rules}
+
+
+\[
+\frac{}
+{\emptyset
+\text{ ctx}}
+\]
+
+\[
+\frac
+{\Gamma
+\text{ ctx}
+\qquad
+x\notin\Gamma}
+{\Gamma,x:A
+\text{ ctx}}
+\]
+
+\[
+\frac
+{\Gamma\vdash t:A}
+{\Gamma\vdash
+\operatorname{Sphere}(x:A.t)
+}
+\]
+
+\[
+\frac
+{\Gamma\vdash t}
+{\Gamma\vdash
+\operatorname{Pop}(t)}
+\]
+
+\[
+\frac
+{\Gamma\vdash t
+\qquad
+\Gamma\vdash u}
+{\Gamma\vdash
+\operatorname{Merge}(t,u)}
+\]
+
+\[
+\frac
+{\Gamma\vdash t
+\qquad
+\Gamma\vdash u}
+{\Gamma\vdash
+\operatorname{Choice}(p,t,u)}
+\]
+
+\[
+\frac
+{\Gamma\vdash t
+\qquad
+\Gamma\vdash u}
+{\Gamma\vdash
+\operatorname{Replay}(t,u)}
+\]
+
+\[
+\frac
+{\Gamma\vdash t}
+{\Gamma\vdash
+\operatorname{Collapse}(t)}
+\]
+
+\[
+\frac{}
+{\Gamma\vdash
+\operatorname{Refuse}(r)}
+\]
+
+
+\subsection*{Structural Axioms}
+
+
+\[
+H
+\subseteq
+H'
+\Longrightarrow
+|H|
+\le
+|H'|
+\]
+
+\[
+H
+\not\supset
+H'
+\]
+
+\[
+\operatorname{Replay}
+(H)
+=
+H
+\]
+
+iff
+
+\[
+H
+\]
+
+contains no unresolved dependencies.
+
+\[
+\operatorname{Pop}
+\circ
+\operatorname{Replay}
+=
+\operatorname{Replay}
+\circ
+\operatorname{Pop}
+\]
+
+whenever
+
+\[
+\operatorname{Ready}(S).
+\]
+
+Merge satisfies
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\cong
+H_1\otimes(H_2\otimes H_3).
+\]
+
+\[
+H_1\otimes H_2
+\cong
+H_2\otimes H_1.
+\]
+
+Choice satisfies
+
+\[
+\sum_i
+p_i
+=
+1.
+\]
+
+Replay preserves dependency,
+
+\[
+u\prec v
+\Longrightarrow
+\operatorname{Replay}(u)
+\prec
+\operatorname{Replay}(v).
+\]
+
+Pop removes exactly one computational boundary,
+
+\[
+|\partial H'|
+=
+|\partial H|-1.
+\]
+
+Collapse is idempotent,
+
+\[
+\operatorname{Collapse}
+(
+\operatorname{Collapse}(t)
+)
+=
+\operatorname{Collapse}(t).
+\]
+
+Refusal is absorbing,

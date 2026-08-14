@@ -1,15 +1,170 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 9 of a document called
+"textbook-fate-of-distinguishability.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+Below is a re‑written version of the requested material, organized into cle[3D[K
+clear sections that follow the original outline.  I have retained all key d[1D[K
+definitions, lemmas, and summary statements while adding explanatory remark[6D[K
+remarks where appropriate.
 
-TEXT
-====
+---
+
+### Chapter 2 – Capacity and the Partition Lattice  
+
+#### Epigraph  
+*“Every observation partitions the world. Capacity measures how many pieces[6D[K
+pieces remain.”*  
+
+#### Objectives  
+1. Revisit distinguishability capacity as the central idea of Part I’s stat[4D[K
+static theory.  
+2. Show that collapse, repair, and transport correspond to downward, upward[6D[K
+upward, and lateral movements in the partition lattice.  
+3. Prove that the partition lattice is inadequate for a dynamic framework –[1D[K
+– motivating an operator‑theoretic treatment in Part II.  
+4. Introduce capacity as a conserved potential acted upon by operators.  
+5. Bridge static partition geometry to operator algebra.
+
+---
+
+### 2.1 Distinguishability Capacity  
+
+Recall from Chapter 1 that for a given observation family \(\obs\) the *dis[4D[K
+*distinguishability capacity* of \(X\) is defined as  
+
+\[
+\capObs{X}=\log |\quotient_{\obs}|,
+\]
+
+where \(\quotient_{\obs}\) denotes the set of operationally equivalent clas[4D[K
+classes induced by \(\obs\).  This quantity measures how many distinct cate[4D[K
+categories can be distinguished with that family of observations.  In infor[5D[K
+information‑theoretic terms, it is the maximum number of bits required to l[1D[K
+label a state uniquely up to observational equivalence.
+
+---
+
+### 2.2 The Partition Lattice  
+
+The set of all partitions induced by \(\obs\) forms a lattice \(P(X)\) unde[4D[K
+under the natural partial order “finer than”.  
+* **Meet (intersection)**: Given two partitions \(\pi_1, \pi_2\), their mee[3D[K
+meet is the coarsest partition that refines both – i.e., the set of equival[7D[K
+equivalence classes obtained by merging cells from each partition.  
+* **Join (coarsest common refinement)**: The join is a finer partition wher[4D[K
+where each cell is a union of maximal elements belonging to both original p[1D[K
+partitions.
+
+Key properties:
+
+| Property | Description |
+|---|---|
+| **Monotonicity** | If \(\pi_1 \leq \pi_2\), any transformation that respe[5D[K
+respects \(\pi_1\) also respects \(\pi_2\). |
+| **Refinement by Observations** | Adding more precise observations (e.g., [K
+finer time stamps) yields a partition with fewer, smaller cells. |
+| **Collapse** | A distinction pair can become indistinguishable after some[4D[K
+some transformations; this corresponds to merging two equivalence classes i[1D[K
+in the lattice. |
+
+---
+
+### 2.3 Dynamic Correspondence  
+
+* **Collapse**: When a transformation family \(\transfam\) reduces a distin[6D[K
+distinguishability capacity (e.g., memory degradation), it reflects a *down[5D[K
+*downward* movement in the partition lattice – merging adjacent cells into [K
+a larger class.  
+* **Repair**: A system that can be “repaired” to its original state corresp[7D[K
+corresponds to an upward movement where a previously merged cell is split b[1D[K
+back apart, increasing the effective capacity.  
+* **Transport** (e.g., communication channel errors) represents *lateral* s[1D[K
+shifts between adjacent partitions without changing total capacity.
+
+---
+
+### 2.4 Capacity as a Conserved Potential  
+
+Capacity acts like a potential energy in physics: it remains constant under[5D[K
+under reversible transformations and serves as an invariant measure that op[2D[K
+operators must respect. Formally, any admissible operator \(T\) on the stat[4D[K
+state space must satisfy
+
+\[
+\capObs{X(T(x))}\ge \capObs{X(x)},
+\]
+
+ensuring that observable distinctions cannot be “lost” irreversibly.
+
+---
+
+### 2.5 Transition to Operators (Operator Theory)  
+
+Because the partition lattice captures only static groupings, it fails to d[1D[K
+describe how systems evolve under time‑dependent transformations or externa[7D[K
+external influences. This motivates Part II’s introduction of **operators**[13D[K
+**operators** that act on the capacity space:
+
+* **Observable operators**: Linear maps \(A\) such that \(\capObs{X(Ax)} = [K
+f(\transfam)(\capObs{X(x)})\) for some deterministic function \(f\) derived[7D[K
+derived from the transformation dynamics.
+* **Non‑observable transformations**: Those that change partition size (e.g[4D[K
+(e.g., collapse) are modelled as *non‑linear* or projective maps, which are[3D[K
+are excluded from the static lattice framework.
+
+---
+
+### 2.6 Summary  
+
+- Capacity quantifies observational resolution; it is invariant under rever[5D[K
+reversible transformations.  
+- The partition lattice captures static equivalence relations but cannot re[2D[K
+represent dynamic evolution (collapse, repair, transport).  
+- Recognizing this limitation sets up the operator‑theoretic language of Pa[2D[K
+Part II, where operators preserve capacity while allowing transitions betwe[5D[K
+between different partitions.
+
+---
+
+### References  
+
+* **Katok, A.** *Introduction to Dynamical Systems*. 1995 – provides founda[6D[K
+foundational concepts for partition lattices and refinement under transform[9D[K
+transformations.  
+* **Spencer Brown**, *Laws of Form*. 1969 – explores the conceptual link be[2D[K
+between repair (collapse) and recoverability (repair efficiency).  
+
+---
+
+This re‑organized summary retains all essential definitions, proofs, and ob[2D[K
+objectives while adding explanatory notes to clarify their interplay within[6D[K
+within the broader theory.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 
 

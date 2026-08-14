@@ -1,252 +1,147 @@
-Here is a reformatted bibliography in plain text, with each reference on it[2D[K
-its own line and properly ordered:
+**Unified Theoretical Synthesis of “textbook‑negation‑before‑logic.tex”**
 
-```text
-@article{Baker1970,
-  author  = {C. L. Baker},
-  title   = {Double negatives},
-  journal = {Linguistic Inquiry},
-  year    = {1970},
-  volume  = {1},
-  pages   = {169--186}
-}
+---
 
-@article{BarwiseCooper1981,
-  author  = {J. Barwise and R. Cooper},
-  title   = {Generalized quantifiers and natural language},
-  journal = {Linguistics and Philosophy},
-  year    = {1981},
-  volume  = {4},
-  pages   = {159--219}
-}
+### 1. Thesis  
+The document posits that *negative (NPI) licensing* is fundamentally a **ge[4D[K
+**geometric/topological phenomenon** on an admissibility field over a Riema[5D[K
+Riemannian manifold \((M,g)\). The thesis asserts:
 
-@article{Broca1861,
-  author  = {P. Broca},
-  title   = {Remarques sur le siège de la faculté du langage articulé},
-  journal = {Bulletins de la Société Anatomique de Paris},
-  year    = {1861},
-  volume  = {6},
-  pages   = {330--357}
-}
+> *Negation distortion in memory persists because it reflects persistent re[2D[K
+reachability geometry rather than propositional content. Licensing of NPIs [K
+therefore depends solely on the orientation (sign) structure preserved by t[1D[K
+the admissibility map \(A\).*
 
-@article{CaramazzaZurif1976,
-  author  = {A. Caramazza and E. Zurif},
-  title   = {Dissociation of algorithmic and heuristic processes in languag[7D[K
-language
-            comprehension},
-  journal = {Brain and Language},
-  year    = {1976},
-  volume  = {3},
-  pages   = {572--582}
-}
+---
 
-@article{CarpenterJust1975,
-  author  = {P. A. Carpenter and M. A. Just},
-  title   = {Sentence comprehension: A psycholinguistic processing model of[2D[K
-of
-            verification},
-  journal = {Psychological Review},
-  year    = {1975},
-  volume  = {82},
-  pages   = {45--73}
-}
+### 2. Core Concepts  
 
-@article{Chomsky1995,
-  author  = {N. Chomsky},
-  title   = {The Minimalist Program},
-  publisher = {MIT Press},
-  year    = {1995}
-}
+#### A. Memory Distortion Decay  
+The decay law for any stored distortion \(\mathcal D_t\) is exponential:
 
-@article{ClarkChase1972,
-  author  = {H. H. Clark and W. G. Chase},
-  title   = {On the process of comparing sentences against pictures},
-  journal = {Cognitive Psychology},
-  year    = {1972},
-  volume  = {3},
-  pages   = {472--517}
-}
+\[
+\mathcal D_t = \mathcal D_0 e^{-2\lambda t},
+\]
 
-@article{Dehaene2003,
-  author  = {S. Dehaene, M. Piazza, P. Pinel and L. Cohen},
-  title   = {Three parietal circuits for number processing},
-  journal = {Cognitive Neuropsychology},
-  year    = {2003},
-  volume  = {20},
-  pages   = {487--506}
-}
+where the rate constant \(\lambda>0\) follows from solving a squared differ[6D[K
+differential inequality. This shows that distortions shrink independently o[1D[K
+of syntactic re‑evaluation.
 
-@article{Deschamps2015,
-  author  = {I. Deschamps and G. Agmon and Y. Loewenstein and Y.
-            Grodzinsky},
-  title   = {The processing cost of downward entailingness: The representat[11D[K
-representation
-            and verification of comparative constructions},
-  booktitle = {Proceedings of Sinn und Bedeutung 19}
-}
+#### B. Ecphory Retrieval  
+An **ecphory operator** maps an internal state \(h\) to external data:
 
-@article{Fauconnier1975,
-  author  = {G. Fauconnier},
-  title   = {Polarity and the scale principle},
-  journal = {Chicago Linguistic Society},
-  year    = {1975},
-  volume  = {11},
-  pages   = {188--199}
-}
+\[
+\mathcal E_t : \mathcal H \rightarrow X,
+\]
 
-@article{Fodor1983,
-  author  = {J. A. Fodor},
-  title   = {The Modularity of Mind},
-  publisher = {MIT Press},
-  year    = {1983}
-}
+with retrieval success defined by a threshold \(\theta>0\):
 
-@article{Frege1879,
-  author  = {G. Frege},
-  title   = {Begriffsschrift},
-  journal = {Halle: Nebert},
-  year    = {1879}
-}
+\[
+\mathcal E_t(h) = x \;\Longleftrightarrow\; |h - E(x)| < \theta .
+\]
 
-@article{Goodglass1968,
-  author  = {H. Goodglass},
-  title   = {Studies on the grammar of aphasics},
-  journal = {Cortex},
-  year    = {1968},
-  volume  = {4},
-  pages   = {193--216}
-}
+#### C. Retrieval Error & Verification Latency  
+The error measure is the reconstruction distance:
 
-@article{Grodzinsky1986,
-  author  = {Y. Grodzinsky},
-  title   = {Language deficits and the theory of syntax},
-  journal = {Brain and Language},
-  year    = {1986},
-  volume  = {27},
-  pages   = {135--159}
-}
+\[
+\varepsilon_t(x)=d_R\bigl(x, \mathcal E_t(E(x))\bigr).
+\]
 
-@article{GrodzinskyEtAl2020,
-  author  = {Y. Grodzinsky and I. Deschamps and P. Pieperhoff and F.
-            Iannilli and G. Agmon and Y. Loewenstein and K. Amunts},
-  title   = {Logical negation mapped onto the brain},
-  journal = {Brain Structure and Function},
-  year    = {2020},
-  volume  = {225},
-  pages   = {19--31}
-}
+Verification latency satisfies a lower bound when distortion persists:
 
-@article{GrodzinskyEtAl2021,
-  author  = {Y. Grodzinsky and P. Pieperhoff and C. K. Thompson},
-  title   = {Stable brain loci for the processing of complex syntax},
-  journal = {Cortex},
-  year    = {2021},
-  volume  = {142},
-  pages   = {252--271}
-}
+\[
+\tau \ge c\Delta_0,
+\]
 
-@article{GrodzinskyEtAl2023,
-  author  = {Y. Grodzinsky and K. Behrent and G. Agmon and N.
-            Bittner and C. Jockwitz and S. Caspers and K. Amunts and S.
-            Heim},
-  title   = {A linguistic complexity pattern that defies aging: The
-            processing of multiple negations},
-  journal = {Cortex},
-  year    = {2023}
-}
+where \(c>0\) is a constant. This formalizes the claim that *delayed verifi[6D[K
+verification* is not merely procedural but geometrically rooted.
 
-@article{Horn1989,
-  author  = {L. R. Horn},
-  title   = {A Natural History of Negation},
-  publisher = {University of Chicago Press},
-  year    = {1989}
-}
+#### D. Orientation Persistence & NPI Licensing  
+If orientation remains unchanged (\(\omega_t = \omega_0\)), then negation‑i[10D[K
+negation‑induced distortion also persists:
 
-@article{Kaup2001,
-  author  = {B. Kaup},
-  title   = {Negation and its impact on the accessibility of text informati[9D[K
-information},
-  journal = {Memory & Cognition},
-  year    = {2001},
-  volume  = {29},
-  pages   = {960--967}
-}
+\[
+D_N(x) = D_N(0).
+\]
 
-@article{KaupZwaan2003,
-  author  = {B. Kaup and R. Zwaan},
-  title   = {Effects of negation and situational presence on language
-            comprehension},
-  journal = {Journal of Experimental Psychology: Learning, Memory, and Cogn[4D[K
-Cognition},
-  year    = {2003},
-  volume  = {29},
-  pages   = {439--446}
-}
+Thus, the *persistence principle* states that memory preserves distortions [K
+of reachability geometry rather than propositional content.
 
-@article{Klima1964,
-  author  = {E. S. Klima},
-  title   = {Negation in English},
-  journal = {The Structure of Language},
-  year    = {1964},
-  editor  = {J. A. Fodor and J. Katz}
-}
+#### E. Admissibility Geometry (NPI Licensing)  
+Define an admissibility field \(A: M \rightarrow [0,1]\). The fully admissi[7D[K
+admissible subset is
 
-@article{Ladusaw1980,
-  author  = {W. Ladusaw},
-  title   = {Polarity Sensitivity as Inherent Scope Relations},
-  note     = {Doctoral dissertation, University of Texas at Austin},
-  year    = {1980}
-}
+\[
+\mathcal A_1 = \{x : A(x)=1\}.
+\]
 
-@article{Lakoff1970,
-  author  = {G. Lakoff},
-  title   = {Linguistics and natural logic},
-  journal = {Synthese},
-  year    = {1970},
-  volume  = {22},
-  pages   = {151--271}
-}
+Licensing domains are:
 
-@article{Montague1974,
-  author  = {R. Montague},
-  title   = {Formal Philosophy},
-  publisher = {Yale University Press},
-  year    = {1974}
-}
+| Domain | Definition |
+|--------|-------------|
+| **Positive** | \(P = \{x : A(x)=1,\;\omega(x)>0\}\) (forward‑orientation [K
+regions). |
+| **Neutral Boundary** | \(B = \{x : A(x)=1,\;\omega(x)=0\}\) (boundary whe[3D[K
+where orientation is irrelevant). |
+| **Negative Licensing** | \(L = \{x : A(x)=1,\;\omega(x)<0\}\) (backward‑o[11D[K
+(backward‑orientation regions that license NPIs). |
 
-@article{Russell1903,
-  author  = {B. Russell},
-  title   = {The Principles of Mathematics},
-  journal = {Cambridge: Cambridge University Press},
-  year    = {1903}
-}
+Consequently,
 
-@article{Szymanik2016,
-  author  = {J. Szymanik},
-  title   = {Quantifiers and Cognition},
-  publisher = {Cham: Springer},
-  year    = {2016}
-}
+\[
+\mathcal A_1 = P \cup B \cup L .
+\]
 
-@article{Tan2023,
-  author  = {I.-A. Tan and N. Kugler-Etinger and Y. Grodzinsky},
-  title   = {An analysis of the role of negation in sentence processing},
-  journal = {Language Science},
-  year    = {2023}
-}
+#### F. Connected Licensing Components  
+A *licensing component* is a connected subset of \(L\). The theorem states:[7D[K
+states:
 
-@article{Tan2022,
-  author  = {I.-A. Tan and Y. Grodzinsky},
-  title   = {The neural basis of comprehension of complex linguistic struct[6D[K
-structures},
-  journal = {Neuropsychologia},
-  year    = {2022}
-}
+> Every point in a licensing component licenses an NPI, reflecting the loca[4D[K
+local nature of licensing.
 
-@article{BarwiseCooper1981 (duplicate),
-  note     = {Duplicate entry for verification purposes}
-```
+#### G. Boundary Geometry (Admissibility Curvature)  
+The curvature measuring how orientation variations affect admissibility is
 
-These entries are now cleanly separated, ready for citation or further proc[4D[K
-processing.
+\[
+\kappa_A = \nabla\!\cdot\!\left(\frac{\nabla A}{|\nabla A|}\right),
+\]
 
+which quantifies the “sharpness” of licensing boundaries.
+
+---
+
+### 3. Implications & Open Questions  
+
+1. **Cognitive‑Computational Mapping** – The geometric framework suggests t[1D[K
+that neural representations (e.g., in Broca’s area) may encode orientation [K
+fields \(\omega\) as activation patterns, directly influencing NPI licensin[8D[K
+licensing without explicit syntactic parsing.
+
+2. **Double Negation Exceptions** – Points on the neutral boundary \(B\) ex[2D[K
+exhibit *partial* NPI licensing, explaining why double negatives sometimes [K
+yield affirmative results (e.g., “not not happy”).
+
+3. **Scalability Across Languages** – If \(\omega\) varies across linguisti[9D[K
+linguistic domains, we expect systematic differences in licensing patterns [K
+that could be tested via cross‑linguistic memory distortion studies.
+
+4. **Integration with Repair Theory** – The delayed verification theorem al[2D[K
+aligns with the hypothesis that repair processes (as described by Ochs & Sc[2D[K
+Schieffelin) are triggered not merely by error detection but by persistent [K
+geometric distortions.
+
+---
+
+### 4. Conclusion  
+
+The document provides a unified geometrical account of NPI licensing, groun[5D[K
+grounding it in memory distortion decay, retrieval geometry, and orientatio[10D[K
+orientation‑preserving admissibility fields on a manifold. This perspective[11D[K
+perspective offers both theoretical clarity (why certain NPIs are licensed)[9D[K
+licensed) and methodological tools (e.g., curvature metrics) for empirical [K
+investigation across linguistic domains.
+
+---
+
+*Prepared by an AI assistant based on the structured summaries of the LaTeX[5D[K
+LaTeX bibliography and its associated conceptual framework.*

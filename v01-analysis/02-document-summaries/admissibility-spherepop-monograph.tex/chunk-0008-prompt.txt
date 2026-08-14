@@ -1,0 +1,287 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+It matters \emph{epistemically} because genuine knowledge of a domain requires structural transparency of the representations used to reason about it. A practitioner whose representations are opaque — whose conclusions are outputs of procedures they cannot inspect — cannot engage in the kind of critical self-reflection and error correction that genuine expertise requires. They cannot trace errors back to their structural source, cannot identify the admissibility conditions that their practice is violating, and cannot revise their practice in structurally informed ways.
+
+It matters \emph{politically} because democratic accountability requires that the processes governing public decisions be assessable by the public: that the admissibility conditions of technical decision-making be exposed to contestation and revision through public discourse. An opaque system that governs public decisions is a system that operates outside the scope of democratic accountability, producing outcomes that cannot be genuinely contested because their structural basis is inaccessible.
+
+It matters \emph{ethically} because the reduction of human beings to inputs in an output-optimization procedure — the elimination of their particular histories, contextual needs, and irreducible specificities in favor of the standardized treatment appropriate for their output-relevant features — is a form of epistemic injustice: a failure to treat them as beings whose full structural particularity is morally relevant and deserving of responsive, history-sensitive attention. Structural transparency is the formal condition for the kind of attention that ethical treatment of persons requires.
+
+ \clearpage
+
+
+
+
+\part{Ontology, Language, and Explainability}
+
+
+\chapter{Symbolic Versus Subsymbolic Systems}
+\chapterrule
+
+\begin{chapterprecis}
+The rise of statistical models and the crisis of semantic
+grounding are examined. Large language models are analyzed as
+instances of opaque compression: powerful, but constitutively
+resistant to explainability in the absence of additional
+structural scaffolding. Explainability and interpretability are
+distinguished with precision.
+\end{chapterprecis}
+
+
+The Rise of Statistical Models
+
+
+The twentieth century witnessed two broadly distinct traditions in the formal treatment of language and meaning. The symbolic tradition, descending from Frege, Russell, and the early Wittgenstein through the formal semantics of Montague and the proof-theoretic approaches of Gentzen and Martin-Löf, treated meaning as compositionally structured: the meaning of a complex expression was determined by the meanings of its parts and the rules governing their combination. Sentences had truth conditions, expressions had denotations, and the semantic relation between language and world was mediated by an explicit compositional calculus whose operations were individually interpretable and collectively traceable. The computational tradition that emerged from this lineage — symbolic AI, expert systems, knowledge representation, logic programming — inherited the same commitments: knowledge was encoded in explicit propositional form, inference was rule-governed, and the reasoning process was in principle fully traceable from premises to conclusion.
+
+The statistical tradition has a different genealogy. Its roots lie in the frequentist and Bayesian traditions in probability theory, in the information-theoretic work of Shannon, in the connectionist movement of the 1980s, and ultimately in the neural network architectures that have come to dominate machine learning. Where the symbolic tradition treats meaning as explicitly structured, the statistical tradition treats it as implicitly encoded in patterns of co-occurrence, distributional proximity, and learned numerical weights. A statistical language model does not represent the meaning of a word by listing its semantic relations to other words in a structured knowledge base. It represents meaning as a position in a high-dimensional numerical space whose geometry is learned from patterns of usage in a training corpus. The relations among meanings are encoded in the geometry of this space — semantically similar words occupy nearby positions — but the geometry is not constructed according to explicit semantic rules. It emerges from optimization of a numerical objective over vast quantities of text.
+
+The rise of statistical models represents an enormous practical advance. Systems trained on large corpora learn semantic regularities — analogical relations, taxonomic structure, contextual appropriateness — that symbolic systems struggled to capture without enormous manual effort. They generalize across surface forms, tolerate ambiguity and noise, and scale in ways that symbolic approaches resisted. These are real achievements. But they come with a structural cost that the symbolic tradition did not pay: the learned representations are distributed across millions of numerical parameters, with no individual parameter or small group of parameters carrying interpretable semantic content. The geometry of the semantic space encodes meaning, but the encoding is opaque — not because the space is unavailable for inspection, but because the relation between geometric position and semantic content is not expressed in a form that human cognition can read directly.
+
+
+Language Models and Opaque Compression
+
+
+A large language model is, from the perspective of the Spherepop framework, a compressed representation of an admissibility manifold: specifically, the admissibility manifold of natural language use, encoding which linguistic continuations are contextually admissible given a particular preceding context. The compression is achieved through the learned numerical parameters of the model, which collectively approximate the conditional probability distributions $P(\text{next token} \mid \text{context})$ over the training distribution. This is a form of compression in the strict technical sense: a large and complex object — the distribution over all possible linguistic continuations — is represented by a finite set of numerical parameters whose collective behavior approximates the original distribution.
+
+The compression is, by the standards of terminal-output accuracy, highly effective. Language models produce contextually appropriate continuations across an enormous range of domains, styles, and registers, and they do so without explicit representation of the semantic or syntactic rules governing appropriateness. The admissibility manifold of language use has been approximated, with remarkable fidelity in many regions, by a purely statistical model.
+
+But the compression is also, by the standards of the Spherepop framework, a form of opacity. The model's parameters do not represent admissibility conditions in a form that is accessible to the Principle of Contextual Equivalence: one cannot inspect the model's weights and determine which equivalence relation is being applied when two different input contexts produce the same output distribution. The model does not expose its collapse structure. It does not distinguish between histories that are genuinely semantically equivalent under some principled admissibility criterion and histories that produce identical outputs for accidental statistical reasons. And it does not preserve provenance: when the model generates a continuation, the generation is not accompanied by a record of which constraints governed the generation, which alternatives were considered and rejected, or which equivalence classes of input context the model is treating as interchangeable.
+
+This is not a criticism of large language models as useful tools. It is a precise characterization of what they are, stated in the vocabulary of the Spherepop framework. They are effective admissibility approximators whose collapse structure is not exposed. Whether this opacity matters depends on what one needs from the system. For many practical tasks — drafting text, answering factual questions, summarizing documents — the opacity is irrelevant: the terminal output is sufficient. For tasks that require understanding of the reasoning process, verification of the grounds for a claim, or detection of the equivalence relation being implicitly applied, the opacity is a fundamental limitation that no amount of increased model scale can resolve, because the limitation is architectural rather than quantitative.
+
+
+Explainability and Interpretability
+
+
+The terms \emph{explainability} and \emph{interpretability} are frequently used interchangeably in the literature on machine learning systems, but the Spherepop framework provides a principled basis for distinguishing them, and the distinction matters enormously for assessing the prospects and limitations of current approaches to AI transparency.
+
+\emph{Explainability} is the capacity to generate, post-hoc, a human-readable account of why a system produced a particular output in a particular case. An explainable system can produce saliency maps showing which input features influenced the output, decision trees approximating local behavior, or natural-language rationales for specific decisions. Explanations are generated after the fact and need not correspond to the actual computational process the system executed. They are best understood as compressed summaries of the output distribution in the neighborhood of a specific input — approximations to the local structure of the admissibility manifold, generated on demand, without any guarantee that the approximation is faithful.
+
+\emph{Interpretability} is the stronger property: a system is interpretable if its computational process is expressed in a form that allows the admissibility structure — the constraint configuration governing each step — to be read directly from the system's representation. An interpretable system exposes its collapse structure: one can inspect it and determine which equivalence relation governs each step, which alternatives were locally admissible and why some were excluded, what the commitment cost of each transition was, and how the terminal output follows from the specific sequence of admissible transitions that produced it. Interpretability is not a post-hoc property; it is a structural property of the representation itself.
+
+\begin{definition}
+A computational system $\mathcal{S}$ is \emph{interpretable} (in the Spherepop sense) if its representation exposes, for each step $e_t$ of each trajectory $\gamma$: the constraint configuration $\mathcal{C}_t$ in force at step $t$; the local admissibility condition $\sadm_{\mathrm{local}}(e_t \mid \mathcal{C}_t)$; the action cost $\mathcal{L}_t$; and the updated constraint configuration $\mathcal{C}_{t+1}$ produced by $e_t$. A system that generates post-hoc accounts of its behavior without exposing this structure is \emph{explainable} but not interpretable.
+\end{definition}
+
+The distinction has immediate practical implications. An explainable system can be audited case by case, with uncertain fidelity, at the cost of substantial additional computation. An interpretable system can be audited structurally, by reading its representation directly, at the cost of designing the system's representation to be readable in the first place. Current large language models are, in varying degrees, explainable but not interpretable. Spherepop-style systems, if built, would be interpretable by construction: the evaluation history is part of the representation, and the constraint configuration at each step is directly readable from the bubble topology.
+
+
+The Crisis of Semantic Grounding
+
+
+The problem of semantic grounding asks: how does a formal symbol system acquire genuine reference to the world? The question was posed most sharply by Searle's Chinese Room argument and by Harnad's symbol grounding problem, both of which argued that formal symbol manipulation is insufficient for genuine meaning because symbols derive their meaning from their connections to sensorimotor experience, not from their relations to other symbols. A system that manipulates symbols correctly according to syntactic rules is not thereby understanding those symbols; it is processing formal marks according to formal rules, and the question of what those marks mean is not answered by describing the rules.
+
+Statistical language models appear, superficially, to escape this critique because their representations are not purely syntactic: they encode semantic regularities learned from patterns of use, and those regularities reflect genuine structural features of the domains their training corpora describe. A model that learns that \enquote{Paris} and \enquote{France} are semantically related has learned something about the world, not merely about syntactic co-occurrence. But the learning is mediated entirely by linguistic context, without any grounding in the sensorimotor experience of the entities named. The model's representation of \enquote{Paris} encodes its distributional relations to other linguistic items, not any experiential contact with the city.
+
+The Spherepop framework approaches grounding differently. Grounding, on the admissibility-manifold view, is not a matter of connecting symbols to sensorimotor experience through a separate grounding relation. It is a matter of the admissibility conditions being determined by the actual structure of the domain being represented. A grounded representation of arithmetic is one whose admissibility conditions reflect the actual constraint structure of arithmetic — the nesting relations that determine evaluation order, the binding conditions that determine scope, the collapse conditions that determine when reduction is admissible. A representation that correctly encodes these admissibility conditions is grounded in arithmetic in the relevant sense, regardless of whether it is accompanied by sensorimotor experience of numbers. Grounding is constraint fidelity: the admissibility manifold of the representation faithfully reflects the admissibility manifold of the domain.
+
+
+\chapter{Ontological Structure and Grounded Representation}
+\chapterrule
+
+\begin{chapterprecis}
+Meaning is analyzed as relational constraint: semantic
+neighborhoods, language as structured navigation, and grounded
+representation are developed as the ontological foundations for
+a Spherepop-based semantics.
+\end{chapterprecis}
+
+
+Meaning as Relational Constraint
+
+
+The view of meaning developed in this monograph is resolutely relational. Meaning is not a property of individual expressions considered in isolation — not a mental image, not a neural activation pattern, not a pointer to an object in the world. It is a structural property of the position an expression occupies within a network of admissibility relations: the set of constraints that govern its combination with other expressions, the set of transitions it licenses and the set it forecloses, the set of contexts in which its use is appropriate and the set in which it is inadmissible. Two expressions have the same meaning, in this sense, if and only if they occupy the same position in the admissibility network — if they license the same transitions, foreclose the same alternatives, and are contextually appropriate in exactly the same set of circumstances.
+
+This view of meaning has deep roots in the philosophical tradition. It is related to Wittgenstein's use-theoretic conception of meaning — meaning as governed by the rules of a language-game — and to the inferentialist semantics developed by Brandom, on which the meaning of an expression is constituted by the inferential role it plays in the practices of giving and asking for reasons. It is also related to the distributional hypothesis in computational linguistics — the idea that words with similar meanings appear in similar contexts — though the Spherepop formulation is more precise: the relevant similarity is not distributional co-occurrence but structural identity of the admissibility conditions governing use.
+
+The relational conception of meaning is not merely a philosophical preference. It has formal consequences that distinguish it from both atomistic and purely inferentialist alternatives. Because meaning is constituted by admissibility relations, and because admissibility relations are formally characterized by the constraint structures of the Spherepop framework, meaning is subject to the same formal analysis as admissibility more generally: it has a geometry (the admissibility manifold), a topology (the structure of semantic neighborhoods), a dynamics (the process of semantic interpretation as trajectory selection through the manifold), and a thermodynamics (semantic entropy as the volume of the admissibility set). These are not metaphors imposed on meaning from outside; they are formal consequences of treating meaning as a structural property of relational position within a constraint network.
+
+
+Semantic Neighborhoods
+
+
+The notion of a semantic neighborhood formalizes the intuition that meanings are not isolated points in a conceptual space but structured regions: clusters of closely related expressions that share large portions of their admissibility conditions and differ in others, forming a continuous topology over the space of meanings. Two expressions are semantically close — they occupy the same neighborhood — if their admissibility conditions largely coincide: the contexts in which one is appropriate are largely the contexts in which the other is appropriate, the inferences one licenses are largely the inferences the other licenses, and the constraints one imposes are largely the constraints the other imposes.
+
+\begin{definition}
+The \emph{semantic neighborhood} $\mathcal{N}_\epsilon(e)$ of an expression $e$ at radius $\epsilon$ is the set of expressions $e'$ such that the symmetric difference of their admissibility conditions has measure at most $\epsilon$:
+\[
+  \mathcal{N}_\epsilon(e) = \bigl\{ e' : \lvert \sadm(\mathcal{C}_e) \;\triangle\; \sadm(\mathcal{C}_{e'}) \rvert \leq \epsilon \bigr\},
+\]
+where $\mathcal{C}_e$ and $\mathcal{C}_{e'}$ are the constraint configurations governing the use of $e$ and $e'$ respectively.
+\end{definition}
+
+Semantic neighborhoods are not fixed but context-dependent: the admissibility conditions governing an expression's use vary with context, and therefore so do the boundaries of the neighborhood. In a mathematical context, \enquote{function} and \enquote{mapping} may occupy the same neighborhood, while in an organizational context they diverge. In a philosophical context, \enquote{concept} and \enquote{idea} may be nearly synonymous, while in a psychological context they are sharply distinguished. The context-dependence of semantic neighborhoods is formally captured by the context-dependence of the constraint configuration $\mathcal{C}_e$: different contexts impose different constraints, and the neighborhood is determined by the constraints in force.
+
+
+Language as Structured Navigation
+
+
+If meaning is relational and constituted by admissibility conditions, then the use of language is navigation through a structured space of meanings: the selection, from a position in the admissibility manifold, of a next expression that is contextually admissible given the current constraint configuration. Producing a sentence is traversing a trajectory through semantic space, with each word choice constrained by the words that preceded it and by the extra-linguistic context. Understanding a sentence is reconstructing the trajectory from its surface form, recovering the sequence of semantic positions traversed and the constraint conditions that governed each step.
+
+This navigational picture of language use is not merely a metaphor. It has precise formal content within the Spherepop framework. A linguistic trajectory is a sequence of semantic positions $s_0, s_1, \ldots, s_n$ through the admissibility manifold, connected by transitions that are locally admissible given the constraint configuration at each step. The constraint configuration is determined jointly by the grammar of the language, the prior linguistic context, the extra-linguistic situation, and the shared background knowledge of speaker and hearer. Grammaticality is local admissibility: a string is grammatical if each transition in the trajectory it traces is locally admissible given the grammatical constraints in force. Semantic appropriateness is global admissibility: the full trajectory is semantically appropriate if the total action cost — the sum of contextual mismatches and constraint violations across all steps — is below the threshold of communicative success.
+
+The navigational picture explains several features of language use that are puzzling on atomistic accounts of meaning. Ambiguity is high semantic entropy at a given point in the trajectory: many different next positions are locally admissible, and the constraint configuration does not uniquely determine which to take. Disambiguation is entropy reduction: additional context constrains the admissibility set, ruling out alternatives and selecting a unique trajectory. Metaphor is locally inadmissible transition that is globally coherent: the literal meaning of the expression is inadmissible in the current context, but a nearby semantic position — reachable by a small perturbation of the admissibility conditions — is admissible and communicatively productive.
+
+
+Grounded Representation
+
+
+The account of grounding as constraint fidelity is elaborated here into a positive theory of grounded representation. A representation is grounded in a domain $D$ to the extent that its admissibility conditions faithfully reflect the admissibility conditions of $D$ itself: the transitions the representation permits are the transitions that $D$ permits, and the transitions it forecloses are the transitions that $D$ forecloses. A perfectly grounded representation of $D$ is one whose admissibility manifold is isomorphic to the admissibility manifold of $D$ — a structure-preserving map between the two constraint networks that takes admissible transitions in the representation to admissible transitions in $D$ and vice versa.
+
+This is a demanding standard, and most real representations fall short of it. A textbook's representation of arithmetic permits some transitions that arithmetic forbids (students make errors that the notation does not immediately flag) and forecloses some transitions that arithmetic permits (students who learn arithmetic through rote memorization of procedures may be unable to perform legitimate transformations not covered by the memorized rules). The textbook's admissibility manifold is an imperfect approximation to arithmetic's admissibility manifold, with both false positives and false negatives.
+
+Spherepop notation, in the domain of arithmetic, is an attempt to minimize false negatives: by making the admissibility conditions explicit in the visual structure of the bubble topology, the notation ensures that every admissible transition is visually legible and every inadmissible transition is visually blocked. The evaluation order of $1 + 3 \times 2^2$ is not merely inferred from memorized rules; it is directly visible in the nesting structure of the bubbles, which accurately reflects the constraint structure of arithmetic's evaluation order. The representation's admissibility manifold is better aligned with arithmetic's admissibility manifold, and grounding is thereby enhanced.
+
+
+\chapter{Spherepop and Explainable Semantics}
+\chapterrule
+
+\begin{chapterprecis}
+This chapter develops the positive proposal: Spherepop as a
+framework for visible semantic operations, operational
+provenance, and localized meaning regions. Computation is
+reconceived as navigable geometry, and the chapter provides a
+treatment of topology, coordinate charts, and sheaf-like
+structures as the mathematical apparatus of this conception.
+\end{chapterprecis}
+
+
+Visible Semantic Operations
+
+
+The positive proposal of this chapter is the development of Spherepop as a framework for visible semantic operations: a representational system in which semantic transformations are directly readable from the representation, rather than encoded in invisible computational processes or recoverable only through post-hoc explanation. The contrast with conventional symbolic and statistical systems is precise. In conventional symbolic systems, semantic operations are visible in principle but often presented in compressed form that makes individual steps hard to track and their semantic significance hard to read. In statistical systems, semantic operations are invisible in practice: the learned parameters that implement the operations are distributed across millions of weights with no individual weight carrying interpretable semantic content.
+
+Spherepop makes semantic operations visible at three levels. At the notational level, the bubble topology directly encodes scope, dependency, and evaluation order: the semantic structure of the expression is readable from its visual structure without inference or reconstruction. At the operational level, each pop event is a visible semantic transformation: it is the explicit resolution of a local semantic question — what is the value of this subexpression? — whose answer is recorded in the evaluation history. At the provenance level, the full sequence of pop events is a visible record of the semantic trajectory: the history of how the current semantic state was reached from the initial expression, which alternatives were foreclosed at each step, and what the admissibility conditions were that governed each transition.
+
+
+Operational Provenance
+
+
+Provenance, in the context of Spherepop, is the full record of the causal history of a semantic or computational result: the ordered sequence of evaluation steps by which the result was reached, together with the constraint configurations in force at each step, the alternatives that were locally admissible but not taken, and the commitment costs incurred along the way. Provenance is not merely a debugging tool or an auditing mechanism. It is, within the Spherepop framework, a constitutive component of semantic content: the result without its provenance is a terminal state without a trajectory, an answer without an understanding of the question.
+
+The claim that provenance is constitutive rather than auxiliary is the Spherepop framework's strongest departure from conventional computational ontology. In conventional computation, a program's output is its semantic content: two programs that produce the same output on all inputs are extensionally equivalent, and their operational differences are implementation details with no semantic significance. In Spherepop, two programs that produce the same output via different histories are semantically distinct under any collapse operator that preserves provenance: they occupy different positions in the admissibility manifold, they have different remaining-freedom profiles, and they support different inferences about the structure of the computation that produced the result.
+
+\begin{proposition}
+Let $\gamma_1$ and $\gamma_2$ be two Spherepop histories with the same terminal value but different admissibility profiles. Under any collapse operator $q$ that is admissibility-preserving, $\gamma_1 \not\sim_q \gamma_2$. That is, provenance-preserving collapse distinguishes histories that terminal-value-only collapse identifies.
+\end{proposition}
+
+
+Localized Meaning Regions
+
+
+The Spherepop framework treats meaning as \emph{local}: the semantic content of a subexpression is constituted by the constraint conditions governing its evaluation within its scope region, and that content is not determined by global properties of the full expression in which it is embedded. This locality principle is one of the framework's most distinctive features and one of its most important practical commitments.
+
+Locality of meaning has both a geometric and a cognitive justification. Geometrically, locality corresponds to the fact that the admissibility conditions governing a bubble's contents are determined by the bubble's boundary conditions — the constraints imposed by the containing bubbles at the boundary of the scope region — and not by the details of what lies outside those boundaries. A bubble is a semantically autonomous region: its internal evaluation is governed by local admissibility conditions that are, in principle, understandable without reference to the full context. Cognitively, locality corresponds to the chunking mechanisms described in Part~II: meaningful units are cognitively processed as wholes, and the cognitive resources required to understand a unit are proportional to the complexity of the unit rather than to the complexity of the larger structure in which it is embedded.
+
+
+Computation as Navigable Geometry
+
+
+The reframing of computation as navigation through semantic configuration space is consolidated here as a philosophical thesis about the nature of computation itself. Computation is not, at the most fundamental level, the execution of a set of instructions by a processor according to a fixed algorithm. It is the navigation of a space of admissible transformations, where the space is structured by the constraint conditions in force, and where the navigator moves through the space by selecting locally admissible transitions that collectively constitute a trajectory to the desired terminal state.
+
+The navigational conception differs from the executionist conception in several respects that are philosophically significant. In the executionist conception, computation is deterministic, sequential, and history-indifferent: given the same input, the computation follows the same steps in the same order, and the history of execution is irrelevant to the semantic content of the output. In the navigational conception, computation is structured, trajectory-sensitive, and history-constituted: different trajectories through the same admissibility manifold may reach the same terminal state, but they are semantically distinct; the full trajectory is a primary semantic object, and the terminal state is a compressed summary of the trajectory. The executionist conception optimizes for efficiency and correctness of terminal output. The navigational conception optimizes for the preservation of the structural information encoded in the trajectory.
+
+
+Coordinate Charts and Context Windows
+
+
+The mathematical apparatus of differential geometry provides a natural language for several of the Spherepop framework's central concepts. A \emph{coordinate chart} is a local homeomorphism from a region of a topological manifold to a region of Euclidean space: it assigns coordinates to the points of the region, making local computations tractable, without requiring the global structure of the manifold to be flat or Euclidean.
+
+In the Spherepop framework, a context window — the local context in which an expression is being evaluated, including the constraint configuration, the evaluation history up to the current point, and the admissibility conditions in force — is a coordinate chart over the admissibility manifold of the full computation. It assigns local semantic coordinates to the current state of the computation, making the local admissibility conditions explicit and the local evaluation decisions tractable, without requiring the global structure of the admissibility manifold to be fully specified. Different context windows cover overlapping regions of the admissibility manifold, with transition functions describing how the local semantic coordinates transform under evaluation.
+
+The coordinate-chart picture gives precise content to several intuitions about context-dependence and semantic continuity. An expression is locally intelligible if it has a well-defined coordinate chart: if the constraint configuration governing its evaluation in the current context is fully specified. It is globally intelligible if the local charts covering all relevant contexts are consistent: if the transition functions between context windows are well-defined and compose correctly. Semantic ambiguity is a failure of local determinacy: the local chart does not uniquely determine the admissible transitions from the current state. Semantic incoherence is a failure of global consistency: the local charts covering different aspects of the expression's use fail to compose into a consistent global picture.
+
+
+Sheaf-Like Structures
+
+
+The mathematical notion of a \emph{sheaf} generalizes the coordinate-chart picture to arbitrary topological spaces. A sheaf over a topological space $X$ assigns to each open set $U \subseteq X$ a set $\mathcal{F}(U)$ of local data — functions, sections, semantic content — together with restriction maps that describe how local data on a larger open set restricts to local data on a smaller one, satisfying locality (a section is determined by its restrictions to a covering) and gluing (compatible local sections can be assembled into a global section).
+
+In the Spherepop framework, the sheaf-theoretic picture formalizes the local-to-global assembly of semantic content. The admissibility manifold $\mathcal{A}(X)$ of a computation is the base space. The sheaf assigns to each open region $U$ of the admissibility manifold the set of locally admissible evaluation sequences over $U$ — the set of trajectories that are consistent with the local constraint configuration within $U$. The gluing axiom says that locally admissible trajectories that are consistent on overlapping regions can be assembled into a globally admissible trajectory — precisely the local-to-global assembly that supports the construction of fully grounded meanings from locally grounded components. The failure of sheaf-like assembly — the condition in which locally consistent context windows fail to produce a globally consistent meaning — corresponds precisely to semantic incoherence.
+
+
+Local-to-Global Meaning Construction
+
+
+The local-to-global assembly of meaning is the process by which individually intelligible components are composed into a globally coherent semantic object. In Spherepop, it is trajectory assembly: the globally admissible evaluation trajectory is constructed from locally admissible evaluation steps, with each step's local admissibility ensuring that it can be coherently incorporated into the global trajectory.
+
+The local-to-global process is genuinely compositional in the sense that the meaning of the whole is not merely the sum of the meanings of the parts, but a structured function of those meanings mediated by the combinatorial rules — the bubble topology, the admissibility conditions at each boundary — that govern their assembly. A bubble containing $3 \times 2^2$ has a local meaning determined by the local admissibility conditions within the bubble: the inner bubble nesting that encodes the rule that exponentiation is evaluated before multiplication. When this bubble is incorporated into the larger expression $1 + 3 \times 2^2$, its local meaning is assembled with the local meaning of the outer addition operation according to the admissibility conditions at the bubble's boundary, producing a globally coherent semantic object whose meaning is the structured composition of its parts' meanings.
+
+
+Semantic Continuity
+
+
+Semantic continuity is the property of a representation that guarantees that small changes in the represented domain produce small changes in the representation's admissibility conditions. A semantically continuous representation supports reliable inference: if you know the semantic content of nearby expressions, you can predict the semantic content of the expression in question with small error.
+
+Semantic continuity is an important structural property because its failure — semantic discontinuity — is one of the primary sources of interpretability failure in AI systems. A system whose output changes dramatically in response to small, semantically irrelevant changes in input is exhibiting semantic discontinuity: the map from input semantic content to output is not continuous in the relevant topology. This is the phenomenon of adversarial examples in neural networks: small perturbations of the input that are semantically negligible to human observers produce dramatic changes in the network's output, revealing that the network's implicit semantic space has a topology that diverges sharply from the topology of the intended semantic domain.
+
+Within the Spherepop framework, semantic continuity is guaranteed by the locality principle and the sheaf-like structure of meaning assembly. Because each bubble's local admissibility conditions are determined by the constraints at its boundary, and because small changes in the expression outside a bubble leave those boundary constraints unchanged, the local meaning of the bubble is semantically continuous with respect to changes in the outer expression.
+
+ \clearpage
+
+
+
+
+\part{Geometry, Waves, and Physical Representation}
+
+
+\chapter{Wave Structure and Relational Physics}
+\chapterrule
+
+\begin{chapterprecis}
+Standing waves, interaction, collapse and revival, and localized
+coherence are examined as physical instances of the structures
+Spherepop formalizes computationally. Phase space and constraint
+fields are developed as the physical counterparts of Spherepop's
+semantic regions.
+\end{chapterprecis}
+
+
+Standing Waves and Interaction
+
+
+The physical picture of a standing wave offers one of the most productive structural analogies available for the Spherepop framework's treatment of localized, bounded, self-sustaining semantic regions. A standing wave is a pattern of constructive and destructive interference between waves traveling in opposite directions that produces a spatially fixed amplitude envelope: a pattern of nodes, where amplitude is permanently zero, and antinodes, where amplitude is permanently maximal. The pattern is sustained not by any static mechanism but by the ongoing dynamical interaction of the traveling waves that compose it. It is a structure that exists in time as a stable product of dynamical process, not as a static object independent of its generative dynamics.
+
+The analogy to Spherepop bubbles is structural. A bubble is not a static container but a dynamically sustained evaluative region: its boundaries are maintained by the ongoing constraint conditions at the bubble's interface, and its internal evaluation is sustained by the local admissibility conditions in force within it. Just as a standing wave's pattern is determined by the boundary conditions at its endpoints, a bubble's evaluative behavior is determined by the constraint conditions at its boundary. And just as a standing wave collapses when its boundary conditions change, a bubble pops when its internal evaluation reaches the point at which the local admissibility conditions are fully satisfied and commitment to a result becomes possible.
+
+The deepest point of the analogy is the relationship between local structure and global coherence. A standing wave is a globally coherent pattern produced by locally determined phase relations: the interference is constructive at antinodes because the phases of the component waves align there, and destructive at nodes because the phases cancel. Similarly, a globally coherent Spherepop computation is produced by locally admissible evaluation steps: the global trajectory is coherent not because it was determined from outside but because each local step satisfied the constraint conditions in force at that point.
+
+
+Collapse and Revival
+
+
+The phenomenon of collapse and revival in quantum mechanical systems provides a physical instance of a structural pattern that is central to the Spherepop framework: the alternation between coherent, locally organized states and collapsed, globally disordered ones, followed by spontaneous re-emergence of coherence. In a collapsing quantum state, initially coherent superpositions of energy eigenstates dephase over time as the different components accumulate different phases, producing apparent incoherence and loss of the initial quantum structure. Revival occurs when the phases realign sufficiently to regenerate the initial coherent pattern, demonstrating that the structure was not destroyed but merely hidden in the dephased superposition.
+
+The structural parallel with Spherepop collapse is exact in the relevant sense: collapse in both cases is not destruction but transformation into a less accessible form. A Spherepop collapse event $\scollapse{q}$ maps a history $\gamma$ to an equivalence class $\gamma/{\sim_q}$, identifying all histories that are observationally equivalent under the chosen collapse operator. The structural information that distinguishes $\gamma$ from other histories in its equivalence class is not destroyed; it is encoded in the kernel of the quotient map. Revival — the recovery of that structural information from the collapsed description — is formally possible whenever the kernel is recoverable from the quotient map. In practice, revival may be impossible if the kernel information has been discarded rather than merely suppressed, exactly as quantum revival is impossible if the initial state information is truly lost through irreversible decoherence rather than merely obscured through dephasing.
+
+
+Localized Coherence
+
+
+Coherence, in the physical sense, is the maintenance of definite phase relations among the components of a superposition over time. A coherent state is one in which the phases are sufficiently aligned to produce constructive interference in observable quantities; an incoherent state is one in which the phases are randomized, suppressing interference effects.
+
+The Spherepop analogue of coherence is the maintenance of consistent admissibility conditions across the components of a computation — the condition in which the constraint configurations governing different parts of the evaluation are mutually consistent, and in which the local admissibility conditions at each bubble boundary compose correctly into a globally admissible evaluation trajectory. A \emph{semantically coherent} computation is one in which all active bubbles have consistent constraint configurations, all admissibility conditions are simultaneously satisfiable, and the evaluation trajectory is well-defined at each step. A \emph{semantically incoherent} computation is one in which constraint configurations conflict, admissibility conditions cannot all be simultaneously satisfied, or the evaluation trajectory is blocked by mutually incompatible constraints.
+
+Localized coherence — coherence maintained within a bounded region while the surrounding environment is incoherent — corresponds in the Spherepop framework to the local admissibility of a bubble's internal evaluation even when the containing context is globally underdetermined. This is the structural property that makes local-before-global evaluation order correct: inner bubbles can be evaluated coherently before the outer context is resolved, because their admissibility conditions are locally determined.
+
+
+Phase Space and Constraint Fields
+
+
+The admissibility manifold of a Spherepop computation is the computational analogue of a constrained mechanical phase space: the space of all admissible computation states, with the constraint conditions — the bubble topology, the active bind constraints, the refuse events — defining the admissible region. Just as a mechanical constraint reduces the available phase space from the full unconstrained manifold to the constraint surface, a Spherepop constraint configuration reduces the available computation space from the full set of all evaluation sequences to the admissibility manifold $\mathcal{A}(X)$.
+
+The constraint field over the admissibility manifold — the function that assigns to each point in the manifold a specification of the constraint configuration in force — is the Spherepop analogue of the Hamiltonian vector field in mechanics: it determines the direction of evolution at each point. Where the mechanical Hamiltonian generates infinitesimal displacements along the constraint surface, the Spherepop constraint field specifies which evaluation steps are locally admissible at each point of the admissibility manifold. The geometry of the constraint field — its singularities, attractors, and repellers — determines the global structure of the evaluation dynamics: which terminal states are accessible from which initial states, which trajectories are geodesics of the action functional, and which regions of the admissibility manifold are inaccessible from the current state.
+
+
+\chapter{Blender Models and Computational Topology}
+\chapterrule

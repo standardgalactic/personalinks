@@ -1,0 +1,136 @@
+Summary
+
+The reference runtime presented in this appendix is deliberately minimal. I[1D[K
+Its responsibilities are limited to:
+
+* Maintaining a composition graph  
+* Loading operator libraries  
+* Scheduling executable nodes  
+* Recording persistent histories  
+* Processing refusal and collapse events  
+* Applying graph rewrites when requested  
+
+Because the core of Spherepop’s design is *composition*—the building up of [K
+computational behavior through the juxtaposition of operators rather than v[1D[K
+via any particular language or logical system—a small, mathematically unifo[5D[K
+uniform runtime can be extended to support a wide variety of practical appl[4D[K
+applications (typing, theorem proving, compilation, optimization, fuzzy inf[3D[K
+inference, symbolic reasoning, neural computation, repair, and learning) si[2D[K
+simply by supplying different operator libraries and graph transformations.[16D[K
+transformations. This economy is the principal engineering consequence of a[1D[K
+adopting a “graph‑first” philosophy: a compact runtime can serve many dispa[5D[K
+disparate computational paradigms because composition itself becomes the pr[2D[K
+primitive operation.
+
+Towards a Composition‑First Calculus
+
+The operational machinery developed in earlier sections naturally motivates[9D[K
+motivates an extension to a formal calculus that treats graph construction [K
+and history evolution as its primitives. Rather than starting from abstract[8D[K
+abstraction, application, or typing, the proposed *composition‑first calcul[6D[K
+calculus* begins with judgments such as:
+
+\[
+H \vdash G \Downarrow H',
+\]
+
+read “executing graph \(G\) extends history \(H\) into history \(H'\).”
+
+Key primitive rules are:
+
+* **Identity rule:**  
+  \[
+  \frac{ }{\; H \vdash \operatorname{Id} \Downarrow H. }
+  \]
+
+* **Composition rule:**  
+  \[
+  \frac{
+    H \vdash G_1 \Downarrow H_1
+    \quad\text{and}\quad
+    H_1 \vdash G_2 \Downarrow H_2
+  }{
+    H \vdash G_2 \circ G_1 \Downarrow H_2 .
+  }
+  \]
+
+These two rules replace many language‑specific evaluation rules (sequential[11D[K
+(sequential execution, function application, pipeline execution, module com[3D[K
+composition) with a single compositional operation.
+
+Operator Evaluation
+
+When an executable node \(n\) of operator \(f\) is evaluated, the rule:
+
+\[
+\frac{
+  v = f(v_1,\dots,v_k)
+}{
+  H \vdash n \Downarrow (H,e),
+}
+\]
+
+where \(e=(n,f,v)\), records both the result and the computational event. T[1D[K
+This makes history an explicit trace of computation rather than a hidden si[2D[K
+side‑effect.
+
+Refusal & Collapse
+
+The calculus also includes rules for handling refusal and committed outcome[7D[K
+outcomes:
+
+* **Refusal rule:**  
+  \[
+  \frac{
+    r\text{ is a refusal reason}
+  }{
+    H \vdash n \Downarrow (H,\Refuse(r)).
+  }
+  \]
+
+* **Collapse rule:**  
+  \[
+  \frac{
+    v\text{ has already been produced}
+  }{
+    H \vdash \Collapse(v) \Downarrow (H,\Collapse(v)).
+  }
+  \]
+
+These mechanisms unify speculative execution, interactive computation, symb[4D[K
+symbolic reasoning, and fuzzy evaluation under a single framework.
+
+Conservativity Principle
+
+A central theorem states that any extension of the composition‑first calcul[6D[K
+calculus by adding descriptive judgments (types, proofs, logical systems, e[1D[K
+etc.) does not alter its primitive operational rules. Thus richer computati[9D[K
+computational systems are *extensions* rather than replacements of executio[8D[K
+execution semantics. This formalizes the thesis that execution precedes des[3D[K
+description.
+
+Hierarchy of Concepts
+
+The resulting hierarchy can be expressed as:
+
+\[
+\text{composition}
+\Longrightarrow
+\text{graphs}
+\Longrightarrow
+\text{histories}
+\Longrightarrow
+\text{execution}
+\Longrightarrow
+\text{optimization}
+\Longrightarrow
+\text{description}
+\Longrightarrow
+\text{verification}.
+\]
+
+Unlike conventional programming‑language theory, where execution is derived[7D[K
+derived from syntax and types, Spherepop’s composition‑first calculus place[5D[K
+places *composition* as the primitive computational operation that everythi[8D[K
+everything else constrains.
+

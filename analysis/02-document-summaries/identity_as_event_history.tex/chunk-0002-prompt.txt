@@ -1,15 +1,220 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 5 of a document called
+"identity_as_event_history.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Projected Identity in the Spherepop Framework**
 
-TEXT
-====
+The notion of “identity” in a reversible world (the present) can only be de[2D[K
+defined by reference to the irreversible past.  In the Spherepop ontology t[1D[K
+this is done through **projected identity**, which ties an object’s identit[7D[K
+identity directly to its *history projection* rather than to any primitive [K
+property.
+
+---
+
+### 1. The Trajectory Category  
+
+Let \(\mathcal{T}\) denote the category of admissible trajectories:
+
+* **Objects** are Spherepop states \((\Omega_t, H_t)\), where  
+  - \(\Omega_t\) is the set of options available at time \(t\);  
+  - \(H_t\) (the *event word*) records the sequence of committed events.
+
+* **Morphisms** are irreversible extensions: a morphism from \((\Omega_t, H[1D[K
+H_t)\) to
+  \((\Omega_{t'}, H_{t'})\) exists iff  
+
+  1. \(\Omega_{t'} \subseteq \Omega_t\) (the set of options cannot expand);[8D[K
+expand);  
+  2. \(H_{t'} = H_t \cdot w\) for some non‑empty word \(w\) (history grows [K
+by committing a new event);  
+  3. The extension satisfies the axioms of Section \(\ref{sec:possibility-p[32D[K
+Section \(\ref{sec:possibility-preimage}\).
+
+Composition is simply concatenation of extensions, reflecting that time pro[3D[K
+proceeds
+monotonically.
+
+Because \(\Omega\) can only shrink and \(H\) can only grow, **no non‑trivia[10D[K
+non‑trivial
+isomorphisms exist**: a trajectory cannot reverse to an earlier state unles[5D[K
+unless it was
+already identical.  This captures the irreversibility at the dynamical leve[4D[K
+level.
+
+---
+
+### 2. History Projection  
+
+Define the functor  
+\[
+\Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \PathCat,
+\]
+which maps each state \((\Omega_t, H_t)\) to its event word \(H_t\) and eac[3D[K
+each
+extension morphism to the corresponding prefix extension in the category of[2D[K
+of paths
+(\(\PathCat\)).  Functoriality follows immediately: concatenating two exten[5D[K
+extensions in
+\(\mathcal{T}\) corresponds exactly to concatenating their event words in
+\(\PathCat\).
+
+---
+
+### 3. Projected Identity  
+
+**Definition (Projected identity).**  
+Two terminal states \((\Omega_k, H_k)\) and \((\Omega_k', H_{k}')\) arising[7D[K
+arising from
+trajectories \(\tau\) and \(\tau'\) are *Spherepop‑identical* iff their pro[3D[K
+projected
+histories coincide:
+
+\[
+\Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau').
+\]
+
+Thus identity is an **equivalence class** defined by the history projection[10D[K
+projection.  
+Distinct trajectories can yield the same object if they commit events in ex[2D[K
+exactly the
+same order, even though their intermediate option spaces differ.
+
+---
+
+### 4. Trajectory Equivalence  
+
+For any two trajectories \(\tau, \tau' \in \mathcal{T}\), define
+
+\[
+\tau \sim \tau' \;\Longleftrightarrow\;
+\Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau').
+\]
+
+Objects of the Spherepop ontology are equivalence classes \([\tau]\).  Each[4D[K
+Each class
+contains all trajectories that produce identical ordered boundary traces; t[1D[K
+the event
+word serves as a minimal complete invariant.
+
+---
+
+### 5. Compatibility with Normal Forms  
+
+The reformulation reproduces the earlier event‑word formalism:
+
+* \(G_X\) is the ancestral event graph for trajectory \(\tau\);  
+* \((\mathrm{spherepop}(X))_{\text{nf}}\) is its canonical linearisation ob[2D[K
+obtained by
+  normalizing via the procedure of Section \(\ref{sec:normalization}\).
+
+Hence, if histories are already in normal form,
+
+\[
+\Pi_{\mathrm{hist}}(\tau) = (\mathrm{spherepop}(X))_{\text{nf}},
+\]
+
+and the original identity condition
+
+\[
+X \equiv Y \;\Longleftrightarrow\;
+(\mathrm{spherepop}(X))_{\text{nf}} = (\mathrm{spherepop}(Y))_{\text{nf}}
+\]
+
+is recovered as a special case of projected identity.
+
+---
+
+### 6. Non‑Injectivity and Loss of Preimage Information  
+
+**Proposition (Non‑injectivity).**  
+There exist distinct trajectories \(\tau \neq \tau'\) with the same history[7D[K
+history
+projection:
+
+\[
+\Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau').
+\]
+
+*Example.*  
+Let \(\Omega_0 = \{a, b, c\}\).  Consider two trajectories that both commit[6D[K
+commit
+event \(a\) first and event \(b\) second.  The first trajectory’s opt[3D[K
+option space
+evolves as \(\{a,b,c\} \to \{b,c\} \to \{\varnothing\}\), while the second [K
+passes a
+binding step that removes \(c\) before the first commitment, evolving to
+\(\{a,b\} \to \{b\} \to \varnothing\).  Both project to the history \((a,b)[7D[K
+\((a,b)\) under
+\(\Pi_{\mathrm{hist}}\), yet their preimages differ in intermediate possibi[7D[K
+possibilities.
+
+**Interpretation.**  
+The non‑injectivity formalises that identity preserves *only* the order of [K
+actualisations,
+not the full geometry of possibility space from which that order emerged.
+Thus, once a trajectory terminates (producing an event word), all alternati[9D[K
+alternatives—
+the options never taken and the paths not followed—are irretrievably lost. [K
+ This is
+exactly what it means for history to be irreversible.
+
+---
+
+### 7. Relationship to Structural Identity  
+
+Projected identity sits between two levels of equivalence:
+
+1. **Trajectory level** (full identity) – retains every detail of the possi[5D[K
+possible
+   worlds leading up to a state.
+2. **Path‑word level** – equality only on event words, corresponding to str[3D[K
+structural
+   isomorphism in observable states.
+3. **Observable‑state level** – equality only on present observables.
+
+These correspond precisely to the stratified equivalence relations discusse[8D[K
+discussed in
+Section \(\ref{sec:equivalences}\): Spherepop identity lies between traject[7D[K
+trajectory
+equivalence and structural identity, preserving causal order while discardi[8D[K
+discarding all
+non‑causal geometry of possibility space.  
+
+---
+
+**In summary**, projected identity provides a rigorous way to define object[6D[K
+objecthood in the
+Spherepop framework as an equivalence class under the history projection \([2D[K
+\(\Pi_{\mathrm{hist}}\).  It captures both the irreversibility of time (no [K
+non‑trivial isomorphisms) and the informational loss inherent in irreversib[10D[K
+irreversible processes.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \begin{proof}
 Suppose for contradiction that $G$ contains a directed cycle

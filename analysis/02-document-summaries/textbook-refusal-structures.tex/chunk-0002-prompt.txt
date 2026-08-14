@@ -1,15 +1,148 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 6 of a document called
+"textbook-refusal-structures.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Compilation as Graph Rewriting**
 
-TEXT
-====
+The idea behind Spherepop’s view of compilation is that programs are fundam[6D[K
+fundamentally *composition graphs* rather than linear text.  In this pictur[6D[K
+picture:
+
+* **Programs = Composition Graphs (G = (N,E))**  
+  A graph consists of a set of nodes \(N\) and edges \(E\) that represent d[1D[K
+dependencies (“who calls who, what flows where”).  Variable names, formatti[8D[K
+formatting, and syntactic sugar fade away; only the *structure* matters.
+
+* **Compilation = Sequence of Graph Rewrites**  
+  The compiler applies a finite sequence of rewrite operators \(\{R_1,\dots[13D[K
+\(\{R_1,\dots,R_k\}\) that transform one graph into another:
+
+  \[
+  G \;\Longrightarrow\; R_1(G) \;\Longrightarrow\; R_2(R_1(G)) \;\Longright[12D[K
+\;\Longrightarrow\; \cdots \;\Longrightarrow\; R_k\!\cdots\!R_1(G).
+  \]
+
+  Each rewrite is a *graph substitution* – it replaces a sub‑graph with ano[3D[K
+another while preserving the overall connectivity.
+
+* **Correctness = Observational Equivalence**  
+  A rewrite \(R\) is operationally correct only if the set of observable hi[2D[K
+histories (the actual computation performed) is unchanged:
+
+  \[
+  \mathcal H(R(G))\cong\mathcal H(G),
+  \]
+
+  where \(\cong\) denotes observational equivalence (deterministic output, [K
+identical distributions for probabilistic cases, etc.).
+
+---
+
+### Key Rewrite Operations
+
+| Operation | Formal Description | Intuitive Meaning |
+|-----------|--------------------|-------------------|
+| **Inlining** | If node \(f\) calls subgraph \(G_f\), replace the call edg[3D[K
+edge with a copy of \(G_f\).  \(\;C[f] \rightarrow C[G_f]\) | “Copy‑and‑pas[13D[K
+“Copy‑and‑paste” the called function’s code into its caller. |
+| **Dead Graph Elimination** | Remove any node not reachable from an output[6D[K
+output vertex via reverse dependency edges: \(\operatorname{Reach}(G)\) are[3D[K
+are kept, others discarded. | Discard unreachable computations (dead code).[6D[K
+code). |
+| **Constant Propagation** | When a subgraph receives only constant inputs,[7D[K
+inputs, evaluate its result at compile time and replace it with the constan[7D[K
+constant node itself.  \(f(c_1,\dots,c_n) \rightarrow c\). | Collapse pure [K
+calculations into constants. |
+| **Common Subgraph Elimination (CSE)** | If two regions compute the same i[1D[K
+isomorphic subgraph \(S\), merge them: two copies of \(S\) become a single [K
+shared node, connected from all consumers to its output.  Two copies → one [K
+shared node. | Remove duplicate work – classic “common subexpression elimin[6D[K
+elimination”. |
+| **Partial Evaluation / Specialization** | Treat certain inputs as constan[7D[K
+constants and pre‑evaluate the surrounding graph for those values.  Equival[7D[K
+Equivalent to running a specific rewrite of the input pattern. | Turn gener[5D[K
+generic code into specialized, faster versions. |
+
+---
+
+### Why This View Simplifies Compilation
+
+1. **Unified Language** – All familiar optimizations (inlining, constant fo[2D[K
+folding, CSE, dead‑code removal) become *specific instances* of applying gr[2D[K
+graph substitution rules.
+
+2. **No Hidden Semantics** – The compiler no longer needs to remember “why”[5D[K
+“why” a rule works; it only needs the guarantee that the operational behavi[6D[K
+behavior is preserved.
+
+3. **Cross‑Domain Translation** – Because compilation is just repeated grap[4D[K
+graph rewriting, translating between paradigms (Boolean circuits → arithmet[8D[K
+arithmetic circuits → GPU kernels) reduces to finding compatible operator l[1D[K
+libraries—essentially *graph homomorphisms*.
+
+4. **Backward Compatibility with Existing Tools** – Since intermediate repr[4D[K
+representations are still graphs, we can still talk about ASTs, SSA forms, [K
+control‑flow graphs, etc., as just different coordinate systems on the same[4D[K
+same composition graph.
+
+---
+
+### Compilation as Progressive Refinement
+
+Instead of a linear pipeline (lexical → parse → optimize → generate), compi[5D[K
+compilation is seen as *progressively simplifying* the graph:
+
+1. **Parser Output** – Very close to source syntax; high level.
+2. **Optimizer Output** – Fewer branches, fewer redundant computations, con[3D[K
+constant propagation applied everywhere possible.
+3. **Backend Output** – Optimized for the target hardware (e.g., vector ins[3D[K
+instructions on a GPU), but still describes the same abstract computation.
+
+Each stage is simply another graph transformation that *preserves* observab[8D[K
+observable behavior while making the structure more efficient for execution[9D[K
+execution.
+
+---
+
+### Bottom Line
+
+Spherepop’s reformulation of compilation tells us:
+
+> **Compilers are fundamentally graph rewriting systems.**  
+> The semantics of a program live in its composition graph; optimizations a[1D[K
+are just systematic ways to rewrite parts of that graph without changing wh[2D[K
+what it does—only how efficiently it can be executed on the chosen substrat[8D[K
+substrate.
+
+This perspective aligns with modern ideas about *semantic compilation* and [K
+makes many formerly “specialized” optimization techniques appear as natural[7D[K
+natural consequences of the underlying graph structure.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 The distinction between logical systems therefore migrates from the execution engine to the operator library.
 

@@ -1,15 +1,155 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 6 of 22 of a document called
+"textbook-the_ecology_of_distinctions.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Admissibility Manifold – Summary**
 
-TEXT
-====
+The *admissibility manifold* $\adm(x,t)$ is a subset of the reachability se[2D[K
+set defined for a reachable state \(y\) at time \(t\):
+
+\[
+\adm(x,t) \;=\;
+\overline{\{
+    y \in \reach(x,t_0,t)
+      : F(y,t,\tau) \ge \alpha \, V_R(x,t_0,t)
+   \}},
+\]
+
+where  
+
+* **Future Reachability Function**  
+  \(F(y,t,\tau)=V_R(y,t,t+\tau)\) is the volume of states reachable from \([7D[K
+from \(y\) over an additional interval \(\tau>0\).
+
+* **Admissibility Threshold**  
+  For a given fraction \(\alpha\in(0,1)\) and horizon \(\tau>0\), a state \[1D[K
+\(y\) is \((\alpha,\tau)\)-admissible if its future reachability retains at[2D[K
+at least that fraction of the original reachable volume.
+
+Thus $\adm(x,t)$ consists of all states from which the system can still exp[3D[K
+explore a substantial portion of its future possibility space, i.e., those [K
+that are *future‑open* rather than extractive.  
+
+---
+
+### Key Theorems and Implications
+
+**Admissibility Existence Theorem** (continuous dynamics)
+
+> If \((X,\Granite)\) is a compact dynamical system with continuous \(F(y,t[7D[K
+\(F(y,t,\tau)\) for all times \(t\) and horizon lengths \(\tau\), then when[4D[K
+whenever the reachability set \(\reach(x,t_0,t)\) is non‑empty and its reac[4D[K
+reachable volume \(V_R(x,t_0,t)>0\), there exists at least one \((\alpha,\t[12D[K
+\((\alpha,\tau)\)-admissible state in \(\adm(x,t)\).
+
+*Proof Sketch*: By continuity of \(F\) on the compact set \(\reach(x,t)\), [K
+a maximum value \(V^*=F(y^*,t,\tau)\) is attained. Since \(V_R>0\), we can [K
+choose any \(\alpha< V^*/V_R\) to guarantee existence (the manifold need no[2D[K
+not be unique).  
+
+**Projection‑Admissibility Gap Theorem**
+
+This theorem quantifies how much information a simple feasibility test lose[4D[K
+loses by ignoring the admissibility criterion:
+
+1. **Gap Measure**:  
+   For a reachable state \(y\), let \(\Delta(y) = V_R(y,t,\tau) - F(y^*,t,\[9D[K
+F(y^*,t,\tau)\) where \(F(y^*,t,\tau)\) is the future volume of the *closes[7D[K
+*closest* admissible point \(y^*\). The cumulative gap over all trajectorie[11D[K
+trajectories in \(\reach(x,t)\) is  
+   \[
+   G = \sup_{\{y_i\}\subset\reach(x,t)}\sum_i \Delta(y_i).
+   \]
+
+2. **Interpretation**:  
+   States that satisfy only the feasibility condition (i.e., belong to \(\r[4D[K
+\(\reach\) but not to \(\adm\)) contribute significantly to \(G\). These ar[2D[K
+are “extractive” states—reaching them reduces future reachable volume below[5D[K
+below the threshold \(\alpha\).
+
+**Beyond Continuation**
+
+Continuity of existence does **not** imply healthy persistence. A system ca[2D[K
+can survive indefinitely along a trajectory that steadily narrows its admis[5D[K
+admissible future, eventually reaching a final state from which almost no f[1D[K
+further reachability exists. Hence, *admissibility* is not merely “survival[9D[K
+“survival” but a criterion for preserving substantial future possibility.
+
+---
+
+### Consequences & Applications
+
+1. **Decision Making**:  
+   When evaluating actions (or trajectories), preferring states that lie on[2D[K
+on the admissibility manifold respects long‑term structural constraints rat[3D[K
+rather than short‑term gains alone.
+
+2. **Robustness Design**:  
+   The threshold \(\alpha\) can be tuned to balance immediate utility with [K
+future robustness—high \(\alpha\) forces preservation of large reachable vo[2D[K
+volumes, low \(\alpha\) allows more extractive (short‑run) options but at a[1D[K
+a measurable cost in lost future flexibility.
+
+3. **Strategic Gaps**:  
+   The Projection‑Admissibility Gap provides a quantitative measure of what[4D[K
+what is sacrificed by ignoring admissibility, enabling transparent trade‑of[8D[K
+trade‑off analysis between present utility and preserved future reachabilit[11D[K
+reachability.
+
+---
+
+### Visual Representation
+
+Figure 14.1 (not reproduced here) illustrates the relationship:
+
+* **Reachable Set** (teal) includes all states that can be reached from \(x[3D[K
+\(x\) in time interval \([t_0,t]\).  
+* **Admissibility Manifold** (gold) is a proper subset—states inside retain[6D[K
+retain enough future volume to meet the threshold.  
+* **Extractive States** lie outside but still reachable; reaching them coll[4D[K
+collapses future possibility below \(\alpha\).
+
+---
+
+### Closing Remarks
+
+The admissibility manifold formalizes a notion of *future‑openness* that is[2D[K
+is independent of any agent’s preferences. It provides:
+
+- A rigorous existence condition (Admissibility Existence Theorem).  
+- A quantitative measure of feasibility loss (Projection‑Admissibility Gap [K
+Theorem).  
+
+These tools are foundational for later chapters on geometry and dynamics, w[1D[K
+where curvature, topology, and invariant measures build upon this admissibi[9D[K
+admissibility framework to derive preservation criteria as strategic conclu[6D[K
+conclusions rather than arbitrary value judgments.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \emph{Convergence.} Holling's distinction between engineering
 resilience --- return time to a single equilibrium --- and

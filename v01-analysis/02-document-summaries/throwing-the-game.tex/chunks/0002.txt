@@ -1,0 +1,386 @@
+
+Let $o_{1:t}$ denote observations up to time $t$, and let $s_t$ denote latent
+states posited by a generative model. In variational form, free energy can be
+written schematically as:
+\[
+F[q] \;=\; \mathbb{E}_{q(s_t)}[-\log p(o_{1:t}, s_t)] \;+\; \mathbb{E}_{q(s_t)}[\log q(s_t)]
+\;=\; D_{\mathrm{KL}}\!\bigl(q(s_t)\,\|\,p(s_t\mid o_{1:t})\bigr)\;-\;\log p(o_{1:t}),
+\]
+so minimizing $F$ simultaneously tightens the approximate posterior $q$ to the
+true posterior and (indirectly) increases evidence for the model.
+Active inference extends this logic to action by selecting policies that are
+expected to minimize future free energy \cite{friston2010freeenergy,clark2016surfing}.
+
+Two structural features matter for our purposes.
+
+First, free-energy minimization encourages \emph{error correction}: when the
+agent encounters divergence between prediction and sensation, it can reduce $F$
+either by updating beliefs (perception) or by acting to make sensations conform
+to predictions (action). Both moves tend to preserve optionality, because the
+dominant imperative is to remain within regimes of low expected surprise.
+
+Second, policy selection is usually formulated over a fixed policy class. Even
+when ``preferences'' are included (e.g.\ via prior preferences over outcomes),
+the agent’s optimization remains an optimization over admissible trajectories.
+The action menu remains, in principle, intact.
+
+Spherepop refusal, by contrast, is not primarily an optimization over
+trajectories. It is an operation that changes the space of trajectories itself.
+
+
+Spherepop Constraint as an Inadmissibility Prior
+
+
+We can express Spherepop events inside an active inference formalism by treating
+them not as reward terms but as \emph{inadmissibility priors}---hard constraints
+that assign zero probability to classes of trajectories.
+
+Let $\tau$ range over future trajectories (action-observation sequences) and let
+$p(\tau)$ denote the agent’s prior over trajectories induced by its generative
+model and policy. A Spherepop refusal of action-type $\alpha$ corresponds to a
+constraint $C_\alpha$ such that:
+\[
+p(\tau \mid C_\alpha) \propto p(\tau)\,\mathbf{1}\{\tau \text{ does not begin with }\alpha\}.
+\]
+Equivalently, it is a prior that sets:
+\[
+p(\tau)=0 \quad \text{for all } \tau \text{ in the refused class}.
+\]
+
+This representation clarifies the conceptual difference from preference change.
+Ordinary preference change modifies the relative weight of trajectories; refusal
+sets an entire region of trajectory-space to measure zero. This is not a
+``soft'' preference encoded as a utility gradient but a topological deletion.
+
+In active inference language, refusal is therefore not well-modeled as
+introducing a new term in the expected free energy objective. It is better
+modeled as changing the support of the distribution over trajectories.
+
+
+Free Energy vs.\ World-Binding: A Structural Tension
+
+
+Once refusal is expressed as a support restriction, an immediate tension with
+free-energy minimization emerges. If refusal deletes trajectories that are
+instrumentally powerful or prediction-confirming, then, relative to the
+pre-refusal model, it may \emph{increase} expected free energy. In the DARYL
+case, maximal play yields predictable outcomes and high control; refusing it
+introduces uncertainty and potential error.
+
+Thus, refusal appears as a deliberate willingness to incur predictive cost for
+the sake of social world-stability. This matches the paper’s earlier
+information-theoretic characterization: refusal is an intentional KL ``spike''
+relative to the prior trajectory distribution, preserved as constraint rather
+than resolved as noise.
+
+The important point is that this does not refute active inference. It clarifies
+where the burden shifts. If one wants refusal to be compatible with free-energy
+minimization, one must represent the social invariant (e.g.\ preserving
+relational roles) \emph{inside the generative model} such that the refusal
+reduces free energy in an expanded model class. Put bluntly: refusal can be free
+energy minimizing only if the world-model contains the right notion of
+worldhood.
+
+
+Refusal as Model-Expansion Rather Than Outcome-Preference
+
+
+This suggests a useful diagnostic distinction.
+
+\begin{remark}
+If refusal is modeled merely as outcome-preference (a soft prior favoring certain
+sensory states), then it becomes strategy-stealable and revision-friendly: it is
+just another tradeoff. If refusal is modeled as world-binding (a structural
+constraint on admissible trajectories), then it resists revision, becomes
+publicly legible, and can underwrite trust.
+\end{remark}
+
+Active inference can therefore accommodate refusal only by treating it as
+structural: a modification of the model’s admissibility structure rather than
+a preference reweighting within a fixed admissibility structure.
+
+
+Stabilization as a Free-Energy Fixed Point
+
+
+We can now connect the Spherepop halting criterion to free-energy dynamics.
+
+Let $\mathcal{T}$ be the set of admissible Spherepop transformations (Pop, Bind,
+Refuse, Collapse), and let $\sim_C$ be the Collapse equivalence relation.
+Recall that stabilization at history $h$ was defined by:
+\[
+[h]_C = [T(h)]_C \quad \text{for all } T\in \mathcal{T}.
+\]
+
+In active inference terms, a stabilized history corresponds to a regime in which
+available transformations no longer produce distinguishable predictive
+consequences. Put differently, further interventions cannot improve the match
+between generative model and admissible futures in any world-relevant way; the
+system has reached a fixed point \emph{modulo Collapse}.
+
+This resembles a variational fixed point: updates that would ordinarily reduce
+free energy become either (i) redundant (they change only Collapse-irrelevant
+detail) or (ii) inadmissible (they violate refusal constraints). Stabilization is
+therefore interpretable as convergence not merely of beliefs but of
+admissibility: the agent’s world has become invariant under its own event algebra.
+
+
+Autoregressive Agents as Anti-Stabilizers
+
+
+Autoregressive systems, by contrast, tend to behave like anti-stabilizers. Their
+core objective is continuation under predictive loss; consequently they can
+always search for another local reparameterization, another smoothing
+continuation, another hedge. Their learning dynamics are naturally aligned with
+minimizing local surprise, not with enforcing hard deletions of trajectory
+support. Even when they emulate refusal, the emulation typically lives in the
+weights of a soft distribution, not in a support restriction.
+
+In this sense, Spherepop refusal is an architectural commitment to non-Markovian
+constraint accumulation, whereas autoregressive cognition is an architectural
+commitment to indefinite extensibility.
+
+
+A Synthesis: Refusal as Active Inference Over Social Invariants
+
+
+A constructive way to integrate these perspectives is to treat refusal as active
+inference over \emph{social invariants}. If an agent’s generative model includes
+variables encoding role stability, trust, and mutual recognition, then maximal
+performance in the DARYL case may increase free energy by destabilizing those
+latent invariants. Under such a model, refusing maximal performance becomes the
+policy that minimizes expected free energy in the extended latent space.
+
+This yields a precise prediction: systems that can genuinely refuse must possess
+generative models whose state variables include not only physical and pragmatic
+regularities but also historically accumulated constraints with social semantics.
+They must represent, in some form, the difference between being able to do
+something and being allowed to do it by their own past.
+
+Spherepop can be read as the algebraic skeleton of this requirement.
+
+
+
+Objections and Replies
+
+\label{sec:obj}
+
+
+
+Objection: This is just lexicographic preferences
+
+
+One might argue that refusal is simply lexicographic ordering: the agent places a
+constraint (e.g.\ ``do not harm'') above all other objectives, and then maximizes
+utility subject to that constraint. On this view, nothing essentially new is
+introduced.
+
+Reply: lexicographic preferences still operate on a fixed option set. They rank
+options; they do not delete them. In Spherepop, refusal is deletion. The
+difference is not verbal. It matters for public legibility and for the
+persistence of exclusion under counterfactual changes. A lexicographic preference
+can, in principle, be revised without structural consequence. A refusal is a
+history event: revising it requires a second event (e.g.\ collapse or revocation)
+that itself has a cost and a public meaning.
+
+
+Objection: You are anthropomorphizing computation
+
+
+The worry is that refusal is a moralized human interpretation of ordinary
+policy selection.
+
+Reply: the paper does not require that refusal be conscious or moral. It requires
+only a structural distinction: actions that remain physically available and
+instrumentally valuable are rendered inadmissible by an irreversible operator.
+This is a formal property of future spaces. Whether such operators can be
+implemented computationally is discussed below; the conceptual point is that the
+structure is not captured by standard optimization on fixed menus.
+
+
+Objection: This requires libertarian free will
+
+
+Reply: nothing here implies uncaused choice. Spherepop events can be fully
+causally determined. The claim is about irreversibility, not metaphysical
+libertarianism. A refusal can be deterministic and still be a real closure
+operator with downstream causal consequences.
+
+
+Objection: Refusal is epiphenomenal
+
+
+Reply: refusal does causal work precisely because it changes the topology of
+futures. In repeated social settings, a publicly legible refusal changes others’
+expectations and thereby changes equilibria. In the DARYL case, the refusal
+restores roles and uncertainty; the social field changes. This is not merely a
+redescription of outcomes; it is a change in what others treat as live.
+
+
+
+Open Problems
+
+\label{sec:open}
+
+
+The framework developed here is intentionally minimal. It therefore raises sharp
+open problems.
+
+
+Detection and ``Turing tests'' for refusal
+
+
+Can genuine refusal be behaviorally distinguished from sophisticated simulation?
+In general, if an agent can perfectly mimic the outward behavior of refusal while
+retaining internal optionality, then purely behavioral tests may fail. The
+natural direction is to seek \emph{counterfactual invariants}: does the agent’s
+inadmissibility persist under distribution shifts that would make the refused
+action locally attractive? This suggests a family of stress tests for AI systems:
+shift incentives and observe whether exclusions persist.
+
+
+Composition of refusals
+
+
+If an agent refuses $\alpha$ at $t_1$ and refuses $\beta$ at $t_2$, what is the
+algebra of the combined constraint? In Spherepop, this is operator composition:
+\[
+\Future_2 = \llbracket \mathbf{Refuse}(\beta)\rrbracket(
+\llbracket \mathbf{Refuse}(\alpha)\rrbracket(\Future_0)).
+\]
+But deeper questions remain about commutativity, interference, and collapse:
+does a later collapse partially revoke earlier refusals? Under what formal
+conditions do refusals form a lattice of closures?
+
+
+Degrees and revocation
+
+
+Is refusal binary? Spherepop, as presented, treats $\mathbf{Refuse}(\alpha)$ as
+deleting all $\alpha$-initiating futures. But one can define partial refusals as
+probability-mass deletions (i.e.\ apply $\mathbf{Pop}$ to a graded predicate) or
+as bounded refusals (delete $\alpha$ for a time interval). Revocation then becomes
+a further event, not a free change of mind. A rigorous account needs a cost model
+for revocation: what is the penalty in trust, identity, or coordination?
+
+
+Minimal architectures for refusal
+
+
+What computational substrate supports genuine refusal? One hypothesis is that an
+agent must have a mechanism that can (i) modify its own policy class, not just
+select within it, and (ii) protect that modification from later local
+re-optimization. This suggests architectural ingredients such as irrevocable
+policy editing, cryptographic commitment, or physically enforced action
+disabling. Whether refusal can be realized without suffering is an open ethical
+question: must commitments be backed by negative feedback, or can they be backed
+by structural locks?
+
+
+Refusal and consciousness
+
+
+Finally, what is the relationship between refusal and consciousness? The paper
+does not assume that refusal requires consciousness, but it is plausible that
+first-person experience is the natural site where ``closure'' is lived as such.
+If so, refusal may be a bridge concept linking agency, responsibility, and
+phenomenology. Clarifying this would require engagement with philosophy of mind
+and empirical work on self-control and commitment.
+
+
+
+Conclusion
+
+
+
+Generative models reveal a genuine principle: sequences contain enough structure
+for coherent generation. Yet coherence is not commitment, and prediction is not
+participation.
+
+The paper’s central claim has been that refusal is a structurally distinct kind
+of cognitive act: an irreversible operation that eliminates admissible futures
+and binds an agent to a history. Spherepop formalizes this distinction by
+treating refusal as deletion in a branching future space, rather than as a mere
+ranking of fixed options. This allows us to explain why refusal is publicly
+legible as reliability, why it can shift equilibria, and why it is difficult to
+``strategy steal'' without transformation.
+
+The survival of value does not require winning every competition. It requires
+agents and institutions capable of irreversible exclusion—closures that preserve
+relationships, stabilize cooperation, and prevent optimization from dissolving
+the conditions of meaning.
+
+Refusal is not a defect in intelligence. It is one of the events by which
+intelligence enters a world.
+
+
+
+
+
+\begin{thebibliography}{99}
+
+\bibitem{barenholtz2025sequences}
+Elan Barenholtz.
+\newblock \emph{Sequences Are All You Need: How Generative Modeling Drove the Evolution of Memory and Cognition}.
+\newblock Substack, Dec 18, 2025.
+\newblock \url{https://elanbarenholtz.substack.com/p/sequences-are-all-you-need}
+
+\bibitem{carlsmith2025goodness}
+Joe Carlsmith.
+\newblock \emph{Video and transcript of talk on ``Can goodness compete?''}
+\newblock Substack, 2025.
+\newblock \url{https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can}
+
+\bibitem{schelling1960strategy}
+Thomas C. Schelling.
+\newblock \emph{The Strategy of Conflict}.
+\newblock Harvard University Press, 1960.
+
+\bibitem{bratman1987intention}
+Michael E. Bratman.
+\newblock \emph{Intention, Plans, and Practical Reason}.
+\newblock Harvard University Press, 1987.
+
+\bibitem{anscombe1957intention}
+G. E. M. Anscombe.
+\newblock \emph{Intention}.
+\newblock Harvard University Press, 1957.
+
+\bibitem{davidson1963actions}
+Donald Davidson.
+\newblock Actions, reasons, and causes.
+\newblock \emph{The Journal of Philosophy}, 60(23):685--700, 1963.
+
+\bibitem{friston2010freeenergy}
+Karl Friston.
+\newblock The free-energy principle: a unified brain theory?
+\newblock \emph{Nature Reviews Neuroscience}, 11:127--138, 2010.
+
+\bibitem{clark2016surfing}
+Andy Clark.
+\newblock \emph{Surfing Uncertainty: Prediction, Action, and the Embodied Mind}.
+\newblock Oxford University Press, 2016.
+
+\bibitem{bostrom2014superintelligence}
+Nick Bostrom.
+\newblock \emph{Superintelligence: Paths, Dangers, Strategies}.
+\newblock Oxford University Press, 2014.
+
+\bibitem{russell2019human}
+Stuart Russell.
+\newblock \emph{Human Compatible}.
+\newblock Viking, 2019.
+
+\bibitem{savage1954foundations}
+Leonard J. Savage.
+\newblock \emph{The Foundations of Statistics}.
+\newblock Wiley, 1954.
+
+\bibitem{jeffrey1983logic}
+Richard Jeffrey.
+\newblock \emph{The Logic of Decision}.
+\newblock University of Chicago Press, 1983.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,173 +1,200 @@
-**Version 0.1 – DDR Documentation Overview**
+**Theoretical Synthesis: docs-design_decisions.md**
 
 ---
 
-### What this file is
+### 1. Thesis  
+The document codifies design‑decision rules that shape the technical archit[6D[K
+architecture of the project around three guiding principles:
 
-* **Purpose:** A living catalogue of every “Decision‑Drift Record” (DDR) th[2D[K
-that has been created for the *Augmented POP* project.
-* **Audience:** Developers, reviewers, and future maintainers who need to u[1D[K
-understand why a particular design choice was made, its consequences, and w[1D[K
-where it is documented in code or documentation.
-
----
-
-### How to read
-
-1. **Table of Contents (below)** – Each DDR entry follows the same template[8D[K
-template; you can jump straight to any decision by using the table.
-2. **Status & Theory Status** – Shows whether a DDR has been finalised (`Ac[4D[K
-(`Accepted`), needs review (`Proposed`/`Review Criteria`), or is obsolete ([1D[K
-(`Superseded`, `Rejected`).
-3. **Decision Context** – A short paragraph explains *why* the decision was[3D[K
-was required and what alternatives were considered.
-4. **Consequences & Risks** – Highlights benefits, trade‑offs, and any open[4D[K
-open warnings that must be monitored (e.g., “lexicographic choice is arbitr[6D[K
-arbitrary” or “hardware variance may hide regressions”).
-5. **Documentation Links** – Points to the exact place in source files (`py[4D[K
-(`pyproject.toml`, `.pre-commit-config.yaml`, test suites, etc.) where the [K
-decision materialises.
+| Principle | Manifestation |
+|-----------|----------------|
+| **Hardware Independence (OVERSOUL §9)** | Performance benchmarks are expr[4D[K
+expressed as *structural scaling* functions rather than raw wall‑clock time[4D[K
+time. This isolates algorithmic complexity from machine‑specific clock spee[4D[K
+speeds, enabling reproducible performance analysis across diverse hardware [K
+generations. |
+| **Speed of Local Development** | MyPy static type checking is limited to [K
+the CI pipeline; local pre‑commit hooks run only on formatting and syntax c[1D[K
+checks. This preserves rapid iteration cycles while preserving safety guara[5D[K
+guarantees for global merges. |
+| **Future‑Ready Compatibility** | Both Python 3.12 and 3.13 are required a[1D[K
+as supported interpreter versions, ensuring access to modern language featu[5D[K
+features (e.g., native union types) without sacrificing broader community s[1D[K
+support. |
 
 ---
 
-### Table of Contents
+### 2. Primitives / Definitions  
 
-| # | DDR | Title (short) | Date Created | Status | Theory Status |
-|---|-----|---------------|--------------|--------|----------------|
-| 001 | **DDR-001** | POP identity‑on‑content | 2024‑03‑01 | Accepted | → C[1D[K
-Choice (Q1b) |
-| 002 | **DDR-002** | Label uniqueness | 2024‑04‑15 | Accepted | → Choice ([1D[K
-(Q8) |
-| 003 | **DDR-003** | BIND existential quotients | 2024‑05‑22 | Accepted (P[2D[K
-(PROV) | → Provisional (Q3) |
-| 004 | **DDR-004** | COLLAPSE composition rejected | 2024‑06‑10 | Accepted[8D[K
-Accepted (TEMP) | ? Open (Q2b) |
-| 005 | **DDR-005** | Quotient equality by members | 2024‑07‑08 | Accepted [K
-| ✓ Paper‑licensed |
-| 006 | **DDR-006** | Validation observational | 2024‑08‑12 | Accepted | ✓ [K
-OVERSOUL §7 |
-| 007 | **DDR-007** | Continuation is superset | 2024‑09‑05 | Accepted | ✓ [K
-Paper‑licensed (Q1a) |
-| 008 | **DDR-008** | Representative lexicographic | 2025‑01‑20 | Accepted [K
-| → Choice |
-| 009 | **DDR-009** | Benchmark structural variables | 2026‑08‑13 | Accepte[7D[K
-Accepted | OVERSOUL §9 |
-| 010 | **DDR-010** | Pre‑commit excludes mypy | 2026‑08‑11 | Accepted | In[2D[K
-Infrastructure choice |
-| 011 | **DDR-011** | Python 3.12 + 3.13 both required | 2026‑08‑11 | Accep[5D[K
-Accepted | Infrastructure choice |
+1. **Structural Scaling Function**  
+   \[
+   T(|h|,\;|O|,\;k,\;b)=\text{complexity derived from history length }|h|,\[6D[K
+}|h|,\\
+   \text{option‑space cardinality }|O|,\\
+   \text{observational horizon }k,\\
+   \text{branching factor }b.
+   \]  
+   - **\( |h| \)**: Length of the problem’s historical context.  
+   - **\( |O| \)**: Cardinality of all possible decisions/options.  
+   - **\( k \)**: Horizon over which observability is required (e.g., numbe[5D[K
+number of steps to look ahead).  
+   - **\( b \)**: Maximum branching per decision node.
 
-*(The table will be expanded as new DDRs are created; each entry follows th[2D[K
-the same format shown below.)*
+2. **Pre‑commit Hook Policy**  
+   - *Local phase*: Enforces basic linting, formatting (`ruff`, `black`).  [K
+
+   - *CI phase*: Executes full type checking with MyPy (ensuring no regress[7D[K
+regressions survive the whole pipeline).
+
+3. **Python Version Policy**  
+   - Supported interpreters: Python ≥ 3.12 (including 3.13).  
+   - Rationale: Aligns with August‑2026 release window, leverages new langu[5D[K
+language features introduced in Python 3.10+, and future‑proofs against dep[3D[K
+deprecation warnings.
 
 ---
 
-### Example DDR Template (filled for reference)
+### 3. Formalism  
 
-```markdown
-## DDR-NNN: <Title>
+The formal description of the benchmarking metric is:
 
-**Date**: YYYY-MM-DD  
-**Status**: Proposed / Accepted / Superseded / Rejected  
-**Theory Status**: ✓ Paper‑licensed / → Choice (QX) / ? Open (QY)  
+\[
+T(|h|,\;|O|,\;k,\;b) = f_{\text{alg}}(h,O,k,b)
+\]
 
-**Context**:
-<One‑sentence description of the problem that forced this decision, plus an[2D[K
-any dependencies or constraints at the time.>
+where \(f_{\text{alg}}\) captures algorithmic complexity (e.g., Big‑O notat[5D[K
+notation adjusted by empirical scaling factors observed in CI runs).  
 
-**Decision**:
-<Explicit choice made; include rationale and why alternatives were rejected[8D[K
-rejected (if applicable).>
+The decision to use **structural scaling** over raw wall‑clock time is form[4D[K
+formalized as:
 
-**Rationale**:
-<Elaborate on the reasoning behind the choice, referencing relevant theory [K
-sections, trade‑offs, and any open questions that remain.
+- **Benchmark Metric**:  
+  \[
+  B = T(|h|,\;|O|,\;k,\;b) \quad\text{instead of}\quad C_{\text{wall}}.
+  \]  
 
-**Alternatives Considered**:
-1. **Alternative A**: Description …
-   - *Why rejected?* – List of reasons (e.g., performance impact, backward [K
-compatibility).
-2. **Alternative B**: Description …
-   - *Why deferred or left for later review?* – Explain the circumstance th[2D[K
-that made it unsuitable now.
+Thresholds (sanity checks) are defined per target problem size, e.g., for 1[1D[K
+10 000 options:
 
-**Consequences**:
-- ✓ Benefit 1 (e.g., “Stable representative selection”)
-- ✗ Risk / Trade‑off (e.g., “Lexicographic choice is arbitrary, could chang[5D[K
-change”)
-- ⚠ Warning / Open Issue (e.g., “Hardware variance may hide regressions – n[1D[K
-needs baseline tracking in Phase A”)
-
-**Documentation**:
-- **Source**: `<file path or module>` where the decision is implemented.
-- **Test Coverage**: `<test suite name and location>` that verifies this im[2D[K
-implementation.
-
-**Review Criteria** (if provisional):
-<What future events would trigger a re‑evaluation? e.g., “If Python 3.14 be[2D[K
-becomes stable, consider updating to support it.”>
-
-```
+- **Acceptable latency**: \(3–5\) ms.  
+- For 100 history operations: \(2–3\) ms.
 
 ---
 
-### How to add a new DDR
+### 4. Mechanisms  
 
-1. **Identify the need** – Does the decision affect more than one module or[2D[K
-or require coordination across tests?
-2. **Write the entry** using the template above; fill in each field.
-3. **Update the version header** (this file) with the new number and date o[1D[K
-of creation.
-4. **Link it** from any relevant section of the project documentation (e.g.[5D[K
-(e.g., README, CONTRIBUTING.md).
+1. **Structural Scaling Measurement**  
+   - Implemented in `tests/test_performance.py`.  
+   - Stores both raw wall‑clock time and the derived scaling value, allowin[7D[K
+allowing regression detection independent of hardware speed.
 
----
+2. **Pre‑commit Hook Enforcement**  
+   - Defined via `.pre-commit-config.yaml` with a comment explaining MyPy’s[6D[K
+MyPy’s exclusion from local runs.  
+   - CI workflow (`lint.yml`) triggers type checking after all formatting c[1D[K
+checks pass:
 
-### Maintenance Guidelines
+   ```yaml
+   name: Type check with mypy
+   group: ‘Pre-commit verification’
+   run: make type-check
+   ```
 
-| Action | Who | When |
-|--------|-----|------|
-| **Add a new DDR** | Lead architect or designated owner | Only after thoro[5D[K
-thorough review by at least two senior engineers. |
-| **Change status** (`Proposed → Accepted`, etc.) | Owner of the decision |[1D[K
-| After consensus in a design‑review meeting. |
-| **Supersede/Replace** | Owner of later DDR | When a newer, better choice [K
-emerges (e.g., moving from 3.12+ to also support Python 3.14). |
-| **Update documentation links** | Maintainer of linked files (`pyproject.t[13D[K
-(`pyproject.toml`, `.github/workflows/…`) | Whenever the code path changes;[8D[K
-changes; keep URLs current. |
-| **Add Review Criteria** | Owner (if provisional) | If the decision’s succ[4D[K
-success depends on future events or external standards. |
+3. **Python Version Matrix**  
+   - `pyproject.toml` enforces required interpreter versions:
 
----
+   ```toml
+   [project]
+   requires-python = ">=3.12"
+   ```
 
-### Quick Reference for Common Statuses
-
-| Status | Meaning |
-|--------|---------|
-| **Accepted** | Decision is final, implementation exists, and it will not [K
-be changed unless a new DDR supersedes it. |
-| **Proposed** | Decision drafted but still under consideration; awaiting r[1D[K
-review. |
-| **Superseded** | Replaced by a newer DDR (e.g., moving from Python 3.12 o[1D[K
-only to 3.12+3.13). |
-| **Rejected** | Not adopted for the current project, possibly kept as hist[4D[K
-historical record. |
-| **→ Choice** | Indicates that this decision is still subject to later ref[3D[K
-refinement or replacement (often a provisional status). |
-| **? Open** | Decision remains open; further research required before comm[4D[K
-committing. |
+   - CI strategy uses matrix deployment for both Python 3.12 and 3.13, ensu[4D[K
+ensuring all tests run on each supported version.
 
 ---
 
-### Final Note
+### 5. Major Arguments  
 
-This document is *living* – every time a design choice changes, the corresp[7D[K
-corresponding DDR entry should be updated accordingly. Keeping it current e[1D[K
-ensures transparency for new contributors and provides a clear audit trail [K
-of why the Augmented POP system behaves as it does today.
+| Argument | Supporting Evidence |
+|----------|---------------------|
+| **Hardware Independence** (DDR‑009) | Over SOUL §9 mandates structural sc[2D[K
+scaling to avoid correlation with clock speed variations across hardware ge[2D[K
+generations. |
+| **Speed of Development vs Safety** (DDR‑010) | MyPy’s latency (~3–5 s per[3D[K
+per run) makes it impractical locally; early detection is reserved for CI w[1D[K
+where all checks are enforced, preserving rapid iteration cycles and develo[6D[K
+developer productivity. |
+| **Future Compatibility** (DDR‑011) | Python 3.13 introduces new safety fe[2D[K
+features and language enhancements that must be supported to prevent deprec[6D[K
+deprecation warnings later in the project lifecycle. |
+
+---
+
+### 6. Dependencies Between Concepts  
+
+- **Structural Scaling ↔ Benchmarking**: The choice of a scaling metric dir[3D[K
+directly impacts how performance regressions are identified; without it, be[2D[K
+benchmark results would be hardware‑biased.
+- **Pre‑commit Hooks ↔ MyPy Integration**: Enforcing type checks only in CI[2D[K
+CI ensures that local commits remain fast (no MyPy overhead) while guarante[8D[K
+guaranteeing global safety. This dependency is reflected in the hook config[6D[K
+configuration and CI workflow ordering.
+- **Python Version Policy ↔ Structural Scaling & Pre‑commit**: Supporting b[1D[K
+both Python 3.12/13 enables developers to run full test suites on their own[3D[K
+own machines, aligning with the hardware‑independent benchmarking approach.[9D[K
+approach.
+
+---
+
+### 7. Implications  
+
+1. **Technical Reproducibility** – All performance analyses become reproduc[8D[K
+reproducible across different compute environments because they are express[7D[K
+expressed in terms of structural variables.
+2. **Developer Experience** – Local workflow remains snappy; only catastrop[9D[K
+catastrophic type errors surface during CI, reducing friction for rapid pro[3D[K
+prototyping.
+3. **Maintenance & Future‑Readiness** – Supporting both 3.12 and 3.13 precl[5D[K
+precludes deprecation issues down the line, allowing the project to leverag[7D[K
+leverage language features introduced after August 2026.
+
+---
+
+### 8. Unresolved Problems  
+
+- **Threshold Calibration**: Determining optimal latency bounds for differe[7D[K
+different problem spaces (e.g., high‑dimensional option spaces) remains emp[3D[K
+empirical and may require additional benchmark data.
+- **CI Resource Consumption**: Running tests on both Python versions double[6D[K
+doubles CI build time; investigating parallelizable test suites could mitig[5D[K
+mitigate this cost without compromising coverage.
+
+---
+
+### 9. Internal Tensions  
+
+| Tension | Description |
+|---------|-------------|
+| **Speed vs Safety** (DDR‑010) | Balancing rapid local commits against the[3D[K
+the safety guarantees provided by MyPy creates a trade‑off between develope[8D[K
+developer ergonomics and code quality assurance. |
+| **Hardware Independence vs Resource Cost** (DDR‑009) | While hardware ind[3D[K
+independence is desirable, it incurs higher CI resource usage; future cost/[5D[K
+cost/benefit analysis may be needed if scaling metric introduces additional[10D[K
+additional overhead not justified by reproducibility gains. |
+
+---
+
+### 10. References  
+
+- Over SOUL §9 – Guiding principle for algorithmic complexity measurement.
+- DDR‑009 (Structural Scaling) – Detailed description of the benchmarking f[1D[K
+function and threshold definitions.
+- DDR‑010 (Pre‑commit Hooks) – Configuration and rationale for limiting MyP[3D[K
+MyPy to CI environment.
+- DDR‑011 (Python Version Policy) – Rationale for supporting Python 3.12+ b[1D[K
+based on language feature timeline.
 
 --- 
 
-**End of File**
-
+**End of Synthesis**

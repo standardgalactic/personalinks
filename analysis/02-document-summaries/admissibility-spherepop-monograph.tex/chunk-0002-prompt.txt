@@ -1,15 +1,141 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 11 of a document called
+"admissibility-spherepop-monograph.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Spherepop Overview**
 
-TEXT
-====
+Spherepop (Simplified Physical Evaluation of Recursive Operations with Prov[4D[K
+Provenance) is a formalism for reasoning about concurrent, order‑independen[16D[K
+order‑independent computations using geometric representations. Its core id[2D[K
+ideas are:
+
+* **Evaluation Regions (Bubbles)** – Each bubble \(B=(U,\partial U,\sigma,\[10D[K
+U,\sigma,\tau)\) defines a *local context* where evaluation events are admi[4D[K
+admissible.  
+  - **Pop Events** (\(\spop{B'}\)) resolve innermost bubbles.  
+  - **Bind Events** (\(\sbind{a<b}{B}\)) impose constraints on the bubble’s[8D[K
+bubble’s interior that affect later pops.  
+  - **Refuse Events** (\(\srefuse{B'}\)) record when a pop would be inadmis[7D[K
+inadmissible.
+
+* **Scope as Physical Boundary** – The boundary of a bubble is its scope: a[1D[K
+anything inside can be directly affected, while anything outside cannot (ex[3D[K
+(except via the pop result). This makes scope an *actual physical constrain[9D[K
+constraint* rather than just syntactic.
+
+* **Dependency Encoded by Nesting** – Spatial nesting of bubbles expresses [K
+linear dependency (a bubble nested within another depends on its parent bei[3D[K
+being evaluated first). No explicit topological‑sort step is needed; the pa[2D[K
+partial order \(\spop{B_1} \prec \spop{B_2}\) follows directly from hierarc[7D[K
+hierarchy.
+
+* **Refusal & Collapse** –  
+  - **Refuse (\(\srefuse{B'}\))** records that a reduction was blocked by a[1D[K
+admissibility conditions, not as failure but as justified deference.  
+  - **Collapse (\(\scollapse{q}\))** identifies equivalent histories under [K
+an equivalence relation \(\sim_q\) while preserving structural invariants, [K
+enabling generalization without loss of significance.
+
+* **Operators and Semantics** – The system’s primary semantic objects are *[1D[K
+*histories* (ordered sequences of admissible events) and *evaluation chains[6D[K
+chains* (subsequences consisting only of pop events). These capture the pro[3D[K
+provenance needed to reconstruct a terminal value from an initial expressio[9D[K
+expression, even though the final value discards most intermediate informat[8D[K
+information.
+
+---
+
+### Detailed Sections
+
+#### 1. Evaluation Region Definition
+- **Components**: interior \(U\), boundary \(\partial U\), surface style \([2D[K
+\(\sigma\) (what can be popped), and topological style \(\tau\) (which pop [K
+events are allowed).  
+- **Admissibility Condition**: An event is admissible if it satisfies const[5D[K
+constraints imposed by its bubble’s topology and any preceding bind/refuse [K
+operations.  
+
+#### 2. Scope as Physical Boundary
+- **Scope Rule**: A bind operation within a bubble restricts scope to the b[1D[K
+bubble’s interior \(U\); no effect can cross the boundary except via the po[2D[K
+pop result.  
+- **Consequence**: This mirrors the confluence property: different evaluati[8D[K
+evaluation orders produce identical terminal values because each bubble’s o[1D[K
+outcome depends solely on its own contents.
+
+#### 3. Dependency as Spatial Nesting
+- **Tree‑Structured Dependency**: If \(B_1\) is nested inside \(B_2\), eval[4D[K
+evaluating \(B_1\) must precede evaluating \(B_2\).  
+- **Limitation**: Only tree‑structured dependencies are captured; shared su[2D[K
+subexpressions require additional bind operations to model cyclic or non‑tr[6D[K
+non‑tree dependency.
+
+#### 4. Refusal, Collapse, and Admissibility
+- **Refuse (\(\srefuse{B'}\))**: Not a failure but documentation that the c[1D[K
+current constraints prevented the pop event from being executed legitimatel[11D[K
+legitimately.  
+- **Collapse (\(\scollapse{q}\))**: Groups histories into equivalence class[5D[K
+classes preserving structural invariants; it is akin to abstracting similar[7D[K
+similar evaluation paths without losing semantic distinctions.
+
+#### 5. Operators and Histories
+- **Evaluation Events**:
+  - \(\spop{B'}\): Pops an innermost bubble \(B'\).  
+  - \(\srefuse{B'}\): Records inadmissibility of a pop attempt on \(B'\).  [K
+
+  - \(\sbind{a<b}{B}\): Introduces constraints limiting the interior of \(B[3D[K
+\(B\) (e.g., variable scopes, type checks).  
+
+- **Evaluation History (\(\shist\))**: Finite ordered sequence of such even[4D[K
+events. The history encodes provenance and is used to define the action fun[3D[K
+functional \(S[\shist]\) and for collapse operations.
+
+---
+
+### Key Themes
+
+1. **Locality & Confluence** – Evaluation regions enforce locality, guarant[7D[K
+guaranteeing that different orders yield the same result (Spherepop analogu[7D[K
+analogue of confluence).  
+2. **Scope as Constraint Boundary** – Scope is a physical property (boundar[8D[K
+(boundary), not merely syntactic, making scope errors visible and error‑pro[9D[K
+error‑prone in diagrams.  
+3. **Dependency via Nesting** – Spatial nesting directly encodes dependency[10D[K
+dependency relations; only tree structures are naturally represented withou[6D[K
+without additional mechanisms for shared subexpressions.  
+4. **Refusal & Collapse as Positive Events** – Refuse records justified con[3D[K
+constraints; collapse groups equivalent histories while preserving semantic[8D[K
+semantic distinctions, enabling generalization.
+
+This structured approach allows Spherepop to manage concurrent evaluations [K
+and order independence purely through geometric representations of the comp[4D[K
+computation’s history and constraints.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \item[Collapse.] The formation of equivalence classes by identifying histories that preserve specified structural invariants under a chosen quotient map $\scollapse{q}$. Collapse is an operation on histories, not a primitive. Its output — an equivalence class of histories — is a derived object, not a foundational one.
 \end{description}

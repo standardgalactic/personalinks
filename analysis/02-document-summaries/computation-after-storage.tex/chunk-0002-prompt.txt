@@ -1,15 +1,126 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 2 of a document called
+"computation-after-storage.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+The document you’ve provided appears to be a formal academic or research pa[2D[K
+paper that discusses various concepts related to information theory, distri[6D[K
+distributed systems, semantic decision problems, and the limits of scalabil[8D[K
+scalability in semantic (or meaning‑preserving) computation. Below is an ov[2D[K
+overview of the main themes and components presented:
 
-TEXT
-====
+### Core Themes
+
+1. **Entropy-Bounded Navigation**:  
+   The corollary states that entropy-bounded navigation implies sustained l[1D[K
+local coherence over finite time. This suggests a connection between inform[6D[K
+information theory (entropy as a measure of uncertainty or disorder) and th[2D[K
+the maintainability of coherent semantic relationships within systems.
+
+2. **Semantic Decision Problems**:  
+   Defined as a tuple $(S, C, \mathcal{T})$ with a query $Q : S \to \{0,1\}[7D[K
+\{0,1\}$ that must preserve all constraints in $C$ under admissible transfo[7D[K
+transformations $\mathcal{T}$. This formalizes how decisions within semanti[7D[K
+semantic systems are evaluated while respecting certain constraints.
+
+3. **Semantic Consistency Problem**:  
+   Determines whether there exists a state $s^\ast$ such that it satisfies [K
+all constraints and is less refined than any given set of states. Essential[9D[K
+Essentially, it checks for the existence of a globally consistent semantic [K
+state.
+
+4. **Semantic Merge Decision Problem**:  
+   Decides if two states can be merged into a single state $s^\ast$ while s[1D[K
+satisfying all constraints. This involves assessing whether combining seman[5D[K
+semantic representations preserves consistency.
+
+5. **Theorems on NP-Hardness and Undecidability**:  
+   - The Semantic Consistency problem is proven NP-hard, indicating its com[3D[K
+computational complexity.
+   - The Semantic Merge decision problem is undecidable in general, suggest[7D[K
+suggesting that there may be no algorithmic solution for all cases of mergi[5D[K
+merging semantic states.
+
+6. **Local Consistency Radius**:  
+   Defined as the maximum depth within which constraints remain satisfiable[11D[K
+satisfiable, highlighting how local interactions affect global consistency.[12D[K
+consistency.
+
+7. **Entropy Cost Function**:  
+   Quantifies the cost of reconciling semantics in terms of entropy changes[7D[K
+changes during transformations, emphasizing the trade-off between computati[9D[K
+computational efficiency and information loss.
+
+8. **Superlinear Entropy Growth**:  
+   States that for systems with an interaction graph $G$, entropy cost grow[4D[K
+grows superlinearly relative to the size of the minimal separator of $G$. T[1D[K
+This implies increasing complexity as system interconnectivity grows.
+
+9. **Scalability Limit Corollary**:  
+   Concludes that no semantic system enforcing global consistency can scale[5D[K
+scale linearly in size, indicating inherent limits on scalability due to co[2D[K
+consistency requirements.
+
+10. **Semantic CAP Property**:  
+    Describes a set of four conditions (consistency, availability, partitio[8D[K
+partition tolerance, and constraint preservation) necessary for distributed[11D[K
+distributed semantic systems. This property encapsulates the trade-offs bet[3D[K
+between robustness and consistency.
+
+11. **Semantic CAP Impossibility Theorem**:  
+    Proves that no distributed semantic system can simultaneously satisfy a[1D[K
+all four CAP properties, highlighting fundamental limitations in achieving [K
+universal scalability without compromising some aspect of consistency or av[2D[K
+availability.
+
+12. **Semantic Scalability Regime Definition**:  
+    Introduces the concept that a system operates in a scalable regime if i[1D[K
+it relaxes at least one condition (global consistency or semantic preservat[9D[K
+preservation), suggesting that trade-offs are inherent to scalable systems.[8D[K
+systems.
+
+### Key Takeaways
+
+- The paper explores deep theoretical limits on how semantics can be mainta[6D[K
+maintained and scaled within distributed systems, drawing heavily from info[4D[K
+information theory and complexity analysis.
+- It underscores the tension between scalability and consistency, indicatin[9D[K
+indicating that either achieving full global coherence at a low cost or mai[3D[K
+maintaining availability under all conditions (as per CAP theorem) is unatt[5D[K
+unattainable without significant trade-offs.
+- The definitions and proofs presented provide a rigorous framework for und[3D[K
+understanding these limits, using concepts like entropy, semantic decision [K
+problems, and transformational constraints.
+
+This document seems to be part of an academic discourse on the theoretical [K
+foundations of distributed computing and information systems, particularly [K
+focusing on how semantics (meaning preservation) interacts with computation[11D[K
+computational scalability and efficiency.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \begin{proof}
 Constraint preservation follows by transitivity of $\vdash$. Entropy boundedness

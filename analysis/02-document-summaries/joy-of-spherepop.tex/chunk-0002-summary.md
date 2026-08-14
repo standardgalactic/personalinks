@@ -1,132 +1,112 @@
 **Abstract Syntax and Denotational Semantics**
 
-A Spherepop program (Π) is formally a finite ordered list of nodes:
+A Spherepop program is formally a finite ordered list (AST) of nodes:
 
 \[
-\mathsf{AST} = [n_1,n_2,\dots ,n_k].
+\mathsf{AST} = [n_1,\; n_2, \dots , n_k],
 \]
 
-Each node `ni` belongs to one of two primitive families:
-
-| Type | Form | Semantic Role |
-|------|------|----------------|
-| **Event** | `Pop(t)`, `Refuse(t)`, `Bind(a,b)`, `Collapse(q)` | Irreversi[9D[K
-Irreversible modifications to the option‑space (see Section 4). |
-| **Declaration** | `Let(x,e)` | Purely referential binding; erased after n[1D[K
-name resolution. |
+where each node $n_i$ is either an **event** or a **declaration**. The orde[4D[K
+ordering of the nodes captures temporal succession rather than computation.[12D[K
+computation.
 
 ---
 
-### 1. Option‑Space Category
+### Event Nodes
 
-Let \(\mathcal{O}\) be the category whose:
+Event nodes encode irreversible operations on option‑spaces:
 
-* **Objects** are all possible option‑spaces (collections of viable futures[7D[K
-futures), and  
-* **Morphisms** are monotone maps that preserve inclusion, i.e., for any `f[2D[K
-`f : X → Y` we have  
+| Node | Formal Form | Semantic Interpretation |
+|------|-------------|------------------------|
+| Pop  | $\mathsf{Pop}(t)$ | Restricts future options: $X \;\xrightarrow{\t[17D[K
+\;\xrightarrow{\text{pop}}\; X|_{\neg t}$ (exclude target $t$). |
+| Refuse | $\mathsf{Refuse}(t)$ | Same geometric exclusion as `Pop`; distin[6D[K
+distinguished for ethical/accounting purposes. |
+| Bind  | $\mathsf{Bind}(a,b)$ | Introduces precedence: $X \;\xrightarrow{\[16D[K
+\;\xrightarrow{\text{bind}}\; X[a \prec b]$ (make $b$ precede $a$). |
+| Collapse | $\mathsf{Collapse}(q)$ | Applies a collapse policy $q$: $X \;\[3D[K
+\;\xrightarrow{\text{collapse}}\; X/{\sim_q}$ (identify distinctions under [K
+$q$). |
 
-  \[
-  f(A) ⊆ f(B) \text{ whenever } A ⊆ B.
-  \]
-
-Key properties:
-
-* **Composition** is defined pointwise (`(g∘f)(x)=g(f(x))`) and yields anot[4D[K
-another morphism.  
-* **Identity** for an object `X` is the inclusion into itself, `id_X : X → [K
-X`.  
-* No morphisms have inverses; most are not bijections—this encodes *irrever[8D[K
-*irreversibility*.
+No compound event forms exist; each node is atomic and must be interpreted [K
+sequentially.
 
 ---
 
-### 2. Interpretation (Functor)
+### Declaration Nodes
 
-Define a functor \(\llbracket·\rrbracket : \mathsf{AST} \to \mathcal{O}\) b[1D[K
-by mapping each node:
-
-| Node | Functorial Meaning |
-|------|---------------------|
-| `Pop(t)` or `Refuse(t)` | \(P_t : X → X \setminus t\) (exclude target `t`[3D[K
-`t`). |
-| `Bind(a,b)` | \(B_{a\prec b} : X → X[a \prec b]\) (make `b` precede `a`).[5D[K
-`a`). |
-| `Collapse(q)` | \(C_q : X → X/{\sim_q}\) (identify all elements related b[1D[K
-by policy `q`). |
-
-The interpretation of a declaration node is the identity morphism:
+Declarations bind identifiers to expressions in a purely referential enviro[6D[K
+environment:
 
 \[
-\llbracket Let(x,e)\rrbracket = \text{id}_X .
+\mathsf{Let}(x,e) \;\longrightarrow\; x := e,
 \]
 
----
-
-### 3. Compositionality
-
-Given two programs Π₁ = `[n₁,…,n_m]` and Π₂ = `[n_{m+1},…,n_k]`, their comb[4D[K
-combined semantic effect is the sequential composition of morphisms:
-
-\[
-\llbracket \Pi_1;\Pi_2 \rrbracket = (\llbracket\Pi_2\rrbracket) \circ (\llb[5D[K
-(\llbracket\Pi_1\rrbracket).
-\]
-
-Because each morphism in \(\mathcal{O}\) is monotone and composition respec[6D[K
-respects the ordering of options, every Spherepop program defines a *well‑d[7D[K
-*well‑defined* transformation on option‑spaces without ambiguity.
+where the expression $e$ is evaluated without affecting semantic state. Dec[3D[K
+Declarations are later erased after name resolution, guaranteeing they cann[4D[K
+cannot influence option‑spaces.
 
 ---
 
-### 4. Determinism & Auditability
+### Semantic Category
 
-Since the syntax admits **only linear histories**, evaluation order is fixe[4D[K
-fixed:
+Define $\mathcal{O}$ as a category whose:
 
-1. Process nodes strictly left‑to‑right.
-2. Each node applied yields exactly one morphism (no branching or backtrack[9D[K
-backtracking).
+* **Objects** are (potentially infinite) option‑spaces.
+* **Morphisms** $f : X \to Y$ are monotone transformations that:
+  * Preserve inclusion ($X \subseteq Y$);
+  * Are closed under composition;
+  * Possess identity morphisms for each object.
 
-Consequently, a program’s semantic interpretation is deterministic given an[2D[K
-an initial option‑space `X₀`. Replaying the same AST always produces the sa[2D[K
-same transformation, enabling verification and reproducibility—essential fo[2D[K
-for formal reasoning about irreversible commitments.
-
----
-
-### 5. Minimal Semantics
-
-The abstract syntax deliberately omits:
-
-* Blocks/loops,
-* Conditional or branching control structures,
-* Implicit updates (e.g., “reassignment”).
-
-All semantic effects appear explicitly as nodes. This design eliminates hid[3D[K
-hidden state, aligns with the philosophical claim that meaning arises only [K
-from *made irreversible* choices.
+$\mathcal{O}$ is **not a groupoid**: most morphisms lack inverses, embodyin[8D[K
+embodying the irreversibility of Spherepop’s semantics.
 
 ---
 
-### 6. Extension Points
+### Interpretation (Denotational Mapping)
 
-Any higher‑level language built on Spherepop must translate its constructs [K
-into a linear sequence of primitive AST nodes (`Pop`, `Refuse`, `Bind`, `Co[3D[K
-`Collapse`, and pure declarations). Such extensions preserve linearity, thu[3D[K
-thus preserving the core guarantees of irreversibility, determinism, and au[2D[K
-auditability.
+Each node maps to a morphism in $\mathcal{O}$:
+
+| Node | Denotation |
+|------|------------|
+| $\mathsf{Pop}(t)$ | $X \xrightarrow{\text{pop}} X_{\neg t}$ – exclude tar[3D[K
+target $t$. |
+| $\mathsf{Refuse}(t)$ | Same as `Pop`; distinguished semantically. |
+| $\mathsf{Bind}(a,b)$ | $X \xrightarrow{\text{bind}} X[a \prec b]$ – enfor[5D[K
+enforce ordering. |
+| $\mathsf{Collapse}(q)$ | $X \xrightarrow{\text{collapse}} X/{\sim_q}$ – i[1D[K
+identify distinctions via policy $q$. |
+
+**Declarations** map to the identity morphism on $\mathcal{O}$, ensuring th[2D[K
+they are purely referential and do not alter semantic state.
+
+---
+
+### Compositional Semantics
+
+The interpretation of an entire AST proceeds by sequential composition:
+
+1. Start with initial option‑space $X_0$.
+2. For each node $n_i$:
+   * If $n_i$ is a declaration, resolve names (identity on $\mathcal{O}$) a[1D[K
+and continue.
+   * Otherwise, apply the corresponding morphism from above to obtain $X_{i[5D[K
+$X_{i+1}$.
+
+The resulting state $X_k$ represents the settled world produced by the prog[4D[K
+program. Because each step is monotone and irreversible, the final space re[2D[K
+reflects a cumulative “settled” configuration rather than a recomputed comp[4D[K
+computation.
 
 ---
 
 **Summary**
 
-The abstract syntax models programs as immutable histories—linear sequences[9D[K
-sequences of irreversible events that transform option‑spaces in a well‑def[8D[K
-well‑defined monotone way. The semantics are captured by the category \(\ma[5D[K
-\(\mathcal{O}\) with its natural interpretation functor, guaranteeing that [K
-every Spherepop program is a deterministic transformation without hidden re[2D[K
-revision paths or rollback mechanisms. This formalism underlies the philoso[7D[K
-philosophical commitments: irreversibility, auditability, and the notion th[2D[K
-that “meaning” is paid for rather than predicted.
-
+- The surface language enforces syntactic irreversibility to guarantee that[4D[K
+that programs describe histories, not mutable states.
+- Semantically, Spherepop operates in a category $\mathcal{O}$ of monotone [K
+transformations on option‑spaces, preserving inclusion and composition but [K
+lacking inverses (non‑groupoid).
+- Programs are linear ASTs where each node maps directly to a deterministic[13D[K
+deterministic morphism, ensuring auditability, reproducibility, and the abs[3D[K
+absence of hidden rollback mechanisms.

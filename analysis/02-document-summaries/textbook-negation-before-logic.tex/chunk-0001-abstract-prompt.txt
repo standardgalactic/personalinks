@@ -1,0 +1,972 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+(none yet)
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-negation-before-logic.tex
+
+NEW CHUNK
+=========
+
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\geometry{margin=1.25in}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Negation Before Logic:\\
+Inferential Fields, Orientation Reversal,\\
+and the Geometry of Admissible Inference}
+\author{Flyxion\\
+\small Independent Researcher}
+\date{June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The cognitive cost of negation has been studied for decades, yet the 
+dominant accounts remain unsatisfying. Operator-counting models predict 
+that processing cost should increase monotonically with the number of 
+negative expressions; they do not explain why two negations can be easier 
+than one, why cost tracks monotonicity domains rather than operator 
+occurrence, or why negated representations retain a processing signature 
+long after the sentence has been parsed. Polarity-based accounts handle 
+some scalar phenomena but conflate orientation toward zero with reversal 
+of inferential direction, which are demonstrably distinct costs.
+
+This paper proposes a geometric alternative. We introduce the notion of 
+an \emph{inferential field} $\mathcal{F} = (X, R, \omega, A)$, where $X$ 
+is a space of distinctions, $R$ is an inferential reachability relation, 
+$\omega : X \to [-1,+1]$ is a continuous orientation field, and $A$ is an 
+admissibility structure. Within this framework, negation is not 
+fundamentally a truth-value operator. It is an orientation transformation 
+$N : \mathcal{F} \to \mathcal{F}$ satisfying $N(\omega) = -\omega$. 
+Monotonicity becomes a property of the orientation field rather than of 
+individual lexical items. Upward-entailing environments correspond to 
+regions where $\omega > 0$ and inferential reachability expands; 
+downward-entailing environments correspond to regions where $\omega < 0$ 
+and reachability contracts. Processing cost is not determined by 
+operator count but by two separable quantities: the magnitude of 
+orientation reversal and the curvature of admissibility domain boundaries.
+
+This decomposition yields the \emph{Orientation-Reversal Principle}: the 
+cognitive cost of a semantic operator is a function of the induced 
+distortion of inferential orientation and the local curvature of 
+admissibility domains, not of operator count. Four bodies of experimental 
+evidence follow as consequences: the non-additivity of double negation, 
+the domain-sensitivity of monotonicity processing cost, the sustained 
+effect of negation in delayed verification, and the licensing conditions 
+of negative polarity items. We further show that negative polarity item 
+licensing is an admissibility probe: an expression such as \emph{ever} or 
+\emph{any} succeeds not because a negative word is present but because 
+the local region of the inferential field carries the required orientation 
+and satisfies the admissibility condition jointly. Neural dissociation 
+evidence from logical negation studies constrains the framework 
+empirically, supporting a four-stage functional architecture in which 
+syntactic field construction, logical field deformation, and scenario 
+verification are partially separable operations.
+
+The framework connects to a broader research program in admissibility 
+geometry and distinguishability theory, in which the same mathematical 
+structure --- distinctions, reachability, orientation, admissibility --- 
+recurs across language, memory, repair, and scientific explanation. 
+Negation, on this view, is not an addition to logic. It is a 
+transformation of the distinction space within which logic becomes 
+possible.
+\end{abstract}
+
+\newpage
+
+
+The Operator-Count Failure
+
+
+The simplest theory of negation processing is also the most natural one.
+If a sentence contains a negative expression, it is harder to process than
+the corresponding positive sentence. If it contains two negative
+expressions, it is harder still. Processing cost increases monotonically
+with the number of negative operators encountered during parsing. Call
+this the \emph{operator-count hypothesis}.
+
+The operator-count hypothesis has the virtue of simplicity and the vice
+of being wrong in precisely the cases that matter most theoretically.
+Three bodies of experimental evidence establish its failure, and the
+pattern of failure is informative: it is not random noise around a
+correct trend but a systematic deviation that points toward a different
+underlying variable.
+
+
+The Double-Negation Asymmetry
+
+
+If processing cost tracked operator count, then a sentence containing two
+negative expressions should be more costly than a sentence containing one.
+The prediction is monotone: each additional negation adds a fixed
+increment of difficulty. The experimental literature on double negation
+does not support this prediction.
+
+Sentences of the form \emph{it is not the case that none of the circles
+are red} involve two scope-taking negative expressions and require the
+reasoner to compute a positive conclusion by composing two reversals.
+Under operator-count, this double-reversal configuration should be the
+most expensive. Under an orientation account, the two reversals cancel:
+$N(N(\omega)) = \omega$, returning the field to its original orientation.
+The field does not count operators; it tracks net orientation. The
+prediction from an orientation account is therefore that double negation
+should not cost twice as much as single negation, and may in some
+configurations cost less, because the inferential field has returned to a
+familiar expansion regime.
+
+This is what the experimental record shows. The cost of double negation
+is not additive. In some participant populations and task configurations,
+sentences with two negations are verified faster than sentences with one,
+when syntactic complexity is controlled. Operator-count has no account of
+this. Orientation reversal explains it directly.
+
+
+Domain Sensitivity of Monotonicity Cost
+
+
+A more precise failure of operator-count comes from experiments that
+manipulate monotonicity independently of the number of negative
+expressions. Consider the contrast between \emph{more than half} and
+\emph{fewer than half}. Both are quantifiers. Neither is a negative word
+in the lexical sense. Yet they induce different entailment profiles:
+\emph{more than half} is upward-entailing in its restrictor, while
+\emph{fewer than half} is downward-entailing. An operator-count model,
+applied to these expressions, predicts no difference in processing cost,
+since no negative operator has been added or removed.
+
+The experimental evidence contradicts this prediction. Downward-entailing
+quantifiers of this kind impose a measurable processing cost relative to
+their upward-entailing counterparts, even when the sentences are matched
+for length, frequency, syntactic structure, and the absence of any overt
+negative morpheme. The source of the cost is the direction of inferential
+expansion, not the presence of a negative word.
+
+More decisive still is the finding from the 2024 monotonicity-domain
+experiments. In those studies, the relevant experimental variable is not
+the number of downward-entailing operators but the structure of the
+monotonicity domain: whether a given expression occurs within a region
+whose inferential orientation is uniformly downward, or near a boundary
+where orientation shifts. The finding is that processing cost tracks
+domain structure. Two configurations with equal operator counts but
+different domain structures produce different costs. Two configurations
+with unequal operator counts but equivalent domain structures produce
+equivalent costs. This result cannot be accommodated by operator-count in
+any form. It requires a variable that tracks the geometry of inferential
+regions, not the inventory of lexical items.
+
+
+The Persistence of Negation in Delayed Verification
+
+
+A third failure of operator-count concerns the temporal profile of
+negation effects. The operator-count hypothesis is naturally interpreted
+as a parsing hypothesis: negative operators introduce additional
+computational steps during incremental sentence processing, and those
+steps consume time. On this interpretation, if sufficient processing time
+is provided before a verification judgment is required, the cost should
+diminish or disappear. The parser has had time to complete its work.
+
+Delayed verification experiments test this prediction by introducing a
+temporal gap between sentence presentation and the onset of the
+verification image. The operator-count prediction is that negation effects
+should attenuate with delay. The experimental finding is the opposite:
+negation effects are \emph{sustained} across delays. A negated sentence
+does not become easier to verify simply because more time has passed. The
+cost persists into the verification phase even when parsing has long
+concluded.
+
+This result is incompatible with a purely incremental parsing account of
+negation cost. It suggests that negation does not merely insert additional
+steps into the parse; it changes the structure of the working-memory
+representation that is passed forward to verification. In the framework
+developed here, this is the \emph{persistence cost}: the residual
+distortion of the inferential field that remains in the representation
+after processing. Negation changes the orientation of the stored
+representation, and orientation is not automatically restored by the
+passage of time.
+
+
+What the Failures Share
+
+
+The three failures of operator-count share a common structure. In each
+case, the quantity that predicts processing cost is not the number of
+negative expressions but a property of the inferential environment those
+expressions create: the net orientation of the field after all reversals
+have been applied, the geometry of domain boundaries, and the persistence
+of orientation change in the stored representation. These are properties
+of a field, not properties of a count. The theory required to explain
+them must be a field theory.
+
+
+Inferential Fields
+
+
+The failures documented in the preceding section converge on a single
+diagnostic: the relevant variable is not a count of operators but a
+property of the inferential environment those operators construct. To make
+this precise, we need a mathematical object that can represent
+inferential environments, support a notion of orientation, and admit a
+well-defined transformation corresponding to negation. We introduce this
+object here.
+
+
+Distinctions and Reachability
+
+
+Let $X$ be a set of \emph{distinctions}. Intuitively, a distinction is a
+difference that the inferential system can represent and act upon: the
+difference between red and not-red, between all and some, between the
+circle being inside the square and outside it. We do not require $X$ to
+carry propositional structure at the outset. Propositions, on the view
+developed here, are derivative objects constructed from distinctions; the
+geometry of the distinction space is prior.
+
+\begin{definition}[Inferential reachability]
+A binary relation $R \subseteq X \times X$ is an \emph{inferential
+reachability relation} on $X$ if it satisfies the following conditions:
+\begin{enumerate}
+\item[(i)] \emph{Reflexivity}: $R(x,x)$ for all $x \in X$.
+\item[(ii)] \emph{Transitivity}: if $R(x,y)$ and $R(y,z)$ then $R(x,z)$.
+\item[(iii)] \emph{Non-triviality}: there exist $x, y \in X$ such that
+$R(x,y)$ and $\neg R(y,x)$.
+\end{enumerate}
+\end{definition}
+
+Condition (iii) ensures that $R$ is not the trivial equivalence relation.
+Inferential motion has direction: some distinctions are reachable from
+others without the converse holding. This directedness is what makes
+orientation a meaningful concept in the space.
+
+For a subset $A \subseteq X$, define the \emph{inferential expansion} of
+$A$ under $R$ as
+
+\[
+R(A) = \{ y \in X : \exists\, x \in A,\; R(x,y) \}.
+\]
+This is the set of distinctions reachable from any member of $A$ in one
+inferential step. The behavior of $R(A)$ as $A$ varies is what
+monotonicity theory studies, and it is where orientation enters.
+
+
+The Orientation Field
+
+
+Classical monotonicity theory classifies expressions as upward- or
+downward-entailing and treats this classification as a binary, lexically
+determined property. The operator-count failures suggest that this
+classification is insufficient: what matters is not the sign of an
+individual expression but the orientation of the inferential environment
+that expression inhabits. We represent this environment with a continuous
+field.
+
+\begin{definition}[Orientation field]
+An \emph{orientation field} on $(X, R)$ is a continuous function
+$\omega : X \to [-1, +1]$ satisfying:
+\begin{enumerate}
+\item[(i)] \emph{Upward regime}: if $\omega(x) > 0$ and $A \subseteq B
+\subseteq X$, then $R(A) \subseteq R(B)$, so inferential expansion
+preserves set inclusion.
+\item[(ii)] \emph{Downward regime}: if $\omega(x) < 0$ and $A \subseteq
+B \subseteq X$, then $R(B) \subseteq R(A)$, so inferential expansion
+reverses set inclusion.
+\item[(iii)] \emph{Boundary}: if $\omega(x) = 0$, then $x$ lies on the
+boundary between upward and downward regimes, and the local expansion
+behavior of $R$ is indeterminate.
+\end{enumerate}
+\end{definition}
+
+The choice of $[-1,+1]$ rather than $\{-1,+1\}$ is deliberate. It allows
+$\omega$ to vary continuously across the distinction space, so that
+regions near orientation boundaries are represented as having intermediate
+orientation values rather than being forced into a binary classification.
+This continuity is what permits a well-defined notion of orientation
+curvature in the next subsection.
+
+
+Admissibility
+
+
+Not every distinction in $X$ is available for inferential use at every
+point in processing. Licensing conditions, syntactic constraints, and
+contextual restrictions determine which regions of the distinction space
+are open to a given inferential operation. We represent this with an
+admissibility structure.
+
+\begin{definition}[Admissibility structure]
+An \emph{admissibility structure} on $(X, R, \omega)$ is a function
+$A : X \to \{0, 1\}$ such that $A(x) = 1$ if the distinction $x$ is
+currently admissible for inferential use and $A(x) = 0$ otherwise. An
+\emph{admissible region} is a connected component of $A^{-1}(1)$.
+\end{definition}
+
+Admissibility is not truth. A distinction may be admissible without being
+verified, and verified without being admissible in the relevant
+inferential context. The separation between admissibility and truth is
+essential to the account of negative polarity items developed in Section
+4: an NPI is sensitive to admissibility conditions, not directly to truth
+conditions.
+
+\begin{definition}[Inferential field]
+An \emph{inferential field} is a quadruple $\mathcal{F} = (X, R, \omega,
+A)$ where $X$ is a set of distinctions, $R$ is an inferential
+reachability relation on $X$, $\omega : X \to [-1,+1]$ is an orientation
+field, and $A : X \to \{0,1\}$ is an admissibility structure.
+\end{definition}
+
+
+Negation as Orientation Transformation
+
+
+With the inferential field in hand, we can give negation a precise
+geometric meaning.
+
+\begin{definition}[Negation operator]
+The \emph{negation operator} $N : \mathcal{F} \to \mathcal{F}$ is the
+map that acts on the orientation field by pointwise reversal:
+\[
+N(\omega)(x) = -\omega(x) \quad \text{for all } x \in X,
+\]
+while leaving $X$, $R$, and $A$ unchanged.
+\end{definition}
+Several consequences follow immediately.
+
+\begin{proposition}[Double negation]
+\label{prop:double-neg}
+$N \circ N = \mathrm{id}_{\mathcal{F}}$.
+\end{proposition}
+
+\begin{proof}
+$(N \circ N)(\omega)(x) = N(-\omega(x)) = -(-\omega(x)) = \omega(x)$ for
+all $x \in X$.
+\end{proof}
+
+\begin{proposition}[Orientation of upward and downward environments]
+\label{prop:orientation}
+A linguistic environment is upward-entailing if and only if the
+corresponding region of $\mathcal{F}$ satisfies $\omega > 0$. It is
+downward-entailing if and only if the corresponding region satisfies
+$\omega < 0$.
+\end{proposition}
+
+\begin{proof}
+By conditions (i) and (ii) of Definition 2.2, the expansion behavior of
+$R$ under set inclusion is determined by the sign of $\omega$. Upward
+entailment is defined by the preservation of set inclusion under
+inferential expansion; downward entailment by its reversal. These
+correspond exactly to the upward and downward regimes of $\omega$.
+\end{proof}
+
+Proposition \ref{prop:double-neg} is already theoretically significant.
+It establishes that the field-theoretic account of negation predicts the
+cancelation of double negation as a structural theorem, not as an
+empirical stipulation. The field does not count negative operators; it
+tracks the net orientation that results from their composition. Two
+reversals return the field to its original state. The non-additivity of
+double-negation cost documented in the experimental literature is
+therefore a consequence of the geometry, not a puzzle requiring separate
+explanation.
+
+
+Orientation Curvature and Processing Cost
+
+
+The domain-sensitivity result from the 2024 monotonicity experiments
+requires a further quantity: not merely the sign of $\omega$ at a point
+but the rate at which $\omega$ changes across inferential regions. We
+define this as orientation curvature.
+
+\begin{definition}[Orientation curvature]
+The \emph{orientation curvature} at $x \in X$ is
+\[
+\kappa_\omega(x) = \left| \nabla \omega(x) \right|,
+\]
+where $\nabla$ denotes the gradient with respect to the topology on $X$
+induced by $R$.
+\end{definition}
+Intuitively, $\kappa_\omega(x)$ measures how rapidly the inferential
+orientation changes in the neighborhood of $x$. In a uniformly
+upward-entailing region, $\omega$ is constant and positive, so
+$\kappa_\omega = 0$. In a uniformly downward-entailing region, $\omega$
+is constant and negative, so $\kappa_\omega = 0$ again. High curvature
+occurs at and near orientation boundaries, where $\omega$ transitions
+between positive and negative values.
+
+\begin{definition}[Processing cost]
+The \emph{processing cost} at $x \in X$ is
+\[
+C(x) = \alpha \cdot \mathbf{1}[\omega(x) < 0] + \beta \cdot
+\kappa_\omega(x),
+\]
+where $\alpha, \beta > 0$ are empirically determined weights,
+$\mathbf{1}[\omega(x) < 0]$ is the indicator function for the downward
+regime, and $\kappa_\omega(x)$ is orientation curvature.
+\end{definition}
+The first term captures the cost of operating in a reversed inferential
+regime: downward-entailing environments impose a baseline cost because
+the ordinary expansion direction of inference is no longer available. The
+second term captures the additional cost of processing near domain
+boundaries, where the local orientation is changing and neither a pure
+upward nor a pure downward inference strategy is applicable.
+
+This cost function separates three empirically distinct quantities that
+previous accounts have conflated:
+
+\begin{enumerate}
+\item \emph{Polarity cost}: the cost associated with scalar negativity,
+which in the present account is absorbed into the admissibility structure
+$A$ rather than $\omega$ directly, since polarity is a property of the
+scalar position of an expression rather than the orientation of its
+inferential environment.
+
+\item \emph{Monotonicity cost}: captured by the first term, the baseline
+cost of operating in a downward-entailing region regardless of how that
+region was constructed.
+
+\item \emph{Boundary cost}: captured by the second term, the additional
+cost of processing near orientation domain boundaries, which is the
+quantity most directly measured by the 2024 monotonicity-domain
+experiments.
+\end{enumerate}
+
+The persistence cost identified in delayed-verification studies does not
+appear in $C(x)$ directly, because persistence is a property of the
+representation passed forward to the verification stage rather than a
+cost incurred during field navigation. We address persistence separately
+in Section 5.
+
+
+Negation Distortion
+
+
+The final quantity introduced in this section connects the field-theoretic
+account to the broader program in distinguishability geometry. In that
+program, a transformation is characterized not only by its action on
+objects but by the distortion it introduces in the reachability structure
+of those objects. We define the analogous quantity for negation.
+
+\begin{definition}[Negation distortion]
+The \emph{negation distortion} at $x \in X$ is
+\[
+D_N(x) = d_R(x, N(x)),
+\]
+where $d_R$ is the reachability pseudometric on $X$ defined by
+\[
+d_R(x, y) = \inf \{ n \in \mathbb{N} : R^n(x) \ni y \text{ and }
+R^n(y) \ni x \},
+\]
+with $d_R(x,y) = \infty$ if no such $n$ exists.
+\end{definition}
+Negation distortion measures how far a distinction $x$ is displaced in
+the reachability structure of $X$ when the orientation of the field is
+reversed. A distinction that remains easily reachable from its negated
+counterpart has low distortion; a distinction that becomes unreachable or
+reaches only after many inferential steps has high distortion.
+
+The global distortion of the negation operator is then
+\[
+\|D_N\| = \int_X D_N(x)\, d\mu(x),
+\]
+where $\mu$ is a suitable measure on $X$ reflecting the prior probability
+or salience of distinctions. This global quantity is what the overall
+processing cost of negation in a given inferential context approximates.
+The three cost components now have a unified representation: polarity
+cost, monotonicity cost, and boundary cost all contribute to $\|D_N\|$
+through their respective effects on $d_R$. Persistence cost is the
+residual of $D_N$ that has not been resolved by the time the
+representation is passed to the verification stage.
+
+
+The Orientation-Reversal Principle
+
+
+The formal machinery of Section 2 permits a precise statement of the
+central theoretical claim of this paper. We state it as a principle
+rather than a theorem because its full justification draws on both the
+mathematical structure of inferential fields and the empirical record
+reviewed in Section 1. The principle unifies the four experimental
+phenomena --- double-negation non-additivity, domain-sensitive
+monotonicity cost, sustained verification effects, and negative polarity
+item licensing --- as consequences of a single underlying geometric
+quantity.
+
+\begin{theorem}[Orientation-Reversal Principle]
+\label{thm:orp}
+Let $\mathcal{F} = (X, R, \omega, A)$ be an inferential field and let
+$T : \mathcal{F} \to \mathcal{F}$ be a semantic operator. The cognitive
+processing cost of $T$ is determined not by the count of negative
+expressions introduced by $T$ but by two separable quantities:
+\begin{enumerate}
+\item[(i)] the magnitude of net orientation reversal induced by $T$,
+measured by $\int_X |\omega(x) - T(\omega)(x)|\, d\mu(x)$, and
+\item[(ii)] the curvature of admissibility domain boundaries in the
+region of $\mathcal{F}$ traversed during processing, measured by
+$\int_X \kappa_\omega(x)\, d\mu(x)$ over the traversed region.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+We proceed by showing that operator count is neither necessary nor
+sufficient to determine processing cost, and that quantities (i) and (ii)
+are jointly sufficient within the field-theoretic framework.
+
+\medskip
+\noindent\textit{Operator count is not sufficient.} By the double-negation
+result (Proposition \ref{prop:double-neg}), two orientation reversals
+compose to the identity transformation. A sentence containing two
+downward-entailing operators therefore induces a net orientation change of
+zero, since $N \circ N = \mathrm{id}$. Under operator count, the
+predicted cost is twice the single-negation cost. Under the
+orientation-reversal measure (i), the predicted cost is zero for the
+orientation component, plus boundary costs incurred during the traversal.
+The experimental record supports the orientation prediction over the
+operator-count prediction: double-negation cost is non-additive and
+can fall below single-negation cost under controlled conditions.
+
+\medskip
+\noindent\textit{Operator count is not necessary.} By Proposition
+\ref{prop:orientation}, downward-entailing environments correspond to
+regions where $\omega < 0$, regardless of whether a negative morpheme is
+present. Quantifiers such as \emph{fewer than half} induce downward
+orientation without containing any negative word. The processing cost
+associated with such quantifiers --- documented in the monotonicity
+literature --- is therefore a cost of orientation, not a cost of operator
+occurrence. Operator count, which registers zero for these expressions,
+fails to predict the observed cost.
+
+\medskip
+\noindent\textit{Quantities (i) and (ii) are jointly sufficient.} The
+cost function $C(x) = \alpha \cdot \mathbf{1}[\omega(x) < 0] + \beta
+\cdot \kappa_\omega(x)$ captures the baseline cost of reversed orientation
+and the additional cost of domain boundaries respectively. Integrating
+over the traversed region yields a total cost that depends on the geometry
+of the inferential path, not on the inventory of operators along it. This
+accounts for: the non-additivity of double negation (net reversal is
+zero); the domain-sensitivity of monotonicity cost (cost tracks boundary
+curvature, not operator occurrence); and the differential cost of
+downward-entailing quantifiers without negative morphemes (orientation
+cost with zero operator count). The persistence effect requires an
+additional claim about the representation passed to verification, which
+is addressed in Section 5, but is consistent with the present framework
+since $D_N(x) > 0$ whenever orientation has been reversed and the
+distortion has not been resolved.
+\end{proof}
+
+
+Four Phenomena as Consequences
+
+
+We now show explicitly how the four experimental phenomena documented in
+Section 1 follow from the Orientation-Reversal Principle.
+
+
+Double-Negation Non-Additivity
+
+
+Under the operator-count hypothesis, the cost of a doubly negated
+sentence $S^{--}$ satisfies $C(S^{--}) = 2 \cdot C(S^-)$, where $S^-$
+is the singly negated sentence. Under the Orientation-Reversal Principle,
+the relevant quantity is the net orientation after composition of
+operators. Since $N \circ N = \mathrm{id}$, the net reversal induced by
+$S^{--}$ is zero, and the orientation component of cost vanishes. The
+[Oresidual cost is purely the boundary cost incurred during the processing
+of the intermediate state, which lies at the orientation boundary
+$\omega = 0$. This boundary cost is real --- the system does pass through
+a region of high curvature --- but it is bounded above by the single
+boundary traversal, not multiplied by two.
+
+The empirical prediction is therefore:
+\[
+C(S^{--}) < 2 \cdot C(S^-),
+\]
+and in populations or task configurations where boundary traversal cost
+is low relative to orientation cost, the stronger prediction
+\[
+C(S^{--}) < C(S^-)
+\]
+may hold. Both predictions are supported by the experimental record and
+both are consequences of the geometry.
+
+Domain-Sensitive Monotonicity Cost
+
+
+The 2024 monotonicity-domain experiments show that processing cost tracks
+domain structure rather than operator occurrence. Under the
+Orientation-Reversal Principle, this is expected. The cost function
+$C(x)$ depends on $\omega(x)$ and $\kappa_\omega(x)$, both of which are
+properties of the inferential region in which processing occurs, not of
+the count of operators that constructed that region. Two configurations
+with equal operator counts but different domain structures will have
+different values of $\kappa_\omega$ and therefore different costs. Two
+configurations with unequal operator counts but equivalent domain
+structures will have equivalent costs.
+
+More precisely, consider two sentences $S_1$ and $S_2$ such that:
+\begin{itemize}
+\item $S_1$ contains one downward-entailing operator and processing
+occurs uniformly within a single downward-entailing domain.
+\item $S_2$ contains two downward-entailing operators but processing
+traverses a boundary between an upward and a downward domain.
+\end{itemize}
+Operator count predicts $C(S_2) > C(S_1)$. The Orientation-Reversal
+Principle predicts $C(S_2) > C(S_1)$ only if the boundary cost of $S_2$
+exceeds the difference in baseline orientation cost, which depends on the
+specific geometry of the domains. The empirical result --- that $S_2$ can
+be more costly than predicted by its operator count and $S_1$ less costly
+--- follows naturally from the curvature term $\beta \cdot
+\kappa_\omega(x)$.
+
+
+Sustained Verification Effects
+
+
+The delayed-verification result presents a challenge to any account that
+treats negation cost as a purely incremental parsing phenomenon. Under
+the Orientation-Reversal Principle, the sustained effect has a natural
+explanation via negation distortion. When a negated sentence is
+processed, the orientation of the resulting representation is reversed
+relative to the corresponding positive sentence. This reversed
+representation is stored in working memory and passed to the verification
+stage. The distortion $D_N(x) = d_R(x, N(x))$ quantifies how far the
+representation has been displaced in reachability terms. This distortion
+does not automatically resolve with the passage of time; it persists in
+the representation until the verification process has explicitly
+re-oriented the field with respect to the scenario being compared.
+
+The prediction is that the sustained cost should correlate with the
+magnitude of $D_N$ for the relevant distinctions, and that it should
+diminish only when the verification process has completed the reachability
+comparison --- not merely when parsing time has elapsed.
+
+
+Negative Polarity Item Licensing
+
+
+The analysis of negative polarity item licensing requires the admissibility
+structure $A$ of the inferential field and is developed in full in Section
+4. Here we note only the consequence of the Orientation-Reversal
+Principle that is relevant to licensing: an NPI is not sensitive to the
+presence of a negative operator but to the orientation and admissibility
+of the local inferential region. Two environments that are equally
+negative in operator count but differ in orientation or admissibility will
+differ in NPI licensing. This prediction separates the present account
+from both standard downward-entailment accounts, which license NPIs by
+operator type, and from polarity accounts, which license them by scalar
+position.
+
+
+The Principle as Unification
+
+
+The Orientation-Reversal Principle is not merely a restatement of the
+four phenomena in geometric language. It provides a single quantity ---
+the distortion of inferential orientation and its curvature across
+admissibility domains --- from which all four phenomena are derivable.
+This is a stronger claim than a descriptive unification. It implies that
+the four phenomena are not independently explained by four separate
+mechanisms but are four measurements of the same underlying geometric
+variable. Experiments designed to manipulate one of the four phenomena
+while holding the geometric variable constant should attenuate or
+eliminate the effect. Experiments designed to manipulate the geometric
+variable directly --- by constructing sentences that traverse domain
+boundaries without using negative morphemes, for instance --- should
+produce costs not predicted by any account that relies on negative
+operator occurrence.
+
+These are testable predictions. We return to them in Section 6.
+
+
+Negative Polarity Items as Admissibility Probes
+
+
+Negative polarity items present the licensing problem in its sharpest
+form. An expression such as \emph{ever}, \emph{any}, \emph{yet}, or
+\emph{lift a finger} is grammatical in some environments and
+ungrammatical in others, and the distribution of grammatical environments
+does not reduce to the mere presence of a negative word. The sentences in
+(\ref{ex:npi-basic}) illustrate the basic pattern.
+
+\begin{enumerate}
+\item \label{ex:npi-basic}
+\begin{enumerate}
+\item[(a)] Nobody has ever been to that island. \hfill [grammatical]
+\item[(b)] Somebody has ever been to that island. \hfill
+[ungrammatical]
+\item[(c)] Few students have ever read that book. \hfill [grammatical]
+\item[(d)] Many students have ever read that book. \hfill
+[ungrammatical]
+\item[(e)] I doubt that she has ever been there. \hfill [grammatical]
+\item[(f)] I believe that she has ever been there. \hfill
+[ungrammatical]
+\end{enumerate}
+\end{enumerate}
+
+The standard generalization, due to Ladusaw, is that NPIs are licensed
+in downward-entailing environments. \emph{Nobody}, \emph{few}, and the
+complement of \emph{doubt} are downward-entailing; \emph{somebody},
+\emph{many}, and the complement of \emph{believe} are not. This
+generalization is largely correct as a descriptive matter, but it leaves
+two theoretical questions unanswered. First, why should downward
+entailment be the licensing condition? What is the connection between
+inference reversal and the grammaticality of \emph{ever}? Second, how
+does the licensing condition interact with syntactic scope and domain
+structure, given the 2024 finding that processing cost tracks domains
+rather than operators?
+
+The inferential field framework answers both questions by recasting NPI
+licensing as an admissibility probe.
+
+
+Admissibility and Orientation as Independent Conditions
+
+
+The key theoretical move is to separate two conditions that previous
+accounts have run together. In the standard downward-entailment account,
+a single condition --- the DE-ness of the licensing environment ---
+determines grammaticality. In the field-theoretic account, two conditions
+must be jointly satisfied.
+
+\begin{definition}[NPI probe]
+An \emph{NPI probe} is a function $P : X \to \{0, 1\}$ defined by
+\[
+P(x) = \begin{cases} 1 & \text{if } A(x) = 1 \text{ and } \omega(x) <
+0, \\ 0 & \text{otherwise.} \end{cases}
+\]
+An NPI expression is licensed at position $x$ in an inferential field
+$\mathcal{F} = (X, R, \omega, A)$ if and only if $P(x) = 1$.
+\end{definition}
+The two conditions are:
+\begin{enumerate}
+\item[(i)] \emph{Admissibility}: $A(x) = 1$. The distinction at $x$ must
+be open to inferential use in the current context. This is a structural
+condition on the inferential field, sensitive to syntactic scope,
+embedding depth, and contextual licensing factors.
+\item[(ii)] \emph{Orientation}: $\omega(x) < 0$. The local inferential
+environment must be in a downward regime. This is the orientation
+condition, which corresponds to the DE-ness condition in standard
+accounts but is now understood as a property of the field rather than
+of a lexical item.
+\end{enumerate}
+
+These conditions are genuinely independent. An environment can be
+downward-oriented without being admissible for NPI licensing --- certain
+embedded contexts are downward-entailing but block NPI licensing for
+independent structural reasons. Conversely, an environment can be
+admissible in general while failing to carry the required downward
+orientation. NPI licensing fails in both cases, but for different
+reasons, and the distinction between the two failure modes has empirical
+consequences.
+
+
+Why Downward Orientation Licenses NPIs
+
+
+The independence of the two conditions raises the explanatory question
+more sharply: given that both conditions must be satisfied, what is the
+theoretical reason that downward orientation is one of them? The
+field-theoretic account provides an answer that the standard DE account
+does not.
+
+In an upward-entailing environment, inferential expansion proceeds
+outward: from narrower to broader sets, from more specific to more
+general distinctions. An existential expression such as \emph{ever} or
+\emph{any} ranges over a class of distinctions and asserts the
+non-emptiness of that class. In an upward-entailing environment, this
+assertion is redundant with ordinary scalar inference: if the class is
+non-empty at a specific level, upward inference carries the assertion to
+more general levels automatically. The NPI contributes no additional
+inferential work.
+
+In a downward-entailing environment, by contrast, the orientation of
+the field is reversed. Inference no longer expands outward; it contracts
+inward. In this regime, the existence of an instance at a general level
+does not guarantee existence at a specific level. The NPI \emph{ever}
+now does genuine inferential work: it asserts reachability across a
+region of the field where reachability is not guaranteed by the default
+expansion of upward inference. The NPI is licensed precisely because the
+field orientation creates a gap that the NPI's assertion is needed to
+fill.
+
+This gives a functional explanation of the licensing condition. NPIs are
+not licensed by downward entailment as an arbitrary syntactic trigger.
+They are licensed because downward orientation creates the inferential
+conditions under which their semantic contribution is non-trivial. An
+NPI in an upward-entailing environment contributes nothing that ordinary
+inference does not already deliver; an NPI in a downward-entailing
+environment contributes an assertion that the field orientation makes
+[Igenuinely informative.
+
+\begin{proposition}[Licensing and inferential contribution]
+\label{prop:npi-contrib}
+Let $\mathcal{F} = (X, R, \omega, A)$ be an inferential field and let
+$e$ be an NPI expression at position $x$. The inferential contribution
+of $e$ is non-trivial if and only if $\omega(x) < 0$.
+\end{proposition}
+
+\begin{proof}
+Suppose $\omega(x) > 0$. Then the local region is upward-entailing, and
+by condition (i) of Definition 2.2, $R(A) \subseteq R(B)$ whenever $A
+\subseteq B$. For an existential NPI ranging over a class $\mathcal{C}$
+of distinctions, the assertion that $\mathcal{C}$ is non-empty at some
+level is carried upward automatically: $R(\mathcal{C}) \supseteq
+\mathcal{C}$, and the reachability of members of $\mathcal{C}$ is
+entailed by the upward expansion of $R$. The NPI asserts what the field
+already delivers. Its contribution is trivial.
+
+Suppose $\omega(x) < 0$. Then the local region is downward-entailing,
+and by condition (ii) of Definition 2.2, $R(B) \subseteq R(A)$ whenever
+$A \subseteq B$. The default direction of inferential expansion is
+reversed. The assertion that $\mathcal{C}$ is non-empty at some level
+is no longer carried automatically: existence at a general level does
+not guarantee reachability at a specific level under contraction.
+The NPI must assert reachability explicitly. Its contribution is
+non-trivial.
+\end{proof}
+
+
+Domain Structure and Licensing Domains
+
+
+The 2024 monotonicity-domain finding that processing cost tracks domain
+structure rather than operator count has a direct parallel in NPI
+licensing. If licensing were purely a property of individual operators,
+then the licensing condition would be checked locally at each operator
+without reference to the broader domain structure. The field-theoretic
+account predicts otherwise: licensing is a property of admissible
+orientation regions, and those regions have spatial extent.
+
+\begin{definition}[Licensing domain]
+A \emph{licensing domain} for NPIs in $\mathcal{F}$ is a maximal
+connected component $D \subseteq X$ such that $A(x) = 1$ and $\omega(x)
+< 0$ for all $x \in D$.
+\end{definition}
+
+Several predictions follow from this definition.
+
+First, an NPI is licensed throughout a licensing domain, not merely at
+the position of the licensing operator. The domain has spatial extent,
+and the orientation condition is satisfied everywhere within it. This
+explains the well-known fact that NPIs can be licensed at a distance from
+their licensor, within the bounds of the appropriate syntactic scope.
+
+Second, the boundary of a licensing domain is a region of high
+orientation curvature: $\kappa_\omega$ is large near the boundary. The
+processing cost function $C(x) = \alpha \cdot \mathbf{1}[\omega(x) < 0]
++ \beta \cdot \kappa_\omega(x)$ therefore predicts that sentences where
+an NPI appears near the edge of a licensing domain --- where the field
+transitions from downward to upward orientation --- should be more
+costly to process than sentences where the NPI appears well within the
+domain. This is a testable prediction that distinguishes the field
+account from standard licensing accounts.
+
+Third, an NPI that appears outside a licensing domain but within an
+admissible region ($A(x) = 1$, $\omega(x) > 0$) should produce an
+ungrammaticality judgment associated with orientation mismatch rather
+than admissibility failure. The two failure modes predict different
+patterns of degradation and potentially different processing signatures.
+An NPI that appears outside an admissible region altogether ($A(x) = 0$)
+should produce a different kind of ungrammaticality. Whether these
+predicted differences in degradation type correspond to empirically
+distinguishable judgment profiles is an open question.
+
+
+Superpolarity and Weak NPIs
+
+
+The standard DE account treats all NPIs as requiring the same licensing
+condition. The empirical literature, however, distinguishes weak NPIs
+(licensed in a wide range of DE environments, including questions and
+conditionals) from strong NPIs (licensed only in a narrow range of
+environments, typically clausemate negation). This distinction is
+difficult to capture in a purely operator-based account.
+
+The field-theoretic account handles the distinction through the joint
+conditions of admissibility and orientation. A weak NPI requires only
+that $\omega(x) < 0$; it is insensitive to the admissibility structure
+except in the minimal sense that the position must be syntactically
+accessible. A strong NPI imposes an additional admissibility condition:
+it requires not merely that the local orientation be downward but that
+the admissibility structure satisfy a further constraint, which in
+practice corresponds to the requirement that the licensor be a clausemate
+negative operator rather than a more distant downward-entailing
+expression.
+
+\begin{definition}[Weak and strong NPI probes]
+A \emph{weak NPI probe} at $x$ succeeds if $\omega(x) < 0$, regardless
+of the admissibility structure beyond syntactic accessibility. A
+\emph{strong NPI probe} at $x$ succeeds if $\omega(x) < -\theta$ for
+some threshold $\theta \in (0,1)$ and $A(x) = 1$ under a restricted
+admissibility structure $A_s$ that requires clausemate licensing.
+\end{definition}
+
+The threshold $\theta$ in the strong NPI definition captures the
+intuition that strong NPIs require not merely a downward-oriented
+environment but a strongly downward-oriented one: the orientation must
+exceed a threshold magnitude, not merely be negative. This is a natural
+consequence of allowing $\omega$ to range continuously over $[-1,+1]$
+rather than taking binary values. Environments near the boundary
+$\omega(x) = 0$ are weakly downward-oriented and license weak but not
+strong NPIs; environments deep in the downward regime license both.
+
+
+The Probe Metaphor and Its Limits
+
+
+We have described NPIs as probes of the inferential field, but the
+metaphor should not be pressed too far. An NPI is not an independent
+detector inserted into the sentence to measure field properties. It is a
+lexical item whose semantic contribution is constituted by its
+sensitivity to field orientation: it asserts reachability across a
+downward-oriented region, and its grammaticality is the reflection of
+whether such an assertion is coherent in the local environment. The probe
+metaphor captures the epistemic situation of the linguist or the grammar:
+by observing where NPIs are licensed, one can infer the orientation
+structure of the inferential field. The NPI is a probe in the sense that
+a thermometer is a probe: it does not measure temperature independently
+of being a thermometer; its readings constitute evidence about the
+environment precisely because of what it is.
+
+The field-theoretic account therefore does not add NPIs as an external
+diagnostic layer on top of the semantic theory. It integrates them as
+lexical items whose licensing conditions are determined by the same
+geometric structure that determines processing cost, monotonicity
+behavior, and negation distortion. The grammar, the processing system,
+and the geometric framework are not three separate theories coordinated
+by stipulation. They are three descriptions of the same inferential field.
+
+
+Persistence, Memory, and Residual Distortion
+
+
+The delayed-verification experiments occupy a distinctive position in the
+empirical record. The other phenomena discussed in this paper ---
+double-negation non-additivity, domain-sensitive monotonicity cost, NPI
+licensing --- concern the processing of sentences at or near the time of
+their production. The delayed-verification result concerns what happens
+after processing has nominally concluded. A negated sentence retains a
+processing cost advantage for the corresponding positive sentence even
+when a temporal gap is introduced between the sentence and the
+verification image. The cost is not a parsing artifact that dissipates
+with time; it is a property of the stored representation.

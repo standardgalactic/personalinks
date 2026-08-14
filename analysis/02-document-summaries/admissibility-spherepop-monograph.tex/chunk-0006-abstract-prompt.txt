@@ -1,0 +1,442 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**1.  What a “computational geodesic’’ is**
+
+In differential geometry a *geodesic* is the straightest possible curve bet[3D[K
+between two points in a curved manifold – it locally minimizes distance (or[3D[K
+(or, more generally, the action) while obeying the constraints of the space[5D[K
+space (e.g., staying within a submanifold).  
+
+Applying this idea to Spherepop computation:
+
+* **Manifold** – The *semantic configuration space* \( \mathcal{A}(X_0,X_n)[20D[K
+\mathcal{A}(X_0,X_n)\) is the curved “space’’ we are moving through. It con[3D[K
+consists of all admissible sequences of evaluation events (the different wa[2D[K
+ways we can pop bubbles, resolve constraints, and accumulate commitment cos[3D[K
+costs).
+
+* **Action functional** – The quantity that geodesics try to minimize is th[2D[K
+the *action* \(S[\gamma]=\sum_t \mathcal{L}_t\) for a trajectory \(\gamma\)[10D[K
+\(\gamma\). Here \(\mathcal{L}_t\) captures both thermodynamic cost (energy[7D[K
+(energy spent) and structural commitment (how much future evaluation power [K
+is locked in by popping bubbles).
+
+* **Constraint submanifold** – Only trajectories that stay inside the admis[5D[K
+admissibility manifold (i.e., respect bubble topology and constraint rules [K
+at each step) are allowed. This mirrors how a geodesic must remain within t[1D[K
+the allowed region of a Riemannian manifold.
+
+Thus, a *computational geodesic* is the trajectory in \(\mathcal{A}(X_0,X_n[21D[K
+\(\mathcal{A}(X_0,X_n)\) that makes \(S[\gamma]\) stationary (i.e., satisfi[7D[K
+satisfies the Euler–Lagrange equations for computation). It represents the [K
+“most economical’’ way of converting future accessibility into present comm[4D[K
+commitment without unnecessary detours.
+
+---
+
+**2.  Variational formulation**
+
+1. **Space of histories**  
+   \[
+   \mathcal{A}(X_0,X_n)=\{\gamma:\{0,\dots ,n\}\to A(X)\;|\;\text{each step[4D[K
+step respects the constraint configuration at that moment}\}.
+   \]
+
+2. **Action functional**  
+   \[
+   S[\gamma]=\sum_{t=1}^{n}\mathcal{L}_t(\gamma_t),
+   \]
+   where each local Lagrangian \(\mathcal{L}_t\) encodes the commitment cos[3D[K
+cost \(\Delta C_t\) and accessibility change \(\Delta\Omega_t\) incurred by[2D[K
+by popping a particular bubble at step \(t\).
+
+3. **Stationary condition**  
+   A trajectory \(\gamma^*\) is a computational geodesic if for every admis[5D[K
+admissible variation \(\delta\gamma\) with fixed endpoints (\(X_0,\,X_n\)):[16D[K
+(\(X_0,\,X_n\)):
+   \[
+   \frac{d}{dt}\Big|_{t=0} S[\gamma+\varepsilon\delta\gamma]=0,
+   \]
+   where \(\varepsilon\) is an infinitesimal parameter. This condition guar[4D[K
+guarantees that the total action does not decrease when we perturb the whol[4D[K
+whole path while staying inside \(\mathcal{A}(X_0,X_n)\).
+
+---
+
+**3.  Why “least structural commitment’’ matters**
+
+- **Aggressive early commits** (e.g., popping a bubble that later forces ma[2D[K
+many more pops) raise the total action because future evaluation power is l[1D[K
+lost cheaply now.
+- **Conservative deferral** (avoiding any pop until forced) may accumulate [K
+deferred‑commitment cost, which eventually becomes expensive to resolve.
+
+The *principle of least structural commitment* states that admissible compu[5D[K
+computation chooses a trajectory where these two penalties balance. It is n[1D[K
+not “greedy’’ (always pop the first possible bubble) nor “lazy’’ (defer eve[3D[K
+every pop). Instead it spreads commitments so that the sum of all future ac[2D[K
+accessibility costs equals the present commitment cost.
+
+---
+
+**4.  From classical mechanics to Spherepop**
+
+| Classical Mechanics | Spherepop Computation |
+|---------------------|-----------------------|
+| Action principle: minimise \(\int L(q,\dot q)\) along a path in configura[9D[K
+configuration space. | Action functional \(S[\gamma]\) measures total futur[5D[K
+future‑accessibility cost minus present commitment, evaluated over all admi[4D[K
+admissible trajectories connecting the same start and end states. |
+| Local Euler–Lagrange equations follow from global stationarity. | Station[7D[K
+Stationary geodesics (variational problem) imply local balance of \(\Delta [K
+C_t\) and \(\Delta\Omega_t\) at each step via the Euler–Lagrange condition [K
+for computation. |
+
+The key point is that *the selection rule*—whether a given pop event is tak[3D[K
+taken—is determined by an *global* property of the whole trajectory, not me[2D[K
+merely the instantaneous local energy or potential.
+
+---
+
+**5.  Semantic configuration space & topology**
+
+- **Initial state**: unreduced expression \(X_0\) with full bubble topology[8D[K
+topology \(\mathcal{B}_0\).
+- **Terminal state**: fully reduced expression \(X_n\) (all bubbles popped,[7D[K
+popped, all constraints resolved).
+- **Intermediate points**: partial reductions where a subset of bubbles has[3D[K
+has been popped; each point carries the current constraint configuration an[2D[K
+and accumulated commitment cost.
+
+The *path metric* in this space is precisely the action \(S[\gamma]\). Stat[4D[K
+States that can be reached with low‑cost steps are “close’’ (small action),[8D[K
+action), while states requiring costly mandatory pops are distant. This top[3D[K
+topology mirrors how one might walk on a mountain: staying near flat valley[6D[K
+valleys (low action) yields an overall shorter route.
+
+---
+
+**6.  Concrete example – evaluating \(1+3\times2^2\)**
+
+| Step | Expression after pop | Bubble popped | Commitment cost \(\Delta C\[2D[K
+C\) | Accessibility change \(\Delta\Omega\) |
+|------|-----------------------|---------------|---------------------------|------|-----------------------|---------------|----------------------------|----------------------------------------|
+| 0 (start) | `1 + 3 * X`           | –             | 0                    [K
+       | 0                                      |
+| 1      | `1 + 3 * 4`           | \(2^2\)       | \(\Delta C_1 = a\)      [K
+    | \(\Delta\Omega_1 = b\)                 |
+| 2      | `1 + 12`              | (none)        | \(\Delta C_2 = c\)      [K
+    | \(\Delta\Omega_2 = d\)                 |
+| 3      | `13`                   | –             | \(\Delta C_3 = e\)     [K
+     | \(\Delta\Omega_3 = f\)                 |
+
+The *geodesic* (least‑cost trajectory) is the one that first pops \(2^2\) b[1D[K
+because it yields a lower total action than any alternative ordering that w[1D[K
+would force an earlier pop of `+` or `*`. The computed path “exponentiation[15D[K
+“exponentiation → multiplication → addition’’ minimizes:
+
+\[
+S = \Delta C_1 + \Delta C_2 + \Delta C_3,
+\]
+
+subject to the constraint that each step respects the current bubble topolo[6D[K
+topology (e.g., you cannot multiply before \(2^2\) is computed).
+
+---
+
+**7.  Why exposing the trajectory matters**
+
+An opaque system that returns only the final value (`13`) hides:
+
+1. **Which bubbles were forced early**, indicating hidden bottlenecks.
+2. **The cumulative commitment cost** at each step, which may be non‑linear[10D[K
+non‑linear (e.g., popping a high‑cost bubble now can save later cheap pops)[5D[K
+pops).
+3. **Potential for alternative low‑cost paths** that might have been avoide[6D[K
+avoided due to premature reduction.
+
+Understanding computation requires the *semantic configuration space* and i[1D[K
+its metric; otherwise we cannot diagnose inefficiencies or redesign evaluat[7D[K
+evaluations without re‑running the whole process.
+
+---
+
+### TL;DR
+
+A computational geodesic is the admissible path in the semantic configurati[11D[K
+configuration space of a Spherepop expression that minimizes the total acti[4D[K
+action functional, analogous to how a straight line (geodesic) minimizes di[2D[K
+distance on a curved manifold. By solving the variational problem “arg stat[9D[K
+“arg stationary \(S[\gamma]\)” we obtain trajectories that balance early co[2D[K
+commitment costs against future accessibility penalties—exactly what the pr[2D[K
+principle of *least structural commitment* prescribes. This global optimali[8D[K
+optimality condition, encoded in the path metric (action), explains why mer[3D[K
+merely knowing the final value is insufficient for understanding computatio[10D[K
+computation; the full trajectory’s structure must be retained and examined.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: admissibility-spherepop-monograph.tex
+
+NEW CHUNK
+=========
+
+
+In a Riemannian manifold, geodesics are the curves of shortest length between two points: the paths that minimize the total distance traversed in the manifold's geometry. In a pseudo-Riemannian manifold such as spacetime, timelike geodesics are the paths that maximize proper time, which in the context of general relativity means the paths followed by freely falling observers. In both cases, geodesics are defined by a variational condition — extremality of a length or action functional — and in both cases, the geodesic equation, which is a local differential equation governing the path, is derived from the global variational condition by the calculus of variations.
+
+The stationary trajectories of the Spherepop action functional are the computational analogues of geodesics in semantic configuration space. They are the paths of least structural commitment through the admissibility manifold: the evaluation orders that distribute commitment cost most efficiently across the steps of the computation, avoiding unnecessary foreclosure of future possibilities at early stages while not deferring mandatory commitments indefinitely. As in the geometric case, these stationary trajectories satisfy a local equation — the computational Euler-Lagrange equation — that is derived from the global variational principle and that determines, at each step, how the commitment cost and accessibility change must be balanced.
+
+The notion of a computational geodesic makes precise the intuition that there is, for any given computation, an evaluation order that is in some sense natural: not arbitrary, not determined by convention (as operator precedence rules are determined), but geometrically determined by the structure of the expression's admissibility manifold. The conventional evaluation order for $1 + 3 \times 2^2$ — exponentiation first, then multiplication, then addition — is the geodesic of the semantic configuration space defined by the expression's nested bubble structure, because that order minimizes the total commitment cost: each bubble is popped at the earliest moment at which it is admissible to do so, which is also the moment at which popping it incurs the lowest cost in foreclosed future possibilities. The precedence rule, on this view, is not an arbitrary convention but a compressed encoding of the geodesic structure of arithmetic's semantic configuration space — and this is why the convention is non-arbitrary even though its presentation is typically unmotivated.
+
+
+Histories as Variational Objects and the Path-Integral Analogy
+
+
+The variational formulation of the Spherepop action suggests a further analogy, more speculative but philosophically significant, with the Feynman path-integral formulation of quantum mechanics. In Feynman's formulation, the probability amplitude for a quantum system to transition from an initial state to a final state is computed not by identifying the single classically optimal trajectory but by summing contributions from all possible trajectories, weighted by a phase factor $e^{iS[\gamma]/\hbar}$ that depends on the classical action $S[\gamma]$ of the trajectory. The classical limit $\hbar \to 0$ recovers the principle of stationary action, because in this limit the contributions of non-stationary trajectories destructively interfere and cancel, leaving only the contribution of the stationary trajectory — the classical path — which interferes constructively with its near neighbours.
+
+The conceptual content of the path integral formulation is that the physically realized outcome is not the result of a single trajectory being selected by some prior mechanism and then executed; it is the result of a superposition over all possible trajectories, with the classical behaviour emerging from the constructive interference of near-stationary trajectories and the suppression of non-classical behaviour by the destructive interference of trajectories with rapidly varying phases. The trajectory is not chosen; it is selected by the geometry of the interference pattern in path space.
+
+The semantic analogy — and it must be insisted upon that this is an analogy, not a claim about quantum mechanisms in cognition — is the following. When a cognitive system or an interpretive framework encounters an ambiguous expression, it does not, typically, execute a deterministic selection procedure that identifies the uniquely correct interpretation and discards all others. It evaluates many possible interpretive trajectories simultaneously, and the stable interpretation that emerges is the one that is reinforced by constructive interference across the space of admissible interpretations — the interpretation to which many nearby trajectories through semantic configuration space lead, and from which small perturbations of the initial expression or context do not depart. Unstable or incoherent interpretations correspond to trajectories that destructively interfere: small variations in context or expression lead to radically different interpretations, producing instability in the interpretation across the space of relevant variations.
+
+\begin{definition}
+A semantic interpretation $m$ of an expression $X$ is \emph{stable under admissible variation} if there exists a neighbourhood $U$ of $X$ in semantic configuration space such that all trajectories $\gamma$ with $\gamma(0) \in U$ and $\gamma(n) = X_n$ converge to the same terminal interpretation $m$. Stable interpretations are the semantic analogues of classically realized trajectories: they are the interpretations for which the space of nearby admissible histories is coherent, all leading to the same result.
+\end{definition}
+
+The relevance of this analogy to the monograph's concerns is immediate. Opaque computational systems — calculators, black-box algorithms, language models that provide terminal outputs without visible reasoning trajectories — suppress all information about the interference structure in semantic configuration space. They provide the terminal interpretation without any indication of whether that interpretation is stable under admissible variation, whether nearby expressions would lead to radically different outputs, or whether the space of near-stationary semantic trajectories is coherent or fragmented. Spherepop's insistence on preserving the evaluation history is, in this light, an insistence on preserving the information needed to assess semantic stability: whether the terminal state $X_n = 13$ is robust to small variations in the expression, or whether it is an accident of the specific evaluation path taken through a fragmented admissibility space.
+
+This is the deepest form of the claim that underlies the entire Part III: \emph{reality selects histories, not merely states}. In classical mechanics, the principle of stationary action selects the physical trajectory from the space of all possible ones; the terminal state is meaningful only as the endpoint of that trajectory. In quantum mechanics, the path integral selects stable outcomes as those that survive constructive interference across the space of all trajectories; the terminal probability amplitude is meaningful only as the integrated contribution of the full path-space geometry. In thermodynamics, the second law selects the direction of spontaneous evolution as the direction of increasing accessibility volume; the terminal equilibrium state is meaningful only as the terminus of the history of constraint relaxation that produced it. In Spherepop computation, the variational principle of least structural commitment selects the optimal evaluation trajectory from the admissibility manifold; the terminal value is meaningful only as the product of the specific history of admissibility transitions that generated it.
+
+The structural pattern is the same in every case. What varies is the domain — physical, quantum mechanical, thermodynamic, computational — and the specific form taken by the action functional and the admissibility conditions. What is invariant is the logical structure: the trajectory is the primary object; the terminal state is a derived object; and understanding consists in access to the former, not merely the latter. A philosophy of computation that privileges terminal states over trajectories — that treats the output of a computation as its primary content and the computational history as an implementation detail — inverts this order of priority and thereby forfeits the possibility of genuine understanding of the processes it describes.
+
+
+Action and Computational Cost
+
+
+The Spherepop action functional is defined as
+\[
+  S[\gamma] = \sum_{t=1}^{n} \mathcal{L}_t,
+\]
+where $\mathcal{L}_t$ is the Lagrangian at step $t$:
+\[
+  \mathcal{L}_t = \Delta\Omega_t + \lambda \Delta C_t.
+\]
+
+Here $\Delta\Omega_t$ denotes the change in admissible possibility volume at step $t$, measured by the change in the logarithm of the number of admissible future evaluation sequences; $\Delta C_t$ denotes the change in commitment complexity, measured by the increase in the number of constraints actively binding future evaluations; and $\lambda > 0$ is a coupling constant that sets the relative weight of thermodynamic accessibility cost against structural commitment cost.
+
+The Lagrangian $\mathcal{L}_t$ is therefore a sum of two conceptually distinct contributions. The first, $\Delta\Omega_t$, is a thermodynamic term: it records how much the evaluation step at time $t$ contracts or expands the space of admissible future computations. A pop event that collapses a deeply nested bubble will typically reduce $\Omega$ significantly, because it forecloses many alternative evaluation paths that would have been available if the bubble had been left intact. A bind event that applies a new constraint reduces $\Omega$ by exactly the volume of the phase space region ruled out by the new constraint. A refuse event preserves $\Omega$ locally at the cost of deferring the evaluation.
+
+The second contribution, $\lambda \Delta C_t$, is a structural term: it records the increase in the system's commitment complexity — the number of active binding constraints — as a consequence of the evaluation step. Commitment complexity increases with each bind operation and decreases with each pop that resolves a bound constraint. It is a measure of the structural rigidity of the ongoing computation: how many constraints are currently in force, how much of the future evaluation space has been locked down by prior commitments, how much freedom of maneuver remains.
+
+The sum $\mathcal{L}_t = \Delta\Omega_t + \lambda \Delta C_t$ therefore measures the total cost of a single evaluation step: the thermodynamic cost of reducing future accessibility plus the structural cost of increasing current commitment. A minimal-action trajectory is one that achieves its computational goal — reaches the terminal state — while incurring the smallest total cost summed over all steps. This is a precise computational analogue of the principle of least action in physics.
+
+
+Commitment and Remaining Freedom
+
+
+The conjugate momentum to the possibility volume $\Omega$ is defined, in direct analogy with Hamiltonian mechanics, as the partial derivative of the Lagrangian with respect to the rate of change of $\Omega$:
+\[
+  \pi_t = \frac{\partial \mathcal{L}_t}{\partial \dot{\Omega}_t}.
+\]
+For the Lagrangian $\mathcal{L}_t = \Delta\Omega_t + \lambda \Delta C_t$, this yields $\pi_t = 1$ as a formal statement in the discrete case, but the more illuminating expression emerges when the Lagrangian is taken to depend on the rate of change of accessibility volume: then $\pi_t$ is the sensitivity of the Lagrangian to marginal changes in how quickly the accessibility volume is being contracted. This is the \emph{commitment momentum}: the rate at which the evaluation process is converting future freedom into present determination.
+
+The Hamiltonian is then:
+\[
+  H_t = \pi_t \Omega_t - \mathcal{L}_t.
+\]
+On the physical interpretation, $H_t$ represents the \emph{remaining freedom} of the computation at step $t$: the product of the current accessibility volume $\Omega_t$ with the commitment momentum $\pi_t$, less the current Lagrangian cost. This is precisely the Legendre transform of the Lagrangian with respect to $\Omega$, and it generates the Hamiltonian equations of motion for the constrained evolution:
+\[
+  \dot{\Omega}_t = \frac{\partial H_t}{\partial \pi_t}, \qquad
+  \dot{\pi}_t = -\frac{\partial H_t}{\partial \Omega_t}.
+\]
+The first equation says that the rate of change of accessibility volume is determined by the commitment momentum: systems with high commitment momentum evolve rapidly toward low-$\Omega$ states, collapsing their future possibility spaces quickly. The second equation says that the rate of change of commitment momentum is determined by the sensitivity of the Hamiltonian to changes in accessibility volume: when remaining freedom decreases steeply with volume, commitment momentum grows, reflecting the accelerating pressure toward resolution as the evaluation approaches its terminal state.
+
+The philosophical content of the Hamiltonian formulation is significant. It identifies \emph{remaining freedom} as the primary dynamical quantity of a computation: not the current state, not the terminal result, but the structured capacity for future determination that the current constraint configuration preserves. A computation with high remaining freedom is one that has not yet committed to a specific evaluation path: many alternatives are still accessible, many pops are still admissible, many bind operations could still be applied or not applied. A computation with low remaining freedom has locked itself into a nearly determined trajectory: the terminal result is nearly fixed by the accumulated commitments, and only a small number of admissible evaluation sequences remain.
+
+This framing makes explicit what black-box computational systems conceal. When a calculator evaluates $1 + 3 \times 2^2 = 13$ instantaneously, it destroys all information about the remaining-freedom profile of the computation: how much future freedom was available after the exponentiation was resolved, how much remained after the multiplication, what the commitment cost of each step was. The result $13$ is the terminal state of a trajectory through admissibility space whose remaining-freedom profile has been completely erased. Spherepop preserves this profile by making each evaluation step visible as a pop event with associated changes in $\Omega$ and $C$.
+
+
+Hamiltonians of Admissibility
+
+
+The Hamiltonian of admissibility $H_t$ is not a single operator but a family of operators parameterized by the constraint configuration in force at step $t$. Different constraint configurations — different bubble topologies, different sets of active bind constraints — yield different Hamiltonians, and therefore different equations of motion for the remaining-freedom dynamics. This is the Spherepop analogue of the observation in constrained Hamiltonian mechanics that constraint surfaces generate modified equations of motion through the Dirac bracket construction.
+
+\begin{definition}
+Let $\mathcal{B}_t$ denote the bubble topology in force at step $t$ of a computation: the set of active bubbles, their nesting relations, and their associated admissibility conditions. The Hamiltonian of admissibility is the functional
+\[
+  H[\mathcal{B}_t](\Omega, \pi) = \pi \Omega - \mathcal{L}[\mathcal{B}_t](\Omega, \Delta C),
+\]
+where $\mathcal{L}[\mathcal{B}_t]$ is the Lagrangian computed with respect to the constraint structure encoded in $\mathcal{B}_t$.
+\end{definition}
+
+The evolution of $\mathcal{B}_t$ as computation proceeds is discrete: each pop event removes a bubble from the topology, each bind event adds a constraint to an existing bubble's boundary conditions, and each refuse event leaves the topology unchanged while recording the refusal as an event in the evaluation history. The sequence of bubble topologies $\mathcal{B}_0, \mathcal{B}_1, \ldots, \mathcal{B}_n$ constitutes the structural skeleton of the computational trajectory, and the sequence of Hamiltonians $H[\mathcal{B}_0], H[\mathcal{B}_1], \ldots, H[\mathcal{B}_n]$ is the sequence of generators of the remaining-freedom dynamics at each step.
+
+The admissibility condition on each pop event is expressible as a constraint on the Hamiltonian: the event $\spop{b}$ at step $t$ is admissible if and only if the bubble $b$ is an innermost bubble in $\mathcal{B}_{t-1}$ — no other admissible bubble is nested strictly inside $b$ — and the constraint conditions on $b$'s boundary are satisfied by the current state. This is the Spherepop analogue of the admissibility condition for Dirac first-class constraints in constrained Hamiltonian mechanics: a constraint is first-class if and only if it commutes with all other constraints under the Poisson bracket, meaning that its application is consistent with maintaining the other constraints. A bubble is poppable if and only if its internal evaluation is consistent with the constraint conditions imposed by all its containing bubbles.
+
+
+Shannon and Statistical Structure
+
+
+The connection between the Spherepop action formalism and information theory emerges most clearly when the accessibility volume $\Omega$ is interpreted not as a volume in a continuous phase space but as a count of admissible evaluation sequences in the discrete setting of combinatorial computation. In this setting, $\Omega_t$ is the number of distinct admissible computational trajectories that could complete the evaluation from state $t$ onward, given the constraint configuration $\mathcal{B}_t$.
+
+Shannon's entropy of the uniform distribution over these trajectories is then $H_t = \log \Omega_t$, which is precisely the Boltzmann entropy of the accessible region in the space of computational histories. The Spherepop action $S[\gamma] = \sum_t \mathcal{L}_t$ is therefore a generalization of the Shannon entropy summed over the trajectory: it measures not merely the uncertainty at each step but the total cost, in units of information and structural commitment, of the specific trajectory $\gamma$ through the space of all admissible trajectories.
+
+This connection makes precise the sense in which a computation has an informational cost. Each pop event that commits to a specific reduction is, from the perspective of the space of admissible trajectories, a selection among many possible evaluations: it reduces the remaining uncertainty about how the computation will proceed. The informational cost of the pop event is the reduction in $\log \Omega$ it produces: the number of bits by which the set of remaining possible completions is contracted. A pop event that resolves an exponentiation within a deeply nested context may contract the space of completions by many bits, because the result of the exponentiation flows through many subsequent operations. A pop event that resolves an isolated leaf expression may contract the space by only a few bits, because few subsequent operations depend on it.
+
+
+Compression and Meaning
+
+
+The information-theoretic interpretation of the Spherepop action raises a natural question: what is the relationship between compression of a computation and preservation of its meaning? This question has a precise answer within the Spherepop framework. Two computational histories $\gamma_1$ and $\gamma_2$ are semantically equivalent — they preserve the same meaning — if and only if they agree on all observable quantities: the terminal result and the admissibility structure of the evaluation (which constraints were in force at each step, which evaluations were admitted or refused). Histories that differ only in unobservable details — in the precise enumeration of microscopically distinct but observationally equivalent intermediate states — may be identified under the collapse operation $\scollapse{q}$ without semantic loss.
+
+Compression of a computational history is therefore the operation of identifying all semantically equivalent histories under an appropriate equivalence relation $\sim_q$. The compressed description $\gamma/{\sim_q}$ retains the observationally essential features of the trajectory — its terminal result, its admissibility profile, its commitment cost — while eliding the observationally redundant details. The compression ratio is $\log \lvert \ker q \rvert$, exactly as in the thermodynamic case. And the condition for the compression to be semantically valid is the factorization condition from the original Spherepop formulation:
+\[
+  f(x) = f(x') \wedge q(x) = q(x') \;\Rightarrow\; \exists!\, \bar{f} \text{ such that } f = \bar{f} \circ \scollapse{q},
+\]
+which says that any observable function $f$ that is invariant under $\sim_q$ descends uniquely through the collapse map. This is a categorical statement: it asserts the existence of a unique factorization through the coequalizer of the equivalence relation, which is the standard universal property of quotient objects in a category with quotients.
+
+The distinction between compression that preserves meaning and compression that destroys it is therefore not a matter of degree but of structure. Compression preserves meaning if and only if the equivalence relation $\sim_q$ is admissibility-preserving: histories that are identified under $\sim_q$ must agree on all observationally meaningful features. Compression destroys meaning when the equivalence relation is applied without regard to admissibility, when histories with different observable features are identified because they share a terminal result, when the computational provenance is erased because the terminal value is all that is considered relevant. The calculator that returns $13$ is performing compression of the second, destructive kind. Spherepop insists on compression of the first, meaning-preserving kind.
+
+
+Information as Constraint
+
+
+The framing of information as constraint — rather than as content, as message, or as reduction of uncertainty — is the natural completion of the thermodynamic interpretation developed in this part of the monograph. On the constraint interpretation, information is not a substance or a quantity possessed by a message in isolation but a relational property: the information in a message, relative to a receiver's prior state, is precisely the set of constraints that message imposes on the receiver's future states. A message that rules out many possible futures carries more information than one that rules out few, because it more severely restricts the receiver's admissibility set.
+
+This is Shannon's insight, stated in the language of the present framework. Shannon's entropy $H = -\sum_i p_i \log p_i$ measures the expected reduction in admissibility set that a message from a source with probability distribution $p$ will impose on the receiver. When all messages are equally probable, the entropy is maximized: each message is maximally informative because each rules out the largest number of alternatives. When one message is certain, the entropy is zero: the message carries no information because it rules out nothing — the receiver already knows it is coming.
+
+\begin{definition}
+The information content of an event $e$ relative to a constraint configuration $\mathcal{C}$ is
+\[
+  I(e \mid \mathcal{C}) = \log \frac{\lvert \sadm(\mathcal{C}) \rvert}{\lvert \sadm(\mathcal{C} \cup \{e\}) \rvert}
+                        = S(\mathcal{C}) - S(\mathcal{C} \cup \{e\}),
+\]
+the reduction in entropy — the logarithm of the ratio of accessibility volumes — produced by conditioning on the occurrence of $e$.
+\end{definition}
+
+On this definition, every pop event in a Spherepop computation carries a definite information content relative to the constraint configuration in which it occurs: the reduction in the accessibility volume of the remaining computation produced by the commitment the pop event entails. The total information content of a computational history $\gamma = (e_1, \ldots, e_n)$ is the sum of the information contents of its constituent events:
+\[
+  I(\gamma) = \sum_{t=1}^{n} I(e_t \mid \mathcal{C}_{t-1}),
+\]
+which is exactly the action $S[\gamma]$ when the Lagrangian is taken to be the pure information cost with $\lambda = 0$. The action functional thus generalizes the information content of a trajectory to include both the information-theoretic cost (the reduction in accessibility volume) and the structural cost (the increase in commitment complexity), weighted by the parameter $\lambda$.
+
+
+Semantic Entropy
+
+
+The final concept of this chapter, and of Part III as a whole, is \emph{semantic entropy}: the analogue, in the domain of meaning and interpretation, of thermodynamic entropy in the domain of physical states. Semantic entropy measures the volume of the accessibility space in the domain of meaningful interpretations rather than physical microstates, and it obeys the same qualitative laws as thermodynamic entropy: it increases when constraints on interpretation are relaxed, decreases when constraints are applied, and is maximized at semantic equilibrium — the condition in which all meaningful interpretations compatible with the available evidence are equally accessible.
+
+The concept of semantic entropy makes precise a set of intuitions that are otherwise difficult to articulate. When a text or expression is highly ambiguous — when many different interpretations are compatible with its surface form — its semantic entropy is high. When a text is highly specific — when its interpretation is almost uniquely determined by its context, prior knowledge, and semantic constraints — its semantic entropy is low. The process of interpretation is the process of reducing semantic entropy by applying constraints derived from context, prior knowledge, pragmatic implicature, and compositional structure. Understanding is the terminal state of this process: the condition in which the semantic admissibility set has been reduced to a small enough volume that a specific interpretation can be adopted with confidence.
+
+\begin{definition}
+Let $\mathcal{I}(e)$ denote the space of possible interpretations of an expression $e$, and let $\mathcal{C}$ denote the contextual constraints applicable to $e$ (background knowledge, semantic conventions, pragmatic expectations). The semantic entropy of $e$ relative to $\mathcal{C}$ is
+\[
+  S_{\mathrm{sem}}(e \mid \mathcal{C}) = \log \lvert \{ i \in \mathcal{I}(e) : i \text{ is admissible under } \mathcal{C} \} \rvert.
+\]
+\end{definition}
+
+Semantic entropy is directly relevant to the critique of black-box computational systems developed in Chapter~9. When a calculator returns $13$, the semantic entropy of the output, relative to the constraints provided by the input expression $1 + 3 \times 2^2$, is zero: there is exactly one admissible interpretation of the numeral $13$ in this context. But the semantic entropy of the \emph{process} has been artificially collapsed: the calculator's output provides no information about which of the many possible computational trajectories was actually taken, what admissibility conditions were in force at each step, or what the commitment cost of the computation was. The output is semantically determinate but computationally opaque.
+
+Spherepop's contribution to semantic entropy is structural: by preserving the evaluation history as a sequence of bubble pops with associated admissibility conditions and commitment costs, it maintains the computational information that the terminal value discards. The semantic entropy of a Spherepop computation history is higher than the semantic entropy of its terminal result, in the same way that a thermodynamic history carries more information than the macrostate at its terminal point. But this higher entropy is not noise or ambiguity — it is preserved structure, the record of how the result was reached, which is precisely the information required for understanding rather than merely for verification. Thermodynamics, information theory, and the Spherepop formalism converge here on a single principle: meaning is not in the terminal state alone but in the trajectory that reaches it.
+
+ \clearpage
+
+
+
+
+\part{Emergence, Complexity, and Self-Organization}
+
+
+\chapter{The Emergent Universe}
+\chapterrule
+
+\begin{chapterprecis}
+Complexity and self-organization are examined through the lens of
+nested systems: evolutionary constraint formation, emergence as
+structured collapse, and the cosmos as a constraint-navigation
+process. The chapter develops the idea that agency is a
+thermodynamic gradient phenomenon.
+\end{chapterprecis}
+
+
+Complexity and Self-Organization
+
+
+The study of complexity and self-organization is, at its most precise, the study of how constraint structures generate ordered patterns from disordered initial conditions. A self-organizing system is not a system that violates thermodynamics by producing order from nothing. It is a system that exploits the local admissibility conditions imposed by its physical substrate to channel the dissipation of free energy into the formation and maintenance of structured, far-from-equilibrium patterns. The order that emerges is not imposed from outside; it arises from the interaction of the system's components under the constraint of their local admissibility conditions, and it persists as long as the free-energy gradient driving its formation continues to be supplied.
+
+Complexity, in the technical sense relevant here, is not synonymous with disorder or unpredictability. A complex system is one that exhibits rich, structured behavior at multiple scales simultaneously: local interactions that generate global patterns, global constraints that shape local dynamics, and feedback loops that couple the two levels in ways that produce behaviors not predictable from either level alone. The Spherepop framework is naturally suited to the description of complexity in this sense, because the nested bubble structure of an admissibility manifold is precisely the kind of multi-scale hierarchical architecture that complex systems exhibit: local constraint configurations within individual bubbles, global constraint structures at the level of the full bubble topology, and coupling between levels through the propagation of pop results from inner to outer bubbles.
+
+
+Nested Systems Within Systems
+
+
+The recursive nesting of systems within systems is the organizational principle common to the most complex structures in the known universe: cells within organisms, organisms within ecosystems, ecosystems within planetary systems, social institutions within civilizations, propositions within proofs, subroutines within programs, bubbles within bubbles. In each case, the nested structure is not merely a convenient description imposed by an observer; it reflects a genuine architectural feature of the system: the fact that certain collections of components are more tightly coupled to each other than to components outside the collection, and that the interface between the collection and its environment is constrained in specific ways that make the collection's behavior at least partially autonomous from the external context.
+
+The Spherepop framework treats nested systems as its primary formal object. Each bubble is a nested system: a collection of internal components (its contents) enclosed within a boundary (its membrane) that interfaces with the external context (the containing bubble or the outermost evaluation environment) through a constrained channel (the pop result). The nesting relation among bubbles directly encodes the nesting relation among the corresponding subsystems. The admissibility conditions at each bubble's boundary encode the interface constraints between the subsystem and its containing system. The pop operation encodes the upward propagation of computed results from inner subsystems to outer ones. The entire multi-scale architecture of a complex system is therefore directly representable in the Spherepop formalism, without loss of the hierarchical structure that makes the system's complexity organized rather than chaotic.
+
+
+Evolutionary Constraint Formation
+
+
+The evolution of complex biological systems can be understood, through the Spherepop lens, as a process of progressive constraint formation: the historical accumulation of admissibility conditions that successively narrow the space of viable developmental and behavioral trajectories while simultaneously enabling the reliable production of increasingly complex organized structures. Each evolutionary innovation — a new biochemical pathway, a new structural protein, a new regulatory mechanism — is the addition of a new constraint to the organism's admissibility manifold: a new condition that the organism's developmental and physiological processes must satisfy in order to be viable.
+
+This framing appears to be in tension with the standard account of evolution as the expansion of phenotypic possibility through the accumulation of heritable variation. But the tension is superficial. The paradox of evolutionary complexity is that the accumulation of constraints enables rather than restricts the production of complex structures. A protein whose folding is highly constrained — whose amino acid sequence is tightly coupled to a specific three-dimensional structure — can perform enzymatic functions that an unconstrained polymer cannot, precisely because the constraint enables a specificity and reliability of function that unconstrained polymers lack. Each new constraint added by evolutionary selection is a new organizational resource: a new admissibility condition that channels the dynamics of the system into reliable production of functional structures.
+
+The evolutionary accumulation of constraints is therefore an instance of the more general phenomenon of path-sensitive historical modification of admissibility structure. The organism at any evolutionary stage carries in its genome, epigenome, and developmental programs the accumulated record of the constraints that proved viable in its lineage's history. This record is not merely a description of what happened; it is a constraint on what can happen next. The organism's future evolutionary trajectory is shaped by its accumulated admissibility structure: certain mutations are viable because they are compatible with the existing constraint configuration, and others are lethal because they violate constraints that the organism's function requires.
+
+
+Emergence as Structured Collapse
+
+
+Emergence — the appearance of properties at a higher level of organization that are not present in the components at lower levels — is one of the most contested concepts in the philosophy of science. The Spherepop framework offers a deflationary but precise account: emergent properties are properties of the equivalence classes produced by the collapse operations that aggregate lower-level components into higher-level entities. They are properties of the quotient structure, not of the individual elements being quotiented.
+
+The temperature of a gas is the paradigm case. Temperature is a property of the gas as a whole — a property of the macrostate — that is not a property of any individual molecule. It is a property of the equivalence class of microstates that are identified by the thermodynamic coarse-graining operation: the collapse $\scollapse{q}$ that identifies all microstates consistent with the observed macroscopic parameters. Temperature is the quotient structure's property, not the components' property; it emerges from the collapse, not from the components themselves.
+
+This account of emergence as structured collapse dissolves the apparent mystery of emergence without reducing it to nothing. The emergent property is real: temperature genuinely describes something about the gas that no description of individual molecules captures. But it is not mysterious: it is precisely the property of the quotient structure produced by a specific, well-defined collapse operation. The emergence is structured rather than arbitrary because the collapse operation is admissibility-preserving: it identifies only microstates that are equivalent under the relevant thermodynamic observables, and it produces a quotient structure that inherits the admissibility conditions from the level below. Emergent properties are the invariants that survive the collapse.
+
+
+The Romance of Reality
+
+
+There is a view, associated with a tradition of scientific naturalism running from Democritus through Lucretius to the modern neo-Darwinian synthesis, that the discovery of the physical basis of complex phenomena is a disenchantment: that explaining biological organization in terms of chemistry, or mental processes in terms of neuroscience, or social structures in terms of individual psychology, is to reveal that the apparent richness and depth of these phenomena is illusory — that they are "nothing but" their material substrate, that the higher-level descriptions are convenient fictions rather than genuine features of reality.
+
+The Spherepop framework rejects this view, not on mystical grounds but on formal ones. The claim that emergent properties are quotient structures rather than independent substances is not the claim that they are "nothing but" the components they emerge from. A quotient structure is not identical to the structure it is quotiented from; it has different properties, different admissibility conditions, and different relationships to other structures at the same level of organization. The temperature of a gas is not the kinetic energies of its molecules; it is the equivalence class of all microstates with the same mean kinetic energy, and it has properties — it determines heat flow direction, it equals other gases' temperatures at equilibrium, it obeys the zeroth law — that no individual molecule's kinetic energy has.
+
+The reality of emergent structures is the reality of quotient structures: not less real than their components, but differently real — real in a different sense, at a different level of description, with different admissibility conditions governing what is possible at that level. The structured richness of biological, cognitive, social, and cultural phenomena is not an illusion overlaid on a featureless physical substrate. It is the genuine formal structure of the quotient spaces that physical processes produce through their history of constraint formation and structured collapse. Reality is structurally rich at every level of the collapse hierarchy, and the romance of reality is the romance of that structural richness — the inexhaustible complexity of quotient structures that emerge from the history of admissibility-guided transformation.
+
+
+Cosmic Complexity and Information
+
+
+The universe as a whole can be understood, through the framework developed in Part~III, as a vast history of constraint formation and release: a trajectory through the space of admissible physical configurations, beginning from an extremely low-entropy, highly constrained initial state and evolving through the successive formation and elaboration of structure — gravitational, nuclear, chemical, biological, cognitive — as the constraints of the initial state propagate forward through time and interact with each other to produce increasingly complex organized patterns.
+
+The information content of the universe, in the Shannon sense, is the logarithm of the number of distinct histories that are consistent with the universe's observed macrostate. This is not a property of the universe's current configuration alone but of the entire trajectory from the initial state to the present: the measure of how many different ways the universe could have arrived at its current macrostate, given the constraints imposed by its physical laws and its initial conditions. The universe's rich structure — its galaxies, stars, planets, biospheres, and minds — represents an enormous reduction of this information from the initial state's maximum: the progressive elimination, through the formation of structure, of the trajectories that would have produced a featureless, high-entropy universe. Structure and information are duals: the formation of structure is the consumption of information, the production of organized patterns from the space of all possible patterns by the action of admissibility constraints.
+
+
+Self-Organizing Systems
+
+
+A self-organizing system is a system whose admissibility manifold has the property that locally admissible transitions tend to produce states with higher global admissibility: states from which a larger number of further strongly admissible reductions are possible, not fewer. This is the opposite of the spontaneous increase of entropy in isolated thermodynamic systems, and it requires an energy source — a thermodynamic gradient — to maintain. Self-organization is not a violation of thermodynamics; it is a thermodynamically driven process in which the local dissipation of free energy is channeled by admissibility constraints into the production of global structure.
+
+The formal structure of self-organization in the Spherepop framework is clear. A self-organizing system is an open system — one with an energy input — whose admissibility manifold has the property that the gradient of the action functional $\nabla S[\gamma]$ points, on average, toward states of higher structural complexity rather than lower. The energy input drives the system along this gradient, against the thermodynamic tendency toward high-entropy, low-structure states, producing and maintaining organized patterns that would spontaneously decay in the absence of the energy input. The organized pattern is an attractor of the constraint-navigation dynamics: a region of the admissibility manifold from which the local admissibility conditions tend to return the system, after small perturbations, to the organized state.
+
+
+Agency and Thermodynamic Gradients
+
+
+Agency — the capacity of a system to act in pursuit of goals, to select among available actions on the basis of anticipated consequences — is, on the Spherepop account, a thermodynamic gradient phenomenon: a property that emerges in systems that maintain far-from-equilibrium organization by dissipating thermodynamic gradients, and that has been shaped by evolution to exploit the admissibility structure of the environment in the service of the organism's survival and reproduction.
+
+An agent, in this account, is a system that models its admissibility manifold — that maintains an internal representation of which transitions are available from its current state, what their costs are, and what terminal states they lead to — and uses this model to select transitions that are likely to preserve or extend the organism's viability. Agency is therefore not a mysterious addition to the physical description of the organism; it is the functional name for the operation of a sufficiently accurate internal model of the admissibility manifold, used to guide trajectory selection in the service of maintaining the thermodynamic gradient that sustains the organism's organization.
+
+The connection to the account of intelligence developed in Part~II is direct. Intelligence, understood as predictive navigation through constraint space, is the cognitive form of agency: the capacity to model the admissibility manifold of the agent's environment accurately enough to select actions that lead to viable futures. Agency in simple organisms is a limited form of this capacity, operating over short time horizons and narrow environmental domains. Agency in cognitively complex organisms extends over longer time horizons and wider domains, exploiting the capacity for simulation and recursive representation developed in Chapter~7. Agency in social and institutional systems extends to the collective level, involving the distributed modeling of social admissibility manifolds by networks of agents acting in coordination.
+
+
+The Universe as Constraint Navigation
+
+
+The view of the universe as a constraint navigation process — as a trajectory through the space of admissible physical configurations, governed by the admissibility conditions encoded in physical law and the action principle — is the cosmological generalization of the Spherepop framework's central claim. Physical law, on this view, is not a set of rules imposed on reality from outside; it is the admissibility structure of physical reality: the specification of which transitions among physical states are locally admissible, and which action functional governs the selection of globally admissible trajectories from the space of locally admissible ones.

@@ -1,0 +1,69 @@
+**Summary of Key Concepts**
+
+1. **Event‑Prefix Category (Pref(ℓ))**  
+   - Objects are natural numbers *n*, representing prefixes of the event lo[2D[K
+log ℓ = (e₁, e₂, …).  
+   - Morphisms *mₙ→ₙ₊ᵏ* extend a prefix by *k* events.  
+   - Composition is addition: extending further preserves order.
+
+2. **State Semantics Functor (S_ℓ)**  
+   - Maps each prefix *n* to the kernel state σₙ obtained by replaying ℓ₍≤ₙ[4D[K
+ℓ₍≤ₙ₎ from the initial state σ₀.  
+   - Each generator *mₙ→ₙ₊₁* maps to a deterministic transition σₙ → σₙ₊₁ i[1D[K
+induced by event eₙ₊₁.
+
+3. **Functoriality of Replay (Proposition)**  
+   - Because both Pref(ℓ) and State are categories, S_ℓ is a functor preser[6D[K
+preserving identity morphisms (zero events map to no change) and compositio[10D[K
+composition (sequential application maps to sequential updates).
+
+4. **Admissible View Definition**  
+   - A view V: State → View must be *non‑interfering*: it does not feed bac[3D[K
+back into the state semantics, ensuring observational neutrality.
+
+5. **View Functoriality Meta‑Theorem**  
+   - For any admissible view V and log ℓ, the composite (V ∘ S_ℓ): Pref(ℓ) [K
+→ View is a functor. This yields:
+     * **Causal Respect** – updates follow event order.
+     * **Snapshot Coherence** – V(σₙ) uniquely determines the prefix ℓ₍≤ₙ₎.[6D[K
+ℓ₍≤ₙ₎.
+     * **Transport Independence** – different admissible transports o[1D[K
+of the same view are observationally equivalent.
+     * **Gauge Freedom** – quotienting by metadata (e.g., layout hints) pre[3D[K
+preserves semantic content.
+
+6. **Corollaries**  
+   - *Diffs and Snapshots as Two Views*: Snapshot serializes full state; di[2D[K
+diff serializes changes, both factor through S_ℓ, guaranteeing Replay Equiv[5D[K
+Equivalence.
+   - *Late‑Joiner Correctness*: A client starting with a snapshot then rece[4D[K
+receiving diffs reconstructs the same view as one that followed diffs from [K
+the start.
+
+7. **Speculative Branches**  
+   - Allow local overlays of hypothetical events on top of an existing log [K
+base EID, replayed by appending overlay logs after the base event. Speculat[8D[K
+Speculative branches are isolated and may be discarded or rebased without a[1D[K
+affecting authoritative state.
+
+8. **Layout and Geometry as Metadata**  
+   - Layout hints are advisory geometric information (position, scale) not [K
+interpreted semantically; geometry is treated as a gauge choice, enabling r[1D[K
+rich visualization while preserving semantic invariants.
+
+9. **Arbiter Model**  
+   - A single arbiter assigns sequence identifiers and appends events to th[2D[K
+the log. It guarantees total causal order and enables clients to submit pro[3D[K
+proposals that are either accepted (broadcast as diffs) or rejected.
+
+10. **Rationale & Comparative Analysis**  
+    - Spherepop OS differs from traditional kernels, CRDT systems, and vers[4D[K
+version control by emphasizing replayability, a single authoritative order,[6D[K
+order, and first‑class speculation. It serves as an operating system for se[2D[K
+semantic time rather than hardware resources.
+
+11. **Conclusion**  
+    - The design leverages determinism, causal clarity, and semantic primac[6D[K
+primacy to support collaboration, introspection, and speculative reasoning [K
+without sacrificing correctness, leaving room for future extensions while p[1D[K
+preserving core invariants.

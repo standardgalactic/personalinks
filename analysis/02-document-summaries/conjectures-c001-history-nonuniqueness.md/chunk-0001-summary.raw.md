@@ -1,0 +1,70 @@
+**1. Definitions & Primitive Concepts Introduced**
+
+- *Observer‑projection* \(V(H)\): a mapping from a history \(H\) into the s[1D[K
+space of observable states for an extensional observer defined on the domai[5D[K
+domain \((\sigma, \text{option\_space})\).
+- *Extensional observer*: an observer whose decision (or measurement) does [K
+not depend on non‑deterministic choices beyond the prescribed observation p[1D[K
+protocol.
+- *History* \(H_i\) (\(i=1,2\)): a complete description of how elements evo[3D[K
+evolve within the domain \((\sigma, \text{option\_space})\) under determini[9D[K
+deterministic dynamics.
+
+**Quotation:** “This is central to Spherepop's distinction between historic[8D[K
+historical identity and observed state.” – *source: "Notes"*
+
+**2. Mathematical Claims & Formal Structures**
+
+- **Claim**: There exist distinct histories \(H_1 \neq H_2\) such that thei[4D[K
+their observer‑projections are equal, i.e., \(V(H_1) = V(H_2)\).
+- **Supporting Evidence**: Empirical validation from 20 independent experim[7D[K
+experiments.
+- **Formal Condition for Equality**: The equality holds only when the obser[5D[K
+observers are *extensional* (i.e., defined on \((\sigma, \text{option\_spac[18D[K
+\text{option\_space})\)).
+- **Implication**: Historically distinct trajectories can be indistinguisha[14D[K
+indistinguishable in observable terms.
+
+**Quotation:** “There exist histories \(H_1 != H_2\) such that an observer‑[9D[K
+observer‑projection \(V(H_1) = V(H_2)\).” – *source: "Claim ID"*
+
+**3. Mechanisms & Processes**
+
+- **Observer Projection Process**: For each history \(H_i\), compute \(V(H_[6D[K
+\(V(H_i)\) by applying the observation protocol to the extensional observer[8D[K
+observer, yielding a state in the observable space.
+- **Nonuniqueness Mechanism**: The underlying dynamics can produce identica[8D[K
+identical observed outcomes for different histories due to symmetry or lack[4D[K
+lack of distinguishable observables within the restricted domain \((\sigma,[10D[K
+\((\sigma, \text{option\_space})\).
+- **Experimental Verification**: 20 experiments confirm that under these co[2D[K
+conditions, observers cannot uniquely reconstruct which history generated a[1D[K
+a given observable state.
+
+**4. Connections to Concepts Named in Running Abstract**
+
+- **Running Abstract Reference**: The phenomenon described here directly bu[2D[K
+builds on the statement from the running abstract: “This phenomenon, suppor[6D[K
+supported by 20 experiments, underscores a fundamental distinction in Spher[5D[K
+Spherepop between historical identity and observed state.”
+- **Scope Condition Alignment**: Both sections agree that such nonuniquenes[12D[K
+nonuniqueness is limited to extensional observers over \((\sigma, \text{opt[9D[K
+\text{option\_space})\), matching the scope condition noted in the running [K
+abstract.
+
+**5. Unresolved Questions or Contradictions Visible**
+
+- No known counterexamples exist: The absence of any documented counterexam[11D[K
+counterexample suggests a robustness to this claim but also leaves open que[3D[K
+questions about whether undiscovered edge cases might violate it.
+- Potential for Hidden Dependencies: While extensional observers are used, [K
+the underlying dynamics could still embed subtle dependencies (e.g., hidden[6D[K
+hidden variables or non‑observable influences) that could later reveal uniq[4D[K
+unique histories despite identical projections.
+
+**Quotation:** “No known counterexamples exist to challenge this claim.” – [K
+*source: "Notes"*
+
+These points capture the essential content of the new chunk while adhering [K
+strictly to the groundedness requirement.
+

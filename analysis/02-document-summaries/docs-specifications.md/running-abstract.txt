@@ -1,0 +1,71 @@
+**confluent(c: Config, ops: List[Operation]) → bool**
+
+*Specification*
+
+```
+confluent(c, [op₁, op₂, …, opₙ]) = true 
+   ⇔ ∃ result such that for every permutation π of the list ops,
+       eval_program(c, π(ops)) evaluates to the same final configuration re[2D[K
+result.
+```
+
+In words: *If you can reorder any sequence of operations without changing t[1D[K
+the end‑result, then the operation set is confluent.*
+
+*Complexity*: The test requires checking all `|ops|!` possible orderings (p[2D[K
+(permutations) and evaluating each ordering with `eval_program`. Hence the [K
+runtime is exponential in both the number of operations (`n`) and the evalu[5D[K
+evaluation cost of a single program run.
+
+*Purpose*
+
+- **Detect** whether the order of operations matters.
+- **Do not**:
+  - Authorize any particular order,
+  - Modify the original configuration,
+  - Declare semantic validity when confluence fails (non‑confluence does no[2D[K
+not imply an error).
+
+---
+
+**Key points to remember**
+
+1. **Non‑authoritative**: The function only reports a property; it never ch[2D[K
+changes state or validates semantics.
+2. **Exponential cost**: Use with caution—small `ops` lists are the only pr[2D[K
+practical case for runtime feasibility.
+3. **Interpretation of “true”**: If such a common result exists, *any* perm[4D[K
+permutation yields that same final configuration (up to observable equality[8D[K
+equality). If no single result satisfies this, the function returns `false`[7D[K
+`false`.
+
+---
+
+**Example usage**
+
+```python
+c = some_initial_config()
+ops = [OpA(), OpB(), OpC()]
+
+is_confluent = confluent(c, ops)
+
+if is_confluent:
+    print("Operations can be reordered without affecting outcome.")
+else:
+    print("Order matters; consider redesigning the operation sequence.")
+```
+
+---
+
+**Related specifications**
+
+- **divergent**: The opposite test (`¬confluent`).
+- **regretful**: Checks if a single operation eliminates future options—use[11D[K
+options—useful for safety analysis.
+- **admissible**: Pre‑check that an operation can be applied without causin[6D[K
+causing an `EvalError`.
+
+These functions together allow you to reason about operational semantics, d[1D[K
+detect order sensitivity, and analyze the impact of individual operations o[1D[K
+on the overall state space.
+

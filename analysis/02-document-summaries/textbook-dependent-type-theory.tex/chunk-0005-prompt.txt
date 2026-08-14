@@ -1,15 +1,213 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 5 of 6 of a document called
+"textbook-dependent-type-theory.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Normalization by Historical Evaluation (NbHE)**  
 
-TEXT
-====
+The replay algorithm described above reconstructs the kernel state that wou[3D[K
+would have been produced by a given historical derivation.  Normalization, [K
+however, must decide whether two terms are *definitionally* equal – i.e., t[1D[K
+they represent the same constructive construction even though their syntax [K
+may differ.
+
+---
+
+### 1. Motivation  
+
+Ordinary normalization (e.g., reduction until no β‑redexes remain) yields o[1D[K
+only the observable value of a term.  In a historical kernel we also need t[1D[K
+to know *why* that value was produced: which events, reductions, and depend[6D[K
+dependency edges led to it.  NbHE answers this by associating each semantic[8D[K
+semantic object with its full construction history.
+
+---
+
+### 2. Historical Semantic Domain  
+
+Instead of evaluating terms into the ordinary domain **V** (the set of valu[4D[K
+values), we evaluate them into a *historical* domain  
+
+\[
+\widehat{V}=V\times H,
+\]
+
+where \(H\) is the category of replayable histories introduced earlier in t[1D[K
+this document.  Every semantic object therefore carries:
+
+* an observable value,  
+* its construction history (the set of events that produced it),  
+* its dependency graph (which records how sub‑terms were built), and  
+* a replay certificate guaranteeing that no cyclic dependencies are present[7D[K
+present.
+
+---
+
+### 3. Evaluation Function  
+
+The historical evaluation function is
+
+\[
+\llbracket t \rrbracket_H : Env \to \widehat{V},
+\]
+
+where *Env* denotes the current typing environment (typing judgments, etc.)[5D[K
+etc.).  Crucially,
+
+\[
+\History(\llbracket t \rrbracket_H)=H_t,
+\]
+
+so the history returned by evaluation is exactly the one responsible for pr[2D[K
+producing the term \(t\).
+
+---
+
+### 4. Reflection and Reification  
+
+*Reflection* lifts a neutral (raw) representation of a term into this histo[5D[K
+historical domain:
+
+\[
+\uparrow : Ne \to \widehat{V}.
+\]
+
+*Reification* extracts canonical syntax from the historical semantic object[6D[K
+object while preserving its provenance:
+
+\[
+\downarrow : \widehat{V} \to Nf .
+\]
+
+Thus the kernel returns a pair  
+
+\[
+(\downarrow(\llbracket t \rrbracket_H),\; \History(\llbracket t \rrbracket_[11D[K
+\rrbracket_H)),
+\]
+
+i.e., both the normal form **and** its full construction history.
+
+---
+
+### 5. Normalization Procedure  
+
+Normalization proceeds in three conceptual phases:
+
+1. **Evaluate:** Compute \(\llbracket t \rrbracket_H\) – this step records [K
+the replay history responsible for constructing the term’s semantics.
+2. **Replay‑aware Reductions:** Perform reductions that respect the replay [K
+invariant (e.g., only collapse when replay equivalence is verified).  This [K
+ensures we never “lose” information about how sub‑terms were built.
+3. **Reify:** Convert the resulting historical semantic object into canonic[7D[K
+canonical syntax using \(\downarrow\), preserving its history.
+
+Formally,
+
+\[
+\operatorname{Norm}(H,t)=\downarrow\bigl(\llbracket t \rrbracket_H\bigr).
+\]
+
+---
+
+### 6. Historical Sharing  
+
+If two terms \(t_1\) and \(t_2\) share a common historical prefix \(H_0\), [K
+ordinary normalization would recompute the shared sub‑expression each time.[5D[K
+time.  In NbHE, we evaluate the *unique* portion of each term:
+
+```text
+eval(H',t') = eval(H_{0};e'_1;...;e'k,t')
+```
+
+where only the newly introduced events \(\{e'_i\}\) require semantic comput[6D[K
+computation.  Every previously normalized segment (including \(H_0\)) remai[5D[K
+remains valid because histories are immutable, giving us true incremental n[1D[K
+normalization.
+
+---
+
+### 7. Replay‑Guided Conversion  
+
+Conversion checking is performed by comparing two terms’ replay‑normalized [K
+forms:
+
+1. Compute \(\operatorname{Norm}(H,A)\) and \(\operatorname{Norm}(H,B)\).  [K
+
+2. Check that their observable normal forms are identical, their histories [K
+are replay equivalent (i.e., they satisfy the same dependency graph constra[7D[K
+constraints), **and** their history graphs are equal.
+
+Observable equality alone is insufficient; constructive provenance must als[3D[K
+also match.
+
+---
+
+### 8. Correctness  
+
+NbHE satisfies two fundamental correctness properties:
+
+1. **Preservation of Observable Semantics:** If \(\llbracket t \rrbracket_H[12D[K
+\rrbracket_H\) reduces to a normal form, that normal form behaves identical[9D[K
+identically in all respects (evaluation contexts, definitional equality che[3D[K
+checks) as the original term would have done.
+
+2. **Replay Equivalence Guarantees Equality:** Two terms are definitionally[14D[K
+definitionally equal *iff* their replay‑normalized histories satisfy:
+
+   - they yield identical observable values,
+   - each step of reduction is replayable (i.e., it respects the cyclic‑dep[10D[K
+cyclic‑dependency invariant), and
+   - their dependency graphs are equivalent (the same historical edges exis[4D[K
+exist).
+
+These properties ensure that normalization correctly reflects constructive [K
+equality rather than syntactic coincidence.
+
+---
+
+### 9. Implementation Implications  
+
+Because the evaluation domain already carries provenance, many existing ker[3D[K
+kernel features can be implemented **outside** the trusted core:
+
+* **Normalization by Evaluation:** The heavy lifting of reduction is delega[6D[K
+delegated to replay; only reflection and reification (both O(1)) remain ins[3D[K
+inside the trusted kernel.
+* **Incremental Compilation:** New additions need only evaluate their suffi[5D[K
+suffixes, not the entire history.
+* **Distributed Synchronization & Archival Verification:** Histories are im[2D[K
+immutable, making distributed log reconciliation trivial.
+
+Thus, historical normalization serves as a unifying foundation for all othe[4D[K
+other language components—proof automation, elaboration, module systems, op[2D[K
+optimizers, etc.—while keeping the trusted kernel minimal and robustly corr[4D[K
+correct.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 The identifier is intentionally independent of the textual name supplied by the
 user.

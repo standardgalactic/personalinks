@@ -1,0 +1,567 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Abstract Syntax and Denotational Semantics**
+
+A Spherepop program is formally captured as a finite ordered list (a *linea[6D[K
+*linear structure*) of nodes:
+
+\[
+\mathsf{AST} = [n_1, n_2, \dots , n_k].
+\]
+
+Each node corresponds to either an **event** or a **declaration**. The orde[4D[K
+ordering of the nodes carries semantic significance; there is no notion of [K
+tree reduction or rewriting that could reorder them without justification.
+
+---
+
+### Event Nodes  
+
+Events are atomic operations on the underlying option‑space:
+
+| Node | Formal Representation | Semantics |
+|------|-----------------------|-----------|
+| Pop  | \(\mathsf{Pop}(t)\)  | Excludes target \(t\) from future options: [K
+ 
+\(X \xrightarrow{\mathsf{Pop}} X_{\neg t}\). |
+| Refuse | \(\mathsf{Refuse}(t)\) | Same as *pop* but recorded separately f[1D[K
+for ethical accounting. |
+| Bind | \(\mathsf{Bind}(a,b)\) | Introduces a precedence constraint (direc[6D[K
+(directional binding):  
+\(X[a \prec b]\). |
+| Collapse | \(\mathsf{Collapse}(q)\) | Applies a collapse policy \(q\) to [K
+identify certain distinctions:  
+\(X \xrightarrow{\mathsf{Collapse}} X/{\sim_q}\). |
+
+These nodes are indivisible; no compound event forms exist, guaranteeing th[2D[K
+that each program describes an irreversible succession of actions.
+
+---
+
+### Declaration Nodes  
+
+Declarations bind identifiers to expressions in a purely referential enviro[6D[K
+environment:
+
+\[
+\mathsf{Let}(x,e) \;\;(\text{declare } x = e).
+\]
+
+They do **not** affect the option‑space and are eliminated after name resol[5D[K
+resolution, ensuring that declarations cannot carry semantic weight.
+
+---
+
+### Semantic Category  
+
+The semantics of Spherepop reside in a category \(\mathcal{O}\) where:
+
+* **Objects:** Option‑spaces (collections of admissible futures).  
+* **Morphisms:** Monotone transformations preserving inclusion. Composition[11D[K
+Composition is associative and identities exist for each object, making \(\[3D[K
+\(\mathcal{O}\) a monoidal preorder.
+
+Key property: morphisms are generally *non‑invertible*, embodying the irrev[5D[K
+irreversibility principle—each event permanently restricts or restructures [K
+the option‑space without an explicit undo operation.
+
+---
+
+### Interpretation of Nodes  
+
+Each node is interpreted as a morphism in \(\mathcal{O}\):
+
+\[
+\begin{aligned}
+\llbracket \mathsf{Pop}(t) \rrbracket &= X \xrightarrow{\neg t},\\
+\llbracket \mathsf{Refuse}(t) \rrbracket &= X \xrightarrow{\neg t},\\
+\llbracket \mathsf{Bind}(a,b) \rrbracket &= X[a \prec b],\\
+\llbracket \mathsf{Collapse}(q) \rrbracket &= X/{\sim_q}.
+\end{aligned}
+\]
+
+Declarations are interpreted as the identity morphism, effectively silent o[1D[K
+on semantics.
+
+---
+
+### Compositionality  
+
+Because the AST is a linear sequence, interpretation proceeds sequentially:[13D[K
+sequentially:
+
+1. **Declaration Phase:** Resolve all \(\mathsf{Let}\) nodes (names become [K
+referential).  
+2. **Execution Phase:** Apply each event node in order to transform the cur[3D[K
+current option‑space according to its morphism definition above.
+
+The deterministic nature of this composition guarantees that replaying an i[1D[K
+identical AST yields the same semantic transformation, reinforcing auditabi[8D[K
+auditability and reproducibility—hallmarks of Spherepop’s commitment model.[6D[K
+model.
+
+---
+
+**Summary**
+
+Spherepop’s surface language enforces a syntax that mirrors its philosophic[11D[K
+philosophical core: events are immutable acts, declarations carry no semant[6D[K
+semantic weight, and irreversibility is enforced syntactically. The denotat[7D[K
+denotational semantics formalize this by mapping programs to morphisms in t[1D[K
+the category \(\mathcal{O}\) of option‑spaces, ensuring that every program [K
+describes a settled world rather than a computation. This austere yet rigor[5D[K
+rigorous structure underlies Spherepop’s ability to “settle” worlds without[7D[K
+without combinatorial explosion or loss of meaning.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: joy-of-spherepop.tex
+
+NEW CHUNK
+=========
+
+
+The denotational semantics of a program is given by composition. Let $X_0$ be the initial option--space. The meaning of an AST is:
+\[
+\llbracket [n_1,\dots,n_k] \rrbracket
+=
+\llbracket n_k \rrbracket \circ \cdots \circ \llbracket n_1 \rrbracket.
+\]
+
+This definition reflects the left-to-right execution order of the surface language. No evaluation strategy other than sequential composition is permitted.
+
+
+Historical Sensitivity
+
+
+Two ASTs that differ only by reordering nodes are generally not equivalent. Semantic equivalence requires that the corresponding morphisms in $\mathcal{O}$ be equal, which holds only under strong independence conditions. This property ensures that histories cannot be arbitrarily reshaped without semantic consequence.
+
+
+Idempotence and Independence
+
+
+Certain event nodes are idempotent:
+\[
+\mathsf{Pop}(t) \circ \mathsf{Pop}(t)
+=
+\mathsf{Pop}(t).
+\]
+Similarly for \texttt{Refuse}. Independence conditions may allow commuting of nodes, but such transformations must be justified semantically. There is no syntactic rule permitting reordering.
+
+
+Determinism
+
+
+Because the semantics is purely functional at the level of morphisms, interpretation is deterministic. Given an initial option--space and a fixed AST, the resulting option--space is uniquely determined.
+
+
+Summary
+
+
+The abstract syntax and denotational semantics of Spherepop enforce the core commitments of the calculus: linear time, irreversibility, and historical meaning. Programs are histories, nodes are commitments, and semantics is composition. This structure underwrites auditability, replay, and the deep coupling between meaning and past action that defines Spherepop.
+
+
+Lagrangian and Hamiltonian Mechanics of Commitment
+
+\label{app:lagrangian}
+
+This appendix provides a detailed account of the discrete Lagrangian and Hamiltonian structures used throughout the paper. The purpose is not to import physical dynamics wholesale, but to demonstrate that Spherepop admits a principled action-based formulation in which commitment, freedom, and abstraction are mathematically coherent.
+
+
+Configuration Variable: Optionality
+
+
+Let $X$ denote an option--space. We associate to $X$ a scalar quantity
+\[
+\Omega(X) \in \mathbb{R}_{\ge 0},
+\]
+called its \emph{optionality}. Intuitively, $\Omega$ measures the degrees of freedom remaining in the future. This quantity need not be cardinality; it may be any monotone measure satisfying:
+\[
+X' \subseteq X \;\Rightarrow\; \Omega(X') \le \Omega(X).
+\]
+
+Optionality is therefore an order-preserving observable on $\mathcal{O}$.
+
+
+Local Lagrangian
+
+
+Each event $e_t : X_{t-1} \to X_t$ induces a local cost
+\[
+\mathcal{L}_t
+=
+\Delta \Omega_t
++
+\lambda\,\Delta C_t,
+\]
+where
+\[
+\Delta \Omega_t = \Omega(X_{t-1}) - \Omega(X_t),
+\]
+and $\Delta C_t$ is an auxiliary cost term recording ethical, normative, or thermodynamic accounting. The constant $\lambda$ controls the relative weighting of accounting cost versus geometric constraint.
+
+The Lagrangian is local in time and depends only on the immediate transformation induced by the event. This locality is essential for compositionality.
+
+
+Action of a History
+
+
+Given a history
+\[
+\gamma = (e_1, e_2, \dots, e_n),
+\]
+its action is defined as the sum of local costs:
+\[
+\mathcal{S}[\gamma]
+=
+\sum_{t=1}^n \mathcal{L}_t.
+\]
+
+Because each $\mathcal{L}_t$ is non-negative for pop, refuse, and bind operations, the action is monotone increasing along histories. This monotonicity encodes irreversibility: action, once accumulated, cannot decrease except through collapse.
+
+
+Commitment as Conjugate Momentum
+
+
+We define the conjugate quantity to optionality as
+\[
+\pi_t
+=
+-\frac{\partial \mathcal{L}_t}{\partial \Omega}.
+\]
+
+This quantity is interpreted as \emph{commitment}. Commitment measures the sensitivity of action to further reductions in optionality. Intuitively, it captures how costly it has become to lose additional freedom.
+
+Although the derivative is formal rather than analytic, it serves as a bookkeeping device that aligns with the discrete nature of the system. Pops and refusals increase commitment; collapse dissipates it.
+
+
+Hamiltonian: Remaining Freedom
+
+
+The Hamiltonian is defined via a discrete Legendre transform:
+\[
+\mathcal{H}_t
+=
+\pi_t\,\Omega(X_t)
+-
+\mathcal{L}_t.
+\]
+
+The Hamiltonian measures remaining maneuverability: the capacity of the system to accommodate further commitments without collapse. A system with large $\mathcal{H}$ retains flexibility; a system with $\mathcal{H} \approx 0$ is fully world-bound.
+
+This interpretation reverses the usual optimization perspective. Freedom is not something to be maximized indefinitely, but something to be spent in the construction of meaning.
+
+
+Collapse and Action Reduction
+
+
+Collapse is the only operator permitted to reduce accumulated action. For a collapse policy $q$ inducing equivalence relation $\sim_q$, we define:
+\[
+\mathcal{S}
+\longmapsto
+\mathcal{S} - \log |\ker q|.
+\]
+
+This reduction corresponds to identifying degrees of freedom that no longer contribute to future choice. Importantly, collapse does not erase past action; it compresses it. The historical cost remains encoded in the quotient structure.
+
+
+Discrete Equations of Motion
+
+
+While Spherepop does not posit physical time evolution, it admits discrete update relations:
+\[
+X_{t+1} = e_{t+1}(X_t),
+\]
+\[
+\pi_{t+1} - \pi_t = -\Delta\Omega_{t+1}.
+\]
+
+These relations express that commitment increases precisely when optionality decreases. No conservation law is postulated; dissipation through collapse is essential.
+
+
+Distinction from Optimization
+
+
+It is important to emphasize that the Lagrangian in Spherepop is not an objective function to be minimized. There is no principle of least action. Instead, the action records the irreversible cost of constructing a world.
+
+Meaningful histories are those with non-zero, non-trivial action. A system that minimizes action by avoiding commitment remains vacuous.
+
+
+Summary
+
+
+The Lagrangian and Hamiltonian structures of Spherepop provide a compact, principled way to quantify commitment and freedom without importing extraneous physical assumptions. By grounding action in irreversible loss of optionality and allowing collapse as controlled renormalization, the mechanics align precisely with the philosophical thesis of the calculus: that worldhood arises through the disciplined expenditure of freedom.
+
+
+Categorical and Sheaf--Theoretic Glossary
+
+\label{app:glossary}
+
+This appendix collects and clarifies the categorical and sheaf--theoretic concepts employed throughout the paper. The intent is not to introduce new formal machinery, but to stabilize terminology and make explicit how familiar mathematical structures are being used in a non-standard semantic context.
+
+
+Option--Space
+
+
+An \emph{option--space} is an abstract object representing the set of admissible futures consistent with a given history. Option--spaces are partially ordered by inclusion: if $X' \subseteq X$, then $X'$ represents a more committed world than $X$.
+
+Option--spaces are not required to be sets in the naive sense; they may be structured spaces encoding dependencies, bindings, and equivalence relations. What matters is that they admit monotone restriction and quotienting.
+
+
+Monotone Morphism
+
+
+A morphism $f : X \to Y$ between option--spaces is \emph{monotone} if it preserves commitment:
+\[
+X' \subseteq X \;\Rightarrow\; f(X') \subseteq f(X).
+\]
+Monotonicity formalizes irreversibility. Morphisms may reduce optionality or identify distinctions, but they may not introduce new admissible futures.
+
+Pop, refuse, bind, and collapse all denote monotone morphisms.
+
+
+History
+
+
+A \emph{history} is a finite composition of monotone morphisms:
+\[
+H = e_n \circ \cdots \circ e_1.
+\]
+Histories are the primary semantic objects of Spherepop. Two histories are considered equivalent only if their composite morphisms are equal in $\mathcal{O}$. There is no notion of observational equivalence that ignores history.
+
+
+Collapse and Quotient
+
+
+Collapse is a quotient operation on option--spaces. Given an equivalence relation $\sim_q$, collapse identifies elements related by $\sim_q$ to form the quotient $X/{\sim_q}$.
+
+The defining property of collapse is universal: any morphism out of $X$ that is insensitive to distinctions beyond $\sim_q$ factors uniquely through the quotient. This property ensures that collapse is principled abstraction rather than ad hoc erasure.
+
+
+Endofunctor
+
+
+An \emph{endofunctor} on $\mathcal{O}$ is a functor
+\[
+\mathsf{F} : \mathcal{O} \to \mathcal{O}.
+\]
+In Spherepop, agents may be characterized as endofunctors that map worlds to more committed worlds by applying histories. These functors are generally not invertible and do not preserve equivalence.
+
+Viewing agents as endofunctors emphasizes that agency is world-transforming rather than state-transitioning.
+
+
+Parser
+
+
+A \emph{parser}, in the Spherepop sense, is a mechanism that maps incoming structure to constraint. Parsing does not produce a representation of the input; it produces a transformed option--space in which the input no longer needs to be reconsidered.
+
+This interpretation generalizes syntactic parsing to cognitive parsing: understanding is exclusion.
+
+
+Sheaf
+
+
+A \emph{sheaf} assigns data to open regions (scopes) of a space in such a way that compatible local data may be uniquely glued into global data.
+
+In Spherepop, option--spaces admit covers by local scopes. Assignments of partial histories or interpretations to these scopes may be treated as sections. The sheaf condition corresponds to successful commitment: local ambiguities have been resolved in a way that yields a coherent global world.
+
+
+Presheaf and Sheafification
+
+
+Before commitment, local sections may fail to glue. Such structures correspond to presheaves rather than sheaves. Collapse may be interpreted as a form of sheafification: distinctions that obstruct gluing are identified, yielding a globally coherent structure.
+
+This interpretation aligns collapse with abstraction and concept formation.
+
+
+View
+
+
+A \emph{view} is a non-authoritative projection of kernel state. Views may discard information, reorder structure, or introduce visual metaphors. Formally, a view is a functor out of kernel state that is not invertible and has no causal influence.
+
+Views support understanding without authority.
+
+
+Accounting Functor
+
+
+The accounting functor
+\[
+\mathcal{A} : \mathcal{O} \to \mathcal{C}
+\]
+maps option--space morphisms to cost or commitment values. This functor records ethical or normative distinctions, such as the difference between pop and refuse, without altering kernel semantics.
+
+
+Worldhood
+
+
+\emph{Worldhood} denotes the condition of being constrained by one’s own history. A system exhibits worldhood if its future behavior is shaped by irreversible past commitments rather than by transient state or external prompting.
+
+In Spherepop, worldhood is not an emergent property; it is a structural consequence of irreversibility.
+
+
+Summary
+
+
+The categorical and sheaf--theoretic concepts employed in Spherepop are not ornamental. They provide a precise language for expressing locality, irreversibility, abstraction, and agency in a unified framework. By grounding ethical and cognitive claims in well-understood mathematical structures, Spherepop aims to make worldhood a formally tractable notion.
+
+\begin{thebibliography}{99}
+
+\bibitem{aristotle_metaphysics}
+Aristotle.
+\textit{Metaphysics}.
+Translated by W. D. Ross.
+Oxford University Press, 1924.
+
+\bibitem{heidegger_being_time}
+Martin Heidegger.
+\textit{Being and Time}.
+Translated by John Macquarrie and Edward Robinson.
+Harper \& Row, 1962.
+
+\bibitem{heidegger_technology}
+Martin Heidegger.
+The Question Concerning Technology.
+In \textit{The Question Concerning Technology and Other Essays}.
+Translated by William Lovitt.
+Harper \& Row, 1977.
+
+\bibitem{whitehead_process}
+Alfred North Whitehead.
+\textit{Process and Reality}.
+Free Press, 1978.
+
+\bibitem{lawvere_adjoints}
+F. William Lawvere.
+Adjointness in Foundations.
+\textit{Dialectica}, 23(3–4):281–296, 1969.
+
+\bibitem{maclane_categories}
+Saunders Mac Lane.
+\textit{Categories for the Working Mathematician}.
+Springer, 2nd edition, 1998.
+
+\bibitem{awodey_category}
+Steve Awodey.
+\textit{Category Theory}.
+Oxford University Press, 2nd edition, 2010.
+
+\bibitem{grothendieck_sga1}
+Alexander Grothendieck.
+\textit{Séminaire de Géométrie Algébrique du Bois Marie (SGA 1)}.
+Springer, 1971.
+
+\bibitem{maclane_moerdijk_sheaves}
+Saunders Mac Lane and Ieke Moerdijk.
+\textit{Sheaves in Geometry and Logic}.
+Springer, 1992.
+
+\bibitem{needham_visual_complex}
+Tristan Needham.
+\textit{Visual Complex Analysis}.
+Oxford University Press, 1997.
+
+\bibitem{needham_geometry_imaginary}
+Tristan Needham.
+\textit{Visual Differential Geometry and Forms}.
+Princeton University Press, 2021.
+
+\bibitem{meijer_category_effects}
+Erik Meijer.
+Category Theory for Programmers.
+\textit{Communications of the ACM}, 61(12):58–64, 2018.
+
+\bibitem{meijer_folds}
+Erik Meijer, Maarten Fokkinga, and Ross Paterson.
+Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire.
+In \textit{FPCA ’91 Proceedings}.
+Springer, 1991.
+
+\bibitem{jacobson_thermodynamics}
+Ted Jacobson.
+Thermodynamics of Spacetime: The Einstein Equation of State.
+\textit{Physical Review Letters}, 75(7):1260–1263, 1995.
+
+\bibitem{verlinde_gravity}
+Erik Verlinde.
+On the Origin of Gravity and the Laws of Newton.
+\textit{Journal of High Energy Physics}, 2011(4):29, 2011.
+
+\bibitem{friston_fep}
+Karl Friston.
+The Free-Energy Principle: A Unified Brain Theory?
+\textit{Nature Reviews Neuroscience}, 11(2):127–138, 2010.
+
+\bibitem{landauer_irreversibility}
+Rolf Landauer.
+Irreversibility and Heat Generation in the Computing Process.
+\textit{IBM Journal of Research and Development}, 5(3):183–191, 1961.
+
+\bibitem{bennett_logical_reversibility}
+Charles H. Bennett.
+Logical Reversibility of Computation.
+\textit{IBM Journal of Research and Development}, 17(6):525–532, 1973.
+
+\bibitem{ashby_variety}
+W. Ross Ashby.
+\textit{An Introduction to Cybernetics}.
+Chapman \& Hall, 1956.
+
+\bibitem{marr_vision}
+David Marr.
+\textit{Vision}.
+W. H. Freeman, 1982.
+
+\bibitem{rosen_life_itself}
+Robert Rosen.
+\textit{Life Itself}.
+Columbia University Press, 1991.
+
+\bibitem{lacan_four_fundamental}
+Jacques Lacan.
+\textit{The Four Fundamental Concepts of Psychoanalysis}.
+Translated by Alan Sheridan.
+W. W. Norton, 1978.
+
+\bibitem{deleuze_cinema2}
+Gilles Deleuze.
+\textit{Cinema 2: The Time-Image}.
+University of Minnesota Press, 1989.
+
+\bibitem{rollins_psychocinema_2024}
+Helen Rollins.
+\textit{Psychocinema}.
+Polity Press,
+Cambridge,
+2024.
+
+\bibitem{turing_computable}
+Alan M. Turing.
+On Computable Numbers, with an Application to the Entscheidungsproblem.
+\textit{Proceedings of the London Mathematical Society}, 42(2):230–265, 1936.
+
+\bibitem{girard_linear_logic}
+Jean-Yves Girard.
+Linear Logic.
+\textit{Theoretical Computer Science}, 50(1):1–101, 1987.
+
+\bibitem{pierce_types}
+Benjamin C. Pierce.
+\textit{Types and Programming Languages}.
+MIT Press, 2002.
+
+\bibitem{dennett_intentional}
+Daniel C. Dennett.
+\textit{The Intentional Stance}.
+MIT Press, 1987.
+
+\end{thebibliography}
+
+\end{document} 
+

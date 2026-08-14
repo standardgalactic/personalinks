@@ -1,0 +1,1324 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+Below is a concise, step‑by‑step overview of the key results and their sign[4D[K
+significance that you can use as a study guide.
+
+---
+
+### 1. Hybrid Repair (Cross‑Module) Theorem  
+
+**Statement:**  
+When local repair within module \(m_i\) saturates because of deep anomalies[9D[K
+anomalies, invoking cross‑module repair selects another module \(\mathcal{D[19D[K
+module \(\mathcal{D}_j\) whose distinction space \(\mathcal{D}_j\) is large[5D[K
+larger than that of \(m_i\). This provides an ontological enlargement (Defi[5D[K
+(Definition \ref{defn:ont-enlarge}), thereby resolving the anomalies in \(\[3D[K
+\(\mathcal{F}_i\).
+
+**Proof Sketch:**  
+1. **Scientific Revolution Theorem** (\cref{thm:sci-rev-thm}) asserts that [K
+when local repair saturates, ontological enlargement is required to handle [K
+deep anomalies.  
+2. Module \(m_j\) offers \(\mathcal{D}_j \supsetneq \mathcal{D}_i\), satisf[6D[K
+satisfying the conditions of Definition \ref{defn:ont-enlarge}.  
+3. The projection \(\pi_{ij}\) maps \(\mathcal{D}_i\)-anomalies into forms [K
+resolvable by \(\mathcal{D}_j\).  
+4. Since each individual repair (\(m_i\) or \(m_j\)) is admissible, the com[3D[K
+composition of these repairs (admissible operators) remains admissible.
+
+**Implication:**  
+Cross‑module repair can fully resolve anomalies that local repair cannot, f[1D[K
+formalizing a “repair cascade” mechanism in HYDRA.
+
+---
+
+### 2. Projection Management Theorem  
+
+**Statement:**  
+For any projection \(\pi_{ij}: m_i \to m_j\), the admissibility distortion [K
+is bounded by  
+
+\[
+\Delta_\adm(\pi_{ij}) \ge \frac{\log r_{ij}}{\log |\mathcal{D}_i|} \cdot V_[2D[K
+V_R(d_i, t),
+\]
+
+where \(r_{ij}=|\mathcal{D}_i|/|\mathcal{D}_j|\) is the compression ratio. [K
+HYDRA tracks this distortion and expands modules when it exceeds a threshol[8D[K
+threshold \(\theta\).
+
+**Proof Sketch:**  
+1. **Projection–Admissibility Gap Theorem** (\cref{thm:proj-adm-gap}) guara[5D[K
+guarantees that any projection with \(r>1\) introduces at least the above a[1D[K
+amount of distortion.  
+2. HYDRA monitors \(\Delta_\adm(\pi_{ij})\). When it surpasses \(\theta\), [K
+further loss of admissibility would be harmful, prompting module expansion [K
+(adding distinctions to \(\mathcal{D}_j\)) which reduces \(r_{ij}\) and thu[3D[K
+thus lowers distortion.
+
+**Implication:**  
+This theorem ensures that projections are only performed when they do not u[1D[K
+unduly compromise system‑level admissibility, guiding dynamic module growth[6D[K
+growth in HYDRA.
+
+---
+
+### 3. Multi‑Module Admissibility Theorem  
+
+**Statement:**  
+A HYDRA instance is system‑level admissible iff the composed projection \(\[3D[K
+\(\Pi = \pi_{k,k-1} \circ \cdots \circ \pi_{21}\) satisfies  
+
+\[
+\Vol(\adm_\mathcal{H}(t)) \ge \alpha \cdot V_R(d_0, t),
+\]
+
+where \(d_0\) is the root module’s model and \(\alpha\in(0,1)\) is a thresh[6D[K
+threshold for admissible volume.
+
+**Proof Sketch:**  
+1. System‑level admissibility corresponds to the admissibility of the full [K
+transformation product.  
+2. Each individual projection may reduce the reachable admissible volume by[2D[K
+by at most its compression ratio \(r_{ij}\).  
+3. The cumulative reduction across all projections must leave a sufficient [K
+portion of the original volume (proportional to \(\alpha V_R\)) to guarante[8D[K
+guarantee overall admissibility.
+
+**Implication:**  
+This theorem provides a quantitative criterion for when an entire HYDRA con[3D[K
+configuration remains usable, ensuring that global operations do not collap[6D[K
+collapse into inadmissible states.
+
+---
+
+### 4. Constraint‑Guided Intelligence Theorem  
+
+**Statement:**  
+The intelligence \(\mathcal{I}(\mathcal{H})\) of a HYDRA instance with cons[4D[K
+constraint set \(\Gamma\) is given by  
+
+\[
+\mathcal{I} = \prod_{i=1}^{k} \kappa(m_i, \mathcal{D}_{m_i}) \cdot \kappa(\[8D[K
+\kappa(\mathcal{H}, \mathcal{D}_\Pi),
+\]
+
+where \(\mathcal{D}_\Pi\) is the distinction space of inter‑module projecti[8D[K
+projection algebra. Constraints that increase \(\kappa(\mathcal{H}, \mathca[7D[K
+\mathcal{D}_\Pi)\) (by specifying repair strategies for failed projections)[12D[K
+projections) raise intelligence, whereas those that decrease it lower intel[5D[K
+intelligence.
+
+**Proof Sketch:**  
+1. **Intelligence–Repair Equivalence Theorem** (\cref{thm:intel-repair}) eq[2D[K
+equates overall system intelligence with the product of base repair capacit[7D[K
+capacity and meta‑repair capacity (the latter being projection‑failure repa[4D[K
+repair).  
+2. Constraints either augment meta‑capacity (by providing explicit strategi[8D[K
+strategies for handling failed projections) or diminish it (by imposing unn[3D[K
+unnecessary restrictions), directly affecting \(\kappa(\mathcal{H}, \mathca[7D[K
+\mathcal{D}_\Pi)\).
+
+**Implication:**  
+The theorem highlights that effective cognitive design in HYDRA relies on s[1D[K
+selecting constraints that enhance meta‑repair rather than impede it, align[5D[K
+aligning with the notion of “guided intelligence”.
+
+---
+
+### 5. Remarks  
+
+- **HYDRA & Dual Processes (Remark hydra-dual):** System 1 corresponds to f[1D[K
+fast local repair within a single module using \(\mathcal{R}_i\); System 2 [K
+corresponds to cross‑module repair via \(\pi_{ij}\) when local repair satur[5D[K
+saturates. Thus, System 2 is not a different kind of cognition but a higher[6D[K
+higher‑order instance of the same repair operation applied over a larger di[2D[K
+distinction space.
+
+- **Product Form (Remark cgi-product-form):** The intelligence measure uses[4D[K
+uses a product rather than a sum because base and meta‑repair capacities ar[2D[K
+are jointly necessary; failure in either dimension leads to overall system [K
+breakdown. An alternative aggregation (e.g., harmonic mean) could model spe[3D[K
+specific architectures but does not capture the joint necessity as directly[8D[K
+directly.
+
+- **Constraint Guidance vs Limitation (Remark cgi-rmk):** Constraints act a[1D[K
+as guides by providing repair strategies for projection failures, thereby i[1D[K
+increasing intelligence, whereas poorly chosen constraints may limit it by [K
+imposing unnecessary restrictions. This distinguishes useful cognitive bias[4D[K
+biases from pathological ones.
+
+---
+
+### 6. Chapter Summary  
+
+1. **HYDRA Architecture:** A distinction ecology with a repair algebra and [K
+an admissibility manifold.  
+2. **Hybrid Repair:** Local saturation triggers cross‑module repair, implem[6D[K
+implementing ontological enlargement.  
+3. **Projection Distortion Management:** HYDRA monitors distortion via \(\D[4D[K
+\(\Delta_\adm\) and expands modules when distortion exceeds a threshold.  
+4. **System Admissibility:** The composed projection must preserve enough a[1D[K
+admissible volume to guarantee system‑level functionality.  
+5. **Constraint‑Guided Intelligence:** Well‑designed constraints increase i[1D[K
+intelligence by enhancing meta‑repair capacity; poorly chosen constraints c[1D[K
+can reduce it.
+
+These theorems and remarks together formalize how HYDRA manages both intra‑[6D[K
+intra‑module and inter‑module repairs, ensuring overall cognitive stability[9D[K
+stability while allowing for dynamic adaptation through intelligent constra[7D[K
+constraint selection.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-the_ecology_of_distinctions.tex
+
+NEW CHUNK
+=========
+
+\subsection*{Exercises}
+\begin{exercise}[CS]
+  Model a large language model with retrieval-augmented
+  generation (RAG) as a HYDRA instance.
+  Identify the modules, projections, repair algebra,
+  and admissibility constraints.
+  What does the Hybrid Repair Theorem predict happens
+  when the base model's context window saturates?
+\end{exercise}
+\begin{exercise}
+  Prove that a single-module system (HYDRA with
+  $|M| = 1$) has $\mathcal{I}(\mathcal{H}) = 0$
+  by the Constraint-Guided Intelligence Theorem.
+  What does this say about the necessity of
+  inter-module structure for general intelligence?
+\end{exercise}
+\begin{exercise}[CS]
+  Design an admissibility monitor for a HYDRA instance:
+  a process that tracks $\Delta_\adm(\pi_{ij})$ for
+  each projection and triggers module expansion
+  when the threshold $\theta$ is exceeded.
+  What data structure efficiently supports this?
+\end{exercise}
+
+
+
+
+\chapter{TARTAN}
+\label{ch:tartan}
+
+\begin{epigraph}{
+  Scale is not merely size.
+  Scale is the structure of recoverability across levels.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define TARTAN coherence tiles and recursive
+        tiling structure.
+  \item Prove the Recursive Tiling Theorem.
+  \item Prove the Coherence Tile Theorem.
+  \item Prove the Multiscale Recoverability Theorem.
+  \item Prove the Trajectory Preservation Theorem.
+  \item Connect TARTAN to the admissibility geometry
+        of Chapter~\ref{ch:geometry-futures}.
+\end{objectives}
+
+
+Multiscale Distinction Structure
+
+
+A persistent challenge in complex systems is that
+distinctions operate at multiple scales simultaneously.
+A genome contains distinctions at the level of
+individual bases, codons, genes, regulatory regions,
+and chromosomes. A city contains distinctions at the
+level of buildings, blocks, neighbourhoods, districts,
+and metropolitan areas. A knowledge base contains
+distinctions at the level of tokens, sentences,
+paragraphs, documents, and corpora.
+
+Simple partition-based distinction theory applies
+cleanly at a single scale. TARTAN — Trajectory-Aware
+Recursive Tiling with Annotated Noise — extends the
+framework to handle multiscale distinction structures
+through recursive decomposition into coherence tiles.
+
+
+Why Panarchy Is Not Enough
+
+\label{sec:ch26-why-panarchy}
+
+Multiscale structure is not a new observation in the study of
+complex systems. Resilience theory's panarchy model already
+describes ecological and social systems as nested hierarchies
+of adaptive cycles, with each level operating on its own
+characteristic timescale and cross-scale interactions
+(``revolt'' from fast lower levels disrupting slow upper ones,
+``remember'' from slow upper levels constraining fast lower
+ones) governing how the whole hierarchy evolves
+\parencite{holling1973,gunderson2002,walker2004}. This is the
+closest existing antecedent to TARTAN's multiscale ambitions,
+and the cross-scale interactions panarchy describes are
+qualitatively similar to what TARTAN's tiling hierarchy is
+built to capture.
+
+What panarchy does not provide is a formal coherence criterion
+for what counts as a single level in the first place, or a
+quantitative account of how recoverability at one scale
+relates to recoverability at another. Levels in panarchy are
+identified qualitatively, by characteristic timescale and
+the analyst's judgement about where a meaningful boundary
+sits. TARTAN replaces this with an explicit, checkable
+condition: a coherence tile is a region where the entropy
+field stays below a scale-appropriate threshold, bounded by a
+detectable rise in entropy at its edge. Scale, on this
+account, is not assumed in advance; it is read off directly
+from where the entropy field actually produces a coherent
+region, and the Multiscale Recoverability Theorem proved later
+in this chapter makes the relationship between recoverability
+at adjacent scales precise rather than qualitative.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch26-falsifiability}
+
+The chapter's culminating result, the TARTAN Admissibility
+Theorem (\cref{thm:tartan-adm}), reduces global generative
+admissibility in the sense of Chapter~\ref{ch:geometry-futures}
+to a tile-local condition: the global admissibility volume is
+non-decreasing iff it is non-decreasing within every finest-
+resolution tile. This is falsifiable against a specific test:
+the reduction should follow from straightforward volume
+additivity across the tiling --- the tiles partition the space,
+so admissible volume sums across them --- with no additional
+postulate about how admissibility behaves across scales beyond
+what Chapter~\ref{ch:geometry-futures} already establishes for
+admissibility volume in general. The proof given later derives
+the result exactly this way, from the Coherence Tile Theorem
+and Recursive Tiling Theorem proved earlier in this chapter. If
+global admissibility had instead required some genuinely
+cross-scale principle not reducible to tile-local conditions
+summed together, the claim that TARTAN realizes
+Chapter~\ref{ch:geometry-futures}'s admissibility geometry,
+rather than describing multiscale structure in parallel
+vocabulary, would fail.
+
+
+What This Chapter Establishes
+
+\label{sec:ch26-preview}
+
+By the end of this chapter, coherence tiles will have been
+defined as entropy-threshold regions, the Recursive Tiling
+Theorem will establish when a hierarchical decomposition into
+tiles exists, and the TARTAN Admissibility Theorem will show
+that global admissibility reduces cleanly to tile-local
+conditions. This completes the book's treatment of
+computational realization. Chapter~\ref{ch:fiscal} turns from
+computation to society, asking whether the same admissibility
+machinery that has now organised matter, meaning,
+self-modelling, preference, and computation can organise the
+institutions that govern collective human action.
+
+\begin{definition}{Coherence Tile}{coherence-tile}
+  A \emph{coherence tile} at scale $\ell$ is a region
+  $T \subseteq X$ satisfying:
+  \begin{enumerate}[(i)]
+    \item \emph{Internal coherence}: the entropy field
+          $S_T(x, t) < \theta_\ell$ for all $x \in T$,
+          where $\theta_\ell$ is the scale-$\ell$
+          threshold. ($S_T$ here denotes a tiling-local
+          gradient-energy field, defined below; it is
+          unrelated to the RSVP constraint field $S$ of
+          Chapter~\ref{ch:rsvp}.)
+    \item \emph{Boundary distinction}: the boundary
+          $\partial T$ is a set of high-entropy transitions
+          $S_T(x,t) \ge \theta_\ell$.
+    \item \emph{Admissible size}: $\mu(T) \in
+          [\mu_{\min}^\ell, \mu_{\max}^\ell]$ for
+          scale-appropriate bounds.
+  \end{enumerate}
+\end{definition}
+
+\begin{remark}{Threshold selection and scale calibration}
+  {tartan-threshold}
+  The Coherence Tile definition depends on the family of
+  thresholds $\{\theta_\ell\}$. The Multiscale
+  Recoverability Theorem holds for \emph{any} valid tiling
+  produced by a consistent threshold family, but it does
+  not identify which threshold family is appropriate for a
+  given domain. This is a calibration problem analogous to
+  bandwidth selection in kernel density estimation, or
+  block-size selection in multi-scale image analysis: the
+  mathematical framework is domain-independent, but the
+  right parameter values depend on the structure of the
+  specific system being tiled.
+
+  In practice, $\theta_\ell$ should be set so that:
+  \begin{itemize}[nosep]
+    \item tiles at scale $\ell$ are large enough to
+          contain the characteristic coherence length of
+          the domain at that resolution; and
+    \item boundaries correspond to genuine high-gradient
+          transitions in $S_T$ rather than noise.
+  \end{itemize}
+  Standard methods from multi-scale analysis (wavelet
+  thresholding, persistent homology of the sublevel sets
+  of $S_T$, or information-theoretic model selection)
+  all provide principled starting points. The framework
+  does not mandate a particular method, since the
+  appropriate choice varies by domain and available data.
+\end{remark}
+
+\begin{definition}{TARTAN Tiling}{tartan-tiling}
+  A \emph{TARTAN tiling} at resolution $L$ is a
+  hierarchical partition
+  \[
+    \mathcal{T}^L = \{T^L_1, \ldots, T^L_{n_L}\}
+  \]
+  of $X$ into coherence tiles, together with a
+  refinement sequence
+  \[
+    \mathcal{T}^0 \preceq \mathcal{T}^1 \preceq
+    \cdots \preceq \mathcal{T}^L,
+  \]
+  where each $\mathcal{T}^\ell$ decomposes the tiles of
+  $\mathcal{T}^{\ell-1}$ into finer coherence tiles.
+\end{definition}
+
+\begin{definition}{Annotated Noise}{annotated-noise}
+  Each tile $T^\ell_i$ carries an \emph{annotation}
+  $\eta^\ell_i$ — a noise injection designed to
+  explore the local admissibility landscape within $T$
+  without destroying tile coherence:
+  \[
+    \Phi^\ell_i(x,t)
+    = \Phi(x,t) + \epsilon_\ell \, \eta^\ell_i(x,t),
+  \]
+  where $\epsilon_\ell \ll 1$ is the scale-$\ell$
+  noise amplitude.
+\end{definition}
+
+
+The Recursive Tiling Theorem
+
+
+\begin{theorem}{Recursive Tiling Theorem}{recursive-tiling}
+  For any field $\Phi: X \to \mathbb{R}$ with entropy
+  field $S_T = |\nabla \Phi|^2$, a TARTAN tiling of
+  resolution $L$ exists satisfying:
+  \begin{enumerate}[(i)]
+    \item Every tile $T \in \mathcal{T}^L$ is a coherence
+          tile (Definition~\ref{defn:coherence-tile}).
+    \item The tiling is a refinement of the coarser
+          tiling $\mathcal{T}^{L-1}$.
+    \item The union $\bigcup_i T^L_i = X$ covers the
+          entire domain.
+    \item Adjacent tiles share boundary distinctions.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  Construct the tiling inductively.
+
+  Base case ($\ell = 0$): Set $\mathcal{T}^0 = \{X\}$,
+  the trivial single-tile partition.
+
+  Inductive step: Given $\mathcal{T}^{\ell-1}$, decompose
+  each tile $T^{\ell-1}_i$ as follows.
+  Compute $S_T(x,t) = |\nabla\Phi|^2$ on $T^{\ell-1}_i$.
+  Identify connected components of the set
+  $\{x \in T^{\ell-1}_i : S_T(x,t) < \theta_\ell\}$.
+  Each component satisfying the size constraint
+  $\mu(T) \in [\mu_{\min}^\ell, \mu_{\max}^\ell]$
+  becomes a tile in $\mathcal{T}^\ell$.
+
+  (i) By construction each component is connected and
+  has low internal entropy.
+  (ii) Each $\mathcal{T}^\ell$-tile is contained in a
+  $\mathcal{T}^{\ell-1}$-tile, so refinement holds.
+  (iii) The induction starts with $X$ and only subdivides,
+  so coverage is maintained.
+  (iv) High-entropy boundaries separate tiles, and all
+  high-entropy points lie on boundaries by construction.
+\end{proof}
+
+
+The Coherence Tile Theorem
+
+
+\begin{theorem}{Coherence Tile Theorem}{coherence-tile-thm}
+  Within a coherence tile $T$ at scale $\ell$:
+  \begin{enumerate}[(i)]
+    \item RSVP dynamics (\cref{ch:rsvp}) are locally
+          stable: $|d\Phi/dt| \le K_\ell$ for a
+          scale-dependent constant $K_\ell$.
+    \item Distinctions within $T$ have recoverability
+          $\reco(d, t) \ge \rho_\ell > 0$.
+    \item Annotated noise $\eta^\ell$ explores
+          admissible alternatives within $T$ without
+          crossing tile boundaries.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) Low entropy $S_T < \theta_\ell$ implies small
+  gradients $|\nabla\Phi| < \sqrt{\theta_\ell}$.
+  By the RSVP continuity equation
+  (\cref{thm:capacity-conservation}), the rate of
+  change of $\Phi$ is proportional to divergence of
+  $\Phi \mathbf{v}$, which is bounded by
+  $\sqrt{\theta_\ell}$. Set
+  $K_\ell = C\sqrt{\theta_\ell}$.
+
+  (ii) Low entropy within $T$ means few alternative
+  microstates are consistent with the observed
+  distinction. By the Entropy--Recoverability Relation
+  (\cref{ch:recoverability}), $S_R \le k\log(1/\rho_\ell)$,
+  so $\rho_\ell \ge e^{-S_R/k} > 0$.
+
+  (iii) Noise amplitude $\epsilon_\ell \ll 1$ ensures
+  perturbations remain below the boundary entropy
+  threshold $\theta_\ell$. Hence the perturbed field
+  $\Phi + \epsilon_\ell \eta$ does not cross tile
+  boundaries.
+\end{proof}
+
+
+The Multiscale Recoverability Theorem
+
+
+\begin{theorem}{Multiscale Recoverability Theorem}{multiscale-reco}
+  A TARTAN tiling of resolution $L$ satisfies:
+  \[
+    \reco(d, t \mid \mathcal{T}^L)
+    \;\ge\;
+    \reco(d, t \mid \mathcal{T}^0),
+  \]
+  with strict inequality whenever refinement isolates
+  a distinction $d$ within a single tile.
+\end{theorem}
+
+\begin{proof}
+  At resolution $\ell = 0$, all distinctions share the
+  single tile $X$. The recoverability of any $d$ is
+  determined by the global entropy field.
+
+  At resolution $\ell > 0$, distinctions within a
+  coherence tile are separated from high-entropy
+  boundary regions. Within the tile, entropy is
+  bounded by $\theta_\ell$, which bounds the
+  reconstruction ambiguity.
+
+  By the Coherence Tile Theorem,
+  $\reco(d, t \mid T^\ell_i) \ge \rho_\ell > 0$ for
+  all tiles. Since $\rho_\ell$ is determined by
+  $\theta_\ell$ and $\theta_\ell < S_{\max}$ (the
+  global maximum), tile-level recoverability exceeds
+  global recoverability.
+
+  Refinement from $\mathcal{T}^{\ell-1}$ to
+  $\mathcal{T}^\ell$ only increases or maintains
+  recoverability by the Refinement Increases Distinction
+  Capacity Theorem (\cref{thm:refinement-capacity}).
+\end{proof}
+
+
+The Trajectory Preservation Theorem
+
+
+TARTAN is trajectory-aware: each tile tracks not just
+the current field configuration but the history of
+field trajectories within it.
+
+\begin{definition}{Trajectory Annotation}{traj-annotation}
+  The \emph{trajectory annotation} of tile $T^\ell_i$
+  at time $t$ is the set of field trajectories
+  observed within $T$ up to time $t$:
+  \[
+    \mathcal{T}\!r^\ell_i(t)
+    = \{(\Phi(x,s))_{s \le t} : x \in T^\ell_i\}.
+  \]
+\end{definition}
+
+\begin{theorem}{Trajectory Preservation Theorem}{traj-preserve}
+  Under TARTAN dynamics, the trajectory annotation
+  $\mathcal{T}\!r^\ell_i(t)$ is non-decreasing in
+  the refinement order: finer tilings preserve
+  strictly more trajectory information.
+  Formally, for $\ell' > \ell$:
+  \[
+    H(\mathcal{T}\!r^{\ell'}_i(t))
+    \;\ge\;
+    H(\mathcal{T}\!r^{\ell}_j(t))
+  \]
+  for any tile $T^{\ell'}_i \subseteq T^\ell_j$.
+\end{theorem}
+
+\begin{proof}
+  The trajectory annotation at coarser resolution
+  $\ell$ averages trajectories over the larger tile
+  $T^\ell_j$. This averaging is a projection:
+  it maps the fine-grained trajectory space onto a
+  coarser representation.
+
+  By the Compression Theorem (\cref{thm:compression}),
+  the entropy of the projected annotation is less than
+  or equal to the entropy of the original.
+  Since $T^{\ell'}_i \subseteq T^\ell_j$, the finer
+  tile's annotation is a restriction (not a compression)
+  of the coarser tile's trajectories within that region.
+
+  Restriction to a subtile preserves the trajectory
+  distinctions within that subtile while removing
+  trajectories from the complement. For trajectories
+  entirely within $T^{\ell'}_i$, distinction capacity
+  is unchanged. For trajectories crossing the boundary,
+  finer tiles separate them, increasing $H$.
+  Hence $H(\mathcal{T}\!r^{\ell'}) \ge H(\mathcal{T}\!r^\ell)$.
+\end{proof}
+
+
+TARTAN and Admissibility
+
+
+\begin{theorem}{TARTAN Admissibility Theorem}{tartan-adm}
+  \index{admissibility!computational}
+  A TARTAN-structured system is generatively admissible
+  (in the sense of Ch.~\ref{ch:geometry-futures}) iff
+  for each tile $T \in \mathcal{T}^L$ at the finest
+  resolution:
+  \[
+    \frac{d}{dt}\Vol(\adm(x, t) \cap T)
+    \;\ge\; 0
+    \quad \forall x \in T.
+  \]
+  That is, generative admissibility is a tile-local
+  condition that propagates to the global system.
+\end{theorem}
+
+\begin{proof}
+  By the Coherence Tile Theorem, RSVP dynamics are
+  locally stable within each tile. The global
+  admissibility manifold is the union of tile-local
+  admissibility manifolds:
+  \[
+    \adm(t) = \bigcup_{T \in \mathcal{T}^L}
+    (\adm(t) \cap T).
+  \]
+  Since tiles partition $X$ (Recursive Tiling Theorem),
+  \[
+    \Vol(\adm(t))
+    = \sum_{T} \Vol(\adm(t) \cap T).
+  \]
+  Therefore $\frac{d}{dt}\Vol(\adm(t)) \ge 0$ iff
+  $\frac{d}{dt}\Vol(\adm(t) \cap T) \ge 0$ for each $T$.
+\end{proof}
+
+\begin{remark}{TARTAN as distributed admissibility checking}
+  {tartan-distributed}
+  The TARTAN Admissibility Theorem converts the global
+  admissibility condition into a collection of local
+  conditions, one per tile. This is computationally
+  significant: rather than computing $\Vol(\adm)$ for
+  the entire system (potentially intractable for large
+  $X$), TARTAN allows parallel, tile-local admissibility
+  monitoring. Each tile is an autonomous admissibility
+  checker. The Ecological Fragility Theorem
+  (\cref{thm:eco-fragility}) warns against making any
+  single tile too large: a highly concentrated tile
+  becomes a single point of failure for global
+  admissibility.
+\end{remark}
+
+\begin{example}{TARTAN in Neural Field Models}{tartan-neural}
+  \bioicon
+  In neural field theory, activity propagates across
+  cortical sheets as travelling waves and localised
+  activation patterns. A TARTAN tiling of cortical space
+  identifies coherent activation regions (low-entropy
+  tiles) separated by high-entropy transition zones.
+  Within each tile, trajectory annotations track the
+  local history of activation. Cross-tile projections
+  implement long-range connectivity. The Multiscale
+  Recoverability Theorem predicts that finer-grained
+  cortical maps support richer reconstructive capacity
+  — consistent with empirical findings that higher
+  cortical areas with finer representational granularity
+  support more complex inference.
+\end{example}
+
+
+Related Frameworks
+
+\label{sec:ch26-related-frameworks}
+
+\subsection*{Bar-Yam: The Complexity Profile}
+
+\emph{Convergence.} Chapters~\ref{ch:regeneration}
+and~\ref{ch:distinction-ecology} engaged complexity science
+through Kauffman's autocatalytic closure and Holland's complex
+adaptive systems; this chapter's concern is closer to Bar-Yam's
+treatment of multiscale structure specifically. Bar-Yam's
+\emph{complexity profile} measures how much behaviour a system
+exhibits as a function of the scale at which it is observed,
+explicitly built to capture systems whose description changes
+qualitatively across scales \parencite{baryam1997}. This is
+structurally close to this chapter's whole project: Coherence
+Tiles and the TARTAN Tiling
+(\cref{defn:coherence-tile,defn:tartan-tiling}) similarly
+decompose a system into scale-dependent units of coherent
+description, and the Recursive Tiling Theorem
+(\cref{thm:recursive-tiling}) formalises how this decomposition
+nests across scales.
+
+\emph{Divergence.} The complexity profile is fundamentally a
+descriptive tool: it tells an external observer how much
+information is needed to describe a system at a given scale, but
+does not by itself specify how repair, recoverability, or
+admissibility behave across scales. The Multiscale Recoverability
+Theorem and TARTAN Admissibility Theorem
+(\cref{thm:multiscale-reco,thm:tartan-adm}) go further, showing
+that admissibility decomposes additively across tiles ---
+$\Vol(\adm(t)) = \sum_T \Vol(\adm(t)\cap T)$ --- which licenses
+genuinely distributed, tile-local admissibility monitoring. This
+is an operational claim about how a system can be managed, not
+merely a descriptive claim about how complex it is at a given
+scale.
+
+\emph{Open question.} Whether Bar-Yam's complexity profile can be
+derived as a specific functional of TARTAN's tile structure ---
+some measure of coherence-tile density as a function of scale,
+for instance --- giving a precise bridge between the two
+frameworks, or whether they answer different questions that
+happen to both be indexed by scale, is not settled here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item TARTAN tiles partition the domain into coherent
+        low-entropy regions separated by high-entropy
+        boundaries.
+  \item A recursive tiling of any resolution exists for
+        any smooth field (\cref{thm:recursive-tiling}).
+  \item Within each tile, dynamics are stable,
+        recoverability is positive, and noise exploration
+        is boundary-respecting
+        (\cref{thm:coherence-tile-thm}).
+  \item Finer tilings support higher recoverability
+        (\cref{thm:multiscale-reco}).
+  \item Trajectory annotations grow monotonically with
+        refinement (\cref{thm:traj-preserve}).
+  \item Global generative admissibility decomposes into
+        tile-local conditions, enabling parallel
+        admissibility monitoring
+        (\cref{thm:tartan-adm}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+\begin{exercise}[CS]
+  Implement the TARTAN tiling algorithm for a 2D field
+  $\Phi: [0,1]^2 \to \mathbb{R}$ using NumPy.
+  Use $S_T = |\nabla\Phi|^2$ computed by finite
+  differences.
+  Visualise tiles at three resolution levels using
+  Matplotlib and identify coherence boundaries.
+\end{exercise}
+\begin{exercise}[Bio]
+  Model a developing embryo as a TARTAN system.
+  The scalar field $\Phi$ represents morphogen
+  concentration. Identify coherence tiles (tissue
+  compartments), tile boundaries (organiser regions),
+  and trajectory annotations (developmental histories).
+  What does the Trajectory Preservation Theorem predict
+  about the information content of differentiated
+  versus undifferentiated cells?
+\end{exercise}
+\begin{exercise}
+  Prove that a single-resolution TARTAN system
+  ($L = 0$) is equivalent to a standard RSVP system
+  without tiling. At what resolution $L$ does the
+  Multiscale Recoverability Theorem guarantee strictly
+  higher recoverability than the RSVP baseline?
+\end{exercise}
+\begin{exercise}[CS]
+  Design a TARTAN-based caching system for a large
+  language model's attention computation.
+  Define the field $\Phi$ (attention scores),
+  entropy $S_T$ (attention entropy), and coherence tiles
+  (semantic segments). Show how the TARTAN Admissibility
+  Theorem reduces the cost of checking whether a
+  cached attention pattern remains valid.
+\end{exercise}
+
+
+\part{Social Realizations}
+
+
+
+
+
+\chapter{Fiscal Reachability}
+\label{ch:fiscal}
+
+\begin{epigraph}{
+  A government that cannot finance its commitments
+  has already abandoned its future.
+  A government that finances only its present
+  has sold it.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define fiscal reachability volume and the policy
+        state space.
+  \item Prove the Fiscal Reachability Theorem.
+  \item Prove the Administrative Blind Spot Theorem.
+  \item Prove the Boundary Exhaustion Theorem.
+  \item Prove the Governance Capacity Theorem.
+  \item Apply the framework to debt dynamics, tax base
+        erosion, and institutional lock-in.
+\end{objectives}
+
+
+Public Finance as Reachability Geometry
+
+
+Public finance is ordinarily described in terms of
+flows: revenues, expenditures, deficits, debts.
+These are important quantities, but they describe the
+\emph{current state} of a fiscal system rather than the
+geometry of its future possibilities.
+
+A government that runs a surplus may nonetheless be
+trapped: its surplus may be generated by selling
+non-renewable resources, eroding its tax base, or
+reducing expenditure on the infrastructure that future
+revenue requires. Conversely, a government running a
+moderate deficit may be expanding its future fiscal
+options by investing in productive capacity, human
+capital, or institutional resilience.
+
+The distinction-theoretic framework replaces the
+flow-accounting perspective with a geometric one. The
+central object is not the current balance but the
+\emph{fiscal reachability volume}: the measure of policy
+states accessible to the government given its current
+institutional, financial, and administrative position.
+
+
+Why Flow Accounting Is Not Enough
+
+\label{sec:ch27-why-flow}
+
+The dominant tradition in public finance, descending from
+Keynesian macroeconomic analysis, evaluates government by its
+flows: the deficit or surplus in a given period, and the
+effect of that balance on aggregate demand
+\parencite{keynes1936}. This tradition is indispensable for
+short-run stabilisation policy, but it has no native vocabulary
+for the long-run question this chapter asks: whether a given
+fiscal position expands or contracts what the government will
+be \emph{able to do} later. A balanced budget achieved by
+selling irreplaceable assets and a moderate deficit financed by
+investment in administrative capacity can look identical on a
+flow-accounting ledger while moving in opposite directions in
+the only currency this chapter treats as fundamental: future
+reachable policy volume.
+
+Chapter~\ref{ch:tartan} closed the book's treatment of
+computational realization by asking whether the same
+admissibility machinery that had organised matter, meaning,
+self-modelling, preference, and computation could organise the
+institutions that govern collective human action. This chapter
+is the first attempt at an answer, beginning with the most
+concrete and measurable of those institutions: the public
+finances that fund every other institutional capacity a polity
+possesses.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch27-falsifiability}
+
+The Governance Capacity Theorem, proved later in this chapter
+(\cref{thm:gov-capacity}), characterises long-term fiscal
+viability as $G_F + R_F \ge L_F$ eventually, where $G_F$ is
+the rate of new policy option generation, $R_F$ the rate of
+constraint removal through institutional repair, and $L_F$ the
+rate of constraint accumulation through fiscal erosion. This
+is falsifiable against a specific test: the condition should
+follow directly from the Distinction Balance Law and Universal
+Regeneration Theorem proved in
+Chapter~\ref{ch:preservation} (\cref{thm:dist-balance,thm:universal-regen}),
+applied to the fiscal distinction ecology defined below, with
+no fiscal-specific postulate introduced beyond the policy
+state space itself. The proof given later does exactly this.
+If fiscal viability had instead required some principle
+special to public finance --- something not already a
+consequence of the book's general balance and regeneration
+machinery --- the claim that fiscal reachability realizes that
+machinery, rather than merely borrowing its vocabulary, would
+fail.
+
+
+What This Chapter Establishes
+
+\label{sec:ch27-preview}
+
+By the end of this chapter, fiscal positions will have been
+embedded in a policy state space with an explicit reachability
+volume, the Fiscal Reachability Theorem will show when
+constraint accumulation outpaces capacity expansion, and the
+Governance Capacity Theorem will derive long-term viability
+directly from the book's general regeneration machinery.
+Chapter~\ref{ch:governance} then widens the lens from public
+finance specifically to governance in general: the full set of
+institutions, not only fiscal ones, that determine whether a
+polity's future remains open or closes.
+
+\begin{definition}{Policy State Space}{policy-state}
+  The \emph{policy state space} is a measurable space
+  $(P, \mu_P)$ where:
+  \begin{itemize}[nosep]
+    \item $P = P_T \times P_E \times P_I$ is the
+          Cartesian product of the taxation space $P_T$,
+          the expenditure space $P_E$, and the
+          institutional capacity space $P_I$.
+    \item $\mu_P$ is a reference measure on $P$
+          reflecting the relative importance of
+          different policy dimensions.
+  \end{itemize}
+  A \emph{fiscal position} is a point $p \in P$
+  representing the government's current policy
+  configuration.
+\end{definition}
+
+\begin{definition}{Fiscal Constraint Set}{fiscal-constraint}
+  The \emph{fiscal constraint set} $\mathcal{C}_F(t)$
+  at time $t$ is the collection of constraints on
+  admissible trajectories through $P$, including:
+  \begin{enumerate}[(i)]
+    \item \emph{Solvency constraints}: the present value
+          of future revenues must cover obligations.
+    \item \emph{Administrative constraints}: the government
+          can only implement policies within its
+          institutional capacity $P_I$.
+    \item \emph{Political constraints}: some policy
+          combinations are excluded by constitutional,
+          electoral, or coalitional structure.
+    \item \emph{Debt market constraints}: borrowing is
+          available only within credit limits.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}{Fiscal Reachability Volume}{fiscal-reach}
+  The \emph{fiscal reachability volume} at position $p$,
+  time $t$, with horizon $\tau$ is
+  \[
+    V_F(p, t, \tau)
+    = \mu_P\!\bigl(
+        \reach_P(p, t, t+\tau)
+        \cap \adm_P(p, t)
+      \bigr),
+  \]
+  the admissible policy space accessible within horizon
+  $\tau$.
+  \index{reachability!fiscal|textbf}
+  \index{admissibility!social|textbf}
+\end{definition}
+
+
+The Fiscal Reachability Theorem
+
+
+\begin{theorem}{Fiscal Reachability Theorem}{fiscal-reach-thm}
+  Fiscal reachability volume $V_F(p,t,\tau)$ is
+  non-increasing under the accumulation of fiscal
+  constraints that are not offset by institutional
+  capacity expansion:
+  \[
+    \frac{d|\mathcal{C}_F|}{dt} > 0
+    \;\text{ and }\;
+    \frac{d\mu_P(P_I)}{dt} \le 0
+    \;\implies\;
+    \frac{dV_F}{dt} \le 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  By the Constraint Volume Theorem
+  (\cref{thm:constraint-vol}), each additional constraint
+  in $\mathcal{C}_F$ reduces $V_F$ by at least
+  the measure of the eliminated policy region.
+  If institutional capacity $P_I$ does not expand to
+  generate new policy options — new tax instruments,
+  new administrative pathways, new borrowing facilities
+  — then no new reachable states are added to offset
+  constraint accumulation.
+  Therefore $V_F$ is non-increasing.
+\end{proof}
+
+\begin{example}{Debt Trap Dynamics}{debt-trap}
+  A government that finances current expenditure through
+  non-concessional borrowing accumulates solvency
+  constraints: future budgets must dedicate increasing
+  fractions of revenue to debt service.
+  If this process continues without expanding the tax
+  base or productive capacity, the fiscal constraint set
+  $\mathcal{C}_F$ grows while $P_I$ contracts
+  (administrative capacity is consumed by debt management).
+  The Fiscal Reachability Theorem predicts monotone
+  decline in $V_F$ — a fiscal trap from which escape
+  requires either external debt relief (constraint
+  removal) or institutional reform (capacity expansion).
+\end{example}
+
+
+The Administrative Blind Spot Theorem
+
+
+Governments operate on compressed representations of
+their policy space. A tax administration that does not
+model informal economic activity has a blind spot in its
+revenue model. A welfare ministry that does not track
+long-term outcomes has a blind spot in its effectiveness
+model. These blind spots are instances of the general
+projection loss established in Chapter~\ref{ch:distinction}.
+
+\begin{definition}{Administrative Projection}{admin-proj}
+  An \emph{administrative projection} is a map
+  $\pi_A : P \to \hat{P}$ from the full policy space
+  to the government's \emph{represented policy space}
+  $\hat{P}$ — the portion it can directly observe,
+  model, and act upon.
+\end{definition}
+
+\begin{theorem}{Administrative Blind Spot Theorem}{admin-blind}
+  Every administrative projection $\pi_A : P \to \hat{P}$
+  with $|\hat{P}| < |P|$ introduces:
+  \begin{enumerate}[(i)]
+    \item A \emph{fiscal blind spot}
+          $B_A = P \setminus \pi_A^{-1}(\hat{P})$:
+          policy regions invisible to administration.
+    \item An \emph{admissibility distortion}
+          $\Delta_\adm(\pi_A) > 0$: the government's
+          estimated fiscal reachability volume exceeds
+          its true reachability volume.
+    \item A \emph{systematic bias toward the represented}:
+          policies well-represented in $\hat{P}$ are
+          over-weighted in planning relative to their
+          true fiscal impact.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) By the Blind Spot Theorem
+  (\cref{thm:blind-spot-thm}), any non-injective
+  projection produces a non-trivial blind spot.
+  Since $|\hat{P}| < |P|$, $\pi_A$ is non-injective.
+
+  (ii) By the Admissibility Distortion Theorem
+  (\cref{thm:adm-distortion}), non-injective projections
+  produce positive admissibility distortion.
+  The government estimates $V_F$ from $\hat{P}$;
+  the true $V_F$ depends on $P$;
+  the difference is $\Delta_\adm(\pi_A) > 0$.
+
+  (iii) The government's planning operates on $\hat{P}$.
+  Policies projecting onto densely represented regions
+  of $\hat{P}$ receive more analytical attention than
+  policies projecting onto sparse regions,
+  regardless of their importance in $P$.
+\end{proof}
+
+\begin{remark}{Tax gap as blind spot}{tax-gap}
+  The \emph{tax gap} — the difference between taxes
+  legally owed and taxes collected — is a direct
+  manifestation of the administrative blind spot.
+  The informal economy, offshore structures, and
+  complex financial instruments represent regions of
+  $P$ that fall outside $\hat{P}$.
+  The Administrative Blind Spot Theorem predicts that
+  governments will systematically underestimate their
+  true fiscal reachability because their planning
+  tools do not represent these regions.
+\end{remark}
+
+
+The Boundary Exhaustion Theorem
+
+
+\begin{definition}{Fiscal Boundary Proximity}{fiscal-boundary}
+  The \emph{fiscal boundary proximity} is
+  \[
+    \beta_F(p, t)
+    = d_P\!\bigl(p,\; \partial\reach_P(p,t)\bigr),
+  \]
+  the distance from the current fiscal position to
+  the boundary of the reachable policy space.
+\end{definition}
+
+\begin{theorem}{Boundary Exhaustion Theorem}{boundary-exhaust}
+  As fiscal boundary proximity $\beta_F \to 0$:
+  \begin{enumerate}[(i)]
+    \item Small fiscal shocks produce disproportionately
+          large reductions in $V_F$.
+    \item The sensitivity of policy outcomes to initial
+          conditions diverges.
+    \item The set of admissible repair operations
+          contracts toward the empty set.
+  \end{enumerate}
+  A government with $\beta_F < \epsilon$ for small
+  $\epsilon$ is \emph{fiscally critical}.
+\end{theorem}
+
+\begin{proof}
+  (i) By the Boundary Proximity and Critical Instability
+  Theorem (\cref{thm:boundary-instab}),
+  $\|\partial V_F/\partial\epsilon\| \to \infty$
+  as $\beta_F \to 0$.
+  Fiscal shocks correspond to perturbations $\epsilon$
+  to the policy trajectory; near the boundary they
+  produce $O(1)$ reductions in $V_F$.
+
+  (ii) Critical instability implies sensitivity to
+  initial conditions: small differences in policy
+  choices near the boundary produce large differences
+  in future reachability.
+
+  (iii) Admissible repair (\cref{prop:repair-adm})
+  requires $V_R(\repair(p), t) \ge V_R(p, t)$.
+  Near the reachability boundary, almost all operations
+  reduce $V_F$; the set of operations satisfying the
+  admissibility condition shrinks.
+\end{proof}
+
+\begin{example}{Sovereign Debt Crises}{sovereign-crisis}
+  The Boundary Exhaustion Theorem describes the
+  dynamics of sovereign debt crises. A government
+  approaching debt sustainability limits
+  ($\beta_F \to 0$) finds that:
+  (i) small increases in borrowing costs produce large
+  reductions in fiscal space; (ii) small differences
+  in initial conditions (e.g.\ whether a crisis hits
+  before or after an election) produce large
+  differences in outcomes; (iii) the set of admissible
+  policy responses available to it contracts —
+  austerity, monetisation, and restructuring each
+  eliminate further options faster than they create them.
+  The crisis is therefore not merely a solvency event
+  but a reachability collapse.
+\end{example}
+
+
+The Governance Capacity Theorem
+
+
+\begin{theorem}{Governance Capacity Theorem}{gov-capacity}
+  A government's long-term fiscal viability satisfies
+  \[
+    \liminf_{t\to\infty} V_F(p(t), t, \tau) > 0
+    \;\iff\;
+    G_F(t) + R_F(t) \ge L_F(t)
+    \quad \text{eventually},
+  \]
+  where $G_F$ is the rate of new policy option
+  generation, $R_F$ is the rate of constraint removal
+  through institutional repair, and $L_F$ is the rate
+  of constraint accumulation through fiscal erosion.
+\end{theorem}
+
+\begin{proof}
+  By the Distinction Balance Law
+  (\cref{thm:dist-balance}) applied to the fiscal
+  distinction ecology, the rate of change of
+  recoverable policy distinctions is
+  $\dot{D}_F = G_F + R_F - L_F$.
+  By the Universal Regeneration Theorem
+  (\cref{thm:universal-regen}), long-term viability
+  requires $\liminf V_F > 0$, which by the Ecology
+  of Distinctions Conservation Law
+  (\cref{thm:ecology-conservation}) holds iff
+  $G_F + R_F \ge L_F$ eventually.
+\end{proof}
+
+\begin{remark}{Fiscal sustainability as generativity}{fiscal-gen}
+  The Governance Capacity Theorem reframes fiscal
+  sustainability. The standard definition asks
+  whether the debt-to-GDP ratio is bounded.
+  The distinction-theoretic definition asks whether
+  the government's policy option space is generatively
+  admissible. These coincide when debt accumulation is
+  the primary source of $L_F$, but diverge when
+  institutional capacity erosion dominates — a
+  government may have low debt but rapidly contracting
+  $V_F$ due to administrative deterioration, regulatory
+  capture, or erosion of state capacity.
+\end{remark}
+
+
+Optionality as Reachable Volume
+
+\label{sec:ch27-optionality}
+
+The Governance Capacity Theorem already implies a reordering
+of how fiscal health should be read. Conventional fiscal
+analysis ranks governments by current revenue $T(t)$.
+The present framework ranks them by future reachable volume
+$V_F(t)$, and the two orderings can disagree sharply: a
+government with declining tax revenue but a growing rate of
+option generation $G_F$ may be in better fiscal health than
+one with strong current revenue and a contracting $G_F + R_F$.
+
+What this chapter's formalism leaves open is what concretely
+constitutes investment in $G_F$ and $R_F$ rather than in
+present consumption. Three categories recur across the
+governance literature on managing deep uncertainty, and each
+maps directly onto this chapter's terms. Information-gathering
+capacity --- statistical agencies, monitoring infrastructure,
+independent research capability --- expands $G_F$ by revealing
+policy options that would otherwise remain unrecognised, not
+merely unexercised. Distributed institutional expertise ---
+civil-service continuity, technical staff retained across
+political transitions, redundant rather than singular sources
+of administrative knowledge --- expands $R_F$, since expertise
+concentrated in too few places is itself a fragile,
+non-regenerative repair resource (\cref{thm:diversity-repair}).
+Reversible, rather than entrenched, policy commitments
+preserve the option to redirect $G_F$ and $R_F$ as
+circumstances change, in the same sense the Option Preservation
+Theorem of Chapter~\ref{ch:governance} formalises for
+constitutional design.
+
+None of these three categories shows up as revenue. All three
+show up as $V_F$. A treasury that funds them while running a
+moderate deficit is not weakening its fiscal position in any
+sense this chapter's geometry recognises; it is doing the one
+thing the Governance Capacity Theorem identifies as necessary
+for long-term viability, in the only currency --- reachable
+policy volume --- that theorem treats as fundamental.
+
+
+Extended Example: The Reachability Collapse of a Company Town
+
+\label{sec:ch27-company-town}
+
+The theorems above are abstract by design, but the pattern they
+describe --- specialization narrowing $G_F$, fixed claims
+accumulating as $L_F$, an administrative projection that hides
+the narrowing from the people managing it, and a boundary
+approached quietly until a small shock exhausts it --- is not a
+hypothetical. It is the structure of one of the best-documented
+fiscal collapses in American economic history: the company town
+of Pullman, Illinois, built in 1880 by the Pullman Palace Car
+Company and dissolved by order of the Illinois Supreme Court in
+1898 \parencite{buder1967}. What follows is a worked
+reconstruction of that collapse in this chapter's terms, with an
+explicit toy trajectory for $V_F(t)$.
+
+
+The Policy State Space of a Company Town
+
+
+In 1880, George Pullman purchased roughly four thousand acres of
+land south of Chicago and built, on a few hundred of them, a
+complete industrial town: factory, row houses, shops, a church,
+a hotel, parks, and paved streets, all owned outright by the
+company. Workers were paid in company currency that became
+indistinguishable from rent obligations: housing costs were
+deducted directly from wages before a worker ever saw the
+remainder.
+
+Cast in this chapter's terms, the town's policy state space
+$P = P_T \times P_E \times P_I$ (\cref{defn:policy-state}) was
+unusually degenerate from the outset. $P_T$, the taxation
+space, collapsed into a single instrument: the wage rate set
+unilaterally by the company. $P_E$, the expenditure space, was
+similarly singular: housing, retail goods, utilities, and even
+church rental were priced and supplied by one landlord. $P_I$,
+institutional capacity, was the narrowest of the three: the town
+did have a local government, but the company installed loyalists
+in its offices and discouraged opposition candidates, so that
+$P_I$ existed nominally while contributing almost nothing to
+$\mathcal{R}_F$, the rate of constraint removal through genuine
+institutional repair (\cref{thm:gov-capacity}). A government that
+exists on paper but cannot act independently of the actor it is
+meant to check is not institutional capacity in this framework's
+sense; it is a captured projection of $P_I$, indistinguishable in
+its effect on $R_F$ from having no town government at all.
+
+
+Specialization and the Erosion of $G_F$
+
+
+A reachability volume's health depends on the rate at which new
+options are generated, $G_F$, relative to the rate at which they
+are foreclosed, $L_F$. Pullman's town was designed, from its
+first survey, to suppress $G_F$ structurally rather than
+incidentally. No land was sold to independent landlords. No
+competing retailers were permitted within the town's commercial
+arcade without the company's approval. Workers could in
+principle have sought housing or employment elsewhere, but the
+practical reachable set of such alternatives --- comparable wages
+within commuting distance, available housing stock, transferable
+skills specific to railcar manufacture --- was thin relative to
+the convenience of staying. This is exactly the Pipeline
+Determination Theorem's bottleneck structure
+(\cref{thm:pipeline-det}) transplanted into a labor market: a
+single stage, employment at one firm, bounded the capacity of
+every downstream stage of a worker's economic life, from housing
+to credit to retail consumption.
+
+The company itself treated the town's housing stock as an
+ordinary capital investment, contractually expected to return six
+percent annually on the cost of construction --- a target the
+investment never actually reached, peaking closer to four and a
+half percent \parencite{buder1967}. This detail matters more than
+it first appears. It means rents were not, in the company's own
+internal accounting, a flexible instrument that could be adjusted
+to local conditions; they were fixed against a return target set
+years earlier, structurally insulated from exactly the kind of
+shock the town was about to experience.
+
+
+The Administrative Blind Spot in Practice
+
+
+The Panic of 1893 cut orders for Pullman cars sharply.
+Management responded as the Administrative Blind Spot Theorem
+(\cref{thm:admin-blind}) predicts any administration will: it
+optimized against its own projection $\hat{P}$ rather than
+against the workers' true policy space $P$. The company's
+projection tracked revenue, cost per car, and the contractual
+return on housing stock. It did not track --- because nothing in
+the company's accounting represented it as a tracked
+quantity --- the residual income remaining to a worker after a
+fixed rent claim was deducted from a falling wage. A federal
+commission later estimated that wages fell approximately
+twenty-five percent between 1893 and May 1894; workers and at
+least one contemporary minister who did the arithmetic by hand
+estimated the true average cut, including indirect reductions in
+hours and piece rates, closer to one third
+\parencite{brecher1972}. Rents were not reduced at all.
+
+This is the chapter's fiscal blind spot
+$B_A = P \setminus \pi_A^{-1}(\hat{P})$ made concrete. The
+quantity that was actually collapsing --- discretionary income,
+the residual space of choice available to a worker after fixed
+obligations were met --- was invisible to $\hat{P}$ precisely
+because $\hat{P}$ had never been built to represent it. The
+company's own books could report a stable, even healthy, picture
+of the town's finances throughout 1893 while the reachable
+policy space available to the people living in it was
+collapsing toward zero.
+
+
+A Toy Trajectory for \texorpdfstring{$V_F(t)$
+{V\_F(t)}}

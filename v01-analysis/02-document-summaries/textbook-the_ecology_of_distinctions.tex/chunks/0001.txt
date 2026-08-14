@@ -1,0 +1,1199 @@
+
+
+
+
+
+
+
+
+\documentclass[12pt,twoside,openright]{book}
+
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont[Scale=0.85]{TeX Gyre Cursor}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+
+
+\usepackage[paperwidth=17cm,paperheight=24cm,
+  top=2.5cm,bottom=2.8cm,inner=2.8cm,outer=2.2cm,
+  marginparwidth=1.4cm,marginparsep=0.3cm]{geometry}
+
+
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\definecolor{DistBlue}  {HTML}{1B4F72}
+\definecolor{DistTeal}  {HTML}{117A65}
+\definecolor{DistAmber} {HTML}{B7770D}
+\definecolor{DistRed}   {HTML}{922B21}
+\definecolor{DistGray}  {HTML}{566573}
+\definecolor{DistGold}  {HTML}{7D6608}
+\definecolor{DistLight} {HTML}{EAF4FB}
+\definecolor{DistLightG}{HTML}{E9F7EF}
+\definecolor{DistGoldBg}{HTML}{FEF9E7}
+\definecolor{DistSage}  {HTML}{5B7553}
+\definecolor{DistSageBg}{HTML}{F1F5EF}
+
+
+\usepackage{tikz,pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,
+  decorations.pathmorphing,backgrounds,fit,calc,matrix,patterns}
+\tikzset{
+  thmnode/.style={rectangle,rounded corners=4pt,
+    draw=DistTeal,fill=DistLight,font=\sffamily\footnotesize,
+    text width=4.2cm,align=center,inner sep=4pt},
+  lawnode/.style={rectangle,rounded corners=4pt,
+    draw=DistGold,fill=DistGoldBg,
+    font=\sffamily\footnotesize\bfseries,
+    text width=4.2cm,align=center,inner sep=4pt},
+  thmedge/.style={-Stealth,DistTeal,thick},
+  distnode/.style={circle,draw=DistBlue,fill=DistLight,
+    minimum size=7mm,font=\small\sffamily},
+  distedge/.style={-Stealth,DistTeal,thick},
+}
+
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries\color{DistBlue}\huge}
+  {\color{DistTeal}\sffamily\Large\chaptername\ \thechapter}
+  {0.5ex}{\titlerule[1pt]\vspace{0.8ex}}[\vspace{0.4ex}\titlerule]
+\titleformat{\section}
+  {\sffamily\bfseries\large\color{DistBlue}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\sffamily\bfseries\normalsize\color{DistGray}}{\thesubsection}{1em}{}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\sffamily\color{DistGray}\leftmark}
+\fancyhead[RO]{\small\sffamily\color{DistGray}\rightmark}
+\fancyfoot[C]{\small\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[most]{tcolorbox}
+
+
+\tcbset{thmbase/.style={enhanced,breakable,
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+  fonttitle=\sffamily\bfseries,separator sign={.}}}
+
+
+\newtcbtheorem[number within=chapter]{axiom}{Axiom}{
+  thmbase,colback=DistGoldBg,colframe=DistGold,coltitle=white,
+  borderline west={3pt}{0pt}{DistGold},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGold,rounded corners}}{axm}
+\newtcbtheorem[use counter from=axiom]{law}{Law}{
+  thmbase,colback=DistGoldBg,colframe=DistGold!80,coltitle=white,
+  borderline west={3pt}{0pt}{DistGold!80},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGold!80,rounded corners}}{law}
+\newtcbtheorem[use counter from=axiom]{principle}{Principle}{
+  thmbase,colback=DistGoldBg,colframe=DistGold!60,coltitle=white,
+  borderline west={3pt}{0pt}{DistGold!60},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGold!60,rounded corners}}{prc}
+
+
+\newtcbtheorem[number within=chapter]{theorem}{Theorem}{
+  thmbase,colback=DistLight,colframe=DistTeal,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistTeal,rounded corners}}{thm}
+
+
+\newtcbtheorem[use counter from=theorem]{proposition}{Proposition}{
+  thmbase,colback=DistLight,colframe=DistBlue,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistBlue,rounded corners}}{prop}
+
+
+\newtcbtheorem[use counter from=theorem]{lemma}{Lemma}{
+  thmbase,colback=DistLight,colframe=DistGray,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistGray,rounded corners}}{lem}
+\newtcbtheorem[use counter from=theorem]{corollary}{Corollary}{
+  thmbase,colback=DistLight,colframe=DistTeal!50,coltitle=DistBlue,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistTeal!50,rounded corners}}{cor}
+
+
+\newtcbtheorem[number within=chapter]{definition}{Definition}{
+  thmbase,colback=DistLightG,colframe=DistTeal,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistTeal,rounded corners}}{defn}
+\newtcbtheorem[number within=chapter]{example}{Example}{
+  thmbase,colback=orange!5,colframe=DistAmber!80,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistAmber!80,rounded corners}}{ex}
+\newtcbtheorem[number within=chapter]{remark}{Remark}{
+  thmbase,colback=yellow!6,colframe=DistAmber,coltitle=white,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistAmber,rounded corners}}{rmk}
+
+\newenvironment{prop}
+{\begin{proposition}{}{}}
+{\end{proposition}}
+
+\newenvironment{ex}
+{\begin{example}{}{}}
+{\end{example}}
+
+\newenvironment{rem}
+{\begin{remark}{}{}}
+{\end{remark}}
+
+\newenvironment{defn}
+{\begin{definition}{}{}}
+{\end{definition}}
+
+\newenvironment{thm}
+{\begin{theorem}{}{}}
+{\end{theorem}}
+
+\newenvironment{lem}
+{\begin{lemma}{}{}}
+{\end{lemma}}
+
+\newenvironment{cor}
+{\begin{corollary}{}{}}
+{\end{corollary}}
+
+\renewcommand{\qedsymbol}{\textcolor{DistTeal}{$\blacksquare$}}
+
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,
+  keywordstyle=\color{DistBlue}\bfseries,
+  commentstyle=\color{DistGray}\itshape,
+  stringstyle=\color{DistAmber},
+  frame=single,rulecolor=\color{DistGray!50},
+  numbers=left,numberstyle=\tiny\color{DistGray},
+  breaklines=true,captionpos=b,tabsize=2,
+  showstringspaces=false}
+\lstdefinelanguage{Spherepop}{
+  morekeywords={pop,refuse,collapse,bind,emit,reach,repair},
+  sensitive=false,morecomment=[l]{//},morestring=[b]"}
+
+
+\usepackage{graphicx,booktabs,caption,subcaption}
+\captionsetup{font=small,labelfont={sf,bf,color=DistBlue}}
+
+
+\usepackage{fontawesome5,enumitem}
+\newcommand{\csicon} {\marginpar{\tiny\color{DistBlue}\faCode}}
+\newcommand{\bioicon}{\marginpar{\tiny\color{DistTeal}\faDna}}
+\newcommand{\physicon}{\marginpar{\tiny\color{DistGray}\faAtom}}
+
+
+\usepackage{makeidx}
+\makeindex
+
+
+\usepackage[acronym,toc,nonumberlist]{glossaries}
+\makeglossaries
+\newacronym{rsvp}{RSVP}{Relativistic Scalar Vector Plenum}
+\newacronym{tartan}{TARTAN}{Trajectory-Aware Recursive Tiling with Annotated Noise}
+\newacronym{cmb}{CMB}{Cosmic Microwave Background}
+\newacronym{hydra}{HYDRA}{Hybrid Dynamic Reasoning Architecture}
+\newglossaryentry{distinction}{name={distinction},
+  description={A partition of domain $X$ into non-identical
+  regions; the primitive act from which objects, information,
+  and entropy arise (Ch.\,1)}}
+\newglossaryentry{recoverability}{name={recoverability},
+  description={The degree to which dispersed distinctions remain
+  reconstructible (Ch.\,5)}}
+\newglossaryentry{repair}{name={repair},
+  description={Operator $\repair:\mathcal{D}\to\mathcal{D}$
+  restoring a damaged distinction; possible iff $\reco>0$ (Ch.\,7)}}
+\newglossaryentry{admissibility}{name={admissibility},
+  description={Property of trajectories preserving admissible
+  future distinction-producing volume (Ch.\,14)}}
+\newglossaryentry{generative-admissibility}{
+  name={generative admissibility},
+  description={Condition $\frac{d}{dt}\Vol(\adm(t))\ge0$;
+  the deepest evaluative criterion (Ch.\,15, Ch.\,31)}}
+
+
+\usepackage[colorlinks=true,linkcolor=DistBlue,
+  citecolor=DistTeal,urlcolor=DistAmber,
+  pdftitle={The Ecology of Distinctions},
+  pdfauthor={Flyxion}]{hyperref}
+\usepackage{cleveref}
+
+
+
+
+
+\crefname{tcb@cnt@theorem}{theorem}{theorems}
+\Crefname{tcb@cnt@theorem}{Theorem}{Theorems}
+\crefname{tcb@cnt@axiom}{axiom}{axioms}
+\Crefname{tcb@cnt@axiom}{Axiom}{Axioms}
+\crefname{tcb@cnt@definition}{definition}{definitions}
+\Crefname{tcb@cnt@definition}{Definition}{Definitions}
+\crefname{tcb@cnt@example}{example}{examples}
+\Crefname{tcb@cnt@example}{Example}{Examples}
+\crefname{tcb@cnt@remark}{remark}{remarks}
+\Crefname{tcb@cnt@remark}{Remark}{Remarks}
+
+
+\usepackage[backend=biber,style=authoryear,
+  sorting=nyt,maxbibnames=6]{biblatex}
+\addbibresource{distinctions.bib}
+
+
+
+
+\newcommand{\vfield}{\vec{v}}
+\newcommand{\partition}{\mathcal{P}}
+\newcommand{\hist}{\mathcal{H}}
+\newcommand{\reach}{\mathcal{R}}
+\newcommand{\adm}{\mathcal{A}}
+\newcommand{\repair}{\mathfrak{R}}
+\newcommand{\reco}{\mathfrak{rec}}
+\newcommand{\Vol}{\operatorname{Vol}}
+
+\newenvironment{epigraph}[2]{
+  \vspace{1em}\begin{flushright}
+  \begin{minipage}{0.72\textwidth}
+  \itshape\small #1\\[0.4em]
+  \upshape\footnotesize\sffamily\color{DistGray}--- #2
+  \end{minipage}\end{flushright}\vspace{1.5em}}{}
+
+\newenvironment{objectives}{
+  \begin{tcolorbox}[colback=DistBlue!5,colframe=DistBlue,
+    title={\faCheckCircle\enspace Learning Objectives},
+    fonttitle=\sffamily\bfseries\color{white},
+    attach boxed title to top left={yshift=-2mm,xshift=4mm},
+    boxed title style={colback=DistBlue},breakable]
+  \begin{itemize}[leftmargin=*,nosep]}{
+  \end{itemize}\end{tcolorbox}\vspace{1em}}
+
+\newenvironment{chapsummary}{
+  \begin{tcolorbox}[colback=DistBlue!5,colframe=DistBlue,
+    title={\faBookOpen\enspace Summary},
+    fonttitle=\sffamily\bfseries\color{white},
+    attach boxed title to top left={yshift=-2mm,xshift=4mm},
+    boxed title style={colback=DistBlue,rounded corners}]
+  \begin{itemize}[nosep,leftmargin=*]}{
+  \end{itemize}\end{tcolorbox}}
+
+
+
+
+
+
+
+\newtcolorbox{distinctionaside}[1]{
+  enhanced,breakable,
+  colback=DistSageBg,colframe=DistSage,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faLightbulb\enspace Distinction in the Wild: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistSage,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+  fontupper=\itshape
+}
+\newtcolorbox{repairaside}[1]{
+  enhanced,breakable,
+  colback=DistSageBg,colframe=DistSage!70!DistGray,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faWrench\enspace Repair Ecology: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistSage!70!DistGray,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+  fontupper=\itshape
+}
+\newtcolorbox{centauraside}[1]{
+  enhanced,breakable,
+  colback=DistSageBg,colframe=DistSage!60!DistAmber,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faRobot\enspace Reverse Centaur Observation: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistSage!60!DistAmber,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+  fontupper=\itshape
+}
+\newtcolorbox{envelopeaside}[1]{
+  enhanced,breakable,
+  colback=DistSageBg,colframe=DistSage!80!DistTeal,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faCalculator\enspace Back-of-the-Envelope: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistSage!80!DistTeal,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+}
+\newtcolorbox{fiveminute}[1]{
+  enhanced,breakable,
+  colback=DistSageBg,colframe=DistSage,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faClock\enspace Five-Minute Distinction Experiment: #1},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=DistSage,rounded corners},
+  left=4pt,right=4pt,top=6pt,bottom=4pt,
+}
+
+\newcounter{exercise}[chapter]
+\newenvironment{exercise}[1][]{
+  \refstepcounter{exercise}
+  \noindent\textbf{\sffamily\color{DistBlue}
+  Exercise~\thechapter.\theexercise
+  \ifx&#1&\else~(#1)\fi.}\enspace}{\par\medskip}
+
+
+\begin{document}
+\frontmatter
+
+
+\begin{titlepage}
+\centering\vspace*{2.5cm}
+{\sffamily\Huge\bfseries\color{DistBlue}
+  The Ecology of Distinctions}\\[0.9em]
+{\sffamily\Large\color{DistGray}
+  From Information and Entropy\\
+  to Repair, Regeneration, and Admissibility}\\[2.2cm]
+{\large Flyxion}\\[0.4em]
+{\sffamily\color{DistGray}Independent Researcher}\\[2.5cm]
+\begin{tikzpicture}
+  \node[distnode,minimum size=1.8cm](X)at(0,0){$X$};
+  \node[distnode,minimum size=1.2cm,fill=DistTeal!20]
+    (A)at(-2.5,-2){$P_1$};
+  \node[distnode,minimum size=1.2cm,fill=DistAmber!20]
+    (B)at(0,-2){$P_2$};
+  \node[distnode,minimum size=1.2cm,fill=DistRed!10]
+    (C)at(2.5,-2){$P_3$};
+  \draw[distedge](X)--(A);\draw[distedge](X)--(B);
+  \draw[distedge](X)--(C);
+  \node[below=.3cm of A,font=\tiny\sffamily\color{DistGray}]
+    {marked};
+  \node[below=.3cm of B,font=\tiny\sffamily\color{DistGray}]
+    {unmarked};
+  \node[below=.3cm of C,font=\tiny\sffamily\color{DistGray}]
+    {boundary};
+\end{tikzpicture}\\[2cm]
+{\sffamily\color{DistGray}First Edition~·~2026}
+\end{titlepage}
+
+\thispagestyle{empty}\vspace*{\fill}
+{\small\noindent\textcopyright{} 2026 Flyxion.
+Released under CC~BY-NC-SA~4.0. Typeset with Lua\LaTeX.}
+\clearpage
+
+\thispagestyle{empty}\vspace*{5cm}
+\begin{center}\itshape
+For everyone who noticed that the categories were wrong\\
+and tried to fix them anyway.
+\end{center}\clearpage
+
+
+\chapter*{The Conceptual Backbone}
+\addcontentsline{toc}{chapter}{The Conceptual Backbone}
+\thispagestyle{empty}
+\begin{tcolorbox}[colback=DistGoldBg,colframe=DistGold,
+  fonttitle=\sffamily\bfseries\color{white},
+  title={\faLayerGroup\enspace Eight Structural Results},breakable]
+\begin{enumerate}[leftmargin=*,itemsep=0.6em,label=\textbf{\arabic*.}]
+  \item \textbf{Axiom of Distinction} (Ch.\,1)\\
+  {\small Every observation presupposes a distinction.
+  Objects, information, cost, and blind spots arise
+  simultaneously from the act of partitioning.}
+  \item \textbf{Information--Distinction Theorem} (Ch.\,2)\\
+  {\small Information is the quantitative expression of
+  distinctions induced by a partition of possibility space.}
+  \item \textbf{Distinction--Entropy Duality} (Ch.\,3)\\
+  {\small Entropy measures latent multiplicity hidden beneath
+  a distinction structure. The Second Law is a theorem about
+  distinction erosion.}
+  \item \textbf{Law of Historical Compression} (Ch.\,4)\\
+  {\small States are projections of histories. History
+  ontology strictly contains state ontology.}
+  \item \textbf{Law of Recoverability} (Ch.\,5)\\
+  {\small Dispersal and destruction are not equivalent.
+  Recoverability is the exact precondition for repair.}
+  \item \textbf{Principle of Repair} (Ch.\,7)\\
+  {\small Persistent distinctions require repair. Repair
+  is possible iff recoverability is strictly positive.}
+  \item \textbf{Principle of Regeneration} (Ch.\,11)\\
+  {\small Regenerative systems preserve their repair capacity.
+  Mere continuation is not regeneration.}
+  \item \textbf{Generative Admissibility Principle} (Ch.\,31)\\
+  {\small A trajectory is valuable insofar as it preserves
+  the capacity for future distinction-production:
+  $\frac{d}{dt}\Vol(\adm(t))\ge0$.}
+\end{enumerate}
+\end{tcolorbox}\clearpage
+
+
+\chapter*{Theorem Dependency Graph}
+\addcontentsline{toc}{chapter}{Theorem Dependency Graph}
+\thispagestyle{empty}
+\begin{center}
+\begin{tikzpicture}[node distance=1.05cm and 0.2cm,
+  every node/.style={font=\sffamily\scriptsize,align=center,
+    text width=3.8cm,inner sep=3pt}]
+\node[lawnode](A1){Axiom of Distinction\\{\tiny Ch.\,1}};
+\node[lawnode,below=of A1](A2){Information--Distinction\\{\tiny Ch.\,2}};
+\node[lawnode,below=of A2](A3){Distinction--Entropy Duality\\{\tiny Ch.\,3}};
+\node[lawnode,below=of A3](A4){Historical Compression\\{\tiny Ch.\,4}};
+\node[lawnode,below=of A4](A5){Law of Recoverability\\{\tiny Ch.\,5}};
+\node[lawnode,below=of A5](A6){Principle of Repair\\{\tiny Ch.\,7}};
+\node[lawnode,below=of A6](A7){Principle of Regeneration\\{\tiny Ch.\,11}};
+\node[lawnode,below=of A7](A8){Generative Admissibility\\{\tiny Ch.\,31}};
+\foreach \u/\v in {A1/A2,A2/A3,A3/A4,A4/A5,A5/A6,A6/A7,A7/A8}
+  \draw[thmedge](\u)--(\v);
+\node[thmnode,right=2.4cm of A1](B1){Projection Loss\\{\tiny Ch.\,2}};
+\node[thmnode,right=2.4cm of A2](B2){Entropy Production\\{\tiny Ch.\,3}};
+\node[thmnode,right=2.4cm of A3](B3){History Primacy\\{\tiny Ch.\,4}};
+\node[thmnode,right=2.4cm of A4](B4){Semantic Horizon\\{\tiny Ch.\,5}};
+\node[thmnode,right=2.4cm of A5](B5){Repair Closure\\{\tiny Ch.\,7}};
+\node[thmnode,right=2.4cm of A6](B6){Regeneration Thm\\{\tiny Ch.\,11}};
+\node[thmnode,right=2.4cm of A7](B7){Reachability Mono.\\{\tiny Ch.\,13}};
+\node[thmnode,right=2.4cm of A8](B8){Future Dist.\ Optimality\\{\tiny Ch.\,15}};
+\foreach \a/\b in {A1/B1,A2/B2,A3/B3,A4/B4,A5/B5,A6/B6,A7/B7,A8/B8}
+  \draw[thmedge,DistBlue](\a)--(\b);
+\draw[thmedge,DistGray,dashed](B3)--(B4);
+\draw[thmedge,DistGray,dashed](B5)--(B6);
+\draw[thmedge,DistGray,dashed](B7)--(B8);
+\end{tikzpicture}
+\end{center}\clearpage
+
+
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+\begin{epigraph}{The beginning of wisdom is to call things by
+  their proper names. The beginning of science is to notice
+  that many of the names were wrong.}{Anonymous}
+\end{epigraph}
+
+This book began from a suspicion that appeared so simple
+it was initially difficult to take seriously: that many
+of the most important concepts used throughout science,
+philosophy, economics, biology, computation, and everyday
+reasoning are grammatically misleading.
+
+We speak primarily in nouns. We organise our descriptions
+around objects, entities, categories, and things. Yet the
+phenomena those nouns describe often turn out, upon closer
+inspection, to be histories, processes, flows, repairs,
+constraints, and trajectories. A mountain is a geological
+process observed at a particular timescale. A species is a
+reproductive process. A company is a collection of
+coordinated histories. A memory is a recoverable trajectory.
+A river is not a thing through which water passes; it is a
+stable pattern constituted by the passage itself.
+
+The intuition that processes precede objects is hardly new.
+It appears repeatedly throughout the history of philosophy
+\parencite{whitehead1929,bergson1896,rescher1996},
+physics, biology, and systems theory. What seemed less
+developed was a rigorous account of what \emph{replaces}
+object ontology once objects are no longer treated as
+fundamental.
+
+The answer proposed here begins with a more primitive
+concept than object, process, information, matter, energy,
+or even observation. It begins with \textbf{distinction}.
+
+Before a thing can be identified, it must first be
+distinguished from something else \parencite{spencer-brown1969}.
+Before information can exist, alternatives must exist
+\parencite{shannon1948}. Before measurement can occur,
+possibilities must be separated. Before categories can
+be constructed, boundaries must be drawn
+\parencite{bateson1972}.
+
+Distinction is therefore treated throughout this book not
+as a derivative notion but as an ontological primitive.
+
+Once distinction is taken seriously, a second problem
+immediately appears. \emph{Distinctions are fragile.}
+They degrade, disperse, collapse, and disappear. This
+motivates the concept of repair — not optimisation, not
+continuation, but the restoration of distinction. Persistent
+structure exists because repair exists \parencite{schrodinger1944}.
+
+Yet repair itself is insufficient. Repair mechanisms degrade.
+This motivates regeneration: preservation of repair capacity.
+And regeneration is insufficient if the futures it generates
+contract. This motivates admissibility and the central
+geometric object of the book: the admissibility manifold
+$\adm(t)$, whose volume $\Vol(\adm(t))$ is the primary
+measure of a system's future possibility.
+
+The deepest result developed in this work is therefore not
+the preservation of distinctions, nor repair, nor
+regeneration. It is the preservation of the capacity to
+generate future distinctions. This culminates in the
+Generative Admissibility Principle:
+\[
+  \frac{d}{dt}\Vol(\adm(t)) \ge 0.
+\]
+A trajectory is valuable insofar as it preserves or expands
+the space of admissible future trajectories.
+
+The book does not claim to derive morality from geometry.
+It does not claim that admissibility solves every normative
+question. What it does claim is narrower: any system that
+systematically destroys its own future distinction-producing
+capacity eventually undermines the conditions required for
+its continued existence. This is not a moral axiom. It
+emerges as a structural consequence of the framework.
+
+The argument may be summarised in a single sequence:
+\[
+  \text{Distinction}\to\text{Information}\to\text{Entropy}
+  \to\text{History}\to\text{Recoverability}\to\text{Repair}
+  \to\text{Regeneration}\to\text{Reachability}
+  \to\text{Admissibility}\to\text{Generativity}.
+\]
+Every chapter is ultimately an elaboration of one step
+in that progression. Whether the framework succeeds or
+fails should be judged not by any individual application
+but by whether this progression captures something real
+about the structure of persistence, knowledge, intelligence,
+civilisation, and the universe itself.
+
+\tableofcontents
+\listoffigures
+
+
+\mainmatter
+
+
+
+\part{Foundations: Distinction Before Object}
+
+
+
+
+
+
+\chapter{The Problem of Difference}
+\label{ch:distinction}
+
+\begin{epigraph}{Draw a distinction.}
+  {G. Spencer-Brown, \textit{Laws of Form}, 1969
+  \parencite{spencer-brown1969}}
+\end{epigraph}
+
+\begin{objectives}
+  \item Understand why distinction is prior to objecthood,
+        information, and entropy.
+  \item State and prove the Axiom of Distinction.
+  \item Define distinction cost, partition refinement, and
+        blind spots.
+  \item Prove the First Distinction Theorem.
+  \item Relate these ideas to hash functions (CS) and
+        cell membranes (Bio).
+\end{objectives}
+
+\begin{fiveminute}{Objects versus Processes}
+Look around the room you are in. Count how many objects you
+can see.
+
+Now count how many processes you can see: air circulating,
+light decaying, surfaces oxidising, dust settling, your own
+breathing.
+
+The room has not changed. Only the partition changed --- the
+distinction you chose to draw across the same underlying
+domain. Everything that follows in this book starts from the
+fact that you had a choice.
+\end{fiveminute}
+
+
+Why Difference Must Come First
+
+\label{sec:ch1-priority}
+
+The purpose of this chapter is not to introduce distinction
+as one concept among others, but to show that distinction
+is the condition under which any further concept can be
+specified at all \parencite{spencer-brown1969}.
+
+Before a thing can be identified, it must first be
+distinguished from something else. Before information can
+exist, alternatives must exist \parencite{bateson1972}.
+Before measurement can occur, possibilities must be
+separated. Before categories can be constructed, boundaries
+must be drawn \parencite{luhmann1984}.
+
+The classical metaphysical question asks what exists. The
+present framework asks what must be presupposed for anything
+to be counted as existing in the first place. The answer
+cannot be ``an object'' because objecthood already
+presupposes a boundary. Nor can it be ``information''
+because information already presupposes alternatives. Nor
+can it be ``state'' because a state is meaningful only
+relative to states from which it is distinguished.
+
+The first primitive cannot be a thing, a datum, or a state.
+It must be the operation that makes thinghood, data, and
+statehood available. That operation is distinction.
+
+This claim can be sharpened by naming its target directly.
+The dominant tradition in Western metaphysics, running from
+Aristotle's categories through medieval substance theory
+into much of contemporary common sense, takes the object as
+primitive: a substance bears properties, properties change,
+and identity persists through that change because the
+substance underneath does. On this view, distinguishing two
+things is a derivative act --- something a mind does to
+already-existing substances, not something that brings
+substances into descriptive existence in the first place.
+
+The present framework inverts the order of dependence. It is
+not that two objects exist and a mind subsequently notices
+they differ. It is that the marking of a difference is what
+first makes ``an object'' available as a unit of description
+at all. This is not a claim that objects are unreal, or that
+substance ontology is wrong about the things it describes. It
+is a claim about priority: wherever a substance ontology
+succeeds in picking out a persisting thing, a distinction has
+already been drawn to make that thing nameable, and the
+present framework asks what that prior act of marking
+requires, formally, for the substance-level description to be
+available afterward.
+
+
+Common Misinterpretations of Distinction
+
+\label{sec:ch1-misinterpretations}
+
+Three misreadings recur often enough to address directly.
+
+The first is that distinction theory denies the existence of
+objects. It does not. Objects are not eliminated by this
+framework; they are relocated. An object remains exactly as
+real as it ever was, but its reality is now understood to
+presuppose a partition rather than to precede one. Chairs,
+cells, and stars continue to exist on this account. What
+changes is the explanation of why they count as units of
+description in the first place.
+
+The second is that distinctions are merely subjective ---
+that because a distinction requires an act of partitioning,
+distinction-talk reduces to a claim about minds or observers,
+with nothing answering to it in the world apart from
+psychology. This does not follow. A crystal lattice
+distinguishes occupied from unoccupied sites without any
+observer present. A cell membrane distinguishes inside from
+outside without consulting anyone's judgement. The Axiom of
+Distinction stated below does not require a mind; it requires
+only that some partitioning structure, physical or formal, be
+in place before a nontrivial observation can be made of it.
+Distinctions are mind-independent wherever the partitioning
+structure itself is mind-independent.
+
+The third is that distinction is equivalent to language ---
+that ``drawing a distinction'' is simply another name for
+applying a word or a category from a linguistic system. This
+conflates a particular, late-arriving instance of distinction
+with the underlying operation itself. Linguistic categories
+are one kind of distinction among many, and a comparatively
+sophisticated one: they presuppose perceptual distinctions,
+which presuppose physical and biological distinctions, all the
+way down to the partitioning of physical degrees of freedom
+that makes a measurable system measurable at all. Language
+refines distinctions that already exist beneath it; it does
+not manufacture the capacity for distinction from nothing.
+
+
+What This Chapter Establishes
+
+\label{sec:ch1-preview}
+
+By the end of this chapter, distinction will have been given a
+precise formal definition as a partition of a domain, and the
+Axiom of Distinction (\cref{axm:dist-axiom}) will have been
+proved to be pragmatically inescapable: denying it requires
+performing it. Two further consequences follow immediately ---
+distinction cost and the existence of blind spots --- both of
+which recur, under different names, in every subsequent
+chapter of this book.
+
+The next chapter takes up a question this one deliberately
+leaves open. Granting that distinction is prior to objecthood,
+is it also prior to \emph{information}, in the specific
+technical sense information acquires in Shannon's theory?
+Chapter~\ref{ch:information} argues that it is: that
+distinguishability is not merely correlated with information
+but is the condition information presupposes.
+
+
+Domains, Partitions, and Marks
+
+\label{sec:ch1-domain}
+
+\begin{definition}{Domain}{domain}
+  A \emph{domain} is a non-empty set $X$ whose elements
+  are possible positions, configurations, events, states,
+  histories, or appearances relative to some system of
+  description. \index{domain}
+\end{definition}
+
+At this level of abstraction no assumption is made that
+$X$ is physical, mental, computational, or semantic.
+It may be a space of molecular configurations, a set of
+bitstrings, a population of organisms, or a set of
+candidate theories.
+
+\begin{definition}{Distinction}{distinction}
+  A \emph{distinction} on domain $X$ is a partition
+  \[
+    \partition = \{P_i\}_{i \in I}
+  \]
+  of $X$ into non-empty, pairwise disjoint subsets
+  satisfying $\bigcup_{i \in I} P_i = X$ and
+  $P_i \cap P_j = \emptyset$ for $i \ne j$.
+  Each $P_i$ is a \emph{cell} of the distinction.
+  \index{distinction|textbf}
+\end{definition}
+
+A distinction does not add material to the domain. It
+changes the descriptive structure by making some
+differences available and leaving others unavailable.
+The same underlying domain can support many incompatible
+distinctions.
+
+\begin{definition}{Marked and Unmarked Regions}{marked-unmarked}
+  Given a binary distinction $\partition = \{M, U\}$,
+  the cell $M$ is the \emph{marked region} and
+  $U = X \setminus M$ is the \emph{unmarked region}.
+\end{definition}
+
+The marked/unmarked terminology is useful because
+observation typically proceeds by indication. The unmarked
+region is not nothing — it is precisely what allows the
+mark to function as a mark.
+
+
+The Axiom of Distinction
+
+\label{sec:ch1-axiom}
+
+\begin{axiom}{Axiom of Distinction}{dist-axiom}
+  Every nontrivial observation presupposes a distinction.
+  Objects, information, cost, and blind spots arise
+  simultaneously and necessarily from the act of
+  partitioning a domain $X$.
+  \index{distinction!Axiom of|textbf}
+\end{axiom}
+
+The claim is axiomatic in the sense that denying it
+requires performing it. To deny that observation
+presupposes distinction, one must distinguish the denial
+from its alternatives. The operation is pragmatically
+unavoidable.
+
+\begin{theorem}{Observational Nontriviality Theorem}
+  {observational-nontriviality}
+  Let $O: X \to Y$ be an observation map. If $O$ is
+  nontrivial, meaning $\exists\, x_1, x_2 \in X$ with
+  $O(x_1) \ne O(x_2)$, then $O$ induces a nontrivial
+  distinction on $X$.
+\end{theorem}
+
+\begin{proof}
+  Define $x \sim_O x'$ iff $O(x) = O(x')$. This is
+  reflexive, symmetric, and transitive, hence an
+  equivalence relation partitioning $X$ into classes
+  $[x]_O = \{x' \in X : O(x') = O(x)\}$.
+  Since $O$ is nontrivial, $\exists\, x_1, x_2$ with
+  $O(x_1) \ne O(x_2)$, so $[x_1]_O \ne [x_2]_O$.
+  The induced partition has at least two cells and is
+  nontrivial.
+\end{proof}
+
+\begin{remark}{Observation produces, not receives}{obs-produces}
+  This theorem is the first formal bridge between
+  observation and distinction. An observation is not a
+  passive reception of a pre-given object. It is a map
+  that identifies some states while separating others.
+  Observation therefore produces a partition, and whatever
+  is called an object appears only after this partition
+  has been imposed.
+\end{remark}
+
+\begin{distinctionaside}{Hearing Your Name}
+A crowded room contains hundreds of simultaneous sounds.
+Most are ignored. The moment someone says your name, the
+entire acoustic field reorganises.
+
+Nothing new entered the room. Only a distinction became
+active.
+
+Attention is selective partitioning.
+\end{distinctionaside}
+
+
+Objects as Equivalence Classes
+
+\label{sec:ch1-objects}
+
+The ordinary grammar of experience suggests that objects
+come first and distinctions are drawn between them. The
+formal structure reverses this order.
+
+\begin{definition}{Object Induced by a Distinction}{object-induced}
+  Let $\partition$ be a distinction on $X$.
+  An \emph{object} relative to $\partition$ is a cell
+  $P_i \in \partition$, or more generally an equivalence
+  class of the relation
+  $x \sim_\partition y \iff \exists\, P_i \in \partition$
+  such that $x, y \in P_i$.
+  \index{object!as equivalence class}
+\end{definition}
+
+\begin{theorem}{Object-as-Equivalence-Class Theorem}
+  {object-equivalence}
+  Every object determined by observation map $O: X \to Y$
+  is an equivalence class of the distinction induced by $O$.
+\end{theorem}
+
+\begin{proof}
+  By the Observational Nontriviality Theorem, $O$ induces
+  equivalence relation $\sim_O$ on $X$. The equivalence
+  classes are $[x]_O = \{x' \in X : O(x') = O(x)\}$.
+  Any object available through $O$ must correspond to one
+  such class, because states outside the class yield
+  different observations while states inside yield the
+  same. Hence objecthood relative to $O$ is exactly
+  equivalence-class structure.
+\end{proof}
+
+This result is the formal version of the claim that
+objects are stabilised distinctions. Objecthood is not
+denied — it is relativised to a distinction system.
+
+\begin{distinctionaside}{The Familiar Room}
+You walk into your living room and instantly know something
+is wrong. For several seconds you cannot identify what
+changed. Then you notice that a lamp has been moved six
+inches.
+
+The distinction existed before the object was identified.
+Your nervous system detected a partition violation before it
+produced a noun.
+
+The feeling of ``something is off'' is distinction preceding
+objecthood.
+\end{distinctionaside}
+
+
+Refinement and Distinction Capacity
+
+\label{sec:ch1-refinement}
+
+\begin{definition}{Refinement}{refinement}
+  Partition $\partition_2$ \emph{refines} $\partition_1$,
+  written $\partition_1 \preceq \partition_2$, if every
+  cell of $\partition_2$ is contained in some cell of
+  $\partition_1$. \index{refinement!of partitions|textbf}
+\end{definition}
+
+\begin{proposition}{Refinement Partial Order}{refinement-order}
+  $\preceq$ is a partial order on the set of partitions
+  of $X$.
+\end{proposition}
+
+\begin{proof}
+  Reflexivity: $\partition \preceq \partition$ trivially.
+  Antisymmetry: mutual refinement forces cell coincidence.
+  Transitivity: if each cell of $\partition_3$ lies in a
+  cell of $\partition_2$ and each cell of $\partition_2$
+  in a cell of $\partition_1$, each cell of $\partition_3$
+  lies in a cell of $\partition_1$.
+\end{proof}
+
+\begin{definition}{Distinction Capacity}{dist-capacity}
+  For a finite partition $\partition$, the
+  \emph{distinction capacity} is
+  $D(\partition) = \log |\partition|$.
+  If cells carry probabilities $p_i$, the weighted
+  capacity is $D_p(\partition) = -\sum_i p_i \log p_i$.
+  \index{distinction!capacity|textbf}
+\end{definition}
+
+\begin{theorem}{Refinement Increases Distinction Capacity}
+  {refinement-capacity}
+  If $\partition_1 \preceq \partition_2$ (finite
+  partitions), then $D(\partition_1) \le D(\partition_2)$.
+\end{theorem}
+
+\begin{proof}
+  Refinement implies $|\partition_2| \ge |\partition_1|$.
+  Since $\log$ is monotone increasing,
+  $\log|\partition_1| \le \log|\partition_2|$.
+\end{proof}
+
+Refinement and blind spot are two sides of the same
+coin: passing to a finer partition shrinks
+$\ker(\pi_\partition)$ exactly as it grows
+$D(\partition)$, since both track the same collapse of
+distinguishable pairs onto shared
+cells.\index{blind spot!relation to partition refinement|textbf}
+
+
+Distinction Cost
+
+\label{sec:ch1-cost}
+
+No real system draws distinctions for free. A cell
+membrane requires energy \parencite{schrodinger1944}.
+A measuring instrument requires resolution.
+A database index requires storage.
+A scientific distinction requires training and
+instrumentation. The minimum energetic cost of
+maintaining a distinction is set by Landauer's principle
+\parencite{landauer1961irreversibility}.
+
+\begin{definition}{Distinction Cost}{dist-cost}
+  A \emph{distinction cost function} is a map
+  $C: \Pi(X) \to \mathbb{R}_{\ge 0}$ satisfying
+  $\partition_1 \preceq \partition_2 \implies
+  C(\partition_1) \le C(\partition_2)$.
+  \index{distinction!cost|textbf}
+\end{definition}
+
+\begin{theorem}{Refinement Cost Theorem}{refinement-cost}
+  $\Delta C(\partition_1, \partition_2)
+  = C(\partition_2) - C(\partition_1) \ge 0$
+  whenever $\partition_1 \preceq \partition_2$.
+\end{theorem}
+
+\begin{proof}
+  Direct from the defining monotonicity of $C$.
+\end{proof}
+
+
+Blind Spots
+
+\label{sec:ch1-blind}
+
+Every distinction illuminates some differences by
+suppressing others. The act of partitioning creates blind
+spots. This is not a psychological defect but a
+structural fact.
+
+\begin{definition}{Projection Induced by a Distinction}{projection-induced}
+  Given partition $\partition = \{P_i\}_{i \in I}$,
+  define the projection $\pi_\partition: X \to I$ by
+  $\pi_\partition(x) = i \iff x \in P_i$.
+\end{definition}
+
+\begin{definition}{Blind Spot}{blind-spot}
+  The \emph{blind spot} of projection $\pi: X \to Y$ is
+  $\ker(\pi) = \{(x,x') \in X \times X : \pi(x) = \pi(x')\}$.
+  Any pair $(x,x') \in \ker(\pi)$ with $x \ne x'$ is
+  invisible to the projection.
+  \index{blind spot|textbf}
+\end{definition}
+
+\begin{theorem}{Blind Spot Theorem}{blind-spot-thm}
+  Let $\pi: X \to Y$ be surjective with $|X| > |Y|$
+  for finite $X, Y$. Then $\pi$ has a nontrivial
+  blind spot.
+\end{theorem}
+
+\begin{proof}
+  Since $\pi$ is surjective, each $y \in Y$ has a
+  non-empty fibre $\pi^{-1}(y)$. If every fibre had
+  exactly one element, $|X| = |Y|$, contradicting
+  $|X| > |Y|$. Hence by the pigeonhole principle at
+  least one fibre contains two distinct elements
+  $x \ne x'$ with $\pi(x) = \pi(x')$.
+\end{proof}
+
+\begin{distinctionaside}{The Missing Keys Problem}
+Suppose your keys are not on the kitchen table. You search
+the table three times before realising they might be
+somewhere else.
+
+The problem is not that you lacked observational power. The
+problem is that your partition was wrong. You were
+distinguishing ``keys on table'' from ``keys not on table''
+while reality was organised according to a different
+distinction: ``keys in jacket pocket'' versus everything
+else.
+
+Most practical failures are not failures of observation.
+They are failures of distinction.
+\end{distinctionaside}
+
+\begin{distinctionaside}{The Missing Stair}
+Residents of an old house step over a broken stair without
+noticing. Visitors trip.
+
+The distinction exists physically but not cognitively.
+Expertise often means forgetting which distinctions are
+invisible to novices.
+\end{distinctionaside}
+
+\begin{definition}{Projection Loss}{projection-loss}
+  The \emph{projection loss} of $\pi: X \to Y$ relative
+  to reference partition $\partition_X$ is
+  $L_\pi = D(\partition_X) - D(\pi(\partition_X))$.
+  \index{projection!loss}
+\end{definition}
+
+\begin{theorem}{Projection Loss Theorem}{projection-loss-thm}
+  $L_\pi \ge 0$. Moreover $L_\pi = 0$ iff $\pi$
+  preserves all distinctions in $\partition_X$.
+\end{theorem}
+
+\begin{proof}
+  Projection cannot increase $|\pi(\partition_X)|$, since
+  cells may only be merged, not split. Hence
+  $D(\pi(\partition_X)) \le D(\partition_X)$ and
+  $L_\pi \ge 0$. Equality holds iff $|\pi(\partition_X)|
+  = |\partition_X|$, i.e.\ no cell is collapsed.
+\end{proof}
+
+
+The First Distinction Theorem
+
+\label{sec:ch1-fdt}
+
+\begin{theorem}{First Distinction Theorem}{first-distinction}
+  Any nontrivial partition $\partition$ of finite domain
+  $X$ simultaneously induces:
+  \begin{enumerate}[(i)]
+    \item objects as cells of $\partition$;
+    \item distinction capacity $D(\partition)$;
+    \item maintenance cost $C(\partition)$;
+    \item blind spots $\ker(\pi_\partition)$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i)~Definition~\ref{defn:object-induced}.
+  (ii)~Definition~\ref{defn:dist-capacity}.
+  (iii)~Definition~\ref{defn:dist-cost}.
+  (iv)~Definition~\ref{defn:blind-spot}
+  and Theorem~\ref{thm:blind-spot-thm}.
+  All four arise from the single operation of partitioning.
+\end{proof}
+
+\begin{remark}{The structural shadow of observation}
+  {structural-shadow}
+  The First Distinction Theorem supplies the formal
+  foundation for the rest of the book. Entropy will be
+  introduced as transformation and erosion of distinction
+  structures. History will be introduced as the persistence
+  of distinctions through time. Recoverability will measure
+  whether dispersed distinctions remain reconstructible.
+  Repair will describe the operations by which damaged
+  distinctions are restored. Regeneration will describe
+  systems that preserve the capacity for future repair.
+  Admissibility will evaluate which futures preserve the
+  possibility of further distinction-production.
+\end{remark}
+
+
+Distinctions as Structural Relations, Not Substances
+
+\label{sec:ch1-structural-relations}
+
+A question the formal framework raises but does not yet
+answer: what \emph{kind of thing} is a distinction?
+The framework treats distinctions as primitive without
+specifying their ontological status, and a reader is right
+to wonder whether a distinction is:
+\begin{itemize}[nosep]
+  \item \emph{physical} --- like the boundary between two
+        phases of matter or the gap between two charged
+        plates;
+  \item \emph{informational} --- like a bit in a register or
+        a branch in a decision tree;
+  \item \emph{cognitive} --- like the conceptual boundary
+        between \emph{red} and \emph{orange}; or
+  \item \emph{linguistic} --- like the semantic distinction
+        between \emph{bank} (financial) and \emph{bank}
+        (riverine).
+\end{itemize}
+The answer the framework gives, implicitly throughout and
+explicitly here, is: \emph{none of the above, and all of
+them}. Distinctions are not a new kind of substance or
+ontological category. They are a \emph{structural operation}
+--- a partition of a domain --- that can be physically,
+informationally, cognitively, or linguistically realized.
+
+\begin{remark}{The Computation Analogy}{computation-analogy}
+  The best analogy is computation. Computation is not made
+  of silicon, nor of neurons, nor of ink marks on paper,
+  though it can be realized in all three. What makes
+  something a computation is its structural role: it
+  transforms inputs to outputs in a way that preserves
+  certain relations and respects certain rules. A distinction
+  works the same way. What makes something a distinction is
+  its structural role: it partitions a domain such that
+  objects, information, cost, and blind spots
+  co-arise. The substrate is contingent; the operation is
+  not.
+\end{remark}
+
+This explains why the book applies the same formal apparatus
+to crystals, genomes, newsrooms, and scientific communities
+without claiming these are the same substance. They are not.
+They are distinct substrates in which the same structural
+operation --- distinction --- is variously realized.
+
+The implications are substantial. The question ``are
+distinctions mind-independent?'' admits a bifurcated answer:
+the \emph{operation} is substrate-neutral, hence neither
+essentially mental nor essentially physical; the
+\emph{instance} depends on what the distinction is realized
+in. A grain boundary in a crystal is a mind-independent
+distinction. The distinction between \emph{avant-garde} and
+\emph{kitsch} is not, or at least depends on conventions no
+crystal shares. The framework accommodates both without
+equivocating, because it is committed to the operation, not
+the substrate.
+
+
+Related Frameworks
+
+\label{sec:ch1-related-frameworks}
+
+\subsection*{Spencer-Brown: The Calculus of Indications}
+
+\emph{Convergence.} This chapter's epigraph is not decoration.
+Spencer-Brown's \emph{Laws of Form} begins from exactly the
+primitive this chapter begins from: drawing a distinction,
+prior to any calculus of objects, truth values, or
+propositions \parencite{spencer-brown1969}. His calculus of
+indications shows that an entire propositional logic can be
+recovered from the single operation of marking a boundary,
+with truth values emerging as a derived rather than primitive
+notion. This book inherits that commitment in full: distinction,
+not object or proposition, is where the analysis must begin.
+
+\emph{Divergence.} Where Spencer-Brown's calculus stays at the
+level of pure form --- marks and their re-entry, with no
+commitment to what a mark measures or costs --- this chapter's
+Axiom of Distinction (\cref{axm:dist-axiom}) immediately
+attaches a partition to measurable consequences: distinction
+capacity $D(\partition)$, maintenance cost $C(\partition)$, and
+blind spots $\ker(\pi_\partition)$, all derived together in the
+First Distinction Theorem (\cref{thm:first-distinction}).
+\emph{Laws of Form} has no analogue of cost or blind spot: a
+mark, once drawn, simply is drawn. This book's claim is that
+drawing a distinction is never free and never complete, and
+that the price and the gap are mathematically inseparable from
+the act itself, not additional structure imposed on top of it.
+
+\emph{Open question.} Spencer-Brown's later development of
+re-entrant forms --- forms that refer to their own boundary ---
+is a candidate formal precursor to this book's treatment of
+recursive self-modelling in Chapter~\ref{ch:consciousness}.
+Whether re-entry and recursive repair are the same structure
+under different names, or only structurally similar, is not
+settled here.
+
+\subsection*{Bateson: Difference as Information}

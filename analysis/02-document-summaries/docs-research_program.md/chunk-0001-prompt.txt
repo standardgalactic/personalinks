@@ -1,0 +1,112 @@
+You are analyzing chunk 1 of 1 of a document called
+"docs-research_program.md", part of a large theoretical/computational research
+repository called Spherepop.
+
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
+
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
+
+Spherepop experiments are now organized as an accumulating experimental pro[3D[K
+program, moving from isolated demonstrations. Core research artifacts inclu[5D[K
+include a machine‑readable manifest at `/home/runner/work/personalinks/pers[36D[K
+`/home/runner/work/personalinks/personalinks/spherepop/experiment_manifest.`/home/runner/work/personalinks/persnalinks/spherepop/experiment_manifest.json`, the lab runner `python -m spherepop.lab`, and registries for theory c[1D[K
+claims (`/home/runner/work/personalinks/personalinks/spherepop/theory_claim[68D[K
+(`/home/runner/work/personalinks/personalinks/spherepop/theory_claims.json`(`/home/runner/work/personalinks/personalinks/spherepop/theory_claim.json`) and conjectures. Each experiment entry specifies its proposition, initial [K
+condition C0, operation family Ω, observable O, expected invariant I, and f[1D[K
+failure condition F. Laboratory commands such as `list`, `run`, `verify`, `[1D[K
+`compare`, and `theory-map` operate using the `--json` flag for machine‑rea[11D[K
+machine‑readable outputs. The verification model ensures experiments execut[6D[K
+execute successfully, include required evidence snippets, and validate inva[4D[K
+invariants and failure conditions, producing structured observational recor[5D[K
+records. Theory mapping generates operation coverage matrices, claim-to-exp[12D[K
+claim-to-experiment witness mappings, and lists uncovered theory claims to [K
+enable CI enforcement of theoretical coverage targets. The framework also s[1D[K
+supports bounded state‑space searches for conjecture failures, automatic pr[2D[K
+promotion of counterexamples as regression fixtures, and adversarial experi[6D[K
+experiment classes with explicit semantic failure reasons, maintaining audi[4D[K
+auditability through the manifest and claim registry model.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
+
+# Spherepop Research Program
+
+Spherepop experiments now operate as an accumulating experimental program rather than isolated demonstrations.
+
+## Core Research Artifacts
+
+- **Machine-readable manifest**: `/home/runner/work/personalinks/personalinks/spherepop/experiment_manifest.json`
+- **Lab runner**: `python -m spherepop.lab`
+- **Theory claim registry**: `/home/runner/work/personalinks/personalinks/spherepop/theory_claims.json`
+- **Conjecture registry**: `/home/runner/work/personalinks/personalinks/conjectures/`
+
+Each experiment entry declares:
+- proposition under investigation
+- initial condition `C0`
+- operation family `Ω`
+- observable `O`
+- expected invariant `I`
+- failure condition `F`
+
+## Laboratory Commands
+
+```bash
+python -m spherepop.lab list
+python -m spherepop.lab run 07
+python -m spherepop.lab run 01..29
+python -m spherepop.lab verify
+python -m spherepop.lab compare 07 08
+python -m spherepop.lab theory-map
+```
+
+Use `--json` on every subcommand for machine-readable outputs.
+
+## Verification Model
+
+`verify` executes experiments and validates their declared evidence contract from the manifest:
+
+- experiment must execute successfully
+- output must include declared evidence snippets
+- invariant and failure condition are attached to the verification report
+
+This creates structured, replayable observational records instead of raw terminal-only demonstrations.
+
+## Theory Mapping
+
+`theory-map` emits:
+
+- operation coverage matrix by experiment
+- claim-to-experiment witness mapping
+- uncovered theory claims
+
+Uncovered claims are intentionally visible so CI can later enforce theoretical coverage targets.
+
+## Counterexample and Adversarial Extension Lane
+
+The current framework is designed to support:
+
+- bounded state-space search for conjecture failures
+- automatic promotion of discovered counterexamples to regression fixtures
+- adversarial experiment classes with explicit semantic failure reasons
+
+These extensions should be attached to the same manifest + claim registry model so evidence remains auditable.
+

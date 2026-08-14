@@ -1,0 +1,537 @@
+You are incrementally building a corpus-level synthesis of the
+Spherepop research repository, cluster 'computation', by merging new material
+into a running synthesis. This is batch 2 of 2.
+
+Do not discard anything correct in the running synthesis below just
+because the new batch doesn't mention it. Only revise the running
+synthesis where the new batch adds, refines, or genuinely conflicts
+with it. If it conflicts, note the conflict explicitly rather than
+silently picking one side.
+
+RUNNING SYNTHESIS SO FAR
+=========================
+
+**Synthesis**
+
+Below is a coherent theoretical narrative that integrates all claims from t[1D[K
+the provided chunk summaries while preserving their citations exactly as gi[2D[K
+given. The reconstruction follows the structure outlined in the **summary.m[11D[K
+**summary.md** file, ensuring logical flow and consistency across sections.[9D[K
+sections.
+
+--- 
+
+### 1. Thesis  
+Spherepop‑OS is an operating system built on **replayable determinism**: ev[2D[K
+every event sequence (log ℓ) can be replayed from any prefix to reconstruct[11D[K
+reconstruct a unique state, guaranteeing causal correctness and observation[11D[K
+observational neutrality across distributed participants. This principle di[2D[K
+distinguishes Spherepop‑OS from traditional kernels, CRDTs, or version cont[4D[K
+control systems that either assume a single hardware ordering or rely on ev[2D[K
+eventual consistency without preserving total causality.
+
+### 2. Primitives & Definitions  
+
+| Primitive | Formal Definition |
+|-----------|--------------------|
+| **Event‑Prefix Category (Pref(ℓ))** | Objects are natural numbers *n* rep[3D[K
+representing prefixes of the event log ℓ = (e₁, e₂, …). Morphisms *mₙ→ₙ₊ᵏ* [K
+extend a prefix by exactly *k* further events. Composition is ordinary addi[4D[K
+addition (*mₙ₊ₖ → mₙ₊₂ᵏ*), preserving event order. |
+| **State Semantics Functor (S_ℓ)** | Maps each prefix *n* to its kernel st[2D[K
+state σₙ obtained by replaying all events ℓ[≤ n] from the initial state σ₀.[3D[K
+σ₀. Each generator *mₙ→ₙ₊₁* induces a deterministic transition σₙ → σₙ₊₁ vi[2D[K
+via event eₙ₊₁. |
+| **Admissible View** | A mapping V: State → View must be *non‑interfering*[17D[K
+*non‑interfering*: it never feeds back into the state semantics, ensuring o[1D[K
+observational neutrality (no hidden side‑effects). |
+
+### 3. Formalism  
+
+- **Category Structure**: Both Pref(ℓ) and State are categories; S_ℓ is a f[1D[K
+functor preserving identity morphisms (zero events → no change) and composi[7D[K
+composition (sequential application → sequential updates).  
+- **Functoriality Meta‑Theorem** (Proposition): For any admissible view V a[1D[K
+and log ℓ, the composite (V ∘ S_ℓ): Pref(ℓ) → View is a functor. This yield[5D[K
+yields:  
+  - *Causal Respect*: Updates follow event order.  
+  - *Snapshot Coherence*: The view at prefix *n* uniquely determines the en[2D[K
+entire prefix ℓ[≤ n].  
+  - *Transport Independence*: Different admissible transports of the same v[1D[K
+view are observationally equivalent.  
+  - *Gauge Freedom*: Quotienting by advisory metadata (e.g., layout hints) [K
+preserves semantic content.
+
+- **Speculative Branches**: Local overlays of hypothetical events on top of[2D[K
+of a base event log EID may be replayed after the base event, isolated from[4D[K
+from authoritative state and potentially discarded or rebased without affec[5D[K
+affecting it.  
+- **Layout & Geometry as Metadata**: Positional and scaling information is [K
+advisory only; geometry functions as a gauge choice, enabling rich visualiz[8D[K
+visualizations while preserving semantic invariants.
+
+### 4. Mechanisms  
+
+1. **Arbiter Model** – A single arbiter assigns sequence identifiers and ap[2D[K
+appends events to ℓ, guaranteeing total causal order across participants.  [K
+
+2. **Snapshot & Diff Views** – Snapshots serialize the full state; diffs se[2D[K
+serialize only changes, both factor through S_ℓ (Replay Equivalence).  
+3. **Late‑Joiner Correctness** – A client starting from a snapshot can late[4D[K
+later receive diffs and reconstruct exactly the same view as one that follo[5D[K
+followed diffs continuously.  
+4. **Speculative Reasoning** – The system permits temporary “what‑if” branc[5D[K
+branches for events not yet committed, allowing exploration without alterin[7D[K
+altering the authoritative state until validation.
+
+### 5. Major Arguments  
+
+- **Correctness vs. Consistency**: Unlike CRDTs or distributed version cont[4D[K
+control systems (which sacrifice total causality), Spherepop OS preserves a[1D[K
+a single deterministic order while still supporting collaborative workflows[9D[K
+workflows.  
+- **Observational Neutrality**: Admissible views guarantee that state repre[5D[K
+representations do not influence the underlying event log, facilitating deb[3D[K
+debugging and introspection without side effects.  
+- **Extensibility via Speculation**: Speculative branches provide a safe pl[2D[K
+playground for testing hypotheses or implementing features (e.g., overlay s[1D[K
+services) without altering the authoritative state until validation.
+
+### 6. Dependencies Between Concepts  
+
+- **Replayability ↔ Arbiter** – The arbiter’s role is indispensable; it und[3D[K
+underpins all causal guarantees and view correctness.  
+- **Snapshot ↔ Diff** – Both are derived from S_ℓ, enabling either full res[3D[K
+restoration or minimal change propagation.  
+- **Speculative Branches ↔ Base Log** – Overlays rely on the base log EID f[1D[K
+for ordering; they are constrained by the same arbiter‑imposed causal order[5D[K
+order.
+
+### 7. Implications  
+
+1. **Collaborative Operating Environment**: Teams can share state snapshots[9D[K
+snapshots and diffs, maintaining a single source of truth while allowing in[2D[K
+independent work paths.  
+2. **Fault Tolerance & Recovery**: Snapshots plus diffs simplify recovery f[1D[K
+from crashes; replaying the diff stream restores to any prior snapshot with[4D[K
+without manual reconstruction.  
+3. **Visualization & Debugging Tools**: Layout hints (geometry) enable grap[4D[K
+graphical representations that are purely advisory, aiding human interpreta[10D[K
+interpretation of abstract state changes.
+
+### 8. Unresolved Problems  
+
+- **Scalability of Arbiter**: As participant count grows, the arbiter’s bot[3D[K
+bottleneck may limit throughput; a sharded or delegated sequencing model co[2D[K
+could mitigate this.  
+- **Metadata Management**: Balancing rich geometric metadata with minimal s[1D[K
+semantic impact remains an open design question for interactive visualizati[11D[K
+visualizations.
+
+### 9. Internal Tensions  
+
+- **Determinism vs. Flexibility**: The commitment to total causal order can[3D[K
+can conflict with the desire for flexible speculative updates; future exten[5D[K
+extensions may need a hybrid model that tolerates bounded inconsistency und[3D[K
+under specific conditions.  
+- **Snapshot Size vs. Diff Efficiency**: Large snapshots increase storage o[1D[K
+overhead, whereas extensive diffs could expose hidden dependencies between [K
+events; optimizing trade‑offs requires careful analysis of event locality.
+
+### 10. Source Citations  
+
+All claims are derived from the chunk summaries and retain their original c[1D[K
+citations exactly as provided (e.g., “[source: "..."]”). No additional asse[4D[K
+assertions were introduced beyond those appearing in the fragment summaries[9D[K
+summaries.
+
+--- 
+
+**End of Synthesis**
+
+NEW BATCH (2 of 2)
+=========================================
+
+--- summary.md ---
+**Thesis (Overall Purpose)**  
+The document provides a practical, self‑contained introduction to **Spherep[9D[K
+**Spherepop in Python**, a software package that enables users to employ th[2D[K
+the Spherep framework within a Python environment. Its primary thesis is th[2D[K
+that by offering an easy installation via pip and a concise REPL tutorial, [K
+developers can quickly begin experimenting with Spherep’s core functionalit[12D[K
+functionalities—such as constructing spherical domains and performing opera[5D[K
+operations like collapse—while also laying groundwork for future extensions[10D[K
+extensions (e.g., integration with NumPy/JAX libraries and geometric encodi[6D[K
+encodings for neural layers).
+
+**Primitive Concepts & Definitions**  
+1. **Spherepop in Python** – Defined as a collection of tools and utilities[9D[K
+utilities that wrap the Spherep framework, allowing users to interact with [K
+its APIs from within Python scripts and interactive sessions. [source: “Sph[4D[K
+“Spherepop in Python”]
+
+2. **REPL (Read‑Eval‑Print Loop)** – A fundamental interaction model demons[6D[K
+demonstrated by executing `(a b c)` within an interactive session, illustra[8D[K
+illustrating immediate evaluation of expressions. This concept underpins th[2D[K
+the tutorial’s emphasis on rapid prototyping.
+
+**Formalism & Mathematical Structure**  
+No explicit mathematical formalisms are introduced in this fragment; instea[6D[K
+instead, focus is placed on procedural and syntactic aspects (installation [K
+commands, REPL usage) rather than abstract algebraic structures or differen[8D[K
+differential geometry that may be explored later.
+
+**Mechanisms & Processes**  
+- **Installation Mechanism**: The package can be installed locally with the[3D[K
+the command `pip install -e .`, enabling developers to set up a development[11D[K
+development environment quickly.
+- **REPL Demonstration**: By running `(a b c)` in an interactive session, u[1D[K
+users are shown how to invoke basic operations within Spherepop, reinforcin[10D[K
+reinforcing the tutorial’s goal of usability through immediate feedback.
+- **Future Development Directions**:
+  - Implementing *differentiable collapse*—a technique for smoothly transit[7D[K
+transitioning between different representations of spherical data.
+  - Integrating with external libraries such as NumPy and JAX to leverage n[1D[K
+numerical optimization and automatic differentiation capabilities.
+  - Experimenting with geometric encodings that can be applied to neural ne[2D[K
+network layers, suggesting pathways toward machine‑learning applications.
+
+**Connections to the Running Abstract**  
+The fragment directly maps onto points highlighted in the running abstract:[9D[K
+abstract:
+- **Installation via pip**: Mirrors the abstract’s promise of a st[2D[K
+streamlined installation process using `pip`.
+- **REPL usage (e.g., `(a b c)`)**: Aligns with the abstract’s description [K
+of an interactive REPL for executing commands and observing results instant[7D[K
+instantly.
+- **Future directions** (differentiable collapse, NumPy/JAX integration, ge[2D[K
+geometric encodings): These are explicit extensions referenced in the runni[5D[K
+running abstract as forthcoming capabilities that will broaden Spherepop’s [K
+applicability.
+
+**Unresolved Questions or Internal Tensions**  
+At this stage, no contradictions or open questions emerge from the fragment[8D[K
+fragment:
+- The scope is limited to presenting features and installation steps withou[6D[K
+without discussing potential implementation challenges.
+- No conflicts between stated goals (e.g., ease of use vs. advanced functio[7D[K
+functionality) are evident; rather, they are presented as complementary fut[3D[K
+future developments.
+
+**Implications & Dependencies**  
+1. **Theoretical Implications**: By formalizing Spherepop in a Pythonic pac[3D[K
+package, the tutorial demonstrates how high‑level abstractions from differe[7D[K
+differential geometry can be operationalized for computational applications[12D[K
+applications (e.g., machine learning), bridging mathematical theory with pr[2D[K
+practical programming environments.
+2. **Dependency Structure**: The success of subsequent features—such as dif[3D[K
+differentiable collapse and library integration—relies on the foundational [K
+ability to install and run Spherepop, underscoring the importance of a clea[4D[K
+clear installation protocol and REPL familiarity.
+
+**Open Problems & Tensions**  
+- *Implementation Details*: Specific algorithms for differentiable collapse[8D[K
+collapse or geometric encodings remain unspecified; future documentation wi[2D[K
+will likely address implementation nuances.
+- *Integration Complexity*: While NumPy/JAX integration is planned, potenti[7D[K
+potential compatibility issues between Spherepop’s data structures and thos[4D[K
+those of the external libraries are not addressed herein.
+
+Overall, this fragment serves as a concise entry point into using Spherepop[9D[K
+Spherepop in Python, establishing foundational practices while signaling br[2D[K
+broader research directions that will be elaborated upon in subsequent sect[4D[K
+sections.
+
+
+--- summary.md ---
+**Unified Theoretical Synthesis**
+
+---
+
+### 1. Thesis  
+
+The document introduces **Spherepop**, a Racket library that provides primi[5D[K
+primitives for manipulating *region* objects—algebraic structures represent[9D[K
+representing spatial or logical domains—with operations such as merging, co[2D[K
+collapsing redundant paths, and evaluating surface‑syntax expressions (`sp`[5D[K
+(`sp`) within those regions. The purpose is to enable disciplined construct[9D[K
+construction and reasoning about complex region data while ensuring type sa[2D[K
+safety and predictable behavior through a predefined collapse strategy.
+
+---
+
+### 2. Primitive Concepts & Definitions  
+
+| Concept | Definition (as presented) |
+|---------|---------------------------|
+| **Spherepop library** | A collection of functions (`make-region`, `merge`[7D[K
+`merge`, `collapse`, `sp`) for working with region primitives in Racket. |
+| **default‑collapse‑strategy** | A preset algorithm that resolves overlapp[8D[K
+overlapping paths within a region, guaranteeing each path contributes uniqu[5D[K
+uniquely to the final representation. |
+| **make‑region** | Constructs a region object from an identifier and assoc[5D[K
+associated data (e.g., `(make-region "a" '(1))`). |
+| **sp (surface syntax)** | Utility for evaluating expressions inside defin[5D[K
+defined regions using surface syntax; effectively interprets `sp`‑wrapped t[1D[K
+terms within the context of a specific region. |
+
+---
+
+### 3. Formalism  
+
+Regions are treated as algebraic structures supporting two primary operatio[8D[K
+operations:
+
+- **Merge** (`merge`) – Combines overlapping data from two regions, applyin[7D[K
+applying the current collapse strategy to resolve conflicts.
+- **Collapse** (`collapse`) – Eliminates redundant path information, ensuri[6D[K
+ensuring each component of a region is non‑redundant.
+
+The evaluation function `eval-term` processes terms constructed with `sp`, [K
+interpreting them within the context of a particular region type (e.g., `(s[3D[K
+`(sp (a b))` evaluates the combined state of regions `a` and `b`).
+
+---
+
+### 4. Mechanisms & Processes  
+
+1. **Region Creation**  
+   - Use `make-region` to instantiate region objects from identifiers and a[1D[K
+associated data (numeric, symbolic, etc.). Example: `(define a (make-region[12D[K
+(make-region "a" '(1)))`.
+
+2. **Merging**  
+   - Apply `merge` to combine two regions, typically resolving overlapping [K
+entries via the default collapse strategy.
+
+3. **Collapsing Redundancies**  
+   - Invoke `collapse` to prune duplicate path information, guaranteeing ea[2D[K
+each path’s contribution is unique and non‑redundant.
+
+4. **Term Evaluation with sp**  
+   - Expressions built using `sp`, such as `(sp (a b))`, are evaluated in t[1D[K
+the context of a specific region, allowing dynamic construction of region‑a[8D[K
+region‑aware computations.
+
+---
+
+### 5. Major Arguments  
+
+- The library’s design emphasizes *type safety* and *predictable behavior* [K
+through the use of a default collapse strategy.
+- By treating regions as algebraic structures with well‑defined merge and c[1D[K
+collapse operations, the framework enables robust handling of complex spati[5D[K
+spatial or logical data without manual intervention in conflict resolution.[11D[K
+resolution.
+- `sp` provides an ergonomic way to embed region context into te[2D[K
+term evaluation, facilitating higher‑level abstractions over region‑aware c[1D[K
+computations.
+
+---
+
+### 6. Dependencies Between Concepts  
+
+- **Default‑collapse‑strategy** depends on the existence and proper functio[7D[K
+functioning of **merge**; it defines how merge resolves overlaps when colla[5D[K
+collapse is applied.
+- **make-region** creates the foundational objects that later participate i[1D[K
+in **merge** and are subject to **collapse** within evaluation contexts.
+- **sp** relies on existing regions (produced by `make-region`) to provide [K
+meaningful input for term evaluation, linking surface syntax directly to re[2D[K
+region semantics.
+
+---
+
+### 7. Implications  
+
+- Enables systematic construction of hierarchical or multi‑dimensional data[4D[K
+data structures where overlapping components can be naturally resolved.
+- Promotes a clear separation between *definition* (`make-region`, `default[8D[K
+`default-collapse-strategy`) and *operation* (merge, collapse) phases, impr[4D[K
+improving code readability and maintainability.
+- Facilitates interoperability with other Racket libraries by providing wel[3D[K
+well‑defined region objects as first‑class citizens.
+
+---
+
+### 8. Unresolved Problems & Open Questions  
+
+1. **Edge Cases in Merge** – How does the library handle regions where over[4D[K
+overlapping data cannot be uniquely merged (e.g., conflicting keys or ambig[5D[K
+ambiguous logical conditions)?
+2. **Error Handling** – What mechanisms are implemented for invalid inputs [K
+to `make-region` or `eval-term`? Are there defined error types, or is excep[5D[K
+exception handling delegated elsewhere?
+3. **Extensibility** – Can additional collapse strategies be registered wit[3D[K
+without modifying core library functions? If so, how does the system discov[6D[K
+discover them?
+
+---
+
+### 9. Internal Tensions  
+
+- **Simplicity vs. Flexibility** – The default collapse strategy provides s[1D[K
+simplicity but may impose constraints that limit custom use cases requiring[9D[K
+requiring more nuanced conflict resolution.
+- **Performance Trade‑offs** – Frequent application of `collapse` could int[3D[K
+introduce overhead in large or highly overlapping region data; balancing pe[2D[K
+performance versus redundancy elimination is an ongoing tension.
+
+---
+
+### 10. Verbatim Citations (as requested)  
+
+1. “Assuming the collection is available on your Racket path, you can requi[5D[K
+require it as follows:” → [source: `#lang racket\n(require spherepop-lib)`][16D[K
+spherepop-lib)`].  
+2. “define s default-collapse-strategy” → [source: `(define s default-colla[13D[K
+default-collaspase-strategy)`].  
+3. “(make-region \"a\" ’(1))” → [source: `(define a (make-region "a" '(1)))[6D[K
+'(1)))`.  
+4. “eval-term s t” → [source: `(define r (eval-term s t))`.
+
+--- 
+
+*End of unified synthesis.*
+
+
+--- summary.md ---
+**Processing‑Sphere Specifications – Unified Theoretical Synthesis**
+
+---
+
+### 1. Thesis & Core Premise  
+
+The specification presents an **immutable, event‑driven state machine** for[3D[K
+for managing logical options (Ω) within a decentralized or distributed sett[4D[K
+setting. Its design is anchored in four primitive event kinds—*Pop*, *Refus[6D[K
+*Refuse*, *Bind*, and *Collapse*—which together enforce:
+
+- **Type safety**: Only the defined EventKind values may occur.
+- **Determinism & ABI stability** guaranteed by Theorem \ref{thm:completene[27D[K
+Theorem \ref{thm:completeness}.
+- **Non‑destructive experimentation** via overlays that can be later commit[6D[K
+committed.
+
+The system embodies a *view* requirement (Requirement \ref{req:view}) where[5D[K
+where only observations registered with predefined rules (`CollapseQuotient[18D[K
+(`CollapseQuotient`, `CollapseMeta`, or identity) are recorded, preserving [K
+a clean audit trail without executing collapse semantics until explicitly v[1D[K
+validated.
+
+---
+
+### 2. Primitive Definitions & Data Structures  
+
+| Component | Description |
+|-----------|-------------|
+| **EventKind** (enum) | Enumerates four permissible event types: <br>• `Po[3D[K
+`Pop` – removes an element from Ω.<br>• `Refuse` – logs inadmissibility wit[3D[K
+without affecting Ω.<br>• `Bind` – couples two elements `(a, b)` optionally[10D[K
+optionally labeled with a tag (`ta`).<br>• `Collapse` – records that a coll[4D[K
+collapse rule has been observed (but not the result). |
+| **State** (struct) | Captures current system state: <br>`option_space` – [K
+set of active options.<br>`committed` – elements popped from Ω.<br>`bound` [K
+– hash‑set of bindings created by `Bind`. <br>`refused` – vector of refusal[7D[K
+refusal attempts with rationale. <br>`observed` – log of Collapse events (`[2D[K
+(`RuleId`). |
+| **History** (struct) | Ordered sequence of `Event`s, enabling determinist[11D[K
+deterministic replay via `replay(omega_0)` which restores the system to a p[1D[K
+prior configuration. |
+| **apply** (pure function) | Transforms `State` given a single event: <br>[4D[K
+<br>• `Pop` → removes element.<br>• `Refuse` → appends refusal record.<br>•[12D[K
+record.<br>• `Bind` → inserts binding pair with optional tag.<br>• `Collaps[8D[K
+`Collapse` → logs rule ID only. |
+| **Collapse Rules** (functions) | Three semantic implementations of collap[6D[K
+collapse: <br>`collapse_quotient` – groups bound objects into Merge‑equival[13D[K
+Merge‑equivalence classes.<br>`collapse_meta` – maps meta‑bound objects to [K
+tags for SetMeta sugar realization.<br>`collapse_identity` – no transformat[11D[K
+transformation, simply records the event. |
+| **Invariant** (Rule Registration) | Only Collapse events linked to regist[6D[K
+registered `RuleId`s may be committed; this prevents unintended rule execut[6D[K
+execution and satisfies Requirement \ref{req:view}. |
+
+---
+
+### 3. Mechanisms & Operational Flow  
+
+1. **Replayability** – The `History` + `apply` pair allows deterministic re[2D[K
+reconstruction of any prior state, supporting rollback or snapshotting with[4D[K
+without storing observed values (`c(H)`).  
+2. **Proposal Validation** – Proposals (collections of events) are validate[8D[K
+validated by the **Arbiter** before committing: <br>• Checks for illegal `P[2D[K
+`PopOutsideOptionSpace`. <br>• Detects attempts to use unregistered `Collap[7D[K
+`CollapseRule` → `UncertifiedCollapseRule`. <br>• Ensures overlay integrity[9D[K
+integrity.  
+3. **Commit Process** – An *Overlay* (non‑authoritative preview) is submitt[7D[K
+submitted via `commit(Overlay, omega_0)` after validation (`o.base_len == s[1D[K
+self.arbiter.len()`). Successful submission adds events to the official his[3D[K
+history; failure triggers `StaleOverlay`.  
+4. **Arbiter Management** – Manages proposal lifecycle: <br>• `state(omega_[13D[K
+`state(omega_0)` returns current state from an initial option space.<br>• `[1D[K
+`submit(p, omega_0)` validates and commits a proposal (including overlays).[10D[K
+overlays).  
+
+---
+
+### 4. Major Arguments & Dependencies  
+
+- **Determinism vs. Flexibility** – The design prioritizes deterministic re[2D[K
+replayability while allowing non‑destructive experimentation through overla[6D[K
+overlays, balancing consistency with extensibility.
+- **Rule Registration Dependency** – Collapse events rely on pre‑registered[14D[K
+pre‑registered rules; this dependency underpins the security invariant (Req[4D[K
+(Requirement \ref{req:view}) and prevents misuse of collapse semantics.
+- **Overlay & Preview Coupling** – Overlays serve as “what‑if” snapshots th[2D[K
+that can be later committed, directly supporting testing without altering t[1D[K
+the immutable history.
+
+---
+
+### 5. Implications  
+
+- **Safety in Distributed Systems** – Guarantees that only vetted state tra[3D[K
+transitions occur, crucial for blockchain or consensus environments where t[1D[K
+tampering must be prevented.
+- **Scalability through Non‑Destructive Changes** – Overlays enable explora[7D[K
+exploratory modifications without permanently altering the history, facilit[7D[K
+facilitating versioned upgrades and rollbacks.
+- **Extensibility via New Collapse Rules** – Future rule implementations ca[2D[K
+can be added by extending `CollapseRules` without breaking existing contrac[7D[K
+contracts or state machines.
+
+---
+
+### 6. Unresolved Problems & Internal Tensions  
+
+1. **Opaque Overlay Lifecycle** – The current fragment does not detail how [K
+overlays are created, stored beyond the immediate commit call, or persisted[9D[K
+persisted across Arbiter restarts. This may lead to inconsistencies if an o[1D[K
+overlay is lost after a reboot.
+2. **Error Boundaries** – While `StaleOverlay` and other error codes (e.g.,[6D[K
+(e.g., `PopOutsideOptionSpace`) are defined, the precise conditions under w[1D[K
+which they are triggered are not fully articulated elsewhere in the documen[7D[K
+document.
+3. **Dependency on Arbiter State** – Validation checks against `self.arbite[12D[K
+`self.arbiter.len()` assume a single global state across all instances of A[1D[K
+Arbiter; multi‑node or sharded implementations must reconcile this consiste[8D[K
+consistency requirement without introducing contention.
+
+---
+
+### 7. Citations Preserved  
+
+- *PopOutsideOptionSpace* error handling (not explicitly quoted here but re[2D[K
+referenced in fragment summaries).  
+- *UncertifiedCollapseRule* validation failure (referenced as an error cond[4D[K
+condition).  
+- Repeated reference to `ArbiterError::StaleOverlay` indicating a commit pa[2D[K
+path exists only through explicit submission.  
+
+---
+
+**Overall, the specification defines a rigorously typed, immutability‑focus[18D[K
+immutability‑focused processing sphere that balances strict state consisten[9D[K
+consistency with experimental flexibility via overlays and deterministic re[2D[K
+replay mechanisms.**
+

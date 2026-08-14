@@ -1,122 +1,123 @@
-**Flow Computing – A Summary and Preview**
+**Preserving Future Options – The Core Idea**
+
+The central thrust of this chapter is that agents preserve *future options*[8D[K
+options* by maintaining admissible futures. In other words, an agent’s beha[4D[K
+behavior should expand the set of worlds where further choices remain avail[5D[K
+available rather than contract it.
 
 ---
 
-### 1. Core Idea  
+### 1. Preference Orderings and Admissibility Potential  
 
-*Computations are fundamentally about the flow of distinctions (bytes, line[4D[K
-lines, records) rather than merely their instantaneous state.*  
-- **Why this matters:** Most formal models of computation—e.g., Turing mach[4D[K
-machines or von Neumann computers—track only a single configuration at any [K
-moment and discard the whole history that produced it. This neglects the ve[2D[K
-very thing we argue is ontologically primary: *distinction capacity* (the a[1D[K
-ability to distinguish one state from another over time).  
-- **Consequence:** Flow‑based computing treats programs as “distinction his[3D[K
-histories,” preserving information about how states relate to each other, e[1D[K
-enabling better composition and reasoning.
+**Key Result (Pref Emergence Theorem – \cref{thm:pref-emergence}):**  
+Preference orderings are not independent constructs; they emerge from the *[1D[K
+*admissibility potential* \(\Phi_A\) defined for a given environment. This [K
+means that what an agent prefers is fundamentally shaped by how much it can[3D[K
+can keep future worlds admissible.
 
 ---
 
-### 2. Why the Turing Machine Is Not Enough  
+### 2. Preference‑Directed Motion  
 
-\label{sec:ch23-why-turing}
+When \(\Phi_A\) exists, agents move in direction of its gradient:
 
-| Aspect | Traditional Model (Turing/ Von Neumann) | Flow‑Computing View |
-|---|---|---|
-| **What is tracked?** | Current state of registers, memory locations, prog[4D[K
-program counter. | Sequences of transformed distinctions; the *history* of [K
-how a current state arose. |
-| **Assumption about computability:** | Computable functions are defined by[2D[K
-by reachable states, not paths. | Computable processes are defined by prese[5D[K
-preserved distinction flows across stages. |
-| **Implication for software design:** | Overwriting memory is acceptable b[1D[K
-because only final state matters. | Preservation of historical distinguisha[12D[K
-distinguishability yields more robust composition (pipelines, modular syste[5D[K
-systems). |
-
-*The theorem proving that a Turing‑machine‑only description discards essent[6D[K
-essential structure lies in Chapter 23.*  
+**Gradient Pref Theorem – \cref{thm:gradient-pref}:**  
+\[
+\dot{x} = \nabla\Phi_A
+\]
+where \(x\) represents the agent’s state. This formalizes that agents act t[1D[K
+to maximize their admissibility potential, analogous to maximizing expected[8D[K
+expected utility in traditional frameworks but grounded directly in future‑[7D[K
+future‑option preservation.
 
 ---
 
-### 3. Falsifiability Test  
+### 3. Reward vs. Future Admissibility Divergence  
 
-\label{sec:ch23-falsifiability}
-
-If the claim that computation *realizes* Chapter 23’s “history before state[5D[K
-state” argument were false, we would need **new principles specific to comp[4D[K
-computation** (beyond what history‑dominates-state already predicts) to pro[3D[K
-prove results like:
-
-- **History Dominance Theorem:** History‑preserving file systems rank above[5D[K
-above state‑only equivalents in distinction capacity.
-- These proofs must rely solely on general theorems about distinction, not [K
-extra axioms tied specifically to computation.
+**Reward–Admissibility Divergence Theorem – \cref{thm:reward-divergence}:**[31D[K
+\cref{thm:reward-divergence}:**  
+Immediate rewards and the preservation of admissible futures can diverge. A[1D[K
+A policy that maximizes short‑term reward may reduce future options, highli[6D[K
+highlighting a fundamental limitation in reward‑maximizing agents.
 
 ---
 
-### 4. What This Chapter Establishes  
+### 4. Preference Curvature and Decision Bottlenecks  
+
+**Pref Curvature Theorem – \cref{thm:pref-curvature}:**  
+Preference curvature identifies where decision bottlenecks arise by linking[7D[K
+linking the shape of preference fields to admissibility curvature. This bri[3D[K
+bridges local choice behavior with global future‑option preservation.
+
+---
+
+### 5. Collective Preference Fields and Interference  
+
+**Pref Interference Theorem – \cref{thm:pref-interference}:**  
+Collective preference fields become generatively admissible when individual[10D[K
+individual preference gradients are largely aligned, ensuring that the grou[4D[K
+group’s overall direction preserves future options rather than conflicting [K
+with them.
+
+---
+
+### 6. Generative Admissibility and Boundary Flux  
+
+The sign condition for a field to be *generatively admissible* is:
 
 \[
-\boxed{
-\begin{aligned}
-&\text{(i) The fundamental theorem: } \textit{History Primacy},\\
-&\text{(ii) That flow‑computing objects (pipelines, streams) are the most n[1D[K
-natural realization of that theorem in computation.}\\
-&\text{(iii) Concrete results such as Pipeline Determination and Markov Bou[3D[K
-Boundary Theorems follow directly from (i).}\\
-&\text{(iv) Application to institutional governance shows how preference fi[2D[K
-fields can lose generative admissibility when only individual components ar[2D[K
-are considered.}
-\end{aligned}}
+\mathcal{L}_{\nabla\Phi_A}\Vol(\adm) \ge 0
 \]
 
----
+where \(\vol(\adm)\) denotes the volume of admissible futures. This transla[7D[K
+translates into the Boundary‑Flux Theorem – a locally computable condition [K
+that measures whether outward flux across the admissibility boundary preser[6D[K
+preserves future options:
 
-### 5. Preview of Key Results  
+\[
+\frac{d}{dt}\Vol(\mathcal{A}_t)=
+\int_{\partial\mathcal{A}_t}\mathbf{p}\cdot\mathbf{n}\, dS
+\]
 
-1. **Pipeline Determination Theorem** – Shows that a pipeline’s behavior (o[2D[K
-(output at each stage) is uniquely determined by the history it carries, no[2D[K
-not just its final state.
-2. **Markov Boundary Theorem for Processes** – Proves that distinguishing p[1D[K
-properties survive transitions only when they respect the Markov property o[1D[K
-of flow continuity.
-3. **History Dominance Theorem** – Demonstrates that file systems preservin[9D[K
-preserving historical distinction capacity outperform those that overwrite [K
-past states in terms of long‑term information retention and composability.
-
----
-
-### 6. Implications for Software Architecture  
-
-- **Modularity & Composability:** By treating each stage as a *distinction [K
-channel*, we can compose arbitrarily large computations from smaller, histo[5D[K
-history‑preserving components.
-- **Error Propagation:** Flows that lose historical distinguishability (e.g[4D[K
-(e.g., overwriting streams) become sources of bugs; flow computing highligh[8D[K
-highlights where to insert safeguards.
-- **Governance & Governance Dynamics (Chapter 24):** Preference fields in i[1D[K
-institutions can fail to be generatively admissible even if individual memb[4D[K
-members’ preferences are, due to aggregate flow dynamics.
+with \(\mathbf{p} = -\nabla U\) the preference flow. If this flux is non‑ne[6D[K
+non‑negative, future options are being conserved.
 
 ---
 
-### 7. Exercises Preview  
+### 7. Exercises and Extensions  
 
-1. **Exercise on Distinction Histories:** Show how a two‑state example illu[4D[K
-illustrates reward–admissibility divergence and compute $\Phi_A(x_1)$, $\Ph[4D[K
-$\Phi_A(x_2)$.
-2. **RL Modification Proposal:** Design an RL objective that includes $\Phi[5D[K
-$\Phi_A$ alongside reward to mitigate reward hacking.
-3. **Preference Interference Proof:** Prove the collective field cannot be [K
-generative unless some $w_i = 0$, given anti‑aligned preferences.
+- **Exercise on Reward–Admissibility Divergence:**  
+Construct a two‑state example with reachability dynamics to illustrate how [K
+immediate reward can diverge from preserving admissible futures. Compute \([2D[K
+\(\Phi_A(x_1)\) and \(\Phi_A(x_2)\).
+
+- **RL Extension:** Propose an RL objective that incorporates both reward \[1D[K
+\(R\) and \(\Phi_A\). Discuss practical challenges in estimating \(\Phi_A\)[10D[K
+\(\Phi_A\) from data.
+
+- **Preference Interference Theorem Proof:** Show that if \(\nabla\Phi_i \c[2D[K
+\cdot \nabla\Phi_j < 0\) for all distinct pairs, the collective field canno[5D[K
+cannot be generatively admissible unless some weight \(w_i = 0\).
+
+- **Governance Application:** Apply the Preference–Admissibility Equivalenc[10D[K
+Equivalence Theorem to institutional governance dynamics. Identify conditio[8D[K
+conditions where individual members have generatively admissible preference[10D[K
+preferences yet the institution fails to do so.
 
 ---
 
-**Conclusion:** Flow computing is not merely a convenient abstraction; it i[1D[K
-is a necessary extension of Chapter 23’s argument that history, not state a[1D[K
-alone, drives computational power and robustness. The rest of this chapter [K
-(and the next) will rigorously prove these ideas using formal theorems and [K
-apply them to real‑world systems like file storage and institutional govern[6D[K
-governance.
+### Summary
 
+This chapter establishes that preserving future options is captured by a *a[2D[K
+*admissibility potential* \(\Phi_A\) and its gradient‑driven motion, reward[6D[K
+rewarding immediate gains at the cost of reduced future choices. By linking[7D[K
+linking preference curvature, collective alignment, and boundary flux condi[5D[K
+conditions, it provides both theoretical and practical tools for designing [K
+agents (or institutions) that truly extend their own options rather than me[2D[K
+merely optimizing short‑term outcomes.
+
+---
+
+*Note to readers:* The equations and references (\(\cref{}\)) are placehold[9D[K
+placeholders intended for a LaTeX document. They will be replaced with actu[4D[K
+actual citations once the full manuscript is finalized.

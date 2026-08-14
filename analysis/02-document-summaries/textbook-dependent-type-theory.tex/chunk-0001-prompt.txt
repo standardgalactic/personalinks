@@ -1,15 +1,218 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 6 of a document called
+"textbook-dependent-type-theory.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Historical Substitution – A Constructive Reinterpretation**
 
-TEXT
-====
+In conventional type theory substitution (β‑reduction) is presented as a pu[2D[K
+purely syntactic replacement:
+
+> \( t[x:=a] \)
+
+where every free occurrence of the variable \(x\) in term \(t\) is replaced[8D[K
+replaced by term
+\(a\).  The correctness condition—avoiding capture—relies only on the ident[5D[K
+identity of
+variables, not on their provenance.
+
+**Spherepop’s Historical Perspective**
+
+Spherepop re‑interprets substitution as a *provenance‑preserving* transform[9D[K
+transformation.
+A substituted object carries its entire construction history, so replacing [K
+one
+variable by another transports both observable syntax **and** the historica[9D[K
+historical facts
+that made that syntax possible.
+
+---
+
+### 1. Historical Environments
+
+When we have proved
+
+\[
+H \vdash a : A,
+\]
+
+the environment records this fact:
+
+\[
+\sigma = \{ x_1 \mapsto (a_1, H_1),\; x_2 \mapsto (a_2, H_2),\;\ldots\}.
+\]
+
+Each entry pairs the semantic value with its constructive history.  Substit[7D[K
+Substitution
+therefore writes
+
+> \( t[H,x\mapsto a] \)
+
+instead of plain \(t[x:=a]\).  The notation makes explicit that substitutio[11D[K
+substitution never
+ignores provenance.
+
+---
+
+### 2. Definition of Historical Substitution  
+
+**Definition (Historical Substitution)**  
+
+Let  
+
+* \( H \vdash a : A\) be established, and  
+* \( H; \operatorname{Declare}(x : A) \vdash t : B\).
+
+Then the historical substitution
+
+> \( t[H,x\mapsto a] \)
+
+is obtained by:
+
+1. Replacing every free occurrence of \(x\) in \(t\) with \(a\);  
+2. Extending the dependency graph of \(t\) to include all dependencies requ[4D[K
+required
+   for constructing \(a\).
+
+Thus substitution modifies **both** the observable term and its underlying [K
+history.
+
+---
+
+### 3. Dependency Preservation  
+
+**Theorem (Dependency Preservation)**  
+
+Let \(D(t)\) denote the dependency graph of term \(t\).  
+If
+
+> \( t' = t[H,x\mapsto a] \),
+
+then
+
+> \( D(t') = D(t) \cup D(a) \)
+
+together with the edges introduced by the substitution itself.  
+
+*No provenance is lost.*  The new graph contains all original dependencies [K
+plus
+those needed for \(a\), preserving the full historical context.
+
+---
+
+### 4. Compositionality of Substitutions  
+
+Multiple substitutions compose naturally:
+
+If  
+
+\[
+\sigma_1 = \{x \mapsto (a, H_a)\},\qquad 
+\sigma_2 = \{y \mapsto (b, H_b)\},
+\]
+
+then
+
+> \( t[\sigma_1][\sigma_2] = t[\sigma_2\circ\sigma_1]\),
+
+provided capture‑avoidance conditions hold and the dependency graphs of
+\(a\) and \(b\) are compatible.  This ensures that successive substitutions[13D[K
+substitutions keep
+both semantic correctness **and** historical integrity.
+
+---
+
+### 5. Substitution and Beta Reduction  
+
+Spherepop interprets ordinary β‑reduction as:
+
+> \((\lambda x.t)\,a \;\longrightarrow\; t[H,x\mapsto a]\),
+
+where the resulting term inherits the extended history \(H'\) (the original[8D[K
+original plus the
+substitution event).  Evaluation thus yields **two** outcomes simultaneousl[13D[K
+simultaneously:
+the new observable term and a permanent record of how that term arose.
+
+---
+
+### 6. Historical Capture Avoidance  
+
+Traditional α‑conversion only requires distinct variable names.  Spherepop [K
+adds:
+
+*Variables may share textual names but retain globally unique historical id[2D[K
+identities.*
+
+If two variables \(x\) and \(x'\) originate from different declaration even[4D[K
+events
+\(e_x \neq e_{x'}\), they are distinguished by their provenance rather than[4D[K
+than mere
+spelling.  This naturally supports hygienic macros, proof replay, distribut[9D[K
+distributed
+proof construction, and incremental compilation.
+
+---
+
+### 7. The Historical Substitution Lemma  
+
+**Theorem (Historical Substitution Lemma)**  
+
+Suppose  
+
+* \( H \vdash a : A\),  
+* \( H; \operatorname{Declare}(x : A) \vdash t : B\).
+
+Then
+
+> \( H \vdash t[H,x\mapsto a] : B[H,x\mapsto a]\),
+
+and the dependency graph of this new derivation is exactly the historical
+composition of those of \(t\) and \(a\).  
+
+This lemma extends the ordinary substitution lemma to include provenance,
+ensuring that every step respects both semantic correctness and constructiv[11D[K
+constructive
+history.
+
+---
+
+### Conclusion  
+
+By treating contexts as mathematical objects generated by constructive even[4D[K
+events, the
+Spherepop kernel recasts all structural operations—substitution included—as[11D[K
+included—as true
+computational processes.  This richer semantics preserves not only observab[8D[K
+observable syntax
+but also the full history of how each piece was constructed, enabling a mor[3D[K
+more robust,
+transparent, and compositional understanding of dependent type theory.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 
 

@@ -30,6 +30,10 @@ pytest
 
 # Try an experiment
 python spherepop/03-pop/run.py
+
+# Use the lab runner
+python -m spherepop.lab list
+python -m spherepop.lab verify
 ```
 
 ## Installation
@@ -47,12 +51,10 @@ pip install -e ".[dev]"
 ```python
 from spherepop import make_config, parse_sphere, transition
 from spherepop.model import RefuseOp, CollapseOp
+from spherepop.serialization import from_json, to_json
 
 # Create initial configuration
-cfg = make_config(
-    parse_sphere("(root: a b c)"),
-    {"a", "b", "c"}
-)
+cfg = make_config(parse_sphere("(root: a b c)"), {"a", "b", "c"})
 
 # Refuse unwanted options
 cfg = transition(cfg, RefuseOp(refused=frozenset({"c"})))
@@ -62,6 +64,11 @@ cfg = transition(cfg, CollapseOp(classes=(frozenset({"a", "b"}),)))
 
 # History records the full trajectory
 print(f"Events: {len(cfg.history)}")  # 2
+
+# Persist and restore config state
+payload = to_json(cfg)
+cfg_restored = from_json(payload)
+assert cfg_restored == cfg
 ```
 
 ## Architecture
@@ -75,6 +82,7 @@ print(f"Events: {len(cfg.history)}")  # 2
 - `predicates.py` — BIND predicate DSL
 - `path_utils.py` — Sphere tree navigation
 - `validation.py` — Advisory configuration invariant checking
+- `serialization.py` — JSON roundtrip for Config persistence
 
 **Experiments** (`spherepop/NN-*/`):
 - 29 numbered experiments exploring confluence, divergence, regret, horizon equivalence, and intensional vs extensional identity
@@ -88,7 +96,38 @@ print(f"Events: {len(cfg.history)}")  # 2
 - [**CONTRIBUTING.md**](./CONTRIBUTING.md) — Development workflow and theory discipline
 - [**docs/DEVELOPMENT.md**](./docs/DEVELOPMENT.md) — Architecture guide
 - [**tests/COVERAGE.md**](./tests/COVERAGE.md) — Test coverage gaps and action plan
+- [**docs/RESEARCH_PROGRAM.md**](./docs/RESEARCH_PROGRAM.md) — Manifest-driven research workflow
 - **API Documentation**: Generate with `./docs/generate.sh`
+
+## Research Laboratory
+
+Spherepop includes a manifest-driven experiment harness:
+
+```bash
+python -m spherepop.lab list
+python -m spherepop.lab run 01..29
+python -m spherepop.lab verify
+python -m spherepop.lab compare 07 08
+python -m spherepop.lab theory-map
+python -m spherepop.lab export 07 --output build/exp07.json
+python -m spherepop.lab inspect build/exp07.json
+python -m spherepop.lab validate build/exp07.json
+python -m spherepop.lab replay build/exp07.json
+```
+
+- Manifest: `spherepop/experiment_manifest.json`
+- Claim registry: `spherepop/theory_claims.json`
+- Conjecture registry: `conjectures/`
+- Add `--json` to emit machine-readable records
+
+## Interchange Schema
+
+`spherepop.serialization` defines the versioned `spherepop.config.v1` interchange format.
+
+- `config_to_dict()` / `config_from_dict()` operate on structural representation only.
+- `to_json()` / `from_json()` preserve deterministic ordering invariants for stable artifacts.
+- Structural deserialization rejects malformed payloads but does **not** normalize or repair semantically invalid configs.
+- Semantic admissibility/invariant checks remain in `spherepop.validation.validate_config()`.
 
 ## Testing
 

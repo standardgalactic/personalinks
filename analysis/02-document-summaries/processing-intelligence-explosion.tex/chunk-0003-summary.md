@@ -1,72 +1,51 @@
-**Summary**
+The document appears to be a structured technical paper or thesis that disc[4D[K
+discusses several concepts related to computation and substrate interpretat[11D[K
+interpretation. Here’s a breakdown of its main components:
 
-The document outlines a formal model for interpreting the esoteric programm[8D[K
-programming language **Spherepop** in terms of thermodynamic and dynamical‑[10D[K
-dynamical‑system semantics. It introduces several key concepts:
+1. **Merge Dynamics (Section \ref{sec:merge})**  
+   - Introduces the idea of bubbles overlapping, defined by the intersectio[11D[K
+intersection $\Omega_a \cap \Omega_b \neq \emptyset$.  
+   - Defines merge coherence as $\mu(B_a, B_b) = \sum_{i \in \Omega_a \cap [K
+\Omega_b} s_i^{(a)}\, s_i^{(b)}$.  
+   - Explains that if $\mu(B_a, B_b) > 0$, the merge is constructive; other[5D[K
+otherwise, it’s destructive, leading to collapse radiation with energy loss[4D[K
+loss $\Delta E = -\alpha |\mu|$.
 
-1. **Merge Dynamics (§ Merge)**  
-   - When two bubbles (\(B_a\) and \(B_b\)) overlap, their *merge coherence[9D[K
-coherence* \(\mu(B_a,B_b)\) is defined as the sum of products of signed siz[3D[K
-sizes over intersecting points.  
-   - If \(\mu > 0\) the merge is constructive; if \(\mu < 0\) it produces *[1D[K
-*collapse radiation* with energy loss proportional to \(|\mu|\). This captu[5D[K
-captures how overlapping bubbles interact on a “mortal substrate” (a field [K
-that can decay).
+2. **Semantic Replay (Section \ref{sec:replay})**  
+   - Defines a semantic replay sequence $\mathcal{P} = (e_1, e_2, \dots, e_[2D[K
+e_n)$ and the replay operator as the composition of these operations on an [K
+initial state $\sigma_0$.  
+   - Highlights that over a stochastic substrate, the replay generates a di[2D[K
+distribution over semantic states denoted by $\mathbb{P}_n$.  
+   - States that meaning is represented not as a single deterministic state[5D[K
+state but as an attractor distribution.
 
-2. **Semantic Replay (§ Replay)**  
-   - A replay sequence \((e_1,\dots,e_n)\) acts as a composition of operato[7D[K
-operators applied to an initial state \(\sigma_0\).  
-   - Over stochastic substrates, each step yields a distribution over seman[5D[K
-semantic states rather than a deterministic single outcome. The convergence[11D[K
-convergence of these distributions (as \(n\) grows) is guaranteed for Tier‑[5D[K
-Tier‑1 repositories by a theorem on attractor existence.
+3. **Attractor Semantics (Section \ref{sec:attractors})**  
+   - Introduces the concept of replay expectation $\bar{\sigma}_n = \mathbb[7D[K
+\mathbb{E}[\sigma_n]$.  
+   - Defines stability for a semantic object $O$ via bounded variance under[5D[K
+under replay, expressed as $\lim_{n \to \infty} \operatorname{Var}(O_n) < \[1D[K
+\delta$ with some tolerance $\delta > 0$.  
+   - Proposes that the contribution of a repository to the collective subst[5D[K
+substrate is proportional to the recoverability of its semantic attractor r[1D[K
+relative to perturbation magnitude.
 
-3. **Attractor Semantics (§ Attractors)**  
-   - The *replay expectation* \(\bar{\sigma}_n = \mathbb{E}[\sigma_n]\) def[3D[K
-defines stability: an object \(O\) is stable if its variance under replay e[1D[K
-eventually stays below a tolerance \(\delta\).  
-   - Semantic persistence is measured by the recoverability of the attracto[8D[K
-attractor’s structure after perturbation, proportional to \(\mathcal{A}(R)\[17D[K
-\(\mathcal{A}(R)\).
+4. **Spherepop--Correspondence (Section \ref{sec:correspondence})**  
+   - Provides a tabular mapping between Spherepop concepts and their substr[6D[K
+substrate interpretations, linking elements like "Sphere" to local parity-p[8D[K
+parity-preserving fields, "Pop" to entropic collapse events, etc.  
+   - Suggests that the nature of Spherepop (with its inherent nondeterminis[13D[K
+nondeterminism) makes it compatible with emerging theoretical frameworks su[2D[K
+such as RSVP-style field thinking, semantic manifolds, topological cognitio[8D[K
+cognition, and distributed attractor systems.
 
-4. **Spherepop‑Correspondence (§ Correspondence)**  
-   - A tabular mapping links core Spherepop concepts with substrate interpr[7D[K
-interpretations:  
-     - **Sphere** ↔ Local parity‑preserving field  
-     - **Pop** ↔ Entropic collapse event  
-     - **Merge** ↔ Coherence synchronization  
-     - **Choice** ↔ Stochastic branch distribution  
-     - **Collapse** ↔ Representative normalization  
-     - **Replay** ↔ Attractor regeneration  
-     - **Semantic object** ↔ Persistent metastable region  
+5. **Bibliography**  
+   - Lists numerous references ranging from foundational works in network t[1D[K
+theory, information theory, to modern interpretations of computation and co[2D[K
+complexity (e.g., by Barabási, Kuramoto, Turing). These citations likely su[2D[K
+support the theoretical arguments presented throughout the document.
 
-5. **Philosophical Implications (discussion)**  
-   - By deliberately eliminating exact addressing, arithmetic, and control [K
-flow, Spherepop forces higher‑order relational structure to emerge. This al[2D[K
-aligns it with modern concepts such as RSVP‑style field thinking, semantic [K
-manifolds, topological cognition, and distributed attractor systems. The “S[2D[K
-“Spherepop layer” is thus seen not merely as a workaround but as a natural [K
-consequence of the substrate’s geometry.
-
-**Bibliography**
-
-The bibliography lists foundational works across physics, information theor[5D[K
-theory, computer science (including Git, AI, and neural networks), philosop[8D[K
-philosophy of computation, and related fields that inform the model. Notabl[6D[K
-Notable entries include:
-
-- Barabási & Albert (2002) – *Linked* on network phenomena.  
-- Kuramoto (1984) – On chemical oscillations and turbulence.  
-- Wolfram (2002) – *A New Kind of Science* for cellular automata insights. [K
- 
-
-These references underpin the thermodynamic, stochastic, and emergent‑prope[14D[K
-emergent‑property reasoning presented in the document.
-
---- 
-
-This summary captures the core ideas, definitions, and theoretical motivati[8D[K
-motivations behind interpreting Spherepop through a substrate‑based dynamic[7D[K
-dynamical model, emphasizing its relevance to broader computational and phy[3D[K
-physical theories.
-
+Overall, the document serves as a comprehensive exploration of how computat[8D[K
+computational concepts can be interpreted within the context of physical or[2D[K
+or stochastic substrates, emphasizing stability, bounded variance, and the [K
+emergence of higher-order structures through nondeterministic processes.

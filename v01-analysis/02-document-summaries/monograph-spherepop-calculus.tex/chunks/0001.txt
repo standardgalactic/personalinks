@@ -1,0 +1,1133 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathpartir}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{tabularx,adjustbox,array}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X} 
+\newcolumntype{C}{>{\centering\arraybackslash}p{2.2cm}} 
+\usepackage{fullpage}
+
+\title{Spherepop Calculus}
+\author{Flyxion}
+
+\date{\today}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{observation}[theorem]{Observation}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The \emph{Spherepop Calculus} (SPC) is a novel functional language and
+type-theoretic framework that unifies abstraction, concurrency, and probabilistic
+choice within a single geometric model of computation. SPC extends the
+$\lambda$-calculus by reinterpreting abstraction and application as
+\texttt{Sphere} and \texttt{Pop}, visualizing scope as nested spheres rather
+than syntactic parentheses. It introduces \texttt{Merge} as a categorical
+parallel operator with tensorial semantics, and \texttt{Choice} as a primitive
+for probabilistic branching, expressible either internally or via a distribution
+monad. The type system extends the Calculus of Constructions with dependent
+types, while the denotational semantics is given in a presheaf topos enriched
+with the Giry distribution monad. We establish meta-theoretic properties of SPC,
+including preservation, progress, and adequacy of the probabilistic semantics,
+together with a formal \emph{Independent Channels Lemma} that quantifies
+aggregated risk across merged probabilistic branches. Historical analysis
+positions SPC at the intersection of $\lambda$-calculus, $\pi$-calculus,
+probabilistic $\lambda$-calculi, and dependent type theory, while translations
+demonstrate that SPC strictly subsumes these calculi up to natural fragments.
+The result is a language that serves both as a foundation for probabilistic and
+concurrent computation and as a categorical framework for reasoning about
+structured scope, uncertainty, and interaction.
+\end{abstract}
+
+\tableofcontents
+
+
+Introduction
+
+
+The study of computation has been shaped by a small number of canonical calculi,
+each capturing different aspects of programming and reasoning. The
+$\lambda$-calculus, introduced by Church in the 1930s, provides a minimal yet
+universal account of higher-order functional abstraction. Process calculi such as
+Milner’s $\pi$-calculus emphasize concurrency and interaction, while extensions
+of $\lambda$-calculus with probabilistic primitives provide a foundation for
+reasoning under uncertainty. Dependent type theories, beginning with Martin-Löf,
+further embed computation into a constructive foundation for mathematics,
+realized in proof assistants such as Coq.
+
+The \emph{Spherepop Calculus} (SPC) proposes a synthesis of these traditions,
+introducing a geometric reinterpretation of abstraction and application as
+\texttt{Sphere} and \texttt{Pop}. Rather than treating scope as a merely
+syntactic device (parentheses), SPC represents computation as the structured
+opening and closing of \emph{spheres}, which can be nested, merged, or
+collapsed. This geometric intuition makes scope explicit, supports natural
+visualization, and provides a foundation for extending the calculus with
+parallelism and probability.
+
+SPC departs from the classical $\lambda$-calculus in three key ways:
+\begin{enumerate}
+  \item \textbf{Merge.} A primitive operator for nondeterministic or parallel
+  composition, interpreted categorically as a tensor product in a monoidal
+  category.
+  \item \textbf{Choice.} A probabilistic branching operator, admitting two
+  semantics: an internal version, where choice returns a value of type $A$, and a
+  distribution-monad version, where choice yields an element of
+  $\mathsf{Dist}(A)$.
+  \item \textbf{Dependent extension.} SPC generalizes the Calculus of
+  Constructions by allowing $\Pi$- and $\Sigma$-types in the presence of Merge
+  and Choice, ensuring compositionality with categorical semantics in a presheaf
+  topos.
+\end{enumerate}
+
+The contributions of this paper are fourfold:
+\begin{itemize}
+  \item We define the syntax, typing rules, and operational semantics of SPC,
+  highlighting its core primitives (\texttt{Sphere}, \texttt{Pop},
+  \texttt{Merge}, \texttt{Choice}).
+  \item We give a denotational semantics in the presheaf topos
+  $[\mathsf{Sphere}^{op},\mathsf{Set}]$, enriched with the Giry distribution
+  monad, and prove adequacy with respect to the operational semantics.
+  \item We establish meta-theoretic properties, including preservation,
+  progress, and a formal \emph{Independent Channels Lemma} that quantifies
+  disjunctive risk aggregation across merged probabilistic branches.
+  \item We situate SPC within the historical development of computation, compare
+  it with $\lambda$-calculus, $\pi$-calculus, and probabilistic $\lambda$-calculi,
+  and provide translations showing that SPC strictly subsumes these calculi up
+  to natural fragments.
+\end{itemize}
+
+Taken together, SPC offers a unified framework for functional abstraction,
+concurrency, and probabilistic reasoning, supported by dependent types and
+categorical semantics. It is simultaneously a programming language, a logical
+foundation, and a conceptual model of computation where scope is geometric,
+parallelism is tensorial, and probability is compositional.
+
+
+Motivation and Overview
+
+
+We establish the foundational properties of the Spherepop Calculus (SPC) through
+three main technical contributions.
+
+\paragraph{Type Safety.}
+We prove \emph{Preservation} (well-typed terms remain well-typed under reduction)
+and \emph{Progress} (a closed well-typed term is either a value or can take a
+reduction step). These results extend the standard type-safety arguments for
+$\lambda$-calculus to a setting enriched with dependent types, Merge, and
+Choice.
+
+\paragraph{Adequacy of Probabilistic Semantics.}
+We show that the denotational semantics in the presheaf topos, enriched with the
+distribution monad, is adequate with respect to the operational semantics.
+Specifically, the expectation of any observable function under the operational
+distribution coincides with its expectation under the denotational distribution.
+This adequacy ensures that probabilistic reasoning in SPC is compositional.
+
+\paragraph{Expressivity.}
+We define translations from the simply-typed $\lambda$-calculus, probabilistic
+$\lambda$-calculus, and a nondeterministic parallel fragment of $\pi$-calculus
+into SPC. These translations preserve typing and operational behavior, and
+demonstrate that SPC strictly subsumes each source calculus. As a corollary, SPC
+provides a unifying framework for higher-order functions, probabilistic choice,
+and parallel composition.
+
+\paragraph{Independent Channels Lemma.}
+Finally, we formalize the aggregation of independent probabilistic branches
+under Merge. We prove that the probability of disjunctive failure across $n$
+independent channels is given by $1 - \prod_{i=1}^n(1-p_i)$, aligning the
+operational and denotational accounts. This lemma illustrates how SPC captures
+structured reasoning about risk in concurrent probabilistic systems.
+
+The contributions of this paper are as follows:
+
+\begin{itemize}
+  \item \textbf{Geometric scope model.}
+  We introduce \emph{Sphere} and \emph{Pop} as geometric abstractions of
+  $\lambda$-abstraction and application, making scope explicit through
+  spherical nesting.
+
+  \item \textbf{Parallel and probabilistic primitives.}
+  We extend the calculus with \emph{Merge} (categorical tensor for parallel
+  composition) and \emph{Choice} (probabilistic branching), with both internal
+  and distribution-monad interpretations.
+
+  \item \textbf{Dependent type system.}
+  We integrate $\Pi$- and $\Sigma$-types into SPC, yielding a
+  \emph{probabilistic, monoidal calculus of constructions}.
+
+  \item \textbf{Denotational semantics.}
+  We give a semantics in the presheaf topos $[\mathsf{Sphere}^{op},\mathsf{Set}]$
+  enriched with the Giry distribution monad, and prove \emph{adequacy} with
+  respect to operational semantics.
+
+  \item \textbf{Meta-theory.}
+  We establish preservation, progress, and a formal \emph{Independent Channels Lemma}
+  quantifying disjunctive risk aggregation under Merge.
+
+  \item \textbf{Expressivity.}
+  We provide translations from $\lambda$-calculus, probabilistic $\lambda$-calculus,
+  and a parallel fragment of $\pi$-calculus into SPC, proving SPC strictly subsumes
+  these calculi.
+\end{itemize}
+
+
+Structure of the Paper
+
+
+The remainder of the paper is organized as follows. 
+Section~\ref{sec:syntax} introduces the syntax, types, and typing rules of SPC. 
+Section~\ref{sec:operational} defines the operational semantics, including 
+$\beta$-reduction, Merge, and Choice. 
+Section~\ref{sec:denotational} presents the denotational semantics in a presheaf 
+topos enriched with the distribution monad. 
+Section~\ref{sec:meta} establishes the meta-theoretic results: preservation, 
+progress, adequacy, and the Independent Channels Lemma. 
+Section~\ref{sec:history} situates SPC in historical context, tracing antecedents 
+from $\lambda$-calculus to probabilistic programming. 
+Section~\ref{sec:positioning} compares SPC to related calculi and formalizes its 
+expressivity. 
+Section~\ref{sec:translations} gives constructive translations from $\lambda$-calculus, 
+probabilistic $\lambda$-calculus, and a fragment of $\pi$-calculus into SPC. 
+Finally, the appendices provide auxiliary lemmas, substitution proofs, and worked 
+examples illustrating the calculus in action.
+
+
+Related Work
+
+
+The Spherepop Calculus (SPC) builds on several long-standing traditions in logic,
+type theory, and programming language semantics, while introducing new
+geometric primitives for abstraction, concurrency, and probabilistic choice.
+
+\paragraph{Foundations in $\lambda$-calculus and type theory.}
+The $\lambda$-calculus \cite{church1940formulation,barendregt1984lambda} is the
+canonical foundation of functional abstraction, and type-theoretic refinements
+such as Martin-Löf’s intuitionistic type theory \cite{martinlof1975intuitionistic}
+and the Calculus of Constructions \cite{coquand1988calculus} enable expressive
+proof systems with dependent types. SPC inherits this tradition but reinterprets
+scope geometrically through \texttt{Sphere} and \texttt{Pop}, extending it with
+native parallel and probabilistic constructs. The broad development of type
+systems is summarized by Pierce \cite{pierce2002types}, which SPC builds upon by
+fusing typing with concurrency and uncertainty.
+
+\paragraph{Categorical semantics.}
+The Curry–Howard–Lambek correspondence \cite{lambek1986categorical}, Mac Lane’s
+coherence results \cite{maclane1963natural}, and Lawvere’s elementary topos
+theory \cite{lawvere1970quantifiers} frame the categorical interpretation of
+logical systems. Awodey \cite{awodey2010category} provides a modern reference
+that situates these ideas within contemporary category theory. SPC draws on this
+lineage by giving its denotational semantics in a presheaf topos enriched with a
+distribution monad, with \texttt{Merge} modeled as a tensor. Street’s formal
+theory of monads \cite{street1972two} and Moggi’s computational monads
+\cite{moggi1991notions} provide the conceptual background for SPC’s treatment of
+probabilistic and parallel computation as compositional effects.
+
+\paragraph{Linear and resource-sensitive calculi.}
+Girard’s linear logic \cite{girard1987linear} introduced explicit control of
+resources in proof theory and computation. While SPC is not linear, its
+geometric nesting of scopes and its tensorial \texttt{Merge} operator echo
+concerns of resource management and structural invariants familiar from the
+linear tradition.
+
+\paragraph{Probabilistic semantics and programming.}
+The semantics of probabilistic programs has a long history
+\cite{kozen1981semantics,giry1982categorical}, recently extended to dependent
+types and constructive foundations \cite{adams2020foundations}. Jacobs and
+Mandemaker’s coalgebraic approach \cite{jacobs2015new} and Fritz’s synthetic
+treatment of Markov kernels \cite{fritz2020synthetic} highlight how categorical
+structures support probability theory. SPC contributes to this tradition by
+internalizing probabilistic branching as a primitive operator (\texttt{Choice}),
+interpretable both operationally and via monads. Contemporary probabilistic
+programming languages such as Church, Anglican, and WebPPL
+\cite{goodman2014design,van2018introduction,gordon2014probabilistic} show the
+practical importance of such models; SPC offers a categorical and type-theoretic
+foundation that could undergird future implementations.
+
+\paragraph{Concurrency and process calculi.}
+Milner’s CCS \cite{milner1980calculus} and $\pi$-calculus
+\cite{milner1999communicating,milner1992calculus} provided the foundational
+frameworks for concurrency and mobility of processes. SPC’s \texttt{Merge}
+resembles nondeterministic parallel composition but is grounded in categorical
+semantics rather than name-passing. This places SPC closer to categorical models
+of concurrency, while retaining the operational intuition of interaction
+between independent channels.
+
+\paragraph{Implementations and proof assistants.}
+The Calculus of Inductive Constructions is realized in Coq
+\cite{bertot2004interactive}, while Agda
+\cite{norell2009dependently} demonstrates dependently typed programming in a
+more lightweight style. SPC shares the constructive spirit of these systems but
+extends their expressivity with concurrency and probabilistic constructs at the
+core. This suggests that SPC could serve as a foundation for future proof
+assistants or domain-specific probabilistic programming tools with certified
+semantics.
+
+\paragraph{Summary.}
+SPC thus situates itself at the intersection of four lines of research:
+$\lambda$-calculus and dependent types, categorical logic and monads,
+probabilistic semantics, and concurrency theory. Its novelty lies in
+synthesizing these strands into a single, geometrically motivated calculus where
+scope, parallelism, and probability are treated as first-class compositional
+notions.
+
+
+
+Overview of the Language
+
+
+The \textbf{Spherepop Calculus (SPC)} is a higher-order, dependent-typed functional language designed to model computation through \textbf{spherical scoping primitives}. Its distinctive features are:
+
+
+1. Core Primitives
+
+
+\begin{itemize}
+\item \textbf{Sphere} -- abstraction operator, analogous to $\lambda$, but visualized as opening a scope (``entering a bubble'').
+\item \textbf{Pop} -- application operator, analogous to $\beta$-reduction, representing the act of collapsing a sphere with an argument.
+\item \textbf{Merge} -- parallel or disjunctive composition, modeling nondeterministic or concurrent branching.
+\item \textbf{Choice} -- probabilistic branching operator, either interpreted internally (as a weighted selector) or via the distribution monad.
+\item \textbf{Nest} -- syntactic sugar for hierarchical application, enforcing structured scoping.
+\end{itemize}
+
+Together, these primitives generalize $\lambda$-calculus while encoding higher-order reasoning about scope, concurrency, and probability.
+
+
+2. Type Discipline
+
+
+SPC extends dependent type theory:
+
+\begin{itemize}
+\item \textbf{Dependent function types} ($\Pi$-types) capture parameterized spheres.
+\item \textbf{Dependent sum types} ($\Sigma$-types) capture merged data.
+\item \textbf{Merge} preserves type alignment, enforcing that both branches produce the same type.
+\item \textbf{Choice} comes in two flavors:
+  \begin{itemize}
+  \item \textit{Internal}: returns an element of type $A$.
+  \item \textit{Monadic}: returns a distribution over $A$, aligning with Giry's distribution monad.
+  \end{itemize}
+\end{itemize}
+
+Thus, SPC can be seen as a \textbf{probabilistic Calculus of Constructions} variant.
+
+
+3. Operational Semantics
+
+
+\begin{itemize}
+\item \textbf{$\beta$-reduction}: $\mathrm{Pop}(\mathrm{Sphere}(x:A.\,t),u) \to t[u/x]$.
+\item \textbf{Merge}: associative and commutative; normalizes via structural equivalence.
+\item \textbf{Choice}: reduces by stochastic sampling ($t$ w.p. $p$, $u$ w.p. $1-p$).
+\end{itemize}
+
+The calculus is confluent for the deterministic fragment and admits stochastic confluence properties for probabilistic terms.
+
+
+4. Denotational Semantics
+
+
+SPC is interpreted in a \textbf{presheaf topos} $[\mathsf{Sphere}^{op}, \mathsf{Set}]$:
+
+\begin{itemize}
+\item \textbf{Terms}: morphisms in the topos.
+\item \textbf{Sphere/Pop}: exponential and evaluation morphisms.
+\item \textbf{Merge}: monoidal product.
+\item \textbf{Choice}: convex combination in the distribution monad, yielding true probabilistic semantics.
+\end{itemize}
+
+Adequacy theorems ensure that operational sampling aligns with denotational expectation.
+
+
+5. Meta-Theory
+
+
+SPC satisfies standard safety results:
+
+\begin{itemize}
+\item \textbf{Preservation} -- reduction preserves types.
+\item \textbf{Progress} -- well-typed closed terms reduce or are values.
+\item \textbf{Adequacy} -- denotational semantics agrees with operational probabilities.
+\item \textbf{Independent Channels Lemma} -- formalizes disjunctive risk aggregation:
+  \[
+  \Pr[\text{doom in merged channels}] = 1 - \prod_i (1 - p_i).
+  \]
+\end{itemize}
+
+
+6. Conceptual Role
+
+
+Unlike traditional $\lambda$-calculus:
+
+\begin{itemize}
+\item SPC emphasizes \textbf{scoping as geometry} (spheres rather than parentheses).
+\item Merge and Choice bring \textbf{parallelism and probability} into the core calculus.
+\item The categorical semantics makes SPC not just a programming language, but a \textbf{theory of structured, probabilistic reasoning}, equally at home in logic, semantics, and physics.
+\end{itemize}
+
+
+Syntax and Typing
+\label{sec:syntax}
+
+
+Grammar of Terms
+
+
+\[
+\begin{array}{rcll}
+t,u & ::= & x & \text{variable} \\
+     & \mid & a & \text{atom / constant} \\
+     & \mid & \mathrm{Sphere}(x{:}A.\,t) & \text{abstraction} \\
+     & \mid & \mathrm{Pop}(t,u) & \text{application} \\
+     & \mid & \mathrm{Merge}(t,u) & \text{parallel / disjunction} \\
+     & \mid & \mathrm{Nest}(t,u) & \text{syntactic sugar for Pop} \\
+     & \mid & \mathrm{Choice}(p,t,u) & \text{probabilistic choice}
+\end{array}
+\]
+
+
+Types and Contexts
+
+
+Contexts: $\Gamma ::= \cdot \mid \Gamma, x{:}A$.
+
+
+Typing Rules
+
+
+\begin{mathpar}
+\inferrule*[right=Var]
+  {x{:}A \in \Gamma}
+  {\Gamma \vdash x : A}
+
+\inferrule*[right=Atom]
+  { }
+  {\Gamma \vdash a : A}
+
+\inferrule*[$\Pi$-Form]
+  {\Gamma \vdash A : \mathsf{Type}_i \\ \Gamma, x{:}A \vdash B : \mathsf{Type}_j}
+  {\Gamma \vdash \Pi x{:}A.\,B : \mathsf{Type}_{\max(i,j)}}
+
+\inferrule*[$\Pi$-Intro]
+  {\Gamma, x{:}A \vdash t : B}
+  {\Gamma \vdash \mathrm{Sphere}(x{:}A.\,t) : \Pi x{:}A.\,B}
+
+\inferrule*[$\Pi$-Elim]
+  {\Gamma \vdash f : \Pi x{:}A.\,B \\ \Gamma \vdash u : A}
+  {\Gamma \vdash \mathrm{Pop}(f,u) : B[u/x]}
+
+\inferrule*[$\Sigma$-Form]
+  {\Gamma \vdash A : \mathsf{Type}_i \\ \Gamma, x{:}A \vdash B : \mathsf{Type}_j}
+  {\Gamma \vdash \Sigma x{:}A.\,B : \mathsf{Type}_{\max(i,j)}}
+
+\inferrule*[$\Sigma$-Intro]
+  {\Gamma \vdash a : A \\ \Gamma \vdash b : B[a/x]}
+  {\Gamma \vdash (a,b) : \Sigma x{:}A.\,B}
+
+\inferrule*[right=Merge]
+  {\Gamma \vdash t : A \\ \Gamma \vdash u : A}
+  {\Gamma \vdash \mathrm{Merge}(t,u) : A}
+
+\inferrule*[right=Choice]
+  {\Gamma \vdash p : \mathsf{Prob} \\
+   \Gamma \vdash t : A \\
+   \Gamma \vdash u : A}
+  {\Gamma \vdash \mathrm{Choice}(p,t,u) : A}
+\end{mathpar}
+
+
+Dependent Types and Extensions
+
+
+The Spherepop Calculus extends the simply-typed core with full \emph{dependent
+types}, generalizing the Calculus of Constructions. This enables the type of a
+term to vary with the values of its arguments, and allows expressive encodings of
+logical quantification, data structures, and program specifications.
+
+\paragraph{Dependent Functions ($\Pi$-types).}
+A dependent function type $\Pi x{:}A.\,B(x)$ represents a family of results $B(x)$
+parameterized by an argument $x:A$. In SPC this is introduced by the abstraction
+form $\mathsf{Sphere}(x{:}A.\,t)$ and eliminated by application
+$\mathsf{Pop}(f,u)$. Typing rules are:
+
+\[
+\inferrule*[right=$\Pi$-Form]
+  {\Gamma \vdash A : \mathsf{Type}_i \\
+   \Gamma, x:A \vdash B(x) : \mathsf{Type}_j}
+  {\Gamma \vdash \Pi x:A.\,B(x) : \mathsf{Type}_{\max(i,j)}}
+\]
+
+\[
+\inferrule*[right=$\Pi$-Intro]
+  {\Gamma, x:A \vdash t : B(x)}
+  {\Gamma \vdash \mathsf{Sphere}(x{:}A.\,t) : \Pi x:A.\,B(x)}
+\]
+
+\[
+\inferrule*[right=$\Pi$-Elim]
+  {\Gamma \vdash f : \Pi x:A.\,B(x) \\
+   \Gamma \vdash u : A}
+  {\Gamma \vdash \mathsf{Pop}(f,u) : B(u)}
+\]
+
+\paragraph{Dependent Pairs ($\Sigma$-types).}
+A dependent sum $\Sigma x{:}A.\,B(x)$ represents pairs $(a,b)$ where $a:A$ and
+$b:B(a)$. SPC introduces such terms directly and allows pattern decomposition:
+
+\[
+\inferrule*[right=$\Sigma$-Form]
+  {\Gamma \vdash A : \mathsf{Type}_i \\
+   \Gamma, x:A \vdash B(x) : \mathsf{Type}_j}
+  {\Gamma \vdash \Sigma x:A.\,B(x) : \mathsf{Type}_{\max(i,j)}}
+\]
+
+\[
+\inferrule*[right=$\Sigma$-Intro]
+  {\Gamma \vdash a : A \\
+   \Gamma \vdash b : B(a)}
+  {\Gamma \vdash (a,b) : \Sigma x:A.\,B(x)}
+\]
+
+Elimination is definable via dependent projection functions, aligning with the
+standard rules of dependent type theory.
+
+\paragraph{Interaction with Merge.}
+The tensorial operator $\mathsf{Merge}$ requires both arguments to have the same
+type. In the dependent setting, this condition is refined: if
+$\Gamma \vdash M : A$ and $\Gamma \vdash N : A$, then
+$\Gamma \vdash M \otimes N : A$. This ensures that parallel branches preserve
+a uniform dependent type, while still allowing the type $A$ itself to depend on
+contextual variables.
+
+\paragraph{Interaction with Choice.}
+The probabilistic operator $\mathsf{Choice}(p,M,N)$ is well-typed whenever
+both branches agree on type:
+\[
+\Gamma \vdash M : A, \quad \Gamma \vdash N : A
+\quad\Rightarrow\quad
+\Gamma \vdash \mathsf{Choice}(p,M,N) : A.
+\]
+Alternatively, in the distributional extension, we admit:
+\[
+\Gamma \vdash \mathsf{Choice}(p,M,N) : \mathsf{Dist}(A).
+\]
+This makes explicit the transition from internal probabilistic branching to
+external distribution-valued semantics.
+
+\paragraph{Universes.}
+As in the Calculus of Constructions, SPC assumes a cumulative hierarchy of type
+universes $\mathsf{Type}_i$ indexed by natural numbers $i$. Dependent types can
+be formed at any level, and type constructors preserve universe stratification.
+
+\paragraph{Expressive Power.}
+With $\Pi$- and $\Sigma$-types, SPC can encode first-order and higher-order
+logic, inductive families, and dependent specifications of probabilistic
+processes. In particular, the combination of dependent sums with Choice
+permits \emph{probabilistic data structures} whose shape depends on sampled
+random values, while dependent functions over Merge enable \emph{concurrent
+families of proofs and programs}.
+
+\medskip
+In summary, the dependent extension equips SPC with the full expressivity of
+modern type theories, while ensuring that Merge and Choice remain type-safe and
+compositional within this enriched framework.
+
+\begin{lemma}[Merge of Dependent Pairs yields a Joint Distribution]
+\label{lem:merge-sigma-joint}
+Let $A$ be a base type and let $\mathsf{Vec}:\mathbb{N}\to\mathsf{Type}$ be a
+family. Suppose
+\[
+\Gamma \vdash P_1 : \Sigma n:\mathbb{N}.\,\mathsf{Vec}(n)
+\qquad\text{and}\qquad
+\Gamma \vdash P_2 : \Sigma m:\mathbb{N}.\,\mathsf{Vec}(m).
+\]
+Then:
+\begin{enumerate}
+\item[\textnormal{(Typing)}] $\Gamma \vdash \mathsf{Merge}(P_1,P_2) \;:\; 
+      \big(\Sigma n:\mathbb{N}.\,\mathsf{Vec}(n)\big) \otimes 
+      \big(\Sigma m:\mathbb{N}.\,\mathsf{Vec}(m)\big)$.
+\item[\textnormal{(Operational)}] If $P_1 \Rightarrow (n,v)$ and $P_2 \Rightarrow (m,w)$
+      by (possibly probabilistic) reduction, then
+      \[
+      \mathsf{Merge}(P_1,P_2) \;\Rightarrow\; (n,v)\ \Vert\ (m,w),
+      \]
+      modulo the associativity/commutativity congruence of $\mathsf{Merge}$.
+\item[\textnormal{(Denotational)}] In the presheaf topos with distribution monad
+      $\mathsf{Dist}$, if $\llbracket P_1 \rrbracket \in \mathsf{Dist}\!\big(\Sigma n.\,\mathsf{Vec}(n)\big)$
+      and $\llbracket P_2 \rrbracket \in \mathsf{Dist}\!\big(\Sigma m.\,\mathsf{Vec}(m)\big)$
+      are independent, then
+      \[
+      \llbracket \mathsf{Merge}(P_1,P_2) \rrbracket
+      \;=\;
+      \llbracket P_1 \rrbracket \otimes \llbracket P_2 \rrbracket
+      \;\in\; \mathsf{Dist}\!\Big(\big(\Sigma n.\,\mathsf{Vec}(n)\big)\times\big(\Sigma m.\,\mathsf{Vec}(m)\big)\Big),
+      \]
+      where $\otimes$ is the product (independent) measure and the codomain
+      identifies the tensor with the cartesian product object in the underlying topos.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}[Sketch]
+\emph{Typing.} By the $\mathsf{Merge}$ typing rule (tensor introduction),
+if both branches share well-formed types, then
+$\Gamma \vdash \mathsf{Merge}(P_1,P_2)$ has the tensor of those types.
+
+\emph{Operational.} Reduction of $\mathsf{Merge}$ proceeds by reducing either
+branch; if both normalize to $(n,v)$ and $(m,w)$, the merged term normalizes to
+their parallel composition, up to A/C congruence.
+
+\emph{Denotational.} By the semantics of $\mathsf{Merge}$ as tensor and of
+probability via $\mathsf{Dist}$, independent branches denote product measures.
+Therefore the denotation of the merge is the independent product of the branch
+distributions, as stated.
+\end{proof}
+
+\begin{corollary}[Pushforward of Merged Dependent Pairs]
+\label{cor:merge-pushforward}
+Let $P_1$ and $P_2$ be as in Lemma~\ref{lem:merge-sigma-joint}, and let
+\[
+\Phi : \big(\Sigma n:\mathbb{N}.\,\mathsf{Vec}(n)\big) \times 
+       \big(\Sigma m:\mathbb{N}.\,\mathsf{Vec}(m)\big) \;\to\; B
+\]
+be a dependent function into some type $B$. Then the SPC term
+\[
+\Phi\big(\mathsf{Merge}(P_1,P_2)\big)
+\]
+is well-typed with type $B$, and its denotational semantics is the pushforward
+measure of the product distribution:
+\[
+\llbracket \Phi(\mathsf{Merge}(P_1,P_2)) \rrbracket
+\;=\; \Phi_\* \big(\,\llbracket P_1 \rrbracket \otimes \llbracket P_2 \rrbracket\,\big).
+\]
+\end{corollary}
+
+\begin{proof}[Sketch]
+\emph{Typing.} By Lemma~\ref{lem:merge-sigma-joint}, $\mathsf{Merge}(P_1,P_2)$
+has type $(\Sigma n.\,\mathsf{Vec}(n)) \otimes (\Sigma m.\,\mathsf{Vec}(m))$,
+which is isomorphic to the product
+$(\Sigma n.\,\mathsf{Vec}(n)) \times (\Sigma m.\,\mathsf{Vec}(m))$. Thus
+applying $\Phi$ yields a term of type $B$.
+
+\emph{Operational.} Whenever $P_1$ reduces to $(n,v)$ and $P_2$ to $(m,w)$,
+the merged term reduces to $(n,v)\Vert(m,w)$, and applying $\Phi$ reduces
+further to $\Phi((n,v),(m,w))$.
+
+\emph{Denotational.} Since $\llbracket \mathsf{Merge}(P_1,P_2)\rrbracket$ is the
+product distribution, and $\Phi$ is interpreted as a measurable map,
+functoriality of the distribution monad implies that its denotation is the
+pushforward $\Phi_\*$. ∎
+\end{proof}
+
+
+
+\paragraph{Worked Example: Dependent Probabilistic Function.}
+
+Consider a type $\mathbb{N}$ of natural numbers, and let $\mathsf{Vec}(n)$ denote
+the type of vectors of length $n$ over some base type $A$. We show how SPC can
+express a probabilistic program that first samples a natural number $n$ and then
+returns a vector of that length.
+
+\medskip
+\textbf{Step 1: Sample a length.}  
+Define a probabilistic choice over natural numbers:
+\[
+L \;=\; \mathsf{Choice}(p,\,0,\,1) : \mathbb{N}.
+\]
+Here, $L$ evaluates to $0$ with probability $p$ and to $1$ with probability
+$1-p$.
+
+\medskip
+\textbf{Step 2: Dependent family of vectors.}  
+We form a dependent function type:
+\[
+F : \Pi n:\mathbb{N}.\, \mathsf{Vec}(n).
+\]
+Given $n$, $F$ produces a vector of length $n$.
+
+\medskip
+\textbf{Step 3: Construct dependent pair.}  
+We bind the probabilistic result of $L$ with a vector of matching length:
+\[
+P \;=\; (\,L,\; \mathsf{Sphere}(n{:}\mathbb{N}.\, \mathsf{Vec}(n))\,) 
+   : \Sigma n:\mathbb{N}.\,\mathsf{Vec}(n).
+\]
+
+\medskip
+\textbf{Step 4: Probabilistic extension.}  
+If we evaluate $P$ operationally, we obtain:
+\[
+P \;\to\; \begin{cases}
+(0,\; \mathsf{Vec}(0)) & \text{with probability } p,\\[4pt]
+(1,\; \mathsf{Vec}(1)) & \text{with probability } 1-p.
+\end{cases}
+\]
+
+\medskip
+\textbf{Denotational semantics.}  
+In the presheaf topos enriched with the distribution monad, the denotation is:
+\[
+\llbracket P \rrbracket \;=\;
+p \cdot \delta_{(0,\;\mathsf{Vec}(0))} \;+\;
+(1-p) \cdot \delta_{(1,\;\mathsf{Vec}(1))}.
+\]
+
+\medskip
+\textbf{Interpretation.}  
+This term demonstrates how $\Sigma$-types interact with $\mathsf{Choice}$:
+the type of the second component (the vector) depends on the sampled value of
+the first component (the length). SPC thus supports \emph{probabilistic dependent
+structures}, where the sampled data determines the type of subsequent
+computation.
+
+\paragraph{Worked Example: Dependent Pairs under Merge.}
+
+Suppose we model two independent random processes that each return a natural
+number $n$ together with a dependent vector of length $n$.  
+
+\medskip
+\textbf{Step 1: Two independent probabilistic samplers.}  
+Let
+\[
+L_1 = \mathsf{Choice}(p,\,0,\,1) : \mathbb{N},
+\qquad
+L_2 = \mathsf{Choice}(q,\,1,\,2) : \mathbb{N}.
+\]
+Here, $L_1$ yields $0$ or $1$, while $L_2$ yields $1$ or $2$.
+
+\medskip
+\textbf{Step 2: Dependent pairs.}  
+We construct dependent pairs where the second component is a vector of the
+chosen length:
+\[
+P_1 = (\,L_1,\, \mathsf{Vec}(L_1)\,) : \Sigma n:\mathbb{N}.\,\mathsf{Vec}(n),
+\]
+\[
+P_2 = (\,L_2,\, \mathsf{Vec}(L_2)\,) : \Sigma m:\mathbb{N}.\,\mathsf{Vec}(m).
+\]
+
+\medskip
+\textbf{Step 3: Merge composition.}  
+We combine these two processes using \texttt{Merge}:
+\[
+M = \mathsf{Merge}(P_1, P_2).
+\]
+
+\medskip
+\textbf{Step 4: Operational behavior.}  
+Operationally, $M$ branches into the four possible outcomes:
+\[
+M \;\to\; \begin{cases}
+(0,\mathsf{Vec}(0)) \;\;||\;\; (1,\mathsf{Vec}(1)) & \text{with prob.\ } p \cdot q, \\[4pt]
+(0,\mathsf{Vec}(0)) \;\;||\;\; (2,\mathsf{Vec}(2)) & \text{with prob.\ } p \cdot (1-q), \\[4pt]
+(1,\mathsf{Vec}(1)) \;\;||\;\; (1,\mathsf{Vec}(1)) & \text{with prob.\ } (1-p) \cdot q, \\[4pt]
+(1,\mathsf{Vec}(1)) \;\;||\;\; (2,\mathsf{Vec}(2)) & \text{with prob.\ } (1-p)\cdot(1-q).
+\end{cases}
+\]
+
+\medskip
+\textbf{Step 5: Denotational interpretation.}  
+In the presheaf topos with distribution monad, $\mathsf{Merge}$ corresponds to
+the product measure of two independent distributions. Thus
+\[
+\llbracket M \rrbracket
+= \llbracket P_1 \rrbracket \otimes \llbracket P_2 \rrbracket,
+\]
+which is the convex combination above, represented as a joint distribution over
+dependent pairs.
+
+\medskip
+\textbf{Interpretation.}  
+This example shows how SPC can reason about \emph{dependent random structures in
+parallel}. Merge enforces independence at the semantic level (tensor product of
+distributions), while $\Sigma$-types ensure that each component is well-typed
+with respect to the dependent relation between the chosen number and the vector
+constructed from it. The combination thus yields a joint dependent distribution.
+
+\paragraph{Worked Example: Concatenation as a Pushforward.}
+
+Let $\mathsf{Vec}:\mathbb{N}\to\mathsf{Type}$ and let
+\[
+P_1 : \Sigma n:\mathbb{N}.\,\mathsf{Vec}(n)
+\qquad\text{and}\qquad
+P_2 : \Sigma m:\mathbb{N}.\,\mathsf{Vec}(m)
+\]
+be the dependent probabilistic pairs from the previous example. Define the
+dependent post-processing map
+\[
+\Phi \;:\;
+\big(\Sigma n:\mathbb{N}.\,\mathsf{Vec}(n)\big)
+\times
+\big(\Sigma m:\mathbb{N}.\,\mathsf{Vec}(m)\big)
+\;\longrightarrow\;
+\Sigma k:\mathbb{N}.\,\mathsf{Vec}(k)
+\]
+by
+\[
+\Phi\big((n,v),(m,w)\big) \;\triangleq\; \big(n{+}m,\;\mathsf{concat}(v,w)\big),
+\]
+where $\mathsf{concat}:\mathsf{Vec}(n)\times\mathsf{Vec}(m)\to\mathsf{Vec}(n{+}m)$
+is length-index respecting.
+
+\medskip
+\textbf{Typing.}
+For any $(n,v)$ and $(m,w)$ with $v:\mathsf{Vec}(n)$ and $w:\mathsf{Vec}(m)$,
+$\mathsf{concat}(v,w):\mathsf{Vec}(n{+}m)$; hence
+$\Phi((n,v),(m,w)):\Sigma k.\,\mathsf{Vec}(k)$ with $k=n{+}m$.
+By Cor.~\ref{cor:merge-pushforward}, $\Phi(\mathsf{Merge}(P_1,P_2))$ is
+well-typed.
+
+\medskip
+\textbf{Operational behavior.}
+If $P_1 \Rightarrow (n,v)$ and $P_2 \Rightarrow (m,w)$, then
+\[
+\mathsf{Merge}(P_1,P_2) \;\Rightarrow\; (n,v)\ \Vert\ (m,w)
+\quad\text{and}\quad
+\Phi\big(\mathsf{Merge}(P_1,P_2)\big)\;\Rightarrow\; \big(n{+}m,\;\mathsf{concat}(v,w)\big).
+\]
+
+\medskip
+\textbf{Denotational semantics (general form).}
+Write $\mu=\llbracket P_1 \rrbracket \in \mathsf{Dist}(\Sigma n.\,\mathsf{Vec}(n))$
+and $\nu=\llbracket P_2 \rrbracket \in \mathsf{Dist}(\Sigma m.\,\mathsf{Vec}(m))$,
+assumed independent. Then
+\[
+\llbracket \Phi(\mathsf{Merge}(P_1,P_2)) \rrbracket
+\;=\;
+\Phi_{\*}(\,\mu \otimes \nu\,)
+\;\in\; \mathsf{Dist}\!\big(\Sigma k.\,\mathsf{Vec}(k)\big),
+\]
+i.e.\ the pushforward of the product measure along
+$((n,v),(m,w)) \mapsto (n{+}m,\mathsf{concat}(v,w))$.
+
+\medskip
+\textbf{Binary-choice instance.}
+Instantiate $P_1,P_2$ with
+\[
+L_1=\mathsf{Choice}(p,0,1),\quad
+P_1=(L_1,\mathsf{Vec}(L_1)),
+\qquad
+L_2=\mathsf{Choice}(q,1,2),\quad
+P_2=(L_2,\mathsf{Vec}(L_2)).
+\]
+Then the four outcomes and their probabilities are:
+\[
+\begin{array}{c|c}
+\text{Outcome of } \Phi(\mathsf{Merge}(P_1,P_2))
+& \text{Probability} \\
+\hline
+\big(0{+}1,\;\mathsf{concat}(\mathsf{Vec}(0),\mathsf{Vec}(1))\big)
+& p\,q \\[2pt]
+\big(0{+}2,\;\mathsf{concat}(\mathsf{Vec}(0),\mathsf{Vec}(2))\big)
+& p\,(1-q) \\[2pt]
+\big(1{+}1,\;\mathsf{concat}(\mathsf{Vec}(1),\mathsf{Vec}(1))\big)
+& (1-p)\,q \\[2pt]
+\big(1{+}2,\;\mathsf{concat}(\mathsf{Vec}(1),\mathsf{Vec}(2))\big)
+& (1-p)\,(1-q)
+\end{array}
+\]
+Equivalently,
+\[
+\llbracket \Phi(\mathsf{Merge}(P_1,P_2)) \rrbracket
+= pq\,\delta_{(1,\_)} + p(1-q)\,\delta_{(2,\_)}
++ (1-p)q\,\delta_{(2,\_)} + (1-p)(1-q)\,\delta_{(3,\_)},
+\]
+where each Dirac mass is at the corresponding concatenated vector of the shown
+length (underscores emphasize value dependence on $v,w$).
+
+\medskip
+\textbf{Takeaway.}
+This instance illustrates Cor.~\ref{cor:merge-pushforward}: the **type-level
+shape** (the length index) evolves by the deterministic map $k=n{+}m$ while the
+**distribution** over shapes and values is exactly the pushforward of the joint
+(independent) distribution under concatenation. The construction is general:
+any dependent post-processing $\Phi$ (e.g.\ zipping, padding, folding) yields a
+well-typed SPC term whose semantics is the corresponding pushforward measure.
+
+
+Operational Semantics
+\label{sec:operational}
+
+
+$\beta$-Reduction and Pop
+
+
+\begin{align*}
+\mathrm{Pop}(\mathrm{Sphere}(x{:}A.\,t),u) &\;\to\; t[u/x] \\
+\mathrm{Nest}(t,u) &\;\to\; \mathrm{Pop}(t,u) \\
+\mathrm{Choice}(p,t,u) &\;\to\; \begin{cases}
+t & \text{with prob.\ } p \\
+u & \text{with prob.\ } 1-p
+\end{cases}
+\end{align*}
+
+
+Merge as Parallel Composition
+
+
+\[
+\mathrm{Merge}(t,u) \equiv \mathrm{Merge}(u,t),
+\quad
+\mathrm{Merge}(t,\mathrm{Merge}(u,v)) \equiv \mathrm{Merge}(\mathrm{Merge}(t,u),v)
+\]
+
+
+Choice (Internal and Monadic Variants)
+
+
+\subparagraph{Option B (Distribution Monad).}
+\[
+\inferrule*[right=Dist-Form]
+  {\Gamma \vdash A : \mathsf{Type}_i}
+  {\Gamma \vdash \mathsf{Dist}(A) : \mathsf{Type}_i}
+\]
+\begin{mathpar}
+\inferrule*[right=Choice-Dist]
+  {\Gamma \vdash p : \mathsf{Prob} \\
+   \Gamma \vdash t : A \\
+   \Gamma \vdash u : A}
+  {\Gamma \vdash \mathrm{Choice}(p,t,u) : \mathsf{Dist}(A)}
+\end{mathpar}
+
+
+Equational Properties of Merge
+
+
+The \texttt{Merge} operator in SPC is intended to model parallel or 
+nondeterministic composition. Its equational theory ensures that the operational, 
+type-theoretic, and denotational perspectives coincide.
+
+\paragraph{Commutativity and Associativity.}
+At the syntactic level, \texttt{Merge} is treated modulo the laws of a commutative 
+monoid (with unit $\mathsf{Skip}$, if introduced):
+\[
+\mathrm{Merge}(t,u) \;\equiv\; \mathrm{Merge}(u,t),
+\qquad
+\mathrm{Merge}(t,\mathrm{Merge}(u,v)) \;\equiv\; 
+\mathrm{Merge}(\mathrm{Merge}(t,u),v).
+\]
+These identifications allow arbitrary \texttt{Merge}-trees to be flattened into 
+multisets of branches.
+
+\paragraph{Idempotence (optional law).}
+If \texttt{Merge} is interpreted as nondeterministic disjunction, one may further 
+impose
+\[
+\mathrm{Merge}(t,t) \;\equiv\; t,
+\]
+yielding a commutative idempotent monoid. However, when \texttt{Merge} is 
+interpreted tensorially in a symmetric monoidal category, this law does not 
+hold in general. We therefore treat idempotence as an admissible equational 
+extension in the nondeterministic reading, but not in the tensorial semantics.
+
+\paragraph{Congruence.}
+\texttt{Merge} is a congruence with respect to SPC reduction:
+\[
+t \to t' \quad\implies\quad
+\mathrm{Merge}(t,u) \to \mathrm{Merge}(t',u),
+\]
+and symmetrically for the right argument. This ensures that parallel branches 
+reduce independently.
+
+\paragraph{Distribution over Choice.}
+Operationally, \texttt{Merge} distributes over \texttt{Choice} in the sense that
+\[
+\mathrm{Merge}(\mathrm{Choice}(p,t,u),v) 
+\;\;\Rightarrow\;\;
+\mathrm{Choice}\big(p,\mathrm{Merge}(t,v),\mathrm{Merge}(u,v)\big).
+\]
+This law ensures compositional alignment between parallel and probabilistic 
+constructs. In the distribution-monad semantics, it corresponds to bilinearity 
+of convex combinations.
+
+Equational Properties of Merge
+
+
+The \texttt{Merge} operator behaves as a commutative and associative 
+combiner of terms, subject to the following equations:
+
+\begin{align*}
+\mathrm{Merge}(t,u) &\equiv \mathrm{Merge}(u,t) \quad &&\text{(commutativity)} \\
+\mathrm{Merge}(t,\mathrm{Merge}(u,v)) &\equiv \mathrm{Merge}(\mathrm{Merge}(t,u),v) 
+  \quad &&\text{(associativity)} \\
+\mathrm{Merge}(t,t) &\equiv t \quad &&\text{(idempotence, optional)} \\
+\mathrm{Merge}(t,\mathbf{0}) &\equiv t \quad &&\text{(neutral element, if defined)}
+\end{align*}
+
+Here $\mathbf{0}$ denotes an optional identity element for \texttt{Merge}, 
+representing the absence of a branch. Together, these laws allow any nested 
+or reordered use of \texttt{Merge} to be flattened into a canonical form.
+
+\paragraph{Summary.}
+Thus, the equational properties of \texttt{Merge} situate SPC in the general 
+theory of symmetric monoidal categories. Depending on interpretation, 
+\texttt{Merge} may behave as:
+\begin{itemize}
+  \item a commutative monoid (nondeterministic or set-theoretic reading),
+  \item or a symmetric monoidal tensor (categorical reading).
+\end{itemize}
+Both views agree on commutativity, associativity, and congruence, while diverging 
+on idempotence. This flexibility allows SPC to uniformly encode both algebraic 
+nondeterminism and categorical concurrency.
+
+
+
+Denotational Semantics
+\label{sec:denotational}
+
+
+Presheaf Topos Semantics
+
+
+The presheaf category $[\mathsf{Sphere}^{op}, \mathsf{Set}]$ forms a topos, providing:
+\begin{itemize}
+\item Subobject classifier (truth sphere).
+\item Finite limits and colimits.
+\item Exponentials.
+\item Internal intuitionistic higher-order logic: propositions = subspheres; proofs = morphisms preserving truth.
+\end{itemize}
+
+\paragraph{Distribution monad on $\mathcal{E}$.}
+For each object $X$ of $\mathcal{E}$, let $\mathsf{Dist}(X)$ denote the object of
+\emph{finitely supported subprobability measures} on $X$ (presheafwise), with unit and bind:
+\[
+\eta_X : X \to \mathsf{Dist}(X)
+\qquad
+\mu^\sharp_{X,Y} : \mathsf{Dist}(X) \times (X \to \mathsf{Dist}(Y)) \to \mathsf{Dist}(Y)
+\]
+satisfying the monad laws (left/right unit and associativity). In syntax we write
+$\mathsf{return} \equiv \eta$ and $\mathsf{bind} \equiv \mu^\sharp$.
+
+\paragraph{Core clauses.}
+\[
+\begin{aligned}
+\llbracket \mathrm{Sphere}(x{:}A.\,t) \rrbracket
+&:\; \llbracket \Gamma \rrbracket \to \llbracket A \rrbracket \Rightarrow \llbracket B \rrbracket
+\quad\text{(exponential in } \mathcal{E}\text{)} \\
+\llbracket \mathrm{Pop}(t,u) \rrbracket
+&=\; \mathsf{ev} \circ \langle \llbracket t \rrbracket , \llbracket u \rrbracket \rangle
+\quad:\; \llbracket \Gamma \rrbracket \to \llbracket B \rrbracket \\
+\llbracket \mathrm{Merge}(t,u) \rrbracket
+&=\; \langle \llbracket t \rrbracket , \llbracket u \rrbracket \rangle
+\quad:\; \llbracket \Gamma \rrbracket \to \llbracket A \times A \rrbracket
+\end{aligned}
+\]
+
+\paragraph{Probabilities and Choice (Option B).}
+We interpret $\mathsf{Prob}$ as the presheaf of reals in $[0,1]$ (constant presheaf suffices).
+Given $p : \llbracket \Gamma \rrbracket \to [0,1]$ and $t,u : \llbracket \Gamma \rrbracket \to \llbracket A \rrbracket$,
+the denotation of \texttt{Choice} is the \emph{convex mixture}:
+\[
+\llbracket \mathrm{Choice}(p,t,u) \rrbracket
+\;=\;
+\big(\lambda \gamma.\; p(\gamma)\cdot \delta_{\llbracket t \rrbracket(\gamma)} \;+\; (1-p(\gamma))\cdot \delta_{\llbracket u \rrbracket(\gamma)} \big)
+\]
+
+Sphere/Pop as Exponentials
+
+
+In categorical semantics, $\lambda$-abstraction and application correspond to
+the exponential adjunction $C^{A} \dashv - \times A$. The \texttt{Sphere}
+operator in SPC generalizes abstraction by constructing a morphism
+$\mathsf{Sphere}(f) : A \to B$ as an object inside the exponential
+$B^{A}$. Operationally, entering a \texttt{Sphere} is equivalent to opening a
+scope, while \texttt{Pop} corresponds to instantiating this scope with an
+argument. Formally, given a context $\Gamma \vdash f : A \to B$, we define:
+\[
+  \Gamma \vdash \mathsf{Sphere}(f) : B^A
+  \qquad
+  \Gamma \vdash \mathsf{Pop}(\mathsf{Sphere}(f), a) : B.
+\]
+The $\beta$- and $\eta$-laws of SPC reproduce the expected adjunction laws of
+the exponential. In this sense, \texttt{Sphere/Pop} are not merely syntactic
+operators but geometric witnesses of the exponential structure in the
+underlying cartesian closed category.
+
+
+Merge as Tensor
+
+
+While ordinary $\lambda$-calculus models computation in a cartesian closed
+category (CCC), SPC extends the structure to a symmetric monoidal category,
+where \texttt{Merge} is interpreted as the tensor $\otimes$. Two computations
+$M$ and $N$ may be combined via
+\[
+  \Gamma \vdash M : A \quad \Delta \vdash N : B
+  \quad \implies \quad \Gamma, \Delta \vdash M \otimes N : A \otimes B.
+\]
+This generalizes parallel composition, enabling the expression of
+independent channels of computation. The associativity and symmetry laws of the
+monoidal tensor ensure that Merge is well-behaved up to canonical isomorphism:
+\[
+  (M \otimes N) \otimes P \cong M \otimes (N \otimes P),
+  \qquad
+  M \otimes N \cong N \otimes M.
+\]
+Thus \texttt{Merge} internalizes concurrency and compositional independence in
+a categorical framework, echoing both tensor products in linear logic and
+parallel composition in process calculi.
+
+
+Choice as Convex Mixture
+
+
+To model probabilistic branching, SPC introduces \texttt{Choice}. At the
+operational level, this corresponds to selecting among terms with given
+probabilities. Categorically, it is modeled as a convex combination of morphisms.
+For two computations $M, N : A$ and $p \in [0,1]$, we define:
+\[
+  \Gamma \vdash \mathsf{Choice}(p, M, N) : A
+\]
+with denotational interpretation
+\[
+  \llbracket \mathsf{Choice}(p, M, N) \rrbracket
+  = p \cdot \llbracket M \rrbracket + (1-p) \cdot \llbracket N \rrbracket.
+\]
+More generally, \texttt{Choice} extends to finite distributions
+$\{(p_i, M_i)\}_{i}$ with $\sum_i p_i = 1$. This interpretation equips SPC with
+the structure of a convex algebra, enabling probabilistic reasoning to be
+internalized into the type system.
+
+
+Distribution Monad Structure
+
+
+The probabilistic semantics of SPC is governed by the distribution monad
+$\mathcal{D}$ \cite{giry1982categorical}. Objects $A$ are mapped to probability
+measures $\mathcal{D}(A)$, and morphisms $f : A \to \mathcal{D}(B)$ are Markov
+kernels. The monadic unit $\eta : A \to \mathcal{D}(A)$ injects a pure value as
+a Dirac measure, while the Kleisli extension $f^\ast : \mathcal{D}(A) \to
+\mathcal{D}(B)$ defines the semantics of probabilistic bind. In SPC, the
+interpretation of \texttt{Choice} is given by convex linear combinations in
+$\mathcal{D}$, and the \texttt{Merge} operator lifts to independent product
+measures when applied to independent channels. Thus the distribution monad
+provides the categorical backbone for SPC’s probabilistic semantics, ensuring
+that randomness is compositional and well-behaved with respect to scope and
+parallelism.
+
+
+Meta-Theory
+\label{sec:meta}
+
+We establish several key meta-theoretic results for SPC. Proofs follow standard
+techniques from type theory and probabilistic semantics, adapted to the
+Sphere/Pop and Merge/Choice constructs.
+
+\paragraph{Preservation.}
+If $\Gamma \vdash M : A$ and $M \to M'$, then $\Gamma \vdash M' : A$.  
+This is proved by induction on typing derivations, with separate cases for
+\texttt{Sphere/Pop}, \texttt{Merge}, and \texttt{Choice} reductions.
+
+\paragraph{Progress.}
+If $\emptyset \vdash M : A$, then either $M$ is a value, or there exists $M'$
+such that $M \to M'$.  
+Probabilistic branching requires extending the progress theorem to guarantee
+that at least one reduct exists with nonzero probability.

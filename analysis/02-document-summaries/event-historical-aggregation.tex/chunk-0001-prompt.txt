@@ -1,15 +1,213 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 2 of a document called
+"event-historical-aggregation.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Algebraic Properties of Provenance‑Guarded Reducers**
 
-TEXT
-====
+---
+
+### 1.  Setting and Notation  
+
+* **Shard identifiers:** $\mathcal{S}$ (a countable set).  
+* **Reducer summary:** $(v,P)$ where $v\in V$ is a payload and $P\subseteq\[12D[K
+$P\subseteq\mathcal{S}$ is the *provenance* – the set of shard identifiers [K
+that contributed to this value.  
+
+We adopt the reducer operation $\diamond :V\times V\to V$, which we will tr[2D[K
+treat as **partial** because it depends on provenance constraints.
+
+---
+
+### 2.  Associativity  
+
+Let $a,b,c$ be three reducers with summaries $(v_a,P_a),(v_b,P_b),(v_c,P_c)[30D[K
+$(v_a,P_a),(v_b,P_b),(v_c,P_c)$.
+Associativity holds if for any *compatible* pairings of shards (i.e., the s[1D[K
+sets
+$P_a\cap P_b$, $P_b\cap P_c$, and $P_a\cap P_c$ are non‑empty) we have  
+
+\[
+((a\diamond b)\diamond c = a\diamond(b\diamond c)).
+\]
+
+**Proof Sketch**
+
+1. **Compatibility Condition:**  
+   The operation is defined only when the provenance sets of adjacent reduc[5D[K
+reducers
+   share at least one shard identifier, otherwise the merge would be “refus[6D[K
+“refused”.
+   Formally,
+   \[
+   P_a\cap P_b\neq\varnothing,\;P_b\cap P_c\neq\varnothing .
+   \]
+
+2. **Effect on Payloads:**  
+   When merging $(a\diamond b)$ and $c$, any shard that appears in both
+   $(a,b)$ (i.e., elements of $P_a\cap P_b$) is *re‑used* rather than creat[5D[K
+creating a new contribution.
+   Consequently the payload transformation behaves as a **composition** on [K
+the
+   carrier space $V$:
+   \[
+   v_{(a\diamond b)} = f_{b,c}(v_a),\qquad 
+   v_{((a\diamond b)\diamond c)} = f_c(v_{(a\diamond b)}) ,
+   \]
+   where \(f_{b,c}\) and \(f_c\) are partial functions that map the existin[7D[K
+existing
+   payload into a form compatible with $c$.
+
+3. **Identity Element:**  
+   The identity reducer for element $x\in V$ is defined as $(x,\varnothing)[16D[K
+$(x,\varnothing)$,
+   which trivially satisfies all compatibility constraints (there are no ot[2D[K
+other
+   shards to clash with).
+
+4. **Associativity Holds When Compatible:**  
+   By construction, if the required intersections exist, merging respects t[1D[K
+the order:
+   \[
+   ((a\diamond b)\diamond c) = a\diamond(b\diamond c),
+   \]
+   because each merge step only “adds” contributions that are already accou[5D[K
+accounted for
+   in the provenance. If any intersection is empty, the operation is refuse[6D[K
+refused,
+   yielding an *error reducer* (e.g., $\bot$), and both sides become undefi[6D[K
+undefined.
+   Hence associativity holds as a property of the allowed merger space.
+
+---
+
+### 3.  Commutativity  
+
+Commutativity would require that for compatible reducers $a,b$
+\[
+(a\diamond b) = (b\diamond a).
+\]
+
+**Why This Fails in General**
+
+1. **Order‑Dependent Provenance:**  
+   The provenance sets $P_a$ and $P_b$ may be disjoint or incomparable.
+   For example, suppose  
+
+   * $a$ aggregates from shards $\{s_1,s_2\}$,
+   * $b$ aggregates from shards $\{s_3,s_4\}$,
+
+   with no common shard identifiers. The merge $(a\diamond b)$ must first v[1D[K
+verify
+   that both contributing values are “eligible” (e.g., they satisfy a monot[5D[K
+monotonicity
+   constraint). This ordering matters: the payload transformation may depen[5D[K
+depend on
+   which reducer is applied first.
+
+2. **Partial Functions:**  
+   If $f_{b,a}$ and $f_{a,b}$ differ because of different provenance histor[6D[K
+histories,
+   then $(a\diamond b) \neq (b\diamond a)$. Hence commutativity does not ho[2D[K
+hold as an
+   axiom; it is only guaranteed when the *compatible* condition reduces to
+   “all shards are shared”.
+
+---
+
+### 4.  Idempotence  
+
+A reducer $r$ is idempotent if $r\diamond r = r$. This property holds **iff[5D[K
+**iff**
+the operation defined by $\diamond$ satisfies a certain normalisation:
+
+1. **Normalization Rule:**  
+   If the provenance of two reducers already overlaps, applying the merge a[1D[K
+again
+   does not change the payload:
+   \[
+   (r\diamond r) = r \quad\text{whenever}\quad P_r\cap P_r' \neq\varnothing[15D[K
+\neq\varnothing .
+   \]
+
+2. **Proof Sketch:**  
+   *When $P_r\cap P_r'$ is non‑empty*,
+   the second reducer contributes no new information (the shards are alread[6D[K
+already
+   accounted for), so applying $\diamond$ a second time yields exactly the [K
+same
+   payload and provenance as before.
+
+3. **Failure Case:**  
+   If $P_r\cap P_r'=\varnothing$, the merge is refused, resulting in an err[3D[K
+error
+   reducer (e.g., “undefined”). In that case $(r\diamond r)$ does not equal[5D[K
+equal $r$,
+   demonstrating that idempotence is *conditional* on compatibility.
+
+---
+
+### 5.  Summary of Derived Properties  
+
+| Property | Condition for Holding |
+|----------|-----------------------|
+| **Associativity** | Compatibility condition: $\exists$ common shards in a[1D[K
+adjacent reducer pairs. |
+| **Commutativity** | Only holds when all involved reducers share the same [K
+set of shard identifiers (i.e., $P_a\cap P_b = \{s_i,\dots\}$ covering both[4D[K
+both). |
+| **Idempotence** | Holds only if a reduction step is “redundant” due to sh[2D[K
+shared provenance; otherwise, refusal occurs. |
+
+These properties arise naturally from the *event‑historical* semantics of r[1D[K
+reducers,
+not from an axiomatic definition of $\diamond$. They explain why classical
+algebraic assumptions (associativity/commutativity for any inputs) do not a[1D[K
+apply:
+the operation is **policy‑dependent**, enforcing that only compatible contr[5D[K
+contributions
+may be merged.
+
+---
+
+**Conclusion**
+
+The algebraic structure of Spherepop reducers is inherently partial and gov[3D[K
+governed by
+provenance constraints. Associativity, commutativity, and idempotence are t[1D[K
+thus
+derived properties rather than imposed axioms, reflecting the commitment na[2D[K
+nature
+of event‑historical aggregation. This perspective clarifies where classical[9D[K
+classical
+algebraic identities hold and highlights the necessity of preservi[8D[K
+preserving provenance
+for meaningful aggregation.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[11pt]{article}
 

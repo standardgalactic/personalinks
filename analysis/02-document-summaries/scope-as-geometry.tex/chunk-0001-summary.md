@@ -1,129 +1,88 @@
-**Spherepop – A Discipline for Time‑Bound Systems**
+**Appendix A – Methodological Commitments**
+
+1. **Irreversibility as Primitive**  
+   - In Spherepop we take “causal commitment” (an irreversible action) to b[1D[K
+be a basic notion rather than something derived from reversibility.  
+   - This inversion leads directly to the design choices of *event‑based* h[1D[K
+history, replayable computation, and explicit branching.
+
+2. **Conservatism About Meaning**  
+   - Meaning is not inferred from behavior or patterns; it enters the syste[5D[K
+system only through *explicit events*.  
+   - All inference remains in the form of views (non‑authoritative represen[8D[K
+representations) that can be replaced without altering the authoritative se[2D[K
+semantic record.
+
+3. **Constructive Stance Toward Abstraction**  
+   - Any abstraction—whether a data type, control structure, or interface c[1D[K
+convention—is treated as an act that *ignores* certain distinctions, and th[2D[K
+those ignored distinctions must be recorded in trace form.  
+   - This ensures that every “shortcut” has a concrete counterpart (e.g., h[1D[K
+hidden state is always accompanied by a commit event).
+
+These commitments guide all design decisions: replay replaces mutable state[5D[K
+state as the primary execution model; identity is grounded in trace rather [K
+than appearance; and any speculative or alternative path must be explicitly[10D[K
+explicitly marked to prevent silent merging.
 
 ---
 
-### 1. Core Principles
+**Appendix B – Relation to Formal Calculi**
 
-| Principle | What It Means |
+Spherepop can be formalized as an extension of typed lambda calculus:
+
+| Primitive | Interpretation |
 |-----------|----------------|
-| **Irreversible Events (Causes)** | Every change to meaning must be record[6D[K
-recorded as an immutable event that cannot be undone or altered without cre[3D[K
-creating a new, distinct event. |
-| **Event Traces** | All semantic changes leave a trace; nothing semantical[10D[K
-semantically significant can happen outside the event interface. This makes[5D[K
-makes history visible and accountable. |
-| **Explicit Causal Links** | When a view influences decision‑making (e.g.,[6D[K
-(e.g., “I clicked this button”), that action is recorded as an event, not h[1D[K
-hidden in implicit state mutation. Undo/redo are expressed by adding new ev[2D[K
-events rather than erasing past ones. |
-| **Views Are Non‑Authoritative** | Representations derived from prefixes o[1D[K
-of the event history may be wrong or misleading because they do not alter r[1D[K
-reality; only explicit events change meaning. |
+| **Sphere (Σ)** | Represents the act of introducing a new object, relation[8D[K
+relation, or equivalence—i.e., an *event* that permanently changes the spac[4D[K
+space of possibilities. |
+| **Pop (π)**    | Models the computation over a prefix of events, yielding[8D[K
+yielding derived structures such as views or speculative branches. |
+| **Trace (Γ)**  | Guarantees that every state reachable from a given event[5D[K
+event history can be reconstructed via replay, preserving causality and non[3D[K
+non‑ergodicity. |
+
+Key formal properties:
+
+- **Reduction ≠ Rewrite**: Reduction is interpreted as the *application* of[2D[K
+of an event to its pre‑history, not merely syntactic transformation.
+- **Branching = Non‑Authoritative Views**: Speculative branches are kept se[2D[K
+separate (marked with a branching token) and must be committed via new Sphe[4D[K
+Sphere events to become authoritative.
+- **Type Safety & Adequacy**: By constraining abstraction to explicit commi[5D[K
+commitments, the calculus retains soundness (no hidden state) while allowin[7D[K
+allowing expressive computation.
+
+Related work demonstrates that such a reinterpretation preserves type safet[5D[K
+safety, compositional semantics, and adequacy without sacrificing performan[9D[K
+performance or expressiveness—showing Spherepop’s formal feasibility beyond[6D[K
+beyond its conceptual framework.
 
 ---
 
-### 2. Architectural Consequences
+**Appendix C – Replay, Speculation, and Branching**
 
-1. **Replay as Primary Execution Model**  
-   - Programs are executed by replaying a prefix of events rather than modi[4D[K
-modifying mutable state directly. This makes histories deterministic and ob[2D[K
-observable.
+1. **Replay as Interpretation**  
+   - Given any prefix of events (Γ₀), the system deterministically reconstr[8D[K
+reconstructs all objects, relations, and equivalences derived from Γ₀.  
+   - This enables late‑joining observers to step through execution history,[8D[K
+history, audit decisions, or simulate alternative runs without altering exi[3D[K
+existing authority.
 
-2. **Views vs. Events**  
-   - *Events* (causal commitments) become immutable entries in the system’s[8D[K
-system’s timeline.  
-   - *Views* (visualizations, summaries, predictions) are derived from thos[4D[K
-those events but cannot cause changes without being explicitly committed as[2D[K
-as new events.
+2. **Speculation via Branching Histories**  
+   - When exploring counterfactual scenarios (e.g., “what if we had chosen [K
+a different algorithm?”), a speculative branch is created that carries the [K
+label *non‑authoritative*.  
+   - The branch may evolve independently but must be committed through a su[2D[K
+subsequent Sphere event (e.g., “recorded policy change”) to become part of [K
+the authoritative history.
 
-3. **Identity Grounded in Traces**  
-   - Identity is tied to event traces; objects are distinguished by their u[1D[K
-unique sequences of events rather than static snapshots or identifiers that[4D[K
-that can be changed arbitrarily.
+3. **Preservation of Asymmetry**  
+   - Branches do not silently merge back into reality; they remain separate[8D[K
+separate until an explicit commit occurs, ensuring that only intentional ac[2D[K
+actions affect the semantic integrity of the system.
 
-4. **Scope Geometry**  
-   - Scope boundaries (events) define geometric regions where meaning chang[5D[K
-changes permanently, preserving a clear separation between “what is possibl[7D[K
-possible now” and “what was”.
-
----
-
-### 3. Implications for Interface Design
-
-- **User Actions:** Instead of directly mutating hidden state, user actions[7D[K
-actions are recorded as events. For example, selecting an item logs a *sele[5D[K
-*selection event* that may be undone by inserting a *deletion event*.
-- **Undo/Redo/Branching:** These operations are understood in terms of addi[4D[K
-adding new events (branches) or reversing the effect of existing ones rathe[5D[K
-rather than erasing history.
-- **Non‑Deterministic Outcomes:** Implicit dependencies (e.g., caching, heu[3D[K
-heuristics) must be made explicit as events; otherwise they silently reshap[6D[K
-reshape behavior.
-
----
-
-### 4. Relation to Automation & Intelligence
-
-- **Algorithms/Models:** Predictions or recommendations are treated as *vie[4D[K
-*views* until an event is explicitly added that records the model’s influen[7D[K
-influence on a decision.
-- **Avoiding Silent Mutation:** Learned models cannot silently alter rankin[6D[K
-rankings, exposures, or defaults without leaving a traceable causal record.[7D[K
-record.
-
----
-
-### 5. Limitations & When to Apply
-
-Spherepop is not a universal replacement for all formalisms but serves syst[4D[K
-systems where:
-
-- Meaning, identity, accountability, or trust depend on how things came to [K
-be.
-- Hidden state changes are sources of structural error (e.g., in distribute[10D[K
-distributed databases, finance, governance).
-
-These systems often become unmanageable when history and causality are trea[4D[K
-treated as secondary.
-
----
-
-### 6. Scope of Claims & Future Directions
-
-- **Discipline vs. Tool:** Spherepop introduces a discipline for constructi[10D[K
-constructing time‑bound systems rather than a single technique.
-- **Costs Involved:** Certain optimizations may be harder to justify, but t[1D[K
-this conservatism is intentional to preserve visibility and traceability.
-- **Applicability Across Domains:** The geometric treatment of scope unifie[6D[K
-unifies parsing, evaluation, deliberation, coordination, and identity acros[5D[K
-across diverse fields.
-- **Future Work:** Develop formal calculus formulations (extension of typed[5D[K
-typed lambda calculus) that retain these commitments without sacrificing ty[2D[K
-type safety or compositional semantics.
-
----
-
-### Appendix Summary
-
-**A. Methodological Commitments**  
-1. Treat irreversible action as primitive.  
-2. Meanings enter only through explicit events.  
-3. Abstractions must be explicitly traceable to preserve history.
-
-**B. Relation to Formal Calculi**  
-Spherepop can be expressed formally (extension of typed lambda calculus) wi[2D[K
-with primitives for structured composition and branching, preserving reduct[6D[K
-reduction semantics while making it an event rather than a rewrite.
-
-**C. Replay, Speculation, Branching**  
-Replay is interpretation; speculative outcomes are marked as non‑authoritat[14D[K
-non‑authoritative branches, allowing safe exploration without silent merge [K
-back into reality.
-
----
-
-In conclusion, Spherepop offers not merely a technical pattern but a founda[6D[K
-foundational discipline for building systems that remain intelligible and t[1D[K
-trustworthy over time by keeping history visible, events explicit, and mean[4D[K
-meaning anchored to immutable trace.
-
+These mechanisms collectively enforce a disciplined separation between *wha[4D[K
+*what is observed* and *how it influences future state*, aligning with Sphe[4D[K
+Spherepop’s core principle that meaning changes solely at explicit boundari[8D[K
+boundaries.

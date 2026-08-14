@@ -1,238 +1,127 @@
 **Recursive Containment and Deferred Closure**
 
-*Flyxion*  
-© All Rights Reserved  
+*Flyxion – A Survey*
 
 ---
 
-### Abstract
+### A. Formal Definitions Collected
 
-This paper develops a scope‑dynamic formalism for recursive containment tha[3D[K
-that complements predictive‑processing accounts of hierarchical inference. [K
-By treating semantic load as a function over nested bubbles (contextual bin[3D[K
-bindings, expectations, unresolved scopes) we show how the resolution opera[5D[K
-operator Pop can recursively collapse open structures when admissibility co[2D[K
-conditions are met. The framework distinguishes between conservative and ex[2D[K
-expansive reframes, demonstrating their topological effects on covering rel[3D[K
-relations and path lengths. Key applications include arithmetic induction, [K
-narrative comprehension, therapeutic reframing of trauma, and metaphorical [K
-expansion (e.g., treating “argument is war”). We argue that ordinary selfho[6D[K
-selfhood, suffering, grief, meditative dissolution, and pathological states[6D[K
-states are different parameter regimes of the same underlying recursive str[3D[K
-structure.
+For reference, the principal definitions of the paper are collected here in[2D[K
+in order of introduction.
 
----
+1. **Semantic Bubble (B = (C, E, U))**:  
+   - *Contextual binding set C*: Sets of variables or entities that partici[7D[K
+participate in a given scope.  
+   - *Expectation structure E*: A priori predictions about how the content [K
+should be organized.  
+   - *Unresolved load scalar U(B)*: Non‑negative measure of remaining uncer[5D[K
+uncertainty (e.g., entropy) within the bubble.
 
-## 1. Introduction
+2. **Containment Structure Σ = (B, ≺)**:  
+   - A finite set of bubbles B equipped with a strict partial order ≺ that [K
+defines parent–child relationships.  
+   - In the tree case every bubble has at most one immediate parent; in the[3D[K
+the DAG (directed acyclic graph) case this restriction is dropped.
 
-Predictive processing posits a brain as a Bayesian inference engine over hi[2D[K
-hierarchical generative models. Yet it lacks an explicit account of how unr[3D[K
-unresolved predictions cascade through multiple levels of expectation. Recu[4D[K
-Recursive containment theory fills this gap by describing nested, self‑refe[9D[K
-self‑referential scopes (semantic bubbles) that bind contexts, expectations[12D[K
-expectations, and forward‑directed loads.
+3. **Scope Stack Σt = [B₁, …, Bₙ]**: Linearizes the active containment path[4D[K
+path such that Bₙ is the currently attended scope.
 
----
+4. **Semantic Load Functional L(Σ) = ∑_i w_i U(B_i)**:  
+   - *wi* = function of distance di (how many hops away), stability si (how[4D[K
+(how solid the bubble feels), relevance ri (how pertinent to current concer[6D[K
+concerns), and context ci (environmental constraints).
 
-## 2. Formal Definitions
+5. **Resolution Operator ρ : B × Σ →ᵗ B′**:  
+   - Partially defined; a bubble can be resolved only if all of its descend[7D[K
+descendants are closed.
 
-### 2.1 Semantic Bubble  
+6. **Well‑nestedness at Position i**: Requires U(B_j) = 0 for all B_j ≺ B_i[3D[K
+B_i (i.e., the scope stack remains acyclic).
 
-A semantic bubble \(B = (C, E, U)\) consists of:
+7. **Primitive Operators**  
+   - *Open*: Introduces a new bubble into Σ without immediate resolution.  [K
 
-- **Contextual binding set** \(C\): items or states tied to a particular me[2D[K
-meaning.
-- **Expectation structure** \(E\): prior beliefs about the world encoded in[2D[K
-in \(C\).
-- **Unresolved load scalar** \(U(B)\): non‑negative measure of prediction e[1D[K
-error.
+   - *Pop*: Closes the topmost open bubble, potentially modifying parent sc[2D[K
+scopes.  
+   - *Meldπ*: Merges two bubbles via a specific merging rule π.  
+   - *Reframecϕ*: Changes containment relations according to constraints ϕ_[2D[K
+ϕ_c (e.g., narrative re‑interpretation).  
+   - *Reframeeϕ*: Adjusts expectations E based on new evidence or context ϕ[1D[K
+ϕ_e.
 
-### 2.2 Containment Structure  
-
-A containment structure \(\Sigma = (B, \prec)\) is a finite set of bubbles [K
-with a strict partial order \(\prec\) representing parent–child relationshi[11D[K
-relationships:
-
-- In the tree case each bubble has at most one immediate parent.
-- In the DAG case this restriction is dropped.
-
-### 2.3 Scope Stack  
-
-The scope stack \(\Sigma_t = [B_1, \ldots, B_n]\) linearizes the active con[3D[K
-containment path with \(B_n\) as the currently attended scope.
-
-### 2.4 Semantic Load Functional  
-
-\[
-L(\Sigma) = \sum_i w_i U(B_i)
-\]
-
-where weighting factors \(w_i = f(d_i, s_i, r_i, c_i)\) depend on bubble de[2D[K
-depth \(d_i\), salience \(s_i\), recency \(r_i\), and context relevance \(c[3D[K
-\(c_i\).
-
-### 2.5 Resolution Operator  
-
-The resolution operator \(\rho : B \times \Sigma \rightarrow B'\) is partia[6D[K
-partial and defined only if all descendants of the target bubble are closed[6D[K
-closed.
+8. **Conservative vs. Expansive Reframe**:  
+   - *Conservative* reframing keeps the transitive closure ≺∗ unchanged, en[2D[K
+ensuring no unnecessary extensions.  
+   - *Expansive* reframing extends ≺∗ (adding new parent relations), allowi[6D[K
+allowing broader semantic integration.
 
 ---
 
-## 3. Containment Dynamics
+### B. Worked Examples
 
-Recursive containment proceeds via admissible Pop operations:
+#### 1. Arithmetic Evaluation
 
-1. **Open**: Declare a bubble open (e.g., when its parent becomes eligible)[9D[K
-eligible).
-2. **Pop**: Resolve by collapsing to a parent, reducing load unless new unr[3D[K
-unresolved scopes appear.
-3. **Meld\(\pi\)**: Merge with another bubble under a shared expectation \([2D[K
-\(\pi\).
-4. **Reframec\(\phi\)** / **Reframede\(\psi\)**: Change the semantic embedd[6D[K
-embedding of the stack via mapping functions \(\phi, \psi\) that preserve o[1D[K
-or alter expectations.
+Consider the expression:  
 
-### 3.1 Well‑Nestedness  
+`(3 + (4 × (2 + 1)))`.
 
-A well‑nested bubble \(B_j\) satisfies:
+Stepwise reduction using recursive containment:
 
-\[
-U(B_k) = 0 \quad \forall B_k \prec B_j
-\]
+1. **Innermost**: `(2 + 1) = 3`.  
+   Stack becomes `[B₁, B₂]` with `U(B₂) = U(4 × 3)`.  
+2. **Next Level**: `4 × 3 = 12`.  
+   Now stack is `[B₁, B₃]`, where `B₃ = (4 × 3)` has zero unresolved load. [K
+ 
+3. **Outermost**: `3 + 12 = 15`.  
 
-Ensuring only closed ancestors allows safe Pop operations without propagati[9D[K
-propagating unresolved load to higher layers.
+Each arrow corresponds to an admissible Pop operation; the unresolved load [K
+monotonically decreases.
 
----
+#### 2. Narrative Induction
 
-## 4. Worked Examples
+Open a narrative with:
 
-### 4.1 Arithmetic  
+- **B₁** (Frame Story) → interrupt → open **B₂** (Embedded Story) → interru[7D[K
+interrupt → open **B₃** (Innermost Anecdote).  
 
-Evaluate the expression:
+Resolution cascade closes B₃ first, modifies B₂′; then modifies B₁′ and fin[3D[K
+finally empties the stack. Semantic load decreases uniformly.
 
-\[
-3 + (4 \times (2 + 1))
-\]
+#### 3. Conservative Reframe – Therapeutic Context
 
-Reduction proceeds as:
+- **Scenario**: A client holds a childhood trauma B_trauma as the enclosing[9D[K
+enclosing frame for their adult identity B_self.  
+- **Therapy Action**: Re‑frame trauma into a contained episode within broad[5D[K
+broader developmental narrative B_history.  
 
-\[
-(3 + (4 \times 3)) \rightarrow (3 + 12) \rightarrow 15
-\]
+Node set remains unchanged; ancestral graph structure is preserved, but cov[3D[K
+covering relations redistribute to reflect new semantic constraints.
 
-Each arrow represents an admissible Pop, starting with the innermost scope [K
-\(2+1\) because its interior is empty. Subsequent scopes become eligible fo[2D[K
-for pop once their ancestors resolve.
+#### 4. Expansive Reframe – Metaphorical Expansion
 
-### 4.2 Narrative Induction  
-
-Consider a story where:
-
-- **B1**: Frame story (outer context).
-- **B2**: Embedded episode.
-- **B3**: Inner anecdote.
-
-Resolution order: \(B_3\) pops first, modifying \(B_2'\); then \(B_2'\) pop[3D[K
-pops, modifying \(B_1'\); finally \(B_1'\) pops, emptying the stack. Semant[6D[K
-Semantic load decreases monotonically through each Pop.
-
-### 4.3 Conservative Reframe (Therapeutic)  
-
-A client with a traumatic experience bubble \(B_{\text{trauma}}\) as an enc[3D[K
-enclosing frame for adult identity \(B_{\text{self}}\). Therapeutic reframi[7D[K
-reframing maps \(B_{\text{trauma}}\) into a broader developmental narrative[9D[K
-narrative \(B_{\text{history}}\):
-
-- **Node set unchanged**.
-- **Ancestral graph remains**.
-- **Covering relations redistributed**, preserving original relationships.
-
-### 4.4 Expansive Reframe (Metaphor)  
-
-The domain of argumentation *Barg* acquires an additional parent scope \(B_[4D[K
-\(B_{\text{war}}\) via the metaphor “argument is war.” This extends the tra[3D[K
-transitive closure \(\prec^*\), adding new relational paths that are compat[6D[K
-compatible with existing constraints.
-
----
-
-## 5. Applications
-
-### 5.1 Ordinary Selfhood  
-
-Self‑model acts as a recursive bubble: present experience \(B_{\text{now}}\[17D[K
-\(B_{\text{now}}\) contains past episodic bubbles and future expectation bu[2D[K
-bubbles. High unresolved forward load (\(U(B_{\text{future}})\)) amplifies [K
-suffering only when the self‑hypothesis \(\Pi_{\text{self}}\) is sufficient[10D[K
-sufficiently precise, creating a cascade of unresolved scopes.
-
-### 5.2 Grief  
-
-Loss of a contextual anchor (e.g., domestic life) forces reorganization: hi[2D[K
-high \(U(B_{\text{future}})\) and low \(\Pi_{\text{self}}\) trigger closure[7D[K
-closure of many previously stable bubbles, leading to an exhausting process[7D[K
-process of relearning new containment relations.
-
-### 5.3 Meditative Dissolution  
-
-Meditation reduces precision weighting on deep priors (\(\Pi_d \rightarrow [K
-0\)), flattening the semantic curvature generated by \(B_{\text{self}}\). A[1D[K
-Attentional gradients relax, revealing local scope navigation without self‑[5D[K
-self‑indexing amplification.
-
-### 5.4 Pathological States  
-
-Excessive \(\Pi_{\text{self}}\) makes every open bubble self‑relevant, conv[4D[K
-converting unresolved load into unbearable suffering (anxiety disorders, ce[2D[K
-certain psychotomies).
-
----
-
-## 6. Conclusion
-
-Recursive containment provides a geometric restatement of predictive proces[6D[K
-processing: the former specifies the topological structure within which inf[3D[K
-inference operates, while the latter specifies the computational mechanism [K
-itself. Together they unify ordinary cognition, self‑related phenomena, and[3D[K
-and pathological states under one framework.
+- **Domain**: Argument Barg (Barg) acquires an additional parent scope B_wa[4D[K
+B_war through metaphor “argument = war.”  
+- **Result**: The transitive closure ≺∗ is extended, embedding Barg within [K
+a new domain; compatibility checks ensure properties from B_war align with [K
+Barg’s existing constraints.
 
 ---
 
 ### References
 
 1. Henk Barendregt. *The Lambda Calculus: Its Syntax and Semantics*. North‑[6D[K
-North‑Holland,
-   1984.
-2. John Baez & Bob Coecke, editors. *Applied Category Theory 2019*. Electro[7D[K
-Electronic Notes in
-   Theoretical Computer Science, 2020.
+North‑Holland, 1984.
+2. John Baez & Bob Coecke (editors). *Applied Category Theory 2019*. Electr[6D[K
+Electronic Notes in Theoretical Computer Science, 2020.
 3. Gilles Fauconnier & Mark Turner. *The Way We Think: Conceptual Blending [K
-and the Mind’s
-   Hidden Complexities*. Basic Books, 2002.
+and the Mind’s Hidden Complexities*. Basic Books, 2002.
 4. Douglas Hofstadter. *Gödel, Escher, Bach: An Eternal Golden Braid*. Basi[4D[K
-Basic Books,
-   1979.
+Basic Books, 1979.
 5. Alicia Juarrero. *Dynamics in Action: Intentional Behavior as a Complex [K
-System*. MIT
-   Press, 1999.
+System*. MIT Press, 1999.
 6. George Lakoff & Mark Johnson. *Metaphors We Live By*. University of Chic[4D[K
-Chicago Press,
-   1980.
-7. Erik Meijer, Maarten Fokkinga, & Ross Paterson. *Functional Programming [K
-with Bananas,
-   Lenses, Envelopes and Barbed Wire*. In *FPCA ’91: Functional Programming[11D[K
-Programming Languages
-   and Computer Architecture*, pages 124–144. Springer, 1991.
-8. Karl Friston & Susan Blackmore. *Why do models suffer? Consciousness, Se[2D[K
-Self‑evidencing,
-   and Mortal Computation*. Transcript of conversation, 2023.
-9. Saunders Mac Lane. *Categories for the Working Mathematician*. Springer,[9D[K
-Springer, 2nd edition,
-   1998.
+Chicago Press, 1980.
 
 ---
 
-**End of Document**
-
+*© Flyxion Project – Recursive Containment and Deferred Closure, 2023.*

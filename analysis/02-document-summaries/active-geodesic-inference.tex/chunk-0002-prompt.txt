@@ -1,15 +1,196 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 3 of a document called
+"active-geodesic-inference.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Active Geodesic Inference (AGI) – Axiomatic Foundations**
 
-TEXT
-====
+Below we summarize the core ideas encapsulated in Axioms 1‑6 that together [K
+define *active geodesic inference* as a principled computational model. Eac[3D[K
+Each axiom enforces a distinct structural constraint—attention, synchroniza[11D[K
+synchronization, stability of reasoning, and irreversibility—that collectiv[9D[K
+collectively guarantee coherent, thermodynamically driven inference.
+
+---
+
+### 1. Provenance & Irreversibility (Axiom 1)
+
+- **Provenance**: Every step in the computation is indexed by its execution[9D[K
+execution history. This prevents “forgetting” earlier decisions, preserving[10D[K
+preserving a traceable lineage.
+- **Irreversibility**: Execution must obey an entropy‑non‑increasing rule; [K
+any state change can only occur if it lowers (or at least does not raise) t[1D[K
+the total semantic energy.
+
+---
+
+### 2. Variational Dynamics & RSVP Hamiltonian (Axiom 2)
+
+- The variational principle selects *active geodesics*—paths that minimize [K
+a cost functional analogous to the **Reward‑Value‑Policy (RVP)** Hamiltonia[10D[K
+Hamiltonian.
+- This yields a deterministic rule for choosing among equivalent outcomes, [K
+ensuring consistent reasoning across repeated trials.
+
+---
+
+### 3. Gibbsian Energy & Entropy (Axiom 3)
+
+- **Gibbs Kernel**: The probability of moving from semantic locus *i* to *j[2D[K
+*j* is given by  
+  \[
+  p(i\to j)\propto e^{-\beta E_{ij}},
+  \]  
+  where \(E_{ij}\) reflects the effective “energy” (cost, uncertainty) and [K
+\(\beta>0\) controls temperature.
+- **Entropy**: The total semantic entropy is non‑decreasing; only actions t[1D[K
+that lower free energy are permitted.
+
+---
+
+### 4. Multi‑Component Synchronization (Axiom 5)
+
+- Each locus \(i\) carries a five‑dimensional order parameter  
+  \[
+  q_i=(q_i^{(1)},\dots,q_i^{(5)}),
+  \]  
+  whose components are coupled via positive intra‑locus terms, promoting al[2D[K
+alignment:  
+  \[
+  \mathcal{E}_{\text{sync}}=-\sum_{k\neq\ell}K_{k\ell}\langle q_i^{(k)},q_i[13D[K
+q_i^{(k)},q_i^{(\ell)}\rangle,\quad K_{k\ell}>0.
+  \]
+- **Symmetry‑Breaking Phase Transition**: Disordered (unaligned) states are[3D[K
+are unstable; ordered alignments correspond to the *coherent reasoning* pha[3D[K
+phase.
+
+---
+
+### 5. Semantic Isomeric Multiplicity (Axiom 6)
+
+- Multiple distinct stationary histories may satisfy the variational condit[6D[K
+condition but produce identical external observables \(\mathcal{O}\).  
+  This captures “semantic isomers” that cannot be merged without additional[10D[K
+additional compatibility checks, explaining why naïve mixture or distillati[10D[K
+distillation often degrades performance.
+
+---
+
+### Consequences & Normal Form
+
+Collectively, Axioms 1‑6 define **Spherepop** as the *syntactic normal form[4D[K
+form* of active geodesic inference:
+
+- It is event‑based (history indexed), provenance‑sensitive, and entropy‑mo[10D[K
+entropy‑monotonic.
+- The RSVP Hamiltonian emerges from Axiom 2 together with energy fields enc[3D[K
+encoded in Axioms 3 & 4.
+- The five‑dimensional Ising model arises as a coarse‑grained limit of Axio[4D[K
+Axiom 5.
+
+---
+
+### Remark on Minimality
+
+Each axiom is essential:
+
+| Removed Axiom | Effect |
+|---------------|--------|
+| 1 (Provenance) | Loss of distinction between reasoning “isomers”; outputs[7D[K
+outputs no longer imply unique internal structure. |
+| 2 (Variational) | No geodesic selection; inference becomes unconstrained [K
+search, undermining stability and privacy guarantees. |
+| 3 (Thermodynamics) | Reversible execution allowed → undermines entropy mo[2D[K
+monotonicity & energy cost constraints. |
+| 4 (Gibbs Kernel) | Attention no longer tied to energetic bond selection; [K
+reasoning topology collapses. |
+| 5 (Synchronization) | Reasoning reduces to scalar optimization, losing mu[2D[K
+multi‑component coherence. |
+| 6 (Isomeric Multiplicity) | Mixtures of strong systems appear indistingui[11D[K
+indistinguishable → performance degradation despite correct outputs. |
+
+Thus the full theory requires exactly these structural commitments.
+
+---
+
+### Appendix C – Typed Operational Semantics for Spherepop
+
+**Configuration**: A program state is a pair \(\langle\Gamma,\Sigma\rangle\[30D[K
+\(\langle\Gamma,\Sigma\rangle\) where:
+
+- **\(\Gamma\)** encodes semantic commitments (type annotations).
+- **\(\Sigma\)** holds the current scope stack and event history.
+
+**Typing Judgment**:  
+\[
+\Gamma \vdash e : \tau [E,S],
+\]  
+meaning expression *e* yields value of type \(\tau\) while incurring at mos[3D[K
+most energetic cost \(E\) and entropy contribution \(S\).
+
+**Scopes as Typed Energy Cells**
+
+- Entering a scope adds a fresh context extension:  
+  \[
+  \Gamma \;\mapsto\; \Gamma, x : \tau [E_x,S_x].
+  \]  
+- **Energy Constraint**: Scope entry is allowed only if the parent’s action[6D[K
+action decrease satisfies \(E_{\text{parent}} \ge E_{\text{child}}\). This [K
+enforces geodesic descent (Axiom 2).
+
+**Entropy Invariant**
+
+For any transition:  
+\[
+S(\Sigma') \ge S(\Sigma),
+\]  
+with strict inequality for scope exits. Closed scopes erase internal entrop[6D[K
+entropy, ensuring irreversibility.
+
+**Reflective & Exploratory Operations**
+
+- Reflective steps are *entropy‑neutral* but may increase local energy, com[3D[K
+compensated later; exploratory branches can temporarily raise \(S\) (provid[7D[K
+(provided they stay within the scope).
+
+**Action Boundedness Theorem**
+
+If a Spherepop program \(P\) is well‑typed with global bounds \([\mathcal{E[13D[K
+\([\mathcal{E}_0,\mathcal{S}_0]\), every execution trace corresponds to an [K
+RSVP action ≤ \(\mathcal{E}_0\) and entropy that monotonically increases fr[2D[K
+from at least \(\mathcal{S}_0\).
+
+---
+
+**In Summary**: The axiomatic framework, together with the typed operationa[10D[K
+operational semantics, guarantees that inference is both *active* (minimizi[9D[K
+(minimizing a variational cost) and *thermodynamically grounded*, preservin[9D[K
+preserving provenance, irreversibility, and coherence across semantic loci.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 The definition of intelligence advanced in this work admits a direct and non-metaphorical extension to biological evolution. In evolutionary theory, populations are traditionally described as distributions over genotypes or phenotypes evolving under selection, mutation, and drift. Recast in the present framework, evolution is more precisely understood as the persistence of viable trajectories through a high-dimensional biological configuration space.
 

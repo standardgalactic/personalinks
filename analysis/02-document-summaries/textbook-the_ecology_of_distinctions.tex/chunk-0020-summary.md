@@ -1,154 +1,183 @@
-Below are concise “summary formulae” that capture the main relations used t[1D[K
-throughout the document.
+Below are compact “summary‑formula” versions of the key results that appear[6D[K
+appear throughout the document.
 
 ---
 
-### 1. Memory‐Weight Dynamics (Decay)
+### 1. Memory Decay (Exponential Forgetting)
 
-For memory weights \(w_i(t)\) decaying exponentially,
+* **Weight dynamics**  
+  \[
+  \frac{dw_i}{dt}= -\lambda_i w_i ,\qquad \lambda_i\ge0 .
+  \]
+
+* **Solution**  
+  \[
+  w_i(t)=w_i(0)\,e^{-\lambda_i t}.
+  \]
+
+* **Memory field (single cue)**  
+  \[
+  M(x,t)=\sum_i w_i(0) e^{-\lambda_i t} K(x,e_i).
+  \]
+
+**Exponential Forgetting Theorem**
+
+If all decay rates satisfy  
 
 \[
-\frac{dw_i}{dt}= -\lambda_i w_i,\qquad \lambda_i\ge0,
+\lambda_i\ge\lambda_{\min}>0,
 \]
 
-the solution is
+then for any time \(t\)
 
 \[
-w_i(t)=w_i(0)e^{-\lambda_i t}.
+M(x,t)\le e^{-\lambda_{\min}t}\,M(x,0).
 \]
 
-The total memory field at time \(t\) and location \(x\) is a weighted sum o[1D[K
-of kernel‐center locations:
-
-\[
-M(x,t)=\sum_{i} w_i(0)e^{-\lambda_i t}\,K(x,e_i).
-\]
+*Proof sketch*: each term is bounded by \(e^{-\lambda_{\min}t}\) and the su[2D[K
+sum of non‑negative weights gives the inequality.
 
 ---
 
-### 2. Exponential Forgetting Theorem  
+### 2. Reinforcement
 
-If all decay rates satisfy \(\lambda_i\ge\lambda_{\min}>0\),
+Adding a constant reinforcement signal  
 
 \[
-M(x,t)\le e^{-\lambda_{\min}t}\,M(x,0),
+r_i(t)=r_i\quad(\text{constant}),
 \]
 
-so the field decays at least as fast as a uniform exponential with rate \(\[3D[K
-\(\lambda_{\min}\).
+the dynamics become  
+
+\[
+\frac{dw_i}{dt}= -\lambda_i w_i + \eta_i r_i .
+\]
+
+**Solution**
+
+\[
+w_i(t)=w_i(0)e^{-\lambda_i t}+ \frac{\eta_i r_i}{\lambda_i}\bigl(1-e^{-\lam[31D[K
+r_i}{\lambda_i}\bigl(1-e^{-\lambda_i t}\bigr).
+\]
+
+**Reinforced Memory Equilibrium Theorem**
+
+Under constant reinforcement the equilibrium weight is  
+
+\[
+w_i^*=\frac{\eta_i r_i}{\lambda_i}.
+\]
+
+*(Proof: set \(\partial w_i/\partial t=0\) → \(-\lambda_i w_i+\eta_i r_i=0\[6D[K
+r_i=0\).)*
 
 ---
 
-### 3. Recall Time Bound  
+### 3. Kernel Representation of Memory
 
-When the initial memory field satisfies \(M(x,0)>\theta\) and all traces de[2D[K
-decay at common rate \(\lambda\),
+Feature map \(\Granite:X\to\mathcal H_K\) satisfies  
 
 \[
-t < \frac{1}{\lambda}\log\!\left(\frac{M(x,0)}{\theta}\right)
+K(x,e)=\langle\Granite(x),\Granite(e)\rangle_{\mathcal H_K}.
 \]
 
-ensures that recall persists until the threshold is reached.
-
----
-
-### 4. Reinforcement Dynamics  
-
-With reinforcement \(r_i(t)\ge0\) (constant), cue exposure adds
+Hence the memory field can be written as a linear functional:
 
 \[
-\frac{dw_i}{dt}= -\lambda_i w_i + \eta_i r_i,
-\]
-
-yielding a steady‑state weight
-
-\[
-w_i^* = \frac{\eta_i r_i}{\lambda_i}.
-\]
-
----
-
-### 5. Kernel Memory Representation  
-
-Mapping cue locations to reproducing‑kernel Hilbert space via feature map \[1D[K
-\(\Granite\),
-
-\[
-K(x,e)=\langle\Granite(x),\Granite(e)\rangle_{\mathcal H_K},
-\]
-
-the memory field becomes
-
-\[
-M(x,t)=\big\langle\Granite(x),\sum_i w_i(t)\,\Granite(e_i)\big\rangle_{\mat[38D[K
-w_i(t)\,\Granite(e_i)\big\rangle_{\mathcal H_K}
-      =\langle\Granite(x),m(t)\rangle_{\mathcal H_K},
-\]
-
-with the feature‑space memory vector
-
-\[
+M(x,t)=\big\langle\Granite(x),\,m(t)\big\rangle_{\mathcal H_K},
+\qquad 
 m(t)=\sum_i w_i(t)\,\Granite(e_i).
 \]
 
-Thus recall is linear in kernel space even though it appears nonlinear in o[1D[K
-original cue space.
+**Kernel Representation of Memory Proposition**
+
+The memory field is linear in kernel feature space (though nonlinear in ori[3D[K
+original cue space).
 
 ---
 
-### 6. False Recall Region  
+### 4. False Recall
 
-Define intended region \(B(r)=\bigcup_i B_i(r)\). The false‑recall (spuriou[8D[K
-(spurious) set is
+Define intended recall region  
 
 \[
-F_\theta(t)=E_\theta(t)\setminus B(r),
+B(r)=\bigcup_i B_i(r),
+\]
+where \(B_i(r)=\{x:d(x,e_i)<r\}\).  
+False‑recall region:
+
+\[
+F_\theta(t)=E_\theta(t)\setminus B(r).
 \]
 
-and its measure gives the false‑recall rate
+*False Recall Rate*
 
 \[
 \mathrm{FR}(t)=\frac{\mu(F_\theta(t))}{\mu(E_\theta(t))}
-               \quad(\text{provided }\mu(E_\theta(t))>0).
+\quad(\text{provided }\mu(E_\theta(t))>0).
 \]
 
 ---
 
-### 7. Memory Capacity Bound  
+### 5. Memory Capacity Bound
 
-If cue space has finite measure \(\mu(X)<\infty\) and each event’s recall n[1D[K
-neighborhood \(B_i(r_\theta)\) must stay disjoint, the maximal number of no[2D[K
-non‑interfering memories is
+Assume each memory has a disjoint recall neighborhood of radius \(r_\theta\[11D[K
+\(r_\theta\) and cue space measure  
 
 \[
-N_{\max}\le \frac{\mu(X)}{b_\theta},
+\mu(X)<\infty.
 \]
 
-where \(b_\theta=\mu(B_i(r_\theta))\) is the measure of a single recall bal[3D[K
-ball.
+If the ball measure is  
+
+\[
+b_\theta=\mu(B_i(r_\theta)),
+\]
+
+the maximum number of non‑interfering memories is
+
+\[
+N_{\max}\le \frac{\mu(X)}{b_\theta}.
+\]
+
+**Noninterference Capacity Bound Theorem**
+
+For unambiguous recall (disjoint ecphoric neighborhoods),
+
+\[
+N\le \frac{\mu(X)}{b_\theta}.
+\]
+
+*(Proof: the union of \(N\) disjoint balls has measure at most \(Nb_\theta\[12D[K
+\(Nb_\theta\), which must be ≤ \(\mu(X)\).)*
 
 ---
 
-### 8. Recoverability–Basin Relation  
+### 6. Recoverability–Basin Relation (Repair Interpretation)
 
-For a Gaussian memory trace, recoverability (the fraction of space where we[2D[K
-weight exceeds threshold \(\theta\)) scales with the ecphoric radius
-
-\[
-r_\theta = \sigma\sqrt{2\log\!\left(\frac{w_i}{\theta}\right)},
-\]
-
-so that
+For a Gaussian trace with weight \(w_i>\theta\),
 
 \[
-\reco(e_i)=\mu(B_i(r_\theta))
+r_\theta = \sigma\sqrt{2\log\!\bigl(w_i/\theta\bigr)}.
 \]
 
-increases monotonically with \(r_\theta\) (and thus with \(\sigma\)).
+Thus recoverability is proportional to the basin radius:
+
+**Recoverability–Basin Proposition**
+
+For single‑trace Gaussian memory,
+
+\[
+\text{recoverability}\propto r_\theta,
+\]
+i.e. it increases monotonically with \(r_\theta\) (and therefore with \(\si[5D[K
+\(\sigma\sqrt{2\log(w_i/\theta)}\)).
+
+*(Proof: the basin of influence under Euclidean distance is monotone in rad[3D[K
+radius, so larger ecphoric neighborhoods imply higher recoverability.)*
 
 ---
 
-These formulae encapsulate the core mathematical relationships presented in[2D[K
-in the document, linking dynamics of memory weights to theoretical limits o[1D[K
-on recall fidelity and capacity.
-
+These concise formulae capture the essential mathematical relations derived[7D[K
+derived throughout the document and can be used as reference points for fur[3D[K
+further analysis or implementation.

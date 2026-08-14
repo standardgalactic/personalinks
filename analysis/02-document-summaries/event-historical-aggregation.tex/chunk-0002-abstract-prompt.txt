@@ -1,0 +1,1392 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Algebraic Properties of Provenance‑Guarded Reducers**
+
+---
+
+### 1.  Setting and Notation  
+
+* **Shard identifiers:** $\mathcal{S}$ (a countable set).  
+* **Reducer summary:** $(v,P)$ where $v\in V$ is a payload and $P\subseteq\[12D[K
+$P\subseteq\mathcal{S}$ is the *provenance* – the set of shard identifiers [K
+that contributed to this value.  
+
+We adopt the reducer operation $\diamond :V\times V\to V$, which we will tr[2D[K
+treat as **partial** because it depends on provenance constraints.
+
+---
+
+### 2.  Associativity  
+
+Let $a,b,c$ be three reducers with summaries $(v_a,P_a),(v_b,P_b),(v_c,P_c)[30D[K
+$(v_a,P_a),(v_b,P_b),(v_c,P_c)$.
+Associativity holds if for any *compatible* pairings of shards (i.e., the s[1D[K
+sets
+$P_a\cap P_b$, $P_b\cap P_c$, and $P_a\cap P_c$ are non‑empty) we have  
+
+\[
+((a\diamond b)\diamond c = a\diamond(b\diamond c)).
+\]
+
+**Proof Sketch**
+
+1. **Compatibility Condition:**  
+   The operation is defined only when the provenance sets of adjacent reduc[5D[K
+reducers
+   share at least one shard identifier, otherwise the merge would be “refus[6D[K
+“refused”.
+   Formally,
+   \[
+   P_a\cap P_b\neq\varnothing,\;P_b\cap P_c\neq\varnothing .
+   \]
+
+2. **Effect on Payloads:**  
+   When merging $(a\diamond b)$ and $c$, any shard that appears in both
+   $(a,b)$ (i.e., elements of $P_a\cap P_b$) is *re‑used* rather than creat[5D[K
+creating a new contribution.
+   Consequently the payload transformation behaves as a **composition** on [K
+the
+   carrier space $V$:
+   \[
+   v_{(a\diamond b)} = f_{b,c}(v_a),\qquad 
+   v_{((a\diamond b)\diamond c)} = f_c(v_{(a\diamond b)}) ,
+   \]
+   where \(f_{b,c}\) and \(f_c\) are partial functions that map the existin[7D[K
+existing
+   payload into a form compatible with $c$.
+
+3. **Identity Element:**  
+   The identity reducer for element $x\in V$ is defined as $(x,\varnothing)[16D[K
+$(x,\varnothing)$,
+   which trivially satisfies all compatibility constraints (there are no ot[2D[K
+other
+   shards to clash with).
+
+4. **Associativity Holds When Compatible:**  
+   By construction, if the required intersections exist, merging respects t[1D[K
+the order:
+   \[
+   ((a\diamond b)\diamond c) = a\diamond(b\diamond c),
+   \]
+   because each merge step only “adds” contributions that are already accou[5D[K
+accounted for
+   in the provenance. If any intersection is empty, the operation is refuse[6D[K
+refused,
+   yielding an *error reducer* (e.g., $\bot$), and both sides become undefi[6D[K
+undefined.
+   Hence associativity holds as a property of the allowed merger space.
+
+---
+
+### 3.  Commutativity  
+
+Commutativity would require that for compatible reducers $a,b$
+\[
+(a\diamond b) = (b\diamond a).
+\]
+
+**Why This Fails in General**
+
+1. **Order‑Dependent Provenance:**  
+   The provenance sets $P_a$ and $P_b$ may be disjoint or incomparable.
+   For example, suppose  
+
+   * $a$ aggregates from shards $\{s_1,s_2\}$,
+   * $b$ aggregates from shards $\{s_3,s_4\}$,
+
+   with no common shard identifiers. The merge $(a\diamond b)$ must first v[1D[K
+verify
+   that both contributing values are “eligible” (e.g., they satisfy a monot[5D[K
+monotonicity
+   constraint). This ordering matters: the payload transformation may depen[5D[K
+depend on
+   which reducer is applied first.
+
+2. **Partial Functions:**  
+   If $f_{b,a}$ and $f_{a,b}$ differ because of different provenance histor[6D[K
+histories,
+   then $(a\diamond b) \neq (b\diamond a)$. Hence commutativity does not ho[2D[K
+hold as an
+   axiom; it is only guaranteed when the *compatible* condition reduces to
+   “all shards are shared”.
+
+---
+
+### 4.  Idempotence  
+
+A reducer $r$ is idempotent if $r\diamond r = r$. This property holds **iff[5D[K
+**iff**
+the operation defined by $\diamond$ satisfies a certain normalisation:
+
+1. **Normalization Rule:**  
+   If the provenance of two reducers already overlaps, applying the merge a[1D[K
+again
+   does not change the payload:
+   \[
+   (r\diamond r) = r \quad\text{whenever}\quad P_r\cap P_r' \neq\varnothing[15D[K
+\neq\varnothing .
+   \]
+
+2. **Proof Sketch:**  
+   *When $P_r\cap P_r'$ is non‑empty*,
+   the second reducer contributes no new information (the shards are alread[6D[K
+already
+   accounted for), so applying $\diamond$ a second time yields exactly the [K
+same
+   payload and provenance as before.
+
+3. **Failure Case:**  
+   If $P_r\cap P_r'=\varnothing$, the merge is refused, resulting in an err[3D[K
+error
+   reducer (e.g., “undefined”). In that case $(r\diamond r)$ does not equal[5D[K
+equal $r$,
+   demonstrating that idempotence is *conditional* on compatibility.
+
+---
+
+### 5.  Summary of Derived Properties  
+
+| Property | Condition for Holding |
+|----------|-----------------------|
+| **Associativity** | Compatibility condition: $\exists$ common shards in a[1D[K
+adjacent reducer pairs. |
+| **Commutativity** | Only holds when all involved reducers share the same [K
+set of shard identifiers (i.e., $P_a\cap P_b = \{s_i,\dots\}$ covering both[4D[K
+both). |
+| **Idempotence** | Holds only if a reduction step is “redundant” due to sh[2D[K
+shared provenance; otherwise, refusal occurs. |
+
+These properties arise naturally from the *event‑historical* semantics of r[1D[K
+reducers,
+not from an axiomatic definition of $\diamond$. They explain why classical
+algebraic assumptions (associativity/commutativity for any inputs) do not a[1D[K
+apply:
+the operation is **policy‑dependent**, enforcing that only compatible contr[5D[K
+contributions
+may be merged.
+
+---
+
+**Conclusion**
+
+The algebraic structure of Spherepop reducers is inherently partial and gov[3D[K
+governed by
+provenance constraints. Associativity, commutativity, and idempotence are t[1D[K
+thus
+derived properties rather than imposed axioms, reflecting the commitment na[2D[K
+nature
+of event‑historical aggregation. This perspective clarifies where classical[9D[K
+classical
+algebraic identities hold and highlights the necessity of preservi[8D[K
+preserving provenance
+for meaningful aggregation.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: event-historical-aggregation.tex
+
+NEW CHUNK
+=========
+
+\begin{definition}[Admissible Merge]
+The merge operation $\oplus$ is a partial binary operation on reducer summaries
+defined by
+\[
+(v_1, P_1) \oplus (v_2, P_2)
+\]
+if and only if $P_1 \cap P_2 = \varnothing$, in which case
+\[
+(v_1, P_1) \oplus (v_2, P_2) := (v_1 \diamond v_2, P_1 \cup P_2).
+\]
+If $P_1 \cap P_2 \neq \varnothing$, the merge is undefined.
+\end{definition}
+
+Undefinedness corresponds exactly to refusal in the event--historical semantics.
+
+
+
+Monotonicity and Strict Growth
+
+
+
+\begin{proposition}[Strict Provenance Growth]
+If $(v', P') = (v, P) \oplus (w, Q)$ is defined, then $P \subsetneq P'$.
+\end{proposition}
+
+\begin{proof}
+Since $Q$ is nonempty for any mapper output and $P \cap Q = \varnothing$, we have
+$P' = P \cup Q$ with $P \subsetneq P'$.
+\end{proof}
+
+\begin{corollary}[No Cycles in Reducer Histories]
+Reducer histories are acyclic with respect to merge ancestry.
+\end{corollary}
+
+\begin{proof}
+Each merge strictly increases provenance size. Since provenance sets are finite,
+no reducer can be its own ancestor.
+\end{proof}
+
+
+
+Associativity up to Collapse
+
+
+
+Let $m_i = (v_i, P_i)$ for $i \in \{1,2,3\}$ with pairwise disjoint provenance.
+
+\begin{theorem}[Associativity up to Provenance--Preserving Equivalence]
+If $\diamond$ is associative, then
+\[
+(m_1 \oplus m_2) \oplus m_3
+\quad \text{and} \quad
+m_1 \oplus (m_2 \oplus m_3)
+\]
+are both defined and equivalent under the equivalence relation
+\[
+(v, P) \sim (v', P') \iff v = v' \;\wedge\; P = P'.
+\]
+\end{theorem}
+
+\begin{proof}
+Both expressions are defined because provenance sets are pairwise disjoint.
+Associativity of $\diamond$ ensures
+\[
+(v_1 \diamond v_2) \diamond v_3 = v_1 \diamond (v_2 \diamond v_3),
+\]
+and set union is associative, yielding identical provenance
+$P_1 \cup P_2 \cup P_3$.
+\end{proof}
+
+\begin{remark}
+The histories producing these results differ syntactically, but collapse
+identifies them by quotienting over internal merge structure.
+\end{remark}
+
+
+
+Commutativity
+
+
+
+\begin{theorem}[Commutativity up to Collapse]
+If $\diamond$ is commutative, then for any two summaries with disjoint provenance,
+\[
+m_1 \oplus m_2 \sim m_2 \oplus m_1.
+\]
+\end{theorem}
+
+\begin{proof}
+Commutativity of $\diamond$ implies $v_1 \diamond v_2 = v_2 \diamond v_1$, and
+set union is commutative. Provenance equality follows.
+\end{proof}
+
+
+
+Idempotence via Inadmissibility
+
+
+
+\begin{theorem}[Idempotence by Partiality]
+For any reducer summary $m = (v, P)$,
+\[
+m \oplus m
+\]
+is undefined.
+\end{theorem}
+
+\begin{proof}
+Since $P \cap P = P \neq \varnothing$, the admissibility condition fails.
+\end{proof}
+
+\begin{corollary}[Semantic Idempotence]
+Each mapper output contributes to a reducer at most once.
+\end{corollary}
+
+\begin{remark}
+Unlike algebraic idempotence, this property is enforced structurally. Duplicate
+inputs do not collapse to the same value; they are forbidden from occurring.
+\end{remark}
+
+
+
+Resulting Algebraic Structure
+
+
+
+\begin{theorem}[Reducer Quotient Structure]
+Let $\sim$ be the provenance--preserving equivalence relation. The quotient
+$(\mathcal{R}/\!\sim,\oplus)$ forms a commutative monoid.
+\end{theorem}
+
+\begin{proof}
+Associativity and commutativity hold up to $\sim$. The empty reducer
+$(v_0, \varnothing)$ serves as identity. Partiality disappears in the quotient
+because undefined merges correspond to excluded elements.
+\end{proof}
+
+\begin{remark}
+This monoid exists only after quotienting by collapse. At the level of histories,
+no total algebraic structure exists.
+\end{remark}
+
+
+
+Embedding CRDT Semantics into Event--Historical Aggregation
+
+
+
+This appendix formalizes the relationship between conflict--free replicated data
+types (CRDTs) and Spherepop reducers. The central results are twofold. First,
+CRDTs embed into Spherepop under specific semantic restrictions. Second, this
+embedding is strict: there exist Spherepop reducers that cannot be faithfully
+represented as CRDTs.
+
+
+
+Preliminaries on CRDTs
+
+
+
+We consider state--based CRDTs, as they admit the clearest algebraic
+characterization. A state--based CRDT is defined by a triple $(S, \sqcup, \leq)$
+where $(S, \leq)$ is a join--semilattice and $\sqcup : S \times S \to S$ is the
+least upper bound operation.
+
+Updates are monotone with respect to $\leq$, and replicas periodically exchange
+states, merging them via $\sqcup$. Correctness is expressed as convergence:
+replicas that have received the same set of updates converge to the same state,
+independent of order or duplication.
+
+
+
+CRDTs as Collapsed Reducers
+
+
+
+We now show that CRDT semantics arise as a degenerate case of Spherepop
+aggregation in which history is aggressively collapsed.
+
+\begin{definition}[CRDT--Compatible Spherepop Reducer]
+A Spherepop reducer is CRDT--compatible if it satisfies the following
+constraints:
+\begin{enumerate}
+\item The payload carrier $V$ forms a join--semilattice.
+\item The merge payload operation $\diamond$ coincides with $\sqcup$.
+\item Provenance is either absent or collapsed immediately after each merge.
+\item No refusal rules are enforced; all merges are admissible.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[CRDT Embedding]
+For every state--based CRDT $(S, \sqcup, \leq)$, there exists a CRDT--compatible
+Spherepop reducer whose collapsed semantics are equivalent to the CRDT's
+convergence semantics.
+\end{theorem}
+
+\begin{proof}
+Construct a Spherepop reducer with payload carrier $V = S$ and merge operation
+$\diamond = \sqcup$. Let each update be represented as a mapper output whose
+payload is the updated state. Because all merges are admissible and collapse is
+applied eagerly, reducer histories never retain internal structure. After each
+merge, the reducer collapses to the canonical join of all received states.
+
+Associativity, commutativity, and idempotence of $\sqcup$ guarantee that the
+resulting payload is independent of merge order and duplication, matching CRDT
+convergence semantics.
+\end{proof}
+
+\begin{remark}
+Under this embedding, Spherepop contributes no additional expressive power. All
+event--historical structure is erased immediately, and aggregation reduces to
+value computation.
+\end{remark}
+
+
+
+Eager Collapse and Event Erasure
+
+
+
+CRDT convergence may be characterized as a discipline of mandatory forgetting.
+
+\begin{proposition}[Convergence as Eager Collapse]
+CRDT convergence is equivalent to applying a collapse operation after every
+merge that preserves only the payload invariant.
+\end{proposition}
+
+\begin{proof}
+Since only the join--semilattice value matters for CRDT correctness, all other
+historical distinctions are semantically irrelevant. Eager collapse enforces this
+irrelevance by quotienting histories immediately.
+\end{proof}
+
+This observation clarifies the philosophical difference between the two
+frameworks: CRDTs treat history as an implementation detail, while Spherepop
+treats history as semantically primary.
+
+
+
+Non--Embeddability of Refusal
+
+
+
+We now establish that the CRDT embedding is strict.
+
+\begin{theorem}[Non--Embeddability of Refusal]
+There exists no faithful embedding of provenance--guarded Spherepop reducers into
+CRDT semantics.
+\end{theorem}
+
+\begin{proof}
+Consider a Spherepop reducer whose merge operation refuses to combine summaries
+with overlapping provenance. Suppose, for contradiction, that this reducer could
+be faithfully embedded into a CRDT. In CRDT semantics, duplicate updates are
+either absorbed by idempotence or merged redundantly without semantic effect.
+
+In Spherepop, by contrast, duplicate provenance renders the merge inadmissible.
+There exists no state transition corresponding to refusal: CRDTs cannot
+distinguish between forbidden composition and harmless idempotent merge.
+Therefore no embedding can preserve the refusal semantics.
+\end{proof}
+
+\begin{corollary}[Policy Non--Expressibility]
+Any aggregation policy that forbids certain combinations of inputs is
+inexpressible in CRDT semantics.
+\end{corollary}
+
+
+
+Non--Monotone Policies
+
+
+
+CRDTs fundamentally rely on monotonic growth of state. Spherepop does not.
+
+\begin{theorem}[Non--Monotone Constraints]
+There exist Spherepop reducers whose admissibility conditions are non--monotone
+with respect to payload growth, and which therefore cannot be represented by
+CRDTs.
+\end{theorem}
+
+\begin{proof}
+Consider a reducer that refuses merges once provenance size exceeds a fixed
+threshold, enforcing a capacity constraint. This refusal depends on accumulated
+history rather than on monotonic payload growth. No CRDT state transition can
+encode such a constraint without violating convergence.
+\end{proof}
+
+
+
+Summary
+
+
+
+CRDTs appear within Spherepop as a special case characterized by eager collapse,
+absence of refusal, and exclusive concern with payload convergence. Spherepop
+strictly generalizes this model by allowing history to remain meaningful,
+enforcing policy through inadmissibility, and treating forgetting as an explicit
+event rather than an implicit consequence of convergence.
+
+
+
+Categorical Semantics of Event--Historical Aggregation
+
+
+
+This appendix presents a categorical formulation of the event--historical
+semantics underlying Spherepop aggregation. The purpose is to make precise the
+structural claims made in the main text, namely that aggregation is a form of
+monoidal composition constrained by authorization, refusal, and collapse, and
+that attention mechanisms correspond to traced folds within this structure.
+
+
+
+The Category of Histories
+
+
+
+Let $\mathcal{H}_0$ be the collection of all admissible event histories. We define
+a category $\mathcal{H}$ as follows.
+
+\begin{definition}[Objects]
+Objects of $\mathcal{H}$ are equivalence classes of histories under a chosen
+collapse equivalence relation $\equiv_I$, where $I$ is a fixed set of invariants.
+\end{definition}
+
+\begin{definition}[Morphisms]
+Given objects $[H]$ and $[H']$, a morphism $[H] \to [H']$ exists if and only if
+there exists a representative history $H'' \in [H']$ such that $H''$ is an
+authorized extension of a representative of $[H]$.
+\end{definition}
+
+Identity morphisms are given by empty extensions. Composition is given by
+concatenation of event sequences when authorization permits.
+
+\begin{proposition}[Well--Definedness]
+Morphisms in $\mathcal{H}$ are well defined with respect to the equivalence
+relation $\equiv_I$.
+\end{proposition}
+
+\begin{proof}
+If $H \equiv_I H'$ and $H \preceq K$ is an authorized extension, then there exists
+a corresponding extension $H' \preceq K'$ such that $K \equiv_I K'$, since
+collapse preserves admissibility of future events that depend only on
+invariants in $I$.
+\end{proof}
+
+
+
+Partiality and Refusal
+
+
+
+\begin{theorem}[Partiality of Composition]
+$\mathcal{H}$ is in general a partial category: composition of morphisms is not
+total.
+\end{theorem}
+
+\begin{proof}
+Authorization constraints depend on full history. There exist morphisms
+$[H] \to [H']$ and $[H'] \to [H'']$ such that the corresponding concatenation of
+events violates authorization. In this case, no composite morphism exists.
+\end{proof}
+
+\begin{remark}
+Refusal corresponds categorically to the absence of a morphism, not to a morphism
+into a distinguished error object.
+\end{remark}
+
+
+
+Merge as a Partial Monoidal Product
+
+
+
+We now show that merge induces a monoidal structure on $\mathcal{H}$.
+
+\begin{definition}[Tensor Product]
+For objects $[H_1]$ and $[H_2]$, define $[H_1] \otimes [H_2]$ to be the object
+represented by the history obtained by merging $H_1$ and $H_2$, if such a merge
+is authorized. If the merge is not authorized, the tensor is undefined.
+\end{definition}
+
+\begin{theorem}[Partial Monoidal Structure]
+$(\mathcal{H}, \otimes)$ is a partial monoidal category with unit object
+$[H_\emptyset]$, the empty reducer history.
+\end{theorem}
+
+\begin{proof}
+The empty history acts as a unit since merging with it introduces no provenance.
+Associativity holds up to collapse by the associativity--up--to--equivalence
+results proven in Appendix A. Partiality follows from authorization constraints.
+\end{proof}
+
+\begin{corollary}[Symmetry up to Collapse]
+If merge payload operations are commutative, then $\mathcal{H}$ admits a symmetry
+isomorphism $[H_1] \otimes [H_2] \cong [H_2] \otimes [H_1]$ up to collapse.
+\end{corollary}
+
+
+
+Collapse as a Quotient Functor
+
+
+
+\begin{definition}[Collapse Functor]
+Let $\mathcal{H}_I$ denote the category of histories collapsed with respect to
+invariants $I$. The collapse functor
+\[
+C_I : \mathcal{H} \to \mathcal{H}_I
+\]
+maps each object to its equivalence class under $\equiv_I$ and each morphism to
+the induced morphism between equivalence classes.
+\end{definition}
+
+\begin{theorem}[Idempotence and Non--Invertibility]
+$C_I$ is idempotent and non--invertible.
+\end{theorem}
+
+\begin{proof}
+Idempotence follows because collapsing twice with respect to the same invariants
+introduces no further identifications. Non--invertibility follows because
+distinct histories may be identified under collapse, and no functor can recover
+the discarded distinctions.
+\end{proof}
+
+\begin{remark}
+Different choices of $I$ yield different quotient categories, corresponding to
+different semantic resolutions.
+\end{remark}
+
+
+
+Attention as Traced Monoidal Folding
+
+
+
+We now formalize attention mechanisms within this categorical setting.
+
+Let $G = (V, E)$ be a directed graph. For each node $i \in V$, let
+$\{H_{j \to i}\}_{j \in \mathcal{N}(i)}$ be histories representing mapper outputs
+from neighbors.
+
+\begin{definition}[Attention Fold]
+An attention head at node $i$ is a fold
+\[
+\mathsf{att}_i : \bigotimes_{j \in \mathcal{N}(i)} [H_{j \to i}] \to [H_i]
+\]
+parameterized by compatibility weights, followed by an optional collapse.
+\end{definition}
+
+\begin{theorem}[Attention as Traced Monoidal Operation]
+Multi--layer attention networks correspond to traced monoidal structures in
+$\mathcal{H}$, where residual connections induce trace operators.
+\end{theorem}
+
+\begin{proof}
+Residual connections feed outputs back as inputs in subsequent layers. In a
+monoidal category, such feedback corresponds to a trace. Partiality ensures that
+only authorized feedback loops exist.
+\end{proof}
+
+\begin{corollary}[Collapse in Standard Transformers]
+Standard transformer architectures correspond to applying collapse immediately
+after each attention fold.
+\end{corollary}
+
+\begin{proof}
+Transformer implementations retain only the resulting value vectors and discard
+all intermediate relevance structure. This is precisely eager collapse with
+respect to payload invariants.
+\end{proof}
+
+
+
+Summary
+
+
+
+The categorical semantics developed here unify event--historical aggregation,
+map--reduce, and attention mechanisms within a single partial monoidal framework.
+Merge corresponds to tensoring, refusal to the absence of morphisms, and collapse
+to quotienting by invariant--preserving equivalence. Attention emerges as a
+traced fold that is ordinarily collapsed in practice, obscuring its underlying
+commitment structure.
+
+
+
+A BNF Grammar for the Spherepop Calculus
+
+
+
+This appendix presents a formal grammar for Spherepop, expressed in
+Backus--Naur Form (BNF). The grammar defines the syntactic structure of
+event--historical programs independently of any particular execution engine.
+Its purpose is to make explicit which constructs are primitive and how histories
+are formed, extended, and constrained.
+
+The grammar is intentionally minimal. All semantic force arises from event
+authorization, refusal, and replay, rather than from complex syntactic forms.
+
+
+
+Lexical Domains
+
+
+
+We assume the following disjoint lexical domains:
+
+\[
+\begin{aligned}
+\langle\textit{Identifier}\rangle &\quad \text{object names, shard IDs, variables} \\
+\langle\textit{EventName}\rangle   &\quad \textsc{pop}, \textsc{link}, \textsc{merge}, \textsc{collapse}, \textsc{refuse} \\
+\langle\textit{Invariant}\rangle   &\quad \text{named invariants (e.g.\ payload, provenance)} \\
+\langle\textit{Literal}\rangle     &\quad \text{numbers, symbols, structured values} \\
+\end{aligned}
+\]
+
+
+
+Programs and Histories
+
+
+
+A Spherepop program is a history specification: a sequence of event statements.
+
+\[
+\begin{aligned}
+\langle\textit{Program}\rangle ::= 
+  &\ \langle\textit{History}\rangle
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+\langle\textit{History}\rangle ::= 
+  &\ \langle\textit{Event}\rangle \\
+  &\ |\ \langle\textit{History}\rangle\ \langle\textit{Event}\rangle
+\end{aligned}
+\]
+
+Histories are ordered and append--only. There is no syntactic construct for
+deletion or mutation of prior events.
+
+
+
+Events
+
+
+
+\[
+\begin{aligned}
+\langle\textit{Event}\rangle ::= 
+  &\ \langle\textit{PopEvent}\rangle \\
+  &\ |\ \langle\textit{LinkEvent}\rangle \\
+  &\ |\ \langle\textit{MergeEvent}\rangle \\
+  &\ |\ \langle\textit{CollapseEvent}\rangle \\
+  &\ |\ \langle\textit{RefuseEvent}\rangle
+\end{aligned}
+\]
+
+Each event form corresponds to a semantic primitive defined in the main text.
+
+
+
+Commitment Events
+
+
+
+\[
+\begin{aligned}
+\langle\textit{PopEvent}\rangle ::= 
+  &\ \textsc{pop}\ \langle\textit{Identifier}\rangle
+\end{aligned}
+\]
+
+A \textsc{pop} event introduces an object as a committed fact. The grammar does
+not enforce authorization; admissibility is a semantic property.
+
+
+
+Provenance and Dependency
+
+
+
+\[
+\begin{aligned}
+\langle\textit{LinkEvent}\rangle ::= 
+  &\ \textsc{link}\ \langle\textit{Identifier}\rangle\ \texttt{->}\ \langle\textit{Identifier}\rangle \\
+  &\ |\ \textsc{link}\ \langle\textit{Identifier}\rangle\ \texttt{->}\ \langle\textit{Identifier}\rangle\ \texttt{:}\ \langle\textit{Identifier}\rangle
+\end{aligned}
+\]
+
+Links encode provenance, causal dependency, typing, or policy constraints.
+The optional label refines the semantic role of the link but does not affect
+syntax.
+
+
+
+Merge Events
+
+
+
+\[
+\begin{aligned}
+\langle\textit{MergeEvent}\rangle ::= 
+  &\ \textsc{merge}\ \langle\textit{Identifier}\rangle\ \langle\textit{Identifier}\rangle\ \texttt{->}\ \langle\textit{Identifier}\rangle
+\end{aligned}
+\]
+
+A merge event binds two existing objects into a new object. The target identifier
+must be fresh. Authorization depends on provenance and policy rules external to
+the grammar.
+
+
+
+Controlled Forgetting
+
+
+
+\[
+\begin{aligned}
+\langle\textit{CollapseEvent}\rangle ::= 
+  &\ \textsc{collapse}\ \langle\textit{Identifier}\rangle \\
+  &\ |\ \textsc{collapse}\ \langle\textit{Identifier}\rangle\ \texttt{keep}\ \langle\textit{InvariantList}\rangle
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+\langle\textit{InvariantList}\rangle ::= 
+  &\ \langle\textit{Invariant}\rangle \\
+  &\ |\ \langle\textit{Invariant}\rangle\ \texttt{,}\ \langle\textit{InvariantList}\rangle
+\end{aligned}
+\]
+
+Collapse events specify which invariants must be preserved. All other distinctions
+are discarded irreversibly.
+
+
+
+Refusal
+
+
+
+\[
+\begin{aligned}
+\langle\textit{RefuseEvent}\rangle ::= 
+  &\ \textsc{refuse}\ \langle\textit{Event}\rangle \\
+  &\ |\ \textsc{refuse}\ \langle\textit{Event}\rangle\ \texttt{:}\ \langle\textit{Identifier}\rangle
+\end{aligned}
+\]
+
+A refusal documents an inadmissible event. Semantically, refusal prevents the
+existence of any successor history in which the refused event occurs.
+
+
+
+Values and Literals (Optional Layer)
+
+
+
+The core calculus is value--agnostic. When needed, literals may be introduced
+through external binding mechanisms:
+
+\[
+\begin{aligned}
+\langle\textit{LiteralBinding}\rangle ::= 
+  &\ \langle\textit{Identifier}\rangle\ \texttt{:=}\ \langle\textit{Literal}\rangle
+\end{aligned}
+\]
+
+Such bindings are interpreted as shorthand for constructing objects whose
+payloads are given by the literal values. They do not alter the event semantics.
+
+
+
+Well--Formedness Conditions (Informal)
+
+
+
+The grammar permits syntactically valid but semantically inadmissible programs.
+The following conditions are enforced semantically rather than grammatically:
+
+\begin{itemize}
+\item An identifier must be introduced by \textsc{pop} before it can be merged.
+\item Merge targets must be fresh identifiers.
+\item Authorization constraints determine whether merges and collapses are
+      admissible.
+\item Refusal prevents the existence of extended histories.
+\end{itemize}
+
+These constraints are intentionally excluded from the grammar to preserve a
+clean separation between syntax and event--historical semantics.
+
+
+
+Discussion
+
+
+
+This grammar emphasizes that Spherepop is not a term--rewriting language but a
+history--construction calculus. Programs specify not how values are transformed,
+but which events are attempted and which commitments are made or refused.
+Execution is replay, and correctness is admissibility.
+
+The simplicity of the grammar reflects a design principle: expressive power
+should reside in event semantics and authorization, not in syntactic complexity.
+
+
+
+Small--Step Operational Semantics
+
+
+
+This appendix derives a small--step operational semantics for Spherepop directly
+from the core event grammar. The semantics is intentionally minimal: it defines
+how histories are extended one event at a time, how refusal corresponds to
+stuckness (absence of a successor configuration), and how replay materializes
+objects as persistent artifacts.
+
+
+Configurations
+
+
+We model execution as a transition system over configurations. A configuration
+is a triple
+\[
+\langle H,\ \Gamma,\ \Sigma \rangle,
+\]
+where $H$ is the committed event history, $\Gamma$ is an object environment, and
+$\Sigma$ is a semantic store. The environment $\Gamma$ maps identifiers to object
+references; the store $\Sigma$ maps object references to semantic records. A
+semantic record minimally contains a payload component and a provenance
+component, but the semantics is parameterized by the payload algebra.
+
+\begin{definition}[Semantic Record]
+A semantic record is a pair $\Sigma(o) = (v(o), P(o))$ where $v(o)$ is the payload
+and $P(o) \subseteq \mathcal{S}$ is a finite provenance set.
+\end{definition}
+
+The semantics assumes a partial payload merge operator $\diamond$ on payloads and
+a partial authorization predicate $\mathsf{Auth}$ that may depend on $H$, $\Gamma$
+and $\Sigma$.
+
+
+Judgments
+
+
+We write a small step as
+\[
+\langle H,\Gamma,\Sigma\rangle \xrightarrow{e} \langle H',\Gamma',\Sigma'\rangle,
+\]
+meaning that event $e$ is admissible and produces a successor configuration. If
+no successor exists, the configuration is stuck; refusal is represented by
+non--existence of a step.
+
+We will also use a helper judgment for freshness: $\mathsf{fresh}(x,\Gamma)$
+holds when identifier $x$ is not bound in $\Gamma$.
+
+
+Rules for \textsc{pop
+}
+
+A \textsc{pop} introduces a new committed object name. Operationally, it allocates
+a fresh object reference $o$ and binds it to the identifier. The payload and
+provenance of a \textsc{pop} may be supplied externally (e.g.\ via literal binding)
+or may default to a unit value.
+
+\begin{proposition}[Pop Rule]
+If $\mathsf{fresh}(x,\Gamma)$ and $\mathsf{Auth}(H,\Gamma,\Sigma,\textsc{pop}\ x)$
+then there exists a fresh object reference $o$ such that
+\[
+\langle H,\Gamma,\Sigma\rangle \xrightarrow{\textsc{pop}\ x}
+\langle H\cdot \textsc{pop}(x),\ \Gamma[x\mapsto o],\ \Sigma[o\mapsto (v_0,P_0)]\rangle.
+\]
+\end{proposition}
+
+\begin{remark}
+The choice of $(v_0,P_0)$ is parameterized. For mapper outputs, $(v_0,P_0)$ will
+already encode the shard provenance; for empty reducers, $P_0=\varnothing$.
+\end{remark}
+
+
+Rules for \textsc{link
+}
+
+Links do not change payloads; they register dependency structure. The semantics
+may record links as part of the store, or treat them as history--only. We present
+a conservative semantics that records them in $\Sigma$ as adjacency metadata
+$\mathsf{Links}(o)$.
+
+\begin{proposition}[Link Rule]
+If $\Gamma(x)=o_x$, $\Gamma(y)=o_y$, and
+$\mathsf{Auth}(H,\Gamma,\Sigma,\textsc{link}\ x\to y)$ then
+\[
+\langle H,\Gamma,\Sigma\rangle \xrightarrow{\textsc{link}\ x\to y}
+\langle H\cdot \textsc{link}(x\to y),\ \Gamma,\ \Sigma'\rangle
+\]
+where $\Sigma'$ is $\Sigma$ updated so that $o_x$ records a link to $o_y$.
+\end{proposition}
+
+
+Rules for \textsc{merge
+}
+
+Merge is the only primitive that necessarily changes payload and provenance. It
+constructs a fresh target object whose semantic record is computed from the
+sources. Authorization includes (at minimum) provenance disjointness and may
+include policy.
+
+Let $x,y,z$ be identifiers. Define $o_x=\Gamma(x)$, $o_y=\Gamma(y)$, and assume
+$z$ is fresh. Let $\Sigma(o_x)=(v_x,P_x)$ and $\Sigma(o_y)=(v_y,P_y)$.
+
+\begin{theorem}[Merge Rule]
+If $\mathsf{fresh}(z,\Gamma)$, $P_x\cap P_y=\varnothing$, the payload merge
+$v_x\diamond v_y$ is defined, and
+$\mathsf{Auth}(H,\Gamma,\Sigma,\textsc{merge}\ x\ y\to z)$, then there exists a
+fresh object reference $o_z$ such that
+\[
+\langle H,\Gamma,\Sigma\rangle \xrightarrow{\textsc{merge}\ x\ y\to z}
+\langle H\cdot \textsc{merge}(x,y\to z),\ \Gamma[z\mapsto o_z],\ \Sigma'\rangle
+\]
+where $\Sigma'(o_z)=(v_x\diamond v_y,\ P_x\cup P_y)$ and $\Sigma'$ also records
+links from $o_z$ to $o_x$ and $o_y$.
+\end{theorem}
+
+\begin{proof}
+By the stated conditions, the semantic record for the merged object is defined.
+Freshness ensures a new identity. Recording ancestry links is admissible and
+preserves lineage.
+\end{proof}
+
+
+Rules for \textsc{collapse
+}
+
+Collapse replaces an object by a collapsed representative that preserves a chosen
+set of invariants. Operationally, collapse may either produce a new object name
+or rewrite the semantic record of an existing object reference. To preserve the
+append--only character, we adopt a persistent semantics: collapse allocates a new
+object reference $o'$ and rebinds the identifier to it.
+
+Let $\mathsf{Keep}_I$ denote an invariant projection operator, mapping semantic
+records to a canonical representative preserving invariants $I$.
+
+\begin{theorem}[Collapse Rule]
+If $\Gamma(x)=o$, $\mathsf{Auth}(H,\Gamma,\Sigma,\textsc{collapse}\ x\ \texttt{keep}\ I)$,
+and $\mathsf{Keep}_I(\Sigma(o))$ is defined, then there exists a fresh object
+reference $o'$ such that
+\[
+\langle H,\Gamma,\Sigma\rangle \xrightarrow{\textsc{collapse}\ x\ \texttt{keep}\ I}
+\langle H\cdot \textsc{collapse}(x;I),\ \Gamma[x\mapsto o'],\ \Sigma[o'\mapsto \mathsf{Keep}_I(\Sigma(o))]\rangle.
+\]
+\end{theorem}
+
+
+Rules for \textsc{refuse
+}
+
+A \textsc{refuse} statement is documentation of inadmissibility. Operationally,
+it does not advance the computation, because it asserts that a particular event
+has no admissible successor. We therefore treat it as a judgmental annotation,
+not a transition.
+
+\begin{definition}[Refusal and Stuckness]
+A configuration is stuck on event $e$ if there is no configuration $C'$ such that
+$C\xrightarrow{e} C'$. A \textsc{refuse} statement is well formed exactly when
+its embedded event would be stuck at the current configuration.
+\end{definition}
+
+\begin{remark}
+This matches the essay's semantics: refusal is absence of a continuation, not an
+error value.
+\end{remark}
+
+
+
+A Static Type and Authorization System
+
+
+
+This appendix gives a static discipline that approximates the dynamic
+authorization predicate $\mathsf{Auth}$ and prevents large classes of inadmissible
+histories from being written. The intent is not to decide authorization
+completely, but to separate (i) syntactic well--formedness, (ii) static
+admissibility, and (iii) dynamic policy checks.
+
+
+Typing Environments and Types
+
+
+We define a typing environment $\Delta$ mapping identifiers to types. Types track
+at least two aspects: the payload kind and the provenance footprint.
+
+Let $\kappa$ range over payload kinds (e.g.\ histogram, sum, set, embedding). Let
+$\pi$ range over provenance descriptors. For static checking, provenance may be
+approximated as either a concrete finite set (when known) or an abstract region
+label.
+
+\begin{definition}[Types]
+A Spherepop object type is a pair $\tau = \kappa[\pi]$, where $\kappa$ is a payload
+kind and $\pi$ is a provenance descriptor.
+\end{definition}
+
+We write $\mathsf{disjoint}(\pi_1,\pi_2)$ for a decidable predicate that
+conservatively approximates disjointness of provenance. If it returns true,
+dynamic provenance disjointness is guaranteed; if false, disjointness is unknown
+and must be decided dynamically or refused conservatively.
+
+
+Typing Judgments
+
+
+Typing judgments have the form
+\[
+\Delta \vdash e : \Delta',
+\]
+meaning that under environment $\Delta$, event $e$ is statically admissible and
+produces an updated environment $\Delta'$.
+
+
+Rules
+
+
+\begin{theorem}[Pop Typing]
+If $x\notin \mathrm{dom}(\Delta)$ and $\tau$ is an assigned type for $x$, then
+\[
+\Delta \vdash \textsc{pop}\ x : \Delta[x\mapsto \tau].
+\]
+\end{theorem}
+
+\begin{remark}
+The grammar does not assign $\tau$; a front--end may infer it from literal
+bindings or annotations, or leave it abstract.
+\end{remark}
+
+\begin{theorem}[Link Typing]
+If $\Delta(x)=\tau_x$ and $\Delta(y)=\tau_y$, then
+\[
+\Delta \vdash \textsc{link}\ x\to y : \Delta.
+\]
+\end{theorem}
+
+\begin{theorem}[Merge Typing]
+If $\Delta(x)=\kappa[\pi_x]$, $\Delta(y)=\kappa[\pi_y]$, $z\notin \mathrm{dom}(\Delta)$,
+and $\mathsf{disjoint}(\pi_x,\pi_y)$ holds, then
+\[
+\Delta \vdash \textsc{merge}\ x\ y\to z : \Delta[z\mapsto \kappa[\pi_x\cup \pi_y]].
+\]
+\end{theorem}
+
+\begin{proof}
+Static disjointness ensures the dynamic disjointness precondition. Payload kinds
+must match to ensure that $\diamond$ is defined at the kind level. Provenance
+union is tracked in the resulting type.
+\end{proof}
+
+\begin{theorem}[Collapse Typing]
+If $\Delta(x)=\kappa[\pi]$ and $I$ is an invariant set admissible for $\kappa$,
+then
+\[
+\Delta \vdash \textsc{collapse}\ x\ \texttt{keep}\ I : \Delta.
+\]
+\end{theorem}
+
+\begin{remark}
+Collapse does not change the kind, but it may coarsen provenance. A refined system
+may update $\pi$ to a less precise descriptor to reflect forgetting.
+\end{remark}
+
+
+Soundness Relative to Dynamic Authorization
+
+
+Let $\mathsf{Auth}$ include at least (i) kind compatibility, (ii) provenance
+disjointness, and (iii) any additional policy constraints.
+
+\begin{theorem}[Static Soundness]
+If $\Delta \vdash e : \Delta'$ and the runtime configuration realizes $\Delta$,
+then either $e$ is dynamically authorized or it is rejected only due to policy
+constraints not expressible in $\Delta$.
+\end{theorem}
+
+\begin{proof}
+The typing rules enforce the structural preconditions of authorization: freshness,
+kind compatibility, and (conservative) provenance disjointness. Any remaining
+rejections must therefore arise from constraints intentionally left to dynamic
+policy.
+\end{proof}
+
+
+
+A Reference Interpreter Consistent with the Grammar
+
+
+
+This appendix specifies a minimal reference interpreter that executes Spherepop
+programs by replaying their event histories under the small--step semantics. The
+interpreter is described as an algorithm rather than an implementation, so that
+multiple concrete runtimes can be validated against the same reference behavior.
+
+
+Interpreter State
+
+
+The interpreter maintains a state $(H,\Gamma,\Sigma)$ as in Appendix~E, together
+with an allocation counter for fresh object references.
+
+The interpreter takes as input a parsed program, i.e.\ a sequence of event
+statements $(e_1,\ldots,e_n)$.
+
+
+Execution Algorithm
+
+
+Execution proceeds sequentially. For each event $e_i$, the interpreter checks
+static admissibility (optional), then checks dynamic authorization, then applies
+the corresponding transition rule. If no transition rule applies, the interpreter
+halts and reports refusal (inadmissibility) with an explanation when available.
+
+\begin{verbatim}
+Algorithm Replay(program):
+    initialize H := empty
+    initialize Γ := empty
+    initialize Σ := empty
+    for each event e in program:
+        if optional_static_check_enabled:
+            require Δ ⊢ e : Δ'  (else reject)
+        if no small-step rule applies to ⟨H,Γ,Σ⟩ with label e:
+            report REFUSAL(e, H, Γ, Σ)
+            halt
+        else:
+            apply the unique rule to obtain ⟨H',Γ',Σ'⟩
+            set (H,Γ,Σ) := (H',Γ',Σ')
+    return ⟨H,Γ,Σ⟩
+\end{verbatim}
+
+
+Determinism
+
+
+Determinism holds when allocation is deterministic (e.g.\ fresh references chosen
+by a counter) and when payload merge $\diamond$ is deterministic.
+
+\begin{theorem}[Determinism of Replay]
+Assume deterministic allocation and deterministic payload operations. Then for any
+program, replay produces either a unique final configuration or a unique first
+refusal event.
+\end{theorem}
+
+\begin{proof}
+By construction, each event statement has at most one applicable transition rule
+given the current configuration. If no rule applies, refusal is determined at
+that point. Otherwise the successor is uniquely determined.
+\end{proof}
+
+
+Conformance Criteria
+
+
+A concrete implementation conforms to this reference interpreter if, for every
+program, it agrees on (i) the first point of refusal, when refusal occurs, and
+(ii) the final replayed semantic records for all committed identifiers, modulo
+the chosen collapse invariants.
+
+\begin{definition}[Interpreter Conformance]
+An implementation conforms if for all programs $P$, either both reference and
+implementation refuse at the same event index, or both terminate with equivalent
+stores under invariant--preserving equivalence.
+\end{definition}
+
+
+\begin{thebibliography}{99}
+
+
+\bibitem{Lamport1978}
+L.~Lamport.
+\newblock Time, clocks, and the ordering of events in a distributed system.
+\newblock \emph{Communications of the ACM}, 21(7):558--565, 1978.
+
+\bibitem{GrayReuter1993}
+J.~Gray and A.~Reuter.
+\newblock \emph{Transaction Processing: Concepts and Techniques}.
+\newblock Morgan Kaufmann, 1993.
+
+\bibitem{FowlerEventSourcing}
+M.~Fowler.
+\newblock Event sourcing.
+\newblock \emph{martinfowler.com}, 2005.
+\newblock Online essay.
+
+\bibitem{Shapiro2011}
+M.~Shapiro, N.~Preguiça, C.~Baquero, and M.~Zawirski.
+\newblock Conflict-free replicated data types.
+\newblock In \emph{Proceedings of the 13th International Symposium on Stabilization, Safety, and Security of Distributed Systems (SSS)}, 2011.
+
+\bibitem{Baquero2017}
+C.~Baquero, P.~Sérgio Almeida, and A.~Shoker.
+\newblock Making operation-based CRDTs operation-based.
+\newblock In \emph{Proceedings of the 21st International Conference on Principles of Distributed Systems (OPODIS)}, 2017.
+
+\bibitem{Lynch1996}
+N.~A. Lynch.
+\newblock \emph{Distributed Algorithms}.
+\newblock Morgan Kaufmann, 1996.
+
+\bibitem{Girard1987}
+J.-Y. Girard.
+\newblock Linear logic.
+\newblock \emph{Theoretical Computer Science}, 50(1):1--102, 1987.
+
+\bibitem{AbramskyCoecke2004}
+S.~Abramsky and B.~Coecke.
+\newblock A categorical semantics of quantum protocols.
+\newblock In \emph{Proceedings of the 19th IEEE Symposium on Logic in Computer Science (LICS)}, 2004.
+
+\bibitem{JoyalStreetVerity1996}
+A.~Joyal, R.~Street, and D.~Verity.
+\newblock Traced monoidal categories.
+\newblock \emph{Mathematical Proceedings of the Cambridge Philosophical Society}, 119(3):447--468, 1996.
+
+\bibitem{Selinger2011}
+P.~Selinger.
+\newblock A survey of graphical languages for monoidal categories.
+\newblock In \emph{New Structures for Physics}, Springer, 2011.
+
+\bibitem{Bennett1982}
+C.~H. Bennett.
+\newblock The thermodynamics of computation—A review.
+\newblock \emph{International Journal of Theoretical Physics}, 21(12):905--940, 1982.
+
+\bibitem{Landauer1961}
+R.~Landauer.
+\newblock Irreversibility and heat generation in the computing process.
+\newblock \emph{IBM Journal of Research and Development}, 5(3):183--191, 1961.
+
+\bibitem{MacLane1998}
+S.~Mac~Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Springer, 2nd edition, 1998.
+
+\bibitem{Pearl2009}
+J.~Pearl.
+\newblock \emph{Causality: Models, Reasoning, and Inference}.
+\newblock Cambridge University Press, 2nd edition, 2009.
+
+\bibitem{Vaswani2017}
+A.~Vaswani et~al.
+\newblock Attention is all you need.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}, 2017.
+
+\bibitem{Battaglia2018}
+P.~Battaglia et~al.
+\newblock Relational inductive biases, deep learning, and graph networks.
+\newblock \emph{arXiv:1806.01261}, 2018.
+
+\bibitem{Bronstein2021}
+M.~M. Bronstein et~al.
+\newblock Geometric deep learning: Grids, groups, graphs, geodesics, and gauges.
+\newblock \emph{arXiv:2104.13478}, 2021.
+
+\bibitem{Barandes2023}
+J.~A. Barandes.
+\newblock Unistochastic quantum theory.
+\newblock \emph{Physical Review A}, 108(3), 2023.
+
+\bibitem{Friston2010}
+K.~Friston.
+\newblock The free-energy principle: A unified brain theory?
+\newblock \emph{Nature Reviews Neuroscience}, 11:127--138, 2010.
+
+\bibitem{DodigCrnkovic2014}
+G.~Dodig-Crnkovic.
+\newblock Information, computation, cognition.
+\newblock \emph{Entropy}, 16(1):245--256, 2014.
+
+\bibitem{Winskel1987}
+G.~Winskel.
+\newblock Event structures.
+\newblock In \emph{Advances in Petri Nets}, Springer, 1987.
+
+\bibitem{Milner1989}
+R.~Milner.
+\newblock \emph{Communication and Concurrency}.
+\newblock Prentice Hall, 1989.
+
+\bibitem{Hewitt1973}
+C.~Hewitt.
+\newblock A universal modular actor formalism for artificial intelligence.
+\newblock In \emph{Proceedings of IJCAI}, 1973.
+
+\end{thebibliography}
+
+
+\end{document} 

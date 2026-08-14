@@ -1,631 +1,576 @@
-The following are analytical summaries of consecutive fragments
-of one research document.
+The following are groundedness-checked analytical summaries of
+consecutive fragments of one research document titled "identity_as_event_history.tex".
 
-Reconstruct the document as a unified theoretical object.
+This document's synthesis will feed into: cluster synthesis and cross-corpus synthesis
 
-Produce a dense scholarly synthesis covering:
+Reconstruct the document as a unified theoretical object. Produce a
+dense scholarly synthesis covering: thesis, primitives/definitions,
+formalism, mechanisms, major arguments, dependencies between
+concepts, implications, unresolved problems, internal tensions.
 
-- thesis;
-- primitives and definitions;
-- formalism;
-- mechanisms;
-- major arguments;
-- dependencies between concepts;
-- implications;
-- unresolved problems;
-- internal tensions;
-- connections likely to matter elsewhere in Spherepop.
-
-Remove repetition introduced by chunking.
-
-Do not flatten genuine distinctions.
+Preserve every [source: "..."] citation attached to a claim you keep.
+Remove repetition introduced by chunking. Do not flatten genuine
+distinctions. Do not add any claim that did not appear, with its
+citation, in the fragment summaries below.
 
 FRAGMENT SUMMARIES
-==================
+===================
 
+--- chunk-0001-summary.md ---
 **Event Graphs and Directed Acyclic Structure**
 
-Linear event words work well for histories where each event has at most one[3D[K
-one predecessor and at most one successor. However, many real-world process[7D[K
-processes involve branching (a single region giving rise to multiple descen[6D[K
-descendants) or merging (multiple regions combining into a new one). In suc[3D[K
-such cases the linear notation becomes inadequate because it hides the para[4D[K
-parallel structure of the history.
-
-**Definition – Event Graph**
-
+**Definition – Event Graph**  
 An *event graph* is a directed graph \(G = (V, \mathcal{E})\) where:
 
-- **Vertices (\(V\))**: Represent regions or configurations of a system.
-- **Edges (\(\mathcal{E}\))**: Represent irreversible events. An edge from [K
-vertex \(X\) to vertex \(Y\) denotes that event producing the region \(Y\) [K
-from the region \(X\).
+- The vertices \(V\) represent distinct regions or configurations of the sy[2D[K
+system.
+- Each directed edge \(X \rightarrow Y\) corresponds to an irreversible eve[3D[K
+event that
+  transforms the region \(X\) into the region \(Y\).
 
-When an event produces multiple descendants, its corresponding vertex will [K
-have several outgoing edges; similarly, if a new region is formed by mergin[6D[K
-merging two others, there will be incoming edges representing those contrib[7D[K
-contributions.
+When a history involves branching (a single region giving rise to several
+descendants) or merging (multiple regions combining into one), the graph na[2D[K
+naturally
+contains vertices with multiple outgoing edges (for branching) or incoming [K
+edges
+(for merging). The entire structure of the graph, not just a linear path, e[1D[K
+encodes
+the full generative history.
 
-**Proposition – Directed Acyclicity**
-
+**Proposition – Directed Acyclicity**  
 Every Spherepop event graph is a *directed acyclic graph* (DAG).
 
-**Why Directed Acyclic?**
+*Proof Sketch*: By definition in Section \(\ref{sec:categorical}\), events [K
+are
+irreversible transformations. If a cycle existed—i.e., there were a path
+\(X \rightarrow Y \rightarrow \dots \rightarrow X\)—it would imply that the[3D[K
+the same
+region could be reached through a reversible sequence of events, contradict[10D[K
+contradicting the
+assumption of irreversibility. Hence no such cycles can appear in an event [K
+graph,
+making it acyclic.
 
-1. **Irreversibility**: By definition, each edge in a Spherepop event graph[5D[K
-graph corresponds to an irreversible transformation. If cycles were allowed[7D[K
-allowed—paths that eventually return to the original region—an inverse proc[4D[K
-process would be implied, contradicting irreversibility.
+**Implications**
 
-2. **No Reversible Loops**: In causal or computational systems modeled by S[1D[K
-Spherepop, no sequence of events can reverse itself. A loop (e.g., \(X \rig[4D[K
-\rightarrow Y \rightarrow \dots \rightarrow X\)) would imply a reversible s[1D[K
-step, which is prohibited under the underlying physical or computational as[2D[K
-assumptions.
+1. **Parallel Histories**: Branching vertices allow simultaneous exploratio[10D[K
+exploration of
+   multiple potential futures without ambiguity, reflecting real-world proc[4D[K
+processes
+   where several outcomes are possible from a single state.
+2. **Historical Clarity**: The DAG structure prevents misinterpretation tha[3D[K
+that could
+   arise if one attempted to collapse the graph into an arbitrary linear or[2D[K
+order,
+   preserving the causal directionality inherent in irreversible events.
+3. **Structural Constraints**: In practice, many physical or computational [K
+systems
+   exhibit non‑linear dynamics (e.g., bifurcations, feedback loops). By enf[3D[K
+enforcing a
+   DAG structure for event graphs, Spherepop aligns with these constraints [K
+while
+   maintaining a compositional framework that remains consistent across all[3D[K
+all events.
 
-3. **Structural Consequence**: The requirement that each event be irreversi[9D[K
-irreversible inherently prevents cycles because a cycle would require an in[2D[K
-inverse transformation at some point in the sequence, violating the irrever[7D[K
-irreversibility constraint.
+Thus, the use of directed acyclic event graphs naturally captures the essen[5D[K
+essential
+property of irreversibility in Spherepop histories and provides a robust vi[2D[K
+visual
+and computational model for analyzing complex generative processes.
 
-This property (directed acyclicity) is not merely a convenient representati[12D[K
-representation but a structural necessity derived from the core assumptions[11D[K
-assumptions of Spherepop. It aligns with broader principles observed in cat[3D[K
-category theory and graph theory for systems where morphisms represent irre[4D[K
-irreversible processes.
 
-**Projected Identity in Spherepop**
+--- chunk-0002-summary.md ---
+**Projected Identity in the Spherepop Framework**
 
-The core idea behind projected identity in the Spherepop framework is that [K
-objects are identified not by their raw trajectories through possibility‑sp[14D[K
-possibility‑space, but rather by the *history* (the sequence of committed e[1D[K
-events) they project onto a canonical path category \(\PathCat\). This reso[4D[K
-resolves the tension between:
-
-1. **Irreversibility** – In an irreversible system, many different past his[3D[K
-histories can lead to the same present state.
-2. **Informational poverty** – The present alone does not uniquely determin[8D[K
-determine the full history.
+The notion of *identity* in the Spherepop ontology is not a primitive prope[5D[K
+property but rather an equivalence class defined by irreversible trajectori[10D[K
+trajectories. Below is a detailed exposition of how this works, linking it [K
+to the earlier definitions and illustrating its implications.
 
 ---
 
-### 1. Formal Setting
+### 1. Trajectory Category
 
-- **Category of Admissible Trajectories \(\mathcal{T}\):**  
-  - *Objects*: Spherepop states \((\Omega_t, H_t)\), where \(\Omega_t\) is [K
-the current option set and \(H_t\) is the accumulated event word.
-  - *Morphisms* (irreversible extensions): A morphism from \((\Omega_t, H_t[3D[K
-H_t)\) to \((\Omega_{t'}, H_{t'})\) exists iff  
-    - \(\Omega_{t'} \subseteq \Omega_t\),  
-    - \(H_{t'} = H_t \cdot w\) for some non‑empty word \(w\), and the exten[5D[K
-extension satisfies all axioms of Section \(\ref{sec:possibility-preimage}\[41D[K
+- **Objects**: The objects of the category \(\mathcal{T}\) are *Spherepop s[1D[K
+states* \((\Omega_t, H_t)\), where \(\Omega_t\) is a set of options at time[4D[K
+time \(t\) and \(H_t\) is the associated history (event word).
+- **Morphisms**: A morphism from \((\Omega_t, H_t)\) to \((\Omega_{t'}, H_{[3D[K
+H_{t'})\) exists iff:
+  - \(\Omega_{t'} \subseteq \Omega_t\) (the state at \(t'\) is a subset of [K
+the current state),
+  - \(H_{t'} = H_t \cdot w\) for some non‑empty word \(w\), preserving the [K
+ordering,
+  - The extension satisfies the axioms from Section \(\ref{sec:possibility-[31D[K
 Section \(\ref{sec:possibility-preimage}\).
 
-  No non‑trivial isomorphisms exist because \(\Omega\) can shrink only whil[4D[K
-while \(H\) grows, preventing reversal.
+- **Composition**: Composition is simply concatenation of extensions, i.e.,[5D[K
+i.e., following one trajectory after another.
 
-- **History Projection Functor**  
-  \[
-    \Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \PathCat
-  \]
-  maps each state to its event word and each extension morphism to the corr[4D[K
-corresponding prefix in \(\PathCat\). Functoriality follows from concatenat[10D[K
-concatenation of extensions matching concatenation of event words.
+- **Irreversibility**: There are no non‑trivial isomorphisms because \(\Ome[6D[K
+\(\Omega\) can only shrink while \(H\) can only grow; thus a reverse morphi[6D[K
+morphism would require identical states.
 
 ---
 
-### 2. Definition of Projected Identity
+### 2. History Projection Functor
 
-**Definition (Projected identity):**  
-Two terminal states \((\Omega_k, H_k)\) and \((\Omega_k', H_k')\) are *Sphe[5D[K
-*Spherepop‑identical* iff their projected histories coincide:
+Define the history projection functor  
+\[
+\Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \PathCat,
+\]  
+which maps each state to its event word \(H_t\) and each morphism (extensio[9D[K
+(extension) to the corresponding prefix extension in \(\PathCat\). Functori[8D[K
+Functoriality follows directly from concatenating histories matching compos[6D[K
+composition of trajectories.
+
+---
+
+### 3. Projected Identity Definition
+
+**Definition**: Two terminal states \((\Omega_k, H_k)\) and \((\Omega_k', H[1D[K
+H_k')\) are *Spherepop‑identical* if their projected histories coincide:
 \[
 \Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau').
 \]
-Thus identity is defined by the equivalence classes of trajectories under t[1D[K
-this history projection, not directly on the trajectories themselves.
 
-**Definition (Trajectory Equivalence):**  
-For \(\tau, \tau' \in \mathcal{T}\),
+Thus identity is defined in terms of the *minimal complete invariant*—the o[1D[K
+ordered sequence of committed events—not directly on trajectories themselve[9D[K
+themselves.
+
+**Trajectory Equivalence**: For any two trajectories \(\tau, \tau' \in \mat[4D[K
+\mathcal{T}\),
 \[
 \tau \sim \tau' \;\Longleftrightarrow\; \Pi_{\mathrm{hist}}(\tau) = \Pi_{\m[7D[K
 \Pi_{\mathrm{hist}}(\tau').
 \]
-Objects are equivalence classes \([\tau]\); the event word is the minimal c[1D[K
-complete invariant, preserving all identity‑relevant distinctions while dis[3D[K
-discarding irrelevant preimage information.
+Objects in the Spherepop ontology are equivalence classes under this relati[6D[K
+relation.
 
 ---
 
-### 3. Compatibility with Normal Forms
+### 4. Compatibility with Normal Forms
 
-The projected identity reduces to the earlier normalised form when historie[8D[K
-histories are already canonical:
-
-- Let \(G_X\) be the ancestral event graph for a trajectory \(\tau\), and l[1D[K
-let  
-  \((\mathrm{spherepop}(X))_{\text{nf}}\) be its linearisation via Section [8D[K
-Section \(\ref{sec:normalization}\).  
-- Then projected identity coincides with:
+If \(G_X\) is the ancestral event graph and \((\text{spherepop}(X))_{\text{[31D[K
+\((\text{spherepop}(X))_{\text{nf}}\) its canonical linearisation, then
 \[
-X \equiv Y \;\Longleftrightarrow\; (\mathrm{spherepop}(X))_{\text{nf}} = (\[2D[K
-(\mathrm{spherepop}(Y))_{\text{nf}}.
+\Pi_{\mathrm{hist}}(\tau) = (\text{spherepop}(X))_{\text{nf}},
 \]
-
-Thus the normal form serves as a canonical representative of each projected[9D[K
-projected‑identity class.
+so the earlier identity condition \(X \equiv Y\) (equality of normal forms)[6D[K
+forms) is recovered as a special case.
 
 ---
 
-### 4. Non‑Injectivity and Loss of Preimage Information
+### 5. Non‑Injectivity and Loss of Preimage Information
 
-**Proposition (Non‑injectivity):**  
-There exist distinct trajectories \(\tau \neq \tau'\) in \(\mathcal{T}\) wi[2D[K
-with equal histories:
-\[
-\Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau').
-\]
+**Proposition**: There exist distinct trajectories \(\tau \neq \tau'\) such[4D[K
+such that \(\Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau')\).
 
-*Example:* Start from \(\Omega_0 = \{a, b, c\}\). Consider two trajectories[12D[K
-trajectories both committing \(a\) then \(b\):
-
-- **Trajectory 1:** \(\{a,b,c\} \to \{b,c\} \to \{c\}\) (options shrink as [K
-events are taken).
-- **Trajectory 2:** A binding step removes \(c\) early, leading to \(\{a,b,[8D[K
+*Example*: Consider \(\Omega_0 = \{a, b, c\}\). Two trajectories commit \(a[3D[K
+\(a\) first and \(b\) second but differ in subsequent options:
+- **Trajectory 1**: \(\{a,b,c\} \to \{b,c\} \to \{c\}\).
+- **Trajectory 2**: A binding step removes \(c\) early, yielding \(\{a,b,c\[10D[K
 \(\{a,b,c\} \to \{a,b\} \to \{b\} \to \varnothing\).
 
-Both project to the history \((a, b)\) under \(\Pi_{\mathrm{hist}}\), yet t[1D[K
-they differ in intermediate options and structural constraints that were ne[2D[K
-never committed.
-
-**Interpretation:** The projection loses all information about alternative [K
-possibilities (the “open” future states). Once a trajectory terminates, tho[3D[K
-those alternatives cannot be recovered from the event word alone. This loss[4D[K
-loss is precisely what makes history irreversible: only the ordered sequenc[7D[K
-sequence of commitments remains informative.
+Both project to the history \((a, b)\), showing that identity preserves onl[3D[K
+only the order of commitments, discarding all other structural details.
 
 ---
 
-### 5. Relationship to Structural Identity
+### 6. Relationship to Structural Identity
 
-The hierarchy of identity relations mirrors the stratified equivalence noti[4D[K
-notions discussed earlier:
+The hierarchy of projections provides a stratified notion of equivalence:
 
-1. **Trajectory Equivalence** (full projection) – retains all dynamics.
-2. **Event‑Word Equality** in \(\PathCat\) – retains only ordered commitmen[9D[K
-commitments, discarding intermediate option space.
-3. **Structural Isomorphism** (identity of observable states in \(\mathcal{[11D[K
-\(\mathcal{S}\)) – equates objects solely by their present configuration.
+1. **Trajectory Equivalence**: Full trajectory equivalence (Section \(\ref{[16D[K
+(Section \(\ref{sec:equivalences}\)).
+2. **Event‑Word Identity**: Equality in the event word.
+3. **Structural Isomorphism**: Equality at the observable state level.
 
-Thus projected identity sits between full dynamical equivalence and mere st[2D[K
-structural resemblance, embodying the philosophical insight that “the past [K
-is determined but often informationally inaccessible from the present.”
-
----
-
-**Conclusion:**  
-Projected identity formalises Spherepop’s principle that identity is define[6D[K
-defined by the irreversible trace of events rather than by the whole trajec[6D[K
-trajectory. This captures both the informational poverty of the present sta[3D[K
-state and the irreversibility inherent in dynamical systems, while preservi[8D[K
-preserving a minimal complete invariant (the canonical event word) for each[4D[K
-each equivalence class.
-
-Below is a detailed explanation of the material you provided, organized int[3D[K
-into several sections to clarify its meaning and implications.
-
----
-
-### 1. Overview of the Three Levels
-
-The framework described consists of three hierarchical levels that represen[8D[K
-represent different granularities of information about possible events:
-
-| Level | Representation | Purpose |
-|-------|----------------|---------|
-| **Bottom (deepest)** | Trajectory category \(\mathcal{T}\) | Captures the[3D[K
-the full geometry of possibility, including the shapes of option spaces, pr[2D[K
-provenance of exclusions, and measures such as entropy \(S\) and responsibi[10D[K
-responsibility \(\mathcal{R}\). |
-| **Middle** | Free History Category \(\PathCat\) | Represents only the ord[3D[K
-ordered record of committed events. It retains enough information to recons[6D[K
-reconstruct trajectories (by “replaying” them) but discards all details abo[3D[K
-about which intermediate possibilities were eliminated or selected. |
-| **Top (surface)** | Observable state category \(\mathcal{S}\) | Contains [K
-only observable states derived from histories, without any reference to int[3D[K
-internal option‑space structure. |
-
----
-
-### 2. Projections and Their Nature
-
-Two key functors map between these levels:
-
-1. **History Projection**  
-   \[
-   \Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \PathCat
-   \]  
-   This functor forgets the evolution of the option space, retaining only t[1D[K
-the ordered commitment record (the “event word”). It is a surjection becaus[6D[K
-because multiple distinct trajectories can map to the same history.
-
-2. **Collapse Functor**  
-   \[
-   \Collapse : \PathCat \longrightarrow \mathcal{S}
-   \]  
-   Given a history, this functor reconstructs an observable state by compos[6D[K
-composing transformations associated with each committed event (from a fixe[4D[K
-fixed root). It is also surjective because different histories can lead to [K
-the same observable state.
-
-Both functors are defined as **functors**, i.e., they preserve composition [K
-and identity. Consequently:
-
-- Extending two trajectories in sequence yields a concatenated history, whi[3D[K
-which corresponds exactly to composing the associated transformations.
-- Replay‑ing a concatenated history is equivalent to replaying its parts in[2D[K
-individually.
-
----
-
-### 3. Global Commutative Diagram
-
-The composition of these functors defines a map from trajectories directly [K
-to observable states:
-\[
-\Collapse \circ \Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \mathcal{[9D[K
-\mathcal{S}.
-\]
-
-This relationship is depicted by the following commutative diagram:
-
-```
-   mathcal{T}
-    ↙          ↘
-  Pi_hist      Collapse
-   |               |
-   v               v
- \PathCat ──────► \mathcal{S}
-```
-
-The diagram emphasizes that **all observable states arise from histories**,[12D[K
-histories**, and **all histories arise from trajectories**. The arrows flow[4D[K
-flow in one direction only, reflecting the irreversibility of information l[1D[K
-loss at each step.
-
----
-
-### 4. Irreversibility: No Right Inverse Functors
-
-Because the projections discard information:
-
-- **No right inverse exists for \(\Collapse\)** (mapping \(\mathcal{S}\) ba[2D[K
-back to \(\PathCat\)): multiple distinct histories can produce the same obs[3D[K
-observable state, so no unique pre‑history can be recovered.
-  
-- **No right inverse exists for \(\Pi_{\mathrm{hist}}\)** (mapping \(\PathC[8D[K
-\(\PathCat\) back to \(\mathcal{T}\)): different trajectories may share the[3D[K
-the same event word but differ in their internal option spaces.
-
-This theorem formalizes that history and state information are not recovera[8D[K
-recoverable uniquely from one another without additional contextual data.
-
----
-
-### 5. Path Functionals: Entropy and Responsibility
-
-The measures \(S\) (entropy) and \(\mathcal{R}\) (responsibility) are defin[5D[K
-defined on the deepest level \(\mathcal{T}\):
-
-- **Entropy**:  
-  \[
-  S(\tau) = \log\left(\frac{|\Omega_0|}{|\Omega_k|}\right),
-  \]  
-  where \(|\Omega_0|\) is the size of the initial option space and \(|\Omeg[8D[K
-\(|\Omega_k|\) that of the final state. It quantifies how much information [K
-has been lost in the trajectory.
-
-- **Responsibility**:  
-  \[
-  \mathcal{R}(\tau) = \sum_{j=1}^{k} \rho(E_{i_j}),
-  \]  
-  summing responsibility weights over each committed event \(E_{i_j}\). It [K
-reflects how much “responsibility” (or cost) is incurred at each step.
-
-**Non‑factorization:** These path functionals do **not** factor through the[3D[K
-the history projection \(\Pi_{\mathrm{hist}}\) in general. There exist traj[4D[K
-trajectories that map to the same history but differ in their entropy and r[1D[K
-responsibility values due to different internal option spaces or exclusion [K
-mechanisms.
-
----
-
-### 6. Stratified Ontology
-
-The global diagram, together with path measures \(S\) and \(\mathcal{R}\), [K
-reveals a **stratified ontological structure**:
-
-1. **Trajectory Level (\(\mathcal{T}\))**: Holds the richest information ab[2D[K
-about possibility.
-2. **History Level (\(\PathCat\))**: Captures only ordered events, sufficie[8D[K
-sufficient for reconstructing trajectories but losing all internal option‑s[8D[K
-option‑space details.
-3. **State Level (\(\mathcal{S}\))**: Contains observable states derived fr[2D[K
-from histories without reference to deeper structure.
-
-Each projection discards information irreversibly:
-
-- The first projection retains history (no loss of entropy/responsibility).[24D[K
-entropy/responsibility).
-- The second projection collapses history into a st[2D[K
-state, losing all internal details.
-
-Thus, **identity** is what remains after the first projection (\(\Pi_{\math[13D[K
-(\(\Pi_{\mathrm{hist}}\)), while **observable states** remain only after bo[2D[K
-both projections. Entropy and responsibility are “shadows” that leave trace[5D[K
-traces at intermediate levels through specific event words or state values [K
-they constrain.
+Spherepop identity sits between trajectory equivalence and structural isomo[5D[K
+isomorphism, retaining causal order while discarding full dynamics of possi[5D[K
+possibility space.
 
 ---
 
 ### Summary
 
-The framework illustrates a hierarchical structure where:
+Identity in Spherepop is thus a *projected* concept: it groups together tra[3D[K
+trajectories that share the same ordered history, capturing what can be kno[3D[K
+known from present observations (the entropy \(\mathcal{R}(X)\)) but not ne[2D[K
+necessarily their entire past histories. This aligns with the philosophical[13D[K
+philosophical view that the past is determined yet often informationally in[2D[K
+inaccessible from the present, and it formalizes how irreversible processes[9D[K
+processes prune alternative pathways while preserving only the essential se[2D[K
+sequence of commitments.
 
-- The deepest level encodes full dynamics (possibility, option spaces).
-- Intermediate level records committed events.
-- Surface level yields observable states without internal information.
-- Projections are surjective but not injective, reflecting irreversible los[3D[K
-loss of detail.
-- Path functionals (entropy and responsibility) capture intrinsic propertie[9D[K
-properties of trajectories that persist despite this loss.
 
-This structure provides a rigorous categorical foundation for understanding[13D[K
-understanding how different levels of description relate to one another and[3D[K
-and why certain types of information cannot be recovered uniquely from lowe[4D[K
-lower‑level representations.
+--- chunk-0003-summary.md ---
+**Summary**
 
-**Spherepop – A Formalism for Causal Histories**
+The paper unifies three hierarchical levels of description for an evolving [K
+system:
 
-**1. Core Syntax**
+1. **Trajectory Category \(\mathcal{T}\)** – contains all possible historie[8D[K
+histories (possibility‑history pairs) with full option‑space geometry.  
+2. **Free History Category \(\PathCat\)** – obtained by the first projectio[9D[K
+projection \(\Pi_{\text{hist}}:\mathcal{T}\to\PathCat\) which forgets the i[1D[K
+internal evolution of the option space and retains only the ordered sequenc[7D[K
+sequence of committed events (the “history word”).  
+3. **Observable State Category \(\mathcal{S}\)** – obtained by projecting h[1D[K
+histories onto observable states via the Collapse functor \(\Collapse:\Path[17D[K
+\(\Collapse:\PathCat\to\mathcal{S}\), which reconstructs a state from its h[1D[K
+history by composing associated transformations.
 
-A *history* in Spherepop is a well‑formed sequence of statements, each bein[4D[K
-being one of three kinds:
+Both projections are functors:
 
-| Type | Production (grammar) |
-|------|-----------------------|
-| **Split**   | `split( <object> ) → <object>,<object>` |
-| **Merge**   | `merge(<object>,<object>) → <object>` |
-| **Direct event transformation** | `<object> → <event> → <object>` |
+- \(\Pi_{\text{hist}}\) respects composition because concatenating two traj[4D[K
+trajectories yields the concatenated event word.  
+- \(\Collapse\) also respects composition because replaying a concatenated [K
+history is equivalent to replaying each part in turn.
 
-*Objects* are the regions or “places” that appear on a causal diagram, whil[4D[K
-while *events* describe transitions (split/merge) between them.  
+**Global Commutative Diagram**
 
-The full grammar is
+The overall map from trajectories directly to observable states is
 
-```
-<history>        ::= <statement>
-                   | <statement> <history>
+\[
+\Pi_{\text{hist}}:\mathcal{T}\longrightarrow\PathCat,\qquad
+\Collapse:\PathCat\longrightarrow\mathcal{S},
+\]
 
-<statement>      ::= <split>
-                   | <merge>
-                   | <event-transform>
+and their composition \(\Collapse\circ\Pi_{\mathrm{hist}}\) gives a functor[7D[K
+functor from \(\mathcal{T}\) to \(\mathcal{S}\).
 
-<object>         ::= ...   (name of a region)
-<event>          ::= ...   (label for a transition, e.g., “birth”, “death”)[8D[K
-“death”)
-```
-
-Thus any history is a linear string such as  
-
-`merge(A,B) → D, split(R) → A,B …`.
-
-**2. Event Graph & Causal Ordering**
-
-When parsed, the statements induce an *event graph* – a directed acyclic gr[2D[K
-graph (DAG) where:
-
-- Vertices = objects (regions).  
-- Edges = events that move tokens from one vertex to another.
-
-The DAG encodes causal dependencies: if event \(E_i\) precedes \(E_j\), the[3D[K
-then \(i\) must occur before \(j\) in any admissible execution.  
-
-**3. Normalization**
-
-Normalization orders the events according to this partial order, producing [K
-a *normal form*:
+The diagram is commutative:
 
 ```
-(normal-form) ::= ( <event‑word> )
+    mathcal{T}
+     ↙   ↘
+  Pi_hist ──► PathCat
+     ▲       ▼
+     │       │
+Collapse ◄──► mathcal{S}
 ```
 
-The *event word* is the linearized list of events after applying commutatio[10D[K
-commutation rules.
+**Irreversibility**
 
-**4. Rewriting Rules & Confluence**
+Because information is lost at each step, neither projection has a right in[2D[K
+inverse:
 
-Normalization proceeds via a confluent rewriting system defined by two basi[4D[K
-basic operations:
+- No functor \(R:\mathcal{S}\to\PathCat\) can recover the full trajectory f[1D[K
+from a state.  
+- No functor \(Q:\PathCat\to\mathcal{T}\) can recover the full history from[4D[K
+from an event word.
 
-1. **Commutation Rule**  
-   If two adjacent events \(E_i\) and \(E_j\) are independent \((E_i\parall[13D[K
-\((E_i\parallel E_j)\), they may be swapped:  
+This reflects genuine irreversibility: once option space is forgotten, no a[1D[K
+amount of information in \(\mathcal{S}\) or \(\PathCat\) can reconstruct th[2D[K
+the lost possibility structure.
 
-   \[
-   (E_i, E_j) \;\longrightarrow\; (E_j, E_i)
-   \]
+**Path Functionals**
 
-   Independence is symmetric (if \(i\parallel j\) then \(j\parallel i\)) an[2D[K
-and satisfies the *diamond* property: any two independent pairs can be comm[4D[K
-commuted independently.
+Entropy \(S\) and responsibility \(\mathcal{R}\) are defined on trajectorie[11D[K
+trajectories:
 
-2. **Structural Rules**  
-   - A merge `merge(A,B) → D` collapses two incoming edges to a single vert[4D[K
-vertex for \(D\).  
-   - A split `split(R) → A,B` collapses one outgoing edge from \(R\) into s[1D[K
-separate outgoing edges to \(A\) and \(B\).
+\[
+S(\tau)=\log\frac{|\Omega_0|}{|\Omega_k|},\qquad
+\mathcal{R}(\tau)=\sum_{j=1}^{k}\rho(E_{i_j}),
+\]
 
-Applying these rules repeatedly yields the *normal form* (the lexicographic[13D[K
-lexicographically smallest word respecting the independence relation).  
+and they factor through \(\Pi_{\mathrm{hist}}\) only in the sense that both[4D[K
+both measures depend on the same ordered event word. They do **not** factor[6D[K
+factor completely, showing that entropy and responsibility capture properti[8D[K
+properties beyond mere identity.
 
-**5. Soundness & Completeness**
+**Stratified Ontology**
 
-- **Soundness**: Every well‑typed Spherepop expression corresponds exactly [K
-to one normal form; thus two expressions represent the same historical obje[4D[K
-object iff their normal forms are identical.
-- **Completeness**: The rewriting terminates because the event graph is a D[1D[K
-DAG, guaranteeing that every execution can be reduced to its unique normal [K
-form.
+The three‑level structure with two scalar measures (entropy and responsibil[11D[K
+responsibility) reflects a stratified ontology:
 
-These properties follow from standard results on confluence and termination[11D[K
-termination for trace‑type rewriting systems (see Abramsky 1994; Mazurkiewi[10D[K
-Mazurkiewicz 1987).
+- **Level 1 (deepest):** Trajectory \(\mathcal{T}\) – full possibility geom[4D[K
+geometry.  
+- **Level 2:** Free History \(\PathCat\) – ordered commitment record.  
+- **Level 3:** Observable State \(\mathcal{S}\) – current configuration.
 
-**6. Connections with Other Formalisms**
+Information is conserved at the trajectory level, progressively lost throug[6D[K
+through the projections, and any remaining “shadow” effects of entropy or r[1D[K
+responsibility are visible only at higher levels (history and state).
 
-| Framework | Mapping to Spherepop |
-|-----------|----------------------|
-| **Mazurkiewicz Trace Theory** | Event words are equivalence classes of se[2D[K
-sequences modulo commutation, identical to the normalized forms obtained by[2D[K
-by rewriting. |
-| **Petri Nets** | Objects ↔ Places; events ↔ Transitions (split → multiple[8D[K
-multiple output places, merge → single input place). A history is a firing [K
-sequence in the net’s reachability graph. |
-| **String Diagrams** | Objects are wires; morphisms are boxes/nodes (split[6D[K
-(split = box with one output wire branching into two, merge = node taking t[1D[K
-two inputs and emitting one). Sequential transformations compose by connect[7D[K
-connecting output to next input wire. |
+**Key Take‑aways**
 
-These correspondences illustrate Spherepop as a compositional language that[4D[K
-that sits at the intersection of algebraic (trace) and geometric (string di[2D[K
-diagram) representations of causal processes.
+- The diagram encapsulates a one‑way flow: richer description → coarser.  
+- Irreversibility is formalized by the non‑existence of right inverses for [K
+the projections.  
+- Path functionals illustrate that not all trajectory information can be ca[2D[K
+captured solely by identity; entropy and responsibility add extra, non‑reco[8D[K
+non‑recoverable dimensions to the ontology.  
 
-**7. Example**
+This framework provides a categorical foundation for understanding how poss[4D[K
+possibility evolves into observable reality while preserving essential inva[4D[K
+invariant structures across the hierarchy.
 
-Consider the simple history:
 
-```
-merge(A,B) → D, split(R) → A,B
-```
-
-Parsing yields an event graph with vertices {R, A, B, D} and edges R→A, R→B[3D[K
-R→B, A→D, B→D.  
-Applying commutation (if \(A\parallel B\) we swap `split(R) → B,A`) produce[7D[K
-produces the normal form:
-
-```
-merge(A,B) → D, split(R) → A,B
-```
-
-or after swapping if adjacency allows:  
-
-```
-merge(A,B) → D, split(R) → B,A
-```
-
-Both are valid because they respect the independence relation.
-
-**8. Decision Procedure**
-
-1. **Parse** the expression into a DAG of events (structural rules).  
-2. **Compute a topological sort** (e.g., lexicographic ordering for ties). [K
- 
-3. **Apply commutation** until no two adjacent events can be swapped withou[6D[K
-without violating the sort.  
-
-The resulting event word is unique and serves as the canonical identifier f[1D[K
-for that object.
+--- chunk-0004-summary.md ---
+Below is a structured, high‑level overview of the material you asked for – [K
+organized into sections that match the structure of the original document. [K
+Feel free to let me know if you need any particular subsection expanded or [K
+reformatted.
 
 ---
 
-*In summary, Spherepop provides an algebraic yet intuitive notation for cau[3D[K
-causal histories: parsed into a DAG of independent events, normalized via c[1D[K
-confluent commutation rules, yielding a unique normal form that serves as t[1D[K
-the identity witness among all syntactically equivalent expressions.*
+## 1. Syntax and Semantics  
 
-**Durable Theoretical Information Extracted**
+### 1.1 Grammar Definitions  
+- **History** (the full syntactic description):  
 
-1. **Core Structure – String Diagrams**
-   - *Definition*: In Spherepop, event histories are represented by “string[7D[K
-“string diagrams” where:
-     - **Sequential composition** → vertical stacking of diagram components[10D[K
-components.
-     - **Parallel processes** → horizontal juxtaposition.
-   - *Illustration*: Figure \ref{fig:string} shows a simple history \((\tex[7D[K
-\((\text{spherepop}(D)) = (E_1, E_3)\) with \(E_1\) as “split” and \(E_3\) [K
-as “merge”.
+  ```verilog
+  <history>        ::= <statement>
+                      | <statement> <history>
 
-2. **Ontological Distinction – Historical Identity**
-   - *Spherepop* differs from standard monoidal categories by treating **hi[4D[K
-**historical identity** as the primary ontological criterion.
-   - This means that causal relations, rather than mere morphisms, dictate [K
-what counts as the same entity over time.
+  <statement>      ::= <split>
+                      | <merge>
+                      | <event-transform>
 
-3. **Integrated Representations**
-   - String diagrams and Petri‑net representations are presented as complem[7D[K
-complementary visual/geometric encodings of the same underlying structure.
-   - An additional layer—**event‑word and normal‑form apparatus**—provides [K
-a canonical symbolic encoding (e.g., normal form).
+  <event-transform>::= <object> "->" <event> "->" <object>
+  ```
 
-4. **Higher‑Categorical Framework**
-   - The causal history category \(\mathcal{H}\) (Section \ref{sec:functors[26D[K
-(Section \ref{sec:functors}) has morphisms that are irreversible events, fo[2D[K
-forming directed causal chains.
-   - Rewriting operations from Appendix \ref{app:rewriting} act as **2‑morp[8D[K
-**2‑morphisms** in a bicategory/2‑category:
-     \[
-       (E_i, E_j) \;\Rightarrow\; (E_j, E_i)
-       \quad\text{when } E_i \parallel E_j,
-       \]
-     allowing re‑ordering of independent events.
-   - **Coherence** is captured by the confluence result: any two sequences [K
-of commutation steps relating the same pair of event chains are linked by h[1D[K
-higher‑order equivalences.
+- **Split** and **Merge** productions (as given):  
 
-5. **Derived Functor / Normalization**
-   - The rewriting structure suggests that objects (event graphs) can be vi[2D[K
-viewed as objects in a **derived category**.
-   - The **normalization functor** (Section \ref{sec:normalization}) extrac[6D[K
-extracts the canonical representative from equivalence classes of descripti[9D[K
-descriptions, analogous to a derived functor.
+  ```verilog
+  <split>   ::= "split" "(" <object> ")" "->" <object> "," <object>
+  <merge>   ::= "merge" "(" <object> "," <object> ) "->" <object>
+  ```
 
-6. **Sheaf‑Theoretic Interpretation**
-   - Large histories are assembled by gluing compatible local histories def[3D[K
-defined on overlapping subgraphs.
-   - This is precisely the condition in sheaf theory for assembling global [K
-sections:
-     *Local knowledge* (processors) → **open sets** = hereditary sub‑DAGs,
-     *Consistent local records* → **sections** = compatible local histories[9D[K
-histories.
-   - The resulting structure is a **sheaf over the causal graph**, with nor[3D[K
-normal form providing the canonical global section.
+These definitions capture the core idea that a history is simply a sequence[8D[K
+sequence of statements, each of which can be either a split/merge operation[9D[K
+operation or a direct event transformation.
 
-7. **Operational Analogy – Distributed Computation**
-   - In practice, different processors hold only their local scope of event[5D[K
-events; consistency on overlaps (overlap verification) and subsequent gluin[5D[K
-gluing produce the full computational history.
-   - This mirrors the assembly process in sheaves: verify compatibility on [K
-intersections and stitch together global descriptions.
+### 1.2 Normal Forms  
+A **normalized Spherepop expression** (the “normal form”) is defined as:
 
-8. **Embedding into a Broader Framework**
-   - Spherepop can be embedded into a broader class of **derived causal cat[3D[K
-categories** where:
-     * Objects = terminal nodes of event diagrams,
-     * Morphisms = irreversible processes,
-     * 2‑morphisms = rewriting equivalences (commutations),
-     * Normalization functors extract canonical representatives.
-   - This programmatic direction is outlined in the essay’s concluding rema[4D[K
-remarks.
+```verilog
+<normal-form> ::= "(" <event-word> ")"
+```
+
+The normal form corresponds to the canonical representation of an execution[9D[K
+execution history after applying the confluence rewriting rules described b[1D[K
+below.
 
 ---
 
-These points capture the essential theoretical constructs—definitions, equa[4D[K
-equations (via commutation relations), distinctions (historical identity vs[2D[K
-vs. standard categories), mechanisms (higher‑categorical structure, derived[7D[K
-derived functors), arguments (coherence and confluence as global consistenc[10D[K
-consistency), conjectures (embedding into derived causal categories), depen[5D[K
-dependencies (between string diagrams, Petri nets, event words), and unreso[6D[K
-unresolved questions (how to fully axiomatize the rewriting system for all [K
-histories).
+## 2. Rewriting Rules and Normalization  
+
+### 2.1 Core Commutation Rule  
+- **Independence Relation**: Events \(E_i\) and \(E_j\) are *independent* ([1D[K
+(\(E_i \parallel E_j\)) if they do not share a common ancestor in the event[5D[K
+event graph.
+- **Rule**:  
+
+  ```text
+  (E_i, E_j)   ->   (E_j, E_i)
+  ```
+
+  whenever \(E_i \parallel E_j\).
+
+This mirrors Mazurkiewicz’s commutation relations for trace equivalence and[3D[K
+and is central to achieving causally‑equivalent histories.
+
+### 2.2 Structural Rules  
+- **Merge Rule**:  
+
+  ```text
+  "merge"(A, B) -> D   can replace two incoming edges into vertex \(D\) in [K
+the event graph.
+  ```
+
+- **Split Rule**:  
+
+  ```text
+  "split"(R) -> A, B   can replace a pair of outgoing edges from \(R\).
+  ```
+
+These rules allow compound symbolic descriptions (e.g., “merge(A, B)”) to b[1D[K
+be collapsed into the underlying graph structure before applying commutatio[10D[K
+commutation.
+
+### 2.3 Normalization Algorithm  
+
+1. **Parse** the expression → build an explicit event graph with vertices =[1D[K
+= regions and edges = events.
+2. **Topological Order**: Compute a DAG ordering (possible because graphs a[1D[K
+are acyclic).
+3. **Apply Commutations**: Repeatedly commute any adjacent independent pair[4D[K
+pairs until no further commutation is possible.
+
+The resulting sequence is the normal form, i.e., the unique representative [K
+of that causal trace.
+
+---
+
+## 3. Confluence Proof  
+
+### Statement  
+*The commutation rewriting system is confluent*: all rewrite paths from a g[1D[K
+given event word converge to the same normal form.
+
+**Proof Sketch**:  
+- The independence relation \(\parallel\) is symmetric; any two adjacent in[2D[K
+independent events can be swapped.
+- If two distinct commutation rules are applicable (e.g., swapping \(E_i, E[1D[K
+E_j\) and then later swapping another pair), applying them in sequence even[4D[K
+eventually yields a single word where all remaining swaps no longer change [K
+the order.  
+- This satisfies the diamond property required for confluence, guaranteeing[12D[K
+guaranteeing termination of the rewriting process.
+
+---
+
+## 4. Connections to Other Process Formalisms  
+
+### 4.1 Trace Theory (Mazurkiewicz)  
+Spherepop histories are exactly the equivalence classes of traces modulo co[2D[K
+commutation of independent events. The independence relation and commutatio[10D[K
+commutation rules correspond directly to Mazurkiewicz’s definitions, making[6D[K
+making Spherepop a concrete instance of trace theory.
+
+### 4.2 Petri Nets  
+- **Places ↔ Regions**: A region in a Spherepop expression corresponds to a[1D[K
+a place (condition/resource) in a Petri net.
+- **Transitions ↔ Events**: Split and merge events correspond to transition[10D[K
+transitions that consume/produce tokens at places; sequential transformatio[13D[K
+transformations correspond to ordered firing of enabled transitions.
+- The DAG nature of the event graph mirrors the property that a Petri net h[1D[K
+has no cycles, ensuring well‑defined execution paths.
+
+### 4.3 String Diagrams  
+In monoidal category theory (Baez & Stay), objects are wires and morphisms [K
+(events) are boxes or nodes linking wires.  
+- **Split** appears as a box with one input and two outputs;  
+- **Merge** appears as a box with two inputs and one output.  
+
+A complete Spherepop history is thus rendered as a compound string diagram [K
+assembled from these elementary components, providing a visual compositiona[12D[K
+compositional semantics.
+
+---
+
+## 5. Illustrative Example (String Diagram)  
+
+```plaintext
++--- split R --> A , B ---+
+|                         |
+|   +---- E1 ----+         |
+|   |            |         v
+|   v            v       +--- merge D <-- E3
+|   |            |       |
++---+------------+     +-----------------+
+```
+
+Here, the split event \(E_1\) creates two descendant regions \(A\) and \(B\[4D[K
+\(B\); later, the merge event \(E_3\) combines them into a single region \([2D[K
+\(D\). This diagrammatic representation aligns with the description in Sect[4D[K
+Section 4.2.
+
+---
+
+## 6. Summary  
+
+- **Syntax**: A history is a sequence of split/merge or direct transformati[12D[K
+transformations.
+- **Normalization**: Achieved via commutation (independence) and structural[10D[K
+structural rules; produces a unique normal form representing causal equival[7D[K
+equivalence.
+- **Confluence**: Guarantees that any rewrite path leads to the same normal[6D[K
+normal form, providing a decision procedure for Spherepop identity.
+- **Connections**: Direct parallels with trace theory, Petri nets, and stri[4D[K
+string diagrams illustrate Spherepop’s role as an expressive, compositional[13D[K
+compositional language for describing causally constrained histories.
+
+---
+
+*Feel free to request deeper dives into any of these sections—e.g., detaile[7D[K
+detailed proofs of confluence, examples using specific event graphs, or a c[1D[K
+comparison table mapping each formalism.*
+
+
+--- chunk-0005-summary.md ---
+**1. Definitions & Primitive Concepts Introduced**
+
+- **Historical identity**: “the primary ontological criterion” that disting[7D[K
+distinguishes Spherepop from standard monoidal categories (source: “[What d[1D[K
+distinguishes … is its emphasis on \emph{historical identity} as the primar[6D[K
+primary ontological criterion.”]”).  
+- **Derived category framework**: A higher‑categorical structure where obje[4D[K
+objects are causal histories, morphisms are irreversible events, and 2‑morp[6D[K
+2‑morphisms capture commutation between independent events (source: “[In th[2D[K
+the causal history category $\mathcal{H}$ introduced in Section~\ref{sec:fu[19D[K
+Section~\ref{sec:functors}, …]”).  
+- **Event‑word & normal‑form apparatus**: Provides a canonical symbolic enc[3D[K
+encoding of event histories (source: “The string diagrams and Petri net rep[3D[K
+representations provide operational and geometric pictures… while the event[5D[K
+event‑word and normal‑form apparatus provides a canonical symbolic encoding[8D[K
+encoding.”).  
+
+**2. Mathematical Claims & Formal Structures**
+
+- Causal history category $\mathcal{H}$ has objects = terminal nodes of eve[3D[K
+event diagrams, morphisms = irreversible events (directed causal chains) (s[2D[K
+(source: “[In the causal history category $\mathcal{H}$ introduced in Secti[5D[K
+Section~\ref{sec:functors}, …]”).  
+- 2‑morphisms are commutation steps between independent events $E_i \parall[7D[K
+\parallel E_j$, interpreted as higher‑order equivalences in a bicategory (s[2D[K
+(source: “The rewriting rules of Appendix~\ref{app:rewriting} provide natur[5D[K
+natural transformations… A commutation step may be interpreted as a 2‑morph[7D[K
+2‑morphism in a bicategory.”).  
+- Confluence result corresponds to coherence of these 2‑morphisms, ensuring[8D[K
+ensuring any two sequences of commutation steps are connected (source: “The[4D[K
+“The confluence result then corresponds to the coherence of these 2‑morphis[9D[K
+2‑morphisms…”).  
+
+**3. Mechanisms & Processes**
+
+- **Gluing**: Large histories are assembled from overlapping local historie[8D[K
+histories $H_i$ that agree on intersections $\{H_i\}$, analogous to sheaf g[1D[K
+gluing (source: “If $\{H_i\}$ is a collection of local histories defined on[2D[K
+on overlapping regions… then a global history may be assembled by gluing.”)[9D[K
+gluing.”).  
+- **Normalization functor**: Extracts canonical representatives from equiva[6D[K
+equivalence classes of event‑graph descriptions (source: “[The normalizatio[12D[K
+normalization functor … plays the role of the derived functor, extracting t[1D[K
+the canonical representative from a class of equivalent descriptions.]”).  [K
+
+
+**4. Connections to Concepts Named in Running Abstract**
+
+- Links “historical identity” with causal trace theory and Mazurkiewicz’s e[1D[K
+event‑word model (source: “Spherepop histories are encoded as directed caus[4D[K
+causal chains… independent events may commute per Mazurkiewicz’s event‑word[10D[K
+event‑word model.”).  
+- Connects Petri‑net semantics to the string‑diagrammatic representation, s[1D[K
+showing both provide geometric/operational pictures of the same structure ([1D[K
+(source: “Petri nets provide a resource‑aware semantics mapping regions to [K
+places/tokens… String diagrams give a geometric proof system…”).  
+- Extends higher‑categorical structures from Section 5 by introducing 2‑mor[5D[K
+2‑morphisms as commutation relations, aligning with derived functor constru[7D[K
+constructions analogous to sheaf theory (source: “This section sketches the[3D[K
+the relevant structures and their relationship to derived categories and sh[2D[K
+sheaf theory…”).  
+
+**5. Unresolved Questions or Contradictions Visible**
+
+- The document hints at a need for more technical development of the higher[6D[K
+higher‑categorical framework but does not resolve how exactly historical id[2D[K
+identity is operationalized beyond being an ontological criterion (potentia[9D[K
+(potential contradiction: “historical identity” may conflict with purely st[2D[K
+structural category axioms).  
+- No explicit mention of potential conflicts between commutation (2‑morphis[10D[K
+(2‑morphisms) and irreversibility of morphisms in $\mathcal{H}$; the relati[6D[K
+relationship remains underdefined.  
+- The embedding of Spherepop into derived causal categories as a sheaf over[4D[K
+over the causal graph is presented as plausible but not demonstrated with c[1D[K
+concrete functorial definitions or coherence proofs, leaving room for unans[5D[K
+unanswered technical questions (e.g., how to handle non‑commutative histori[7D[K
+histories that violate confluence).  
+
+--- 
+
+*All substantive claims are directly tied to verbatim excerpts from the new[3D[K
+new chunk.*
 

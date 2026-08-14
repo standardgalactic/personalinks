@@ -1,15 +1,194 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 3 of a document called
+"the-calculus-of-commitment.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Currying, Pipelines, and the Merge‑Collapse View**
 
-TEXT
-====
+In Spherepop we view computation not only as “do something with many inputs[6D[K
+inputs” but as a **series of unary commitments** that are accumulated seque[5D[K
+sequentially. This perspective makes several deep facts visible:
+
+1. **Functions are first‑class values.**  
+   Applying a multi‑argument function partially yields another function (a [K
+*transformer*) rather than an immediate result.
+
+2. **Composition is associative and uniform.**  
+   Because each stage consumes exactly one input, the whole pipeline reduce[6D[K
+reduces to a chain of unary transformations. The order in which we merge th[2D[K
+these stages never matters as long as associativity holds.
+
+3. **Incremental commitment lets us defer collapse until the entire structu[7D[K
+structure has accumulated.**  
+
+Thus pipelines like
+
+\[
+h \circ g \circ f
+\]
+
+are interpreted structurally as
+
+\[
+\operatorname{collapse}(S \oplus S_f \oplus S_g \oplus S_h),
+\]
+
+where each \(S_i\) is a “region” that records the result of one stage. The [K
+merge operator \(\oplus\) (think of it as “pipeline‑join”) is associative, [K
+so grouping does not affect the final outcome.
+
+---
+
+### Currying Reveals First‑Class Functions
+
+Currying turns any function of several arguments into a series of single‑ar[9D[K
+single‑argument functions:
+
+\[
+f(x,y,z) \;\longrightarrow\; f(x)(y)(z).
+\]
+
+This has three immediate consequences:
+
+* **First‑class nature:** The intermediate transformer \(f(x)\) is itself a[1D[K
+a function that can be passed around, stored in variables, or composed furt[4D[K
+further.
+* **Associativity of composition:** Because each application produces the s[1D[K
+same kind of unary object, we can compose them without ever having to “wait[5D[K
+“wait” for all inputs. In other words,
+  \[
+  (h \circ g)(x) = h(g(x)),
+  \]
+  and similarly for three‑argument cases, giving
+  \[
+  (h \circ g \circ f)(x,y,z)=h\big(g(f(x,y),z)\big).
+  \]
+
+* **Incremental commitment:** We never need all inputs at once; we can star[4D[K
+start with \(f\) on one argument and then feed the result into \(g\). This [K
+matches how Unix pipelines operate: each command consumes a stream and prod[4D[K
+produces another.
+
+---
+
+### Merge‑Collapse as the Core Compositional Principle
+
+Consider any program that processes a data **stream** \(S\). We associate i[1D[K
+it with an abstract region \(S_i\) (a “commitment” to some part of the inpu[4D[K
+input). The whole pipeline is then described by:
+
+\[
+S \mapsto \operatorname{collapse}\big(
+  S \oplus S_1 \oplus S_2 \oplus \dots \oplus S_n
+).
+\]
+
+* **Implicit merging:** The pipe symbol \(|\) in Unix pipelines denotes an [K
+implicit merge of the outputs. In our formalism, this is exactly the operat[6D[K
+operation \(\oplus\) that combines regions.
+* **Final collapse:** Only after all stages have accumulated do we apply th[2D[K
+the canonical projection (collapse), yielding a single region representing [K
+the end result.
+
+Thus currying and pipeline notation share the same algebraic backbone: *seq[4D[K
+*sequential composition via associative merge followed by canonical project[7D[K
+projection*.
+
+---
+
+### From Pipeline to the Untyped \(\lambda\)-Calculus
+
+The untyped \(\lambda\)-calculus can be seen as a **structured refinement**[12D[K
+refinement** of this merge‑collapse picture:
+
+| Concept in \(\lambda\) | Merge‑Collapse Analogue |
+|------------------------|--------------------------|
+| Abstraction \(\lambda x.\,e\) | Region parameterization:  
+  \[
+  \llbracket \lambda x.\, e \rrbracket(R)=\operatorname{collapse}\big(\llbr[47D[K
+\rrbracket(R)=\operatorname{collapse}\big(\llbracket e\rrbracket \oplus R\b[3D[K
+R\big)
+  \] |
+| Application \((\lambda x.\,e)\;a\) | Merge + identification + collapse:  [K
+
+  *Merge* the region for argument \(a\) with the body’s structure, then int[3D[K
+introduce an equivalence identifying placeholder \(x\) with \(a\), finally [K
+collapse to canonical form. |
+| \(\beta\)-reduction \((\lambda x.\,e)\;a \to e[x:=a]\) | Collapse after m[1D[K
+merge:  
+  Merge the region of \(a\) into \(\llbracket e\rrbracket\); identification[14D[K
+identification makes all bound occurrences of \(x\) equivalent to those of [K
+\(a\); collapse yields the canonical term. |
+| Confluence (normalisation independence) | Follows from associativity of m[1D[K
+merge and commutativity of region joining, plus canonical projection—differ[17D[K
+projection—different evaluation orders produce the same collapsed region. |[1D[K
+|
+
+**Key Point:** In this view, substitution is not a primitive “replace symbo[5D[K
+symbol” but rather *merge‑then‑identify‑then‑collapse*. This structural ins[3D[K
+insight explains why \(\lambda\)-calculus enjoys confluence and normalizati[11D[K
+normalization without needing an explicit notion of variable binding as a s[1D[K
+separate syntactic rule.
+
+---
+
+### Types Preserve the Structural Integrity
+
+Types in Spherepop are precisely **invariants preserved under merge and col[3D[K
+collapse**:
+
+* The base type is *Region* – any well‑formed expression denotes a region.
+* A function type \(A \to B\) guarantees that after merging an input of typ[3D[K
+type \(A\), the resulting region can be collapsed into a region correspondi[11D[K
+corresponding to type \(B\).  
+  Thus types act as safety checks: they ensure we never collapse into an il[2D[K
+ill‑formed or inconsistent region.
+
+---
+
+### Summary
+
+Currying, pipelines, and merge‑collapse semantics share a common structural[10D[K
+structural principle:
+
+* **Composition is associative**, so the order of applying unary transforma[10D[K
+transformations does not matter.
+* **Each step consumes exactly one input** (or “commitment”), allowing us t[1D[K
+to build complex behaviours incrementally without waiting for all data at o[1D[K
+once.
+* The final *collapse* step projects the accumulated structure into a singl[5D[K
+single canonical form.
+
+This viewpoint clarifies why functional programming languages—whether they [K
+use pipe operators in Unix shells or arrow notation in \(\lambda\)-calculus[20D[K
+\(\lambda\)-calculus—are fundamentally about **structured, associative accu[4D[K
+accumulation** rather than merely sequential execution. It also shows that [K
+types are naturally expressed as constraints on this aggregation process.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[11pt]{article}
 

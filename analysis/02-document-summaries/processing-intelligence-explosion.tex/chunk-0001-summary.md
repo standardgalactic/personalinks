@@ -1,47 +1,57 @@
-**Parity Invariance Under Stochastic Drift (Lemma \ref{lemma:parity})**
+**Parity Invariance Under Stochastic Drift**
 
-*Proof.*  
-Let \(p(t)\) denote the tape pointer after \(t\) steps. By definition of th[2D[K
-the \(\mathbf{AmbiBF}\) movement rule, at each step we add a random offset [K
-\(\eta_t\) where  
-
-\[
-\eta_t \in \{-1,\;+1\},\qquad P(\eta_t = +1)=P(\eta_t = -1)=\tfrac12 .
-\]
-
-Since \(\eta_t \equiv 1 \pmod{2}\) in both cases, the parity (even/odd natu[4D[K
-nature) of \(p(t)\) changes only by adding an odd number:
+**Lemma [Parity Preservation] (labelled as \ref{lemma:parity})**  
+Let \(p(t) \in \mathbb{Z}\) be the tape pointer evolving under the AmbiBF m[1D[K
+movement rule:
 
 \[
-p(t+1) = p(t) + \eta_{t} \equiv p(t) + 1 \pmod{2}.
+p(t+1)=p(t)+\eta_t,\qquad 
+\eta_t\in\{-1,+1\},\;\text{with equal probability}.
 \]
 
-Thus after each step the parity flips deterministically. By induction, star[4D[K
-starting from any initial value \(p(0)\),
+Then the parity \(p(t)\bmod 2\) is deterministic given the initial value \([2D[K
+\(p(0)\):
 
 \[
-p(t) \equiv p(0) + t \pmod{2}\qquad\text{for all }t\ge 0 .
+p(t)\bmod 2 = (p(0)+t)\bmod 2 \quad\text{for all } t\ge 0.
 \]
 
-Hence the parity of the pointer is completely determined by its step count [K
-and the initial parity, independent of the random choices made along the wa[2D[K
-way. ∎  
+**Proof**  
+Because each step adds either +1 or ‑1, we have  
+
+\[
+\eta_t \equiv 1 \pmod{2}
+\]
+
+in both cases. Hence  
+
+\[
+p(t+1) = p(t)+\eta_t \equiv p(t)+1 \pmod{2}.
+\]
+
+By induction on \(t\),
+
+\[
+p(0)\bmod 2,\; p(1)\bmod 2=p(0)+1\bmod 2,\;
+p(2)\bmod 2=p(0)+2\bmod 2=\dots
+\]
+
+Thus  
+
+\[
+p(t)\bmod 2 = (p(0)+t)\bmod 2 \quad\forall t.
+\tag{*}
+\]  
 
 **Corollary [Dead Reckoning]**  
-Because \(p(t)\bmod 2\) depends only on whether \(t\) is even or odd (relat[6D[K
-(relative to the starting point), a program can always infer its current po[2D[K
-pointer parity simply by counting steps, without needing direct access to t[1D[K
-the absolute position of the tape. This invariant underlies the “counter en[2D[K
-encoding” used in \(\mathbf{AmbiBF}\) semantics: each step advances the poi[3D[K
-pointer’s parity, allowing stable counters and loops despite stochastic dri[3D[K
-drift.
+A program executing on AmbiBF can always determine the current parity of th[2D[K
+the tape pointer by counting steps, even without knowing its absolute posit[5D[K
+position. This invariant underpins counter encoding in the original languag[7D[K
+language specification.
 
-**Remark on Optimality**  
-The lemma demonstrates that parity is *the unique* positional invariant pre[3D[K
-preserved by arbitrary symmetric random walks on \(\mathbb{Z}\). All other [K
-modular invariants (e.g., modulo‑4 or modulo‑any composite) are destroyed b[1D[K
-because the sum of many independent ±1 steps introduces unpredictable odd/e[5D[K
-odd/even flips. Consequently, \(\mathbf{AmbiBF}\)’s reliance on parity is n[1D[K
-not merely a clever design choice but an optimal strategy for maintaining s[1D[K
-structural stability in a fundamentally noisy environment.
-
+**Remark** – The lemma shows that *parity is the unique positional invarian[8D[K
+invariant preserved under arbitrary symmetric random walks on \(\mathbb{Z}\[13D[K
+\(\mathbb{Z}\)*: all other modular invariants are erased by stochastic drif[4D[K
+drift. Consequently, AmbiBF’s design deliberately exploits this property to[2D[K
+to achieve reliable computation from unreliable primitives (see von Neumann[11D[K
+von Neumann 1956; Cover & Thomas 2006 for analogous results).

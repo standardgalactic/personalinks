@@ -1,0 +1,1262 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Admissibility Manifold – Summary**
+
+The *admissibility manifold* $\adm(x,t)$ is a subset of the reachability se[2D[K
+set defined for a reachable state \(y\) at time \(t\):
+
+\[
+\adm(x,t) \;=\;
+\overline{\{
+    y \in \reach(x,t_0,t)
+      : F(y,t,\tau) \ge \alpha \, V_R(x,t_0,t)
+   \}},
+\]
+
+where  
+
+* **Future Reachability Function**  
+  \(F(y,t,\tau)=V_R(y,t,t+\tau)\) is the volume of states reachable from \([7D[K
+from \(y\) over an additional interval \(\tau>0\).
+
+* **Admissibility Threshold**  
+  For a given fraction \(\alpha\in(0,1)\) and horizon \(\tau>0\), a state \[1D[K
+\(y\) is \((\alpha,\tau)\)-admissible if its future reachability retains at[2D[K
+at least that fraction of the original reachable volume.
+
+Thus $\adm(x,t)$ consists of all states from which the system can still exp[3D[K
+explore a substantial portion of its future possibility space, i.e., those [K
+that are *future‑open* rather than extractive.  
+
+---
+
+### Key Theorems and Implications
+
+**Admissibility Existence Theorem** (continuous dynamics)
+
+> If \((X,\Granite)\) is a compact dynamical system with continuous \(F(y,t[7D[K
+\(F(y,t,\tau)\) for all times \(t\) and horizon lengths \(\tau\), then when[4D[K
+whenever the reachability set \(\reach(x,t_0,t)\) is non‑empty and its reac[4D[K
+reachable volume \(V_R(x,t_0,t)>0\), there exists at least one \((\alpha,\t[12D[K
+\((\alpha,\tau)\)-admissible state in \(\adm(x,t)\).
+
+*Proof Sketch*: By continuity of \(F\) on the compact set \(\reach(x,t)\), [K
+a maximum value \(V^*=F(y^*,t,\tau)\) is attained. Since \(V_R>0\), we can [K
+choose any \(\alpha< V^*/V_R\) to guarantee existence (the manifold need no[2D[K
+not be unique).  
+
+**Projection‑Admissibility Gap Theorem**
+
+This theorem quantifies how much information a simple feasibility test lose[4D[K
+loses by ignoring the admissibility criterion:
+
+1. **Gap Measure**:  
+   For a reachable state \(y\), let \(\Delta(y) = V_R(y,t,\tau) - F(y^*,t,\[9D[K
+F(y^*,t,\tau)\) where \(F(y^*,t,\tau)\) is the future volume of the *closes[7D[K
+*closest* admissible point \(y^*\). The cumulative gap over all trajectorie[11D[K
+trajectories in \(\reach(x,t)\) is  
+   \[
+   G = \sup_{\{y_i\}\subset\reach(x,t)}\sum_i \Delta(y_i).
+   \]
+
+2. **Interpretation**:  
+   States that satisfy only the feasibility condition (i.e., belong to \(\r[4D[K
+\(\reach\) but not to \(\adm\)) contribute significantly to \(G\). These ar[2D[K
+are “extractive” states—reaching them reduces future reachable volume below[5D[K
+below the threshold \(\alpha\).
+
+**Beyond Continuation**
+
+Continuity of existence does **not** imply healthy persistence. A system ca[2D[K
+can survive indefinitely along a trajectory that steadily narrows its admis[5D[K
+admissible future, eventually reaching a final state from which almost no f[1D[K
+further reachability exists. Hence, *admissibility* is not merely “survival[9D[K
+“survival” but a criterion for preserving substantial future possibility.
+
+---
+
+### Consequences & Applications
+
+1. **Decision Making**:  
+   When evaluating actions (or trajectories), preferring states that lie on[2D[K
+on the admissibility manifold respects long‑term structural constraints rat[3D[K
+rather than short‑term gains alone.
+
+2. **Robustness Design**:  
+   The threshold \(\alpha\) can be tuned to balance immediate utility with [K
+future robustness—high \(\alpha\) forces preservation of large reachable vo[2D[K
+volumes, low \(\alpha\) allows more extractive (short‑run) options but at a[1D[K
+a measurable cost in lost future flexibility.
+
+3. **Strategic Gaps**:  
+   The Projection‑Admissibility Gap provides a quantitative measure of what[4D[K
+what is sacrificed by ignoring admissibility, enabling transparent trade‑of[8D[K
+trade‑off analysis between present utility and preserved future reachabilit[11D[K
+reachability.
+
+---
+
+### Visual Representation
+
+Figure 14.1 (not reproduced here) illustrates the relationship:
+
+* **Reachable Set** (teal) includes all states that can be reached from \(x[3D[K
+\(x\) in time interval \([t_0,t]\).  
+* **Admissibility Manifold** (gold) is a proper subset—states inside retain[6D[K
+retain enough future volume to meet the threshold.  
+* **Extractive States** lie outside but still reachable; reaching them coll[4D[K
+collapses future possibility below \(\alpha\).
+
+---
+
+### Closing Remarks
+
+The admissibility manifold formalizes a notion of *future‑openness* that is[2D[K
+is independent of any agent’s preferences. It provides:
+
+- A rigorous existence condition (Admissibility Existence Theorem).  
+- A quantitative measure of feasibility loss (Projection‑Admissibility Gap [K
+Theorem).  
+
+These tools are foundational for later chapters on geometry and dynamics, w[1D[K
+where curvature, topology, and invariant measures build upon this admissibi[9D[K
+admissibility framework to derive preservation criteria as strategic conclu[6D[K
+conclusions rather than arbitrary value judgments.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-the_ecology_of_distinctions.tex
+
+NEW CHUNK
+=========
+
+
+Observational and Interventional Admissibility
+
+\label{sec:ch14-obs-int}
+
+A fundamental distinction in causal reasoning separates
+\emph{observing} a system from \emph{intervening} on it
+\parencite{pearl2000causality}. The same distinction
+applies to admissibility.
+
+\begin{definition}{Observational Admissibility}{obs-adm}
+  A trajectory $\gamma$ is \emph{observationally admissible}
+  if $\gamma(t)\in\adm(x,t)$ for all $t$, where $\adm$ is
+  defined relative to the natural dynamics $\Phi$ without
+  external intervention.
+\end{definition}
+
+\begin{definition}{Interventional Admissibility}{int-adm}
+  A trajectory $\gamma$ is \emph{interventionally
+  admissible} if $\gamma(t)\in\adm^\mathrm{do}(x,t)$ for
+  all $t$, where $\adm^\mathrm{do}$ is defined relative to
+  the post-intervention dynamics $\Phi^\mathrm{do}$ obtained
+  by fixing some variables by external control.
+\end{definition}
+
+\begin{theorem}{Observational--Interventional Separation}
+  {obs-int-sep}
+  Observational and interventional admissibility manifolds
+  are generically distinct: $\adm(x,t) \ne \adm^\mathrm{do}(x,t)$.
+  Intervention can either expand or contract the
+  admissibility manifold relative to observation.
+\end{theorem}
+
+\begin{proof}
+  Consider a system with hidden confounders. Under
+  observation, trajectories that appear to reach high-$F$
+  states may owe their reachability to confounders that are
+  not preserved under intervention. Let $Z$ be a confounder
+  with $P(Y=y\mid X=x,Z=z) \ne P(Y=y\mid X=x)$. Then
+  $\reach(x,t)$ computed from observational data includes
+  states reachable only when $Z$ takes specific values.
+  After intervention $\mathrm{do}(X=x)$, confounders are
+  severed, so $\reach^\mathrm{do}(x,t) \ne \reach(x,t)$ in
+  general. Since $\adm$ is defined over $\reach$, they
+  differ. For expansion: intervention can remove constraints
+  that were present under natural dynamics (e.g.\ medical
+  treatment removes disease constraints). For contraction:
+  intervention can introduce new constraints (e.g.\ fixing
+  a variable eliminates trajectories that depended on its
+  variation).
+\end{proof}
+
+\begin{example}{Drug Treatment and Admissibility}{drug-adm}
+  \bioicon
+  Consider a patient's physiological state space.
+  Observationally, a patient with untreated hypertension
+  follows trajectories that are observationally
+  inadmissible: they lead to states (stroke, organ failure)
+  from which reachability volume is severely reduced.
+  Interventional admissibility under antihypertensive
+  treatment expands $\adm^\mathrm{do}$ by removing the
+  hypertensive constraint, opening trajectories toward
+  states with higher $F$.
+\end{example}
+
+\begin{example}{AGI Alignment and Admissibility}{agi-adm}
+  \csicon
+  An AI system maximising a reward function may follow
+  observationally reachable trajectories that are
+  interventionally inadmissible: they consume resources or
+  close options in ways that reduce future human
+  reachability volume. Alignment can be formulated as the
+  requirement that the system's trajectories remain within
+  the intersection $\adm(x,t)\cap\adm^\mathrm{do}(x,t)$.
+\end{example}
+
+
+Admissibility Distortion
+
+\label{sec:ch14-distortion}
+
+When a system operates under a compressed or approximate
+representation of state space, its estimate of
+admissibility may differ systematically from true
+admissibility. This is admissibility distortion.
+
+\begin{definition}{Admissibility Distortion}{adm-distortion-def}
+  Let $\pi:X\to Y$ be a projection (lossy representation).
+  The \emph{admissibility distortion} induced by $\pi$ is
+  \[
+    \Delta_\adm(\pi)
+    = \sup_{x\in X} |V_R(x,t) - V_R(\pi(x),t)|,
+  \]
+  the maximum discrepancy between true reachability volume
+  and the volume estimated from the compressed
+  representation $\pi(x)$.
+\end{definition}
+
+\begin{theorem}{Admissibility Distortion Theorem}{adm-distortion}
+  For any non-injective projection $\pi:X\to Y$,
+  $\Delta_\adm(\pi) > 0$: every lossy representation
+  introduces positive admissibility distortion.
+\end{theorem}
+
+\begin{proof}
+  Since $\pi$ is non-injective, there exist
+  $x_1,x_2\in X$ with $x_1\ne x_2$ but
+  $\pi(x_1)=\pi(x_2)$. Their reachability sets may differ:
+  $\reach(x_1,t)\ne\reach(x_2,t)$ in general, since
+  reachability depends on the full state, not its
+  projection. Under the compressed representation, both
+  $x_1$ and $x_2$ are assigned the same estimated
+  reachability volume $V_R(\pi(x_1),t)=V_R(\pi(x_2),t)$.
+  Hence at least one of these estimates is wrong, giving
+  $\Delta_\adm(\pi)>0$.
+\end{proof}
+
+Admissibility distortion is the geometric analogue of
+projection loss (Chapter~\ref{ch:distinction}) applied to
+future possibility rather than present information. Just
+as every observation loses present distinctions, every
+compressed model loses future distinctions.
+
+
+The Projection--Admissibility Gap
+
+\label{sec:ch14-gap}
+
+Admissibility distortion has a particularly important
+consequence for systems that reason about their own futures
+using compressed self-models.
+
+\begin{definition}{Self-Model}{self-model-ch14}
+  A \emph{self-model} of a system with state space $X$ is a
+  projection $\hat\pi:X\to\hat{X}$ where $\hat{X}$ is a
+  simplified representation of $X$ used by the system
+  itself for planning and prediction.
+\end{definition}
+
+\begin{theorem}{Projection--Admissibility Gap Theorem}
+  {proj-adm-gap}
+  Let $\hat\pi:X\to\hat{X}$ be a self-model with compression
+  ratio $r = |X|/|\hat{X}| > 1$. Then the system
+  underestimates admissibility distortion by at least a
+  factor of $\log r$:
+  \[
+    \Delta_\adm(\hat\pi)
+    \ge \frac{\log r}{\log|X|}\cdot V_R(x_\mathrm{max},t).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Compression by ratio $r$ collapses on average $r$ states
+  of $X$ into each state of $\hat{X}$. The reachability
+  volume estimated from $\hat\pi(x)$ is therefore an
+  average over $r$ distinct true reachability volumes. By
+  Jensen's inequality applied to the concave logarithm,
+  this average underestimates the maximum reachability
+  volume by at least $\log r/\log|X|$ as a fraction of the
+  total reachability.
+\end{proof}
+
+\begin{remark}{Self-Model Humility}{self-model-humility}
+  The Projection--Admissibility Gap Theorem is a formal
+  statement of self-model humility: any system reasoning
+  about its own futures from a compressed self-representation
+  will systematically underestimate how much admissibility
+  it is destroying by its choices. This applies equally to
+  biological organisms, institutions, and artificial
+  intelligence systems. The more compressed the self-model,
+  the larger the gap.
+\end{remark}
+
+
+Admissibility and Repair
+
+\label{sec:ch14-repair}
+
+The connection between admissibility and the repair
+framework of Part~III is direct.
+
+\begin{proposition}{Repair Preserves Admissibility}{repair-adm}
+  A repair operation $\repair$ is admissible if and only if
+  $V_R(\repair(y),t) \ge V_R(y,t)$: admissible repair does
+  not reduce reachability volume.
+\end{proposition}
+
+\begin{proof}
+  By definition, repair restores a distinction to a state
+  that is closer to the admissibility manifold. If the
+  repair is itself inadmissible --- if it reaches a state
+  of lower reachability volume --- then it has consumed
+  future possibility in the act of restoring present
+  distinction. Such a repair is incoherent with the purpose
+  of repair: it removes one damage while introducing a
+  structural deterioration of the future. Therefore
+  admissible repair satisfies
+  $V_R(\repair(y),t)\ge V_R(y,t)$.
+\end{proof}
+
+\begin{example}{Antibiotic Resistance and Inadmissible Repair}
+  {abx-resist}
+  \bioicon
+  A bacterial population under antibiotic pressure may
+  ``repair'' its survival problem through resistance
+  mutations. This is observationally successful repair: the
+  population survives. But at the population level,
+  indiscriminate antibiotic use drives resistance evolution,
+  which contracts the admissibility manifold for future
+  treatment: fewer antibiotics remain effective. The
+  short-term repair is interventionally inadmissible: it
+  reduces future reachability volume for the health system.
+\end{example}
+
+
+Admissibility Metrics
+
+\label{sec:ch14-metrics}
+
+\begin{definition}{Admissibility Score}{adm-score}
+  The \emph{admissibility score} of a trajectory
+  $\gamma:[t_0,T]\to X$ is
+  \[
+    \mathcal{A}(\gamma)
+    = \frac{1}{T-t_0} \int_{t_0}^T
+      \frac{F(\gamma(t),t,\tau)}{V_R(\gamma(t_0),t_0,T)}\,dt,
+  \]
+  the time-averaged fraction of original reachability
+  volume preserved along $\gamma$.
+\end{definition}
+
+\begin{definition}{Admissibility Distance}{adm-distance}
+  The \emph{admissibility distance} from a state $y$ to the
+  admissibility manifold is
+  $d_\adm(y) = \inf_{z\in\adm(x,t)} d(y,z)$.
+\end{definition}
+
+These metrics provide practical tools for evaluating
+whether a given system trajectory is approaching or
+receding from admissibility. Chapter~\ref{ch:geometry-futures}
+uses them to characterise generative, extractive, and
+regenerative trajectories geometrically.
+
+
+Admissibility in Computation
+
+\label{sec:ch14-computation}
+
+\csicon
+
+\begin{definition}{Computationally Admissible Program}{comp-adm}
+  A program $P$ is \emph{computationally admissible} from
+  configuration $c_0$ if at every step $t$, the set of
+  configurations reachable in the next $\tau$ steps
+  satisfies
+  \[
+    \frac{V_R^P(c_t,\tau)}{V_R^P(c_0,\tau)} \ge \alpha,
+  \]
+  ruling out execution paths that close off large fractions
+  of the future configuration space.
+\end{definition}
+
+\begin{example}{Reversible Computing}{rev-comp}
+  Reversible computing maintains computational admissibility
+  exactly: every operation is a bijection on configurations,
+  so $V_R$ is constant and $\mathcal{A}(\gamma)=1$.
+  Irreversible operations (such as erasing a bit) are
+  inadmissible in the strict sense: they collapse
+  computational reachability. Landauer's principle
+  \parencite{landauer1961irreversibility} can be reread as
+  the thermodynamic cost of computational inadmissibility.
+\end{example}
+
+
+The Admissibility Manifold as a Sheaf
+
+\label{sec:ch14-sheaf}
+
+For readers with background in category theory or algebraic
+topology, the admissibility manifold has a natural
+sheaf-theoretic interpretation that connects to the
+Distinguishability Geometry programme.
+
+\begin{definition}{Admissibility Sheaf}{adm-sheaf}
+  Let $\mathcal{T}$ be the topology on
+  $X\times\mathbb{R}_{\ge0}$. The \emph{admissibility sheaf}
+  $\mathcal{A}$ assigns to each open set $U\in\mathcal{T}$
+  the set of locally admissible trajectories,
+  \[
+    \mathcal{A}(U)
+    = \{\gamma : U \to X : \gamma \text{ is admissible on } U\},
+  \]
+  with restriction maps given by restricting trajectories
+  to smaller open sets.
+\end{definition}
+
+\begin{proposition}{Admissibility Sheaf is a Sheaf}{adm-sheaf-prop}
+  $\mathcal{A}$ satisfies the sheaf axioms: identity,
+  locality, and gluing.
+\end{proposition}
+
+\begin{proof}
+  \emph{Identity}: the empty trajectory is admissible on
+  the empty set. \emph{Locality}: if $\gamma$ is admissible
+  on each $U_i$ in an open cover, then it is admissible on
+  $U$. \emph{Gluing}: if $\gamma_i\in\mathcal{A}(U_i)$
+  agree on overlaps $U_i\cap U_j$, their union defines an
+  admissible trajectory on $\bigcup_i U_i$, provided the
+  gluing is consistent with dynamics.
+\end{proof}
+
+The sheaf structure means admissibility is a genuinely
+local-to-global property: global admissibility is
+determined by local admissibility conditions. This has
+direct implications for distributed systems, where no
+single node has global knowledge but local admissibility
+conditions can nonetheless guarantee global future
+preservation.
+
+
+The Principle of Radical Optionality
+
+\label{sec:ch14-radical-optionality}
+
+The admissibility apparatus developed in this chapter has,
+so far, been stated at the level of trajectories: a
+trajectory is admissible if it preserves future admissible
+volume. It is worth restating the same idea at the level of
+a single decision, since that is the level at which most
+real agents --- biological, institutional, or computational
+--- actually have to act.
+
+\begin{principle}{Principle of Radical Optionality}{radical-optionality}
+  Under conditions of deep uncertainty about future states,
+  admissible action is action that maximises the preservation
+  of future admissible action:
+  \[
+    a^* = \arg\max_a \Vol\bigl(\adm(t+1) \mid a\bigr),
+  \]
+  where $\adm(t+1)\mid a$ is the admissibility manifold
+  resulting from taking action $a$ at time $t$.
+\end{principle}
+
+This is not a new postulate so much as the Generative
+Admissibility Principle (\cref{prc:gap-ch15}), proved in
+Chapter~\ref{ch:geometry-futures}, restated at the shortest
+possible time horizon: one decision, one step ahead, rather
+than an entire trajectory. Where the trajectory-level
+principle ranks whole futures, the action-level principle
+gives a decision rule usable by an agent who must choose now,
+under uncertainty about everything beyond the next state.
+
+The name is borrowed from a recurring argument in the
+governance literature: that under deep uncertainty, the
+correct response is not to commit early to a predicted
+future, but to invest in the capacity to act well whatever
+future arrives --- information-gathering capacity,
+institutional flexibility, reversible commitments,
+distributed expertise. Each of these is, in the present
+framework, a direct investment in $\Vol(\adm(t+1))$ rather
+than in any particular predicted outcome. The principle of
+radical optionality is what the Generative Admissibility
+Principle looks like from the inside of a single decision
+made under genuine uncertainty, and it is the thread
+connecting reachability (Chapter~\ref{ch:reachability}),
+fiscal reachability (Chapter~\ref{ch:fiscal}), repair
+(Chapter~\ref{ch:repair}), regeneration
+(Chapter~\ref{ch:regeneration}), preference fields
+(Chapter~\ref{ch:preference-fields}), governance
+(Chapter~\ref{ch:governance}), and continuation
+(Chapter~\ref{ch:beyond-continuation}) into a single
+recurring claim, restated at whatever scale the acting
+system happens to operate.
+
+
+Related Frameworks
+
+\label{sec:ch14-related-frameworks}
+
+\subsection*{Information Geometry: Constrained Manifolds}
+
+\emph{Convergence.} Chapter~\ref{ch:reachability} engaged
+information geometry on the question of volume; this chapter's
+concern is closer to its treatment of constrained sub-manifolds.
+Information geometry treats exponential families as sub-manifolds
+cut out within the full simplex of distributions by holding
+certain moments fixed, and uses the natural Fisher-Rao gradient
+to optimise in a way that respects this geometric structure
+rather than treating parameters as living in flat Euclidean space
+\parencite{amari2016,ay2017}. This chapter's Admissibility
+Manifold (\cref{defn:adm-manifold}) is structurally the same
+move: $\adm(t)$ is cut out within the larger reachable set by the
+admissibility threshold, and the Admissibility Distance
+(\cref{defn:adm-distance}) plays the role the Fisher-Rao distance
+plays for exponential families --- a notion of distance intrinsic
+to the constrained manifold itself, not inherited naively from
+the ambient space.
+
+\emph{Divergence.} Exponential families are characterised
+analytically and in closed form: their defining constraint is
+linear in the sufficient statistics, and the resulting manifold's
+curvature is well understood. This chapter's admissibility
+threshold is in general history- and system-dependent, with no
+guarantee of closed form. More importantly, exponential families
+are externally specified --- nothing is ever \emph{wrong} about
+what an exponential family's constraint surface looks like, since
+the family is given by definition. The Admissibility Distortion
+Theorem and the Projection--Admissibility Gap Theorem
+(\cref{thm:adm-distortion,thm:proj-adm-gap}) describe exactly the
+failure mode information geometry has no need to address: an
+agent's internal model of its own admissibility manifold can
+diverge from the manifold's true shape, because the manifold here
+must be estimated from the inside rather than given as data.
+
+\emph{Open question.} Whether natural-gradient-style optimisation
+--- ascent respecting the Fisher-Rao metric rather than a flat
+Euclidean one --- gives the right notion of fastest
+admissibility-preserving action in this chapter's framework, or
+whether the admissibility manifold's curvature is too irregular
+for natural-gradient methods to transfer cleanly, is not settled
+here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Reachability is necessary but not sufficient:
+        admissibility asks which reachable states preserve
+        future reachability.
+  \item The admissibility manifold $\adm(x,t)$ is the
+        closed set of states from which reachability volume
+        remains above threshold $\alpha$
+        (\cref{defn:adm-manifold}).
+  \item $\adm$ is non-empty whenever reachability is
+        non-empty and the dynamics are continuous on a
+        compact space (\cref{thm:adm-exist}).
+  \item Observational and interventional admissibility are
+        generically distinct; interventions can expand or
+        contract $\adm$ (\cref{thm:obs-int-sep}).
+  \item Every lossy representation induces positive
+        admissibility distortion (\cref{thm:adm-distortion}).
+  \item Compressed self-models systematically underestimate
+        the admissibility they destroy
+        (\cref{thm:proj-adm-gap}).
+  \item Admissible repair does not reduce reachability
+        volume (\cref{prop:repair-adm}).
+  \item Reversible computing is maximally admissible;
+        irreversible operations are inadmissible at cost
+        equal to Landauer's bound.
+  \item The admissibility manifold forms a sheaf, making
+        admissibility a local-to-global property.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  A garbage-collected programming language periodically
+  frees unreachable memory. Model this as an admissibility
+  operation. What is being repaired? Is the repair
+  admissible in the sense of \cref{prop:repair-adm}? What
+  would an \emph{inadmissible} memory operation look like?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Model cell senescence as an admissibility collapse event.
+  Identify the state space $X$, the admissibility threshold
+  $\alpha$, and the mechanism by which senescence reduces
+  $V_R$. What would an admissibility-preserving alternative
+  to senescence look like?
+\end{exercise}
+
+\begin{exercise}
+  Prove that if $\adm(x,t)=\reach(x,t)$ for all $t$, then
+  the system is reversible. (Hint: use the definition of
+  admissibility threshold and the Future Cone Theorem,
+  Chapter~\ref{ch:reachability}.)
+\end{exercise}
+
+\begin{exercise}[CS]
+  Define an \emph{admissibility-preserving compiler
+  optimisation} as one that does not reduce the set of
+  possible program behaviours. Give an example of an
+  optimisation that is admissible and one that is not.
+  (Consider inlining, dead code elimination, and
+  speculative execution.)
+\end{exercise}
+
+\begin{exercise}
+  Let $\pi:X\to Y$ be a projection with compression ratio
+  $r=2$ (every two states mapped to one). Compute the
+  minimum admissibility distortion $\Delta_\adm(\pi)$ as a
+  function of $V_R(x_\mathrm{max},t)$. How does the
+  distortion scale as $r\to\infty$?
+\end{exercise}
+
+
+\chapter{The Geometry of Admissible Futures}
+\label{ch:geometry-futures}
+\begin{epigraph}{What we call the beginning is often the end.
+  And to make an end is to make a beginning.}
+  {T.S.\ Eliot, \textit{Little Gidding}}
+\end{epigraph}
+
+\begin{objectives}
+  \item Extend the admissibility manifold of
+        Chapter~\ref{ch:admissibility} into a full invariant
+        combining volume, diversity, topology, and
+        curvature.
+  \item Classify trajectories as generative, extractive,
+        regenerative, or pathologically continuing.
+  \item Prove the Future Volume, Bottleneck, and Future
+        Preservation Theorems.
+  \item Prove the Admissibility Curvature Theorem and
+        identify high-curvature decision points.
+  \item Prove the Future Distinction Optimality Theorem and
+        derive strategic dominance from geometry alone.
+\end{objectives}
+
+
+Two Trajectories, One Volume
+
+\label{sec:ch15-why}
+
+Chapter~\ref{ch:admissibility} established admissibility as
+a refinement of reachability: what matters is not merely how
+many states remain reachable, but whether reaching them
+preserves further reachability. This refinement is already
+an improvement over raw volume. Yet a further puzzle
+remains.
+
+Consider two trajectories that preserve exactly the same
+admissible volume at every moment,
+$\Vol(\adm_1(t))=\Vol(\adm_2(t))$ for all $t$. Are they
+equivalent in every sense that matters? The first trajectory
+moves smoothly through a region of low curvature, where
+small variations in decision produce small variations in
+future possibility. The second passes repeatedly through
+narrow, high-curvature passages, where a small misstep would
+have collapsed the admissible volume by a large amount, even
+though no misstep in fact occurred. Both trajectories
+preserve identical volume. Only one of them did so by
+repeatedly surviving a bottleneck.
+
+Volume alone cannot distinguish these trajectories, yet the
+distinction matters enormously to anyone evaluating risk,
+robustness, or the wisdom of a strategy after the fact. This
+chapter completes the geometric picture left open by
+reachability and admissibility by introducing curvature and
+topology alongside volume, and by asking a further, more
+demanding question: can the preference for trajectories that
+preserve future possibility be derived as a strategic
+conclusion, rather than assumed as a moral premise? The
+final section of this chapter argues that it can.
+
+This is, in a precise sense, an old problem given a new
+metric. Phase-space geometry --- the description of a
+system's evolution as a trajectory through the space of its
+possible states, central to classical mechanics and to
+dynamical systems theory more broadly
+\parencite{arnold1989,strogatz2015} --- already studies
+curvature, stability, and the structure of trajectories in
+exhaustive technical detail. What standard phase-space
+geometry does not supply is a metric oriented toward the
+future: its curvature measures sensitivity of a trajectory to
+perturbation, not the trajectory's effect on how much remains
+admissible afterward. A dynamicist can fully characterise the
+stability of an orbit without ever asking whether that orbit
+preserves or destroys the system's capacity to reach other
+configurations later. This chapter's full admissibility
+invariant $\mathbf{I}_\adm$ is built specifically to ask that
+question, adding a future-preservation dimension that ordinary
+phase-space curvature does not contain.
+
+\section{Common Misinterpretations of Generative
+  Admissibility}
+\label{sec:ch15-misinterpretations}
+
+Generative admissibility is easily mistaken for growth. The
+Future Volume Theorem proven below does show that
+uncompensated entropy growth cannot increase admissible
+volume, which invites the inference that any process which
+does increase some measurable quantity --- output,
+population, computation, wealth --- is thereby generatively
+admissible. This inference is unsound. A pathologically
+continuing trajectory, defined later in this chapter, can
+increase a visible quantity precisely by consuming the
+distinction structures that would have permitted future
+increase; what grows in the present is purchased against
+what remains possible later. Growth is not
+generativity,\index{generativity|textbf} and
+a trajectory that looks identical to a generative one this
+year may already have crossed into extraction.
+
+A second misinterpretation treats the Generative
+Admissibility Principle as a value judgement smuggled into
+an otherwise formal framework. This is not how the principle
+is established here. The Future Distinction Optimality
+Theorem proves, from the prior geometric machinery alone,
+that generatively admissible trajectories are eventually
+strategically dominant over extractive alternatives achieving
+equal reward. Nothing about preference, ethics, or value is
+assumed in the proof; what is assumed is only that reward is
+non-decreasing in admissible volume, a condition any rational
+agent already accepts implicitly. The principle is a theorem
+about which trajectories win, not a stipulation about which
+trajectories are good.
+
+A third, related misinterpretation runs in the opposite
+direction: that because strategic dominance has been proven,
+the framework has thereby settled every normative question
+worth asking. It has not. The chapter draws a careful
+boundary between strategic preference, which is now a proven
+consequence of geometry, and moral preference, which remains
+a further and separate claim. The framework crosses from
+geometry to strategy by proof. It does not thereby cross
+from strategy to ethics by the same proof, and the final
+section of this chapter is explicit about where the
+derivation stops.
+
+By the end of this chapter, the full admissibility invariant
+will combine volume, diversity, topology, and curvature into
+a single object, the Future Distinction Optimality Theorem
+will derive strategic dominance for generatively admissible
+trajectories from geometry alone, and the chapter's closing
+section will draw the line between that strategic result and
+any further ethical claim. This completes the book's purely
+abstract development across Parts~I through~V. Beginning with
+Chapter~\ref{ch:rsvp}, the book turns to asking what physical,
+cognitive, computational, and social systems would have to
+look like to actually realise the geometry developed so far
+--- starting with the most concrete question of all: what
+minimal physical field content could make a reachability
+geometry like this one real?
+
+
+Formal Development
+
+\label{sec:ch15-formal}
+
+\begin{definition}{Full Admissibility Invariant}{full-adm-inv}
+  $\mathbf{I}_\adm(x,t)
+  =(\Vol(\adm),S_\adm,\chi(\adm),\kappa_\adm)$:
+  volume, diversity, topological complexity, and curvature.
+  \index{admissibility!invariant (full)|textbf}
+\end{definition}
+
+\begin{definition}{Uncompensated Entropy Growth}{uncomp-entropy}
+  Entropy growth is \emph{uncompensated} if not accompanied
+  by repair, adaptation, or distinction generation:
+  $\Delta S>0$ and $\Delta D\le0$.
+\end{definition}
+
+\begin{theorem}{Future Volume Theorem}{future-vol}
+  (i)~$\Vol(\adm(t))\ge0$ is well-defined.
+  (ii)~$\Vol(\adm(t))\le V_R(x,t)$.
+  (iii)~Under uncompensated entropy growth,
+  $\Vol(\adm(t))\le\Vol(\adm(t_0))$.
+  (iv)~Under regenerative dynamics,
+  $\Vol(\adm(t))\ge\Vol(\adm(t_0))$.
+  (v)~Under distinction-generating dynamics,
+  $\Vol(\adm(t))$ is strictly increasing.
+\end{theorem}
+
+\begin{definition}{Trajectory Classification}{traj-classes}
+  $\gamma$ is \textbf{generative} if
+  $\frac{d}{dt}\Vol(\adm)\ge0$;
+  \textbf{extractive} if $<0$;
+  \textbf{regenerative} if generative and
+  $\frac{d^2}{dt^2}\Vol(\adm)\ge0$;
+  \textbf{pathologically continuing} if extractive but
+  consuming distinction structures to avoid termination.
+  \index{trajectory!generative|textbf}
+  \index{trajectory!extractive|textbf}
+  \index{trajectory!admissible|textbf}
+  \index{future cone!relation to A(x,t)}
+\end{definition}
+
+\begin{theorem}{Future Bottleneck Theorem}{bottleneck}
+  For extractive $\gamma$ with $\Vol(\adm)>0$ on $[t_0,T]$
+  and repair continuously exercised at capacity
+  $\kappa_\repair>0$:
+  (i)~$\gamma$ passes through a bottleneck $t^*$;
+  (ii)~$\min_t\Vol(\adm(\gamma(t),t))\ge\kappa_\repair$.
+\end{theorem}
+
+\begin{theorem}{Future Preservation Theorem}{future-preserve}
+  Let $\gamma_1$ be generative and $\gamma_2$ extractive
+  from the same $x$, with equal immediate reward and $r$
+  non-decreasing in $\Vol(\adm)$.
+  Then $\exists T^*$ such that $\forall T>T^*$:
+  $\int_{t_0}^T r(\gamma_1)\,dt\ge
+  \int_{t_0}^T r(\gamma_2)\,dt$.
+\end{theorem}
+
+\begin{theorem}{Admissibility Curvature Theorem}{adm-curv}
+  A perturbation of size $\epsilon$ in a high-curvature
+  direction changes $\Vol(\adm)$ by
+  $O(\epsilon\cdot\kappa_\adm)$; in a low-curvature
+  direction, $O(\epsilon^2)$.
+  High-curvature points are decision points where
+  trajectory choices have disproportionate consequences.
+  \index{admissibility!curvature|textbf}
+\end{theorem}
+
+\begin{principle}{Generative Admissibility Principle}{gap-ch15}
+  A trajectory is valuable insofar as it preserves the
+  capacity for future distinction-production.
+  \index{generative admissibility!principle|textbf}
+\end{principle}
+
+\begin{theorem}{Future Distinction Optimality Theorem}
+  {gat-ch15}
+  Among trajectories achieving equal reward $R$, with
+  $r$ continuous and non-decreasing in $\Vol(\adm)$,
+  generatively admissible trajectories maximise
+  future distinction-producing capacity:
+  $\mathbf{I}_\adm(\gamma^*(T),T)
+  \ge_\mathrm{lex}\mathbf{I}_\adm(\gamma(T),T)$
+  for all $\gamma\in\Gamma_R^-$.
+  \index{generative admissibility!theorem|textbf}
+\end{theorem}
+
+\begin{corollary}{Intelligence and Admissibility}{gat-intelligence}
+  A system is intelligent iff its trajectories are
+  generatively admissible w.r.t.\ its ecology.
+\end{corollary}
+\begin{corollary}{Science and Admissibility}{gat-science}
+  A scientific tradition is generatively admissible insofar
+  as it expands the volume, entropy, and topological
+  complexity of future admissible questions.
+\end{corollary}
+\begin{corollary}{Governance and Admissibility}{gat-governance}
+  Governance is generatively admissible insofar as it
+  preserves the reachability volume and diversity of
+  policy options for future generations.
+\end{corollary}
+\begin{corollary}{Memory and Admissibility}{gat-memory}
+  Memory is generatively admissible insofar as it
+  preserves recoverability needed for future repair.
+\end{corollary}
+\begin{corollary}{Repair and Admissibility}{gat-repair}
+  Admissible repair is generatively admissible;
+  repair reducing $\Vol(\adm)$ is worse than no repair.
+\end{corollary}
+\begin{corollary}{Cosmological Renewal}{gat-cosmo}
+  Expyrotic renewal (Ch.\,\ref{ch:expyrotic}) is
+  generatively admissible: it restores the universe's
+  distinction-producing capacity.
+\end{corollary}
+
+
+From Geometry to Ethics: Three Layers
+
+\label{sec:ch15-three-layers}
+
+The entire progression so far has been mathematical. No step
+has been normative by assumption. Yet a sophisticated reader
+is right to ask whether the conclusions that follow are
+\emph{descriptive}, \emph{strategic}, or \emph{normative},
+and whether the framework conflates them. It does not --- but
+the distinction is important enough to state explicitly.
+
+\paragraph{Layer 1: Descriptive.}
+The Generative Admissibility Principle, and all the
+reachability and admissibility machinery that precedes it,
+makes descriptive claims about trajectories: whether they
+preserve or erode the volume of admissible futures. These
+are geometric facts about dynamical systems. They are true
+or false independently of whether anyone cares about them.
+
+\paragraph{Layer 2: Strategic.}
+The Future Distinction Optimality Theorem
+(\cref{thm:gat-ch15}) adds a conditional strategic result:
+\emph{among trajectories achieving equal immediate reward,
+generatively admissible ones dominate extractive ones over
+sufficiently long horizons}. This is a theorem, not an
+assumption. Its hypothesis is that reward is non-decreasing
+in admissible volume; its conclusion is lexicographic
+dominance of the admissible trajectory. Strategic dominance
+is derived, not postulated.
+
+\paragraph{Layer 3: Normative.}
+The jump from ``strategically dominant'' to ``valuable'' or
+``the correct criterion'' requires a further premise not
+supplied by this framework:
+\begin{quote}
+  \emph{If} an agent values long-run future possibility,
+  \emph{then} it ought to pursue generatively admissible
+  trajectories.
+\end{quote}
+That conditional is a theorem. The unconditional claim ---
+that all agents ought to value long-run possibility, that
+admissibility is morally obligatory, that the framework
+\emph{crosses from geometry to ethics by proof} --- is not.
+It requires an additional value premise, and one that is
+philosophically serious, not trivial.
+
+\begin{remark}{The Scope of the Normative Claim}{normative-scope}
+  This framework does not derive:
+  \begin{enumerate}[(i)]
+    \item aesthetic value,
+    \item personal preference or dignity,
+    \item obligations of justice, care, or solidarity,
+    \item the weight to assign to present versus future
+          distinction-producing capacity.
+  \end{enumerate}
+  It establishes conditions under which future
+  distinction-producing capacity is preserved, and shows
+  that agents who value this capacity have reason to prefer
+  admissibility-preserving trajectories. The framework is
+  silent on whether future possibility is the \emph{highest}
+  value or the \emph{only} value. Those are further
+  philosophical questions that no geometric result can
+  settle.
+\end{remark}
+
+The framework thus sits at the boundary between geometry and
+ethics without crossing it. The most that can be claimed,
+and it is already a great deal, is this: \emph{any} account
+of value that takes the long-run availability of options
+seriously will find that generative admissibility is a
+necessary condition of such availability. Whether it is also
+sufficient, and whether such availability is itself what
+value consists in, remain open questions the mathematics
+leaves intact.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item The full invariant
+        $\mathbf{I}_\adm=(\Vol,S_\adm,\chi,\kappa_\adm)$
+        captures volume, diversity, topology, and curvature.
+  \item The Future Volume Theorem holds under uncompensated
+        entropy growth; evolution and learning are not
+        counterexamples.
+  \item Growth is not generativity.
+  \item The Bottleneck Theorem requires repair to be
+        \emph{exercised} (\cref{thm:bottleneck}).
+  \item Generative trajectories dominate extractive ones
+        over long horizons (\cref{thm:future-preserve}).
+  \item The Future Distinction Optimality Theorem proves
+        the dominance of generative trajectories
+        (\cref{thm:gat-ch15}).
+\end{chapsummary}
+
+
+\part{Physical Realizations}
+
+
+
+
+
+
+
+
+
+
+
+\chapter{RSVP: The Scalar--Vector Plenum}
+\label{ch:rsvp}
+
+\begin{epigraph}{
+  A physical theory is not a list of forces. It is a
+  statement of what can be stored, what can move, and
+  what can be lost.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Show that the RSVP fields $(\Phi,\mathbf{v},S)$ emerge
+        from the distinction-repair-reachability framework
+        rather than being postulated independently.
+  \item Prove the Three-Field Necessity Theorem.
+  \item Derive the RSVP continuity and constraint-accumulation
+        equations.
+  \item Prove the Reachability Capacity Theorem connecting
+        RSVP directly to Part~V.
+  \item Derive lamphrodyne relaxation and the RSVP
+        Admissibility Theorem.
+  \item Prove the Physical Realization Theorem.
+\end{objectives}
+
+
+Three Quantities, Not One
+
+\label{sec:ch16-three}
+
+The purpose of this chapter is not to re-derive the entire
+RSVP programme from scratch. It is to supply the minimum
+mathematical machinery required to connect
+Parts~I--V to a physical realization.
+
+The central claim is that a physical system capable of
+representing distinction-theoretic structure requires
+exactly three independent geometric quantities:
+\emph{capacity}, \emph{transport}, and \emph{constraint}.
+These become, respectively, the scalar field $\Phi$, the
+vector field $\mathbf{v}$, and the constraint field $S$ —
+together, the \emph{Relativistic Scalar--Vector Plenum}
+(\gls{rsvp}).
+
+\begin{definition}{RSVP State Variables}{rsvp-fields}
+  An RSVP system is described by the triple
+  \[
+    (\Phi, \mathbf{v}, S),
+  \]
+  where $\Phi(x,t)$ is the \emph{scalar capacity field},
+  $\mathbf{v}(x,t)$ is the \emph{transport velocity field},
+  and $S(x,t)$ is the \emph{constraint density field}.
+  \index{RSVP (Relativistic Scalar Vector Plenum)|textbf}
+\end{definition}
+
+The interpretation of each field connects directly to the
+preceding fifteen chapters rather than to independent
+physical postulates.
+
+\begin{definition}{Capacity Field}{capacity-field}
+  The capacity field $\Phi$ measures the local ability of
+  a region to support future distinctions.
+  \index{RSVP!capacity field}
+\end{definition}
+
+Thus $\Phi$ is not energy, not matter, and not information
+in the Shannon sense. It is available
+distinction-producing capacity, in the sense developed
+throughout Chapters~13--15.
+
+\begin{definition}{Constraint Field}{constraint-field}
+  The constraint field $S(x,t)$ measures accumulated
+  restriction on future reachability volume.
+  \index{RSVP!constraint field}
+  \index{entropy!RSVP field S|textbf}
+\end{definition}
+
+Entropy, on this reading, becomes geometrized: $S$ is not
+a count of microstates but a local field whose growth
+restricts the admissible future.
+
+\begin{definition}{Transport Field}{transport-field}
+  The transport field $\mathbf{v}(x,t)$ describes the
+  propagation of distinction-producing capacity through
+  the domain.
+  \index{RSVP!transport field}
+\end{definition}
+
+
+Why Standard Field Content Is Not Enough
+
+\label{sec:ch16-why-standard-fields}
+
+Physics already has well-developed inventories of fundamental
+field content. The Standard Model of particle physics
+specifies a fixed roster of scalar, vector, and spinor fields
+governing the known forces and matter content of the
+universe. General relativity specifies a single geometric
+object, the stress-energy tensor $T_{\mu\nu}$, as the source
+term coupling matter to spacetime curvature
+\parencite{misner1973}. Both inventories are extraordinarily
+successful within their domains, and neither was constructed
+with distinguishability in mind. Their field content is
+justified empirically, by what predictions it generates and
+confirms, not derived from any prior commitment about what a
+universe whose fundamental quantity is distinguishability
+would need to contain.
+
+This chapter asks a different kind of question: not which
+fields are observed, but which fields are \emph{required} if
+a physical system is to realize a reachability geometry of
+the kind developed in Part~V at all. The answer is not ``as
+many as observation demands'' but a specific, derivable
+number --- three --- and a specific role for each: a quantity
+measuring available distinction-producing capacity, a
+quantity describing how that capacity moves, and a quantity
+recording the accumulated restriction on where it can still
+go. Whether the Standard Model's field content and RSVP's
+three fields ultimately coincide, in the sense of either
+reducing to the other, is a question this chapter does not
+settle and is explicit about leaving open; what this chapter
+does claim is narrower and prior to that question: that
+\emph{some} system of exactly this three-field shape is what
+distinguishability-as-fundamental requires, independently of
+which physical fields are eventually found to instantiate it.
+
+Chapter~\ref{ch:geometry-futures} closed Part~V by deriving
+the full admissibility invariant $\mathbf{I}_\adm$, combining
+reachability volume, diversity, topology, and curvature, and
+by showing that trajectories preserving this invariant are
+strategically dominant. That result was purely geometric: it
+characterised which trajectories are good without specifying
+what kind of physical substrate could carry such a trajectory
+at all. This chapter supplies that substrate. If reachability
+volume $\Vol(\adm(x,t))$ is to be a property of an actual
+physical system rather than an abstract mathematical
+construction, something in that system must play the role of
+locally available capacity, something must describe how
+capacity is transported, and something must record
+accumulated constraint. The argument of this chapter is that
+these three roles cannot be collapsed into fewer than three
+fields without losing the ability to represent reachability
+geometry faithfully.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch16-falsifiability}
+
+A chapter claiming that physics realizes the abstract theory
+developed in Parts~I--V owes the reader a specific answer to
+an uncomfortable question: what observation, or what proof,
+would show that this realization fails --- that RSVP merely
+borrows the vocabulary of reachability geometry rather than
+genuinely instantiating it? The answer this chapter commits
+to is structural rather than empirical, and it is stated here
+so that it can be checked against the formal development that
+follows.
+
+The Local Well-Posedness Theorem
+(\cref{thm:rsvp-well-posed}), proved later in this chapter,
+establishes that the coupled system governing
+$(\Phi,\mathbf{v},S)$ admits unique local solutions under
+stated regularity conditions. The claim that capacity,
+transport, and constraint are jointly \emph{necessary} ---
+not merely a convenient choice among many adequate ones --- is
+falsified if well-posedness, or the reachability-capacity
+correspondence built on it, survives the removal of any one
+of the three fields. If a two-field system, omitting transport
+and treating capacity as instantaneously available everywhere
+it is needed, turns out to support the same theorems, then
+transport is not necessary and this chapter's central claim is
+wrong. If constraint can be recovered as a derived quantity
+from capacity and transport alone, with no independent
+dynamics of its own, the same is true of constraint. The
+chapter's governing theorems are written to make exactly this
+kind of removal experiment checkable; a reader unconvinced by
+the necessity claim has a precise, formal test available
+rather than an appeal to elegance.
+
+
+What This Chapter Establishes
+
+\label{sec:ch16-preview}
+
+By the end of this chapter, the Three-Field Necessity Theorem
+will show why fewer than three independent fields can
+represent reachability geometry faithfully, the RSVP
+continuity and constraint-accumulation equations will give
+$(\Phi,\mathbf{v},S)$ concrete dynamics, and the Reachability
+Capacity Theorem will connect those dynamics back to
+$\Vol(\adm(x,t))$ explicitly, closing the loop opened in
+Part~V. Chapter~\ref{ch:gravity} then asks what happens when
+this field content is allowed to curve the space it occupies
+--- whether gravity itself can be recovered as a consequence
+of capacity gradients, rather than introduced as an
+independent force.
+
+
+The Three-Field Necessity Theorem
+
+\label{sec:ch16-necessity}
+
+\begin{theorem}{Three-Field Necessity Theorem}{three-field-necessity}
+  Any physical theory capable of representing
+  \begin{enumerate}[(i)]
+    \item stored distinction capacity,
+    \item movement of distinction capacity, and
+    \item restriction of distinction capacity
+  \end{enumerate}
+  requires at least one scalar field, one vector field,
+  and one constraint field.
+\end{theorem}
+
+\begin{proof}
+  Stored capacity requires a scalar magnitude at each
+  point, since storage is a quantity without intrinsic
+  direction. Transport requires directional information
+  in addition to magnitude, hence a vector field. Constraint
+  accumulation requires a quantity that independently
+  measures admissible-volume reduction: it cannot be
+  recovered from $\Phi$ and $\mathbf{v}$ alone, since a
+  system may transport capacity without losing future
+  reachability, or lose reachability without any change in
+  stored capacity. No two of the three quantities determine
+  the third. Therefore all three are independent and all
+  three are necessary.
+\end{proof}
+
+\begin{remark}{Why this theorem matters}{three-field-remark}
+  This theorem is significant because it makes the RSVP
+  triple appear inevitable rather than invented. Any
+  framework satisfying the requirements of
+  Chapters~1--15 --- storage, transport, and restriction of
+  distinction capacity --- is forced into this three-field
+  structure, independently of any commitment to a
+  particular physical interpretation.
+\end{remark}
+
+
+Capacity Conservation
+
+\label{sec:ch16-conservation}
+
+\begin{theorem}{Capacity Conservation Theorem}{capacity-conservation}
+  For any region $\Omega$, capacity evolves according to
+  \[
+    \frac{\partial \Phi}{\partial t}
+    + \nabla\cdot(\Phi\mathbf{v})
+    = Q - R,
+  \]
+  where $Q$ creates distinction capacity and $R$ destroys it.
+\end{theorem}
+
+\begin{proof}
+  Apply conservation to an arbitrary volume $\Omega$: the
+  rate of change of capacity within $\Omega$ equals inflow
+  across $\partial\Omega$ plus internal sources minus
+  internal sinks. Applying the divergence theorem to convert
+  the boundary flux into a volume integral of
+  $\nabla\cdot(\Phi\mathbf{v})$ yields
+  \[
+    \frac{\partial \Phi}{\partial t}
+    + \nabla\cdot(\Phi\mathbf{v})
+    = Q - R. \qedhere
+  \]
+\end{proof}
+
+This is the fundamental RSVP continuity equation, governing
+all subsequent dynamics in Part~VI.

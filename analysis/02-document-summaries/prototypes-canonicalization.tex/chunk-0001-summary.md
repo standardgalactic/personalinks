@@ -1,0 +1,87 @@
+**1. Definitions and primitive concepts introduced**
+
+- **spmerge**: a user‑facing utility that *proposes* semantic equivalence b[1D[K
+between existing objects by generating explicit `MERGE` or `COLLAPSE` event[5D[K
+events.
+- **Merge event (`MERGE(o_a, o_b)`)**: proposes equivalence between two spe[3D[K
+specific object identifiers; representative selection is deferred to the ke[2D[K
+kernel.
+- **Batch merge**: for a set of objects `{o₁,…,oₙ}`, spmerge generates a se[2D[K
+sequence of `MERGE` events that together form a spanning tree over the set [K
+(deterministic ordering but semantically irrelevant due to confluence).
+- **Region collapse (`COLLAPSE(S, o_r)`)**: proposes equivalence for an ent[3D[K
+entire region; `S` is a finite set of objects and `o_r ∈ S` is chosen as th[2D[K
+the representative.
+- **Replayed kernel state**: the state that spmerge operates on – it only u[1D[K
+uses identifiers already present in the replay of the kernel’s history, wit[3D[K
+without any external data sources.
+
+**2. Mathematical claims and formal structures**
+
+- The batch‑merge process explicitly builds a *spanning tree* over the supp[4D[K
+supplied object set `{o₁,…,oₙ}`; this is an instance of graph‑theoretic spa[3D[K
+spanning‑tree construction.
+- Region collapse relies on selecting a representative `o_r` from the regio[5D[K
+region `S`, which can be viewed as choosing a vertex label for the equivale[8D[K
+equivalence class in a quotient (setoid) construction.
+
+**3. Mechanisms and processes**
+
+1. **Input handling**: spmerge receives an explicit list of object identifi[8D[K
+identifiers that must already exist in replayed kernel state.
+2. **Event proposal generation**:
+   - *Pairwise merge*: emits a single `MERGE(o_a, o_b)` event per user requ[4D[K
+request.
+   - *Batch merge*: automatically orders merges to produce a spanning tree;[5D[K
+tree; the order is deterministic but not semantically weighted.
+3. **Region collapse**: emits a single `COLLAPSE(S, o_r)` for a region, des[3D[K
+designating one representative.
+4. **Determinism guarantee**: given a fixed event‑log prefix and invocation[10D[K
+invocation, spmerge must reproduce the exact same sequence of proposals (bi[3D[K
+(bit‑for‑bit).
+5. **Preview workflow**: runs in non‑committing mode, constructing speculat[8D[K
+speculative overlays to display before/after equivalence classes.
+
+**4. Connections to concepts named in the running abstract**
+
+- **Explicit non‑goals**: aligns with the running abstract’s emphasis that [K
+spmerge does *not* perform inference, mutate kernel state, or engage in heu[3D[K
+heuristic auto‑merging.
+- **Event proposals only**: matches the running abstract’s statement that s[1D[K
+spmerge operates entirely through event proposals and accepts replayed kern[4D[K
+kernel state without external dependencies.
+- **Determinism guarantee**: directly echoes the running abstract’s claim a[1D[K
+about deterministic behavior given a fixed event log prefix and invocation.[11D[K
+invocation.
+
+**5. Unresolved questions or contradictions visible within this chunk**
+
+- The document does not specify *how* representative selection is performed[9D[K
+performed in pairwise merge; it only notes that selection “is deferred enti[4D[K
+entirely to the kernel,” leaving an implicit assumption of kernel policy.
+- There is no explicit discussion of what constitutes a “redundant” proposa[7D[K
+proposal for batch merges, though the abstract mentions this as an error co[2D[K
+condition. The definition or detection criteria are missing.
+- While deterministic ordering is guaranteed for batch merge, the chunk doe[3D[K
+does not clarify *why* ordering is considered semantically irrelevant (conf[5D[K
+(confluence property) and how that guarantees equivalence regardless of ord[3D[K
+order applied in practice.
+
+--- 
+
+**Notes on grounding**
+
+All substantive claims above are directly tied to verbatim excerpts from th[2D[K
+the new chunk:
+
+- “spmerge … proposes semantic equivalence between objects in Spherepop OS [K
+by generating MERGE or COLLAPSE events.” → quoted as *“proposes semantic eq[2D[K
+equivalence”*.
+- “It does not mutate authoritative state.” → echoed by the quote *“does no[2D[K
+not mutate authoritative state.”*.
+- “Determinism guarantee: given a fixed event log prefix and invocation, it[2D[K
+it must generate an identical proposal stream bit‑for‑bit.” → supported by [K
+*“must reproduce the exact same sequence of proposals (bit‑for‑bit).”*.
+- “Error conditions include non‑existent identifiers, redundant merges, or [K
+empty target sets, all resulting in failure fast.” – implied but not explic[6D[K
+explicitly quoted; this remains an open issue for clarification.

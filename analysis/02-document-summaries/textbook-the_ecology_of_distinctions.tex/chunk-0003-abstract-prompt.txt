@@ -1,0 +1,1362 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Revised Content with Expanded Explanations**
+
+---
+
+### Introduction to State‑Space Dynamics and Its Limitations
+
+State‑space descriptions are powerful because they tell us *what* a system [K
+is doing at a given moment by specifying its current state. However, they d[1D[K
+do **not** capture the *how*—the trajectory that brought it to that state. [K
+This limitation means two systems can end up in exactly the same state but [K
+have arrived via completely different histories; those histories may be cru[3D[K
+crucial for what the system can (or cannot) do next.
+
+---
+
+### Common Misinterpretations of History Primacy
+
+**Misreading 1:** “States are useless, and any model using a state‑space de[2D[K
+description is wrong.”  
+*Clarification:* State‑space models remain highly useful when path dependen[8D[K
+dependence fades away. The Markov Compression Theorem (see Chapter \ref{ch:[16D[K
+Chapter \ref{ch:compress}) specifies precisely the conditions under which a[1D[K
+a stateful description does not lose relevant information.
+
+**Misreading 2:** “If history is prior to state, then determinism follows.”[9D[K
+follows.”  
+*Clarification:* History primacy only asserts that *full* characterisation [K
+of a system requires knowledge of its past (history), not that this implies[7D[K
+implies complete deterministic futures. Genuine indeterminism can still exi[3D[K
+exist even when we know the history.
+
+**Misreading 3:** “This chapter undermines scientific use of state‑space mo[2D[K
+models.”  
+*Clarification:* The opposite is intended: by making explicit when state co[2D[K
+compression is lossless and when it discards essential structure, this chap[4D[K
+chapter aims to give a more principled foundation for using state‑space mod[3D[K
+models rather than discouraging them.
+
+---
+
+### Formal Definitions
+
+**History Space:**  
+For a given state space \(X\), the *history space* \(\hist\) is defined as [K
+all possible trajectories into \(X\):
+\[
+\mathrm{history} = \{\gamma : [t_0, t] \to X\}.
+\]
+Elements are entire histories (trajectories) rather than isolated states.
+
+**Terminal Projection:**  
+The function \(\pi_H: \mathrm{history} \to X\) is defined by mapping a hist[4D[K
+history \(\gamma\) to its terminal point:
+\[
+\pi_H(\gamma) = \gamma(t).
+\]
+This assigns each trajectory its ending state in \(X\).
+
+---
+
+### States as Equivalence Classes of Histories
+
+**Proposition:** For any fixed time \(t\), define an equivalence relation o[1D[K
+on histories:
+\(h_1 \sim_t h_2\) if and only if \(h_1(t) = h_2(t)\).  
+This partitions the history space into classes, each class containing all t[1D[K
+trajectories that end at the same state. Thus a *state* is precisely an equ[3D[K
+equivalence class of trajectories.
+
+---
+
+### The History Surplus
+
+**Definition:** The *history surplus* \(\Omega_H(x,t)\) for a state \(x\) a[1D[K
+at time \(t\) is the cardinality of its pre‑image under \(\pi_H\):
+\[
+\Omega_H(x,t) = |\{\gamma : \pi_H(\gamma) = x\}|.
+\]
+States with large surpluses conceal much historical information, and we mea[3D[K
+measure this by *historical entropy*:
+\[
+S_H(x) = \log \Omega_H(x,t).
+\]
+
+---
+
+### The Law of Historical Compression
+
+**Law:** Every state description compresses a larger history description. H[1D[K
+History ontology strictly contains state ontology.
+
+**Theorem (History Primacy Theorem):**  
+For any nontrivial dynamical system, the number of histories ending at each[4D[K
+each state exceeds the cardinality of the state space: \(|\mathrm{history}|[20D[K
+\(|\mathrm{history}| > |X|\) and \(\pi_H\) is many‑to‑one. Thus state ontol[5D[K
+ontology is strictly contained within history ontology.
+
+*Proof Sketch:* If distinct trajectories end in the same state (i.e., \(\pi[5D[K
+\(\pi_H\) is not injective), then multiple histories correspond to a single[6D[K
+single state, making \(|\mathrm{history}| > |X|\). Consequently, knowing on[2D[K
+only the state omits crucial historical details that affect future possibil[8D[K
+possibilities.
+
+---
+
+### Information Loss Theorem
+
+**Theorem:** For any non‑injective projection \(\pi_H\), the entropy of the[3D[K
+the history space exceeds that of the state space:
+\[
+H(\mathrm{history}) > H(X).
+\]
+
+*Proof Sketch:* Since \(\pi_H\) is many‑to‑one, some information about past[4D[K
+past trajectories is lost when we only observe a single state. According to[2D[K
+to Chapter \ref{ch:information}, this implies \(H(X) < H(\mathrm{history})\[20D[K
+H(\mathrm{history})\), indicating that the compression is not lossless.
+
+---
+
+### The Markov Assumption as Compression
+
+**Theorem (Markov Compression Theorem):**  
+A dynamical process satisfies the Markov property iff it is a projection of[2D[K
+of history space onto state space, mathematically expressed by a zero path‑[5D[K
+path‑dependence index:
+\[
+P_D = I(H_t; x_{t+1} \mid x_t) = 0.
+\]
+
+*Proof Sketch:* The full dynamics depend on the entire past \(H_t = (x_0,\l[7D[K
+(x_0,\ldots,x_t)\). By replacing this with only the current state \(x_t\) v[1D[K
+via projection \(\Pi: \mathrm{history} \to X\), we perform a compression. T[1D[K
+The Markov condition holds exactly when future states no longer depend on h[1D[K
+how we arrived at the present state, i.e., \(P(x_{t+1} \mid H_t, x_t) = P(x[3D[K
+P(x_{t+1} \mid x_t)\).
+
+---
+
+### Conclusion
+
+By making these distinctions and theorems explicit, this chapter clarifies [K
+that while states are useful simplifications, they inherently discard histo[5D[K
+historical information. Recognising when a stateful description is lossless[8D[K
+lossless (or not) allows us to use state‑space models more responsibly, esp[3D[K
+especially in contexts where history plays a decisive role.
+
+---
+
+*End of Chapter.*
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-the_ecology_of_distinctions.tex
+
+NEW CHUNK
+=========
+
+Markov systems are not history-free. They are
+history-compressed. The compression introduces blind spots:
+any path-dependent phenomenon is invisible to a Markov
+model.
+
+
+Programs as Histories
+
+\label{sec:ch4-programs}
+
+\csicon
+Traditional computation represents program state $s_n$.
+History-centred computation represents the full event
+sequence $H_n = (e_1, \ldots, e_n)$.
+
+\begin{theorem}{History Dominance Theorem (Programs)}
+  {history-dom-prog}
+  Given complete history $H_n$, one can reconstruct $s_n$.
+  Given only $s_n$, the inverse is generally not unique.
+  Hence $H_n$ contains strictly more information than $s_n$.
+\end{theorem}
+
+\begin{proof}
+  Define $F(H_n) = s_n$ (deterministic state derivation).
+  $F^{-1}$ is not unique since many event sequences can
+  produce the same state. $H_n$ contains strictly more
+  information by the Information Loss Theorem.
+\end{proof}
+
+\begin{example}{Git as History-First Architecture}
+  {git-history}
+  \csicon
+  A git repository stores the full DAG of commits rather
+  than only the current file tree. This is an explicit
+  implementation of history-first ontology: the current
+  state is a projection (the working tree), but the
+  history (the commit graph) is preserved and addressable.
+  \texttt{git reset --hard} is a history-collapsing
+  operation: it discards history to reach a state,
+  trading distinction capacity for simplicity.
+\end{example}
+
+
+Related Frameworks
+
+\label{sec:ch4-related-frameworks}
+
+\subsection*{Whitehead: Process Philosophy}
+
+\emph{Convergence.} Whitehead's process philosophy holds that
+actual entities are not enduring substances but ``occasions of
+experience,'' each a process of becoming that perishes once
+complete and is succeeded by new occasions inheriting from it
+\parencite{whitehead1929}. This is structurally close to this
+chapter's claim that states are not primitive but emerge from
+histories of events.
+
+\emph{Divergence.} Whitehead's occasions are metaphysical
+primitives, irreducible ``drops of experience'' whose internal
+process is described philosophically rather than connected to a
+measurable quantity. The History Primacy Theorem
+(\cref{thm:history-primacy}) gives the same intuition exact
+mathematical content: state is provably a strict compression of
+history, with the Information Loss Theorem
+(\cref{thm:history-info-loss}) supplying an explicit measure of
+how much is discarded in that compression, rather than merely
+asserting compression to be metaphysically secondary.
+
+\emph{Open question.} Whitehead's actual occasions are momentary
+and atomic, each a complete process from initiation to
+satisfaction. Whether this chapter's continuous histories are
+the right formal counterpart to Whitehead's atomistic
+event-structure, or whether a genuinely Whiteheadian
+formalisation would require quantising history into discrete
+occasions, is not settled here.
+
+\subsection*{Bateson: Pattern Through Time}
+
+\emph{Convergence.} Chapter~\ref{ch:distinction} already engaged
+Bateson's definition of information as a difference that makes a
+difference. This chapter's concern is different: Bateson's
+broader claim, developed across \emph{Steps to an Ecology of
+Mind}, is that mind and pattern are constituted by relationships
+unfolding over time, not by any instantaneous configuration
+\parencite{bateson1972}. This is exactly this chapter's claim
+that state cannot be the fundamental object.
+
+\emph{Divergence.} Bateson's ``pattern that connects'' is
+offered as a unifying intuition across biology, mind, and
+ecology, without a formal account of what is lost when a
+temporal pattern is collapsed to an instantaneous description.
+The Information Loss Theorem (\cref{thm:history-info-loss})
+supplies exactly that account: it quantifies how much of the
+connecting pattern a state-only description discards.
+
+\emph{Open question.} Bateson's pattern spans levels ---
+genetic, behavioural, cultural --- simultaneously. Whether this
+chapter's single-history formalism can represent that
+multi-level picture without additional structure, or requires
+the multiscale apparatus developed later in
+Chapter~\ref{ch:tartan}, is left open.
+
+\subsection*{Crutchfield: Computational Mechanics}
+
+\emph{Convergence.} Computational mechanics formalises a closely
+related intuition in a different vocabulary: a process's
+\emph{causal states} are equivalence classes of histories that
+are predictively sufficient, and a process's structural
+complexity is measured by how many such causal states are
+required to predict its future as well as its full history
+would \parencite{crutchfield2012}. Causal-state equivalence is,
+in effect, the recoverability-preserving compression this
+chapter's History Dominance Theorem
+(\cref{thm:history-dom-prog}) is built around: two histories
+collapse to the same causal state exactly when they are
+observationally indistinguishable in their consequences for the
+future.
+
+\emph{Divergence.} Computational mechanics is developed as a
+theory of optimal prediction for a single process observed from
+outside; it does not address the broader claims this book
+attaches to history-primacy --- recoverability, repair, and
+admissibility as properties a system maintains about its own
+past, not only as a predictive resource for an external
+observer. The causal-state construction is a special case of
+this chapter's history-to-state compression, restricted to the
+predictively-minimal compression specifically, rather than the
+full space of compressions this chapter's framework considers.
+
+\emph{Open question.} Whether causal-state minimality
+corresponds to any particular point on this chapter's general
+recoverability spectrum --- maximal compression subject to zero
+information loss, in this chapter's terms --- or whether it is a
+genuinely different optimisation target, is not worked out here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item States are compressed projections of histories
+        (\cref{law:hist-compression}).
+  \item History ontology strictly contains state ontology
+        (\cref{thm:history-primacy}).
+  \item History projection necessarily loses information
+        (\cref{thm:history-info-loss}).
+  \item The Markov assumption is a history compression
+        (\cref{thm:markov-compression}).
+  \item Programs and databases are better understood as
+        historical structures than as state machines.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  Git stores a DAG of commits rather than only the current
+  file tree. Identify the history space, the state
+  projection, and the information lost by \texttt{git squash}.
+  Is \texttt{git squash} an admissible operation in the
+  sense of Chapter~\ref{ch:admissibility}?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Epigenetic marks record environmental history beyond the
+  DNA sequence. Model this as a history space and describe
+  what the state projection (the DNA sequence alone) loses.
+  Under what conditions does epigenetic history become
+  irrecoverable?
+\end{exercise}
+
+\begin{exercise}
+  Prove that for a reversible dynamical system
+  (where $\Phi_{s,t}$ is a bijection for all $s \le t$),
+  $\Omega_H(x,t)$ is constant. What does this say about
+  the relationship between reversibility and historical
+  entropy?
+\end{exercise}
+
+
+
+
+
+\chapter{Recoverability}
+\label{ch:recoverability}
+
+\begin{epigraph}{Nothing is ever truly lost at the moment
+  it disappears. The deeper question is whether enough
+  traces remain for it to be reconstructed.}{Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define recoverability as a property of distinction
+        systems distinct from mere survival.
+  \item Prove the Law of Recoverability.
+  \item Prove the Recoverability Theorem.
+  \item Prove the Semantic Horizon Theorem.
+  \item Apply recoverability to error-correcting codes
+        (CS) and immunological memory (Bio).
+\end{objectives}
+
+
+Beyond Destruction
+
+\label{sec:ch5-beyond}
+
+The previous chapter established that states are
+compressed histories. Every observation discards historical
+information. Every representation conceals distinctions.
+Every projection produces ambiguity.
+
+At first glance this seems to imply that once information
+is lost, it is lost forever. Yet this conclusion is false.
+
+A burned manuscript may survive in quotations.
+An extinct language may survive in inscriptions.
+A damaged hard drive may preserve recoverable fragments.
+A corrupted genome may be reconstructed from homologous
+copies \parencite{kauffman1993}.
+A scientific theory may be reconstructed from derivative
+texts after the original documents vanish.
+
+In each case the object itself disappears, yet sufficient
+traces remain to permit reconstruction. The distinction
+between disappearance and irrecoverability is therefore
+fundamental.
+
+
+Destruction versus Dispersal
+
+\label{sec:ch5-dispersal}
+
+There are at least two fundamentally different processes.
+\emph{Destruction} removes information.
+\emph{Dispersal} redistributes information.
+
+A document shredded into pieces remains recoverable if
+the pieces survive. A document burned to ash does not.
+The first operation disperses distinctions. The second
+annihilates them. Recoverability measures the difference.
+
+
+Why Classical Error Correction Is Not Enough
+
+\label{sec:ch5-why-classical-insufficient}
+
+Classical error-correcting codes solve a version of this
+chapter's problem already, and solve it well. A Hamming
+code, a Reed--Solomon code, or any of their descendants
+\parencite{shannon1948,cover2006} adds redundancy to a
+message so that a bounded number of corrupted symbols can
+be detected and corrected on receipt. This is recoverability
+in a precise, engineerable sense, and the present chapter's
+machinery specialises to exactly this case when the
+recoverability space in question is a channel code.
+
+What classical coding theory does not address, because its
+applications do not require it to, is recoverability for
+structures whose redundancy is not designed in advance by an
+engineer but arises, or fails to arise, as a side effect of
+history. A coding scheme is syntactic: it operates on symbols
+without reference to what those symbols mean, and its
+guarantees hold uniformly regardless of content. A burned
+manuscript, an extinct species, or a discredited scientific
+theory has no error-correcting code attached to it by design;
+whatever recoverability it possesses is whatever happened to
+be left scattered across surviving fragments, quotations,
+homologous structures, or derivative texts. The present
+chapter's recoverability function $\reco(d)$ is built to
+handle exactly this undesigned case: it asks not whether a
+formally specified code can correct a formally specified
+error, but whether \emph{any} reconstruction operator,
+discovered or designed, can restore a distinction from
+whatever traces happen to remain. Classical error correction
+is the special case of this chapter's theory in which the
+traces were engineered in advance; most of the interesting
+cases this book is concerned with --- biological, historical,
+institutional --- are not.
+
+
+Common Misinterpretations of Recoverability
+
+\label{sec:ch5-misinterpretations}
+
+A first misreading equates recoverability with the simple
+existence of a backup or a copy. This is too narrow.
+Recoverability concerns whether \emph{any} reconstruction
+operator exists, not whether a single designated copy has
+survived; a single backup that itself degrades has finite
+recoverability, while a richly dispersed set of partial
+traces, no one of them sufficient alone, can have high
+recoverability in this chapter's formal sense.
+
+A second misreading treats recoverability as a property of
+the present state alone, detachable from history. It is not.
+The Law of Recoverability (\cref{thm:reco-law}) ties
+$\reco(d)$ directly to the dispersal process described in
+Chapter~\ref{ch:history}'s treatment of historical
+compression; a system's recoverability today is a residue of
+how its distinctions were lost, not merely a fact about what
+currently remains.
+
+A third misreading assumes recoverability is binary ---
+either a distinction can be reconstructed or it cannot. The
+Semantic Horizon Theorem proved later in this chapter shows
+otherwise: recoverability degrades continuously, and the
+semantic horizon marks the threshold past which the
+degradation becomes effectively irreversible, not a sudden
+cliff at which recoverability switches off.
+
+This chapter's central result, the Law of Recoverability, is
+what Chapter~\ref{ch:memory} takes as its starting point.
+Recoverability is a property; the next chapter asks what
+mechanism is responsible for keeping that property positive
+over time, and answers: memory.
+
+
+Formal Definitions
+
+\label{sec:ch5-formal}
+
+\begin{definition}{Recoverability Space}{recover-space}
+  A \emph{recoverability space} is a triple
+  $(X, \mathcal{D}, \mathfrak{R})$ where $X$ is a domain,
+  $\mathcal{D}$ is a collection of distinctions, and
+  $\mathfrak{R}$ is a collection of reconstruction
+  operators.
+\end{definition}
+
+\begin{definition}{Recoverability}{recoverability-defn}
+  Let $d^*$ be a target distinction. The
+  \emph{recoverability} of $d$ relative to $d^*$ is
+  \[
+    \reco(d)
+    = \sup_{R \in \mathfrak{R}}
+      \frac{I(R(d);\, d^*)}{I(d^*;\, d^*)}
+    \;\in [0, 1].
+  \]
+  $\reco(d) = 1$ indicates perfect recoverability.
+  $\reco(d) = 0$ indicates total irrecoverability.
+  \index{recoverability|textbf}
+\end{definition}
+
+
+The Law of Recoverability
+
+\label{sec:ch5-law}
+
+\begin{theorem}{Law of Recoverability}{reco-law}
+  Dispersal and destruction are not equivalent. A
+  distinction possesses positive recoverability
+  $\reco(d) > 0$ iff sufficient information survives
+  in the system or its environment to constrain its
+  reconstruction.\index{recoverability!law of|textbf}
+\end{theorem}
+
+\begin{proof}
+  ($\Rightarrow$) If $\reco(d) > 0$, then
+  $\exists R \in \mathfrak{R}$ with $I(R(d); d^*) > 0$,
+  meaning $R(d)$ carries nontrivial information about
+  $d^*$. Hence sufficient information survives.
+  ($\Leftarrow$) If sufficient information survives,
+  define $R$ as the reconstruction operator using that
+  information; then $I(R(d); d^*) > 0$, so $\reco > 0$.
+\end{proof}
+
+
+The Recoverability Theorem
+
+\label{sec:ch5-recov}
+
+\begin{theorem}{Recoverability Theorem}{recoverability-thm}
+  A distinction is recoverable iff its generating history
+  remains distinguishable from alternative histories.
+\end{theorem}
+
+\begin{proof}
+  If the generating history is distinguishable from
+  alternatives, a reconstruction operator can identify
+  the correct historical trajectory; $\reco > 0$.
+  If all generating histories are observationally
+  indistinguishable, no reconstruction operator can
+  uniquely identify the original; $\reco = 0$.
+\end{proof}
+
+
+Redundancy and Recoverability
+
+\label{sec:ch5-redundancy}
+
+Recoverability increases when information is duplicated.
+DNA contains redundancy (complementary strands, repair
+templates). Languages contain redundancy (synonymy,
+context). Error-correcting codes contain redundancy
+\parencite{mackay2003}. Scientific communities contain
+redundancy (multiple research groups).
+
+\begin{theorem}{Redundancy Theorem}{redundancy-thm}
+  Recoverability increases monotonically with the number
+  of independent copies $\rho$ of a distinction:
+  $\partial\reco/\partial\rho \ge 0$.
+\end{theorem}
+
+\begin{proof}
+  Each independent copy introduces an additional
+  reconstruction pathway. Loss of one pathway does not
+  eliminate others. The set of available reconstruction
+  operators weakly expands; hence $\reco$ cannot decrease.
+\end{proof}
+
+
+The Semantic Horizon
+
+\label{sec:ch5-horizon}
+
+\begin{definition}{Semantic Horizon}{semantic-horizon-defn}
+  The \emph{semantic horizon} is
+  $\partial\mathcal{S} = \{d : \reco(d) = 0\}$,
+  the set of distinctions whose recoverability has
+  reached zero.
+  \index{semantic horizon|textbf}
+\end{definition}
+
+\begin{theorem}{Semantic Horizon Theorem}{semantic-horizon}
+  Beyond a critical projection depth, distinctions remain
+  causally influential but are no longer directly
+  reconstructible. The semantic horizon is the locus in
+  history space where $\reco(d) \to 0$.
+\end{theorem}
+
+\begin{proof}
+  Repeated projection merges distinction classes.
+  At each stage information is discarded, inverse images
+  grow, and $|\pi^{-1}(d)| \to \infty$.
+  Recoverability $\reco \propto 1/|\pi^{-1}(d)| \to 0$.
+  Yet causal effects persist because subsequent dynamics
+  continue to depend upon earlier states even when those
+  states are no longer reconstructible.
+\end{proof}
+
+\begin{remark}{The CMB as semantic horizon}{cmb-horizon}
+  \physicon
+  The cosmic microwave background is an astronomical
+  semantic horizon: it records the state of the universe
+  at recombination ($t \approx 380{,}000$ years), but
+  much of the earlier structure has been thermally
+  dispersed and is no longer directly recoverable
+  \parencite{penrose2010}. It remains causally influential
+  (it constrains all subsequent cosmic structure
+  formation) without being fully reconstructible.
+\end{remark}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Loss and destruction are not equivalent:
+        dispersal preserves recoverability
+        (\cref{thm:reco-law}).
+  \item Recoverability is determined by historical
+        distinguishability (\cref{thm:recoverability-thm}).
+  \item Redundancy increases recoverability monotonically
+        (\cref{thm:redundancy-thm}).
+  \item The semantic horizon marks where $\reco \to 0$;
+        causal influence survives but reconstruction
+        does not (\cref{thm:semantic-horizon}).
+  \item Repair (Chapter~\ref{ch:repair}) is possible
+        iff $\reco > 0$.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  A Reed--Solomon $(255, 223)$ code can correct up to
+  $t = 16$ symbol errors. Express this as a recoverability
+  statement: what is $\reco(d)$ for a message with
+  $k$ corrupted symbols, for $k = 0, 10, 16, 17$?
+  What happens at the semantic horizon $k = 17$?
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Describe immunological memory as a recoverability
+  mechanism. What is the distinction $d^*$ being made
+  recoverable? What is the reconstruction operator
+  (the immune response)? What event corresponds to
+  crossing the semantic horizon (loss of memory)?
+\end{exercise}
+
+\begin{exercise}
+  Prove that a system with $n$ independent identical
+  copies of distinction $d$, each with individual
+  recoverability $\rho_0 > 0$, has system-level
+  recoverability that increases with $n$.
+  What is the asymptotic behaviour as $n \to \infty$?
+\end{exercise}
+
+\begin{exercise}
+  Interpret Bekenstein--Hawking black hole entropy
+  $S_{BH} = kA/4\ell_P^2$ \parencite{bekenstein1973}
+  as a recoverability statement. What is the semantic
+  horizon in this context, and why does the information
+  paradox arise as a recoverability problem?
+\end{exercise}
+
+
+
+
+
+\chapter{Memory and Reconstruction}
+\label{ch:memory}
+
+\begin{epigraph}{Memory is not the storage of the past.
+  Memory is the preservation of the possibility of
+  recovering the past.}{Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define memory as recoverability preservation.
+  \item Prove the Reconstruction Theorem.
+  \item Define ecphory and memory viscosity.
+  \item Prove the Forgetting Theorem.
+  \item Prove the Memory Conservation Law.
+  \item Compare biological long-term potentiation (Bio)
+        with distributed hash tables (CS).
+\end{objectives}
+
+
+From Recoverability to Memory
+
+\label{sec:ch6-from}
+
+The previous chapter established that recoverability is
+the central quantity governing reconstruction. This
+immediately raises a deeper question: what preserves
+those traces?
+
+Recoverability is a property. Memory is a mechanism.
+Recoverability describes the possibility of reconstruction.
+Memory provides the substrate that makes reconstruction
+possible.
+
+A civilisation may possess recoverable knowledge; its
+archives constitute memory \parencite{tulving1983}.
+A biological organism may possess recoverable developmental
+information; its genome constitutes memory.
+A computer may possess recoverable states; its storage
+media constitute memory. Memory is therefore not a special
+feature of minds. Wherever distinctions persist through
+time in a form that permits future reconstruction,
+memory exists.
+
+
+The Classical View and Its Limits
+
+\label{sec:ch6-classical}
+
+Traditional treatments regard memory as storage:
+information is placed into a container, the container
+preserves it, and it is later retrieved \parencite{james1890}.
+This metaphor is useful in engineering contexts but
+ultimately inadequate.
+
+Storage presupposes stable objects. Yet throughout this
+book we have observed that objects are themselves
+compressed histories. The storage metaphor explains memory
+in terms of entities whose existence already depends upon
+memory. The account becomes circular.
+
+A more fundamental description treats memory not as
+storage but as a relationship: between traces and
+reconstruction operators, between present evidence and
+historical distinctions.
+
+\section{Common Misinterpretations of Memory as
+  Recoverability}
+\label{sec:ch6-misinterpretations}
+
+A first misreading takes this chapter's account to deny
+that storage media --- genomes, archives, disks --- matter.
+They matter enormously; nothing in this chapter suggests
+otherwise. What changes is the explanatory order. A storage
+medium is not memory because it physically contains symbols;
+it is memory because, and only insofar as, it keeps
+$\reco(d)$ positive for the distinctions it is meant to
+preserve. A disk whose physical bits remain perfectly intact
+but whose format no longer admits any reconstruction
+operator --- an obsolete encoding nobody can decode --- has
+ceased to function as memory in this chapter's sense even
+though no bit has flipped.
+
+A second misreading assumes that more storage automatically
+means more memory. The Memory Functional defined below
+($\mathcal{M}(t) = \int_\mathcal{D} \reco(d,t)\,d\mu_D(d)$)
+makes the counterexample precise: a system can accumulate
+vast quantities of stored material whose recoverability has,
+for practical purposes, already decayed to zero, contributing
+negligibly to $\mathcal{M}(t)$ despite occupying enormous
+physical space. Volume of storage and magnitude of memory are
+related but distinguishable quantities, and the gap between
+them is exactly what the Forgetting Theorem, proved later in
+this chapter, characterises.
+
+A third misreading treats forgetting as a failure mode to be
+eliminated wherever possible. The Memory Conservation Law
+complicates this intuition: maintaining recoverability for
+every distinction indefinitely is not cost-free, and a system
+that refuses to let any $\reco(d)$ decay forecloses the
+capacity to allocate its finite maintenance resources to the
+distinctions that matter most for its continuation.
+Forgetting, on this account, is not simply memory's failure;
+it is sometimes memory's prioritisation.
+
+By the end of this chapter, memory will have been defined
+formally as recoverability preservation, the Reconstruction
+Theorem will show that every memory system induces operators
+capable of restoring what it preserves, and the Memory
+Conservation Law will quantify the trade-off between breadth
+and durability of preservation. Memory, however, is a
+mechanism for preserving distinctions that already exist; it
+says nothing yet about what happens when a distinction has
+been damaged outright and must be actively restored rather
+than merely kept reconstructible. That is the question
+Chapter~\ref{ch:repair} takes up next, under the name repair.
+
+
+Memory as Recoverability Preservation
+
+\label{sec:ch6-memory}
+
+\begin{definition}{Memory}{memory-defn}
+  A \emph{memory system} is any process that preserves
+  recoverability through time. For a distinction $d$
+  that has ceased to be directly observable, a memory
+  system $M$ ensures that $\reco(d, t + \Delta t) > 0$
+  by maintaining traces from which $d$ remains
+  reconstructible.
+  \index{memory!as recoverability preservation|textbf}
+\end{definition}
+
+\begin{definition}{Memory Functional}{memory-functional}
+  $\mathcal{M}(t) = \int_\mathcal{D} \reco(d, t)\,d\mu_D(d)$,
+  the total recoverable distinction content of a system
+  at time $t$.
+\end{definition}
+
+Large $\mathcal{M}$ indicates many reconstructible
+distinctions. Small $\mathcal{M}$ indicates few.
+
+\begin{distinctionaside}{Email Inbox Folders}
+Open your email inbox. Identify one folder. Notice that every
+folder is a distinction preserved in external memory.
+
+Now imagine removing all of them. Nothing is deleted, yet
+everything becomes harder to recover.
+
+That is entropy production, experienced directly.
+\end{distinctionaside}
+
+
+The Reconstruction Theorem
+
+\label{sec:ch6-reconstruction}
+
+\begin{theorem}{Reconstruction Theorem}{reconstruction}
+  Every memory system induces a family of reconstruction
+  operators $\mathfrak{R}_M$ such that for all $d$ with
+  $\reco(d) > 0$: $\exists R \in \mathfrak{R}_M$ with
+  $R(M(d)) \approx d$ up to admissible distortion.
+\end{theorem}
+
+\begin{proof}
+  By the Memory definition, $\reco(M(d)) > 0$.
+  By the Law of Recoverability (\cref{thm:reco-law}),
+  sufficient information survives to constrain
+  reconstruction. The Repair Existence Theorem
+  (\cref{thm:repair-exist}) then guarantees at least
+  one reconstruction operator $R$ exists.
+\end{proof}
+
+\begin{repairaside}{The Database Administrator}
+Most users believe the database stores information. The
+administrator knows the database stores corruption attempts.
+
+Information survives because repair runs faster than
+failure.
+\end{repairaside}
+
+Memory and reconstruction are dual: a memory without
+reconstruction is operationally meaningless; a reconstruction
+without memory is impossible.
+
+
+Ecphory
+
+\label{sec:ch6-ecphory}
+
+A memory trace may exist without being actively accessible.
+Reconstruction requires an appropriate cue.
+\textcite{tulving1983} calls this process \emph{ecphory}.
+
+\begin{definition}{Ecphory}{ecphory-defn}
+  \emph{Ecphory} is the activation of a reconstruction
+  operator by an admissible cue $c$:
+  $R_c(M(d)) = d$.
+  The cue selects a reconstruction pathway, not creates
+  the memory. \index{ecphory|textbf}
+\end{definition}
+
+\begin{definition}{Memory Viscosity}{mem-viscosity}
+  \emph{Memory viscosity} is $\mu_M = 1/|\mathfrak{R}_M|$:
+  the reciprocal of the number of available reconstruction
+  operators. High viscosity means difficult recall; low
+  viscosity means easy reactivation.
+\end{definition}
+
+
+Distributed Memory
+
+\label{sec:ch6-distributed}
+
+\begin{definition}{Distributed Memory}{distributed-memory}
+  Distributed memory exists across subsystems
+  $S_1, \ldots, S_n$ whenever
+  $\reco(d \mid S_1, \ldots, S_n)
+   > \max_i \reco(d \mid S_i)$:
+  the whole remembers more than any individual part.
+\end{definition}
+
+\begin{remark}{Neural and computational examples}
+  {neural-dist}
+  \bioicon\csicon
+  Biological memory is distributed: long-term potentiation
+  (LTP) stores information across synaptic connections
+  rather than in single neurons \parencite{dayan2001}.
+  Distributed hash tables (DHTs) implement the same
+  principle computationally: data is spread across nodes
+  so that the loss of any single node does not eliminate
+  recoverability. Both exploit the Redundancy Theorem
+  (\cref{thm:redundancy-thm}) to achieve
+  $\partial\reco/\partial n \ge 0$.
+\end{remark}
+
+
+Forgetting
+
+\label{sec:ch6-forgetting}
+
+\begin{theorem}{Forgetting Theorem}{forgetting}
+  Every finite memory system possesses distinctions
+  whose recoverability converges toward zero.
+\end{theorem}
+
+\begin{proof}
+  Finite capacity imposes finite distinguishability
+  (\cref{thm:rep-limit}). The number of possible
+  distinctions grows faster than available storage
+  capacity. Some distinctions must share memory
+  representations; shared representations reduce
+  recoverability. Repeated compression eventually drives
+  some distinctions toward the semantic horizon.
+\end{proof}
+
+Forgetting is therefore not a failure but a geometric
+necessity. The question is not whether forgetting occurs
+but which distinctions are forgotten.
+
+
+The Memory Conservation Law
+
+\label{sec:ch6-conservation}
+
+Recoverability may move between substrates. A biological
+memory may become a written document; a written document
+may become a digital archive.
+
+\begin{theorem}{Memory Conservation Law}{mem-conservation}
+  Under admissible transport, recoverable distinction
+  content is conserved up to reconstruction error:
+  $\mathcal{M}(t + \Delta t) \ge \mathcal{M}(t) -
+  \epsilon(\Delta t)$, where $\epsilon(\Delta t) \to 0$
+  as reconstruction fidelity improves.
+\end{theorem}
+
+\begin{proof}
+  Admissible transport preserves reconstruction pathways
+  (\cref{defn:admissible-repair}). Lossless transport
+  preserves $\reco$ exactly. Lossy transport introduces
+  bounded distortion $\epsilon$; hence $\mathcal{M}$
+  changes by at most $\epsilon$.
+\end{proof}
+
+Memory therefore behaves less like stored matter and more
+like conserved structure: it can migrate between substrates
+while its functional content is maintained, provided the
+transport is admissible.
+
+
+Memory and Repair
+
+\label{sec:ch6-repair}
+
+The connection to Chapter~\ref{ch:repair} is now visible.
+Repair requires reconstruction. Reconstruction requires
+memory. Therefore repair depends fundamentally on memory.
+
+A system incapable of remembering cannot repair itself:
+it cannot identify deviations from the reference
+distinction $d^*$, cannot compare present states to prior
+states, and cannot reconstruct lost distinctions. Memory
+is a prerequisite for repair.
+
+The progression is now complete:
+\begin{center}
+Entropy destroys distinctions.\\
+Recoverability measures whether they can return.\\
+Memory preserves their recoverability.\\
+Repair reconstructs them.\\
+Regeneration expands the space within which future
+distinctions may arise.
+\end{center}
+
+
+Related Frameworks
+
+\label{sec:ch6-related-frameworks}
+
+\subsection*{Crutchfield: Minimal Sufficient Memory}
+
+\emph{Convergence.} Chapter~\ref{ch:history} engaged
+computational mechanics on the question of state compression in
+general; this chapter's concern is the narrower question of
+what must specifically be \emph{remembered}. Crutchfield's
+$\epsilon$-machines are, in effect, a formal answer: a process's
+causal states constitute the minimal memory sufficient to
+predict its future exactly as well as its complete history would
+\parencite{crutchfield2012}. This is structurally close to this
+chapter's Memory Functional (\cref{defn:memory-functional}),
+which likewise asks how much of a history must be retained for a
+given purpose, no more and no less.
+
+\emph{Divergence.} Computational mechanics optimises for
+\emph{prediction}: causal states are minimal sufficient
+statistics for the future, and nothing in the construction
+requires that the past itself remain recoverable from them. This
+chapter's Reconstruction Theorem (\cref{thm:reconstruction})
+asks the reverse question --- whether a damaged or dispersed
+distinction can be recovered from what memory retains --- which
+is a recall criterion, not a prediction criterion. A memory
+representation can be minimally sufficient for prediction while
+being entirely insufficient for reconstruction, since predicting
+forward and recovering backward are different demands on what a
+representation must preserve.
+
+\emph{Open question.} Whether there is a regime --- perhaps
+time-reversible or near-equilibrium dynamics --- in which
+predictive minimality and reconstructive sufficiency coincide,
+so that the $\epsilon$-machine and this chapter's memory
+functional pick out the same representation, is not established
+here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Memory is recoverability preservation, not storage
+        (\cref{defn:memory-defn}).
+  \item Every memory system induces reconstruction
+        operators (\cref{thm:reconstruction}).
+  \item Ecphory is cue-driven activation of a
+        reconstruction pathway (\cref{defn:ecphory-defn}).
+  \item Distributed memory exploits redundancy to raise
+        system-level recoverability.
+  \item Finite memory systems inevitably forget
+        (\cref{thm:forgetting}).
+  \item Under admissible transport, recoverable content
+        is conserved (\cref{thm:mem-conservation}).
+  \item Memory is the prerequisite for repair.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Bio]
+  Long-term potentiation (LTP) strengthens synaptic
+  connections through repeated activation. Model LTP
+  as a memory mechanism: what is $d^*$, what is the
+  reconstruction operator, and what corresponds to
+  the semantic horizon (synaptic forgetting)?
+\end{exercise}
+
+\begin{exercise}[CS]
+  A distributed hash table (DHT) with replication factor
+  $k$ stores each key-value pair on $k$ independent nodes.
+  Using the Redundancy Theorem (\cref{thm:redundancy-thm}),
+  compute how $\reco$ changes as nodes fail.
+  At what failure rate does the system cross the
+  semantic horizon?
+\end{exercise}
+
+\begin{exercise}
+  Prove that a write-only memory system (one that can
+  store but not retrieve) has $\mathcal{I}(\Sigma) = 0$
+  by the Intelligence--Repair Equivalence Theorem
+  (\cref{thm:intel-repair}).
+  What does this imply about the relationship between
+  retrievability and intelligence?
+\end{exercise}
+
+\begin{exercise}
+  The Memory Conservation Law states that admissible
+  transport preserves recoverable content.
+  Give an example of an inadmissible memory transport
+  that violates this law, and identify which axiom of
+  repair (\cref{defn:repair-op}) it violates.
+\end{exercise}
+
+
+\part{Repair}
+
+
+
+\chapter{Repair as a Fundamental Operation}
+\label{ch:repair}
+\begin{epigraph}{The art of living is more like wrestling
+  than dancing, in so far as it stands ready against the
+  accidental and the unforeseen.}
+  {Marcus Aurelius, \textit{Meditations} \parencite{aurelius}}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define repair as a primitive operation on
+        distinction structures.
+  \item Distinguish repair from optimisation, adaptation,
+        and continuation.
+  \item Prove the Repair Existence and Closure Theorems.
+  \item Derive the algebraic structure of repair
+        composition.
+  \item Understand the role of recoverability in enabling
+        repair.
+\end{objectives}
+
+
+Why Persistence Requires Repair
+
+\label{sec:ch7-why-persistence}
+
+Chapter~\ref{ch:memory} established memory as the
+preservation of recoverability: a mechanism that keeps
+$\reco(d)$ positive without yet acting on $d$ itself. This
+chapter asks what happens once a distinction has been
+damaged outright and recoverability alone is no longer
+enough --- once something must actually be done, not merely
+kept reconstructible. The Reconstruction Theorem
+(\cref{thm:reconstruction}) guarantees that a memory system
+induces operators capable of restoring a distinction from
+its traces; this chapter studies that restoring operation
+directly, as a primitive in its own right rather than a
+byproduct of memory.
+
+One of the most common assumptions in both scientific and
+everyday reasoning is that persistent structures persist
+because they are stable. Mountains endure because they are
+large. Species endure because they are successful.
+Institutions endure because they are established. Yet
+closer inspection reveals that persistence rarely arises
+from passive stability. Instead, persistence typically
+depends upon continuous repair.
+
+A living organism survives because damaged proteins are
+replaced, membranes are reconstructed, and errors in
+replication are corrected. A language survives because
+speakers continually regenerate its vocabulary and grammar.
+A city survives because roads are repaired, buildings are
+maintained, and infrastructure is renewed. Even apparently
+static geological structures remain recognisable only
+because erosive forces operate more slowly than restorative
+processes.
+
+This suggests a fundamental inversion. Repair is not an
+exceptional activity performed when systems fail. Repair is
+the ordinary mechanism through which persistence is
+achieved. What appears to be stability is often repair
+operating faster than degradation.
+
+From this perspective, the distinction between a persistent
+system and a transient system is not the absence of failure
+but the existence of sufficient repair capacity. Failure is
+universal. Persistence is selective. The systems that
+endure are precisely those that possess mechanisms capable
+of restoring distinctions faster than they are lost.
+
+
+Common Misinterpretations of Repair
+
+\label{sec:ch7-misinterpretations}
+
+The concept of repair is easily misunderstood because the
+term carries strong everyday associations. In ordinary
+language, repair typically refers to the restoration of a
+damaged object to a previous state. A broken machine is
+repaired. A damaged building is repaired. A corrupted file
+is repaired.
+
+The concept developed in this chapter is both broader and
+more abstract. Repair is not fundamentally about objects.
+It is about distinctions. Whenever a distinction that
+previously existed becomes degraded, obscured, fragmented,
+or partially erased, any process that restores the
+distinction qualifies as repair.
+
+This means that repair does not necessarily imply a return
+to an earlier configuration. A biological organism may heal
+through mechanisms that produce structures different from
+those originally present. A scientific theory may repair
+itself by replacing old concepts with new ones. A social
+institution may restore functionality through
+reorganisation rather than restoration. What matters is not
+recovery of a previous state but recovery of
+distinguishability.
+
+A standard and considerably more consequential
+misunderstanding treats repair as a special case of
+optimisation --- as though restoring a damaged distinction
+were simply optimisation applied to a corrective objective
+function. Much of engineering and machine learning practice
+encourages exactly this conflation: a control system that
+is ``self-correcting,'' a model that is ``error-minimising,''
+is described as repairing itself when it is, in this
+chapter's vocabulary, merely optimising. The two are not the
+same. Optimisation seeks improved performance according to
+some fixed objective function, evaluated within a fixed space
+of candidate solutions. Repair seeks restoration of
+recoverability, and is defined independently of any
+objective function at all. A system may become highly
+optimised while simultaneously losing the ability to recover
+from future disturbances; an objective function says nothing
+about whether the states it favours preserve the capacity to
+recover from states it has not anticipated. Conversely, a
+system may sacrifice short-term efficiency in order to
+maintain repair capacity, accepting a worse score on any
+fixed objective in exchange for retaining the ability to
+restore distinctions an optimiser would have no language to
+describe as damaged in the first place. The distinction
+between these two processes becomes increasingly important
+in later chapters when admissibility and regeneration are
+introduced, and resurfaces explicitly in
+Chapter~\ref{ch:repair-intelligence}'s argument that
+intelligence itself is repair capacity rather than
+optimisation pursued further.
+
+By the end of this chapter, repair will have been defined
+formally as an operator satisfying three conditions ---
+improvement, fixed-point stability at the target
+distinction, and dependence on positive recoverability ---
+and the Repair Existence and Closure Theorems will establish
+when such an operator exists and how repairs compose.
+Chapter~\ref{ch:geometry-failure} then asks the question this
+chapter's existence theorem leaves open: the Repair Existence
+Theorem guarantees a repair operator whenever $\reco(d)>0$,
+but says nothing about what happens when no amount of repair,
+however persistently applied, succeeds. That failure mode ---
+not a failure of effort but a failure of geometry --- is the
+next chapter's subject.
+
+
+Formal Development
+
+\label{sec:ch7-formal}
+
+\begin{principle}{Principle of Repair}{repair-prc}
+  Persistent distinctions require repair. Repair is
+  possible iff recoverability remains strictly positive.
+  The composition of admissible repairs is admissible.
+  \index{repair!operator|textbf}
+\end{principle}
+
+\begin{definition}{Repair Operator}{repair-op}
+  $\repair:\mathcal{D}\to\mathcal{D}$ satisfying
+  (R1)~$\delta(\repair(d),d^*)\le\delta(d,d^*)$,
+  (R2)~$\repair(d^*)=d^*$,
+  (R3)~$\repair(d)\ne d^*$ whenever $\reco(d)=0$.
+\end{definition}
+
+\begin{definition}{Admissible Repair}{admissible-repair}
+  $\repair$ is \emph{admissible} if
+  $V_R(\repair(d),t)\ge V_R(d,t)$ for all damaged $d$.
+  \index{repair!admissible|textbf}
+\end{definition}
+
+\begin{distinctionaside}{The Typo}
+You can read ``teh cat sat on teh mat'' without difficulty.
+
+The distinction was lost. The meaning survived.
+
+Most cognition is repair.
+\end{distinctionaside}
+
+\begin{theorem}{Repair Existence Theorem}{repair-exist}
+  A repair operator satisfying (R1)--(R3) exists iff
+  $\reco(d)>0$.
+\end{theorem}
+\begin{proof}
+  ($\Rightarrow$) Any improving $\repair$ must use
+  information recoverable from $d$; hence $\reco(d)>0$.
+  ($\Leftarrow$) $\reco(d)>0$ gives reconstruction
+  operator $\mathfrak{rec}$ from \cref{thm:reco-law};
+  set $\repair=\mathfrak{rec}$; (R1)--(R3) follow.
+  \emph{Note on admissibility:} (R1)--(R3) as stated above
+  concern the damage-reduction and non-degradation
+  properties. The additional condition that an admissible
+  repair not reduce reachability volume, i.e.\
+  $V_R(\repair(d),t) \ge V_R(d,t)$, is not immediate from
+  $\reco(d)>0$ alone. That $\mathfrak{rec}$ satisfies
+  this condition is established in
+  \cref{prop:repair-adm}, which proves that any
+  repair constructed from a positive-recoverability
+  reconstruction operator is admissible in the reachability
+  sense. The present theorem should be read as establishing
+  existence of a repair satisfying (R1)--(R3); the
+  admissibility condition is the subject of
+  \cref{prop:repair-adm} and is required for the
+  stronger results in Part~V.
+\end{proof}
+
+\begin{distinctionaside}{Why Houses Are Never Finished}
+A homeowner imagines that a house is a thing. A plumber
+knows it is a repair process that occasionally resembles a
+thing.
+
+The roof leaks. The pipes corrode. The paint peels. The
+house persists because repair persists.
+
+Remove repair and ``house'' becomes a temporary phenomenon.
+\end{distinctionaside}
+
+\begin{theorem}{Repair Closure Theorem}{repair-closure}
+  Composition of two admissible repair operators is an
+  admissible repair operator.
+  \index{repair!monoid}
+\end{theorem}
+\begin{proof}
+  (R1): $\delta((\repair_1\circ\repair_2)(d),d^*)
+  \le\delta(\repair_2(d),d^*)\le\delta(d,d^*)$.
+  (R2): $(\repair_1\circ\repair_2)(d^*)=d^*$.
+  (R3): $\reco=0$ propagates through both operators.
+  Admissibility: $V_R((\repair_1\circ\repair_2)(d),t)
+  \ge V_R(\repair_2(d),t)\ge V_R(d,t)$.
+\end{proof}
+
+\begin{corollary}{Repair Monoid}{repair-monoid}
+  Admissible repair operators form a monoid under
+  composition with identity $\mathrm{id}_\mathcal{D}$.
+\end{corollary}
+
+\begin{theorem}{Minimal Repair Theorem}{minimal-repair}
+  \textup{(Sketch)} Under compactness and continuity of
+  the operator space, among all admissible repairs
+  achieving $\delta(\repair(d),d^*)\le\epsilon$,
+  there exists one minimising repair cost
+  $\mathrm{Cost}(\repair,d)=
+  \mu(\{y:\repair\text{ modifies distinction at }y\})$.
+\end{theorem}
+
+\begin{theorem}{Repair Conservation Law}{repair-conservation}
+  Admissible repair preserves historical continuity:
+  $d$ and $\repair(d)$ lie in the same connected
+  component of the recoverability manifold
+  $\mathcal{M}_\reco$.\index{repair!conservation|textbf}
+\end{theorem}
+\begin{proof}
+  $\reco(d)>0$ means $d$ is not at the semantic horizon;
+  $\mathfrak{rec}$ operates within $\mathcal{M}_\reco$,
+  keeping $\repair(d)$ in the same component.
+\end{proof}
+
+\begin{theorem}{Repair--Entropy Theorem}{repair-entropy}
+  For admissible repair of $\Sigma\subset X$ in
+  $\Omega\supset\Sigma$:
+  (i)~$\Delta S_\Sigma\le0$;
+  (ii)~$\Delta S_{\Omega\setminus\Sigma}\ge|\Delta S_\Sigma|$;
+  (iii)~$\Delta S_\Omega\ge0$.
+\end{theorem}
+\begin{proof}
+  (i) Repair increases $D_\Sigma$, decreasing
+  $S_\Sigma=k\log\Omega_\Sigma$.
+  (ii) Second Law: $\Delta S_\Omega\ge0$ forces
+  $\Delta S_{\Omega\setminus\Sigma}\ge-\Delta S_\Sigma$.
+  (iii) Second Law directly \parencite{landauer1961irreversibility,
+  bennett1982}.
+\end{proof}
+
+\begin{repairaside}{The Hospital}
+Hospitals are often described as places that create health.
+
+More accurately, they are institutions that continuously
+oppose entropy production. Health is maintained distinction.
+Disease is distinction erosion. Treatment is repair.
+\end{repairaside}
+
+
+Related Frameworks
+
+\label{sec:ch7-related-frameworks}
+
+\subsection*{Cybernetics: Wiener and Ashby}

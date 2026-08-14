@@ -1,85 +1,82 @@
-**Durable Theoretical Information Extracted**
+**1. Definitions & Primitive Concepts Introduced**
 
-1. **Core Structure – String Diagrams**
-   - *Definition*: In Spherepop, event histories are represented by “string[7D[K
-“string diagrams” where:
-     - **Sequential composition** → vertical stacking of diagram components[10D[K
-components.
-     - **Parallel processes** → horizontal juxtaposition.
-   - *Illustration*: Figure \ref{fig:string} shows a simple history \((\tex[7D[K
-\((\text{spherepop}(D)) = (E_1, E_3)\) with \(E_1\) as “split” and \(E_3\) [K
-as “merge”.
+- **Historical identity**: “the primary ontological criterion” that disting[7D[K
+distinguishes Spherepop from standard monoidal categories (source: “[What d[1D[K
+distinguishes … is its emphasis on \emph{historical identity} as the primar[6D[K
+primary ontological criterion.”]”).  
+- **Derived category framework**: A higher‑categorical structure where obje[4D[K
+objects are causal histories, morphisms are irreversible events, and 2‑morp[6D[K
+2‑morphisms capture commutation between independent events (source: “[In th[2D[K
+the causal history category $\mathcal{H}$ introduced in Section~\ref{sec:fu[19D[K
+Section~\ref{sec:functors}, …]”).  
+- **Event‑word & normal‑form apparatus**: Provides a canonical symbolic enc[3D[K
+encoding of event histories (source: “The string diagrams and Petri net rep[3D[K
+representations provide operational and geometric pictures… while the event[5D[K
+event‑word and normal‑form apparatus provides a canonical symbolic encoding[8D[K
+encoding.”).  
 
-2. **Ontological Distinction – Historical Identity**
-   - *Spherepop* differs from standard monoidal categories by treating **hi[4D[K
-**historical identity** as the primary ontological criterion.
-   - This means that causal relations, rather than mere morphisms, dictate [K
-what counts as the same entity over time.
+**2. Mathematical Claims & Formal Structures**
 
-3. **Integrated Representations**
-   - String diagrams and Petri‑net representations are presented as complem[7D[K
-complementary visual/geometric encodings of the same underlying structure.
-   - An additional layer—**event‑word and normal‑form apparatus**—provides [K
-a canonical symbolic encoding (e.g., normal form).
+- Causal history category $\mathcal{H}$ has objects = terminal nodes of eve[3D[K
+event diagrams, morphisms = irreversible events (directed causal chains) (s[2D[K
+(source: “[In the causal history category $\mathcal{H}$ introduced in Secti[5D[K
+Section~\ref{sec:functors}, …]”).  
+- 2‑morphisms are commutation steps between independent events $E_i \parall[7D[K
+\parallel E_j$, interpreted as higher‑order equivalences in a bicategory (s[2D[K
+(source: “The rewriting rules of Appendix~\ref{app:rewriting} provide natur[5D[K
+natural transformations… A commutation step may be interpreted as a 2‑morph[7D[K
+2‑morphism in a bicategory.”).  
+- Confluence result corresponds to coherence of these 2‑morphisms, ensuring[8D[K
+ensuring any two sequences of commutation steps are connected (source: “The[4D[K
+“The confluence result then corresponds to the coherence of these 2‑morphis[9D[K
+2‑morphisms…”).  
 
-4. **Higher‑Categorical Framework**
-   - The causal history category \(\mathcal{H}\) (Section \ref{sec:functors[26D[K
-(Section \ref{sec:functors}) has morphisms that are irreversible events, fo[2D[K
-forming directed causal chains.
-   - Rewriting operations from Appendix \ref{app:rewriting} act as **2‑morp[8D[K
-**2‑morphisms** in a bicategory/2‑category:
-     \[
-       (E_i, E_j) \;\Rightarrow\; (E_j, E_i)
-       \quad\text{when } E_i \parallel E_j,
-       \]
-     allowing re‑ordering of independent events.
-   - **Coherence** is captured by the confluence result: any two sequences [K
-of commutation steps relating the same pair of event chains are linked by h[1D[K
-higher‑order equivalences.
+**3. Mechanisms & Processes**
 
-5. **Derived Functor / Normalization**
-   - The rewriting structure suggests that objects (event graphs) can be vi[2D[K
-viewed as objects in a **derived category**.
-   - The **normalization functor** (Section \ref{sec:normalization}) extrac[6D[K
-extracts the canonical representative from equivalence classes of descripti[9D[K
-descriptions, analogous to a derived functor.
+- **Gluing**: Large histories are assembled from overlapping local historie[8D[K
+histories $H_i$ that agree on intersections $\{H_i\}$, analogous to sheaf g[1D[K
+gluing (source: “If $\{H_i\}$ is a collection of local histories defined on[2D[K
+on overlapping regions… then a global history may be assembled by gluing.”)[9D[K
+gluing.”).  
+- **Normalization functor**: Extracts canonical representatives from equiva[6D[K
+equivalence classes of event‑graph descriptions (source: “[The normalizatio[12D[K
+normalization functor … plays the role of the derived functor, extracting t[1D[K
+the canonical representative from a class of equivalent descriptions.]”).  [K
 
-6. **Sheaf‑Theoretic Interpretation**
-   - Large histories are assembled by gluing compatible local histories def[3D[K
-defined on overlapping subgraphs.
-   - This is precisely the condition in sheaf theory for assembling global [K
-sections:
-     *Local knowledge* (processors) → **open sets** = hereditary sub‑DAGs,
-     *Consistent local records* → **sections** = compatible local histories[9D[K
-histories.
-   - The resulting structure is a **sheaf over the causal graph**, with nor[3D[K
-normal form providing the canonical global section.
 
-7. **Operational Analogy – Distributed Computation**
-   - In practice, different processors hold only their local scope of event[5D[K
-events; consistency on overlaps (overlap verification) and subsequent gluin[5D[K
-gluing produce the full computational history.
-   - This mirrors the assembly process in sheaves: verify compatibility on [K
-intersections and stitch together global descriptions.
+**4. Connections to Concepts Named in Running Abstract**
 
-8. **Embedding into a Broader Framework**
-   - Spherepop can be embedded into a broader class of **derived causal cat[3D[K
-categories** where:
-     * Objects = terminal nodes of event diagrams,
-     * Morphisms = irreversible processes,
-     * 2‑morphisms = rewriting equivalences (commutations),
-     * Normalization functors extract canonical representatives.
-   - This programmatic direction is outlined in the essay’s concluding rema[4D[K
-remarks.
+- Links “historical identity” with causal trace theory and Mazurkiewicz’s e[1D[K
+event‑word model (source: “Spherepop histories are encoded as directed caus[4D[K
+causal chains… independent events may commute per Mazurkiewicz’s event‑word[10D[K
+event‑word model.”).  
+- Connects Petri‑net semantics to the string‑diagrammatic representation, s[1D[K
+showing both provide geometric/operational pictures of the same structure ([1D[K
+(source: “Petri nets provide a resource‑aware semantics mapping regions to [K
+places/tokens… String diagrams give a geometric proof system…”).  
+- Extends higher‑categorical structures from Section 5 by introducing 2‑mor[5D[K
+2‑morphisms as commutation relations, aligning with derived functor constru[7D[K
+constructions analogous to sheaf theory (source: “This section sketches the[3D[K
+the relevant structures and their relationship to derived categories and sh[2D[K
+sheaf theory…”).  
 
----
+**5. Unresolved Questions or Contradictions Visible**
 
-These points capture the essential theoretical constructs—definitions, equa[4D[K
-equations (via commutation relations), distinctions (historical identity vs[2D[K
-vs. standard categories), mechanisms (higher‑categorical structure, derived[7D[K
-derived functors), arguments (coherence and confluence as global consistenc[10D[K
-consistency), conjectures (embedding into derived causal categories), depen[5D[K
-dependencies (between string diagrams, Petri nets, event words), and unreso[6D[K
-unresolved questions (how to fully axiomatize the rewriting system for all [K
-histories).
+- The document hints at a need for more technical development of the higher[6D[K
+higher‑categorical framework but does not resolve how exactly historical id[2D[K
+identity is operationalized beyond being an ontological criterion (potentia[9D[K
+(potential contradiction: “historical identity” may conflict with purely st[2D[K
+structural category axioms).  
+- No explicit mention of potential conflicts between commutation (2‑morphis[10D[K
+(2‑morphisms) and irreversibility of morphisms in $\mathcal{H}$; the relati[6D[K
+relationship remains underdefined.  
+- The embedding of Spherepop into derived causal categories as a sheaf over[4D[K
+over the causal graph is presented as plausible but not demonstrated with c[1D[K
+concrete functorial definitions or coherence proofs, leaving room for unans[5D[K
+unanswered technical questions (e.g., how to handle non‑commutative histori[7D[K
+histories that violate confluence).  
 
+--- 
+
+*All substantive claims are directly tied to verbatim excerpts from the new[3D[K
+new chunk.*

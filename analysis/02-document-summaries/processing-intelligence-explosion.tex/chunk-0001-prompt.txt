@@ -1,15 +1,85 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 3 of a document called
+"processing-intelligence-explosion.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Parity Invariance Under Stochastic Drift (Lemma [lemma:parity])**  
 
-TEXT
-====
+*Proof.*  
+Let \(p(t)\) denote the tape pointer after \(t\) steps. By definition of th[2D[K
+the \(\textbf{AmbiBF}\) movement rule, each step increments or decrements t[1D[K
+the pointer by exactly one unit:
+
+\[
+p(t+1)=p(t)+\eta_t,\qquad \eta_t\in\{-1,+1\},\;\Pr(\eta_t=\pm1)=\tfrac12 .
+\]
+
+Because either \(\eta_t=+1\) or \(\eta_t=-1\), we have
+
+\[
+\eta_t \equiv 1 \pmod{2}\quad\text{(independent of the random outcome).}
+\]
+
+Hence, iterating over any number of steps yields a congruence:
+
+\[
+p(t)=p(0)+t\cdot(\pm1)\equiv p(0)+t \pmod{2}.
+\]
+
+By induction on \(t\) this holds for all non‑negative integers. Consequentl[11D[K
+Consequently the parity (even/odd nature) of the pointer is deterministic g[1D[K
+given its initial value:  
+
+\[
+p(t)\bmod 2 = (p(0)+t)\bmod 2 .
+\]
+
+∎  
+
+**Corollary [Dead Reckoning]**  
+Since parity never changes, a program running on \(\textbf{AmbiBF}\) can al[2D[K
+always infer the current pointer parity from its step count alone. This inv[3D[K
+invariant underlies all counter‑encoding mechanisms in the original languag[7D[K
+language specification.
+
+**Remark**  
+Parity is uniquely preserved among modular invariants for symmetric random [K
+walks on the integer line: any other modulus would be corrupted by stochast[8D[K
+stochastic drift, whereas even/odd remains stable regardless of the sequenc[7D[K
+sequence of \(\pm1\) increments. Thus parity serves as an optimal “stable f[1D[K
+fingerprint” for semantic tracking on this substrate.
+
+---  
+
+*Appendix [sec:bubbleregions]* elaborates that bubble support regions are d[1D[K
+defined precisely by these invariant neighborhoods (parity‑preserving parit[5D[K
+parity classes) so that semantic values can be reconstructed statistically [K
+even when raw cell contents fluctuate.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[11pt]{article}
 

@@ -1,0 +1,155 @@
+**Experiment Summary**
+
+Below is a concise overview of the **Quotient Theory Experiment** as define[6D[K
+defined in the catalog entry.
+
+---
+
+### Experiment: Quotient Theory (Class S, Layer 0)
+
+#### Purpose
+- To demonstrate that quotient types are *set‑equivalence* relations:
+  - Two quotients representing the same underlying set behave identically.
+  - The chosen representative is arbitrary and has no impact on equality.
+  - No “canonical” representative exists; any member can serve as a stand‑i[7D[K
+stand‑in.
+
+#### Theory Status
+- **Paper‑licensed (quotients are sets)** – subject to further formalizatio[12D[K
+formalization in future specifications if needed.
+
+#### What It Tests
+```text
+Quotient({a,b}) == Quotient({b,a})   (order irrelevant)
+representative(q) ∈ q.members        (arbitrary choice)
+```
+
+#### Success Criteria
+1. **Quotient equality by member set only** – Two quotients are equal if th[2D[K
+their underlying sets coincide.
+2. **Representative consistency but arbitrariness** – The `representative()[17D[K
+`representative()` method returns an element of the quotient, yet any eleme[5D[K
+element may be chosen without affecting truth‑values.
+3. **No canonical representative** – All members in a given quotient are in[2D[K
+interchangeable for all purposes.
+
+#### Key Learnings
+- Representatives are *display* tools only; they never serve as identity fo[2D[K
+for equality comparisons.
+
+#### Regression Tests
+- `test_regressions.py::test_regression_quotient_representative_independenc`test_regressions.py::test_regression_quotient_representative_independence`
+
+---
+
+### How This Fits Into the Larger Framework
+
+| Layer | Purpose of Experiments in This Layer |
+|-------|--------------------------------------|
+| **0** (Primitives) | Define foundational constructs (`01`, `02`, `03`, `0[2D[K
+`04`, `05`, `06`, `12`, `27`). These experiments validate that primitives b[1D[K
+behave as intended before any higher‑level interaction is considered. |
+| **1** (Observers) | Experiments such as **Observer Non‑Authority** (25) a[1D[K
+and **Replay Invariance** (24) verify observer properties like non‑authorit[12D[K
+non‑authority, authority separation, and deterministic replay behavior. |
+| **2** (Interactions) | Includes experiments on bind/refuse commutation (*[2D[K
+(**21**) and confluence across policy families (**22**). These explore how [K
+primitives interact under various conditions. |
+| **3** (Invariants) | Experiments like **Affliction vs Infliction** (20) t[1D[K
+test intensional‑extensional equivalence, and **Horizon Equivalence** (26) [K
+probes reachability over time horizons. |
+
+#### Critical Path
+The logical flow is:
+```
+01 → 02 → 03,04,05,06 → 07,08,09 → all others
+```
+Ensuring primitives are correctly defined before any interaction‑ or invari[6D[K
+invariant‑level experiments can be meaningfully evaluated.
+
+---
+
+### Adding New Experiments
+
+If you propose a new experiment (N+1), follow these steps:
+
+1. **Classify** – Determine its class: `S` (standard test), `X` (experiment[11D[K
+(experimental, non‑prescriptive), `Q` (research question), or `I` (internal[9D[K
+(internal implementation).
+2. **Purpose Statement** – Provide a one‑sentence description of the specif[6D[K
+specific question it answers.
+3. **Theory Status Check** – Verify if it explores *paper‑licensed* (✓), pr[2D[K
+provisional (→), or research (?) semantics.
+4. **Experimental Flag** – Mark any `X` or `Q` experiments with `@pytest.ma[11D[K
+`@pytest.mark.experimental` in their test files.
+5. **Catalog Update** – Add a new entry following the template shown below.[6D[K
+below.
+
+#### Experiment Template
+
+```python
+"""
+Experiment N: <Title>
+
+CLASS: S | X | Q | I
+LAYER: 0 | 1 | 2 | 3
+THEORY STATUS: Paper-licensed | Provisional | Research (if applicable)
+
+PURPOSE:
+  <One-sentence question or hypothesis>
+
+PAPER REFERENCE:
+  <Reference to Appendix X, Section Y, etc., if relevant>
+
+SUCCESS CRITERIA:
+  - <Observable outcome 1>
+  - <Observable outcome 2>
+
+THEORY QUESTIONS:
+  - Explores Q# (if applicable)
+
+EXPECTED OUTCOME:
+  <What success looks like>
+
+FAILURE MODES:
+  <What would indicate a problem>
+"""
+```
+
+---
+
+### Maintenance Guidelines
+
+- **Update** when specifications change, new primitives are added, or theor[5D[K
+theory status is resolved.
+- **Do not update** for cosmetic fixes; use the *Expected Outcome* and *Fai[4D[K
+*Failure Modes* fields to document surprising results.
+- Refer to `THEORY_STATUS.md` for authoritative information on open vs. res[3D[K
+resolved questions.
+
+---
+
+### Cross‑References
+
+- **THEORY_STATUS.md**: Determines whether a question is currently provisio[8D[K
+provisional, paper‑licensed, or pending formalization.
+- **SPECIFICATIONS.md**: Provides the normative definitions of stable seman[5D[K
+semantics (e.g., observer non‑authority).
+- **CONTRIBUTING.md**: Guides how to propose new experiments and maintain t[1D[K
+them within this catalog.
+- **test_regressions.py**: Contains regression tests extracted from each ex[2D[K
+experiment for automated validation.
+
+---
+
+### Version History
+
+| Date       | Change Summary |
+|------------|----------------|
+| 2026‑08‑13 | Initial catalog entry (29 documented experiments). Classific[9D[K
+Classifications, theory statuses, success criteria, and cross‑references ad[2D[K
+added. Template provided for future additions. |
+
+--- 
+
+*End of Experiment Entry.*

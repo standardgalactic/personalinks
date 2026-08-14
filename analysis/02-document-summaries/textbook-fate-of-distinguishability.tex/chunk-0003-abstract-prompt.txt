@@ -1,0 +1,1457 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Meta‑Stability Theorem – Detailed Proof Sketch**
+
+Below is a complete, step‑by‑step proof of the Meta‑Stability Theorem as st[2D[K
+stated in Chapter II. It shows why only the *algebraic structure* of the op[2D[K
+operator monoid \((\distOp,\circ,\mathrm{Id})\) survives when we apply an a[1D[K
+admissible transformation family \(\{\transfam\}\) to the distinction space[5D[K
+space.
+
+---
+
+### 1. Setup
+
+- **Domain** \(X\) and codomain \(Y\) are arbitrary sets (the physical worl[4D[K
+world, a cognitive model, or a civilization).
+- **Distinction pairs**: \(\distPairs = X\times Y\).  
+  Two pairs \((x_1,y_1)\) and \((x_2,y_2)\) are *observationally indistingu[10D[K
+indistinguishable* if \(x_1\sim_\obs x_2\) **and** \(y_1\sim_\obs y_2\).
+- **Operator monoid**:  
+  \[
+  \distOp = \{\text{all admissible operations }F:X\times Y\to X\times Y\}
+  \]
+  with composition defined pointwise:
+  \[
+  (F\circ G)(x,y)=F(G(x,y)).
+  \]
+
+---
+
+### 2. What Survives the Transformation?
+
+**Claim 1:** *Individual distinction pairs need not survive.*  
+*Proof:* Take any **collapse operator** \(C\) belonging to \(\{\transfam\}\[16D[K
+\(\{\transfam\}\). By definition, there exist distinct elements \(x_0,y_0\)[11D[K
+\(x_0,y_0\) such that  
+
+  \[
+  C(x_0)=C(y_0).
+  \]
+
+Applying the transformation \(T=C\) yields a new distinction pair  
+\((C(x_0),C(y_0))\) which is observationally indistinguishable from itself,[7D[K
+itself, showing that the *content* of a pair can change under an admissible[10D[K
+admissible transformation. ∎
+
+---
+
+### 3. Preservation of Monoid Structure (Theorem)
+
+**Statement:** For every \(T\in\{\transfam\}\), the pullback induced action[6D[K
+action  
+
+  \[
+  T^*: \distOp \longrightarrow \distOp,\qquad
+  (T^*F)(x,y)=F(T(x),T(y))
+  \]
+
+maps the monoid structure of \(\distOp\) to itself; i.e.,
+
+- \(T^*(\mathrm{Id}) = \mathrm{Id}\);
+- If \(F,G\in\distOp\) then \(T^*(F\circ G) = (T^*F)\circ(T^*G)\).
+
+**Proof:**
+
+1. **Identity Preservation:**  
+   For any operator \(F\),
+
+   \[
+   (T^*\mathrm{Id})(x,y)=\mathrm{Id}(T(x),T(y))=F(T(x),T(y)).
+   \]
+
+   Since the pullback definition is pointwise, applying it to the identity [K
+gives back the original operator after transformation. Hence \(T^*(\mathrm{[14D[K
+\(T^*(\mathrm{Id})=\mathrm{Id}\).
+
+2. **Composition Preservation:**  
+   Let \(F,G\in\distOp\) and let \(T\in\{\transfam\}\) be admissible (i.e.,[6D[K
+(i.e., it preserves observability, so that both pre‑images exist). Then
+
+   \[
+   \begin{aligned}
+   (T^*(F\circ G))(x,y)
+   &= (F\circ G)(T(x),T(y))\\
+   &= F\bigl(T(x),T(y)\bigr).
+   \end{aligned}
+   \]
+
+   Now consider the composition:
+
+   \[
+   \begin{aligned}
+   ((T^*F)\circ(T^*G))(x,y)
+   &= (T^*F)\bigl(G(T(x),T(y))\bigr)\\
+   &= F\Bigl(T\!\bigl(G(T(x),T(y))_1\bigr),
+                T\!\bigl(G(T(x),T(y))_2\bigr)\Bigr).
+   \end{aligned}
+   \]
+
+   Because \(T\) is admissible, the relation  
+
+   \[
+   G(T(x'),T(y')) = (u,v) \;\Longrightarrow\; G(x',y')=(u',v')
+   \]
+
+   holds for all pairs. Thus
+
+   \[
+   T\!\bigl(G(T(x),T(y))_1\bigr)=G(x,y)_1,\qquad
+   T\!\bigl(G(T(x),T(y))_2\bigr)=G(x,y)_2.
+   \]
+
+   Consequently,
+
+   \[
+   F\Bigl(T\!\bigl(G(T(x),T(y))_1\bigr),
+            T\!\bigl(G(T(x),T(y))_2\bigr)\Bigr)
+   = (F\circ G)(x,y).
+   \]
+
+   Therefore  
+
+   \[
+   T^*(F\circ G) = (T^*F)\circ(T^*G).
+   \]
+
+3. **Conclusion:**  
+   Since the identity and composition laws are preserved by every pullback [K
+\(T^*\), the whole monoid structure of \(\distOp\) is invariant under any a[1D[K
+admissible transformation.
+
+---
+
+### 4. What Is Conserved?
+
+**Claim 2:** The conserved object is not a specific distinction or operator[8D[K
+operator, but **the algebraic structure** (i.e., the set of operators and t[1D[K
+their composition rules) itself.
+
+*Proof Sketch:*  
+If we replaced \(\distOp\) with some particular operator \(F_0\), collapse [K
+could map distinct inputs to indistinguishable outputs, destroying informat[8D[K
+information about how pairs behave under transformations. The meta‑theorem [K
+tells us that **only** the fact that there exist operators capable of colla[5D[K
+collapsing, repairing, and transporting distinctions (and their composition[11D[K
+composition rules) survives.
+
+---
+
+### 5. Implications for Different Scales
+
+| Scale | Physical Realization | Cognitive Analogue | Civilizational Coroll[6D[K
+Corollary |
+|-------|----------------------|--------------------|----------------------|-------|----------------------|--------------------|--------------------------|
+| **Particle Physics** | Distinction pairs are particle–antiparticle states[6D[K
+states; collapse is decay into a common energy state (e.g., photons). The m[1D[K
+monoid captures symmetry‑breaking and gauge interactions. | Perceptual expe[4D[K
+experiences become indistinguishable after attentional collapse, preserving[10D[K
+preserving memory structures rather than specific memories. | Societal coll[4D[K
+collapses turn distinct groups into homogeneous cultures while retaining th[2D[K
+the possibility of recombination through migration or education. |
+| **Cognitive Neuroscience** | Neurons form patterned connections; a transf[6D[K
+transformation (e.g., drug effect) may map active synapses to inactive ones[4D[K
+ones, showing that only the *structure* of synaptic connectivity is preserv[7D[K
+preserved. | Memory consolidation preserves relational schemas rather than [K
+specific recollections. | Cultural narratives survive societal upheavals by[2D[K
+by preserving narrative structures and archetypal motifs. |
+| **Civilization** | Nations undergo regime changes; distinct political ins[3D[K
+institutions may be merged into a single state, yet the possibility to re‑s[4D[K
+re‑segment persists (e.g., federalism). | Societies preserve social hierarc[7D[K
+hierarchies while allowing redistribution of power under new constitutions.[14D[K
+constitutions. | Global trade alliances survive economic shocks by retainin[8D[K
+retaining market structures and regulatory frameworks. |
+
+---
+
+### 6. Why Fate Space is Necessary
+
+Because collapse operators can erase individual distinctions, we cannot des[3D[K
+describe the future solely in terms of specific pairs \((x,y)\). Instead, *[1D[K
+**Fate Space**—the space of *observable outcome classes* (i.e., equivalence[11D[K
+equivalence classes under observation)—captures what survives. The Meta‑Sta[8D[K
+Meta‑Stability theorem guarantees that this higher‑level structure is invar[5D[K
+invariant under all admissible transformations, justifying the construction[12D[K
+construction of Fate Space in Chapter 10.
+
+---
+
+### Summary
+
+- **Individual distinctions** may disappear via collapse operators → not pr[2D[K
+preserved.
+- **Monoid algebraic relations** (identity and composition) survive any adm[3D[K
+admissible transformation when viewed through the pullback action \(T^*\).
+- The *conserved object* is the structural integrity of \(\distOp\) itself,[7D[K
+itself, not particular elements or their images.
+- This invariance explains why higher‑level concepts such as Fate Space are[3D[K
+are essential: they describe what can be inferred about future states witho[5D[K
+without losing information about how transformations act on the whole opera[5D[K
+operator algebra.
+
+--- 
+
+\end{document}
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-fate-of-distinguishability.tex
+
+NEW CHUNK
+=========
+
+(ii): For any $T\in\transfam$, the pullback
+$T^*F(x,y)=F(T(x),T(y))$ maps $\distOp$ to $\distOp$ (by
+closure of $\distOp$ under precomposition with maps from $X$).
+The family $\{T^*:T\in\transfam\}$ is an action of $\transfam$
+on $\distOp$: $(S\circ T)^*F(x,y)=F(S(T(x)),S(T(y)))=
+S^*(T^*F)(x,y)$, so $(S\circ T)^*=T^*\circ S^*$ (the action
+is contravariant). This is a well-defined action of the monoid
+$(\transfam,\circ)$ on the set $\distOp$.
+
+(iii): The algebraic structure --- the six operator classes,
+their composition rules, the identity, the invertible subgroup,
+the non-invertible submonoid --- is defined abstractly in terms
+of what operators do to $\distMetric$. None of these
+definitions refer to any particular distinction pair. Under
+pullback by $T$, each class maps to the corresponding class:
+$T^*(\collapOp)$ is a collapse operator (since $T^*\collapOp(x,y)=
+\collapOp(T(x),T(y))$ may still merge distinct pairs); $T^*R$
+is a repair operator; etc. The algebraic structure of $\distOp$
+is therefore preserved under the family of pullbacks.
+\end{proof}
+\end{metatheorem}
+
+
+What the Theorem Says and Does Not Say
+
+
+The Meta-Stability Theorem is precise about what persists.
+
+It says: the algebraic structure of $\distOp$ --- the set of
+operator classes and their composition rules --- persists under
+admissible transformation.
+
+It does not say: any particular operator is invariant.
+Specific collapse or repair operators may themselves be altered
+by the transformation family.
+
+It does not say: distinctions are preserved. Individual pairs
+may collapse, as claim~(i) makes explicit.
+
+It does not say: the action $T^*$ is a monoid homomorphism.
+As the proof of \cref{thm:pullback-comp} reveals, the pullback
+is a contravariant action but not generally a homomorphism.
+
+What persists is the \emph{kind of thing that can happen}: the
+existence of collapse, repair, transport, and their algebraic
+relations. This is a structural persistence claim, not a
+material one.
+
+
+Interpretations at Three Scales
+
+
+\paragraph{Physical scale.} Particular particles are created
+and destroyed. The laws governing particle creation and
+destruction --- the operator algebra of particle physics ---
+persist. Individual measurements yield individual outcomes;
+the algebra of observables persists.
+
+\paragraph{Cognitive scale.} Particular memories are forgotten.
+The capacity to form and repair memories --- the operator
+algebra of the cognitive system --- persists (until the system
+itself ceases to exist). Particular concepts are revised; the
+capacity for conceptual distinction-making persists.
+
+\paragraph{Civilizational scale.} Particular languages go
+extinct. The capacity for language formation and transmission
+--- the operator algebra of linguistic distinction-making ---
+persists in human populations. Particular institutions fail;
+the capacity to form and repair institutions persists.
+
+In each case, the Meta-Stability Theorem identifies the same
+structural asymmetry: individual instances are fragile; the
+class of possible operations is robust. Persistence resides
+at the level of organization, not content.
+
+
+Why Fate Theory Follows
+
+
+The Meta-Stability Theorem closes the foundational arc of
+Parts~I and~II. It shows that the question ``will this
+distinction survive?'' does not have a stable answer: some
+distinctions survive, others do not. But it also shows that
+the question ``what kinds of operations are possible?'' does
+have a stable answer: the operator algebra persists.
+
+This stability creates a new question: given that the operator
+algebra is stable, what does it tell us about the \emph{future}
+of any particular distinction pair? Not whether the pair will
+survive, but what the distribution of its possible fates is.
+
+That question requires a new space. Not a space of distinctions.
+Not a space of operators. A space of \emph{possible fates},
+structured by the stable operator algebra.
+
+That space is the fate space $\fateSpace$ of Chapter~10.
+
+\begin{trilogylink}{Meta-Stability Across the Trilogy}
+In \textit{Persistence Before Truth}, the argument for why
+truth is possible despite transformation is essentially the
+Meta-Stability Theorem in disguise: it is not that particular
+distinctions never collapse, but that the capacity to make and
+restore distinctions persists, enabling truth-evaluation to
+proceed.
+
+In \textit{The Ecology of Distinctions}, the persistence of
+the operator algebra is what enables the generative dynamics
+of the ecological framework: if the operator algebra itself
+could be destroyed, no ecology of distinctions would be
+possible. The ecology presupposes the meta-stability.
+
+In this volume, the Meta-Stability Theorem is the formal
+bridge from Part~II (operator algebra) to Part~III (fate
+geometry): the fate map assigns to each distinction pair the
+record of what the stable operator algebra says may happen to
+it.
+\end{trilogylink}
+
+\begin{chapsummary}
+\item The pushforward $T_*F=T\circ F$ is not a monoid
+  homomorphism in general.
+\item The pullback $T^*F(x,y)=F(T(x),T(y))$ defines a
+  consistent action of $\transfam$ on $\distOp$, but is
+  contravariant and not generally a homomorphism either.
+\item The Meta-Stability Theorem: individual distinctions need
+  not persist; the algebraic structure of $\distOp$ (the six
+  classes, composition rules, identity, invertible subgroup)
+  persists under the pullback action of admissible
+  transformations.
+\item The conserved object is organizational: the kind of
+  thing that can happen, not which particular things happen.
+\item This stability makes the Fate Space necessary: it is the
+  space that records what the stable operator algebra says may
+  happen to each distinction pair.
+\end{chapsummary}
+
+\part{Fate Geometry}
+
+
+
+
+
+
+\chapter{The Fate Space}
+\label{ch:fate-space}
+
+\begin{epigraph}{The same present may lead to radically different
+  futures. The present state does not determine the fate.}
+  {The motivating observation}
+\end{epigraph}
+
+\begin{objectives}
+\item Explain why observational distance and transformation
+  families are insufficient to determine what \emph{happens}
+  to a distinction.
+\item Introduce the four fate coordinates and motivate their
+  choice.
+\item Define the fate space $\fateSpace$ as a product of these
+  coordinates and establish its topology.
+\item Define the fate map $\fateMap:X\times X\to\fateSpace$.
+\item Prove the Collapse Discontinuity Meta-Theorem: collapse
+  is topologically irreversible.
+\item Work through examples showing what the fate map records.
+\item Introduce fate-profile equivalence as a forward pointer
+  to Chapter~15.
+\end{objectives}
+
+Parts~I and~II developed the language of distinction pairs
+and operators. Part~II culminated in the Meta-Stability
+Theorem: individual distinctions are not conserved, but the
+operator algebra is. That theorem answers a conservation
+question. It does not answer a predictive one.
+
+Given a distinction pair $(x,y)$ and a family of transformations
+$\transfam$, what actually \emph{happens} to the pair? Will it
+survive? Can it be repaired if damaged? Is it reachable from
+neighboring pairs? Does it lie in a region the operator family
+treats as admissible?
+
+None of these questions are answered by knowing the observational
+distance $\distMetric(x,y)$ or the operator algebra $\distOp$.
+They require a new object: a structured record of the pair's
+\emph{fate} under the operator family. That object is the fate
+map.
+
+
+Why a New Space is Needed
+
+
+Consider two distinction pairs $(x_1,y_1)$ and $(x_2,y_2)$
+with $\distMetric(x_1,y_1)=\distMetric(x_2,y_2)$: the two
+pairs are equally distinguishable right now. It is entirely
+possible that:
+
+$(x_1,y_1)$ survives every transformation in $\transfam$ with
+high probability, can be repaired after damage by a cheap
+operator, lies deep within an admissible region, and can be
+communicated across large transport distances;
+
+while $(x_2,y_2)$ collapses under most transformations in
+$\transfam$, has no repair pathway, lies near the admissibility
+boundary, and cannot be transported beyond a small neighborhood.
+
+The pairs are observationally indistinguishable in the present
+but have entirely different prospects. Observational distance
+does not record this. Neither does the operator algebra, which
+describes what operators can \emph{do} but not what they
+\emph{do to particular pairs}. We need a map from pairs to
+a structured record of their prospects under the operator family.
+
+
+The Four Fate Coordinates
+
+
+The fate of a distinction pair $(x,y)$ under an operator family
+$\transfam$ is determined by four independent quantities.
+
+\paragraph{Survival ratio $\survRatio\in[0,1]$.}
+How often does the distinction survive a random transformation
+from $\transfam$? Formally, $\survRatio_\transfam(x,y)=
+\mu(S_\transfam(x,y))/\mu(\transfam)$ where
+$S_\transfam(x,y)=\{T\in\transfam:T(x)\not\sim_\obs T(y)\}$
+is the survival set (Chapter~3). $\survRatio=1$ means invariant
+under $\transfam$; $\survRatio=0$ means destroyed by every
+transformation.
+
+\paragraph{Repair efficiency $\repEff\in[0,1]$.}
+After a degrading transformation $D$ reduces the pair below
+operational threshold, can it be reconstructed? $\repEff$ is
+the ratio $d_\obs(R(D(x)),R(D(y)))/d_\obs(x,y)$ for the best
+available repair operator $R$ (Chapter~7). $\repEff=1$ means
+perfect reconstruction; $\repEff=0$ means the pair is in the
+memory set's complement --- unreconstructable.
+
+\paragraph{Collapse indicator $\collapseInd\in\{0,1\}$.}
+Is the distinction currently operative? $\collapseInd=1$ means
+the pair is distinguishable under the current observation
+family $\obs$. $\collapseInd=0$ means it has collapsed: no
+admissible observation can separate $x$ from $y$. The collapse
+indicator is discrete. This is not a simplification; it is the
+most important topological fact about the fate space.
+
+\paragraph{Transport coordinates $\boldsymbol{\tau}
+\in\mathbb{R}_{\ge0}^k$.}
+How far can the distinction be communicated? Each coordinate
+$\tau_i$ measures the reach of the $i$-th transport operator
+available to the pair: the supremal distance over which the
+distinction remains recoverable after transport. $k$ is the
+number of independent transport channels in the operator family.
+
+
+The Fate Space
+
+
+\begin{definition}{Fate Space}{fate-space}
+The \emph{fate space} is the product
+\[
+  \fateSpace
+  \;=\;
+  [0,1]_{\survRatio}
+  \times
+  [0,1]_{\repEff}
+  \times
+  \{0,1\}_{\collapseInd}
+  \times
+  \mathbb{R}_{\ge0}^{k},
+\]
+equipped with the product topology, where $\{0,1\}$ carries
+the discrete topology.
+\end{definition}
+
+\begin{definition}{Fate Map}{fate-map}
+The \emph{fate map} is
+\[
+  \fateMap:X\times X\longrightarrow\fateSpace,
+  \quad
+  (x,y)\longmapsto
+  \bigl(
+    \survRatio_\transfam(x,y),\;
+    \repEff(x,y),\;
+    \collapseInd(x,y),\;
+    \boldsymbol{\tau}(x,y)
+  \bigr).
+\]
+\end{definition}
+
+The fate map assigns to every distinction pair a structured
+record of its prospects under the operator family~\cite{amari2000}. It is the
+primary object of Part~III.
+
+
+Topology of the Fate Space
+
+
+The product topology on $\fateSpace$ is determined by the
+factor topologies. Three of the four factors are connected:
+$[0,1]$ and $\mathbb{R}_{\ge0}$ are path-connected. The
+fourth factor $\{0,1\}$ with the discrete topology is not
+connected. This single discrete factor determines the global
+topology.
+
+\begin{proposition}{Two Connected Components}{two-comps}
+The fate space $\fateSpace$ has exactly two connected
+components:
+\[
+  \fateComp{1}
+  \;=\;
+  [0,1]^2\times\{1\}\times\mathbb{R}_{\ge0}^k
+  \quad\text{and}\quad
+  \fateComp{0}
+  \;=\;
+  [0,1]^2\times\{0\}\times\mathbb{R}_{\ge0}^k.
+\]
+\begin{proof}
+A product space is connected iff every factor is connected, or
+iff the disconnected factors separate the space into components
+corresponding to their own components. Here $\{0,1\}$ is
+disconnected with components $\{0\}$ and $\{1\}$, each
+open and closed in the discrete topology. The product topology
+inherits this: the preimages of $\{0\}$ and $\{1\}$ under
+the projection $\pi_c:\fateSpace\to\{0,1\}$ are
+$\fateComp{0}$ and $\fateComp{1}$, both open and closed in
+$\fateSpace$. They partition $\fateSpace$. Each is connected
+(as a product of connected spaces). Hence these are the two
+components.
+\end{proof}
+\end{proposition}
+
+
+The Collapse Discontinuity Theorem
+
+
+The topological structure of $\fateSpace$ has an immediate
+consequence that is one of the three central results of this
+volume.
+
+\begin{metatheorem}{Collapse Discontinuity}{collapse-disc}
+No continuous path in $\fateSpace$ connects a fate profile
+with $\collapseInd=1$ to a fate profile with $\collapseInd=0$.
+Consequently:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item Collapse is topologically irreversible: a distinction
+    pair that crosses from $\fateComp{1}$ to $\fateComp{0}$
+    cannot return by any continuous process in $\fateSpace$.
+  \item The fate map $\fateMap$ cannot be continuous at any
+    point where a distinction pair transitions between the
+    two components.
+  \item Collapse events are topological singularities, not
+    merely large quantitative changes in the coordinates
+    $\survRatio$, $\repEff$, or $\boldsymbol{\tau}$.
+\end{enumerate}
+\begin{proof}
+The two components $\fateComp{0}$ and $\fateComp{1}$ are
+open and closed in $\fateSpace$ (they are the preimages of
+$\{0\}$ and $\{1\}$ under the continuous projection
+$\pi_c$, and $\{0\},\{1\}$ are open in the discrete topology
+on $\{0,1\}$)~\cite{munkres2000}. A continuous path $\gamma:[0,1]\to\fateSpace$
+with $\gamma(0)\in\fateComp{1}$ must satisfy
+$\gamma([0,1])\subseteq\fateComp{1}$ by connectedness of
+$[0,1]$ and the fact that $\fateComp{1}$ is both open and
+closed: the preimage $\gamma^{-1}(\fateComp{1})$ is open
+and closed in $[0,1]$, contains $0$, hence equals all of
+$[0,1]$. Therefore $\gamma(1)\in\fateComp{1}$: no path
+reaches $\fateComp{0}$.
+
+Claim~(ii) follows because continuity of $\fateMap$ at a
+transition point would require $\fateMap$ to map a connected
+neighbourhood continuously into $\fateSpace$, landing in both
+components --- impossible.
+
+Claim~(iii) follows because the discontinuity is topological:
+it cannot be removed by any continuous reparametrization or
+approximation.
+\end{proof}
+\end{metatheorem}
+
+\begin{remark}{The Significance of Discreteness}
+  {discrete-significance}
+The collapse indicator is discrete by design, not convention.
+A distinction pair is either operationally present or it is
+not. There is no intermediate state: a distinction that is
+``half-collapsed'' is not a distinction. The discreteness of
+$\collapseInd$ is the formal expression of this all-or-nothing
+character of operational presence.
+
+The Collapse Discontinuity Theorem is therefore not a theorem
+about a modelling choice. It is a theorem about the structure
+of distinction itself: there is a topological gap between
+being distinguishable and not being distinguishable, and no
+continuous process bridges it.
+\end{remark}
+
+
+Worked Examples
+
+
+\begin{example}{Fate Profile of a Stable Memory}
+  {stable-memory}
+Let $(x,y)$ be a distinction pair corresponding to a long-term
+memory: $x$ is the encoded memory trace, $y$ is the absent
+trace. Typical fate profile:
+
+$\survRatio\approx 0.95$: the distinction survives most
+transformations (daily interference, minor forgetting).
+
+$\repEff\approx 0.8$: substantial reconstruction is possible
+from partial traces.
+
+$\collapseInd=1$: the memory is currently operative.
+
+$\tau\approx[0.7]$: the memory can be communicated to one
+other person with reasonable fidelity.
+
+Fate profile: $(0.95, 0.8, 1, [0.7])$.
+This is a point well inside $\fateComp{1}$ with good
+repair coverage and positive transport reach.
+\end{example}
+
+\begin{example}{Fate Profile of an Endangered Distinction}
+  {endangered}
+Let $(x,y)$ be a distinction pair corresponding to an
+endangered linguistic category:
+
+$\survRatio\approx 0.15$: most speakers have dropped the
+distinction.
+
+$\repEff\approx 0.3$: some documentary records exist.
+
+$\collapseInd=1$: the distinction is still made by some speakers.
+
+$\tau\approx[0.1]$: transmission to new speakers is very limited.
+
+Fate profile: $(0.15, 0.3, 1, [0.1])$.
+This point lies near $\partial\admRegion$ in $\fateComp{1}$:
+the distinction is present but facing imminent collapse.
+\end{example}
+
+\begin{example}{Fate Profile of a Collapsed Distinction}
+  {collapsed}
+Let $(x,y)$ be a distinction pair corresponding to an extinct
+language's phonemic contrast:
+
+$\survRatio=0$: no living speakers preserve the contrast.
+
+$\repEff=0.1$: fragmentary reconstruction may be possible
+from historical records.
+
+$\collapseInd=0$: the distinction is no longer operative.
+
+$\tau=[0]$: no current transport pathway.
+
+Fate profile: $(0, 0.1, 0, [0])$.
+This point lies in $\fateComp{0}$. The Collapse
+Discontinuity Theorem guarantees that no continuous fate
+trajectory from any point in $\fateComp{1}$ reaches here.
+\end{example}
+
+\begin{example}{Fate Profile of a Physical Invariant}
+  {invariant}
+Let $(x,y)$ correspond to a distinction preserved by a
+conservation law (e.g., two configurations differing in
+electric charge):
+
+$\survRatio=1$: every transformation preserving charge
+preserves the distinction.
+
+$\repEff=1$: the distinction is always reconstructible.
+
+$\collapseInd=1$: it is operative.
+
+$\tau=[+\infty]$ (or large): charge differences are
+transported without loss over arbitrary distances.
+
+Fate profile: $(1, 1, 1, [L])$ for large $L$.
+This is a fate profile near the ``ideal corner'' of $\fateComp{1}$:
+maximum survival, perfect repairability, full transport.
+\end{example}
+
+
+The Geometry of Fate Space
+
+
+The worked examples illuminate the geometry of $\fateSpace$.
+The component $\fateComp{1}$ is a copy of $[0,1]^2\times
+\mathbb{R}_{\ge0}^k$: a ``cube-with-rays'' in which:
+
+the origin $(0,0,1,\mathbf{0})$ is the worst admissible fate
+--- present but barely surviving, unrepairable, untransportable;
+
+the ideal corner $(1,1,1,\boldsymbol{\infty})$ is the best
+fate --- fully surviving, perfectly repairable, universally
+transportable;
+
+the admissible region $\admRegion\subseteq\fateComp{1}$ is
+the subset of fate profiles compatible with continued
+operation;
+
+the admissibility boundary $\partial\admRegion$ is where
+fates become incompatible with continued operation.
+
+The component $\fateComp{0}$ is the ``collapsed copy'' ---
+the same geometry but populated by distinctions that have
+ceased to be operative. Points in $\fateComp{0}$ with
+$\repEff>0$ are latent memories (Chapter~19): collapsed but
+reconstructible.
+
+\begin{fatediagram}{The Geometry of $\fateSpace$}
+\centering
+\begin{tikzpicture}[scale=0.9]
+  
+  \draw[FateViolet,thick,rounded corners=8pt]
+    (-0.3,-0.3) rectangle (5.8,4.3);
+  \node[font=\sffamily\small\bfseries\color{FateViolet}]
+    at (2.75,4.6) {$\fateComp{1}$ (operative)};
+  
+  \draw[DistTeal,thick,fill=DistLight,rounded corners=5pt]
+    (0.5,0.5) rectangle (4.5,3.5);
+  \node[font=\sffamily\footnotesize\color{DistTeal}]
+    at (2.5,3.8) {$\admRegion$};
+  
+  \node[font=\tiny\sffamily\color{DistGray}]at(0.5,-0.1){$\survRatio=0$};
+  \node[font=\tiny\sffamily\color{DistGray}]at(4.5,-0.1){$\survRatio=1$};
+  \node[font=\tiny\sffamily\color{DistGray},rotate=90]
+    at(-0.1,0.5){$\repEff=0$};
+  \node[font=\tiny\sffamily\color{DistGray},rotate=90]
+    at(-0.1,3.5){$\repEff=1$};
+  
+  \filldraw[DistGold](4.5,3.5)circle(3pt);
+  \node[font=\tiny\sffamily\color{DistGold},right=2pt]
+    at(4.5,3.5){ideal $(1,1,1,\mathbf{\infty})$};
+  
+  \filldraw[DistAmber](0.9,1.1)circle(3pt);
+  \node[font=\tiny\sffamily\color{DistAmber},right=2pt]
+    at(0.9,1.1){endangered};
+  
+  \filldraw[DistTeal](3.8,2.8)circle(3pt);
+  \node[font=\tiny\sffamily\color{DistTeal},right=2pt]
+    at(3.8,2.8){stable memory};
+  
+  \draw[-Stealth,dashed,DistGray,thick]
+    (2.75,0.1)--(2.75,-1.2)
+    node[midway,right=2pt,font=\tiny\sffamily\color{DistGray}]
+    {collapse};
+  
+  \draw[DistGray,thick,rounded corners=8pt]
+    (-0.3,-1.8) rectangle (5.8,-0.9);
+  \node[font=\sffamily\small\color{DistGray}]
+    at(2.75,-2.1){$\fateComp{0}$ (collapsed)};
+  \filldraw[DistGray](1.2,-1.3)circle(2pt);
+  \node[font=\tiny\sffamily\color{DistGray},right=2pt]
+    at(1.2,-1.3){latent memory ($\repEff>0$)};
+  \filldraw[DistRed!70](3.5,-1.3)circle(2pt)
+    node[right=2pt,font=\tiny\sffamily\color{DistRed!70}]
+    {lost ($\repEff=0$)};
+  
+  \node[font=\sffamily\tiny\bfseries\color{FateViolet}]
+    at(5.2,-0.5){topological gap};
+\end{tikzpicture}
+\end{fatediagram}
+
+
+Fate-Profile Equivalence
+
+
+Two distinction pairs have the same fate if and only if their
+fate maps agree.
+
+\begin{definition}{Fate-Profile Equivalence}{fate-equiv}
+Two distinction pairs $(x,y),(x',y')\in X\times X$ are
+\emph{fate-equivalent}, written $(x,y)\approx_\fateMap(x',y')$,
+if
+\[
+  \fateMap(x,y) \;=\; \fateMap(x',y').
+\]
+\end{definition}
+
+This equivalence relation on $X\times X$ will be used in
+Chapter~15 to define fate classes: the equivalence classes
+$\fateClasses=(X\times X)/{\approx_\fateMap}$. The reason for
+deferring the quotient is conceptual: distinction pairs exist
+before their fates. The geometry of $X\times X$ and $\fateSpace$
+should be understood before the quotient is formed. Chapter~15
+introduces $\fateClasses$ at the moment when population
+dynamics require it.
+
+\begin{remark}{What the Fate Map Does Not Record}{fate-limits}
+The fate map $\fateMap$ records prospective information about
+a distinction pair: survival, repairability, transport reach,
+operational status. It does not record:
+
+The \emph{content} of the distinction --- what $x$ and $y$
+differ \emph{in} is not captured by $\fateMap(x,y)$.
+
+The \emph{history} of the pair --- how it came to have its
+current fate profile is not in $\fateSpace$.
+
+The \emph{mechanism} of collapse or repair --- $\fateMap$
+records the outcome, not the process.
+
+These are not defects. They are features: by abstracting away
+content, history, and mechanism, the fate map becomes
+applicable to distinctions in physics, biology, cognition,
+language, and civilization under a single formalism. The
+content-, history-, and mechanism-specific theories are special
+cases to which the framework applies.
+\end{remark}
+
+\begin{chapsummary}
+\item The fate space $\fateSpace=[0,1]_\survRatio\times
+  [0,1]_\repEff\times\{0,1\}_\collapseInd\times\mathbb{R}_{\ge0}^k$
+  records the prospects of a distinction pair under the
+  operator family.
+\item The four coordinates measure: survival rate, repair
+  efficiency, operational status, and transport reach.
+\item $\fateSpace$ has two connected components $\fateComp{1}$
+  (operative) and $\fateComp{0}$ (collapsed), separated by
+  the discrete topology of $\collapseInd$.
+\item The Collapse Discontinuity Meta-Theorem: no continuous
+  path connects $\fateComp{1}$ to $\fateComp{0}$; collapse
+  is topologically irreversible.
+\item The fate map $\fateMap:X\times X\to\fateSpace$ is the
+  primary object of Part~III; everything in Parts~IV--VI is
+  derived from it.
+\item Fate-profile equivalence $\approx_\fateMap$ partitions
+  $X\times X$ into fate classes, introduced formally in
+  Chapter~15.
+\end{chapsummary}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter{Fate Metrics and Continuity}
+\label{ch:fate-metrics}
+
+\begin{epigraph}{Two points may be close together without their
+  futures being close together.}{Observation underlying this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Define fate distance as a family of metrics on the connected
+  components of fate space.
+\item Establish local continuity of the fate map under admissible
+  operator families.
+\item Introduce fate sensitivity as the local Lipschitz constant of
+  the fate map.
+\item Show that the singular set is precisely the locus of infinite
+  fate sensitivity, suturing this chapter to Chapter~12.
+\end{objectives}
+
+The previous chapter introduced fate space
+\[
+  \fateSpace
+  \;=\;
+  [0,1]_{\survRatio}
+  \times
+  [0,1]_{\repEff}
+  \times
+  \{0,1\}_{\collapseInd}
+  \times
+  \mathbb{R}_{\ge0}^{k}
+\]
+and the fate map
+\[
+  \fateMap:\distPairs\longrightarrow\fateSpace.
+\]
+The existence of a fate map allows distinction pairs to be
+compared not merely by their present observational separation
+but by the trajectories available to that separation under
+transformation. Distinctions that appear similar at a single
+instant may possess radically different futures. The purpose
+of fate geometry is therefore not to describe what distinctions
+are, but what may become of them.
+
+To reason about such questions we require a notion of distance
+on fate space, and a corresponding notion of continuity for the
+fate map. The topological structure of $\fateSpace$, however,
+is not uniform: the discrete collapse coordinate
+$\collapseInd\in\{0,1\}$ partitions $\fateSpace$ into two
+connected components. Fate distance and fate continuity are
+therefore defined component-wise.
+
+
+Fate Distance
+
+
+\begin{definition}{Connected Components of Fate Space}
+  {fate-components}
+The space $\fateSpace$ has exactly two connected components,
+\[
+  \fateComp{1}
+  \;=\;
+  [0,1]_{\survRatio}\times[0,1]_{\repEff}
+    \times\{1\}\times\mathbb{R}_{\ge0}^{k},
+\]
+\[
+  \fateComp{0}
+  \;=\;
+  [0,1]_{\survRatio}\times[0,1]_{\repEff}
+    \times\{0\}\times\mathbb{R}_{\ge0}^{k}.
+\]
+A fate profile $s\in\fateSpace$ belongs to $\fateComp{1}$ if
+$\collapseInd(s)=1$ (the distinction is operationally present)
+and to $\fateComp{0}$ if $\collapseInd(s)=0$ (it has collapsed).
+\end{definition}
+
+\begin{definition}{Fate Distance}{fate-distance}
+Let $s=(\survRatio,\repEff,\collapseInd,\boldsymbol{\tau})$ and
+$s'=(\survRatio',\repEff',\collapseInd',\boldsymbol{\tau}')$ be
+fate profiles belonging to the same connected component of
+$\fateSpace$.
+The \emph{fate distance} is
+\[
+  \fateDist{s}{s'}
+  \;=\;
+  |\survRatio-\survRatio'|
+  \;+\;
+  |\repEff-\repEff'|
+  \;+\;
+  \|\boldsymbol{\tau}-\boldsymbol{\tau}'\|_{1}.
+\]
+The collapse coordinate $\collapseInd$ is omitted because it is
+constant within each component and cannot contribute to
+intra-component distance.
+
+For profiles in \emph{different} components, fate distance is
+undefined. The topological gap between components is addressed
+by the Collapse Discontinuity Theorem
+(\cref{meta:collapse-disc}) and is the subject of
+Chapter~12.
+\end{definition}
+
+\begin{proposition}{Fate Distance is a Metric on Each Component}
+  {fate-metric}
+On each connected component $\fateComp{c}$, the fate distance
+$d_{\fateSpace}$ is a metric.
+\begin{proof}
+Within $\fateComp{c}$ the collapse coordinate is the constant
+$c\in\{0,1\}$ and contributes nothing to the distance formula.
+The remaining coordinates are $\survRatio,\repEff\in[0,1]$ and
+$\boldsymbol{\tau}\in\mathbb{R}_{\ge0}^k$.
+
+\emph{Positivity.} Each term $|\survRatio-\survRatio'|$,
+$|\repEff-\repEff'|$, $\|\boldsymbol{\tau}-\boldsymbol{\tau}'\|_1$
+is non-negative. Their sum is zero iff each term is zero, which
+holds iff $\survRatio=\survRatio'$, $\repEff=\repEff'$, and
+$\boldsymbol{\tau}=\boldsymbol{\tau}'$, i.e., iff $s=s'$.
+
+\emph{Symmetry.} $|a-b|=|b-a|$ and $\|\mathbf{u}-\mathbf{v}\|_1
+=\|\mathbf{v}-\mathbf{u}\|_1$ for all real values.
+
+\emph{Triangle inequality.} For any third profile
+$s''=(\survRatio'',\repEff'',c,\boldsymbol{\tau}'')$,
+\begin{align*}
+  \fateDist{s}{s''}
+  &= |\survRatio-\survRatio''|
+     +|\repEff-\repEff''|
+     +\|\boldsymbol{\tau}-\boldsymbol{\tau}''\|_1 \\
+  &\le
+    (|\survRatio-\survRatio'|+|\survRatio'-\survRatio''|)
+    +(|\repEff-\repEff'|+|\repEff'-\repEff''|) \\
+  &\quad
+    +(\|\boldsymbol{\tau}-\boldsymbol{\tau}'\|_1
+     +\|\boldsymbol{\tau}'-\boldsymbol{\tau}''\|_1) \\
+  &= \fateDist{s}{s'} + \fateDist{s'}{s''}.
+\end{align*}
+Hence $d_{\fateSpace}$ satisfies all metric axioms on $\fateComp{c}$.
+\end{proof}
+\end{proposition}
+
+\begin{remark}{Fate Distance is Not Observational Distance}
+  {fate-vs-obs}
+The fate distance $d_{\fateSpace}$ and the observational
+pseudometric $\distMetric$ measure orthogonal properties.
+Two distinction pairs may be observationally close
+($\distDist{p}{q}$ small) while their fate profiles are distant
+($\fateDist{\fateMap(p)}{\fateMap(q)}$ large), and vice versa.
+A pair of states nearly indistinguishable today may face
+entirely different futures. Conversely, two currently well-separated
+pairs may share identical fates under the same operator family.
+Fate geometry therefore captures information that observational
+geometry cannot.
+\end{remark}
+
+
+Continuity of the Fate Map
+
+
+\begin{definition}{Fate Continuity}{fate-continuity-defn}
+The fate map $\fateMap$ is \emph{continuous at} $(x,y)\in\distPairs$
+if $\fateMap(x,y)$ and all sufficiently nearby pairs share the
+same connected component of $\fateSpace$, and for every
+$\varepsilon>0$ there exists $\delta>0$ such that
+\[
+  \distDist{(x,y)}{(x',y')} < \delta
+  \;\Longrightarrow\;
+  \fateDist{\fateMap(x,y)}{\fateMap(x',y')} < \varepsilon.
+\]
+The fate map is \emph{continuous} if it is continuous at every
+point of $\distPairs$.
+\end{definition}
+
+The condition that nearby pairs share the same connected component
+is not redundant: pairs near a collapse event may lie in different
+components, and the distance formula is undefined across components.
+Continuity requires that collapse events are isolated, not merely
+that the real-valued coordinates vary continuously.
+
+\begin{theorem}{Local Continuity of the Fate Map}{local-cont}
+Let $\transfam$ be an admissible transformation family such that
+the survival ratio $\survRatio_\transfam(x,y)$ and repair
+efficiency $\repEff(x,y)$ vary continuously with respect to
+$\distMetric$, and the transport coordinates
+$\boldsymbol{\tau}(x,y)$ are constructed from continuous operator
+actions on $\distPairs$. Then $\fateMap$ is continuous on the
+interior of each non-collapse region
+\[
+  \distPairs^{+}
+  \;=\;
+  \{(x,y)\in\distPairs : \collapseInd(x,y)=1\}.
+\]
+\begin{proof}
+Fix $(x,y)\in\distPairs^{+}$, so $\collapseInd(x,y)=1$.
+By assumption, $\survRatio_\transfam$ and $\repEff$ are continuous
+at $(x,y)$. Since $\distPairs^{+}$ is open in $\distPairs$ (it
+is the preimage of the open set $\{c=1\}$ in the Sierpi\'{n}ski
+topology on $\{0,1\}$), there exists a neighbourhood of $(x,y)$
+contained in $\distPairs^{+}$. Within this neighbourhood all
+pairs share the component $\fateComp{1}$, so fate distance is
+defined.
+
+Given $\varepsilon>0$, continuity of $\survRatio_\transfam$
+provides $\delta_1$ such that
+$|\survRatio_\transfam(x,y)-\survRatio_\transfam(x',y')|
+<\varepsilon/3$
+whenever $\distDist{(x,y)}{(x',y')}<\delta_1$.
+Continuity of $\repEff$ provides $\delta_2$ analogously.
+Continuity of each transport coordinate provides $\delta_3$.
+Setting $\delta=\min(\delta_1,\delta_2,\delta_3)$ gives
+\[
+  \fateDist{\fateMap(x,y)}{\fateMap(x',y')}
+  \;<\;
+  \tfrac{\varepsilon}{3}+\tfrac{\varepsilon}{3}
+  +\tfrac{\varepsilon}{3}
+  \;=\;\varepsilon
+\]
+for all $(x',y')$ with $\distDist{(x,y)}{(x',y')}<\delta$.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{The Assumption is on Operators, Not on State Space}
+  {cont-assumption}
+The continuity hypotheses of \cref{thm:local-cont} are conditions
+on the operator family $\transfam$, not on the underlying state
+space $X$. They are satisfied, for example, whenever $X$ is a
+normed space and the survival and repair operators are given by
+Lipschitz maps. The theorem therefore applies to all standard
+physical and computational models of transformation, while leaving
+open the possibility of discontinuous operators --- which are
+precisely the objects of Chapter~12.
+\end{remark}
+
+
+Fate Sensitivity and Lipschitz Regularity
+
+
+Continuity guarantees that nearby distinctions have nearby futures.
+A quantitative strengthening asks at what \emph{rate} futures can
+diverge as pairs are perturbed.
+
+\begin{definition}{Fate Sensitivity}{fate-sens-defn}
+The \emph{fate sensitivity} of $\fateMap$ at $(x,y)\in\distPairs$
+is
+\[
+  \fateSens{x,y}
+  \;=\;
+  \limsup_{(x',y')\to(x,y)}
+  \frac{
+    \fateDist{\fateMap(x,y)}{\fateMap(x',y')}
+  }{
+    \distDist{(x,y)}{(x',y')}
+  }.
+\]
+This is the local Lipschitz constant of $\fateMap$ at $(x,y)$.
+\end{definition}
+
+\begin{definition}{Lipschitz Fate Map}{lipschitz-fate}
+The fate map is \emph{Lipschitz} if there exists a global constant
+$\fateLip>0$ such that
+\[
+  \fateDist{\fateMap(p)}{\fateMap(q)}
+  \;\le\;
+  \fateLip\cdot\distDist{p}{q}
+\]
+for all $p,q$ in the same non-collapse region of $\distPairs$.
+Equivalently, $\sup_{p\in\distPairs^+}\fateSens{p}\le\fateLip<\infty$.
+\end{definition}
+
+The Lipschitz constant $\fateLip$ quantifies the fragility of
+fate: small Lipschitz constants indicate that futures are robust
+to perturbation; large constants indicate that small changes in
+the distinction pair produce large changes in fate. For specific
+operator families, $\fateLip$ can be computed from the operator
+norms of the survival and repair maps.
+
+\begin{proposition}{Linear Observation Bound}{linear-lip}
+Let $X=\mathbb{R}^n$ with the Euclidean norm,
+$\obs=\{o_j:X\to\mathbb{R}\}_{j=1}^m$ a finite family of
+linear observation maps, and suppose the survival and repair
+operators are given by matrices $S,R\in\mathbb{R}^{n\times n}$.
+Then the fate map is Lipschitz with constant
+\[
+  \fateLip
+  \;\le\;
+  \max_{j}\bigl(\|S\|_{\mathrm{op}}+\|R\|_{\mathrm{op}}\bigr)
+  \cdot
+  \max_{j}\|o_j\|_{\mathrm{op}}.
+\]
+\begin{proof}
+The survival ratio coordinate satisfies
+$|\survRatio(p)-\survRatio(q)|
+\le\|S\|_{\mathrm{op}}\cdot\distDist{p}{q}$
+by linearity and the definition of the operator norm.
+The repair efficiency coordinate satisfies
+$|\repEff(p)-\repEff(q)|
+\le\|R\|_{\mathrm{op}}\cdot\distDist{p}{q}$
+by the same argument.
+Summing gives the stated bound.
+\end{proof}
+\end{proposition}
+
+The key structural theorem suturing this chapter to Chapter~12
+is the following, which shows that fate sensitivity is not merely
+a quantitative measure but a geometric one: its singularities
+are exactly the points where Chapter~12's analysis begins.
+
+\begin{theorem}{Singular Set as Infinite Sensitivity}
+  {sing-is-infinite}
+The singular set $\singSet$ of the fate map coincides with the
+locus of infinite fate sensitivity:
+\[
+  \singSet
+  \;=\;
+  \bigl\{(x,y)\in\distPairs : \fateSens{x,y}=+\infty\bigr\}.
+\]
+\begin{proof}
+$(\supseteq)$: Suppose $\fateSens{x,y}=+\infty$. Then for
+every $M>0$ and every $\delta>0$, there exists $(x',y')$ with
+$\distDist{(x,y)}{(x',y')}<\delta$ yet
+$\fateDist{\fateMap(x,y)}{\fateMap(x',y')}>M\cdot\delta$.
+No such behaviour is compatible with continuity at $(x,y)$.
+Hence $\fateMap$ is discontinuous at $(x,y)$, so
+$(x,y)\in\singSet$.
+
+$(\subseteq)$: Suppose $\fateSens{x,y}<\infty$. Then $\fateMap$
+is locally Lipschitz at $(x,y)$, hence continuous there. Thus
+$(x,y)\notin\singSet$.
+\end{proof}
+\end{theorem}
+
+
+Fate Criticality
+
+
+The Singular Set as Infinite Sensitivity theorem establishes
+that $\fateSens{x,y}=+\infty$ characterizes exactly the points
+of $\singSet$. A natural question follows: can infinite
+sensitivity be detected in advance, before a distinction pair
+reaches the singular set? The following theorem provides a
+positive answer.
+
+\begin{theorem}{Fate Criticality Theorem}{fate-criticality}
+Let $\gamma:[0,1]\to\distPairs$ be a continuous path with
+$\gamma(0)=(x,y)$ and $\lim_{t\to 1}\gamma(t)\in\singSet$.
+Then
+\[
+  \fateSens{\gamma(t)}\;\longrightarrow\;+\infty
+  \qquad\text{as }t\to 1.
+\]
+That is: as a distinction pair approaches a singular stratum,
+its fate sensitivity diverges.
+\begin{proof}
+Suppose for contradiction that $\fateSens{\gamma(t)}$ remains
+bounded along the path: $\fateSens{\gamma(t)}\le M<\infty$ for
+all $t\in[0,1)$. Then $\fateMap\circ\gamma$ is locally Lipschitz
+with constant $M$ along $\gamma$, hence continuous on $[0,1)$.
+
+Since $\gamma$ is continuous and $\distPairs$ is a metric space,
+$\gamma(t)$ converges to a point $p^*\in\singSet$ as $t\to 1$.
+By the Singular Set as Infinite Sensitivity theorem
+(\cref{thm:sing-is-infinite}), $\fateSens{p^*}=+\infty$.
+But if $\fateMap$ were locally Lipschitz at $p^*$ with
+constant $M$, it would be continuous there, contradicting
+$p^*\in\singSet$. Hence the assumption fails: $\fateSens{\gamma(t)}$
+must diverge as $t\to 1$.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Predictive Interpretation}{criticality-predict}
+The Fate Criticality Theorem gives a predictive criterion for
+impending fate singularities. A distinction pair approaching
+collapse, forgetting, or repair-threshold will exhibit
+increasing fate sensitivity before the singularity is reached.
+Monitoring $\fateSens{x,y}$ therefore provides advance warning
+of qualitative fate transitions.
+
+This has concrete interpretations at every scale. In physical
+systems, rising sensitivity near a phase transition corresponds
+to critical slowing down and diverging susceptibility. In
+cognitive systems, rising sensitivity near a forgetting
+threshold corresponds to increased vulnerability of a memory
+to interference. In social systems, rising sensitivity near
+an institutional stratum corresponds to the brittleness
+characteristic of organizations approaching failure. In each
+case the same mathematical object --- fate sensitivity ---
+provides the observable signature.
+\end{remark}
+
+\begin{chapsummary}
+\item Fate space $\fateSpace$ has two connected components
+  $\fateComp{1}$ and $\fateComp{0}$ separated by the discrete
+  collapse coordinate.
+\item Fate distance $d_{\fateSpace}$ is a metric on each component,
+  omitting the collapse coordinate as constant within a component.
+\item The fate map is continuous on the interior of each
+  non-collapse region whenever the operator family acts
+  continuously on distinction pairs.
+\item Fate sensitivity $\sigma_{\fateMap}$ is the local Lipschitz
+  constant; its divergence to infinity is equivalent to
+  discontinuity of the fate map.
+\item The singular set $\singSet$ is the locus of infinite
+  sensitivity. Its structure is the subject of Chapter~12.
+\item The Fate Criticality Theorem: as a distinction pair
+  approaches any singular stratum, its fate sensitivity
+  diverges. This provides a predictive signature of impending
+  fate transitions.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Fate Singularities and Bifurcations}
+\label{ch:fate-sing}
+
+\begin{epigraph}{The singular points are not defects of the
+  theory. They are the theory's most important predictions.}
+  {Paraphrase of Ren\'e Thom}
+\end{epigraph}
+
+\begin{objectives}
+\item Identify the singular set $\singSet$ as the union of four
+  qualitatively distinct strata.
+\item Prove that collapse events are topological singularities,
+  not merely large quantitative changes.
+\item Characterize repair threshold, transport horizon, and
+  forgetting singularities as bifurcations in fate space.
+\item Establish that the strata are generically smooth
+  submanifolds away from their mutual intersections.
+\item Show that historical events --- scientific revolutions,
+  institutional collapse, paradigm shifts --- are crossings of
+  specific strata.
+\end{objectives}
+
+The previous chapter established that the fate map is
+continuous on the interior of each non-collapse region, and
+that the singular set $\singSet$ is precisely the locus of
+infinite fate sensitivity. This chapter characterizes the
+geometry of $\singSet$.
+
+The singular set is not homogeneous. Different points of
+$\singSet$ correspond to qualitatively different modes of fate
+transition, arising from different coordinates of the fate map.
+The natural decomposition of $\singSet$ into strata makes this
+taxonomy precise.
+
+
+The Singular Set and Its Strata
+
+
+Recall from Chapter~11 that
+\[
+  \singSet
+  \;=\;
+  \bigl\{(x,y)\in\distPairs
+  : \fateMap\text{ is discontinuous at }(x,y)\bigr\}.
+\]
+
+\begin{definition}{Fate Strata}{fate-strata}
+The singular set decomposes as
+\[
+  \singSet
+  \;=\;
+  \strataC\;\cup\;\strataR\;\cup\;\strataT\;\cup\;\strataF,
+\]
+where each stratum is defined by the coordinate of $\fateSpace$
+responsible for the discontinuity:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item $\strataC$ (\emph{collapse stratum}): locus where
+    $\collapseInd$ changes discontinuously from~$1$ to~$0$.
+  \item $\strataR$ (\emph{repair stratum}): locus where $\repEff$
+    jumps discontinuously, marking the appearance or disappearance
+    of a repair pathway.
+  \item $\strataT$ (\emph{transport stratum}): locus where a
+    transport coordinate $\tau_i$ changes discontinuously, marking
+    a reachability horizon.
+  \item $\strataF$ (\emph{forgetting stratum}): locus where
+    $\survRatio$ drops discontinuously to zero, marking the onset
+    of irreversible forgetting.
+\end{itemize}
+\end{definition}
+
+The strata are not mutually exclusive at their boundaries: a
+point may lie in multiple strata simultaneously, corresponding
+to a fate event involving more than one coordinate. Such
+intersections are the most structurally complex points of
+$\singSet$ and are discussed in
+\cref{sec:stratum-intersections}.
+
+
+Collapse Singularities
+
+
+The collapse stratum $\strataC$ is the most dramatic. The
+collapse coordinate $\collapseInd$ is discrete: it cannot vary
+continuously. Any change in its value is therefore a
+topological discontinuity.
+
+\begin{theorem}{Collapse Events are Topological Singularities}
+  {collapse-topo}
+Every point of $\strataC$ is a topological singularity of the
+fate map: the fate map cannot be extended continuously across
+$\strataC$.
+\begin{proof}
+Let $(x,y)\in\strataC$. By definition, $\collapseInd(x,y)=1$
+yet every neighbourhood of $(x,y)$ in $\distPairs$ contains
+points $(x',y')$ with $\collapseInd(x',y')=0$.
+
+The space $\fateSpace$ is equipped with the product topology.
+The factor $\{0,1\}$ carries the discrete topology, in which
+$\{0\}$ and $\{1\}$ are both open and closed. The preimage
+$\fateMap^{-1}(\{c=1\})$ and $\fateMap^{-1}(\{c=0\})$ are
+therefore required to be open sets if $\fateMap$ is continuous.
+But their union is all of $\distPairs$ and they are disjoint,
+so continuity of $\collapseInd\circ\fateMap$ requires
+$\distPairs$ to be disconnected in a neighbourhood of $(x,y)$.
+
+Since by hypothesis every neighbourhood of $(x,y)$ contains
+points of both $\distPairs^+$ and $\distPairs^0$, no such
+disconnected neighbourhood exists. Therefore $\fateMap$ is
+discontinuous at $(x,y)$, and the discontinuity cannot be
+removed by any continuous extension.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Collapse is not Degradation}{collapse-not-degrad}
+This theorem provides the formal distinction between
+\emph{degradation} and \emph{collapse}. Degradation corresponds
+to movement within $\fateComp{1}$: the survival ratio $\survRatio$
+decreases, the repair efficiency $\repEff$ may decline, but the
+distinction remains operationally present. Collapse corresponds
+to crossing $\strataC$ into $\fateComp{0}$: the distinction
+ceases to be operationally present. The two processes differ not
+in degree but in kind. A degrading distinction can in principle
+be repaired; a collapsed distinction cannot be repaired from
+within the same operator family that caused the collapse,
+because it no longer exists as an object in $\distPairs^+$.
+\end{remark}
+
+\begin{corollary}{Scientific Revolutions as Collapse Events}
+  {revolutions-collapse}
+A scientific revolution in the sense of Kuhn, in which a
+previously operative distinction ceases to organize empirical
+inquiry, is a crossing of $\strataC$. It is therefore not a
+large quantitative change in theory but a topological
+singularity: no continuous deformation of the prior framework
+produces it.
+\end{corollary}
+
+
+Repair Threshold Singularities
+
+
+The repair stratum $\strataR$ marks a qualitatively different
+event: the sudden appearance or disappearance of a repair
+pathway.
+
+\begin{definition}{Repair Threshold}{repair-threshold}
+A distinction pair $(x,y)$ lies on the repair stratum $\strataR$
+if the repair efficiency $\repEff(x,y)$ is discontinuous at
+$(x,y)$: specifically, if
+\[
+  \liminf_{(x',y')\to(x,y)}\repEff(x',y')
+  \;\neq\;
+  \limsup_{(x',y')\to(x,y)}\repEff(x',y').
+\]
+\end{definition}
+
+Repair threshold singularities correspond to the appearance of
+memory. When $\repEff$ jumps from~$0$ to a positive value, a
+distinction that was previously irrecoverable after damage
+suddenly becomes recoverable. This is the formal analogue of
+the appearance of an error-correcting code, a biological repair
+mechanism, or an archival system.
+
+\begin{proposition}{Repair Thresholds are Bifurcations}
+  {repair-bifurc}
+At a repair threshold singularity, the qualitative structure of
+the fate map changes: the fate of a distinction pair transitions
+from the regime of permanent loss to the regime of managed
+degradation.
+\begin{proof}
+Below threshold ($\repEff=0$), damage to the distinction is
+permanent: the repair efficiency coordinate of $\fateMap$
+contributes nothing to $\fateDist{\fateMap(p)}{\fateMap(q)}$
+and the distinction evolves under pure degradation dynamics.
+Above threshold ($\repEff>0$), damage is recoverable and the
+evolution is governed by the repair--degradation balance.
+These are qualitatively distinct dynamical regimes. The jump
+in $\repEff$ at the threshold constitutes a bifurcation in the
+fate map.
+\end{proof}
+\end{proposition}
+
+
+Transport Horizon Singularities

@@ -1,187 +1,150 @@
-Below is the full response following your instructions:
+Below is an explanation of the key ideas and proofs presented in the docume[6D[K
+document, broken down into sections that follow the original text’s structu[7D[K
+structure. Each section focuses on one major concept or result, providing c[1D[K
+clarity without reproducing the entire document.
 
 ---
 
-**Spherepop: Event‑Historical Aggregation**
+### 1. Event‑Historical Semantics
 
-*Definition – Weighted Sum and Authorization*
+**Core Idea:**  
+The document frames attention mechanisms (and related aggregation) as proce[5D[K
+processes of *commitment* rather than mere computation of values. This pers[4D[K
+perspective shifts focus from what a model “outputs” to how it *chooses* an[2D[K
+and *records* its inputs.
 
-An **$\diamond$** (weighted sum) represents an aggregation where each term [K
-carries a weight reflecting its authority in contributing to the final resu[4D[K
-result. The process of computing $h_i$ is equivalent to constructing a redu[4D[K
-reducer object whose history records which neighboring elements were attend[6D[K
-attended to, together with their respective weights. Standard Transformer i[1D[K
-implementations collapse this detailed history immediately into a single ve[2D[K
-vector, discarding all trace of what was considered or excluded.
+- **Reducer Object:** A reducer is not just a vector but an object that rec[3D[K
+records which neighbors were attended to (i.e., their provenance) and under[5D[K
+under what weights.
+- **Standard Transformers:** By contrast, standard transformers collapse th[2D[K
+the history immediately after reduction, losing all information about the c[1D[K
+choices made during aggregation.
 
-*Attention as Refusal Rules*
-
-Attention masks are naturally interpreted as **refusal rules**: if an edge [K
-$(i,j)$ is masked, the merge that would bring $v_j$ into the reducer at nod[3D[K
-node $i$ is disallowed. This formalizes the intuition that masking enforces[8D[K
-enforces a “no‑access” policy for particular connections.
-
-**Proposition – Masking as Refusal**
-
-*Statement.* Let $(i,j)$ be a masked edge. Then any attempted merge incorpo[7D[K
-incorporating $v_j$ into the reducer at $i$ is refused.
-
-*Proof.* By construction, an attention mask forces $\alpha_{ij}=0$. In even[4D[K
-event‑historical terms this means there is no authorization for merging nod[3D[K
-node $j$ with node $i$, so such a merge cannot be part of any admissible hi[2D[K
-history.
-
-*Consequence.* This highlights the limitation of standard Transformer atten[5D[K
-attention: refusal is encoded numerically (via zeros) rather than structura[9D[K
-structurally, making it impossible to distinguish principled exclusion from[4D[K
-from accidental irrelevance.
+**Why It Matters:**  
+Retaining this history enables explicit refusal of unwanted contributions, [K
+auditability of how results are formed, and controlled forgetting mechanism[9D[K
+mechanisms—critical for applications requiring interpretability or complian[8D[K
+compliance with regulatory constraints (e.g., in finance or healthcare).
 
 ---
 
-**Multi‑Head Attention as Parallel Reducers**
+### 2. Attention Masks as Refusal Rules
 
-Multi‑head attention decomposes aggregation into several parallel reducers.[9D[K
-reducers. Each head operates with its own set of query, key, and value proj[4D[K
-projections $\{Q_h, K_h, V_h\}$, constructing a distinct reducer history ov[2D[K
-over the same pool of mapper outputs.
+**Proposition:** If an edge \((i,j)\) is masked, then the merge incorporati[11D[K
+incorporating \(v_j\) into node \(i\)’s reducer history is refused.
 
-**Proposition – Independence of Attention Heads**
+- **Proof Sketch:** Masking enforces \(\alpha_{ij}=0\). Since authorization[13D[K
+authorization for a merge event involves non‑zero weights (e.g., based on p[1D[K
+positional or semantic relevance), a zero weight corresponds to an inadmiss[8D[K
+inadmissible merge.
+- **Limitation of Standard Attention:** The numeric zero vector does not di[2D[K
+distinguish principled exclusion from accidental irrelevance, which can lea[3D[K
+lead to unintended behavior.
 
-*Statement.* Reducer histories corresponding to different attention heads a[1D[K
-are independent and can be collapsed or audited separately.
-
-*Proof.* Since each head uses its unique payload operation determined by $\[2D[K
-$\{Q_h, K_h, V_h\}$, there is no shared merge event between heads. Conseque[8D[K
-Consequently their histories remain disjoint and evolve independently.
-
-*Implication.* The concatenation step after multi‑head attention merely bin[3D[K
-binds these parallel reducer objects into a higher‑level representation; st[2D[K
-standard Transformers collapse this binding outright.
+**Implication:** This reframing highlights that masks serve as structural r[1D[K
+refusal rules rather than mere numerical cutoffs.
 
 ---
 
-**Limits of Value‑Centric Attention**
+### 3. Multi‑Head Attention
 
-From the event‑historical perspective, conventional Transformer attentions [K
-systematically erase information that makes aggregation meaningful: which i[1D[K
-inputs were actually considered, which were excluded, and with what influen[7D[K
-influence. This erasure yields observed phenomena such as prompt sensitivit[10D[K
-sensitivity, instability under long horizon composition, and difficulty enf[3D[K
-enforcing hard constraints—issues not merely algorithmic but structural.
+**Independence of Heads:**  
+Each head constructs a distinct reducer history using its own query, key, a[1D[K
+and value projections \((Q_h,K_h,V_h)\). The histories are independent beca[4D[K
+because no merge events overlap across heads.
 
-**Spherepop’s Alternative**
+- **Higher‑Level Merge:** After multi‑head aggregation, the concatenated an[2D[K
+and projected results form a single representation. This step mirrors stand[5D[K
+standard practice where further collapse occurs.
+- **Independence Proof:** Since each head has distinct projections, any att[3D[K
+attempt to combine two different heads would require merging distinct paylo[5D[K
+payloads, which is not permitted by design.
 
-Spherepop proposes attention mechanisms that retain at least some event his[3D[K
-history, allowing explicit refusal, auditable influence, and controlled for[3D[K
-forgetting.
-
----
-
-**Categorical Semantics of Event‑Historical Aggregation**
-
-The event‑historical semantics introduced earlier can be abstracted into a [K
-categorical framework that unifies map‑reduce, streaming aggregation, and a[1D[K
-attention under one formal lens while preserving asymmetries introduced by [K
-commitment, refusal, and collapse.
-
-*Category $\mathcal{H}$ – Objectified Histories*
-
-We define $\mathcal{H}$ whose objects are event histories modulo authorized[10D[K
-authorized collapse. Two histories become identified when they satisfy the [K
-same set of invariants $I$. Morphisms are authorized extensions: a morphism[8D[K
-morphism $H \to H'$ exists iff $H'$ can be constructed from $H$ without vio[3D[K
-violating authorization constraints.
-
-*Identity and Composition*
-
-- Identity morphisms correspond to empty extensions.
-- Composition is given by concatenation of event sequences, but only partia[6D[K
-partial composition is allowed because authorization may forbid certain pai[3D[K
-pairs (refusal corresponds to non‑existence of a morphism).
-
-*Remark on Partiality*
-
-Partialness encodes refusal: the absence of a morphism signals an invalid c[1D[K
-construction that cannot be composed further.
+**Why It Matters:**  
+Multi‑head attention allows separate exploration of different aspects (e.g.[5D[K
+(e.g., syntactic vs. semantic relationships), preserving the ability to aud[3D[K
+audit and refuse selectively in downstream stages.
 
 ---
 
-**Merge as a Partial Monoidal Structure**
+### 4. Limits of Value‑Centric Attention
 
-Merge induces a monoidal structure on $\mathcal{H}$, but it is partial and [K
-policy‑dependent. Compatible histories merge into $H_1 \otimes H_2$, with t[1D[K
-the empty reducer object serving as the unit. Associativity and symmetry ho[2D[K
-hold only up to collapse; thus $\mathcal{H}$ is not a strict monoidal categ[5D[K
-category but one modulo a quotient functor induced by collapse.
+**Observation:** Standard attention collapses all structural information, t[1D[K
+turning aggregation into a purely numeric operation. This leads to:
 
-*Refusal through Non‑Existence of Morphisms*
+- **Prompt Sensitivity:** Models can be sensitive to slight changes in inpu[4D[K
+input phrasing.
+- **Instability Under Long Horizon Composition:** Errors accumulate over ma[2D[K
+many steps due to lack of traceability.
+- **Difficulty Enforcing Hard Constraints:** Without an event history, it’s[4D[K
+it’s hard to ensure that certain exclusions (e.g., masked nodes) are respec[6D[K
+respected.
 
-In this setting, refusal means “no morphism exists,” ensuring that invalid [K
-constructions cannot be accidentally composed with later operations. Correc[6D[K
-Correctness becomes a structural property rather than a runtime check.
-
----
-
-**Collapse as a Quotient Functor**
-
-The collapse functor $C_I : \mathcal{H} \to \mathcal{H}_I$ maps histories t[1D[K
-to equivalence classes preserving chosen invariants $I$. It is idempotent a[1D[K
-and non‑invertible, meaning forgetting happens permanently but the act of f[1D[K
-forgetting itself leaves an implicit trace.
-
-*Differences via Invariant Choice*
-
-Different choices of $I$ produce different quotient categories (trade‑offs [K
-between fidelity and tractability).
+**Spherepop Proposal:**  
+Introduce mechanisms that retain at least partial event histories, enabling[8D[K
+enabling explicit refusal and auditable influence. This shift from “value c[1D[K
+computation” to “commitment‑forming processes” addresses many empirical cha[3D[K
+challenges observed in transformer models.
 
 ---
 
-**Map‑Reduce and Attention as Monoidal Folding**
+### 5. Categorical Semantics of Event‑Historical Aggregation
 
-Map‑reduce is viewed as a fold over families of objects in $\mathcal{H}$. M[1D[K
-Mapping produces independent histories; reduction folds them using the mono[4D[K
-monoidal structure. Unlike classical folding, this operation respects autho[5D[K
-authorization constraints and may be partial.
+**Category \(\mathcal{H}\):**  
+Objects are event histories modulo authorized collapse, with morphisms repr[4D[K
+representing authorized extensions of histories. Composition is partial bec[3D[K
+because not all pairs of morphisms can be composed without violating author[6D[K
+authorization constraints.
 
-*Attention as Event‑Historical Folding*
+- **Identity Morphism:** Represents an empty extension (no change).
+- **Composition:** Concatenates sequences of events only when they remain c[1D[K
+compatible under the policy.
+- **Refusal as Non‑Existence:** If merging violates policies, no morphism e[1D[K
+exists between those histories—invalid constructions are simply unrepresent[11D[K
+unrepresentable.
 
-An attention head interprets graph edges as parameterized folds where weigh[5D[K
-weights are learned compatibility functions. Standard Transformers collapse[8D[K
-collapse after each fold, obscuring semantic commitments made during aggreg[6D[K
-aggregation.
-
-*Multi‑Head Attention*
-
-Multi‑head attention corresponds to parallel folding (different heads) whos[4D[K
-whose results are later merged at a higher level, mirroring layered neural [K
-network architectures while exposing points of commitment and forgetting.
+**Collapse Functor \(C_I\):**  
+Maps histories to equivalence classes preserving chosen invariants \(I\). T[1D[K
+This functor is idempotent and non‑invertible, reflecting that forgetting i[1D[K
+is permanent but traceable (as a committed event).
 
 ---
 
-**Conclusion and Future Directions**
+### 6. Map‑Reduce and Attention as Monoidal Folding
 
-This essay recasts distributed aggregation in terms of irreversible commitm[7D[K
-commitment rather than value computation. By treating refusal as non‑existe[10D[K
-non‑existence of morphisms and collapse as explicit forgetting, the framewo[7D[K
-framework accommodates policy constraints, auditability, and controlled abs[3D[K
-abstraction as core features. It suggests that attention mechanisms can be [K
-reinterpreted to retain semantic history—opening new avenues for architectu[10D[K
-architectures preserving such histories.
+- **Map‑Reduce:** A fold over families of objects in \(\mathcal{H}\), where[5D[K
+where mapping produces independent histories and reduction folds them using[5D[K
+using the monoidal structure induced by merge.
+- **Attention Mechanisms:** Parameterized folds over graph‑indexed families[8D[K
+families, with folding weights determined by learned compatibility function[8D[K
+functions. Standard transformers collapse immediately after reduction.
 
-*Future Work*
+**Multi‑Head Attention:**  
+Corresponds to parallel folds followed by a higher-level fold, aligning wit[3D[K
+with layered neural architectures while exposing commitment points.
 
-- Designing attention networks that preserve partial event histories.
-- Integrating these ideas with learning dynamics (treating training itself [K
-as a sequence of commitments).
-- Exploring connections to traced monoidal categories, persistent data stru[4D[K
-structures, and semantics of irreversible computation.
+---
 
-Ultimately, event‑historical aggregation aligns distributed systems, machin[6D[K
-machine‑learning models, and semantic computation around a shared notion of[2D[K
-of meaning as constraint: aggregates are durable objects encoding the const[5D[K
-constraints under which they were formed.
+### 7. Conclusion and Future Directions
 
---- 
+- **Event‑Historical Aggregation:** Treats aggregation as irreversible comm[4D[K
+commitment, not just value computation.
+- **Refusal & Auditability:** Embedding refusal rules makes it possible to [K
+audit how results are formed.
+- **Attention Mechanisms:** Viewing attention as event‑historical folding e[1D[K
+exposes the cost of immediate collapse and suggests architectures that reta[4D[K
+retain partial histories.
 
-*End of Document.*
+**Future Work:**
+1. Designing attention mechanisms with explicit provenance preservation.
+2. Integrating these ideas into learning dynamics, viewing training as a se[2D[K
+sequence of commitments.
+3. Connecting to traced monoidal categories and persistent data structures [K
+for deeper theoretical grounding.
 
+---
+
+This structured breakdown captures the essential concepts, proofs, and impl[4D[K
+implications outlined in the original document while maintaining clarity an[2D[K
+and focus on the event‑historical perspective of aggregation and attention [K
+mechanisms.

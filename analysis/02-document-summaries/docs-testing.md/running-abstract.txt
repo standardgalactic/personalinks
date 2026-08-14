@@ -1,0 +1,303 @@
+**Benchmark Explanation**
+
+The benchmark shown in the prompt is a typical use‑case for measuring perfo[5D[K
+performance of a core operation (`RefuseOp`) on a large option space:
+
+```python
+You = benchmark(transition, cfg, RefuseOp(refused=to_refuse))
+
+assert len(result.option_space) == 500
+```
+
+* **What is being measured?**  
+  - The `benchmark` function records the time taken for the `transition` op[2D[K
+operation (the main transition logic of a configuration `cfg`) when it cons[4D[K
+consumes an instance of `RefuseOp` with a specific `to_refuse` set.  
+  - By asserting that the resulting option space has exactly **500** elemen[6D[K
+elements, we verify that the expected post‑condition—removal of the specifi[7D[K
+specified options—is achieved within acceptable performance bounds.
+
+* **Why this matters**  
+  - The *REFUSE* operation is known to prune a subset of options from the c[1D[K
+current option set. In many practical scenarios (e.g., language constructs,[11D[K
+constructs, policy constraints), the size of `result.option_space` should b[1D[K
+be roughly proportional to the number of refusals applied. For typical inpu[4D[K
+input sizes, expecting ~500 remaining options indicates that the implementa[10D[K
+implementation correctly eliminates the intended alternatives without exces[5D[K
+excessive overhead.
+
+* **Typical performance goals**  
+  - The benchmark is usually accompanied by a threshold (e.g., `< 10 ms` fo[2D[K
+for modest inputs) to detect regressions caused by code changes. If the mea[3D[K
+measured time exceeds this limit, it signals an inefficiency that may requi[5D[K
+require refactoring of internal loops or data structures.
+
+---
+
+## Experimental Test Markers
+
+### When to Use `@pytest.mark.experimental`
+
+| Condition | Reason |
+|-----------|--------|
+| **Provisional semantics** (e.g., a new Q# feature not yet formalized) | T[1D[K
+Tests are speculative and will be updated once the theory is clarified. |
+| **Unresolved composition** (e.g., COLLAPSE on quotient predicates) | The [K
+expected behavior may change; we need to observe how it behaves in practice[8D[K
+practice. |
+| **Extrapolated or research‑question behaviors** | Intended for future spe[3D[K
+specifiation, not a stable contract. |
+
+*Do NOT mark*:  
+- Paper‑licensed (already formalized) behavior even if complex.  
+- Infrastructure utilities (parsing, formatting, validation).  
+- Stable observer implementations that already conform to the specification[13D[K
+specification.
+
+### Example Markings
+
+```python
+# ✅ Experimental – provisional quotient predicate semantics (Q3)
+@pytest.mark.experimental
+def test_bind_quotient_existential():
+    """BIND uses existential semantics on quotients (PROVISIONAL)."""
+    ...
+
+# ✅ Experimental – unresolved COLLAPSE composition (Q2b)
+@pytest.mark.experimental
+def test_collapse_composition():
+    """COLLAPSE on quotients (unresolved, currently errors)."""
+    with pytest.raises(EvalError):
+        ...
+```
+
+### Running Different Sets of Tests
+
+```bash
+# Include experimental tests (default)
+pytest
+
+# Exclude experimental (good for CI sanity checks)
+pytest -m "not experimental"
+
+# Only run the experimental suite
+pytest -m experimental
+```
+
+---
+
+## Test Maintenance Workflow
+
+### Triggered by Specification Changes (`SPECIFICATIONS.md`)
+
+1. **Locate affected sections** – Use grep or IDE search to find any mentio[6D[K
+mention of the changed specification section (e.g., “REFUSE”).
+2. **Check theory status** – Determine if Q# for that operation has moved f[1D[K
+from pending/→ to ✓.
+3. **Update assertions** – Adjust test expectations (`assert ...`) to refle[5D[K
+reflect the new formal semantics.
+4. **Refresh docstrings** – Add or update `Specification:` and `Theory Stat[4D[K
+Status:` references in each affected test.
+5. **Re‑classify markers** – If a previously experimental test now satisfie[8D[K
+satisfies the spec, remove `@pytest.mark.experimental`.
+6. **Run full suite** – Verify that no regressions were introduced.
+
+### Triggered by Theory Resolution (`THEORY_STATUS.md`)
+
+When a Q# question changes from “?” or “→” to “✓”, follow these steps:
+
+1. **Identify experimental tests** – Use `pytest -m experimental --co | gre[3D[K
+grep <test_name>` to find pending tests.
+2. **Validate implementation** – Run those experiments and confirm the obse[4D[K
+observed behavior matches the resolved theory.
+3. **Update markers** – Remove `@pytest.mark.experimental` since the test i[1D[K
+is now stable.
+4. **Document in DESIGN_DECISIONS.md** – If a design decision changed (e.g.[5D[K
+(e.g., COLLAPSE semantics), create a new entry or supersede an existing one[3D[K
+one marked as “Deprecated”.
+5. **Add regressions** – Any behavior that no longer holds should be moved [K
+to `test_regressions.py`.
+
+### Triggered by Experiment Completion
+
+After successfully running experiment N:
+
+1. **Log the run** – Add an entry to `EXPERIMENT_CATALOG.md` with:
+   - Description, input size, outcome.
+2. **Promote stable behaviors** – Identify experiments that passed and shou[4D[K
+should become part of the core spec → move into `test_regressions.py`.
+3. **Update Theory Status** – Reflect whether the question is now “S”, “X”,[4D[K
+“X”, or if a new research direction (“I”) is needed.
+
+---
+
+## Testing Checklist
+
+### For New Features
+
+| Item | Description |
+|------|-------------|
+| ✅ Unit tests for all success paths | Verify that every successful use‑ca[6D[K
+use‑case works. |
+| ✅ Unit tests for all error paths | Ensure exceptions are raised where re[2D[K
+required (e.g., invalid inputs). |
+| ✅ Integration test for typical usage | Simulate end‑to‑end scenario with[4D[K
+with a real configuration and operation. |
+| ✅ Property test if invariant exists | Use Hypothesis to assert invariant[9D[K
+invariants (e.g., postcondition of `Refuse`). |
+| ✅ Actionable error messages | Errors must clearly indicate the problem a[1D[K
+and possible fixes. |
+| ✅ Docstring includes **Specification:** and **Theory Status:** | Keeps d[1D[K
+documentation up‑to‑date for future maintainers. |
+| ✅ Marked with `@pytest.mark.experimental` if provisional | Prevents acci[4D[K
+accidental regression testing on experimental behavior. |
+| ✅ Updated **SPECIFICATIONS.md** if adding new semantics | Ensures the fo[2D[K
+formal spec is reflected in tests. |
+| ✅ Coverage ≥ 85% on stable core code | Guarantees robustness for product[7D[K
+production‑ready features. |
+
+### For Bug Fixes
+
+1. **Regression test reproduces bug** – Verify that the failing case can be[2D[K
+be triggered by a new test.
+2. **Fix makes regression test pass** – Confirm the fix resolves the issue [K
+without side effects.
+3. **No other tests regressed** – Run full suite to ensure unrelated code i[1D[K
+is unchanged.
+4. **Root cause identified, not just symptom** – Document why the bug exist[5D[K
+existed (e.g., edge case missing in spec).
+5. **Specification updated if behavior clarified** – Add a note to `SPECIFI[8D[K
+`SPECIFICATIONS.md` describing new semantics.
+
+### For Refactoring
+
+| Item | Description |
+|------|-------------|
+| ✅ All existing tests still pass | Confirms behavioral invariance. |
+| ✅ Coverage unchanged or improved | Indicates no dead code introduced. |
+| ✅ No semantic changes (behavior identical) | Ensures functional equivale[8D[K
+equivalence despite internal redesigns. |
+| ✅ Performance benchmarks unchanged | Guarantees latency/space costs rema[4D[K
+remain within limits. |
+| ✅ Updated docstrings if interfaces changed | Keeps documentation consist[7D[K
+consistent with new signatures or defaults. |
+
+---
+
+## Common Pitfalls & How to Avoid Them
+
+### Pitfall 1 – Testing Implementation, Not Specification
+
+**Bad**:  
+```python
+def test_refuse_uses_frozenset_difference():
+    """REFUSE implementation uses frozenset.__sub__."""
+```
+
+**Good**:  
+```python
+def test_refuse_removes_specified_options():
+    """REFUSE postcondition: option_space' = option_space \ refused."""
+```
+*Reason*: Tests should reflect the *intended* behavior as specified in `SPE[4D[K
+`SPECIFICATIONS.md`, not internal implementation details that could change [K
+without affecting semantics.
+
+### Pitfall 2 – Circular Tests
+
+**Bad**:  
+```python
+def test_admissible_matches_transition():
+    """admissible() returns same as transition() success."""
+    for op in operations:
+        assert admissible(op, cfg) == can_transition(op, cfg)
+```
+
+**Problem**: `can_transition` may be implemented with a try/except that alw[3D[K
+always raises the right result—making the test flaky.
+
+**Good**:  
+```python
+def test_admissible_detects_empty_refuse():
+    """admissible() returns False for REFUSE with empty set."""
+    cfg = make_config(...)
+    assert not admissible(RefuseOp(refused=frozenset()), cfg)
+```
+*Solution*: Target a specific invariant that cannot be accidentally satisfi[7D[K
+satisfied by indirect implementation tricks.
+
+### Pitfall 3 – Flaky Tests
+
+**Causes**:  
+- Random generators without fixed seeds.  
+- Time‑dependent assertions (e.g., waiting for a network response).  
+- Filesystem race conditions or test order dependencies.
+
+**Solutions**:  
+- Use `@given` from Hypothesis with a deterministic seed (`hypersuggest`). [K
+ 
+- Mock external resources (`unittest.mock`, `pytest-mock`) so tests run in [K
+isolation.  
+- Wrap file operations inside temporary directories created by pytest’s `tm[3D[K
+`tmp_path`.  
+- Run experiments under reproducible conditions (`--random-order` should be[2D[K
+be enabled).  
+
+### Pitfall 4 – Overfitting to Implementation
+
+**Bad**:  
+```python
+def test_pop_clones_items_list():
+    """POP clones items list to avoid mutation."""
+```
+
+**Problem**: The implementation detail may change (e.g., move from copy to [K
+view) while the specification stays the same. Future changes could break th[2D[K
+this test even though functionality is preserved.
+
+**Good**:  
+```python
+def test_pop_does_not_mutate_original():
+    original = [...]
+    popped = pop(original)
+    assert original == [...]  # original remains unchanged
+```
+*Reason*: Focus on observable behavior (`does not mutate the original list`[5D[K
+list`) rather than internal cloning mechanisms.
+
+### Pitfall 5 – Ignoring Coverage Thresholds
+
+**Issue**: Failing to enforce `≥ 85%` coverage can hide bugs that manifest [K
+only under certain edge conditions (e.g., empty inputs, large data structur[8D[K
+structures).  
+
+**Mitigation**: Run the test suite with a coverage checker (`pytest-cov`) a[1D[K
+and configure CI pipelines to fail on low coverage.
+
+---
+
+## Summary
+
+- **Benchmarking**: The `benchmark(transition, cfg, RefuseOp(...))` call me[2D[K
+measures execution time while asserting that `result.option_space` has the [K
+expected 500 elements—ensuring efficient pruning of options.
+- **Experimental Markers**: Use `@pytest.mark.experimental` for speculative[11D[K
+speculative or unresolved behavior; transition to stable tests once theory [K
+is finalized and documented in `SPECIFICATIONS.md`.
+- **Maintenance Steps**:
+  - Update docstrings, spec references, and experiment logs whenever the un[2D[K
+underlying specification changes.
+  - Run full regression suites after each major change to catch regressions[11D[K
+regressions early.
+  - Keep documentation aligned with actual behavior via versioned entries i[1D[K
+in `EXPERIMENT_CATALOG.md` and `THEORY_STATUS.md`.
+- **Best Practices**:
+  - Write tests that assert *intended* outcomes, not implementation quirks.[7D[K
+quirks.
+  - Guard against flakiness by controlling randomness, timeouts, and[3D[K
+and environmental factors.
+  - Enforce a high coverage threshold (≥ 85%) to minimize hidden bugs.
+
+Following these guidelines ensures that the codebase remains both correct *[1D[K
+**and** maintainable as specifications evolve.
+

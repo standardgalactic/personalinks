@@ -1,0 +1,5773 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Formal Grammar of the Spherepop Calculus**
+
+---
+
+### 1. Symbol Sets
+
+- **Variables:** \(\mathcal V = \{x, y, z, \dots\}\)  
+- **Constants:** \(\mathcal C = \{c_1, c_2, \dots\}\)  
+- **Primitive Operators:** \(\mathcal O = \{\operatorname{Sphere}, \operato[8D[K
+\operatorname{Pop}, \operatorname{Merge}, \operatorname{Choice}, \operatorn[10D[K
+\operatorname{Replay}, \operatorname{Refuse}, \operatorname{Collapse}, \ope[4D[K
+\operatorname{Bind}\}\)
+
+---
+
+### 2. Term Grammar
+
+Terms \(t\) are defined inductively as:
+
+\[
+t
+=
+\begin{cases}
+x & (\text{variable})\\[4pt]
+c & (\text{constant})\\[4pt]
+\underbrace{\operatorname{Sphere}(x:A.t)}_{\text{bounded computation}}\\[6p[18D[K
+computation}}\\[6pt]
+\underbrace{\operatorname{Pop}(t)}_{\text{pop operation}}\\[6pt]
+\underbrace{\operatorname{Merge}(t,t)}_{\text{merge two histories}}\\[6pt]
+\underbrace{\operatorname{Choice}(p,t,t)}_{\text{probabilistic/conditional [K
+branch}}\\[6pt]
+\underbrace{\operatorname{Replay}(t,t)}_{\text{symbolic continuation}}\\[6p[19D[K
+continuation}}\\[6pt]
+\underbrace{\operatorname{Refuse}(r)}_{\text{refusal of a region}}\\[6pt]
+\underbrace{\operatorname{Collapse}(t)}_{\text{final commitment}}\\[6pt]
+\underbrace{\operatorname{Bind}(t,t)}_{\text{binding two histories}}
+\end{cases}
+\]
+
+---
+
+### 3. Contexts (Histories)
+
+- **Context:** A history \(\Gamma\) is a finite sequence of execution event[5D[K
+events:
+
+  \[
+  \Gamma = (e_1, e_2, \ldots, e_n)
+  \]
+
+- **Events \(e_i\)** belong to the set  
+
+  \[
+  \{ \operatorname{Open}, \operatorname{Pop}, \operatorname{Replay}, \opera[6D[K
+\operatorname{Merge},
+    \operatorname{Choice}, \operatorname{Collapse}, \operatorname{Refuse} \[1D[K
+\}.
+  \]
+
+- **Well‑formedness:** The dependency order must be preserved:
+
+  \[
+  e_i \prec e_j \;\Longrightarrow\; i < j.
+  \]
+
+---
+
+### 4. Definitions of Core Concepts
+
+#### a) Sphere (Computational Region)
+
+A *Sphere* is recursively defined as:
+
+\[
+S = (B, I)
+\]
+
+- **\(B\)** – the computational boundary (a description of what belongs to [K
+\(S\)).  
+- **\(I\)** – a finite computation graph that fully describes the interior [K
+operations.
+
+Every node in an interior belongs to exactly one Sphere.  
+
+Nested Spheres satisfy:
+
+\[
+S_i \subset S_j \;\Longrightarrow\; \partial S_i \cap \partial S_j = \varno[6D[K
+\varnothing.
+\]
+
+Thus, **\(B\)** is a *computational boundary*—a geometric notion that parti[5D[K
+partitions the history into independent regions.
+
+#### b) Program ↔ Directed Acyclic Graph (DAG)
+
+Every admissible program corresponds to a finite directed acyclic graph
+
+\[
+G = (V, E)
+\]
+
+with a sphere assignment \(\sigma : V \rightarrow \mathcal S\) such that:
+
+\[
+(u,v) \in E \;\Longrightarrow\; 
+\underbrace{\sigma(u)}_{\text{contains } \sigma(v)}
+\vee
+\underbrace{\sigma(v)}_{\text{contains } \sigma(u)}
+\vee
+\underbrace{\sigma(u)}_{\text{parallel to } \sigma(v)}.
+\]
+
+This ensures that the dependency order mirrors geometric containment, allow[5D[K
+allowing the operational scheduler to act only on *admissible* sphere assig[5D[K
+assignments.
+
+---
+
+### 5. Operational Semantics (Key Rules)
+
+#### **Formation Rules**
+
+1. An empty context is always valid:
+
+   \[
+   \frac{}{\emptyset \text{ ctx}}
+   \]
+
+2. Variables can be introduced if they do not already appear in the current[7D[K
+current context:
+
+   \[
+   \frac{\Gamma\;\text{ctx}\quad x\notin\Gamma}{\Gamma,x:A\;\text{ctx}}
+   \]
+
+3. A term is well‑typed iff it originates from a Sphere:
+
+   \[
+   \frac{\Gamma\vDash t : A}{\Gamma\vDash \operatorname{Sphere}(x:A.t)}
+   \]
+
+4. **Pop** consumes the topmost element of a history:
+
+   \[
+   \frac{\Gamma\vDash t}{\Gamma\vDash \operatorname{Pop}(t)}
+   \]
+
+5. **Merge** combines two histories, preserving their order:
+
+   \[
+   \frac{\Gamma\vDash t\;\text{ctx}\quad \Gamma\vDash u\;\text{ctx}}{\Gamma[21D[K
+u\;\text{ctx}}{\Gamma\vDash \operatorname{Merge}(t,u)}
+   \]
+
+6. **Choice** creates a probabilistic/conditional branch (e.g., nondetermin[11D[K
+nondeterminism):
+
+   \[
+   \frac{\Gamma\vDash t\;\text{ctx}\quad \Gamma\vDash u\;\text{ctx}}{\Gamma[21D[K
+u\;\text{ctx}}{\Gamma\vDash \operatorname{Choice}(p,t,u)}
+   \]
+
+7. **Replay** symbolically continues a history without committing:
+
+   \[
+   \frac{\Gamma\vDash t}{\Gamma\vDash \operatorname{Replay}(t,t)}
+   \]
+   (provided the region is *ready* for replay.)
+
+8. **Refuse** marks an unresolved dependency, effectively “undoing” part of[2D[K
+of the computation:
+
+   \[
+   \frac{\Gamma\vDash t}{\Gamma\vDash \operatorname{Refuse}(r)}
+   \]
+
+---
+
+#### **Structural Axioms**
+
+- **Order Preservation:** If a history \(H\) is contained in another \(H'\)[6D[K
+\(H'\), its size cannot exceed that of \(H'\):
+
+  \[
+  H \subseteq H' \;\Longrightarrow\; |H| \le |H'|
+  \]
+
+- **Disjointness:** Incompatible regions are never nested:
+
+  \[
+  H_1 \nsubseteq H_2 \quad \text{and vice‑versa}
+  \]
+
+- **Replay Idempotence:** Replaying a ready region does not change the stat[4D[K
+state further beyond its current position:
+
+  \[
+  \operatorname{Replay}(H) = H \;\text{iff}\; H\text{ contains no unresolve[9D[K
+unresolved dependencies.}
+  \]
+
+- **Pop Dependency:** Popping exactly reduces one computational boundary’s [K
+size by one:
+
+  \[
+  |\partial H'| = |\partial H| - 1.
+  \]
+
+- **Collapse Idempotence:** Committing a collapsed history has no further e[1D[K
+effect:
+
+  \[
+  \operatorname{Collapse}(\operatorname{Collapse}(t)) = \operatorname{Colla[19D[K
+\operatorname{Collapse}(t).
+  \]
+
+- **Refusal Absorbing Property:** Refusing an already‑refused region is a n[1D[K
+no‑op.
+
+---
+
+### 6. Summary
+
+The Spherepop Calculus uses a *dual* notion of computation: **geometric** ([1D[K
+(through the bounded computational regions—Spheres) and **syntactic** (via [K
+histories). The operational semantics enforce that every operation respects[8D[K
+respects both dependency order and geometric containment, allowing for symb[4D[K
+symbolic continuations, probabilistic branching, replay, refusal, and colla[5D[K
+collapse—all while preserving a well‑formed history.
+
+This formalism provides a rigorous foundation for the philosophical ideas p[1D[K
+presented in the main text—especially the intrinsic nature of explanation a[1D[K
+as part of computation itself. The parser is expected to output a rooted fo[2D[K
+forest of non‑overlapping Spheres whose transitive closure yields the depen[5D[K
+dependency graph used throughout the semantics, ensuring that all later opt[3D[K
+optimizations or analyses operate on well‑formed computational histories.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-beyond-parentheses.tex
+
+NEW CHUNK
+=========
+
+\[
+\operatorname{Replay}
+(
+\operatorname{Refuse}(r),
+t
+)
+=
+\operatorname{Refuse}(r).
+\]
+
+These axioms define the formal syntax and structural constraints of the
+Spherepop Calculus independently of its operational and denotational
+interpretations.
+
+
+
+Static Semantics
+
+
+
+The static semantics of the Spherepop Calculus is presented as a natural
+deduction system over historical contexts. Throughout this appendix,
+contexts are interpreted as finite histories of admissible computational
+construction rather than unordered environments.
+
+
+\subsection*{Judgements}
+
+
+\[
+\Gamma\;\text{ctx}
+\]
+
+\[
+\Gamma\vdash A:\mathrm{Type}_i
+\]
+
+\[
+\Gamma\vdash t:A
+\]
+
+\[
+\Gamma\vdash H:\mathrm{Hist}
+\]
+
+\[
+\Gamma\vdash H\;\mathrm{adm}
+\]
+
+\[
+\Gamma\vdash H\rightsquigarrow H'
+\]
+
+
+\subsection*{Universe Formation}
+
+
+\[
+\frac{}
+{\Gamma\vdash
+\mathrm{Type}_i:\mathrm{Type}_{i+1}}
+\]
+
+\[
+\mathrm{Type}_0
+<
+\mathrm{Type}_1
+<
+\mathrm{Type}_2
+<
+\cdots
+\]
+
+
+\subsection*{Context Formation}
+
+
+\[
+\frac{}
+{\emptyset\;\mathrm{ctx}}
+\]
+
+\[
+\frac
+{\Gamma\;\mathrm{ctx}
+\qquad
+\Gamma\vdash A:\mathrm{Type}_i
+\qquad
+x\notin\Gamma}
+{\Gamma,x:A\;\mathrm{ctx}}
+\]
+
+\[
+\frac
+{\Gamma\;\mathrm{ctx}
+\qquad
+\Gamma\vdash H:\mathrm{Hist}}
+{\Gamma,H\;\mathrm{ctx}}
+\]
+
+
+\subsection*{Variable Rule}
+
+
+\[
+\frac
+{\Gamma,x:A,\Delta\;\mathrm{ctx}}
+{\Gamma,x:A,\Delta\vdash x:A}
+\]
+
+
+\subsection*{Weakening}
+
+
+\[
+\frac
+{\Gamma\vdash t:A
+\qquad
+\Gamma\vdash B:\mathrm{Type}}
+{\Gamma,y:B\vdash t:A}
+\]
+
+
+\subsection*{Historical Extension}
+
+
+\[
+\frac
+{\Gamma\vdash H:\mathrm{Hist}
+\qquad
+\Gamma,H\vdash e}
+{\Gamma\vdash
+H::e
+:
+\mathrm{Hist}}
+\]
+
+where
+
+\[
+::
+\]
+
+denotes historical concatenation.
+
+
+\subsection*{Replay Formation}
+
+
+\[
+\frac
+{\Gamma\vdash
+H_1:\mathrm{Hist}
+\qquad
+\Gamma\vdash
+H_2:\mathrm{Hist}}
+{\Gamma\vdash
+\operatorname{Replay}(H_1,H_2)
+:
+\mathrm{Hist}}
+\]
+
+
+\subsection*{Pop Formation}
+
+
+\[
+\frac
+{\Gamma\vdash
+S:\mathrm{Sphere}
+\qquad
+\operatorname{Ready}(S)}
+{\Gamma\vdash
+\operatorname{Pop}(S)}
+\]
+
+
+\subsection*{Merge Formation}
+
+
+\[
+\frac
+{\Gamma\vdash
+H_1:\mathrm{Hist}
+\qquad
+\Gamma\vdash
+H_2:\mathrm{Hist}
+\qquad
+H_1\perp H_2}
+{\Gamma\vdash
+H_1\otimes H_2
+:
+\mathrm{Hist}}
+\]
+
+
+\subsection*{Choice Formation}
+
+
+\[
+\frac
+{\Gamma\vdash t:A
+\qquad
+\Gamma\vdash u:A
+\qquad
+0\le p\le1}
+{\Gamma\vdash
+\operatorname{Choice}(p,t,u):A}
+\]
+
+
+\subsection*{Collapse Formation}
+
+
+\[
+\frac
+{\Gamma\vdash
+t:A}
+{\Gamma\vdash
+\operatorname{Collapse}(t):A}
+\]
+
+
+\subsection*{Refusal Formation}
+
+
+\[
+\frac
+{\neg
+\operatorname{Adm}(H,e)}
+{\Gamma\vdash
+\operatorname{Refuse}(e)
+:
+\mathrm{Hist}}
+\]
+
+
+\subsection*{Dependent Products}
+
+
+\[
+\frac
+{\Gamma\vdash A:\mathrm{Type}
+\qquad
+\Gamma,x:A\vdash
+B:\mathrm{Type}}
+{\Gamma\vdash
+\Pi_{x:A}B
+:
+\mathrm{Type}}
+\]
+
+\[
+\frac
+{\Gamma,x:A\vdash
+t:B}
+{\Gamma\vdash
+\lambda x.t
+:
+\Pi_{x:A}B}
+\]
+
+\[
+\frac
+{\Gamma\vdash
+f:\Pi_{x:A}B
+\qquad
+\Gamma\vdash
+a:A}
+{\Gamma\vdash
+f(a)
+:
+B[a/x]}
+\]
+
+
+\subsection*{Dependent Sums}
+
+
+\[
+\frac
+{\Gamma\vdash
+A:\mathrm{Type}
+\qquad
+\Gamma,x:A\vdash
+B:\mathrm{Type}}
+{\Gamma\vdash
+\Sigma_{x:A}B
+:
+\mathrm{Type}}
+\]
+
+\[
+\frac
+{\Gamma\vdash a:A
+\qquad
+\Gamma\vdash b:B[a/x]}
+{\Gamma\vdash
+(a,b)
+:
+\Sigma_{x:A}B}
+\]
+
+
+\subsection*{Identity Types}
+
+
+\[
+\frac
+{\Gamma\vdash
+a:A}
+{\Gamma\vdash
+\operatorname{refl}(a)
+:
+\operatorname{Id}_A(a,a)}
+\]
+
+\[
+\frac
+{\Gamma\vdash
+p:
+\operatorname{Id}_A(a,b)}
+{\Gamma\vdash
+J(p)}
+\]
+
+
+\subsection*{Historical Admissibility}
+
+
+\[
+\frac
+{\Gamma\vdash
+H:\mathrm{Hist}
+\qquad
+\operatorname{Consistent}(H)}
+{\Gamma\vdash
+H\;\mathrm{adm}}
+\]
+
+\[
+\frac
+{\Gamma\vdash
+H\;\mathrm{adm}
+\qquad
+\operatorname{Adm}(H,e)}
+{\Gamma\vdash
+H::e\;\mathrm{adm}}
+\]
+
+
+\subsection*{Structural Properties}
+
+
+\[
+\Gamma\vdash H
+\Longrightarrow
+\Gamma\vdash
+\operatorname{Replay}(H)
+\]
+
+\[
+\Gamma\vdash
+H_1\otimes H_2
+\Longrightarrow
+\Gamma\vdash
+H_2\otimes H_1
+\]
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\cong
+H_1\otimes(H_2\otimes H_3)
+\]
+
+\[
+\operatorname{Collapse}
+\circ
+\operatorname{Collapse}
+=
+\operatorname{Collapse}
+\]
+
+\[
+\operatorname{Replay}
+\circ
+\operatorname{Replay}
+=
+\operatorname{Replay}
+\]
+
+\[
+\operatorname{Replay}
+\circ
+\operatorname{Collapse}
+=
+\operatorname{Collapse}
+\circ
+\operatorname{Replay}
+\]
+
+\[
+H
+\subseteq
+H'
+\Longrightarrow
+|H|
+\le
+|H'|
+\]
+
+\[
+\Gamma\vdash
+H\;\mathrm{adm}
+\Longrightarrow
+\Gamma\vdash
+\operatorname{Replay}(H)\;\mathrm{adm}
+\]
+
+\[
+\Gamma\vdash
+H\;\mathrm{adm}
+\Longrightarrow
+\Gamma\vdash
+\operatorname{Collapse}(H)\;\mathrm{adm}
+\]
+
+
+\subsection*{Historical Substitution}
+
+
+\[
+\frac
+{\Gamma\vdash
+a:A
+\qquad
+\Gamma,x:A,\Delta\vdash t:B}
+{\Gamma,\Delta[a/x]
+\vdash
+\operatorname{Replay}(a,t)
+:
+B[a/x]}
+\]
+
+
+\subsection*{Fundamental Static Invariant}
+
+
+For every admissible derivation,
+
+\[
+\Gamma
+\vdash
+H
+:
+\mathrm{Hist},
+\]
+
+there exists a unique dependency order
+
+\[
+(H,\prec)
+\]
+
+such that
+
+\[
+\prec
+\]
+
+is acyclic,
+
+\[
+H
+\]
+
+is monotone,
+
+Replay preserves
+
+\[
+\prec,
+\]
+
+Pop removes exactly one maximal Sphere,
+
+Merge preserves independent connected components,
+
+Choice preserves well-typedness,
+
+Collapse preserves admissibility,
+
+and Refusal preserves consistency by preventing inadmissible historical
+extension.
+
+
+
+Operational Semantics
+
+
+
+Let the machine configuration be
+
+\[
+\langle H,Q,\Sigma\rangle
+\]
+
+where
+
+\[
+H
+\]
+
+is the computational history,
+
+\[
+Q
+\]
+
+is the scheduler frontier,
+
+and
+
+\[
+\Sigma
+\]
+
+is the dependency graph.
+
+
+\subsection*{Transition Relation}
+
+
+The operational relation is
+
+\[
+\longrightarrow
+\;\subseteq\;
+\mathcal C
+\times
+\mathcal C.
+\]
+
+Configurations evolve according to
+
+\[
+\langle
+H,Q,\Sigma
+\rangle
+\longrightarrow
+\langle
+H',Q',\Sigma'
+\rangle.
+\]
+
+
+\subsection*{Ready Rule}
+
+
+\[
+\frac
+{\forall
+d\in
+\operatorname{Deps}(S),
+\operatorname{Resolved}(d)}
+{\operatorname{Ready}(S)}
+\]
+
+
+\subsection*{Sphere Introduction}
+
+
+\[
+\frac{}
+{\langle
+H,Q,\Sigma
+\rangle
+\longrightarrow
+\langle
+H::\operatorname{Open}(S),
+Q\cup\{S\},
+\Sigma
+\rangle}
+\]
+
+
+\subsection*{Pop}
+
+
+\[
+\frac
+{\operatorname{Ready}(S)}
+{\langle
+H,Q,\Sigma
+\rangle
+\longrightarrow
+\langle
+H::\operatorname{Pop}(S),
+Q-\{S\},
+\Sigma'
+\rangle}
+\]
+
+
+\subsection*{Replay}
+
+
+\[
+\frac
+{u\prec v}
+{\operatorname{Replay}(u,v)}
+\]
+
+\[
+\frac
+{}
+{\langle
+H,Q,\Sigma
+\rangle
+\longrightarrow
+\langle
+H::\operatorname{Replay},
+Q,
+\Sigma
+\rangle}
+\]
+
+
+\subsection*{Merge}
+
+
+\[
+\frac
+{H_1\perp H_2}
+{H_1\otimes H_2}
+\]
+
+\[
+\frac
+{S_1,\ldots,S_n
+\subseteq
+Q}
+{\operatorname{Merge}(S_1,\ldots,S_n)}
+\]
+
+
+\subsection*{Choice}
+
+
+Immediate semantics:
+
+\[
+\frac{}
+{\operatorname{Choice}(p,t,u)
+\longrightarrow
+t}
+\qquad
+(p)
+\]
+
+\[
+\frac{}
+{\operatorname{Choice}(p,t,u)
+\longrightarrow
+u}
+\qquad
+(1-p)
+\]
+
+Distribution semantics:
+
+\[
+\operatorname{Choice}(p,t,u)
+:
+\operatorname{Dist}(A)
+\]
+
+
+\subsection*{Collapse}
+
+
+\[
+\frac
+{\operatorname{Resolved}(t)}
+{\operatorname{Collapse}(t)}
+\]
+
+
+\subsection*{Refusal}
+
+
+\[
+\frac
+{\neg
+\operatorname{Adm}(H,e)}
+{\operatorname{Refuse}(e)}
+\]
+
+
+\subsection*{Bind}
+
+
+\[
+\frac
+{t\longrightarrow t'}
+{\operatorname{Bind}(t,f)
+\longrightarrow
+\operatorname{Bind}(t',f)}
+\]
+
+\[
+\frac
+{}
+{\operatorname{Bind}(v,f)
+\longrightarrow
+f(v)}
+\]
+
+
+\subsection*{Congruence}
+
+
+\[
+\frac
+{t\longrightarrow t'}
+{\operatorname{Pop}(t)
+\longrightarrow
+\operatorname{Pop}(t')}
+\]
+
+\[
+\frac
+{t\longrightarrow t'}
+{\operatorname{Merge}(t,u)
+\longrightarrow
+\operatorname{Merge}(t',u)}
+\]
+
+\[
+\frac
+{u\longrightarrow u'}
+{\operatorname{Merge}(t,u)
+\longrightarrow
+\operatorname{Merge}(t,u')}
+\]
+
+
+\subsection*{Scheduler}
+
+
+\[
+Q
+=
+\{
+S
+\mid
+\operatorname{Ready}(S)
+\}.
+\]
+
+\[
+\operatorname{Select}
+:
+Q
+\rightarrow
+S.
+\]
+
+\[
+\operatorname{Execute}
+(S)
+=
+\operatorname{Pop}(S).
+\]
+
+
+\subsection*{Historical Transition}
+
+
+\[
+H
+\longrightarrow
+H::e
+\]
+
+where
+
+\[
+e
+\in
+\{
+\operatorname{Open},
+\operatorname{Replay},
+\operatorname{Pop},
+\operatorname{Merge},
+\operatorname{Choice},
+\operatorname{Collapse},
+\operatorname{Refuse}
+\}.
+\]
+
+
+\subsection*{Operational Invariants}
+
+
+\[
+H
+\subseteq
+H'
+\]
+
+\[
+|H|
+<
+|H'|
+\]
+
+for every successful transition.
+
+\[
+\operatorname{Replay}
+(H)
+\supseteq
+H.
+\]
+
+\[
+\operatorname{Collapse}
+(H)
+\subseteq
+H.
+\]
+
+\[
+\operatorname{Refuse}
+(H)
+=
+H.
+\]
+
+\[
+\operatorname{Merge}
+(H_1,H_2)
+=
+H_1\cup H_2.
+\]
+
+
+\subsection*{Scheduler Correctness}
+
+
+\[
+\operatorname{Ready}(S)
+\Longleftrightarrow
+\forall
+d\in
+\operatorname{Deps}(S),
+\operatorname{Resolved}(d).
+\]
+
+\[
+\operatorname{Pop}(S)
+\Longrightarrow
+S
+\notin
+Q.
+\]
+
+\[
+\operatorname{Open}(S)
+\Longrightarrow
+S
+\in
+\Sigma.
+\]
+
+
+\subsection*{Deterministic Fragment}
+
+
+If
+
+\[
+\operatorname{Choice}
+\]
+
+does not occur, then
+
+\[
+\forall
+H,
+\qquad
+H
+\longrightarrow
+H'
+\Longrightarrow
+H'
+\text{ unique}.
+\]
+
+
+\subsection*{Monotonicity}
+
+
+\[
+H_i
+\subseteq
+H_{i+1}
+\]
+
+for every execution sequence
+
+\[
+H_0
+\longrightarrow
+H_1
+\longrightarrow
+\cdots
+\longrightarrow
+H_n.
+\]
+
+
+\subsection*{Termination}
+
+
+If
+
+\[
+G=(V,E)
+\]
+
+is finite and acyclic,
+
+then repeated application of
+
+\[
+\operatorname{Ready}
+\]
+
+followed by
+
+\[
+\operatorname{Pop}
+\]
+
+terminates after exactly
+
+\[
+|V|
+\]
+
+successful Pops.
+
+
+\subsection*{Operational Soundness}
+
+
+For every derivation
+
+\[
+\Gamma
+\vdash
+t:A
+\]
+
+there exists an execution sequence
+
+\[
+H_0
+\longrightarrow
+H_1
+\longrightarrow
+\cdots
+\longrightarrow
+H_n
+\]
+
+such that
+
+\[
+H_n
+\]
+
+contains a unique maximal
+
+\[
+\operatorname{Collapse}(v)
+\]
+
+with
+
+\[
+\Gamma
+\vdash
+v:A.
+\]
+
+This defines the complete small-step operational semantics of the Spherepop
+Calculus.
+
+
+
+Denotational Semantics
+
+
+
+Let
+
+\[
+\mathbf{Hist}
+\]
+
+denote the category of admissible computational histories.
+
+Objects are histories,
+
+\[
+H
+\in
+\operatorname{Obj}(\mathbf{Hist}),
+\]
+
+and morphisms are admissible historical continuations,
+
+\[
+f:H_1\rightarrow H_2.
+\]
+
+
+\subsection*{Identity}
+
+
+\[
+\operatorname{id}_H
+:
+H
+\rightarrow
+H.
+\]
+
+\[
+\operatorname{id}_H
+\circ
+f
+=
+f.
+\]
+
+\[
+f
+\circ
+\operatorname{id}_H
+=
+f.
+\]
+
+
+\subsection*{Composition}
+
+
+\[
+f
+:
+H_1
+\rightarrow
+H_2,
+\]
+
+\[
+g
+:
+H_2
+\rightarrow
+H_3,
+\]
+
+\[
+g\circ f
+:
+H_1
+\rightarrow
+H_3.
+\]
+
+Associativity:
+
+\[
+h\circ(g\circ f)
+=
+(h\circ g)\circ f.
+\]
+
+
+\subsection*{Sphere Interpretation}
+
+
+\[
+\llbracket
+S
+\rrbracket
+:
+H
+\rightarrow
+H_S.
+\]
+
+\[
+H
+\subseteq
+H_S.
+\]
+
+
+\subsection*{Pop Interpretation}
+
+
+\[
+\llbracket
+\operatorname{Pop}
+\rrbracket
+:
+H_S
+\rightarrow
+H_S\cup\{v\}.
+\]
+
+\[
+\llbracket
+\operatorname{Pop}
+\rrbracket
+\circ
+\llbracket
+S
+\rrbracket
+=
+\llbracket
+v
+\rrbracket.
+\]
+
+
+\subsection*{Replay Functor}
+
+
+\[
+\mathcal R
+:
+\mathbf{Hist}
+\rightarrow
+\mathbf{Hist}.
+\]
+
+Object mapping:
+
+\[
+\mathcal R(H)
+=
+H.
+\]
+
+Morphisms:
+
+\[
+\mathcal R(f)
+:
+\mathcal R(H_1)
+\rightarrow
+\mathcal R(H_2).
+\]
+
+Functoriality:
+
+\[
+\mathcal R(\operatorname{id})
+=
+\operatorname{id}.
+\]
+
+\[
+\mathcal R(g\circ f)
+=
+\mathcal R(g)
+\circ
+\mathcal R(f).
+\]
+
+
+\subsection*{Merge}
+
+
+Tensor product:
+
+\[
+\otimes
+:
+\mathbf{Hist}
+\times
+\mathbf{Hist}
+\rightarrow
+\mathbf{Hist}.
+\]
+
+Associator:
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\cong
+H_1\otimes(H_2\otimes H_3).
+\]
+
+Symmetry:
+
+\[
+H_1\otimes H_2
+\cong
+H_2\otimes H_1.
+\]
+
+Unit:
+
+\[
+I\otimes H
+\cong
+H.
+\]
+
+
+\subsection*{Choice}
+
+
+Probability functor
+
+\[
+\mathcal D
+:
+\mathbf{Hist}
+\rightarrow
+\mathbf{Hist}.
+\]
+
+Unit:
+
+\[
+\eta
+:
+H
+\rightarrow
+\mathcal D(H).
+\]
+
+Multiplication:
+
+\[
+\mu
+:
+\mathcal D^2(H)
+\rightarrow
+\mathcal D(H).
+\]
+
+Monad laws:
+
+\[
+\mu
+\circ
+\eta
+=
+\operatorname{id}.
+\]
+
+\[
+\mu
+\circ
+\mathcal D(\eta)
+=
+\operatorname{id}.
+\]
+
+\[
+\mu
+\circ
+\mathcal D(\mu)
+=
+\mu
+\circ
+\mu.
+\]
+
+
+\subsection*{Refusal}
+
+
+Partial morphism
+
+\[
+\operatorname{Refuse}
+:
+H
+\rightharpoonup
+H'.
+\]
+
+Domain
+
+\[
+\operatorname{Dom}
+(\operatorname{Refuse})
+=
+\{
+H
+\mid
+\operatorname{Adm}(H)
+\}.
+\]
+
+Undefined otherwise.
+
+
+\subsection*{Collapse}
+
+
+Natural transformation
+
+\[
+\kappa
+:
+\operatorname{id}
+\Rightarrow
+\operatorname{Collapse}.
+\]
+
+Idempotence:
+
+\[
+\kappa
+\circ
+\kappa
+=
+\kappa.
+\]
+
+
+\subsection*{Historical Quotient}
+
+
+Define
+
+\[
+H_1
+\sim
+H_2
+\]
+
+iff
+
+\[
+\forall
+C,
+\qquad
+C[H_1]
+\Downarrow
+v
+\Longleftrightarrow
+C[H_2]
+\Downarrow
+v.
+\]
+
+The quotient category is
+
+\[
+\mathbf{Hist}/\!\!\sim.
+\]
+
+
+\subsection*{Replay Equivalence}
+
+
+\[
+\operatorname{Replay}(H)
+\sim
+H.
+\]
+
+\[
+\operatorname{Replay}
+(
+\operatorname{Replay}(H)
+)
+\sim
+\operatorname{Replay}(H).
+\]
+
+
+\subsection*{Historical Metric}
+
+
+Let
+
+\[
+d
+:
+\mathbf{Hist}
+\times
+\mathbf{Hist}
+\rightarrow
+\mathbb R_{\ge0}.
+\]
+
+Properties:
+
+\[
+d(H,H)=0,
+\]
+
+\[
+d(H_1,H_2)
+=
+d(H_2,H_1),
+\]
+
+\[
+d(H_1,H_3)
+\le
+d(H_1,H_2)
++
+d(H_2,H_3).
+\]
+
+
+\subsection*{Historical Completion}
+
+
+Every Cauchy sequence
+
+\[
+H_0,
+H_1,
+\ldots
+\]
+
+with respect to
+
+\[
+d
+\]
+
+admits a completion
+
+\[
+\widehat H.
+\]
+
+
+\subsection*{Universal Property}
+
+
+For every history-preserving functor
+
+\[
+F
+:
+\mathbf{Hist}
+\rightarrow
+\mathcal C,
+\]
+
+there exists a unique factorization
+
+\[
+\begin{array}{ccc}
+\mathbf{Hist}
+&
+\xrightarrow{\;\;Q\;\;}
+&
+\mathbf{Hist}/\!\!\sim
+\\[1ex]
+&
+\searrow_F
+&
+\downarrow^{\widetilde F}
+\\[1ex]
+&
+&
+\mathcal C
+\end{array}
+\]
+
+such that
+
+\[
+F
+=
+\widetilde F
+\circ
+Q.
+\]
+
+
+\subsection*{Denotational Adequacy}
+
+
+If
+
+\[
+H
+\Downarrow
+v
+\]
+
+operationally,
+
+then
+
+\[
+\llbracket
+H
+\rrbracket
+=
+\llbracket
+v
+\rrbracket.
+\]
+
+Conversely,
+
+\[
+\llbracket
+H
+\rrbracket
+=
+\llbracket
+v
+\rrbracket
+\Longrightarrow
+H
+\Downarrow
+v.
+\]
+
+Hence the operational semantics and denotational semantics are extensionally equivalent.
+
+\[
+\Box
+\]
+
+
+
+Meta-Theoretic Proofs
+
+
+
+Throughout this appendix let
+
+\[
+\Gamma\vdash H:\mathrm{Hist}
+\]
+
+denote an admissible historical derivation and
+
+\[
+H
+\longrightarrow
+H'
+\]
+
+the operational transition relation.
+
+
+\subsection*{Lemma A (Historical Extension)}
+
+
+If
+
+\[
+H
+\longrightarrow
+H',
+\]
+
+then
+
+\[
+H
+\subseteq
+H'.
+\]
+
+\begin{proof}
+
+Operational inspection.
+
+Every reduction appends exactly one admissible event.
+
+No reduction removes an admitted event.
+
+\[
+H'
+=
+H::e.
+\]
+
+Hence
+
+\[
+H
+\subseteq
+H'.
+\]
+
+\end{proof}
+
+
+\subsection*{Lemma B (Dependency Preservation)}
+
+
+If
+
+\[
+u
+\prec
+v
+\]
+
+in
+
+\[
+H,
+\]
+
+then
+
+\[
+u
+\prec
+v
+\]
+
+in every extension
+
+\[
+H'.
+\]
+
+\begin{proof}
+
+Every operational rule preserves edge orientation.
+
+No rule introduces a reverse dependency.
+
+Therefore
+
+\[
+\prec
+\]
+
+remains acyclic.
+
+\end{proof}
+
+
+\subsection*{Lemma C (Replay Preservation)}
+
+
+Replay preserves dependency order.
+
+\[
+u
+\prec
+v
+\Longrightarrow
+\operatorname{Replay}(u)
+\prec
+\operatorname{Replay}(v).
+\]
+
+\begin{proof}
+
+Replay reconstructs existing historical structure.
+
+No dependency is reordered.
+
+\end{proof}
+
+
+\subsection*{Lemma D (Replay Idempotence)}
+
+
+\[
+\operatorname{Replay}
+(
+\operatorname{Replay}(H)
+)
+=
+\operatorname{Replay}(H).
+\]
+
+\begin{proof}
+
+Replay reconstructs only unresolved dependencies.
+
+After reconstruction no unresolved dependencies remain.
+
+A second Replay introduces no new historical events.
+
+\end{proof}
+
+
+\subsection*{Lemma E (Collapse Idempotence)}
+
+
+\[
+\operatorname{Collapse}
+(
+\operatorname{Collapse}(H)
+)
+=
+\operatorname{Collapse}(H).
+\]
+
+\begin{proof}
+
+Collapse removes maximal unresolved boundaries.
+
+Once collapsed, no additional collapse exists.
+
+\end{proof}
+
+
+\subsection*{Lemma F (Merge Commutativity)}
+
+
+If
+
+\[
+H_1
+\perp
+H_2,
+\]
+
+then
+
+\[
+H_1
+\otimes
+H_2
+\cong
+H_2
+\otimes
+H_1.
+\]
+
+\begin{proof}
+
+Independence implies absence of causal edges.
+
+Execution order therefore does not alter reachable histories.
+
+\end{proof}
+
+
+\subsection*{Lemma G (Merge Associativity)}
+
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\cong
+H_1\otimes(H_2\otimes H_3).
+\]
+
+\begin{proof}
+
+Immediate from the associativity of disjoint union over dependency graphs.
+
+\end{proof}
+
+
+\subsection*{Theorem 1 (Subject Preservation)}
+
+
+If
+
+\[
+\Gamma
+\vdash
+t:A
+\]
+
+and
+
+\[
+t
+\longrightarrow
+t',
+\]
+
+then
+
+\[
+\Gamma
+\vdash
+t':A.
+\]
+
+\begin{proof}
+
+Induction on the derivation of
+
+\[
+t
+\longrightarrow
+t'.
+\]
+
+Cases:
+
+\[
+\operatorname{Pop},
+\operatorname{Replay},
+\operatorname{Merge},
+\operatorname{Choice},
+\operatorname{Collapse},
+\operatorname{Bind}.
+\]
+
+Typing follows from the corresponding formation rule.
+
+\end{proof}
+
+
+\subsection*{Theorem 2 (Historical Preservation)}
+
+
+If
+
+\[
+\Gamma
+\vdash
+H:\mathrm{Hist}
+\]
+
+and
+
+\[
+H
+\longrightarrow
+H',
+\]
+
+then
+
+\[
+\Gamma
+\vdash
+H':\mathrm{Hist}.
+\]
+
+\begin{proof}
+
+Direct induction over operational transitions.
+
+Apply Lemma A.
+
+\end{proof}
+
+
+\subsection*{Theorem 3 (Historical Monotonicity)}
+
+
+Every execution satisfies
+
+\[
+H_0
+\subseteq
+H_1
+\subseteq
+\cdots
+\subseteq
+H_n.
+\]
+
+\begin{proof}
+
+Repeated application of Lemma A.
+
+\end{proof}
+
+
+\subsection*{Theorem 4 (Replay Correctness)}
+
+
+For every admissible continuation
+
+\[
+C,
+\]
+
+\[
+C[\operatorname{Replay}(H)]
+\Downarrow
+v
+\Longleftrightarrow
+C[H]
+\Downarrow
+v.
+\]
+
+\begin{proof}
+
+Replay reconstructs provenance without altering observable outputs.
+
+Proceed by induction over the structure of
+
+\[
+C.
+\]
+
+\end{proof}
+
+
+\subsection*{Theorem 5 (Scheduler Correctness)}
+
+
+Every node selected by the scheduler satisfies
+
+\[
+\operatorname{Ready}(S).
+\]
+
+Every Ready node eventually executes.
+
+\begin{proof}
+
+Ready follows from dependency inspection.
+
+Termination follows from finiteness of the dependency graph.
+
+\end{proof}
+
+
+\subsection*{Theorem 6 (Confluence of Independent Pops)}
+
+
+If
+
+\[
+S_1
+\perp
+S_2,
+\]
+
+then
+
+\[
+\operatorname{Pop}(S_1)
+;
+\operatorname{Pop}(S_2)
+\cong
+\operatorname{Pop}(S_2)
+;
+\operatorname{Pop}(S_1).
+\]
+
+\begin{proof}
+
+Immediate from Merge commutativity.
+
+\end{proof}
+
+
+\subsection*{Theorem 7 (Progress)}
+
+
+If
+
+\[
+\Gamma
+\vdash
+H:\mathrm{Hist},
+\]
+
+then exactly one of the following holds.
+
+\[
+\begin{aligned}
+&(1)\quad H\text{ is complete};\\
+&(2)\quad \exists\,H'
+\text{ such that }
+H\rightarrow H';\\
+&(3)\quad H
+\text{ is deferred awaiting admissible continuation};\\
+&(4)\quad H
+\text{ terminates by Refusal.}
+\end{aligned}
+\]
+
+\begin{proof}
+
+Induction on operational configurations.
+
+Deferred configurations arise only from unresolved dependencies.
+
+Refusal configurations terminate immediately.
+
+\end{proof}
+
+
+\subsection*{Theorem 8 (Termination)}
+
+
+If
+
+\[
+G=(V,E)
+\]
+
+is finite and acyclic,
+
+then execution terminates after
+
+\[
+|V|
+\]
+
+successful Pops.
+
+\begin{proof}
+
+Each Pop removes one maximal Sphere.
+
+No Sphere is recreated.
+
+Since
+
+\[
+|V|
+<\infty,
+\]
+
+termination follows by induction.
+
+\end{proof}
+
+
+\subsection*{Theorem 9 (Historical Completeness)}
+
+
+Every observable value
+
+\[
+v
+\]
+
+admits a finite provenance.
+
+That is,
+
+\[
+\exists
+H
+\]
+
+such that
+
+\[
+H
+\Downarrow
+v.
+\]
+
+\begin{proof}
+
+Construct the execution history recursively from the dependency graph.
+
+Finiteness follows from acyclicity.
+
+\end{proof}
+
+
+\subsection*{Corollary}
+
+
+The Spherepop Calculus satisfies
+
+\[
+\boxed{
+\begin{aligned}
+&\text{Subject Preservation},\\
+&\text{Historical Preservation},\\
+&\text{Replay Correctness},\\
+&\text{Historical Monotonicity},\\
+&\text{Scheduler Correctness},\\
+&\text{Confluence of Independent Pops},\\
+&\text{Termination over finite DAGs},\\
+&\text{Historical Completeness}.
+\end{aligned}
+}
+\]
+
+\[
+\Box
+\]
+
+
+
+Complexity Theory
+
+
+
+Let
+
+\[
+G=(V,E)
+\]
+
+denote the dependency graph generated by the parser, where
+
+\[
+n=|V|,
+\qquad
+m=|E|.
+\]
+
+Let
+
+\[
+H=(e_1,\ldots,e_k)
+\]
+
+be the execution history.
+
+
+\subsection*{Definition (Depth)}
+
+
+The depth of a computational history is
+
+\[
+D(H)
+=
+\max_{v\in V}
+\ell(v),
+\]
+
+where
+
+\[
+\ell(v)
+\]
+
+is the length of the longest dependency path terminating at
+
+\[
+v.
+\]
+
+
+\subsection*{Definition (Width)}
+
+
+The width is
+
+\[
+W(H)
+=
+\max_t
+|Q_t|,
+\]
+
+where
+
+\[
+Q_t
+\]
+
+is the scheduler frontier at time
+
+\[
+t.
+\]
+
+
+\subsection*{Definition (Replay Radius)}
+
+
+The replay radius of a node
+
+\[
+v
+\]
+
+is
+
+\[
+R(v)
+=
+|\operatorname{Anc}(v)|,
+\]
+
+where
+
+\[
+\operatorname{Anc}(v)
+\]
+
+is the transitive closure of dependencies.
+
+
+\subsection*{Definition (Historical Volume)}
+
+
+The historical volume is
+
+\[
+\operatorname{Vol}(H)
+=
+|V|
++
+|E|
++
+|H|.
+\]
+
+
+\subsection*{Definition (Collapse Depth)}
+
+
+\[
+C(H)
+=
+\max_i
+\operatorname{depth}(S_i).
+\]
+
+
+\subsection*{Definition (Merge Width)}
+
+
+For
+
+\[
+M
+=
+H_1
+\otimes
+\cdots
+\otimes
+H_k,
+\]
+
+define
+
+\[
+W(M)
+=
+k.
+\]
+
+
+\subsection*{Parser Complexity}
+
+
+Lexical analysis
+
+\[
+O(n).
+\]
+
+Parsing
+
+\[
+O(n).
+\]
+
+AST construction
+
+\[
+O(n).
+\]
+
+Dependency graph construction
+
+\[
+O(n+m).
+\]
+
+
+\subsection*{Scheduler Complexity}
+
+
+Naive scheduler
+
+\[
+O(n)
+\]
+
+per iteration.
+
+Priority scheduler
+
+\[
+O(\log n)
+\]
+
+per insertion.
+
+Heap scheduler
+
+\[
+O(\log n)
+\]
+
+per Pop.
+
+Total execution
+
+\[
+O(n\log n).
+\]
+
+
+\subsection*{Replay Complexity}
+
+
+Worst case
+
+\[
+O(n+m).
+\]
+
+Bounded replay
+
+\[
+O(R(v)).
+\]
+
+Incremental replay
+
+\[
+O(\Delta H).
+\]
+
+
+\subsection*{Merge Complexity}
+
+
+Flattening
+
+\[
+O(k).
+\]
+
+Dependency merge
+
+\[
+O(m).
+\]
+
+Parallel scheduling
+
+\[
+O(W(H)).
+\]
+
+
+\subsection*{Choice Complexity}
+
+
+Immediate sampling
+
+\[
+O(1).
+\]
+
+Distribution propagation
+
+\[
+O(k),
+\]
+
+where
+
+\[
+k
+\]
+
+is the support size.
+
+
+\subsection*{History Compression}
+
+
+Suppose repeated subhistories
+
+\[
+H_i
+=
+H_j.
+\]
+
+Compression factor
+
+\[
+\gamma
+=
+\frac{|H|}
+{|H_c|}.
+\]
+
+Compressed storage
+
+\[
+|H_c|
+=
+O(r+d),
+\]
+
+where
+
+\[
+r
+\]
+
+is the number of distinct replay regions and
+
+\[
+d
+\]
+
+the dependency graph.
+
+
+\subsection*{Persistent Storage}
+
+
+Naive storage
+
+\[
+O(|H|).
+\]
+
+Checkpoint storage
+
+\[
+O(c+d).
+\]
+
+Replay reconstruction
+
+\[
+O(R(v)).
+\]
+
+
+\subsection*{Memory Complexity}
+
+
+Runtime memory
+
+\[
+M
+=
+M_V
++
+M_E
++
+M_H.
+\]
+
+Explicitly,
+
+\[
+M
+=
+O(n+m+|H|).
+\]
+
+Compressed,
+
+\[
+M
+=
+O(n+m+r).
+\]
+
+
+\subsection*{Parallel Speedup}
+
+
+Maximum theoretical speedup
+
+\[
+S
+=
+\frac{n}{D(H)}.
+\]
+
+Efficiency
+
+\[
+E
+=
+\frac{S}{P},
+\]
+
+where
+
+\[
+P
+\]
+
+is the processor count.
+
+
+\subsection*{Critical Path}
+
+
+Execution time
+
+\[
+T
+=
+D(H)
++
+\frac{n-D(H)}{P}.
+\]
+
+
+\subsection*{Historical Diameter}
+
+
+\[
+\operatorname{diam}(H)
+=
+\max_{u,v}
+d(u,v).
+\]
+
+
+\subsection*{Replay Locality}
+
+
+Local replay satisfies
+
+\[
+R(v)
+\ll
+n.
+\]
+
+Global replay satisfies
+
+\[
+R(v)
+=
+O(n).
+\]
+
+
+\subsection*{Incremental Compilation}
+
+
+Suppose
+
+\[
+\Delta V
+\subseteq
+V.
+\]
+
+Incremental recompilation cost
+
+\[
+O
+(
+|\Delta V|
++
+|\Delta E|
+).
+\]
+
+
+\subsection*{Historical Stability}
+
+
+Let
+
+\[
+\delta
+\]
+
+be the number of modified nodes.
+
+Then
+
+\[
+\operatorname{Replay}
+=
+O(\delta+D(H)).
+\]
+
+
+\subsection*{Asymptotic Bounds}
+
+
+\[
+\begin{array}{lcl}
+\text{Parsing}
+&
+O(n)
+\\[0.4em]
+
+\text{Dependency Graph}
+&
+O(n+m)
+\\[0.4em]
+
+\text{Scheduling}
+&
+O(n\log n)
+\\[0.4em]
+
+\text{Replay}
+&
+O(R(v))
+\\[0.4em]
+
+\text{Merge}
+&
+O(m)
+\\[0.4em]
+
+\text{Choice}
+&
+O(1)
+\text{ or }
+O(k)
+\\[0.4em]
+
+\text{Compression}
+&
+O(|H|)
+\\[0.4em]
+
+\text{Incremental Compilation}
+&
+O(\Delta V+\Delta E)
+\\[0.4em]
+
+\text{Memory}
+&
+O(n+m+r)
+\end{array}
+\]
+
+
+\subsection*{Theorem (Historical Complexity)}
+
+
+Let
+
+\[
+G
+\]
+
+be a finite acyclic dependency graph.
+
+Then the Spherepop runtime executes with total complexity
+
+\[
+O
+(
+n\log n
++
+m
++
+R_{\max}
+),
+\]
+
+where
+
+\[
+R_{\max}
+=
+\max_v
+R(v).
+\]
+
+Furthermore,
+
+\[
+R_{\max}
+\le
+n,
+\]
+
+and equality holds if and only if the dependency graph is totally ordered.
+
+\[
+\Box
+\]
+
+
+
+Universal Operator Machine
+
+
+
+Let
+
+\[
+\mathcal U
+=
+(Q,\Sigma,H,\Omega)
+\]
+
+denote the Universal Operator Machine.
+
+The machine state consists of
+
+\[
+Q
+\]
+
+the scheduler,
+
+\[
+\Sigma
+\]
+
+the dependency graph,
+
+\[
+H
+\]
+
+the computational history,
+
+and
+
+\[
+\Omega
+\]
+
+the operator library.
+
+
+\subsection*{Machine Configuration}
+
+
+A machine configuration is
+
+\[
+\langle
+Q,
+\Sigma,
+H,
+\Omega
+\rangle .
+\]
+
+Execution is defined by
+
+\[
+\longrightarrow_U
+\subseteq
+\mathcal U
+\times
+\mathcal U.
+\]
+
+
+\subsection*{Operator Node}
+
+
+Every node is a tuple
+
+\[
+N
+=
+(o,I,O,H),
+\]
+
+where
+
+\[
+o
+\]
+
+is the operator,
+
+\[
+I
+\]
+
+its input list,
+
+\[
+O
+\]
+
+its output,
+
+and
+
+\[
+H
+\]
+
+its local history.
+
+
+\subsection*{Dependency Graph}
+
+
+\[
+\Sigma
+=
+(V,E).
+\]
+
+Nodes
+
+\[
+V
+=
+\{N_1,\ldots,N_n\}.
+\]
+
+Edges
+
+\[
+(u,v)
+\in
+E
+\]
+
+represent computational dependency.
+
+Acyclicity:
+
+\[
+\Sigma
+\text{ is a DAG}.
+\]
+
+
+\subsection*{Ready Set}
+
+
+\[
+Q
+=
+\{
+v
+\in
+V
+\mid
+\forall
+u\prec v,
+\operatorname{Resolved}(u)
+\}.
+\]
+
+
+\subsection*{Scheduler}
+
+
+Scheduler map
+
+\[
+S
+:
+Q
+\rightarrow
+V.
+\]
+
+Execution
+
+\[
+S(v)
+=
+\operatorname{Pop}(v).
+\]
+
+
+\subsection*{History Register}
+
+
+History memory
+
+\[
+H
+=
+(e_1,\ldots,e_n).
+\]
+
+Insertion
+
+\[
+H'
+=
+H::e.
+\]
+
+Monotonicity
+
+\[
+H
+\subseteq
+H'.
+\]
+
+
+\subsection*{Replay Cache}
+
+
+Replay table
+
+\[
+R
+:
+V
+\rightarrow
+H.
+\]
+
+Lookup
+
+\[
+R(v)
+=
+H_v.
+\]
+
+Update
+
+\[
+R'
+=
+R
+\cup
+\{
+(v,H')
+\}.
+\]
+
+
+\subsection*{Operator Evaluation}
+
+
+Evaluation map
+
+\[
+\Omega
+:
+o
+\times
+I
+\rightarrow
+O.
+\]
+
+Composition
+
+\[
+o_2
+\circ
+o_1.
+\]
+
+Identity
+
+\[
+\operatorname{id}.
+\]
+
+
+\subsection*{Execution Cycle}
+
+
+One machine cycle consists of
+
+\[
+\operatorname{Locate}
+\rightarrow
+\operatorname{Replay}
+\rightarrow
+\operatorname{Evaluate}
+\rightarrow
+\operatorname{Pop}
+\rightarrow
+\operatorname{Record}
+\rightarrow
+\operatorname{Repeat}.
+\]
+
+
+\subsection*{Machine Transition}
+
+
+\[
+\langle
+Q,
+\Sigma,
+H,
+\Omega
+\rangle
+\longrightarrow
+\langle
+Q',
+\Sigma',
+H',
+\Omega
+\rangle.
+\]
+
+
+\subsection*{Operator Libraries}
+
+
+Boolean library
+
+\[
+\Omega_B
+=
+\{
+\land,
+\lor,
+\neg
+\}.
+\]
+
+Fuzzy library
+
+\[
+\Omega_F
+=
+\{
+\min,
+\max,
+1-x
+\}.
+\]
+
+Product logic
+
+\[
+\Omega_P
+=
+\{
+xy,
+x+y-xy,
+1-x
+\}.
+\]
+
+Differentiable library
+
+\[
+\Omega_D
+=
+\{
++,
+\times,
+\sigma,
+\tanh,
+\operatorname{ReLU}
+\}.
+\]
+
+Probabilistic library
+
+\[
+\Omega_{\mathcal D}
+=
+\{
+\operatorname{Choice},
+\operatorname{Sample},
+\operatorname{Observe}
+\}.
+\]
+
+
+\subsection*{Compilation}
+
+
+Compiler
+
+\[
+C
+:
+\text{Program}
+\rightarrow
+\Sigma.
+\]
+
+Optimization
+
+\[
+O
+:
+\Sigma
+\rightarrow
+\Sigma'.
+\]
+
+Code generation
+
+\[
+G
+:
+\Sigma'
+\rightarrow
+B,
+\]
+
+where
+
+\[
+B
+\]
+
+is machine bytecode.
+
+
+\subsection*{Optimization Rules}
+
+
+Inlining
+
+\[
+f(x)
+\rightsquigarrow
+\operatorname{Body}(f).
+\]
+
+Constant propagation
+
+\[
+x=c
+\Longrightarrow
+f(x)
+=
+f(c).
+\]
+
+Dead history elimination
+
+\[
+\operatorname{Future}(H)
+=
+\varnothing
+\Longrightarrow
+H
+\mapsto
+\varepsilon.
+\]
+
+Replay compression
+
+\[
+H_i
+=
+H_j
+\Longrightarrow
+H_i
+\equiv
+H_j.
+\]
+
+Merge flattening
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\Longrightarrow
+H_1\otimes H_2\otimes H_3.
+\]
+
+
+\subsection*{Historical Memory}
+
+
+Active memory
+
+\[
+M_A.
+\]
+
+Replay cache
+
+\[
+M_R.
+\]
+
+Archive
+
+\[
+M_H.
+\]
+
+Total memory
+
+\[
+M
+=
+M_A
++
+M_R
++
+M_H.
+\]
+
+
+\subsection*{Correctness}
+
+
+Machine correctness
+
+\[
+C(P)
+\Downarrow
+v
+\Longleftrightarrow
+P
+\Downarrow
+v.
+\]
+
+Replay correctness
+
+\[
+\operatorname{Replay}
+(H)
+\sim
+H.
+\]
+
+Scheduler correctness
+
+\[
+\forall
+v
+\in
+Q,
+\qquad
+\operatorname{Ready}(v).
+\]
+
+
+\subsection*{Universal Simulation Theorem}
+
+
+Let
+
+\[
+\Omega
+\]
+
+be any operator algebra satisfying closure under composition.
+
+Then there exists a Universal Operator Machine
+
+\[
+\mathcal U_\Omega
+\]
+
+such that every finite computation over
+
+\[
+\Omega
+\]
+
+admits an execution sequence
+
+\[
+\mathcal U_\Omega
+\Downarrow
+H
+\]
+
+whose terminal Collapse is observationally equivalent to the original computation.
+
+Equivalently,
+
+\[
+\forall
+P_\Omega,
+\qquad
+\exists
+\mathcal U_\Omega,
+\qquad
+\llbracket
+P_\Omega
+\rrbracket
+=
+\llbracket
+\mathcal U_\Omega
+\rrbracket.
+\]
+
+\begin{proof}
+
+Construct the dependency graph generated by
+\(P_\Omega\).
+
+Replace each primitive operation by its corresponding operator node.
+
+Preserve dependency edges.
+
+The scheduler executes every Ready node according to the operational semantics.
+
+Replay preserves provenance.
+
+Pop resolves completed computational regions.
+
+Collapse produces the terminal observable value.
+
+Correctness follows by induction over the topological ordering of the dependency graph.
+
+\end{proof}
+
+\[
+\Box
+\]
+
+
+
+Equidistribution of Historical Lattice Shapes
+
+
+
+Let
+
+\[
+H
+\]
+
+be a finite admissible history.
+
+Let
+
+\[
+\Lambda(H)
+\subset
+\mathbb R^d
+\]
+
+be the dependency lattice generated by the incidence vectors of events in
+
+\[
+H.
+\]
+
+Define the covolume-normalized lattice
+
+\[
+\Lambda_1(H)
+=
+\operatorname{covol}(\Lambda(H))^{-1/d}
+\Lambda(H).
+\]
+
+The shape of
+
+\[
+H
+\]
+
+is
+
+\[
+\operatorname{sh}(H)
+=
+[\Lambda_1(H)]
+\in
+\operatorname{SL}_d(\mathbb Z)
+\backslash
+\operatorname{SL}_d(\mathbb R)
+/\operatorname{SO}_d(\mathbb R).
+\]
+
+Let
+
+\[
+\mathcal X_d
+=
+\operatorname{SL}_d(\mathbb Z)
+\backslash
+\operatorname{SL}_d(\mathbb R)
+/\operatorname{SO}_d(\mathbb R).
+\]
+
+Let
+
+\[
+\mu_d
+\]
+
+be the Haar probability measure on
+
+\[
+\mathcal X_d.
+\]
+
+For
+
+\[
+X>0,
+\]
+
+define
+
+\[
+\mathcal H_d(X)
+=
+\{
+H
+:
+\operatorname{rank}\Lambda(H)=d,
+\;
+\operatorname{Disc}(H)<X
+\}.
+\]
+
+Here
+
+\[
+\operatorname{Disc}(H)
+=
+\det
+(
+\langle e_i,e_j\rangle
+)
+\]
+
+for any basis
+
+\[
+(e_1,\ldots,e_d)
+\]
+
+of
+
+\[
+\Lambda(H).
+\]
+
+
+\subsection*{Definition}
+
+
+A family of admissible histories
+
+\[
+\mathcal H_d
+\]
+
+has equidistributed lattice shapes if, for every bounded continuous function
+
+\[
+f:\mathcal X_d\rightarrow\mathbb R,
+\]
+
+one has
+
+\[
+\lim_{X\rightarrow\infty}
+\frac{1}{|\mathcal H_d(X)|}
+\sum_{H\in\mathcal H_d(X)}
+f(\operatorname{sh}(H))
+=
+\int_{\mathcal X_d}
+f\,d\mu_d.
+\]
+
+
+\subsection*{Historical Shape Conjecture}
+
+
+For
+
+\[
+d\in\{3,4,5\},
+\]
+
+the admissible Spherepop histories of dependency rank
+
+\[
+d
+\]
+
+ordered by discriminant have equidistributed normalized dependency-lattice
+shapes:
+
+\[
+\operatorname{sh}
+(
+\mathcal H_d(X)
+)
+\Rightarrow
+\mu_d
+\]
+
+as
+
+\[
+X\rightarrow\infty.
+\]
+
+Equivalently,
+
+\[
+\lim_{X\rightarrow\infty}
+\frac{
+|\{H\in\mathcal H_d(X):\operatorname{sh}(H)\in U\}|
+}{
+|\mathcal H_d(X)|
+}
+=
+\mu_d(U)
+\]
+
+for every
+
+\[
+\mu_d(\partial U)=0.
+\]
+
+
+\subsection*{Analogy}
+
+
+For a number field
+
+\[
+K/\mathbb Q
+\]
+
+of degree
+
+\[
+n,
+\]
+
+the ring of integers
+
+\[
+\mathcal O_K
+\]
+
+embeds as a lattice in
+
+\[
+K\otimes_{\mathbb Q}\mathbb R.
+\]
+
+After removing scale, one obtains a lattice shape in
+
+\[
+\mathcal X_{n-1}.
+\]
+
+For cubic, quartic, and quintic fields, ordered by discriminant, these shapes
+are expected or known in suitable settings to distribute according to the
+natural homogeneous measure.
+
+Spherepop replaces
+
+\[
+\mathcal O_K
+\]
+
+by
+
+\[
+\Lambda(H),
+\]
+
+and replaces arithmetic discriminant by historical discriminant.
+
+Thus
+
+\[
+\mathcal O_K
+\leadsto
+\Lambda(H),
+\]
+
+\[
+\operatorname{Disc}(K)
+\leadsto
+\operatorname{Disc}(H),
+\]
+
+\[
+\operatorname{sh}(\mathcal O_K)
+\leadsto
+\operatorname{sh}(H).
+\]
+
+
+\subsection*{Interpretation}
+
+
+Historical equidistribution asserts that large admissible histories do not
+concentrate around special dependency geometries.
+
+In the limit,
+
+\[
+X\rightarrow\infty,
+\]
+
+their normalized dependency lattices become generic points of the moduli space
+
+\[
+\mathcal X_d.
+\]
+
+Thus the large-scale geometry of computation becomes asymptotically
+independent of accidental syntactic presentation.
+
+
+\subsection*{Spherepop Equidistribution Principle}
+
+
+Let
+
+\[
+F
+\]
+
+be any admissible construction functor satisfying
+
+\[
+F(H_1\otimes H_2)
+=
+F(H_1)\oplus F(H_2),
+\]
+
+\[
+F(\operatorname{Replay}(H))
+=
+F(H),
+\]
+
+and
+
+\[
+F(\operatorname{Collapse}(H))
+=
+F(H)/{\sim}.
+\]
+
+Then the induced lattice-shape map
+
+\[
+H
+\mapsto
+\operatorname{sh}(F(H))
+\]
+
+is asymptotically Haar-distributed whenever the discriminant ordering is
+nondegenerate.
+
+\[
+\boxed{
+\operatorname{sh}(H)
+\sim
+\mu_d
+}
+\]
+
+for
+
+\[
+d=3,4,5.
+\]
+
+
+
+Limits, Hyperplanes, and Logic-Circuit Diagrams
+
+
+
+Let
+
+\[
+C=(V,E)
+\]
+
+be a finite directed acyclic circuit.
+
+Let
+
+\[
+V_{\mathrm{in}}
+\subseteq
+V
+\]
+
+be input nodes,
+
+\[
+V_{\mathrm{gate}}
+\subseteq
+V
+\]
+
+gate nodes,
+
+and
+
+\[
+V_{\mathrm{out}}
+\subseteq
+V
+\]
+
+output nodes.
+
+Each gate
+
+\[
+g\in V_{\mathrm{gate}}
+\]
+
+is assigned an operator
+
+\[
+\omega_g:
+[0,1]^{k_g}
+\rightarrow
+[0,1].
+\]
+
+The circuit evaluation map is
+
+\[
+F_C:
+[0,1]^n
+\rightarrow
+[0,1]^m.
+\]
+
+
+\subsection*{Hyperplane Representation}
+
+
+A threshold gate is a hyperplane decision rule
+
+\[
+g(x)
+=
+\mathbf 1
+\left[
+w\cdot x+b\ge 0
+\right],
+\]
+
+with decision hyperplane
+
+\[
+\Pi_g
+=
+\{
+x\in\mathbb R^n
+:
+w\cdot x+b=0
+\}.
+\]
+
+The positive and negative regions are
+
+\[
+\Pi_g^+
+=
+\{
+x:w\cdot x+b>0
+\},
+\qquad
+\Pi_g^-
+=
+\{
+x:w\cdot x+b<0
+\}.
+\]
+
+Thus
+
+\[
+\mathbb R^n
+=
+\Pi_g^-
+\cup
+\Pi_g
+\cup
+\Pi_g^+.
+\]
+
+
+\subsection*{Logical Boundaries}
+
+
+A Boolean predicate
+
+\[
+P:X\rightarrow\{0,1\}
+\]
+
+induces a boundary
+
+\[
+\partial P
+=
+\overline{P^{-1}(1)}
+\cap
+\overline{P^{-1}(0)}.
+\]
+
+For a threshold predicate,
+
+\[
+\partial P
+=
+\Pi_g.
+\]
+
+Therefore every threshold gate is a refusal boundary:
+
+\[
+x\in\Pi_g^+
+\Longrightarrow
+\operatorname{Collapse}(1),
+\]
+
+\[
+x\in\Pi_g^-
+\Longrightarrow
+\operatorname{Collapse}(0),
+\]
+
+\[
+x\in\Pi_g
+\Longrightarrow
+\operatorname{Defer}
+\;\vee\;
+\operatorname{Refuse}.
+\]
+
+
+\subsection*{Limits of Soft Gates}
+
+
+Let
+
+\[
+\sigma_\beta(t)
+=
+\frac{1}{1+e^{-\beta t}}.
+\]
+
+Define
+
+\[
+g_\beta(x)
+=
+\sigma_\beta(w\cdot x+b).
+\]
+
+Then
+
+\[
+\lim_{\beta\rightarrow\infty}
+g_\beta(x)
+=
+\mathbf 1[w\cdot x+b>0]
+\]
+
+for
+
+\[
+x\notin\Pi_g.
+\]
+
+At the boundary,
+
+\[
+x\in\Pi_g
+\Longrightarrow
+g_\beta(x)=\frac12.
+\]
+
+Hence
+
+\[
+\lim_{\beta\rightarrow\infty}
+g_\beta
+=
+g
+\]
+
+pointwise off the hyperplane.
+
+Distributionally,
+
+\[
+\nabla g_\beta
+=
+\beta
+\sigma_\beta(1-\sigma_\beta)w
+\]
+
+converges to a boundary-supported measure:
+
+\[
+\nabla g_\beta
+\rightharpoonup
+w\,\delta_{\Pi_g}.
+\]
+
+
+\subsection*{Circuit Regions}
+
+
+For gates
+
+\[
+g_1,\ldots,g_N,
+\]
+
+define hyperplanes
+
+\[
+\Pi_i
+=
+\{x:w_i\cdot x+b_i=0\}.
+\]
+
+The arrangement
+
+\[
+\mathcal A_C
+=
+\{\Pi_1,\ldots,\Pi_N\}
+\]
+
+partitions
+
+\[
+\mathbb R^n
+\]
+
+into cells
+
+\[
+\mathbb R^n\setminus
+\bigcup_i\Pi_i
+=
+\bigsqcup_{\alpha}
+R_\alpha.
+\]
+
+On each cell,
+
+\[
+F_C
+\]
+
+is locally constant for Boolean threshold circuits.
+
+Thus
+
+\[
+x,y\in R_\alpha
+\Longrightarrow
+F_C(x)=F_C(y).
+\]
+
+
+\subsection*{Spherepop Interpretation}
+
+
+Each gate is a Sphere
+
+\[
+S_g.
+\]
+
+Its hyperplane
+
+\[
+\Pi_g
+\]
+
+is the admissibility boundary.
+
+Evaluation is
+
+\[
+\operatorname{Pop}(S_g)
+=
+\begin{cases}
+1,&w\cdot x+b>0,\\
+0,&w\cdot x+b<0,\\
+\operatorname{Refuse}(r_g),&w\cdot x+b=0.
+\end{cases}
+\]
+
+A circuit is a Merge of gate histories:
+
+\[
+H_C
+=
+\bigotimes_{g\in V_{\mathrm{gate}}}
+H_g.
+\]
+
+Dependency edges impose partial order:
+
+\[
+g_i\prec g_j
+\Longleftrightarrow
+(g_i,g_j)\in E.
+\]
+
+Circuit evaluation is historical Collapse:
+
+\[
+F_C(x)
+=
+\operatorname{Collapse}
+\left(
+\bigotimes_{g\in V_{\mathrm{out}}}
+\operatorname{Pop}(S_g)
+\right).
+\]
+
+
+\subsection*{Diagrammatic Laws}
+
+
+Serial composition:
+
+\[
+\begin{array}{c}
+x
+\longrightarrow
+g
+\longrightarrow
+h
+\longrightarrow
+y
+\end{array}
+\]
+
+denotes
+
+\[
+h\circ g.
+\]
+
+Parallel composition:
+
+\[
+\begin{array}{c}
+x
+\longrightarrow
+g
+\\
+x
+\longrightarrow
+h
+\end{array}
+\]
+
+denotes
+
+\[
+g\otimes h.
+\]
+
+Fan-in:
+
+\[
+(g,h)
+\longrightarrow
+k
+\]
+
+denotes
+
+\[
+k\circ(g\otimes h).
+\]
+
+Fan-out denotes Replay:
+
+\[
+x
+\longmapsto
+(x,x)
+=
+\operatorname{Replay}(x).
+\]
+
+
+\subsection*{Limit of Circuit Diagrams}
+
+
+Let
+
+\[
+C_\beta
+\]
+
+be a differentiable circuit obtained by replacing every threshold gate
+
+\[
+g_i
+\]
+
+with
+
+\[
+g_{i,\beta}(x)
+=
+\sigma_\beta(w_i\cdot x+b_i).
+\]
+
+Then
+
+\[
+F_{C_\beta}
+:
+[0,1]^n
+\rightarrow
+[0,1]^m
+\]
+
+is smooth.
+
+For every
+
+\[
+x
+\notin
+\bigcup_i \Pi_i,
+\]
+
+\[
+\lim_{\beta\rightarrow\infty}
+F_{C_\beta}(x)
+=
+F_C(x).
+\]
+
+Thus Boolean circuit diagrams are sharp-boundary limits of differentiable
+Spherepop histories.
+
+
+\subsection*{Hyperplane Limit Theorem}
+
+
+Let
+
+\[
+C_\beta
+\]
+
+be a family of smooth circuits with gate activations
+
+\[
+\sigma_\beta(w_i\cdot x+b_i).
+\]
+
+Let
+
+\[
+C_\infty
+\]
+
+be the threshold circuit obtained as
+
+\[
+\beta\rightarrow\infty.
+\]
+
+Then
+
+\[
+F_{C_\beta}
+\rightarrow
+F_{C_\infty}
+\]
+
+pointwise on
+
+\[
+\mathbb R^n
+\setminus
+\bigcup_i\Pi_i.
+\]
+
+Moreover,
+
+\[
+\nabla F_{C_\beta}
+\]
+
+converges weakly to a measure supported on
+
+\[
+\bigcup_i\Pi_i.
+\]
+
+Hence all logical discontinuities are concentrated on admissibility
+hyperplanes.
+
+\[
+\Box
+\]
+
+
+\subsection*{Circuit Diagram Equivalence}
+
+
+Two circuits
+
+\[
+C_1,C_2
+\]
+
+are diagrammatically equivalent if
+
+\[
+F_{C_1}=F_{C_2}.
+\]
+
+They are historically equivalent if
+
+\[
+H_{C_1}\sim H_{C_2}.
+\]
+
+Historical equivalence implies diagrammatic equivalence:
+
+\[
+H_{C_1}\sim H_{C_2}
+\Longrightarrow
+F_{C_1}=F_{C_2}.
+\]
+
+The converse fails whenever two diagrams compute the same function with
+distinct dependency histories.
+
+
+\subsection*{Collapse Quotient}
+
+
+Define
+
+\[
+C_1\equiv_{\mathrm{collapse}} C_2
+\]
+
+iff
+
+\[
+\operatorname{Collapse}(H_{C_1})
+=
+\operatorname{Collapse}(H_{C_2}).
+\]
+
+Then
+
+\[
+\equiv_{\mathrm{hist}}
+\;\subseteq\;
+\equiv_{\mathrm{collapse}}
+\;\subseteq\;
+\equiv_{\mathrm{func}}.
+\]
+
+Thus
+
+\[
+\text{history}
+\rightarrow
+\text{diagram}
+\rightarrow
+\text{function}
+\]
+
+is a sequence of quotient maps.
+
+
+
+Historical Algebra
+
+
+
+Let
+
+\[
+\mathcal H
+\]
+
+denote the collection of all admissible histories.
+
+
+\subsection*{Definition (History Addition)}
+
+
+Define
+
+\[
+\oplus
+:
+\mathcal H\times\mathcal H
+\rightarrow
+\mathcal H
+\]
+
+by
+
+\[
+H_1\oplus H_2
+=
+\operatorname{Merge}(H_1,H_2).
+\]
+
+Properties:
+
+\[
+H_1\oplus H_2
+=
+H_2\oplus H_1.
+\]
+
+\[
+(H_1\oplus H_2)\oplus H_3
+=
+H_1\oplus(H_2\oplus H_3).
+\]
+
+Identity:
+
+\[
+0_{\mathcal H}
+=
+\varnothing.
+\]
+
+\[
+H\oplus0_{\mathcal H}
+=
+H.
+\]
+
+
+\subsection*{Definition (Historical Multiplication)}
+
+
+Define
+
+\[
+\otimes
+:
+\mathcal H\times\mathcal H
+\rightarrow
+\mathcal H
+\]
+
+by sequential composition,
+
+\[
+H_1\otimes H_2
+=
+H_1::H_2.
+\]
+
+Associativity:
+
+\[
+(H_1\otimes H_2)\otimes H_3
+=
+H_1\otimes(H_2\otimes H_3).
+\]
+
+Identity:
+
+\[
+1_{\mathcal H}
+=
+\varepsilon.
+\]
+
+
+\subsection*{Distributivity}
+
+
+\[
+H_1
+\otimes
+(H_2\oplus H_3)
+=
+(H_1\otimes H_2)
+\oplus
+(H_1\otimes H_3).
+\]
+
+Likewise,
+
+\[
+(H_1\oplus H_2)
+\otimes
+H_3
+=
+(H_1\otimes H_3)
+\oplus
+(H_2\otimes H_3).
+\]
+
+
+\subsection*{Historical Semiring}
+
+
+Therefore
+
+\[
+(\mathcal H,\oplus,\otimes)
+\]
+
+forms a semiring.
+
+
+\subsection*{Replay Operator}
+
+
+Define
+
+\[
+R
+:
+\mathcal H
+\rightarrow
+\mathcal H.
+\]
+
+Idempotence:
+
+\[
+R^2=R.
+\]
+
+Monotonicity:
+
+\[
+H_1
+\subseteq
+H_2
+\Longrightarrow
+R(H_1)
+\subseteq
+R(H_2).
+\]
+
+Composition preservation:
+
+\[
+R(H_1\otimes H_2)
+=
+R(H_1)
+\otimes
+R(H_2).
+\]
+
+
+\subsection*{Collapse Operator}
+
+
+Define
+
+\[
+C
+:
+\mathcal H
+\rightarrow
+\mathcal V.
+\]
+
+Idempotence:
+
+\[
+C^2=C.
+\]
+
+Compatibility:
+
+\[
+C(R(H))
+=
+C(H).
+\]
+
+
+\subsection*{Refusal Algebra}
+
+
+Let
+
+\[
+\mathcal R
+=
+\{
+r_1,r_2,\ldots
+\}
+\]
+
+be refusal reasons.
+
+Define
+
+\[
+\vee
+\]
+
+by least common refusal,
+
+and
+
+\[
+\wedge
+\]
+
+by greatest common admissible refinement.
+
+Then
+
+\[
+(\mathcal R,\vee,\wedge)
+\]
+
+is a bounded lattice.
+
+Bottom element:
+
+\[
+\bot
+=
+\operatorname{Accept}.
+\]
+
+Top element:
+
+\[
+\top
+=
+\operatorname{Impossible}.
+\]
+
+
+\subsection*{Historical Congruence}
+
+
+Define
+
+\[
+H_1
+\equiv
+H_2
+\]
+
+iff
+
+\[
+C(H_1)
+=
+C(H_2).
+\]
+
+Then
+
+\[
+\equiv
+\]
+
+is an equivalence relation.
+
+Furthermore,
+
+\[
+H_1
+\equiv
+H_2
+\Longrightarrow
+R(H_1)
+\equiv
+R(H_2).
+\]
+
+
+\subsection*{Historical Ideals}
+
+
+A subset
+
+\[
+I
+\subseteq
+\mathcal H
+\]
+
+is an ideal if
+
+\[
+H\in I,
+\qquad
+K\subseteq H
+\Longrightarrow
+K\in I,
+\]
+
+and
+
+\[
+H_1,H_2\in I
+\Longrightarrow
+H_1\oplus H_2
+\in I.
+\]
+
+
+\subsection*{Replay Closure}
+
+
+Define
+
+\[
+\overline H
+=
+R(H).
+\]
+
+Then
+
+\[
+\overline{\overline H}
+=
+\overline H.
+\]
+
+
+\subsection*{Historical Metric Algebra}
+
+
+Let
+
+\[
+d
+:
+\mathcal H\times\mathcal H
+\rightarrow
+\mathbb R.
+\]
+
+Require
+
+\[
+d(H,H)=0,
+\]
+
+\[
+d(H_1,H_2)=d(H_2,H_1),
+\]
+
+\[
+d(H_1,H_3)
+\le
+d(H_1,H_2)
++
+d(H_2,H_3).
+\]
+
+Replay is non-expansive:
+
+\[
+d(R(H_1),R(H_2))
+\le
+d(H_1,H_2).
+\]
+
+
+\subsection*{Fixed Points}
+
+
+A history
+
+\[
+H
+\]
+
+is replay-complete iff
+
+\[
+R(H)=H.
+\]
+
+A history is collapse-complete iff
+
+\[
+C(H)=H.
+\]
+
+
+\subsection*{Least Fixed Point}
+
+
+Let
+
+\[
+F:\mathcal H\rightarrow\mathcal H
+\]
+
+be monotone.
+
+Then
+
+\[
+\operatorname{lfp}(F)
+=
+\bigcup_{n=0}^{\infty}
+F^n(\varnothing).
+\]
+
+
+\subsection*{Greatest Fixed Point}
+
+
+If
+
+\[
+F
+\]
+
+preserves arbitrary intersections,
+
+then
+
+\[
+\operatorname{gfp}(F)
+=
+\bigcap
+\{
+H
+:
+F(H)\subseteq H
+\}.
+\]
+
+
+\subsection*{Completion Theorem}
+
+
+Every ascending chain
+
+\[
+H_0
+\subseteq
+H_1
+\subseteq
+\cdots
+\]
+
+admits a least upper bound
+
+\[
+H_\infty
+=
+\bigcup_i
+H_i.
+\]
+
+Moreover,
+
+\[
+R(H_\infty)
+=
+\bigcup_i
+R(H_i).
+\]
+
+
+\subsection*{Historical Algebra Theorem}
+
+
+The structure
+
+\[
+\boxed{
+(
+\mathcal H,
+\oplus,
+\otimes,
+R,
+C,
+d
+)
+}
+\]
+
+forms a complete idempotent semiring equipped with
+
+\[
+\begin{aligned}
+&\text{a replay closure operator},\\
+&\text{a collapse quotient},\\
+&\text{a bounded refusal lattice},\\
+&\text{least and greatest fixed points},\\
+&\text{a complete lattice of admissible histories}.
+\end{aligned}
+\]
+
+Consequently, every finite Spherepop computation admits an algebraic
+interpretation independent of its operational realization.
+
+\[
+\Box
+\]
+
+
+
+Category-Theoretic Foundations
+
+
+
+Let
+
+\[
+\mathbf{Hist}
+\]
+
+denote the category of admissible computational histories.
+
+Objects are histories,
+
+\[
+H
+\in
+\operatorname{Ob}(\mathbf{Hist}),
+\]
+
+and morphisms are admissible historical continuations,
+
+\[
+f:H_1\rightarrow H_2.
+\]
+
+
+\subsection*{Identity Morphisms}
+
+
+For every history
+
+\[
+H,
+\]
+
+there exists
+
+\[
+\operatorname{id}_H
+:
+H
+\rightarrow
+H
+\]
+
+such that
+
+\[
+f\circ\operatorname{id}_H=f,
+\]
+
+\[
+\operatorname{id}_H\circ g=g.
+\]
+
+
+\subsection*{Composition}
+
+
+Given
+
+\[
+f:H_1\rightarrow H_2,
+\]
+
+\[
+g:H_2\rightarrow H_3,
+\]
+
+define
+
+\[
+g\circ f:H_1\rightarrow H_3.
+\]
+
+Associativity holds:
+
+\[
+(h\circ g)\circ f
+=
+h\circ(g\circ f).
+\]
+
+
+\subsection*{Historical Product}
+
+
+The categorical product
+
+\[
+H_1\times H_2
+\]
+
+is equipped with projections
+
+\[
+\pi_1:H_1\times H_2\rightarrow H_1,
+\]
+
+\[
+\pi_2:H_1\times H_2\rightarrow H_2.
+\]
+
+For every
+
+\[
+X
+\]
+
+and morphisms
+
+\[
+f:X\rightarrow H_1,
+\]
+
+\[
+g:X\rightarrow H_2,
+\]
+
+there exists a unique morphism
+
+\[
+\langle f,g\rangle
+:
+X
+\rightarrow
+H_1\times H_2.
+\]
+
+
+\subsection*{Historical Coproduct}
+
+
+The coproduct
+
+\[
+H_1+H_2
+\]
+
+admits injections
+
+\[
+\iota_1
+:
+H_1
+\rightarrow
+H_1+H_2,
+\]
+
+\[
+\iota_2
+:
+H_2
+\rightarrow
+H_1+H_2.
+\]
+
+
+\subsection*{Merge Tensor}
+
+
+Merge defines a symmetric monoidal product
+
+\[
+\otimes
+:
+\mathbf{Hist}
+\times
+\mathbf{Hist}
+\rightarrow
+\mathbf{Hist}.
+\]
+
+Associator
+
+\[
+\alpha
+:
+(H_1\otimes H_2)\otimes H_3
+\Rightarrow
+H_1\otimes(H_2\otimes H_3).
+\]
+
+Left unitor
+
+\[
+\lambda
+:
+I\otimes H
+\Rightarrow
+H.
+\]
+
+Right unitor
+
+\[
+\rho
+:
+H\otimes I
+\Rightarrow
+H.
+\]
+
+Braiding
+
+\[
+\beta
+:
+H_1\otimes H_2
+\Rightarrow
+H_2\otimes H_1.
+\]
+
+
+\subsection*{Replay Functor}
+
+
+Replay is an endofunctor
+
+\[
+R
+:
+\mathbf{Hist}
+\rightarrow
+\mathbf{Hist}.
+\]
+
+Objects:
+
+\[
+R(H)=H.
+\]
+
+Morphisms:
+
+\[
+R(f)
+:
+R(H_1)
+\rightarrow
+R(H_2).
+\]
+
+Functoriality:
+
+\[
+R(\operatorname{id})
+=
+\operatorname{id},
+\]
+
+\[
+R(g\circ f)
+=
+R(g)\circ R(f).
+\]
+
+
+\subsection*{Collapse Natural Transformation}
+
+
+Collapse defines
+
+\[
+\kappa
+:
+R
+\Rightarrow
+\operatorname{Id}.
+\]
+
+Naturality:
+
+\[
+\begin{array}{ccc}
+R(H_1)
+&
+\xrightarrow{R(f)}
+&
+R(H_2)
+\\
+\downarrow\kappa
+&&
+\downarrow\kappa
+\\
+H_1
+&
+\xrightarrow{f}
+&
+H_2
+\end{array}
+\]
+
+commutes.
+
+
+\subsection*{Refusal Subcategory}
+
+
+Define
+
+\[
+\mathbf{Adm}
+\subseteq
+\mathbf{Hist}
+\]
+
+by
+
+\[
+\operatorname{Ob}(\mathbf{Adm})
+=
+\{
+H
+:
+\operatorname{Adm}(H)
+\}.
+\]
+
+Morphisms preserve admissibility.
+
+
+\subsection*{Adjunction}
+
+
+Let
+
+\[
+I
+:
+\mathbf{Adm}
+\hookrightarrow
+\mathbf{Hist}
+\]
+
+be inclusion.
+
+Suppose
+
+\[
+L
+:
+\mathbf{Hist}
+\rightarrow
+\mathbf{Adm}
+\]
+
+assigns maximal admissible repair.
+
+Then
+
+\[
+L\dashv I.
+\]
+
+Hence
+
+\[
+\operatorname{Hom}_{\mathbf{Adm}}
+(LH,A)
+\cong
+\operatorname{Hom}_{\mathbf{Hist}}
+(H,IA).
+\]
+
+
+\subsection*{Historical Monad}
+
+
+Replay induces a monad
+
+\[
+(R,\eta,\mu).
+\]
+
+Unit
+
+\[
+\eta
+:
+\operatorname{Id}
+\Rightarrow
+R.
+\]
+
+Multiplication
+
+\[
+\mu
+:
+R^2
+\Rightarrow
+R.
+\]
+
+Monad identities:
+
+\[
+\mu
+\circ
+R\eta
+=
+\operatorname{id},
+\]
+
+\[
+\mu
+\circ
+\eta R
+=
+\operatorname{id},
+\]
+
+\[
+\mu
+\circ
+R\mu
+=
+\mu
+\circ
+\mu R.
+\]
+
+
+\subsection*{Historical Comonad}
+
+
+History extraction defines
+
+\[
+(E,\varepsilon,\delta).
+\]
+
+Counit
+
+\[
+\varepsilon
+:
+E
+\Rightarrow
+\operatorname{Id}.
+\]
+
+Comultiplication
+
+\[
+\delta
+:
+E
+\Rightarrow
+E^2.
+\]
+
+
+\subsection*{Pullbacks}
+
+
+For
+
+\[
+f:H_1\rightarrow H_3,
+\]
+
+\[
+g:H_2\rightarrow H_3,
+\]
+
+their pullback is
+
+\[
+H_1
+\times_{H_3}
+H_2.
+\]
+
+Operationally this represents dependency synchronization.
+
+
+\subsection*{Pushouts}
+
+
+Given
+
+\[
+H_0
+\rightarrow
+H_1,
+\]
+
+\[
+H_0
+\rightarrow
+H_2,
+\]
+
+the pushout
+
+\[
+H_1
+\cup_{H_0}
+H_2
+\]
+
+models history merging.
+
+
+\subsection*{Limits}
+
+
+Every finite diagram
+
+\[
+D:J
+\rightarrow
+\mathbf{Hist}
+\]
+
+admits a limit
+
+\[
+\varprojlim D
+\]
+
+whenever all dependency cones commute.
+
+
+\subsection*{Colimits}
+
+
+Every finite cocomplete diagram admits
+
+\[
+\varinjlim D.
+\]
+
+Operationally,
+
+\[
+\varinjlim
+\]
+
+corresponds to history accumulation.
+
+
+\subsection*{Kan Extensions}
+
+
+Given
+
+\[
+F:\mathbf C\rightarrow\mathbf{Hist},
+\]
+
+\[
+K:\mathbf C\rightarrow\mathbf D,
+\]
+
+the left Kan extension
+
+\[
+\operatorname{Lan}_K(F)
+\]
+
+exists whenever
+
+\[
+\mathbf{Hist}
+\]
+
+is cocomplete.
+
+Likewise,
+
+\[
+\operatorname{Ran}_K(F)
+\]
+
+exists whenever
+
+\[
+\mathbf{Hist}
+\]
+
+is complete.
+
+
+\subsection*{Presheaf Semantics}
+
+
+Let
+
+\[
+\mathbf{Sphere}
+\]
+
+denote the category of computational regions.
+
+A historical presheaf is
+
+\[
+F
+:
+\mathbf{Sphere}^{op}
+\rightarrow
+\mathbf{Set}.
+\]
+
+For every inclusion
+
+\[
+U
+\subseteq
+V,
+\]
+
+there is a restriction morphism
+
+\[
+F(V)
+\rightarrow
+F(U).
+\]
+
+
+\subsection*{Sheaf Condition}
+
+
+If
+
+\[
+\{U_i\}
+\]
+
+covers
+
+\[
+U,
+\]
+
+and
+
+\[
+s_i
+\in
+F(U_i)
+\]
+
+agree on overlaps,
+
+then there exists a unique
+
+\[
+s
+\in
+F(U)
+\]
+
+such that
+
+\[
+s|_{U_i}=s_i.
+\]
+
+
+\subsection*{Historical Fibration}
+
+
+Define
+
+\[
+p
+:
+\mathbf{Hist}
+\rightarrow
+\mathbf{Time}.
+\]
+
+Fibres
+
+\[
+p^{-1}(t)
+\]

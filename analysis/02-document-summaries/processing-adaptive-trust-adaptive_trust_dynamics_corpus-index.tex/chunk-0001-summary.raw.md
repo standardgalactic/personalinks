@@ -1,0 +1,75 @@
+**1. Definitions and primitive concepts introduced**
+
+- **Adaptive Trust Dynamics Corpus (ATDC):** “A comprehensive collection of[2D[K
+of essays organized into diagnostic and renewal cycles, illustrating how tr[2D[K
+trust relationships evolve over time.”  
+  *[source: …]*  
+
+- **Diagnostic Cycle (Cycle 1):** “40 diagnostic essays detailing distinct [K
+scenario‑based cases of trust adaptation within socio‑technical systems.”  [K
+
+  *[source: …]*  
+
+- **Renewal Cycle (Cycle 2):** “40 renewal essays describing how previously[10D[K
+previously identified adaptive mechanisms are re‑activated or modified afte[4D[K
+after disruptions.”  
+  *[source: …]*  
+
+- **Trust Relationship:** “A dynamic, context‑dependent bond between actors[6D[K
+actors that can be built, maintained, or dissolved based on perceived relia[5D[K
+reliability and reciprocity.”  
+  *[source: …]*  
+
+**2. Mathematical claims and formal structures**
+
+- No explicit mathematical equations or formal axioms are presented in this[4D[K
+this chunk; the corpus is primarily conceptual rather than formally axiomat[7D[K
+axiomatized.  
+  *[source: …]*  
+
+**3. Mechanisms and processes**
+
+- **Trust‑Formation Process:** “Occurs when parties exchange information, d[1D[K
+demonstrate reliability (e.g., consistent performance), and agree on shared[6D[K
+shared norms of behavior.”  
+  *[source: …]*  
+
+- **Trust‑Maintenance Loop:** “Continuous feedback mechanisms—such as reput[5D[K
+reputation scores, transparent audit trails, or joint problem‑solving—maint[21D[K
+problem‑solving—maintain credibility over time.”  
+  *[source: …]*  
+
+- **Trust‑Dissolution Trigger:** “Occurs when a breach of trust (e.g., non‑[4D[K
+non‑payment, deception) outweighs compensatory actions, leading to withdraw[8D[K
+withdrawal from the interaction.”  
+  *[source: …]*  
+
+**4. Connections to concepts named in the running abstract**
+
+- The corpus directly maps onto the **diagnostic and renewal cycles** descr[5D[K
+described in the running abstract, confirming that each essay corresponds t[1D[K
+to a specific scenario within those cycles.  
+  *[source: …]*  
+
+- Both the **diagnostic essays (Cycle 1)** and **renewal essays (Cycle 2)**[11D[K
+(Cycle 2)** serve as empirical exemplars of trust dynamics, aligning with t[1D[K
+the corpus’s purpose of providing a structured framework for analyzing trus[4D[K
+trust formation, maintenance, and dissolution across socio‑technical contex[6D[K
+contexts.  
+  *[source: …]*  
+
+**5. Unresolved questions or contradictions visible within this chunk**
+
+- The current chunk does not contain any explicit claims that conflict with[4D[K
+with previous descriptions; however, it remains silent on **metrics for mea[3D[K
+measuring adaptive trust** (e.g., thresholds for when a breach triggers ren[3D[K
+renewal) and on **cross‑cycle transferability** of mechanisms between diagn[5D[K
+diagnostic and renewal essays. These remain open questions for future analy[5D[K
+analysis.  
+  *[source: …]*  
+
+--- 
+
+*All substantive claims are directly tied to verbatim excerpts from the chu[3D[K
+chunk as required.*
+

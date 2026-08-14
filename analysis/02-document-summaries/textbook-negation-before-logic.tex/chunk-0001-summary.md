@@ -1,123 +1,75 @@
-Below is an analysis of the material you provided, organized by its major c[1D[K
-components:
+**Scalar Inference and Field Orientation**
+
+In an *upward‑entailing* inferential field, if a class (e.g., non‑empty at [K
+a particular level) holds at some position \(x\), then upward inference aut[3D[K
+automatically carries this assertion to more general levels. An NPI in such[4D[K
+such a setting contributes no extra inferential work because the default ex[2D[K
+expansion already guarantees reachability.
+
+Conversely, when the field is *downward‑entailing*, inference contracts inw[3D[K
+inward rather than expanding outward. Here, an instance at a higher (more g[1D[K
+general) level does **not** guarantee existence at a lower (more specific) [K
+level. The NPI then asserts reachability across a region where this reachab[7D[K
+reachability is not automatically secured by upward inference; its semantic[8D[K
+semantic contribution becomes genuinely informative.
+
+*Proposition*: An NPI’s inferential contribution is non‑trivial **iff** the[3D[K
+the local orientation \(\omega(x)\) of the field is negative (\(\omega(x)<0[14D[K
+(\(\omega(x)<0\)). If \(\omega(x)>0\) (upward‑entailing), the assertion is [K
+already covered by normal upward inference, making the NPI trivial.
 
 ---
 
-### 1. Scalar Inference & NPI Licensing
+**Domain Structure and Licensing Domains**
 
-**Key Idea:**  
-- When the inferential field (Ω) at a position x is upward‑entailing (ω(x) [K
-> 0), scalar inferences automatically carry assertions to more general leve[4D[K
-levels; thus an NPI makes no extra contribution.  
-- Conversely, when ω(x) < 0 (downward orientation), existence of an instanc[7D[K
-instance only at higher (general) levels does not guarantee it exists at lo[2D[K
-lower (specific) levels. The NPI then asserts reachability across a region [K
-where such reachability is not guaranteed by default upward inference.
+Licensing is not a purely local operator property but depends on *admissibl[10D[K
+*admissible orientation regions* of the field. A **licensing domain** \(D\s[5D[K
+\(D\subseteq X\) for an inferential field \(\mathcal{F}\) consists of maxim[5D[K
+maximal connected components where:
 
-**Proposition:**  
-- **Licensing and Inferential Contribution** – Let Ω be the inferential fie[3D[K
-field, e an NPI expression at x. Its contribution is non‑trivial if and onl[3D[K
-only if ω(x) < 0. This follows because downward orientation reverses the us[2D[K
-usual expansion direction of inference.
+1. Admissibility holds (\(A(x)=1\)), and  
+2. Orientation is downward (\(\omega(x)<0\)).
 
-**Proof Sketch:**  
-- If ω(x) > 0 (upward environment), upward inference already ensures reacha[6D[K
-reachability, so an NPI’s claim (“the class is non‑empty at some level”) is[2D[K
-is already entailed by standard reasoning. Hence its contribution is trivia[6D[K
-trivial.  
-- If ω(x) < 0 (downward environment), the contraction of inference means ex[2D[K
-existence at a higher level does not guarantee lower‑level membership. The [K
-NPI must explicitly assert reachability, making its contribution non‑trivia[10D[K
-non‑trivial.
+Predictions from this definition include:
+- **Spatial extent**: NPIs licensed throughout a domain, not just at the op[2D[K
+operator’s position.
+- **Curvature at boundaries**: High orientation curvature \(\kappa_\omega\)[17D[K
+\(\kappa_\omega\) near domain edges makes processing cost higher due to the[3D[K
+the mismatch between upward and downward orientations.
+- **Ungrammaticality patterns**: Sentences with NPIs near licensing domain [K
+boundaries should be more costly than those fully within the domain, distin[6D[K
+distinguishing them from violations solely due to admissibility failure.
 
 ---
 
-### 2. Domain Structure & Licensing Domains
+**Superpolarity and Weak vs. Strong NPIs**
 
-**Definition – Licensing Domain:**  
-A licensing domain D ⊆ X is a maximal connected component where A(x) = 1 an[2D[K
-and ω(x) < 0 for every x in D.  
+The distinction between *weak* (licensed broadly) and *strong* (licensed on[2D[K
+only in narrow DE environments such as clausemate negation) NPIs arises nat[3D[K
+naturally:
 
-**Predictions from This Definition:**  
-1. **Spatial Extent of NPIs:** An NPI licensed throughout its domain, not j[1D[K
-just at the operator position, because the orientation condition holds ever[4D[K
-everywhere within it.  
-2. **Boundary Effects:** Near the boundary (high curvature κ_ω), processing[10D[K
-processing cost C(x) = α·(1[ω(x)<0]) + β·κ_ω(x) predicts higher cost for se[2D[K
-sentences where an NPI appears at the edge of a licensing domain, reflectin[9D[K
-reflecting reversed inferential expansion.  
-3. **Ungrammaticality Outside Domains:** An NPI outside but within admissib[8D[K
-admissible region (A(x)=1, ω(x)>0) yields a different ungrammaticality—orie[21D[K
-ungrammaticality—orientation mismatch rather than outright inadmissibility.[16D[K
-inadmissibility.
+- **Weak NPI probe**: Succeeds if \(\omega(x)<0\) irrespective of syntactic[9D[K
+syntactic accessibility.
+- **Strong NPI probe**: Requires a deeper downward orientation, e.g., \(\om[5D[K
+\(\omega(x) < -\theta\) for some threshold \(\theta>0\), and must be positi[6D[K
+positioned within an admissible region \(A_s\) that restricts licensing to [K
+clausemate negatives.
+
+This captures the intuition that strong NPIs need not only a negative orien[5D[K
+orientation but a sufficiently “downward” one, reflected by the continuous [K
+range of \(\omega\) values.
 
 ---
 
-### 3. Superpolarity & Weak vs. Strong NPIs
+**Probe Metaphor and Its Limits**
 
-**Standard DE Account Limitation:**  
-The usual account treats all NPIs equally, ignoring empirical distinctions [K
-(weak NPIs licensed widely; strong NPIs only under narrow conditions).
+While we describe NPIs as *probes* (e.g., a thermometer measures temperatur[10D[K
+temperature), this metaphor should be limited. An NPI’s grammaticality is n[1D[K
+not an independent measurement but its lexical contribution: asserting reac[4D[K
+reachability across downward‑oriented regions, making it a probe **insofar [K
+as** its readings reflect the local inferential environment.
 
-**Field‑Theoretic Resolution:**  
-- **Weak NPI Probes:** Succeed if ω(x) < 0 regardless of broader admissibil[10D[K
-admissibility. They are insensitive beyond syntactic accessibility.  
-- **Strong NPI Probes:** Require a stricter condition: ω(x) < –θ (for some [K
-θ > 0) *and* the licensor must be a clausemate negative operator, reflectin[9D[K
-reflecting the additional “downward‑oriented” constraint.
-
-**Threshold Interpretation:**  
-The threshold θ captures that strong NPIs need not merely be negatively ori[3D[K
-oriented but deeply so—environments near ω(x)=0 (weakly downward) license o[1D[K
-only weak NPIs. Deeply downward environments (ω(x)<–θ) license both weak an[2D[K
-and strong forms.
-
----
-
-### 4. Probe Metaphor & Its Limitations
-
-**Interpretation:**  
-The metaphor of an “NPI probe” highlights that NPIs are not independent det[3D[K
-detectors but lexical items whose grammaticality hinges on their sensitivit[10D[K
-sensitivity to the inferential field’s orientation (and admissibility). The[3D[K
-Their readings provide evidence about local environment properties.
-
-**Caveat:**  
-This metaphor should be taken as a descriptive shorthand rather than an ont[3D[K
-ontological claim. It reflects how NPIs function within the grammar—linking[15D[K
-grammar—linking semantic contribution directly to field orientation—but doe[3D[K
-does not introduce an extra layer of explanation (e.g., separate “detector”[10D[K
-“detector” mechanisms).
-
----
-
-### 5. Persistence, Memory, and Residual Distortion
-
-**Delayed‑Verification Experiments:**  
-These phenomena show that a negated sentence retains processing cost advant[6D[K
-advantages for its positive counterpart even after temporal gaps. This sugg[4D[K
-suggests that the representation of the negative configuration is not fully[5D[K
-fully erased; rather, it carries “residual distortion” persisting through m[1D[K
-memory.
-
----
-
-### Summary
-
-The field‑theoretic framework explains NPI licensing by linking grammatical[11D[K
-grammaticality to orientation properties (ω) and admissibility structures A[1D[K
-A, providing a unified account for phenomena such as:
-
-- **Scalar inference dynamics** (automatic upward expansion vs. explicit do[2D[K
-downward reachability).
-- **Domain structure** influencing where NPIs are licensed.
-- **Differential behavior of weak vs. strong NPIs** via threshold‑dependent[19D[K
-threshold‑dependent conditions.
-- The role of the probe metaphor, which captures functional dependence with[4D[K
-without implying an independent detector.
-
-This approach distinguishes between superficial similarities and deeper str[3D[K
-structural differences observed across various NPI licensing experiments, o[1D[K
-offering a coherent explanation for processing cost variations tied to fiel[4D[K
-field orientation rather than operator count alone.
-
+Thus, the field‑theoretic account integrates NPIs as intrinsic lexical item[4D[K
+items whose licensing conditions emerge from the geometric structure of the[3D[K
+the inferential field—parsing cost, monotonicity behavior, and negation dis[3D[K
+distortion are not separate theories but facets of this unified framework.

@@ -1,193 +1,174 @@
-**Normalization by Historical Evaluation (NbHE) in the Historical Kernel**
+**Normalization by Historical Evaluation (NbHE) – Summary**
+
+The historical calculus extends the ordinary Calculus of Constructions by g[1D[K
+giving every term a *construction history* together with its observable nor[3D[K
+normal form.  This dual output is what we call **Historical Normalization**[15D[K
+Normalization**:
 
 ---
 
-### 1. Motivation
+### Core Idea  
 
-Ordinary term‑normalisation answers “*t → v*”.  
-Historical normalisation asks for a *pair*:
+Instead of reducing an expression \(t\) only to a value \(v\), NbHE produce[7D[K
+produces a pair  
+\[
+(\downarrow(v), \History(v)),
+\]  
+where \(\History(v)\) records the replayable history that generated the nor[3D[K
+normal form.  This preserves the invariant
 
 \[
-(H,t)\;\Downarrow\;(H',v),
+\History(\llbracket t \rrbracket_H)=H_t,
 \]
 
-where **\(H'\)** records exactly how the canonical value **\(v\)** was buil[4D[K
-built.
-Thus NbHE computes both an observable result and its constructive provenanc[9D[K
-provenance.
+i.e., the recorded history exactly matches the history introduced during th[2D[K
+the original derivation.
 
 ---
 
-### 2. Historical Semantic Domain
+### Semantic Domain  
 
-Instead of a plain semantic domain \(\mathcal V\) we work with  
-
+The semantic domain is enlarged to  
 \[
 \widehat{\mathcal V}= \mathcal V\times\mathcal H,
-\]
+\]  
+with \(\mathcal H\) being the category of replayable histories (as defined [K
+in the replay engine).  Every value now carries both an observable part and[3D[K
+and a provenance part.
 
-with **\(\mathcal H\)** the category of replayable histories (introduced ea[2D[K
-earlier).  
-Every value now carries:
+---
 
-* an observable term,  
-* its construction history,  
-* dependency graph, and  
-* a replay certificate.
+### Evaluation Function  
 
-The invariant
+For any environment \(Env\),
 
 \[
-\History(\llbracket t\rrbracket_H)=H_t
+\llbracket t \rrbracket_H : Env \rightarrow \widehat{\mathcal V}
 \]
 
-ensures that the stored history is exactly the one responsible for **\(t\)*[8D[K
-**\(t\)**.
+maps neutral terms into this enriched domain.  Neutral terms are first refl[4D[K
+reflected (see reflection below) so that the resulting semantic object alre[4D[K
+already contains a history.
 
 ---
 
-### 3. Evaluation Function
+### Reflection  
 
-For an environment **Env** we define  
+The operator  
+\[
+\uparrow: Ne \rightarrow \widehat{\mathcal V}
+\]  
+converts neutral terms into their historical semantical representation, ini[3D[K
+initially carrying only the corresponding declaration event.  Future reduct[6D[K
+reductions monotonically extend this history.
+
+---
+
+### Reification  
+
+To obtain canonical syntax,
 
 \[
-\llbracket t \rrbracket_H : Env \rightarrow \widehat{\mathcal V},
+\downarrow : \widehat{\mathcal V} \rightarrow Nf
 \]
 
-which *reflexively* records every historical step taken to build the semant[6D[K
-semantic
-representation of **\(t\)**.
-
----
-
-### 4. Reflection & Reification
-
-*Reflection*: neutral terms are turned into historical objects:
+projects the semantic object to normal form while preserving its constructi[10D[K
+construction history:
 
 \[
-\uparrow : Ne \rightarrow \widehat{\mathcal V}.
+\operatorname{Norm}(H,t) = \downarrow(\llbracket t \rrbracket_H).
 \]
 
-Reification gives canonical syntax while preserving provenance:
+---
+
+### Evaluation Procedure  
+
+1. **Evaluate** the observable term \(t\) into the historical domain:  
+   \(\llbracket t \rrbracket_H\).
+
+2. **Perform replay‑aware semantic computation**: continue reductions only [K
+when a new history element appears (i.e., when replay encounters a novel ev[2D[K
+event).  This prevents redundant re‑evaluation of shared prefixes.
+
+3. **Reify** the resulting semantical object into canonical syntax, retaini[7D[K
+retaining its history:  
+   \(\downarrow(\llbracket t \rrbracket_H)\).
+
+---
+
+### Historical Sharing  
+
+If two terms share an earlier replay history \(H_0\),
 
 \[
-\downarrow : \widehat{\mathcal V} \rightarrow Nf,
-\qquad
-(\downarrow(v),\History(v)).
+t_1 = H_0; e_1,\qquad
+t_2 = H_0; e_2,
 \]
 
-Thus the kernel outputs a *pair* (normal form + history) rather than just t[1D[K
-the
-syntax.
+only the new events \(e_1\) and \(e_2\) require semantic evaluation.  All p[1D[K
+previously computed parts remain valid because histories are immutable.
 
 ---
 
-### 5. Normalisation Procedure
+### Incremental Normalization  
 
-Normalising **\(t\)** with respect to history **\(H\)** proceeds in three p[1D[K
-phases:
-
-1. **Evaluate** – compute \(\llbracket t \rrbracket_H\) in the historical s[1D[K
-semantic
-   domain.
-2. **Replay‑aware computation** – perform reduction steps only when they ch[2D[K
-change
-   the replay graph (i.e., involve a new declaration, bind, collapse, meld,[5D[K
-meld,
-   or universe). This prevents repeated evaluation of unchanged prefix[6D[K
-prefixes.
-3. **Reflect & Reify** – apply \(\downarrow\) to obtain canonical syntax wh[2D[K
-while keeping
-   the original history.
-
-Formally:
+For a derived history \(H' = H; e\),
 
 \[
-\operatorname{Norm}(H,t) = \downarrow\bigl(\llbracket t \rrbracket_H\bigr).[19D[K
-\rrbracket_H\bigr).
+\operatorname{Norm}(H') = \operatorname{Extend}(\operatorname{Norm}(H), e).[3D[K
+e).
 \]
+
+Thus the cost of normalization scales linearly with newly introduced events[6D[K
+events, not total library size.
 
 ---
 
-### 6. Historical Sharing & Incremental Normalisation
+### Conversion & Correctness  
 
-If **\(t_1\)** and **\(t_2\)** share a historical prefix **\(H_0\)**, we on[2D[K
-only need to
-evaluate the *new* fragment **\(e\)**:
+Conversion between types \(A\) and \(B\) succeeds only if:
+
+1. Their normal forms coincide (observable equality).  
+2. Their histories are replay‑equivalent (i.e., they represent the same con[3D[K
+constructive derivation).  
+3. Dependency graphs satisfy historical equivalence, ensuring that shared s[1D[K
+substructures reflect identical provenance.
+
+---
+
+### Correctness Theorem  
+
+If a history \(H\) is accepted by the replay engine, then
 
 \[
-\operatorname{Norm}(H') = \operatorname{Extend}\bigl(\operatorname{Norm}(H)[49D[K
-\operatorname{Extend}\bigl(\operatorname{Norm}(H), e\bigr).
+\Replay(H) = S,
 \]
 
-Thus computation depends on novelty rather than repeated evaluation of iden[4D[K
-identical
-segments.
+where \(S\) is the kernel state originally produced by \(H\).  Every typing[6D[K
+typing judgment reconstructed during replay is derivable in the declarative[11D[K
+declarative historical calculus.
 
 ---
 
-### 7. Replay‑Guided Conversion
+### Complexity  
 
-Two types **\(A\)** and **\(B\)** are definitionally equal iff:
+Assuming all previously verified prefixes are cached,
 
-1. Their normal forms coincide,
-2. The histories (including dependency graphs) are replay equivalent, and
-3. Their constructions satisfy historical equivalence.
+\[
+T(n)=O(n),
+\]
 
-Observable equality alone is insufficient; constructive provenance also dec[3D[K
-decides
-conversion.
-
----
-
-### 8. Correctness
-
-**NbHE** satisfies two fundamental correctness properties:
-
-* **Semantic Preservation:** Normalisation preserves observable behaviour.
-* **Provenance Consistency:** The returned normal form together with its hi[2D[K
-history
-  uniquely determines the original term up to definitional equality.
-
-These follow directly from the design of replay (history preservation, incr[4D[K
-incrementality,
-and reduction only when needed).
+with respect to the number of new events \(n\), because each step involves [K
+only linear graph traversal, dependency verification, and reduction of the [K
+newly introduced suffix.
 
 ---
 
-### 9. Complexity & Caching
+**Conclusion**
 
-Because histories are immutable, replayed prefixes can be cached:
-
-* If **\(H_0\)** has already been normalised, subsequent extensions start f[1D[K
-from
-  the cached state.
-* Normalisation of an extension is linear in the number of new events,
-  leading to overall complexity \(O(n)\) where **\(n\)** is the count of ne[2D[K
-newly
-  introduced events.
-
----
-
-### 10. Central Role
-
-Normalization by Historical Evaluation exemplifies how replay underpins man[3D[K
-many kernel
-features:
-
-* **Normalisation** (by evaluation),
-* **Type checking** (using history‑aware reduction),
-* **Dependency reconstruction**,  
-* **Proof verification**,  
-
-and more—mirroring the principle that *history, not context, is the core se[2D[K
-semantic
-object*.
-
----
-
-This framework shows how constructive histories replace traditional context[7D[K
-contexts,
-offering a unified view where normalisation itself becomes a historical ope[3D[K
-operation.
-
+Normalization by Historical Evaluation integrates constructive provenance d[1D[K
+directly into evaluation.  It yields both an observable normal form *and* i[1D[K
+its full construction history, enabling precise conversion checking while a[1D[K
+avoiding redundant re‑evaluation of shared prefixes and guaranteeing that e[1D[K
+every derived expression is fully accounted for in the kernel’s trusted sta[3D[K
+state.

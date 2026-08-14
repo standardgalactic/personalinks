@@ -1,200 +1,270 @@
-Below is a high‑level summary and overview of the ideas presented in the do[2D[K
-document you provided (the “Appendix” that follows the main text). The mate[4D[K
-material covers the design philosophy behind a graph‑first runtime, increme[7D[K
-incremental execution mechanisms, and a proposed composition‑first calculus[8D[K
-calculus intended to unify many computational paradigms.
+**Appendix A – Incremental Execution**
+
+Many practical systems repeatedly modify only small portions of a computati[9D[K
+computation graph. Re‑computing the entire graph would be wasteful; instead[7D[K
+instead we **mark only those nodes whose dependencies have changed**, retai[5D[K
+retain the histories of unaffected regions, and recompute only the computat[8D[K
+computational consequences of the modification. This mechanism naturally su[2D[K
+supports interactive programming, graphical editors, continuous simulation,[11D[K
+simulation, spreadsheet computation, and reactive user interfaces.
+
+**Incrementality emerges from dependency analysis rather than from speciali[8D[K
+specialized programming constructs.**
 
 ---
 
-## 1. Overview
+### 1. Overview
 
-- **Graph‑First Runtime**:  
-  - Operates on an *execution engine* that is deliberately minimal in scope[5D[K
-scope. Its responsibilities are:
-    1. Maintain a composition graph.
-    2. Load operator libraries (i.e., “plug‑in” computational units).
-    3. Schedule executable nodes for evaluation.
-    4. Record persistent histories of state changes.
-    5. Handle refusal and collapse events.
-    6. Apply requested graph rewrites.
+* The runtime described here is intentionally minimal:  
+  * Maintain a composition graph.  
+  * Load operator libraries.  
+  * Schedule executable nodes.  
+  * Record persistent histories.  
+  * Process refusal and collapse events.  
+  * Apply graph rewrites when requested.
 
-- **Incremental Execution**:  
-  - Many practical systems only modify small portions of a large computatio[10D[K
-computation graph. Rather than recomputing the whole graph, the runtime mar[3D[K
-marks only those nodes whose dependencies have changed while preserving una[3D[K
-unaffected regions (their previous histories). This yields an *incremental*[13D[K
-*incremental* execution model that supports:
-    - Interactive programming.
-    - Graphical editors.
-    - Continuous simulation.
-    - Spreadsheet‑style computation.
-    - Reactive user interfaces.
-
-- **Composition as Primitive**:  
-  - Incrementality emerges from dependency analysis, not from specialized l[1D[K
-language constructs. The idea is to treat composition (linking operators to[2D[K
-together) as the fundamental computational operation.
-
----
-
-## 2. Key Themes
-
-### 2.1 Minimal Execution Engine
-The runtime’s purpose is to serve as a *glue* for higher‑level semantics:
-
-- **Composition Graph**: Represents the structure of computation.
-- **Operator Libraries**: Provide concrete implementations (e.g., arithmeti[9D[K
-arithmetic, control flow, machine learning primitives).
-- **History Recording**: Enables tracing and undo/redo capabilities.
-
-Because it avoids heavyweight features like type systems or logical inferen[7D[K
-inference by default, richer computational phenomena are realized simply by[2D[K
-by supplying different operator libraries and graph transformations rather [K
-than expanding the core engine itself. This economy is a direct consequence[11D[K
-consequence of treating *composition* as the primitive operation (as oppose[6D[K
-opposed to language‑level abstractions).
-
-### 2.2 Incrementality
-- The incremental execution strategy reduces wasteful recomputation.
-- Only nodes whose dependencies have changed are reevaluated, while unchang[7D[K
-unchanged histories remain intact.
-- This supports interactive and real‑time systems where only a small part o[1D[K
-of the computation changes.
-
-### 2.3 Composition‑First Calculus Proposal
-
-#### 2.1 Primitive Judgments
-Instead of starting with conventional judgments like typing (`Γ ⊢ t : T`) o[1D[K
-or applicative ones, the calculus begins with operational judgments:
-
-- **Judgment**:  
-  \[
-  H \vdash G \Downarrow H'
-  \]
-  Read as: “Executing graph \(G\) extends history \(H\) into history \(H'\)[6D[K
-\(H'\).”
-
-#### 2.2 Primitive Rules
-The calculus contains a small number of inference rules:
-1. **Identity Rule** (empty graph leaves history unchanged):  
-   \[
-   \frac{}{H \vdash \operatorname{Id} \Downarrow H.}
-   \]
-2. **Composition Rule**:  
-   \[
-   \frac{
-     H \vdash G_1 \Downarrow H_1 \quad
-     H_1 \vdash G_2 \Downarrow H_2
-   }{
-     H \vdash G_2 \circ G_1 \Downarrow H_2.
-   }
-   \]
-   This rule replaces a plethora of language‑specific evaluation rules.
-
-#### 2.3 Operator Evaluation
-If node \(n\) has operator \(f\), the evaluation rule is:
-\[
-\frac{
-  v = f(v_1,\dots,v_k)
-}{
-  H \vdash n \Downarrow (H,e),
-}
-\]
-where \(e=(n,f,v)\). The history explicitly records each computational even[4D[K
-event.
-
-#### 2.4 Refusal & Collapse
-- **Refusal**:  
-  \[
-  \frac{
-    r \text{ is a refusal reason}
-  }{
-    H \vdash n \Downarrow (H,\Refuse(r)).
-  }
-  \]
-  Allows constraint systems, proof assistants, and repair algorithms to han[3D[K
-handle rejected continuations without terminating the calculus.
-
-- **Collapse**:  
-  \[
-  \frac{
-    v \text{ has been evaluated}
-  }{
-    H \vdash \Collapse(v) \Downarrow (H,\Collapse(v)).
-  }
-  \]
-  Provides a uniform account of speculative execution, interactive computat[8D[K
-computation, symbolic reasoning, and fuzzy evaluation.
-
-#### 2.5 Conservativity Principle
-The calculus is *conservative*: any extension obtained by adding descriptiv[10D[K
-descriptive judgments (types, proofs, etc.) does **not** alter the primitiv[8D[K
-primitive operational rules but merely constrains which graphs are admissib[8D[K
-admissible. This formalizes the thesis that richer computational systems ex[2D[K
-extend rather than replace execution semantics.
-
----
-
-## 3. The Composition‑First Thesis
-
-The hierarchy of ideas can be expressed mathematically as:
-
-1. **Primitive Operators → Graphs → Histories**  
-   - Primitive operators generate a *composition graph*.
-   - These graphs evolve into *persistent histories* that record state chan[4D[K
-changes and evaluation events.
-
-2. **Execution from Composition**  
-   - Execution (evaluating nodes) is the fundamental operation, preceding a[1D[K
-any syntactic or logical description.
-
-3. **Descriptions as Constraints**  
-   - Types, proof judgments, dependent types, etc., are introduced to const[5D[K
-constrain which graphs are permissible rather than expanding the execution [K
+* Every richer computational phenomenon (typing, theorem proving, compilati[9D[K
+compilation, optimization, fuzzy inference, symbolic reasoning, neural comp[4D[K
+computation, repair, learning) is realized by supplying different operator [K
+libraries and graph transformations rather than enlarging the execution eng[3D[K
 engine itself.
 
-This ordering contrasts sharply with traditional programming‑language theor[5D[K
-theory, where computation often follows from typing and syntax.
+* The economy of a small, mathematically uniform runtime follows from treat[5D[K
+treating **composition**, not any particular programming language or logica[6D[K
+logical system, as the primitive computational operation (the “graph‑first [K
+philosophy”).
 
 ---
 
-## 4. Theoretical Result (Conservativity)
+### 2. Incremental Execution Details
 
-The central theorem of this appendix states:
+1. **Marked Nodes** – When an update occurs, only nodes whose input depende[7D[K
+dependencies have changed are flagged for re‑evaluation.  
+2. **History Preservation** – Unaffected parts of the graph keep their prev[4D[K
+previous histories, ensuring that incremental changes do not erase prior co[2D[K
+computational context.  
+3. **Re‑evaluation** – Only those portions of the computation that depend o[1D[K
+on the modified inputs are recomputed; all other results remain as they wer[3D[K
+were previously computed.
 
-> **Conservativity**: Every extension of the composition‑first calculus obt[3D[K
-obtained by adding descriptive judgments while leaving the operational rule[4D[K
-rules unchanged is conservative with respect to execution.
-
-Consequences:
-- Adding richer computational systems (typed, proof‑theoretic, etc.) does n[1D[K
-not enlarge the primitive semantics.
-- Execution remains invariant across extensions; only admissible graphs are[3D[K
-are recognized.
-
----
-
-## 5. Practical Implications
-
-- **Unified Framework**: By treating composition as first class, many dispa[5D[K
-disparate paradigms (functional programming, type theory, neural networks, [K
-constraint solving) can be expressed within a single calculus.
-- **Extensibility**: New computational phenomena are accommodated without r[1D[K
-redesigning the core execution engine—only by adding new operator libraries[9D[K
-libraries and corresponding descriptive judgments.
+This yields a cost‑effective way to maintain consistent state in large, dyn[3D[K
+dynamic graphs such as spreadsheets, simulation models, or interactive UIs.[4D[K
+UIs.
 
 ---
 
-### Bottom Line
+### 3. Relation to Richer Computational Phenomena
 
-The document proposes a radically different foundational approach to comput[6D[K
-computation: treat *composition* as the primitive operation, use persistent[10D[K
-persistent histories for incremental updates, and formalize this notion via[3D[K
-via a minimal yet expressive composition‑first calculus. This framework aim[3D[K
-aims to bridge diverse computational domains by grounding them in shared ex[2D[K
-execution semantics rather than distinct syntactic or logical structures.
+The economy of the minimal runtime enables **extension** via operator libra[5D[K
+libraries and graph transformations without altering its core semantics:
 
-Feel free to ask if you need deeper details on any specific section (e.g., [K
-the derivation of incremental rules, examples of operator libraries, or the[3D[K
-the formal proof of conservativity).
+* Typing → add a type‑checking library.  
+* Theorem proving → incorporate proof‑search operators.  
+* Compilation → include code‑generation nodes.  
+* Optimization → introduce heuristics that prune unnecessary recomputation.[14D[K
+recomputation.
 
+Thus, composition remains the **primitive** operation; all other features a[1D[K
+are built on top of it.
+
+---
+
+### 4. Towards a Composition‑First Calculus
+
+The operational machinery developed in previous appendices (graphs, operato[7D[K
+operator algebras, histories) suggests we can formalize these ideas into a [K
+calculus analogous to the lambda calculus or the calculus of constructions [K
+**but with composition as its primitive**.
+
+#### 4.1 Primitive Judgments
+
+* The most basic judgment is  
+
+  \[
+  H
+  \vdash
+  G
+  \Downarrow
+  H',
+  \]
+
+  meaning “executing graph \(G\) extends history \(H\) into history \(H'\).[15D[K
+history \(H'\).”
+
+* No variables, typing contexts, or logical propositions appear; only graph[5D[K
+graphs and histories matter.
+
+#### 4.2 Primitive Rules
+
+1. **Identity** – An empty graph leaves the history unchanged:  
+
+   \[
+   \frac{ }{
+     H
+   \vdash
+   \operatorname{Id}
+   \Downarrow
+   H.
+   }
+   \]
+
+2. **Composition** – Sequential execution of two graphs \(G_1\) and \(G_2\)[7D[K
+\(G_2\):  
+
+   \[
+   \frac{
+     H
+   \vdash
+   G_1
+   \Downarrow
+   H_1
+   \qquad
+     H_1
+   \vdash
+   G_2
+   \Downarrow
+   H_2
+   }{
+     H
+   \vdash
+   G_2\circ G_1
+   \Downarrow
+   H_2.
+   }
+   \]
+
+* This single rule replaces a large collection of language‑specific evaluat[7D[K
+evaluation rules (e.g., function application, pipeline execution).
+
+#### 4.3 Operator Evaluation
+
+If node \(n\) has operator \(f\) and its inputs evaluate to values \(v_1,\d[8D[K
+\(v_1,\dots,v_k\), the evaluation rule is  
+
+\[
+\frac{
+   v
+= f(v_1,\ldots ,v_k)
+}{
+   H
+\vdash
+   n
+\Downarrow
+   (H,e),
+}
+\]
+
+where \(e=(n,f,v)\). The history now records **both** the computation and i[1D[K
+its result.
+
+#### 4.4 Refusal
+
+Constraint systems, proof assistants, repair systems, and interactive reaso[5D[K
+reasoning often need to reject a continuation:
+
+\[
+\frac{
+   r
+\text{ is a refusal reason}
+}{
+   H
+\vdash
+   n
+\Downarrow
+   (H,\Refuse(r)).
+}
+\]
+
+* Refusal does not terminate the calculus; subsequent rules may branch, rep[3D[K
+repair, or replace the rejected continuation.
+
+#### 4.5 Collapse
+
+When a value \(v\) is already produced and committed:
+
+\[
+\frac{
+   v
+\text{ has been evaluated}
+}{
+   H
+\vdash
+   \Collapse(v)
+\Downarrow
+   (H,\Collapse(v)).
+}
+\]
+
+* This explicitly separates evaluation from commitment, providing uniform t[1D[K
+treatment of speculative execution, interactive computation, symbolic reaso[5D[K
+reasoning, and fuzzy evaluation.
+
+---
+
+### 5. Conservativity Principle
+
+An important property: **richer computational systems extend rather than re[2D[K
+replace** the primitive rules.  
+
+*Typed systems add typing judgments.*  
+*Proof systems add proof judgments.*  
+*Dependent type theories add universe judgments.*  
+
+These extensions do **not** alter the operational rules above; they merely [K
+constrain which graphs are considered admissible.
+
+Consequently, we have:
+
+> **Theorem (Conservativity).** Every extension of the composition‑first ca[2D[K
+calculus obtained by adding descriptive judgments while leaving the operati[7D[K
+operational rules unchanged is conservative with respect to execution. Thus[4D[K
+Thus richer systems enrich computation without enlarging its primitive sema[4D[K
+semantics.
+
+---
+
+### 6. The Composition‑First Thesis
+
+The resulting hierarchy can be summarized as:
+
+\[
+\text{composition} \;\Longrightarrow\; \text{graphs} \;\Longrightarrow\; \t[2D[K
+\text{histories}
+\;\Longrightarrow\; \text{execution}
+\;\Longrightarrow\; \text{optimization}
+\;\Longrightarrow\; \text{description}
+\;\Longrightarrow\; \text{verification}.
+\]
+
+*Execution precedes description.* Descriptions (syntax, types, logical syst[4D[K
+systems) **constrain** execution but do not generate it.
+
+---
+
+### 7. Bibliography
+
+1. Aho A., Lam M.S., Sethi R., Ullman J.D. – *Compilers: Principles, Techni[6D[K
+Techniques, and Tools* (2nd ed.). Addison‑Wesley, 2007.  
+2. Baader F., Nipkow T. – *Term Rewriting and All That*. Cambridge Universi[8D[K
+University Press, 1998.  
+3. Bird R. – *Introduction to Functional Programming Using Haskell*. Prenti[6D[K
+Prentice Hall, 1998.  
+4. Backus J.P. – “Can Programming Be Liberated from the von Neumann Style?”[7D[K
+Style?” ACM SIGPLAN Notices, 21(8):613–641, 1978.  
+5. Barendregt H.P. – *The Lambda Calculus: Its Syntax and Semantics*. North[5D[K
+North‑Holland, 1984.  
+6. Bird R. – *Introduction to Functional Programming Using Haskell*. Prenti[6D[K
+Prentice Hall, 1998.  
+7. Bondy J.A., Murty U.S.R. – *Graph Theory with Applications*. Macmillan, [K
+1976.  
+8. Book R.H., Otto F. – *String‑Rewriting Systems*. Springer, 1984.  
+9. Cormen T.H., Leiserson C.E., Rivest R.L., Stein C. – *Introduction to Al[2D[K
+Algorithms*, 4th ed. MIT Press, 2022.  
+10. Cousot P., Cousot R. – “Abstract Interpretation.” Proceedings of the AC[2D[K
+ACM Symposium on Principles of Programming Languages, 1977.  
+11. Gonthier G. – *Formal Proof — The Four‑Color Theorem*. Notices of the A[1D[K
+American Mathematical Society, 55(11):1382–1393, 2008.
+
+---
+
+**End of Appendix A – Incremental Execution**

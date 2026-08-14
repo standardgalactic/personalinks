@@ -1,0 +1,891 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+\geometry{margin=1.3in}
+\setmainfont{Linux Libertine O}
+\setmonofont{Linux Libertine Mono O}
+\onehalfspacing
+
+\newcommand{\ambibf}{
+  \texttt{/}\textnormal{æmbiːɛf}\texttt{/}
+}
+
+\definecolor{codebg}{gray}{0.96}
+\definecolor{codecomment}{gray}{0.45}
+\definecolor{codestring}{RGB}{0,100,0}
+\definecolor{codekeyword}{RGB}{0,0,160}
+\definecolor{linkblue}{RGB}{30,60,140}
+
+\lstset{
+  language=Python,
+  backgroundcolor=\color{codebg},
+  basicstyle=\small\ttfamily,
+  keywordstyle=\color{codekeyword},
+  stringstyle=\color{codestring},
+  commentstyle=\color{codecomment}\itshape,
+  breaklines=true,
+  frame=single,
+  framesep=4pt,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  showstringspaces=false,
+  tabsize=4,
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=linkblue,
+  urlcolor=linkblue,
+  citecolor=linkblue,
+}
+
+\title{{\large\bfseries Globally Persistent Recomposable Thought}\\[4pt]
+{\normalsize GitHub, the Intelligence Explosion, and\\
+the Admissibility Geometry of Collective Cognition}}
+\author{Flyxion}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The conventional narrative attributes the current acceleration in technological
+capability to the emergence of generative artificial intelligence. This essay
+argues that this attribution is substantially mislocated. The more fundamental
+cause is a structural transformation in the organization of human technical
+cognition that preceded large language models by nearly two decades: the
+creation, through GitHub and adjacent open-source infrastructure, of a globally
+persistent, recursively recomposable substrate for executable thought. Generative
+AI functions as a compression interface and navigational accelerant over that
+substrate, not as its source. We develop this argument in five stages: first, as
+a historical and infrastructural claim about the bottlenecks that GitHub
+dissolved; second, as an epistemic economy argument about the incentive
+structures GitHub created across academia, industry, and independent research;
+third, through a concrete worked example in which Spherepop semantics are
+implemented over the probabilistic substrate language \ambibf{},
+demonstrating the three-tier taxonomy of admissible, boundary, and inert
+repository contributions; fourth, as a connection to the Quantum SpherePop
+field-theoretic framework, in which developmental geometry is interpreted as
+a semantic quantization sequence and repository replay is formalized as
+coarse-grained semantic reconstruction; and fifth, as a connection to the RSVP
+admissibility framework, in which the GitHub substrate is understood as a
+planetary-scale coherence field whose dynamics are governed by the same
+lamphron--lamphrodyne duality that governs physical structure formation.
+Mathematical appendices formalize the stochastic tape geometry, bubble energy,
+mortality functional, stabilization operators, and attractor semantics of the
+worked example.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+
+
+Introduction: Locating the Explosion
+
+
+
+When observers describe an intelligence explosion in progress, they typically
+point at the visible outputs of large language models: the apparent fluency,
+the breadth of domain competence, the speed of generation. The inference drawn
+is that something qualitatively new has appeared inside the models themselves.
+This essay disputes that inference --- not in order to diminish what generative
+AI accomplishes, but in order to locate the causal structure of the acceleration
+more precisely.
+
+The acceleration has at least two distinct components. One is the improvement
+in pattern synthesis achieved by scaling transformer architectures over massive
+corpora. The other, older, and arguably more fundamental component is the
+creation of a globally persistent, recomposable, machine-readable substrate of
+executable human cognition. That substrate did not arrive with GPT. It arrived
+with Git and GitHub, and it matured over a decade before foundation models
+became publicly visible.
+
+To conflate these two components --- to attribute the explosion to the synthesis
+engine while ignoring the substrate it synthesizes over --- is to mistake the
+accelerant for the fuel. The fuel is the open-source graph. GitHub
+operationalized globally recomposable thought years before any language model
+was capable of navigating it fluently. What generative AI contributed was a
+compression interface: a mechanism for making the accumulated graph more
+navigable, more searchable, more autocomplete-able. The graph itself was already
+there.
+
+Underlying this argument is an implicit redefinition of intelligence that the
+essay will make progressively more explicit. Intelligence is not merely
+inference efficiency within an isolated agent~\cite{russell2010}. It is the
+persistence, replayability, and recomposability of developmental trajectories
+across a collective substrate. GitHub is intelligent infrastructure not because
+it reasons, but because it preserves and recombines the intermediate cognitive
+states of millions of contributors in a form that remains recoverable,
+extensible, and semantically legible across time. Generative AI is impressive
+because it navigates that infrastructure fluently --- but the infrastructure is
+the prior achievement.
+
+\subsection*{A Formal Distinction}
+
+Let $\mathcal{G}$ denote the open-source repository graph at time $t$, with
+nodes $R_i$ (repositories) and directed edges representing dependency or
+derivation relations. Let $\mathcal{M}_t$ denote a language model trained on
+the corpus induced by $\mathcal{G}_t$. The standard narrative implicitly models
+capability as a function of model parameters alone:
+\[
+\mathrm{capability}(t) \approx f(\mathcal{M}_t).
+\]
+The thesis of this essay is that this factorization is incorrect. The correct
+model is:
+\[
+\mathrm{capability}(t) \approx f(\mathcal{M}_t,\, \mathcal{G}_t),
+\]
+where $\mathcal{G}_t$ is not merely training data but the admissibility geometry
+over which $\mathcal{M}_t$ operates. Holding $\mathcal{G}_t$ fixed at its
+pre-2005 state while scaling $\mathcal{M}_t$ to current parameter counts would
+produce a system of dramatically lower practical capability, because the
+substrate carrying executable procedural knowledge would be absent. The
+explosion is located in the joint growth of both terms, not in $\mathcal{M}_t$
+alone.
+
+
+
+What GitHub Changed Structurally
+
+
+
+Before distributed version control became socially normalized through GitHub,
+programming knowledge was fragmented across institutional silos, mailing list
+archives, FTP mirrors, academic preprints, and private internal repositories.
+Code reuse existed, but composability was expensive in a deep sense: discovering
+compatible dependencies, understanding undocumented build assumptions, patching
+incompatibilities across codebases, and maintaining local forks all imposed
+friction costs that compounded at every layer of abstraction. Knowledge transfer
+was slow, lossy, and structurally conservative --- it favored large institutions
+with internal memory over distributed coordination.
+
+Git itself introduced distributed version control~\cite{git2005,torvalds2001},
+but GitHub introduced something architecturally distinct: it transformed
+repositories into globally addressable semantic modules. A repository ceased to
+be mere storage and became instead a live executable idea, carrying versioned
+history, public forking infrastructure, discoverable architecture, compositional
+dependency graphs, executable documentation, collaborative debugging, social
+reputation mechanisms, and machine-readable structural metadata simultaneously.
+
+This matters because intelligence amplification in any system --- biological,
+institutional, or technological --- tends to come less from increases in raw
+processing capacity than from reductions in the friction of
+recombination~\cite{simon1962,wiener1948}. The critical resource is not the
+power of individual nodes but the composability of the graph they
+inhabit~\cite{barabasi2002}.
+
+GitHub made software development into a partially continuous evolutionary
+system. A single developer anywhere on the planet can improve a tokenizer
+originally written in another country, which optimizes a training pipeline
+maintained in a third, which accelerates a robotics stack assembled in a fourth,
+which gets incorporated into a model deployed globally within days. The causal
+chain crosses borders, institutions, and time zones with a friction cost that
+would have been prohibitive under any previous coordination infrastructure.
+This is historically unprecedented not in degree but in kind.
+
+The entire modern AI ecosystem is downstream of this recombination layer. The
+libraries, the training frameworks, the evaluation harnesses, the inference
+runtimes, the quantization methods, the adapter architectures, the diffusion
+pipelines and deployment toolchains --- none of these emerged from isolated
+laboratories operating independently. They emerged from an ultra-dense recursive
+open-source ecosystem whose coordination was primarily mediated through GitHub.
+A modern foundation model is not a singular invention. It is an enormous
+stitched-together graph of repositories, and its apparent intelligence is
+partially the intelligence of that graph made fluid.
+
+In this sense GitHub functions as a planetary externalized cortex. Repositories
+are memory units. Forks are evolutionary branches. Pull requests are
+reconciliation operators that integrate divergent solutions. Issue trackers are
+error-correction loops. Stars and watchers are salience signals that route
+collective attention. Continuous integration pipelines are automated verification
+mechanisms that prevent the silent accumulation of errors. The architecture
+recapitulates, at planetary scale, many of the structural features of biological
+working memory --- but with the crucial addition of perfect reproducibility, zero
+marginal copy cost, and global simultaneous accessibility.
+
+\subsection*{Composability as a Monotone Functional}
+
+Define the \emph{recombination friction} $\rho(R_i, R_j)$ between two
+repositories $R_i, R_j \in \mathcal{G}$ as the expected developer effort
+required to integrate $R_j$ into a codebase that already depends on $R_i$.
+Before GitHub, $\rho$ was high and asymmetric: it depended strongly on
+institutional access, version availability, and documentation quality. GitHub
+reduced $\rho$ toward a near-constant baseline by standardizing dependency
+declaration, forking, and issue resolution as first-class operations.
+
+\begin{proposition}[Composability Monotonicity]
+Let $\mathcal{G}_t$ be the repository graph at time $t$ with mean pairwise
+recombination friction $\bar\rho_t$. If GitHub's structural innovations reduce
+$\bar\rho_t$ monotonically, then the number of reachable composite systems of
+depth $d$ grows at least exponentially in $d$ as $\bar\rho_t \to 0$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+A composite system of depth $d$ requires $d$ successful integration steps. The
+probability that each step succeeds is approximately $1 - \bar\rho_t / C$ for
+some cost constant $C$. The expected number of reachable composites at depth
+$d$ is therefore $(1 - \bar\rho_t/C)^d \cdot |\mathcal{G}_t|^d$. As
+$\bar\rho_t \to 0$ this approaches $|\mathcal{G}_t|^d$, which grows
+exponentially in $d$ for any fixed graph size exceeding one.
+\end{proof}
+
+\begin{corollary}
+Even a modest reduction in $\bar\rho_t$ produces superlinear growth in the
+accessible composite design space. GitHub's reduction was not modest; it was
+structural. The consequence is the combinatorial explosion in deployable AI
+infrastructure observed over the past fifteen years.
+\end{corollary}
+
+
+
+
+
+Toward a Theory of Procedural Substrates
+
+\label{sec:procedural-substrates}
+
+
+The preceding section described what GitHub changed infrastructurally. Before
+proceeding to the incentive economy and the worked example, we need to establish
+what kind of object a repository actually is within the framework this paper
+develops. The vocabulary introduced here --- developmental trajectory,
+recomposability, semantic replay, procedural substrate --- will govern all
+subsequent analysis, and its stabilization early prevents ambiguity from
+accumulating across later sections.
+
+\paragraph{Artifacts versus trajectories.}
+The conventional view of a software repository treats it as an information
+object: a collection of files encoding a program. On this view, two repositories
+with identical file contents are identical repositories, and the history of
+how those contents were produced is archival metadata rather than constitutive
+structure. This paper rejects that view.
+
+A repository is not primarily an artifact. It is a compressed developmental
+history --- a record of a trajectory through semantic configuration space ---
+from which the artifact is merely the most recent projection. The distinction
+is not merely philosophical. It determines what can be recovered from the
+repository, what can be extended from it, and what training signal it
+contributes to a language model. Formally:
+\[
+\text{artifact}(R) \;\neq\; \text{trajectory}(R).
+\]
+The artifact is the current state $x_n$. The trajectory is the sequence
+$(x_0, x_1, \ldots, x_n)$ of states connected by the commit history. GitHub
+preserves partial access to the trajectory; older publication systems preserved
+only the artifact.
+
+\paragraph{Recomposability as a geometric property.}
+Recomposability is sometimes understood as a social property (whether
+contributors are willing to share code) or as an infrastructural property
+(whether package managers support integration). This paper uses a stricter
+definition.
+
+\begin{definition}[Recomposability]
+\label{def:recomposability}
+A repository $R$ is \emph{recomposable} with respect to a target architecture
+$\tau$ if there exists a fork $R'$ of $R$ such that:
+\begin{enumerate}
+\item $R'$ satisfies the structural requirements of $\tau$,
+\item the developmental trace of $R'$ is recoverable from that of $R$ plus
+a bounded number of additional commits, and
+\item the admissibility score $\mathcal{A}(R') \geq \mathcal{A}(R) - \varepsilon$
+for some tolerance $\varepsilon > 0$.
+\end{enumerate}
+\end{definition}
+
+Under this definition, recomposability is a geometric property of the
+repository's position in configuration space: it asks whether $\tau$ is
+reachable from $R$ via a bounded-cost trajectory that remains inside the
+admissible region $\{\Phi > 0\}$. A repository may be technically open-source
+but geometrically irrecomposable if its architecture is so idiosyncratic that
+no bounded extension reaches a useful target. Conversely, a well-designed
+modular repository may be highly recomposable even with non-trivial licensing
+constraints, because its extension surfaces are clearly defined and its
+dependencies are minimal.
+
+\paragraph{Semantic replay.}
+Replay is the operation by which a repository's developmental geometry is
+re-instantiated in a new context. A fork is a replay operation: it takes the
+developmental trace of $R$ and re-executes it under altered initial conditions
+(a different base version, a different dependency set, a different target
+platform). The crucial property of replay is that it need not produce an
+identical result to the original: what it must produce is a result that lies
+in the same attractor basin --- a system that satisfies the same
+semantic invariants as the original, reached by a developmentally continuous
+path.
+
+This distinguishes replay from copying. Copying produces an identical artifact.
+Replay produces a semantically equivalent trajectory endpoint, potentially via
+a different route. GitHub's fork infrastructure implements replay; its snapshot
+downloads implement copying. The two are not equivalent as training signals:
+a corpus of copies provides no developmental geometry; a corpus of forks and
+their parent repositories exposes the trajectory structure that makes
+generalization possible.
+
+\paragraph{Procedural substrates.}
+We are now in a position to define the central concept of the paper.
+
+\begin{definition}[Procedural Substrate]
+\label{def:procedural-substrate}
+A \emph{procedural substrate} is a globally accessible, version-controlled
+repository graph $\mathcal{G}$ in which:
+\begin{enumerate}
+\item developmental trajectories are partially preserved (repositories have
+public commit histories recoverable by any agent with network access),
+\item recomposability is structurally supported (dependency declaration,
+forking, and merge operations are first-class graph operations), and
+\item intermediate cognitive states are externalized (issue discussions,
+branch histories, and commit messages preserve reasoning traces alongside
+code changes).
+\end{enumerate}
+The \emph{admissibility density} of a procedural substrate is
+$\mathcal{A}(\mathcal{G}) = \mathbb{E}_{R \sim \mathcal{G}}[\mathcal{A}(R)]$.
+\end{definition}
+
+The thesis of this paper can now be stated precisely: the current intelligence
+explosion is explained by the emergence of GitHub as the first planetary-scale
+procedural substrate, and the role of generative AI is to function as a
+manifold-compression operator (defined formally in \S\ref{sec:gradient})
+over that substrate. Scale of compute amplifies the signal the substrate
+provides; it does not substitute for the substrate itself.
+
+\paragraph{Intermediate cognitive states.}
+The third condition in Definition~\ref{def:procedural-substrate} deserves
+emphasis because it represents the sharpest departure from prior publication
+systems. Previous civilizations preserved \emph{finalized artifacts}: published
+papers, finished products, polished monographs. GitHub preserves
+\emph{intermediate procedural cognition}: the reasoning, the failure modes,
+the alternatives considered, the implementation choices made and abandoned,
+the debugging traces, the partial implementations, and the evolutionary
+trajectory from naive first attempt to refined architecture.
+
+This matters because intermediate states carry the developmental geometry that
+final states conceal. A published paper explaining an algorithm does not expose
+the five failed implementations that preceded it, the bug that forced a
+redesign, or the off-by-one error that revealed a deeper architectural
+assumption. A public repository with its full commit history does. The
+training signal embedded in that history is qualitatively different from the
+training signal in the final published artifact: it exposes not only what
+the system is but how it became what it is, which is precisely the developmental
+geometry that enables both human extension and model generalization.
+
+
+The Epistemic Economy: Academia, Industry, and the Incentive Inversion
+
+
+
+The structural argument becomes considerably stronger when one examines what
+GitHub did simultaneously to academia and to industry --- and in particular the
+strange new incentive landscape it created across both.
+
+Traditional academic knowledge production was optimized around scarcity.
+Journal slots were scarce. Institutional legitimacy was scarce. Peer review
+was slow and systematically selected for finished narratives, clean positive
+outcomes, and retrospective theoretical coherence. The payoff structure strongly
+discouraged publishing negative results, failed experiments, intermediate
+implementations, and unfinished tooling. Much of the productive cognitive work
+behind a published result disappeared permanently into private hard drives and
+unpublished notes.
+
+Industry was similarly siloed. Tooling was proprietary, research pipelines were
+closed, engineering cultures were isolated, and the primary mechanism for
+knowledge transfer across institutions was credential-mediated hiring rather than
+artifact-mediated accumulation.
+
+GitHub partially inverted both systems simultaneously.
+
+For researchers, a public repository became a mechanism for reproducibility and
+a new form of epistemic credibility. A paper without accompanying code has come
+to look increasingly incomplete in any field where results depend on exact
+preprocessing pipelines, training configurations, dependency version constraints,
+hidden implementation choices, and evaluation harnesses that are not fully
+specifiable in prose. The repository functions as an executable appendix: not
+merely supplementary material, but primary evidence. The claim shifts from the
+assertion of a result to the demonstration of the exact machinery that generated
+it. This is a profound epistemological change, because it substantially narrows
+the gap between claim and verifiable warrant.
+
+More unexpectedly, GitHub rewards incompleteness in ways that the traditional
+academic publication system strongly punished. A half-working repository can
+generate enormous downstream value if someone else forks it, repairs a critical
+bug, integrates it with another project, reinterprets its architecture, or
+extracts a single useful subroutine that would otherwise have remained invisible.
+A failed transformer experiment may contain a novel architectural idea. An
+abandoned rendering engine may contain a useful data structure. An incomplete
+theorem prover may implement a technique that another researcher needs. Under
+the old system, all of this would have vanished. GitHub externalizes cognitive
+debris instead of discarding it, and evolutionary systems require variation ---
+including failed variation --- not merely success. This transforms failure itself
+into reusable infrastructure, which is a genuinely novel property of the
+ecosystem GitHub produced.
+
+Businesses reinforce this dynamic because repositories also became the
+highest-bandwidth talent discovery mechanism available~\cite{benkler2006,raymond1999}.
+A repository is substantially more informative than a r\'esum\'e. Code quality,
+architectural taste, debugging persistence, documentation discipline,
+collaboration behavior, design philosophy, and the trajectory of intellectual
+growth over time are all directly visible in a sufficiently active public
+profile. This creates a strange new incentive structure: people publish not only
+because publication is epistemically virtuous but because publication is
+economically actionable. The repository is simultaneously a research artifact,
+a portfolio, a social signal, a collaboration node, a recruiting surface, and a
+contribution to the commons. All of these payoffs align toward the same
+behavior: public technical disclosure.
+
+Even large corporations participate in this economy because selective open
+sourcing can attract talent, establish de facto standards, shape downstream
+ecosystems, reduce internal maintenance costs, appropriate community labor, and
+increase platform lock-in. The incentive structures across academic researchers,
+independent hobbyists, early-stage startups, and large technology corporations
+are therefore partially aligned toward an outcome --- global public technical
+disclosure --- that no centralized actor planned and no traditional institution
+could have organized.
+
+That alignment is historically unusual. In previous eras, academics hoarded
+unfinished work, corporations concealed infrastructure, hobbyists lacked
+visibility, and failed ideas vanished. GitHub changed the payoff matrix at every
+level of the ecosystem simultaneously, and the result was an unprecedented
+externalization of procedural knowledge into globally accessible executable form.
+
+\subsection*{The Payoff Matrix Inversion}
+
+Let $V_\mathrm{pub}(R)$ denote the private value to a developer of publishing
+repository $R$, and $V_\mathrm{priv}(R)$ the value of keeping it private.
+Under the pre-GitHub regime, $V_\mathrm{priv}(R) > V_\mathrm{pub}(R)$ for
+most $R$: secrecy preserved competitive advantage, and publication infrastructure
+was costly. GitHub altered the components of $V_\mathrm{pub}$ by adding
+reputation signals $\sigma(R)$, talent-market visibility $\tau(R)$, and
+community maintenance value $\mu(R)$:
+\[
+V_\mathrm{pub}(R) = V_0(R) + \sigma(R) + \tau(R) + \mu(R),
+\]
+where $V_0(R)$ is the baseline epistemic value of the artifact and $\sigma,
+\tau, \mu \geq 0$. For repositories of sufficiently broad utility,
+$\sigma + \tau + \mu$ dominates any competitive-secrecy premium, reversing the
+inequality. The result is a Nash equilibrium shift: once enough participants
+publish, the reputational penalty for not publishing exceeds the competitive
+benefit of secrecy, making publication the dominant strategy across the
+ecosystem.
+
+\begin{proposition}[Publication Dominance]
+In a market where talent acquisition depends on public repository visibility and
+where standard-setting requires ecosystem adoption, there exists a threshold
+$\theta > 0$ such that for any repository with aggregate utility exceeding
+$\theta$, publication is the dominant strategy regardless of initial competitive
+considerations.
+\end{proposition}
+
+This threshold is endogenous: as more participants publish, $\tau(R)$ increases
+for all repositories (because the talent market becomes more repository-literate)
+and $\sigma(R)$ increases (because visibility scales with network density),
+lowering $\theta$ further. The equilibrium is therefore self-reinforcing once
+critical mass is reached.
+
+
+
+The Recursion That Closed
+
+
+
+The current acceleration is therefore the product of a closed recursion loop
+rather than a single technological breakthrough. GitHub accumulated global
+executable cognition over roughly a decade and a half. Large language models
+trained on that cognition. Those models now assist in generating new
+repositories. Those repositories feed future training corpora. The cycle
+accelerates.
+
+The explosion is not located inside the model alone. It is located in the
+coupling between globally persistent open-source infrastructure, distributed
+version control, internet-scale collaborative coordination, and machine-assisted
+synthesis. Remove any of these components and the feedback loop either slows
+dramatically or ceases.
+
+One useful formulation distinguishes the memory layer from the synthesis layer.
+GitHub created civilization-scale working memory: a globally accessible,
+perfectly reproducible, continuously updated record of executable technical
+cognition accumulated across millions of contributors over years. Generative AI
+created civilization-scale autocomplete over that memory: a mechanism for
+navigating, compressing, translating, and recombining the contents of that record
+with substantially reduced friction. The autocomplete is impressive. But it
+autocompletes over a substrate it did not create.
+
+An LLM trained exclusively on text that predated the open-source ecosystem would
+be dramatically weaker in practical utility, because the open-source ecosystem is
+not merely training data --- it is the ontological substrate from which the
+model's representations of procedural reasoning are derived. GitHub may not
+merely have enabled AI. It may have manufactured the very conceptual vocabulary
+that AI learned to navigate.
+
+The deeper bottleneck that was dissolved was never insufficient raw intelligence.
+It was insufficient coordination, reuse, interoperability, discoverability, and
+cumulative persistence of technical cognition across institutional and national
+boundaries. GitHub solved that bottleneck first. Generative AI subsequently
+accelerated throughput over a substrate that had already been built.
+
+\subsection*{Fixed-Point Analysis of the Recursion}
+
+Let $\mathcal{G}_t$ denote the repository graph and $\mathcal{M}_t$ a language
+model at time $t$. Define the joint state $\Sigma_t = (\mathcal{G}_t,
+\mathcal{M}_t)$. The recursion operates through two coupled update rules:
+\begin{align}
+\mathcal{M}_{t+1} &= \mathrm{Train}(\mathcal{M}_t,\; \mathcal{G}_t), \label{eq:model-update}\\
+\mathcal{G}_{t+1} &= \mathrm{Extend}(\mathcal{G}_t,\; \mathcal{M}_t), \label{eq:graph-update}
+\end{align}
+where $\mathrm{Train}$ updates model parameters from the current graph corpus
+and $\mathrm{Extend}$ adds repositories generated or assisted by the current
+model. The composition $\Phi = \mathrm{Extend} \circ \mathrm{Train}$ defines a
+dynamical system on the joint space.
+
+\begin{proposition}[Recursion Amplification]
+If $\mathrm{Train}$ is monotone in graph quality (better-structured graphs
+produce more capable models) and $\mathrm{Extend}$ is monotone in model
+capability (more capable models generate higher-quality repositories), then the
+joint dynamical system is monotone increasing in both coordinates simultaneously,
+and no stable fixed point exists below the resource ceiling of the ecosystem.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Let $q(\mathcal{G})$ denote graph quality and $c(\mathcal{M})$ model capability,
+both real-valued. By assumption $c(\mathcal{M}_{t+1}) \geq c(\mathcal{M}_t)$
+whenever $q(\mathcal{G}_t) \geq q(\mathcal{G}_{t-1})$, and $q(\mathcal{G}_{t+1})
+\geq q(\mathcal{G}_t)$ whenever $c(\mathcal{M}_t) \geq c(\mathcal{M}_{t-1})$.
+By induction on $t$, both sequences are non-decreasing. A fixed point
+$\Sigma^*$ would require $\mathrm{Train}(\mathcal{M}^*, \mathcal{G}^*) =
+\mathcal{M}^*$ and $\mathrm{Extend}(\mathcal{G}^*, \mathcal{M}^*) =
+\mathcal{G}^*$ simultaneously, which cannot hold below the resource ceiling
+because each update strictly improves upon the previous state.
+\end{proof}
+
+\begin{corollary}
+The feedback loop described in equations \eqref{eq:model-update} and
+\eqref{eq:graph-update} is self-accelerating. The observed nonlinearity in
+AI capability growth is not a property of the model architecture alone; it
+is a property of the coupled dynamical system.
+\end{corollary}
+
+
+
+
+
+Why Esolangs Matter Epistemically
+
+
+
+Before presenting the worked example, it is worth explaining why an esoteric
+programming language --- rather than a more conventional computational model ---
+provides the most instructive substrate for the argument. The choice is not
+arbitrary or ornamental. Esolangs function as compressed laboratories for
+admissibility geometry because they isolate computational invariants under
+adversarial conditions.
+
+A conventional programming language is designed to minimize friction between
+programmer intent and machine execution. It supplies deterministic control flow,
+precise arithmetic, predictable memory, and a type system that enforces
+consistency at the symbolic level. These features are engineered precisely to
+eliminate the gap between syntactic intent and operational behavior. This makes
+conventional languages excellent tools for building systems, but poor
+instruments for studying the minimal conditions under which computation
+survives substrate unreliability.
+
+An esoteric language designed adversarially --- one that deliberately removes
+the scaffolding that conventional languages supply --- forces exactly this
+question into the open: what is the irreducible structural minimum that permits
+coherent computation? The answer reveals which invariants are genuinely load-bearing
+and which are engineering conveniences.
+
+\ambibf{} is particularly well suited to this purpose because it removes
+\emph{directional determinism}: the most basic assumption of Turing-complete
+computation, namely that symbolic control flow determines operational behavior,
+is destroyed at the syntactic level. The programmer can write \texttt{+} or
+\texttt{-}, \texttt{<} or \texttt{>}, but the runtime erases the distinction.
+What survives is only what the substrate cannot destroy: in this case, parity.
+
+\paragraph{Symbolic determinism versus statistical semantic persistence.}
+This establishes the central epistemological distinction that bridges the
+worked example to the larger GitHub argument. Ordinary programming languages
+stabilize computation through \emph{symbolic determinism}: the semantics of
+a program are fully determined by its text, and execution is a pure function
+of the symbolic state. Spherepop-style systems stabilize computation through
+\emph{statistical semantic persistence}: meaning is not encoded in any single
+symbolic state but in the distribution of states that a system reliably
+occupies under perturbation. A bubble is not a variable whose value is the
+current tape cell content; it is a localized probability distribution whose
+center of mass defines the semantic state.
+
+This distinction is not merely technical. It is the bridge between:
+\begin{itemize}
+\item the GitHub replay argument (repository identity is defined not by a
+snapshot but by the distribution of states a development process reliably
+returns to under forking and perturbation),
+\item the stochastic semantics of \ambibf{} and Spherepop (meaning persists
+through attractor stability rather than symbolic identity),
+\item the LLM training argument (models learn developmental geometry ---
+the attractor structure of good code --- not merely surface syntax),
+\item the RSVP admissibility framework (the scalar field $\Phi > 0$ encodes
+regions of configuration space where attractor stability is maintained), and
+\item open-source recomposition (composability is possible because recomposable
+systems share attractor structure across their extension surfaces, not merely
+compatible type signatures).
+\end{itemize}
+
+Without this bridge, the transition from Python interpreters to field-theoretic
+language may seem abrupt. With it, the progression is conceptually continuous:
+each layer of formalism describes the same phenomenon --- the persistence of
+recoverable developmental structure under perturbation --- at a different scale
+and resolution.
+
+\paragraph{The esolang as minimal model organism.}
+In this sense \ambibf{} functions as what biologists call a model organism:
+a system deliberately chosen for its tractability rather than its
+representativeness, from which general principles can be extracted and
+transferred to less tractable domains. Just as \textit{C. elegans} reveals
+principles of developmental biology that transfer to vertebrates, \ambibf{}
+reveals principles of admissibility geometry that transfer to GitHub repositories,
+LLM training dynamics, and RSVP field theory. The worked example is not a
+detour from the main argument. It is the main argument at its most legible scale.
+
+\section[A Worked Example]{A Worked Example: Spherepop over \ambibf{}}
+\label{sec:worked}
+
+
+The argument so far has remained at the level of ecosystem dynamics. To make
+it concrete, we need a worked example: an actual repository, developed in
+stages, whose publication history instantiates the theoretical claims rather
+than merely illustrating them. The example chosen here is deliberately
+non-trivial. It is not a utility script or a data-processing tool. It is an
+implementation of Spherepop semantics over a probabilistic substrate language
+called \ambibf{}, and its interest lies precisely in the fact that the system
+it implements is itself a model of how stable meaning emerges from unreliable
+substrates. The repository becomes, in this sense, a miniature of the larger
+ecosystem it is embedded in.
+
+\ambibf{} is a Brainfuck derivative created by ais523 in 2012. Its design is
+deliberately adversarial toward determinism. Where Brainfuck provides distinct
+increment and decrement operators, \ambibf{} collapses them into a single
+instruction that randomly does either. Where Brainfuck provides distinct left
+and right pointer movements, \ambibf{} collapses these into a single instruction
+that randomly does either. The bracket instructions \texttt{[} and \texttt{]}
+retain their Brainfuck semantics, but since the arithmetic and movement operators
+are both nondeterministic, the control flow they govern operates over a
+stochastic field rather than a deterministic memory. The tape is infinite in
+both directions and every cell holds a bignum value, which provides unexpectedly
+rich storage capacity, but that capacity is accessible only through
+probabilistic navigation.
+
+The consequence is philosophically significant. This is not merely randomized
+Brainfuck. The randomness is structural: every directional and arithmetic
+intention in the source code is erased at the operational level. A program that
+writes \texttt{+} and a program that writes \texttt{-} are operationally
+identical. The source code contains apparent semantic content that the runtime
+systematically destroys. Syntax no longer cleanly determines execution. Meaning
+exists only as a distribution over possible trajectories.
+
+This raises a question that makes the language genuinely interesting as a
+theoretical object rather than a mere curiosity: how much determinism is
+actually necessary for computation? The Turing-completeness of \ambibf{}
+remains an open question, but the analysis in the original language specification
+demonstrates that reliable computation can emerge from unreliable
+primitives~\cite{neumann1956}. By encoding counter values not as single tape
+cells but as parity-structured fields distributed across tape regions, the
+language allows certain invariants to be recovered statistically even when exact
+cell values cannot be trusted. Parity remains one of the few geometric
+properties that survives noisy drift with recoverable probability. This connects
+\ambibf{} to von Neumann's classical result on reliable computation from
+unreliable components~\cite{neumann1956}, to error-correcting codes~\cite{cover2006},
+and to the broader family of systems where stable structure emerges from
+stochastic substrates~\cite{wolfram2002}.
+
+A minimal Python interpreter for \ambibf{} captures these dynamics directly:
+
+\begin{lstlisting}
+import random
+from collections import defaultdict
+
+class AmbiBFMachine:
+    def __init__(self):
+        self.tape = defaultdict(int)
+        self.ptr = 0
+
+    def step(self, command):
+        if command in "+-":
+            self.tape[self.ptr] += random.choice([-1, 1])
+        elif command in "<>":
+            self.ptr += random.choice([-1, 1])
+
+    def run(self, code, max_steps=100000):
+        brackets = self.match_brackets(code)
+        ip = 0
+        steps = 0
+        while ip < len(code) and steps < max_steps:
+            c = code[ip]
+            if c == "[":
+                if self.tape[self.ptr] == 0:
+                    ip = brackets[ip]
+            elif c == "]":
+                if self.tape[self.ptr] != 0:
+                    ip = brackets[ip]
+            else:
+                self.step(c)
+            ip += 1
+            steps += 1
+        return dict(self.tape)
+
+    @staticmethod
+    def match_brackets(code):
+        stack, pairs = [], {}
+        for i, c in enumerate(code):
+            if c == "[":
+                stack.append(i)
+            elif c == "]":
+                if not stack:
+                    raise SyntaxError("Unmatched ]")
+                j = stack.pop()
+                pairs[i] = j
+                pairs[j] = i
+        if stack:
+            raise SyntaxError("Unmatched [")
+        return pairs
+\end{lstlisting}
+
+This is the lamphron moment: a compact, specialized, self-contained artifact
+that makes a single architectural commitment visible. The bracket-matching
+function is deterministic. The tape is a \texttt{defaultdict}. The \texttt{step}
+function delegates all nondeterminism to a single \texttt{random.choice} call.
+Every design decision encodes an irreversible constraint. The choice to use a
+hash map rather than a list encodes a commitment to infinite sparse tape. The
+\texttt{max\_steps} guard encodes a commitment to termination safety. The bracket
+matching as a preprocessing pass rather than a runtime scan encodes a commitment
+to $O(1)$ jump cost. These are Spherepop events: irreversible constraints that
+narrow the option-space of future extensions while keeping the trajectory inside
+the admissible region $\Phi > 0$.
+
+A model ingesting this repository does not memorize the file. It updates its
+representation of what it looks like when a stochastic tape machine is
+implemented carefully: what the bracket-matching idiom looks like, what the
+\texttt{defaultdict} pattern signals about tape geometry, what the separation
+between \texttt{step} and \texttt{run} reveals about the intended extension
+surface. These are procedural patterns that transfer. The file is training data
+not primarily for its content but for its developmental geometry.
+
+\subsection*{Parity Invariance Under Stochastic Drift}
+
+The key insight enabling reliable computation on this substrate is that parity
+is preserved under symmetric random walks. We formalize this as follows.
+
+\begin{lemma}[Parity Preservation]\label{lemma:parity}
+Let $p(t) \in \mathbb{Z}$ be the tape pointer evolving under the \ambibf{}
+movement rule: at each step, $p(t+1) = p(t) + \eta_t$ where $\eta_t \in
+\{-1, +1\}$ with equal probability. Then the parity $p(t) \bmod 2$ is
+deterministic given $p(0)$: $p(t) \bmod 2 = (p(0) + t) \bmod 2$ for all $t$.
+\end{lemma}
+
+\begin{proof}
+Since $\eta_t \in \{-1, +1\}$, we have $\eta_t \equiv 1 \pmod{2}$ in both
+cases. Therefore $p(t+1) \equiv p(t) + 1 \pmod{2}$ at every step, regardless
+of the random outcome. By induction, $p(t) \equiv p(0) + t \pmod{2}$.
+\end{proof}
+
+\begin{corollary}[Dead Reckoning]
+A program executing on \ambibf{} can always determine the current parity of
+the tape pointer by counting steps, even with no access to the pointer's
+absolute position. This is the foundational invariant on which the counter
+encoding described in the original language specification rests.
+\end{corollary}
+
+\begin{remark}
+The lemma shows that parity is the \emph{unique} positional invariant
+preserved under arbitrary symmetric random walks on $\mathbb{Z}$: all other
+modular invariants are destroyed by stochastic drift. The \ambibf{} encoding
+strategy is therefore not merely clever but optimal given the substrate's
+constraints.
+\end{remark}
+
+
+
+Bubbles as Metastable Attractors: The Spherepop Layer
+
+
+
+The \texttt{AmbiBFMachine} alone is a substrate interpreter. It demonstrates
+that \ambibf{} dynamics can be simulated, but it does not yet raise the question
+that makes the system theoretically interesting: can coherent semantic structures
+persist on this substrate despite continuous stochastic erosion? Answering this
+question requires a second layer, and the second layer is Spherepop.
+
+In the Spherepop formalism, a bubble is not a variable. It is a named localized
+field whose value emerges through stabilization rather than assignment. Applied
+to an \ambibf{} substrate, a bubble is a parity-preserving neighborhood of tape
+cells whose collective behavior encodes a semantic state that survives repeated
+perturbation. The parity constraint is essential: it is one of the few geometric
+properties that can be recovered statistically after noisy pointer drift, because
+the even-odd structure of tape positions is invariant under the symmetric random
+walk (see Appendix~\ref{sec:bubbleregions} for the formal definition of bubble
+support regions).
+
+A minimal Spherepop layer over the interpreter captures this directly:
+
+\begin{lstlisting}
+class Spherepop:
+    def __init__(self):
+        self.machine = AmbiBFMachine()
+        self.bubbles = {}
+        self.next_cell = 0
+
+    def bubble(self, name):
+        self.bubbles[name] = self.next_cell
+        self.next_cell += 2
+
+    def focus(self, name):
+        target = self.bubbles[name]
+        while self.machine.ptr != target:
+            if self.machine.ptr < target:
+                self.machine.ptr += 1
+            else:
+                self.machine.ptr -= 1
+
+    def jiggle(self, name, amount=1):
+        self.focus(name)
+        for _ in range(amount):
+            self.machine.run("+")
+
+    def pop(self, name):
+        self.focus(name)
+        self.machine.run("[+]")
+
+    def stabilize(self, name, attempts=101):
+        self.focus(name)
+        values = [self.machine.tape[self.machine.ptr]
+                  for _ in range(attempts)]
+        positives = sum(1 for v in values if v > 0)
+        negatives = sum(1 for v in values if v < 0)
+        if positives > negatives:
+            return "+bubble"
+        elif negatives > positives:
+            return "-bubble"
+        else:
+            return "void"
+
+    def read(self):
+        return {name: self.machine.tape[cell]
+                for name, cell in self.bubbles.items()}
+\end{lstlisting}

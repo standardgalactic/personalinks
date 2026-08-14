@@ -1,117 +1,72 @@
-**Toward Computational Habitats**
+**Summary**
 
-The preceding discussion has established that cognition is not confined to [K
-a single biological substrate but extends into an ecologically embedded “co[3D[K
-“computational habitat” where mind and environment are dynamically interdep[8D[K
-interdependent. This ecological view reshapes how we conceive of scientific[10D[K
-scientific practice, intellectual development, and the tools that support t[1D[K
-them.
+The passage argues that cognition—especially long‑term intellectual work—is[7D[K
+work—is not confined to an isolated brain but must be understood as a tempo[5D[K
+temporally extended computation embedded in its historical environment. Key[3D[K
+Key points include:
 
-### 1. Digital Infrastructures as Persistent Computational Substrates
+1. **Ecological Formulation**: Scientific discovery is better modeled as th[2D[K
+the evolution of “cognitive habitats” (labs, universities, digital reposito[8D[K
+repositories) that preserve and extend unfinished investigations rather tha[3D[K
+than isolated breakthroughs.
 
-Digital infrastructures—repositories (e.g., arXiv), collaborative platforms[9D[K
-platforms (e.g., GitLab, Overleaf), discussion forums (e.g., Reddit, StackE[6D[K
-StackExchange), electronic correspondence (e‑mail, messaging apps), and int[3D[K
-interactive documentation systems—are not merely tools for communication. T[1D[K
-They function as **persistent computational substrates**:
+2. **Computational Boundary**: The traditional view treats cognition’s boun[4D[K
+boundary as limited to the biological brain (\(\partial S = \partial B\)). [K
+However, an ecological hypothesis expands this to include historically coup[4D[K
+coupled external artifacts (\(\partial S = \partial B \cup \partial \mathca[7D[K
+\mathcal{E}\)).
 
-- **Preservation of Unfinished Investigations:** Even when an investigation[13D[K
-investigation is abandoned, its intermediate derivations remain stored in d[1D[K
-digital form, allowing future researchers to pick up where the previous wor[3D[K
-work left off.
-  
-- **Exposure of Intermediate Derivations:** Code snippets, notebooks (Jupyt[6D[K
-(Jupyter, RMarkdown), and annotated data objects expose logical steps that [K
-were once tacit, thereby maintaining a “memory” of reasoning pathways.
+3. **Temporal Extension Necessity**: For intellectual projects longer than [K
+the capacity of working memory (\(\tau_P > \tau_{\text{WM}}\)), a substanti[9D[K
+substantial amount of computational state must be preserved externally:
+   \[
+   |S_P(t)| \propto \text{Complexity}(P) \cdot \log(t)
+   \]
+   The environment becomes computationally necessary, not merely convenient[10D[K
+convenient.
 
-- **Maintenance of Collaborative Memory:** Discussion threads retain contex[6D[K
-context—questions asked, answers given, debates recorded—and serve as refer[5D[K
-reference points for later work, preserving the communal knowledge base.
+4. **Storage vs. Participation**: Artifacts like notebooks or software repo[4D[K
+repositories are often mislabeled as “storage” but actually *participate* i[1D[K
+in cognition because they re‑activate suspended computations and their assu[4D[K
+assumptions.
 
-### 2. The Role of Reachable Intellectual Manifolds
+5. **Projection Loss & Ecological Entropy**: Limiting analysis to the organ[5D[K
+organism alone (projecting onto \(\pi_B\)) discards important future comput[6D[K
+computational capacities, quantified by ecological entropy \(S_{\mathcal{E}[16D[K
+\(S_{\mathcal{E}}\) that grows over time:
+   \[
+   \frac{dS_{\mathcal{E}}}{dt} > 0
+   \]
+   This loss becomes increasingly severe for long‑term projects.
 
-The ecological principle highlighted earlier—that innovation rates scale wi[2D[K
-with reachable intellectual manifolds—is manifested in digital infrastructu[12D[K
-infrastructures through **networked connectivity**:
+6. **Analogies to Other Fields**: Similar to thermodynamics or ecology, cog[3D[K
+cognition’s state cannot be fully captured by current neural activity alone[5D[K
+alone; relationships among components carry independent computational signi[5D[K
+significance.
 
-- **Spatial Topologies:** The topology of repositories (linked papers, cita[4D[K
-citation graphs) creates “intellectual pathways” that guide discovery. When[4D[K
-When a new idea surfaces, the system’s navigation mechanisms expose related[7D[K
-related work, accelerating interdisciplinary convergence.
+7. **Intergenerational Persistence**: Intellectual traditions persist acros[5D[K
+across generations because portions of their computational state are stabil[6D[K
+stabilized in external environments (digital archives, shared repositories)[13D[K
+repositories). The tradition is a distributed system:
+   \[
+   \mathcal{C}(T) = \bigcup_{i=1}^{n} \mathcal{C}_i
+   \]
 
-- **Algorithmic Amplification:** Search engines and recommendation algorith[8D[K
-algorithms bias exposure toward nodes with high connectivity (high citation[8D[K
-citations, many collaborations), mirroring how physical spaces favor highly[6D[K
-highly navigable areas.
+**Methodological Implication**
 
-### 3. Designing for Interdisciplinary Adjacency
+The isolated brain model remains useful for limited experimental questions [K
+but must not be taken as the natural boundary of cognition. Analyzing cogni[5D[K
+cognition requires considering the historically coupled organism‑environmen[19D[K
+organism‑environment system, recognizing that external artifacts actively p[1D[K
+participate in shaping future thought.
 
-Institutions that foster interdisciplinary adjacency must therefore priorit[7D[K
-prioritize:
+---
 
-- **Open Access Repositories:** Make code, datasets, and pre‑prints freely [K
-available to extend reachability.
-  
-- **Standardized Metadata & APIs:** Enable automated linking across platfor[7D[K
-platforms (e.g., BibTeX, DOIs) so that computational objects can be discove[7D[K
-discovered beyond keyword searches.
+**References (as given)**  
 
-- **Collaboration Environments Integrated with Workflow Tools:** Platforms [K
-like GitHub’s issue/ticket system and Overleaf’s comment threads keep discu[5D[K
-discussions attached to the artifacts they discuss, preserving context.
-
-### 4. Implications for Scientific Practice
-
-1. **Long‑Term Evolution of Ideas:** Unlike isolated breakthroughs, scienti[7D[K
-scientific discovery is better understood as a *temporally extended computa[7D[K
-computation* where previous work continuously shapes future possibilities.
-   
-2. **Persistence Across Generations:** Intellectual traditions (e.g., mathe[5D[K
-mathematical notation systems) endure because the computational state they [K
-embody remains embedded in external artifacts that persist beyond individua[9D[K
-individual lifespans.
-
-3. **Methodological Shift:** Researchers should adopt a “computational habi[4D[K
-habitat” mindset, treating their digital workspace as an extension of worki[5D[K
-working memory rather than merely storage. This influences experimental des[3D[K
-design (e.g., using version control to track hypotheses), data management p[1D[K
-practices, and publication norms (open science, reproducibility).
-
-### 5. Design Principles for Computational Habitats
-
-- **Visibility & Accessibility:** Ensure that intermediate artifacts are pu[2D[K
-publicly viewable and linkable.
-  
-- **Continuity of State:** Preserve the order and dependencies of operation[9D[K
-operations; allow users to “re‑run” earlier steps.
-
-- **Interoperability:** Standardize data formats, citation mechanisms, and [K
-metadata schemas so different habitats can communicate seamlessly.
-
-### 6. Future Directions
-
-1. **Semantic Web & Knowledge Graphs:** Develop richer ontologies that map [K
-not just between documents but also across time (e.g., “this theorem was pr[2D[K
-proven before this algorithm existed”).
-
-2. **Agent‑Based Collaboration Platforms:** Design systems where autonomous[10D[K
-autonomous agents (software bots) can suggest connections based on patterns[8D[K
-patterns of interdisciplinary adjacency, acting as digital curators.
-
-3. **AI for Historical Contextualization:** Use large language models train[5D[K
-trained on historical texts to generate contextual summaries that help newe[4D[K
-newer researchers locate and understand legacy work embedded in digital arc[3D[K
-archives.
-
-### Conclusion
-
-By viewing scientific inquiry through the lens of an ecologically extended [K
-computational habitat, we acknowledge that cognition is inherently *distrib[8D[K
-*distributed* across organisms and their environments. This perspective not[3D[K
-not only enriches our understanding of how ideas evolve but also informs th[2D[K
-the design of tools—digital repositories, collaborative platforms, and AI a[1D[K
-agents—that better support this distributed form of computation. As researc[7D[K
-research practices continue to integrate digital infrastructures, they will[4D[K
-will increasingly resemble historically coupled cognitive habitats where pa[2D[K
-past work actively participates in shaping future discovery pathways.
-
+- The ecological hypothesis and computational boundary definition are expli[5D[K
+explicitly stated.
+- The theorem on temporal extension necessity quantifies state growth over [K
+project duration.
+- The proposition about increasing ecological entropy highlights ongoing lo[2D[K
+loss of future cognitive options when analyzing only neural activity.

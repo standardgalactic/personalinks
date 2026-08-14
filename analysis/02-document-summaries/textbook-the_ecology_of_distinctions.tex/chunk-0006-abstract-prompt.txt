@@ -1,0 +1,1228 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Summary**
+
+The passage outlines an ecological perspective on *distinctions*—the buildi[6D[K
+building blocks of any system (biological ecosystems, information networks,[9D[K
+networks, economic systems, etc.). Key points include:
+
+1. **Monocultures and Fragility**  
+   - Concentrating dependencies into a narrow set of distinctions makes the[3D[K
+the whole vulnerable: a single failure can cascade across many dependent pa[2D[K
+paths. This aligns with classic ecological warnings about monoculture susce[5D[K
+susceptibility.
+
+2. **Ecological Diversity as a Functional Property**  
+   - *Ecological diversity* is defined as “the number of independent repair[6D[K
+repair pathways available within an ecology.” It differs from mere variety [K
+because distinct pathways fail in different ways, increasing resilience.
+
+3. **Diversity–Repair Theorem**  
+   - Repair capacity (κ) increases weakly with the number of independent pa[2D[K
+pathways (N): ∂κ/∂N ≥ 0. Each additional pathway adds new routes for recons[6D[K
+reconstruction, preventing a single loss from eliminating all options.
+
+4. **Regenerative Ecologies**  
+   - A *regenerative ecology* is one where the future repair capacity grows[5D[K
+grows: d/dt κ_ℰ > 0. Such ecologies expand their set of repairable distinct[8D[K
+distinctions over time, preserving not just structure but also potential fu[2D[K
+futures (e.g., scientific method cycles).
+
+5. **Competition and Cooperation**  
+   - Distinctions interact much like species in an ecosystem: some cooperat[8D[K
+cooperate (peer review ↔ scientific reliability), others compete (censorshi[10D[K
+(censorship ↔ open criticism). These dynamics generate complex ecological p[1D[K
+patterns far beyond any single distinction.
+
+6. **Emergence of Admissibility**  
+   - The framework raises the critical question: *whether future possibilit[10D[K
+possibilities survive* rather than just preservation of structures, capacit[7D[K
+capacities, or regeneration. This motivates a shift toward “reachability” ([1D[K
+(Chapter X), focusing on preserving viable trajectories.
+
+7. **Relation to Related Frameworks**  
+   - **Systems Theory**: Luhmann’s autopoiesis and von Bertalanffy’s genera[6D[K
+general systems theory are discussed as precursors, but the chapter introdu[7D[K
+introduces a more inclusive dependency relation for distinction ecologies ([1D[K
+(Distinction Dependency Theorem).  
+   - **Complex Adaptive Systems (Holland)**: Aligns with Holland’s view of [K
+emergent order from many interacting agents, though adaptation is not requi[5D[K
+required; resilience follows directly from dependency structure.  
+   - **Ecological Resilience (Holling)**: Provides a parallel concept but t[1D[K
+the chapter goes further by quantifying how diversity and regeneration affe[4D[K
+affect long‑term viability.
+
+**Takeaway**
+
+The ecological lens reveals that *diversity*—the variety of independent rep[3D[K
+repair pathways—is not just an aesthetic feature but a functional prerequis[9D[K
+prerequisite for resilience, regeneration, and adaptive capacity. The frame[5D[K
+framework anticipates deeper questions about the sustainability of future p[1D[K
+possibilities, steering research toward concepts like reachability to addre[5D[K
+address long‑term viability in distinction ecologies.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-the_ecology_of_distinctions.tex
+
+NEW CHUNK
+=========
+
+\emph{Convergence.} Holling's distinction between engineering
+resilience --- return time to a single equilibrium --- and
+ecological resilience --- the amount of disturbance a system
+can absorb before flipping into a qualitatively different
+stability regime --- anticipates this chapter's distinction
+between regeneration and mere recovery to a fixed reference
+state \parencite{holling1973}. Both reject a single equilibrium
+point as the right object to track.
+
+\emph{Divergence.} Holling's resilience is fundamentally about
+remaining within the \emph{same} basin of attraction: resilience
+is measured by how much perturbation a basin can absorb before
+the system shifts regime. This chapter's regeneration is not
+about staying within a basin at all. A distinction ecology can
+undergo arbitrarily large reorganisation --- the formal analogue
+of Holling's regime shift --- and still count as fully
+regenerative, provided repair capacity and diversity are
+preserved or expanded through the transition
+(\cref{thm:regen-ecology-thm}). This chapter's regeneration is
+therefore compatible with, and often requires, exactly the kind
+of basin-flipping change Holling's framework treats as the
+outcome resilience is meant to resist.
+
+\emph{Open question.} Whether there is a principled translation
+of Holling's basin-and-threshold language into this chapter's
+diversity and capacity language --- whether ``remaining within a
+basin'' corresponds to some specific, identifiable condition on
+$\kappa(\Sigma)$ --- or whether the two frameworks simply ask
+different questions that happen to share vocabulary, is left
+open.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Distinctions exist within ecologies of
+        interdependent distinctions
+        (\cref{defn:dist-ecology}).
+  \item Dependency structures determine recoverability
+        (\cref{thm:dist-dependency}).
+  \item Loss of supporting distinctions propagates through
+        ecological cascades (\cref{defn:cascade-failure}).
+  \item Concentrated dependency increases fragility
+        (\cref{thm:eco-fragility}).
+  \item Diversity increases repair capacity by creating
+        independent repair pathways
+        (\cref{thm:diversity-repair}).
+  \item Regenerative ecologies expand future repair
+        capacity (\cref{thm:regen-ecology-thm}).
+  \item Regeneration alone does not guarantee preservation
+        of future possibility --- the unresolved question
+        leads to reachability and admissibility.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Bio]
+  Model a keystone species in terms of
+  \cref{defn:dist-dep}. What does $p\to1$ in the Ecological
+  Fragility Theorem correspond to ecologically?
+\end{exercise}
+
+\begin{exercise}[CS]
+  Compare a centralised database and a distributed ledger
+  as distinction ecologies. Compute $p$ for each and
+  compare expected cascade sizes.
+\end{exercise}
+
+\begin{exercise}
+  Prove that any distinction ecology with a unique critical
+  node ($p=1$) has a failure cascade that eliminates all
+  distinctions. What does this imply for system design?
+\end{exercise}
+
+
+\part{Geometry}
+
+
+
+
+
+
+\chapter{Reachability}
+\label{ch:reachability}
+
+\begin{epigraph}{The possible is not the actual. But it is
+  the space from which the actual is drawn.}
+  {Modal realism, broadly construed}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define reachability sets and reachability volume
+        formally.
+  \item Prove the Reachability Monotonicity Theorem.
+  \item Prove the Constraint Volume Theorem.
+  \item Characterise boundary proximity and critical
+        instability.
+  \item Prove the Future Cone Theorem.
+  \item Apply reachability geometry to biological fitness
+        landscapes and computational state-space search.
+\end{objectives}
+
+
+From Entropy to Geometry
+
+\label{sec:ch13-motivation}
+
+The preceding chapters established a progression.
+Distinctions are drawn at a cost. Information measures how
+many distinctions a system supports. Entropy measures the
+multiplicity hidden beneath distinction structures.
+Histories carry information that states discard.
+Recoverability determines whether dispersed distinctions
+remain reconstructible. Repair restores distinctions when
+recoverability permits. Regeneration preserves repair
+capacity over time.
+
+Each of these concepts concerns what a system \emph{is} or
+\emph{has been}. The present chapter turns to a different
+question: what can a system \emph{become}?
+
+This is not merely a pragmatic question. The geometry of
+future possibility turns out to be as determinate, as
+measurable, and as theoretically consequential as entropy
+or information. A system that has maintained all of its
+distinctions perfectly, repaired every damage, and achieved
+full regeneration may nevertheless face a contracted future
+if earlier trajectories have closed off regions of
+possibility space. Conversely, a system with incomplete
+distinctions may preserve a rich geometry of futures simply
+by avoiding the collapses that would have eliminated them.
+The concept that formalises this intuition is
+\emph{reachability}.
+
+Chapter~\ref{ch:distinction-ecology} showed that a single
+distinction's prospects depend on the ecology of dependencies
+surrounding it: the Ecological Fragility Theorem
+(\cref{thm:eco-fragility}) characterised when local damage
+cascades through a dependency network, and the Regenerative
+Ecology Theorem (\cref{thm:regen-ecology-thm}) extended
+regeneration from a single system to an entire population of
+interacting distinctions. Both results describe what an
+ecology currently maintains. Neither yet asks what an ecology
+--- or a single system within one --- could still become if
+its present trajectory were different. That is the question
+this chapter takes up.
+
+
+Why Control Theory's Reachability Is Not Enough
+
+\label{sec:ch13-why-control-theory}
+
+Reachability is not a new word in this book's vocabulary.
+Control theory has used it for decades, in a precise and
+operationally useful sense: given a dynamical system and an
+admissible set of control inputs, the reachable set from
+state $x$ is the collection of states the system can be
+steered into within some time horizon
+\parencite{kalman1960,sontag1998}. This is not a loose
+precursor to the present chapter's concept; it is a genuine
+special case, recovered when the state space $X$ is taken to
+be an ordinary physical or engineering configuration space
+and the dynamics $\Phi$ are taken to be governed by a
+controllable input.
+
+What control theory's reachable set does not, and was never
+built to, address is reachability for distinction structures
+rather than physical states. A control engineer asks which
+configurations of a satellite, a chemical plant, or a robotic
+arm can be reached from the present configuration. This
+chapter asks a structurally identical question one level up:
+which \emph{distinguishable futures} --- which configurations
+of admissible distinctions, not merely physical coordinates
+--- remain reachable from a system's present distinction
+structure. The two questions coincide exactly when the
+distinctions in play are already coextensive with the
+physical state space, which is the classical
+control-theoretic case. They diverge sharply once the state
+space in question is a genome, an institution, or a
+scientific discipline, where a great deal of what can or
+cannot be reached is determined by distinction-level
+structure --- recoverability, dependency, repair capacity ---
+that has no representation in $X$ at all. Reachability volume,
+as this chapter defines it, generalises the control-theoretic
+notion by replacing a fixed physical state space with the
+full distinction-ecological structure developed across
+Parts~I through~IV.
+
+
+Common Misinterpretations of Reachability
+
+\label{sec:ch13-misinterpretations}
+
+A first misreading treats reachability volume as simply a
+restatement of entropy --- more reachable states sounding
+like more multiplicity, in the sense of
+Chapter~\ref{ch:entropy}. The two are related but distinct.
+Entropy measures multiplicity concealed beneath a single
+distinction at a single moment; reachability volume measures
+the size of the set of \emph{future} distinction structures
+attainable from the present one. A system can have low
+present entropy --- a sharply resolved, highly distinguished
+current state --- while still possessing enormous
+reachability volume, if that sharp state happens to sit at a
+branch point from which many futures remain open.
+
+A second misreading assumes that reachability volume can only
+shrink, since entropy left unrepaired tends to grow and
+distinctions left undefended tend to erode. The Reachability
+Monotonicity Theorem proved below shows the relationship is
+more specific than this intuition suggests: reachability
+volume is non-increasing only under particular dynamical
+conditions, and the same regenerative processes established
+in Chapter~\ref{ch:regeneration} can expand it. Reachability
+contraction is common, not inevitable.
+
+A third misreading treats reachability as purely a matter of
+quantity --- bigger reachable sets are simply better, full
+stop. This is the question Chapter~\ref{ch:admissibility}
+exists to complicate. Two states can have identical
+reachability volume while differing enormously in which
+specific futures that volume contains, a distinction
+invisible to volume alone and the entire subject of the next
+chapter.
+
+By the end of this chapter, reachability sets and reachability
+volume will have been defined formally as properties of a
+dynamical system's distinguishable futures, the Reachability
+Monotonicity Theorem will characterise when volume can only
+shrink, and the Future Cone Theorem will describe the
+geometry of the boundary separating reachable from
+unreachable futures. Chapter~\ref{ch:admissibility} then asks
+the question this chapter's volume measure cannot answer on
+its own: among the states a system can reach, which ones are
+worth reaching --- in the specific sense of preserving, rather
+than foreclosing, further reachability?
+
+
+Basic Definitions
+
+\label{sec:ch13-defs}
+
+\begin{definition}{State Space and Dynamics}{state-space}
+  Let $X$ be a \emph{state space}: a measurable space whose
+  points represent possible configurations of a system. A
+  \emph{dynamics} on $X$ is a family of maps
+  $\Phi_{s,t} : X \to X$, $s \le t$, satisfying
+  $\Phi_{t,t} = \mathrm{id}$ and
+  $\Phi_{s,t} = \Phi_{u,t} \circ \Phi_{s,u}$ for all
+  $s \le u \le t$. The pair $(X,\Phi)$ is a \emph{dynamical
+  system}.
+\end{definition}
+
+\begin{definition}{Reachability Set and Volume}{reach-set}
+  Let $(X,\Phi)$ be a dynamical system, $x\in X$ a state,
+  and $t_0 \le t$ times. The \emph{reachability set} of $x$
+  at time $t$ is
+  \[
+    \reach(x,t_0,t) = \{
+      y\in X : \exists\, \text{admissible }
+      \gamma:[t_0,t]\to X,\;
+      \gamma(t_0)=x,\; \gamma(t)=y
+    \}.
+  \]
+  The \emph{reachability volume} is
+  $V_R(x,t) = \mu(\reach(x,t))$ for reference measure $\mu$.
+  \index{reachability!volume|textbf}
+\end{definition}
+
+\begin{remark}{What counts as admissible?}{reach-admissible}
+  The qualifier ``admissible trajectory'' is intentionally
+  broad at this stage. In physical systems it may mean
+  trajectories satisfying the equations of motion. In
+  biological systems it may mean developmental programmes
+  consistent with genetic and environmental constraints. In
+  computational systems it may mean execution paths
+  consistent with a program's operational semantics.
+  Chapter~\ref{ch:admissibility} imposes the stronger
+  condition of \emph{admissibility} in the technical sense,
+  which adds a future-preservation requirement on top of
+  bare reachability.
+\end{remark}
+
+\begin{example}{Reachability in a Finite Automaton}{reach-dfa}
+  \csicon
+  Let $X = \{q_0,q_1,q_2,q_3\}$ be the states of a
+  deterministic finite automaton with transition function
+  $\delta$. Define reachability at depth $n$ as the set of
+  states accessible from $q_0$ via paths of length at most
+  $n$. With counting measure, $V_R(q_0,n) = |\reach(q_0,n)|$.
+  If $\delta$ is a bijection, $V_R$ is constant. If some
+  states are absorbing (no outgoing transitions), $V_R$
+  declines as the automaton is driven into them.
+\end{example}
+
+\begin{example}{Reachability in a Fitness Landscape}{reach-fitness}
+  \bioicon
+  In evolutionary biology, a \emph{fitness landscape} maps
+  genotypes $g\in X$ to fitness values $f(g)\in\mathbb{R}$.
+  The reachability set of a population at genotype $g$
+  under point-mutation dynamics is the set of genotypes
+  accessible by single mutations without crossing a fitness
+  valley of depth exceeding some threshold $\theta$.
+  Reachability volume measures the accessible adaptive
+  neighbourhood.
+\end{example}
+
+\begin{distinctionaside}{The Empty Refrigerator}
+An empty refrigerator and a full refrigerator may contain
+the same number of sandwiches right now: zero.
+
+The difference is reachability. One state is adjacent to
+lunch. The other is adjacent to grocery shopping.
+\end{distinctionaside}
+
+
+Reachability Monotonicity
+
+\label{sec:ch13-monotone}
+
+\begin{theorem}{Reachability Monotonicity Theorem}{reach-mono}
+  Let $(X,\Phi)$ be a dynamical system with
+  entropy-increasing dynamics, and let
+  $\mathcal{C}_1\subseteq\mathcal{C}_2$ be two constraint
+  sets imposed on trajectories from $x$. Then
+  \[
+    V_R(x,t\mid\mathcal{C}_2) \le V_R(x,t\mid\mathcal{C}_1).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Denote by $\reach(x,t\mid\mathcal{C})$ the set of states
+  reachable from $x$ by time $t$ via trajectories satisfying
+  constraint set $\mathcal{C}$. Since
+  $\mathcal{C}_1\subseteq\mathcal{C}_2$, every trajectory
+  satisfying $\mathcal{C}_2$ also satisfies $\mathcal{C}_1$.
+  Therefore
+  $\reach(x,t\mid\mathcal{C}_2) \subseteq \reach(x,t\mid\mathcal{C}_1)$,
+  and applying the measure $\mu$ to both sides gives
+  $V_R(x,t\mid\mathcal{C}_2) \le V_R(x,t\mid\mathcal{C}_1)$.
+  \parencite{sontag1998}
+\end{proof}
+
+\begin{corollary}{Constraint Accumulation}{constraint-accum}
+  If a system accumulates constraints over time,
+  $\mathcal{C}(t_1)\subseteq\mathcal{C}(t_2)$ for
+  $t_1\le t_2$, then
+  $V_R(x,T\mid\mathcal{C}(t_2)) \le V_R(x,T\mid\mathcal{C}(t_1))$
+  for any future time $T\ge t_2$.
+\end{corollary}
+
+The corollary captures a central ecological intuition:
+systems that accumulate constraints without shedding them
+eventually approach reachability exhaustion. Part~IX
+applies this directly to fiscal and governance systems.
+
+
+The Constraint Volume Theorem
+
+\label{sec:ch13-constraint-vol}
+
+The Reachability Monotonicity Theorem is qualitative. The
+following theorem makes the relationship between constraint
+density and reachability loss quantitative.
+
+\begin{definition}{Constraint Density}{constraint-density}
+  Let $\mathcal{C}$ be a set of trajectory constraints, each
+  eliminating a measurable subset of $X$. The
+  \emph{constraint density} at $x$ is
+  \[
+    \rho_\mathcal{C}(x)
+    = \frac{1}{\mu(X)} \sum_{c\in\mathcal{C}}
+      \mu(\{y : c\text{ eliminates }y\}).
+  \]
+\end{definition}
+
+\begin{theorem}{Constraint Volume Theorem}{constraint-vol}
+  Under independence assumptions on constraint impacts,
+  reachability volume satisfies
+  \[
+    V_R(x,t) \le \mu(X)\, e^{-\rho_\mathcal{C}|\mathcal{C}|}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Under independence, each constraint eliminates fraction
+  $\rho_\mathcal{C}$ of the remaining reachable set
+  independently. After $|\mathcal{C}|$ constraints, the
+  surviving fraction is
+  $(1-\rho_\mathcal{C})^{|\mathcal{C}|}$. Using the
+  inequality $1-p\le e^{-p}$ for $p\in[0,1]$,
+  \[
+    V_R(x,t)
+    \le \mu(X)(1-\rho_\mathcal{C})^{|\mathcal{C}|}
+    \le \mu(X)\,e^{-\rho_\mathcal{C}|\mathcal{C}|}. \qedhere
+  \]
+\end{proof}
+
+\begin{remark}{Exponential Collapse}{exp-collapse}
+  The Constraint Volume Theorem reveals that reachability
+  volume decays \emph{at least exponentially} in constraint
+  count under independence. This is structurally analogous
+  to the exponential decay of partition functions under
+  constraint in statistical mechanics, and to the
+  exponential narrowing of hypothesis spaces under
+  independent observations in Bayesian inference.
+  Dependence among constraints can accelerate or decelerate
+  this decay, but cannot eliminate it if constraints
+  genuinely eliminate distinct regions of future space.
+\end{remark}
+
+
+Reachability Boundaries
+
+\label{sec:ch13-boundary}
+
+\begin{definition}{Reachability Boundary}{reach-boundary}
+  The \emph{reachability boundary} of $x$ at time $t$ is
+  \[
+    \partial\reach(x,t)
+    = \overline{\reach(x,t)} \setminus
+      \mathrm{int}(\reach(x,t)),
+  \]
+  where $\mathrm{int}(\cdot)$ denotes interior in the
+  topology of $X$.
+\end{definition}
+
+\begin{definition}{Boundary Proximity}{boundary-prox}
+  The \emph{boundary proximity} of a state
+  $y\in\reach(x,t)$ is
+  $\beta(y,x,t) = d(y,\partial\reach(x,t))$.
+\end{definition}
+
+\begin{theorem}{Boundary Proximity and Critical Instability}
+  {boundary-instab}
+  Let $(X,\Phi)$ be a smooth dynamical system. As
+  $\beta(y,x,t)\to0$, the sensitivity of future
+  reachability volume to perturbations diverges:
+  \[
+    \left\|\frac{\partial V_R}{\partial\epsilon}\right\|
+    \to \infty \quad \text{as } \beta \to 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Consider a trajectory $\gamma$ terminating near
+  $\partial\reach(x,t)$. A perturbation $\epsilon$ to
+  $\gamma$ displaces the terminal state by order $\epsilon$.
+  Near the boundary, a displacement of size $\epsilon$ can
+  either remain inside $\reach(x,t)$ or exit it, eliminating
+  an entire connected component of future reachability. The
+  change in $V_R$ is therefore not $O(\epsilon)$ but $O(1)$
+  in the worst case as $\beta\to0$. Hence
+  $\|\partial V_R/\partial\epsilon\|\to\infty$.
+\end{proof}
+
+\begin{remark}{Ecological Interpretation}{boundary-eco}
+  Boundary proximity is a precise analogue of ecological
+  \emph{edge effects}. A species population near the
+  boundary of its viable climate envelope is
+  disproportionately sensitive to small perturbations. An
+  institution near the boundary of its fiscal reachability
+  set is disproportionately sensitive to minor shocks. A
+  computation near the boundary of its termination condition
+  is disproportionately sensitive to numerical error. In
+  each case, the geometry of the reachability boundary ---
+  not the current state alone --- determines fragility.
+\end{remark}
+
+
+The Future Cone Theorem
+
+\label{sec:ch13-future-cone}
+
+Under broad conditions, reachability sets inherit a
+cone-like structure from the underlying dynamics. This is
+the geometric heart of the chapter.
+
+\begin{definition}{Future Cone}{future-cone-def}
+  The \emph{future cone} of $x$ from time $t_0$ is the union
+  over all future times:
+  \[
+    \mathcal{F}(x,t_0) = \bigcup_{t\ge t_0} \reach(x,t_0,t)
+    \subseteq X \times [t_0,\infty).
+  \]
+  \index{future cone|textbf}
+\end{definition}
+
+\begin{theorem}{Future Cone Theorem}{future-cone}
+  For any dynamical system $(X,\Phi)$ and initial state $x$:
+  \begin{enumerate}[(i)]
+    \item $\mathcal{F}(x,t_0)$ is non-empty for all $t_0$.
+    \item For $s\le t$, $\reach(x,t_0,s) \subseteq
+          \reach(x,t_0,t)$ whenever the dynamics are
+          non-contracting.
+    \item The boundary $\partial\mathcal{F}(x,t_0)$ is a
+          codimension-one surface in
+          $X\times[t_0,\infty)$ whenever $X$ is a smooth
+          manifold and $\Phi$ is smooth.
+    \item Collapse of $\mathcal{F}(x,t_0)$ to a
+          lower-dimensional set is equivalent to the system
+          becoming trapped in a proper invariant
+          submanifold.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) The trivial trajectory $\gamma(t)=x$ for all $t$ is
+  always admissible, so $x\in\reach(x,t_0,t)$ for all $t$.
+
+  (ii) Under non-contracting dynamics, any state reachable
+  at time $s$ remains reachable or leads to further states
+  at time $t>s$. Hence
+  $\reach(x,t_0,s)\subseteq\reach(x,t_0,t)$.
+
+  (iii) By the implicit function theorem, the boundary of
+  $\mathcal{F}(x,t_0)$ is locally a smooth hypersurface
+  wherever $\Phi$ is smooth and transversality conditions
+  hold.
+
+  (iv) If $\mathcal{F}(x,t_0)\subseteq M \subsetneq X$ for a
+  proper submanifold $M$, then $M$ is forward-invariant
+  under $\Phi$ restricted to trajectories from $x$.
+  Conversely, if the system is trapped in such an $M$, the
+  reachability set collapses to at most $\dim M < \dim X$
+  dimensions.
+\end{proof}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.1]
+\draw[-Stealth,DistGray,thick] (0,0) -- (6.2,0)
+  node[right,font=\small\sffamily] {time $t$};
+\draw[-Stealth,DistGray,thick] (0,-2.2) -- (0,2.4)
+  node[above,font=\small\sffamily] {$X$};
+\filldraw[DistBlue] (0.3,0) circle (2pt)
+  node[above left,font=\small\sffamily\color{DistBlue}] {$x$};
+\draw[DistTeal,very thick]
+  (0.3,0) to[out=60,in=170] (6,2);
+\draw[DistTeal,very thick]
+  (0.3,0) to[out=-60,in=190] (6,-2);
+\fill[DistTeal!10,opacity=0.7]
+  (0.3,0) to[out=60,in=170] (6,2)
+  -- (6,-2)
+  to[out=190,in=-60] (0.3,0);
+\draw[DistBlue,dashed] (2,-0.9) -- (2,0.9);
+\filldraw[DistBlue!40] (2,0) ellipse (2pt and 18pt);
+\node[below,font=\tiny\sffamily\color{DistBlue}] at (2,-1) {$t_1$};
+\draw[DistBlue,dashed] (4,-1.7) -- (4,1.7);
+\filldraw[DistBlue!40] (4,0) ellipse (2pt and 34pt);
+\node[below,font=\tiny\sffamily\color{DistBlue}] at (4,-1.8) {$t_2$};
+\node[font=\small\sffamily\color{DistTeal}] at (4.8,1.4)
+  {$\partial\mathcal{F}(x,t_0)$};
+\node[font=\small\sffamily\color{DistGray}] at (3.1,0)
+  {$\mathcal{F}(x,t_0)$};
+\end{tikzpicture}
+\caption{The future cone $\mathcal{F}(x,t_0)$ expands as time
+  increases under non-contracting dynamics. Vertical slices
+  at $t_1$ and $t_2$ show growing reachability sets. The cone
+  boundary $\partial\mathcal{F}$ is a smooth hypersurface
+  (\cref{thm:future-cone}). Trajectory collapse corresponds
+  to the cone narrowing to a lower-dimensional
+  submanifold.}
+\label{fig:future-cone}
+\end{figure}
+
+
+Reachability and Entropy
+
+\label{sec:ch13-entropy}
+
+Chapter~\ref{ch:entropy} established that entropy measures
+latent multiplicity beneath a distinction structure. We can
+now close the loop: entropy and reachability volume are
+related by a precise inequality.
+
+\begin{theorem}{Entropy--Reachability Inequality}{entropy-reach}
+  For a system with state space $X$ equipped with a
+  uniform measure $\mu$,
+  \[
+    S(x,t) \le k\log V_R(x,t) + S_0,
+  \]
+  where $k$ is the Boltzmann constant (or its informational
+  analogue $\log_2 e$ in nats/bits).
+\end{theorem}
+
+\begin{proof}
+  Entropy $S(x,t)=k\log\Omega(x,t)$ where $\Omega$ counts
+  microstates compatible with the current macrostate. Every
+  compatible microstate is reachable from some earlier
+  state, so $\Omega(x,t)\le\mu(\reach(x,t))=V_R(x,t)$ up to
+  normalisation. The inequality follows from monotonicity
+  of $\log$.
+\end{proof}
+
+The inequality is in general not tight: reachability volume
+upper-bounds entropy because the reachability set includes
+states that may be accessible but not thermodynamically
+populated. Chapter~\ref{ch:admissibility} tightens this to
+the admissible subset.
+
+
+Reachability in Computation
+
+\label{sec:ch13-computation}
+
+\csicon
+Reachability is a classical concept in theoretical computer
+science, where it underlies model checking, program
+verification, and complexity theory. The
+distinction-theoretic framing adds a quantitative geometric
+layer that classical reachability analysis typically omits.
+
+\begin{definition}{Computational Reachability Volume}{comp-reach}
+  Let $M$ be a Turing machine with configuration space $C$.
+  The \emph{computational reachability volume} from
+  configuration $c_0$ after $t$ steps is
+  $V_R^M(c_0,t) = |\reach_M(c_0,t)|$, the number of
+  distinct configurations reachable within $t$ computation
+  steps.
+\end{definition}
+
+\begin{proposition}{Halting and Reachability Collapse}{halt-reach}
+  A Turing machine $M$ halts on input $w$ if and only if
+  the reachability set eventually collapses to a singleton:
+  \[
+    \exists\, t^* :
+    \reach_M(c_0(w),t) = \{c_\mathrm{halt}\}
+    \quad \forall\, t \ge t^*.
+  \]
+\end{proposition}
+
+\begin{proof}
+  If $M$ halts at time $t^*$, the halting configuration
+  $c_\mathrm{halt}$ has no outgoing transitions. Hence for
+  all $t\ge t^*$, the only reachable configuration is
+  $c_\mathrm{halt}$. Conversely, if reachability collapses
+  to a singleton, that singleton must be a configuration
+  with no transitions, i.e.\ a halting configuration.
+\end{proof}
+
+\begin{remark}{Undecidability as Reachability Uncertainty}{undecide-reach}
+  The undecidability of the halting problem is, in
+  reachability terms, the statement that one cannot
+  determine in advance whether $V_R^M(c_0,t)$ will collapse
+  to a singleton. This is directly analogous to the
+  statement that one cannot determine from a present state
+  alone whether a trajectory approaches a boundary of the
+  reachability set.
+\end{remark}
+
+
+Reachability in Biology
+
+\label{sec:ch13-biology}
+
+\bioicon
+Biological systems operate under reachability constraints
+at every scale.
+
+\paragraph{Development.} A totipotent stem cell has maximal
+developmental reachability: it can become any cell type.
+Differentiation is irreversible commitment to a proper
+subset of fates. Waddington's epigenetic landscape is a
+qualitative picture of the reachability structure of
+developmental trajectories \parencite{waddington1957strategy}.
+Reachability volume decreases monotonically during normal
+development (\cref{thm:reach-mono}); reprogramming
+(e.g.\ induced pluripotency) partially restores it.
+
+\paragraph{Immune memory.} An immune system that has
+encountered antigen $a$ has a different reachability set
+than a naive immune system. Vaccination expands
+reachability volume with respect to pathogen response while
+leaving most of state space unchanged. Immunosuppression
+contracts it.
+
+\paragraph{Ecology.} A food web defines reachability
+constraints among species: which trophic configurations are
+accessible from a given community composition. Extinction
+collapses reachability by permanently removing nodes from
+the network. The Constraint Volume Theorem
+(\cref{thm:constraint-vol}) predicts exponential narrowing
+of ecological reachability under sequential extinction.
+
+
+Reachability and the Distinction Framework
+
+\label{sec:ch13-connection}
+
+We close the chapter by connecting reachability geometry
+back to the distinction-theoretic foundations of Part~I.
+
+\begin{theorem}{Reachability as Distinction Preservation}
+  {reach-dist}
+  A trajectory $\gamma:[t_0,t]\to X$ is
+  reachability-preserving if and only if it does not reduce
+  the number of distinctions that can be produced from any
+  state along $\gamma$. Formally,
+  \[
+    V_R(\gamma(t),t) \ge V_R(\gamma(t_0),t_0)
+    \iff
+    D(\gamma(t)) \ge D(\gamma(t_0)).
+  \]
+\end{theorem}
+
+\begin{proof}
+  Each reachable state $y\in\reach(x,t)$ corresponds to a
+  distinct future distinction structure. A reduction in
+  $V_R$ therefore corresponds to the elimination of entire
+  families of distinction structures from the future.
+  Conversely, preservation of $V_R$ preserves the range of
+  distinction structures accessible from $\gamma(t)$. The
+  equivalence follows from the bijection between reachable
+  states and achievable distinction structures under the
+  assumption that distinct states support distinct
+  distinctions.
+\end{proof}
+
+This theorem is the bridge to Chapter~\ref{ch:admissibility}.
+Reachability asks which states are accessible.
+Admissibility asks which of those states preserves the
+capacity to reach further states --- and, ultimately, to
+produce further distinctions.
+
+
+Related Frameworks
+
+\label{sec:ch13-related-frameworks}
+
+\subsection*{Information Geometry}
+
+\emph{Convergence.} Information geometry equips spaces of
+probability distributions with a canonical Riemannian
+structure --- the Fisher information metric --- turning
+families of distributions into manifolds on which distances,
+geodesics, and volumes are well defined
+\parencite{amari2016,ay2017}. This chapter's Reachability Set
+and Volume (\cref{defn:reach-set}) treats reachability in
+exactly the same spirit: not as a mere list of accessible
+states but as a measurable volume, $V_R$, in a genuinely
+geometric space.
+
+\emph{Divergence.} Information geometry's metric is induced by
+the curvature of a statistical model itself --- how
+distinguishable nearby distributions are under repeated
+sampling --- a property specifically of probability measures.
+This chapter's reachability volume is induced by dynamics, not
+statistics: $V_R(x,t)$ is the volume of states accessible from
+$x$ under whatever flow or transition structure governs the
+system, well defined even for purely deterministic systems with
+no probabilistic interpretation at all. The Reachability
+Monotonicity Theorem (\cref{thm:reach-mono}) is a dynamical, not
+a statistical, fact.
+
+\emph{Open question.} Whether a Fisher-Rao-style metric could be
+constructed directly on the reachable sets themselves --
+treating each $\reach(x,t)$ as an empirical distribution over
+future states -- yielding a genuinely information-geometric
+reading of reachability volume, is not pursued here.
+
+\subsection*{Dynamical Systems Theory}
+\index{reachability!control-theory contrast|textbf}
+
+\emph{Convergence.} The classical treatment of basins of
+attraction, invariant sets, and forward-orbit closures
+\parencite{strogatz2015,smale1967} is the most direct
+mathematical antecedent of this chapter's reachable set
+$\reach(x,t)$: the forward orbit of $x$ under a system's flow,
+or its closure, is exactly the structure this chapter measures.
+
+\emph{Divergence.} Classical dynamical systems theory is
+centrally interested in long-run, asymptotic orbit behaviour ---
+attractors, limit cycles, basins --- largely independent of any
+value attached to where an orbit ends up. This chapter's
+apparatus instead treats the \emph{size} of the reachable set
+at every finite time $t$ as the primary object, via the
+Reachability Monotonicity Theorem and the Constraint Volume
+Theorem (\cref{thm:constraint-vol}), because the chapter's
+downstream concern --- developed in Chapter~\ref{ch:admissibility}
+--- is precisely which of these reachable futures preserve
+value, not merely where the system eventually settles.
+
+\emph{Open question.} Whether $V_R$'s monotonicity properties
+correspond cleanly to Liouville-theorem-style volume
+preservation for Hamiltonian flows \parencite{arnold1989}, or
+whether dissipative systems, where phase-space volume
+contracts, require a separate treatment within this chapter's
+framework, is left open.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Reachability sets formalise what a system can
+        become.
+  \item $V_R$ is the primary quantitative measure of future
+        possibility.
+  \item Stronger constraints monotonically reduce $V_R$
+        (\cref{thm:reach-mono}).
+  \item Constraint accumulation causes at least exponential
+        decay of reachability (\cref{thm:constraint-vol}).
+  \item States near the reachability boundary exhibit
+        critical instability (\cref{thm:boundary-instab}).
+  \item Under smooth, non-contracting dynamics, reachable
+        futures form a cone-like structure
+        (\cref{thm:future-cone}).
+  \item Entropy is bounded above by the log of reachability
+        volume (\cref{thm:entropy-reach}).
+  \item In computation, halting equals reachability
+        collapse; in biology, differentiation, immunity, and
+        extinction are all reachability-reducing events.
+  \item Reachability preservation is equivalent to
+        distinction capacity preservation
+        (\cref{thm:reach-dist}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[CS]
+  Let $X=\{0,1\}^n$ with Hamming distance. Define a single
+  step as a bit-flip of any one coordinate. Compute
+  $V_R(x,t)$ for $t=0,1,2,3$ and identify when the
+  constraint set $\mathcal{C}=\{\text{no flip of bit }k\}$
+  reduces reachability volume, verifying
+  \cref{thm:reach-mono}.
+\end{exercise}
+
+\begin{exercise}[Bio]
+  Describe Waddington's epigenetic landscape in terms of
+  \cref{defn:reach-set}. What corresponds to the state space
+  $X$, the dynamics $\Phi$, and the reachability boundary?
+  What biological event corresponds to $V_R\to0$?
+\end{exercise}
+
+\begin{exercise}
+  Prove that for a reversible dynamical system (one where
+  $\Phi_{s,t}$ is a bijection for all $s\le t$),
+  reachability volume is constant: $V_R(x,t)=V_R(x,t_0)$ for
+  all $t\ge t_0$. Interpret this in terms of Liouville's
+  theorem in Hamiltonian mechanics.
+\end{exercise}
+
+\begin{exercise}[CS]
+  Define the \emph{reachability entropy} of a program $P$
+  from initial state $s_0$ at time $t$ as
+  $H_R(t)=\log V_R^P(s_0,t)$. Show that for a deterministic
+  program, $H_R(t)$ is non-increasing after the program
+  begins deterministic execution. When is $H_R(t)$
+  constant?
+\end{exercise}
+
+\begin{exercise}
+  Let $\mathcal{C}_1,\mathcal{C}_2$ be two constraint sets
+  that are \emph{not} independent (they eliminate
+  overlapping regions of $X$). Show that the bound in
+  \cref{thm:constraint-vol} may be loose, and derive a
+  tighter bound under a known overlap fraction $\alpha$.
+\end{exercise}
+
+
+
+
+
+\chapter{Admissibility}
+\label{ch:admissibility}
+
+\begin{epigraph}{It is not enough to reach the destination.
+  One must arrive in a condition from which further
+  journeys remain possible.}
+  {Attributed to no one; true of everyone}
+\end{epigraph}
+
+\begin{objectives}
+  \item Distinguish admissibility from bare reachability.
+  \item Define the admissibility manifold $\adm$.
+  \item Prove the Admissibility Existence Theorem.
+  \item Prove the Observational--Interventional Separation
+        Theorem.
+  \item Prove the Admissibility Distortion Theorem.
+  \item Prove the Projection--Admissibility Gap Theorem.
+  \item Apply admissibility to immune escape, program
+        correctness, and alignment.
+\end{objectives}
+
+
+The Insufficiency of Reachability
+
+\label{sec:ch14-insufficiency}
+
+Chapter~\ref{ch:reachability} established that reachability
+volume is the primary quantitative measure of a system's
+future possibility. But reachability alone is insufficient
+as a criterion for evaluating trajectories. Consider two
+trajectories $\gamma_1$ and $\gamma_2$ from the same initial
+state $x$, both terminating at time $T$ with identical
+reachability volumes,
+$V_R(\gamma_1(T),T) = V_R(\gamma_2(T),T)$. Are they
+equivalent? Not necessarily. It matters \emph{which} states
+are reachable, not merely \emph{how many}.
+
+\begin{example}{Two Trajectories with Equal Volume}{equal-vol}
+  \bioicon
+  Consider an immune system that has fought off infection
+  via two strategies. Strategy $\gamma_1$ produces a diverse
+  antibody repertoire, reaching many distinct antigenic
+  configurations. Strategy $\gamma_2$ produces a narrow,
+  highly optimised antibody response, reaching an equal
+  \emph{number} of configurations but concentrated in a
+  single antigenic region. Both strategies give
+  $V_R(\gamma_i(T),T)=k$ for the same $k$. But $\gamma_2$
+  has exhausted cross-reactive potential: a novel antigen
+  outside its narrow repertoire will find the immune system
+  unable to respond. $\gamma_1$ preserves the capacity to
+  respond to novel threats. Reachability volume is the
+  same. Admissibility is not.
+\end{example}
+
+\begin{distinctionaside}{The Meeting That Could Have Been an
+  Email}
+A one-hour meeting removes one hour from ten people. The
+meeting therefore destroys ten hours of future possibility.
+
+To justify itself, it must generate more future possibility
+than it consumes. Most meetings fail this test.
+\end{distinctionaside}
+
+\begin{envelopeaside}{The Cost of Meetings}
+Ten people spend one hour in a meeting. Current cost:
+$10$ person-hours.
+
+Future cost: every delayed decision changes future reachable
+states. The true cost is not the hour consumed. It is the
+reachable volume destroyed by consuming it.
+
+Most calendars ignore the larger term.
+\end{envelopeaside}
+
+This motivates the central concept of the chapter.
+\emph{Admissibility} refines reachability by asking not
+merely whether a state is reachable, but whether reaching
+it preserves the capacity for further reachability ---
+including the reachability of further admissible states.
+
+
+Why Feasibility Is Not the Same as Admissibility
+
+\label{sec:ch14-why-feasibility}
+
+Many disciplines already possess concepts that resemble
+admissibility on the surface. Engineers speak of feasible
+designs: a design is feasible if it satisfies every specified
+constraint --- structural, thermal, budgetary --- at the
+moment of evaluation. Optimisation theory speaks of a
+feasible region: the subset of a search space satisfying a
+problem's constraints, within which an objective function is
+then optimised. Constraint satisfaction in this sense asks a
+single, static question: does a candidate solution violate
+any constraint, right now?
+
+Admissibility asks a different and more demanding question. A
+state can be perfectly feasible --- satisfying every
+constraint imposed on it --- while the act of reaching that
+state forecloses the future feasibility of states that would
+otherwise have remained available. Feasibility, as ordinarily
+used, is evaluated at a single instant against a fixed
+constraint set. Admissibility is evaluated against a
+trajectory's effect on the constraint set itself, asking not
+merely whether the present state is acceptable but whether
+reaching it leaves the system's future similarly well
+supplied with acceptable states. A feasible trajectory can be
+admissibility-destroying: the immune system's narrow,
+highly-optimised antibody response above is feasible by every
+ordinary criterion --- it satisfies the constraint of fighting
+off the present infection --- and admissibility-destroying
+all the same. Feasibility is a property of a single state
+relative to a fixed constraint set; admissibility is a
+property of a trajectory relative to the constraint sets its
+own continuation will face.
+
+
+Common Misinterpretations of Admissibility
+
+\label{sec:ch14-misinterpretations}
+
+A first misreading treats admissibility as simply a stricter
+or more conservative feasibility criterion --- as though
+admissible states were just a smaller, safer subset of
+feasible ones. This is not the relationship. A state can be
+admissible while being only narrowly feasible by ordinary
+standards, if reaching it preserves substantial future
+reachability despite operating close to some constraint
+boundary; and a state can be comfortably feasible while being
+inadmissible, as the chapter's opening example shows.
+Admissibility and feasibility are evaluated along different
+axes entirely, not nested subsets of the same axis.
+
+A second misreading equates admissibility with utility or
+preference satisfaction --- that an admissible trajectory is
+simply one a rational agent would prefer. The Admissibility
+Manifold defined below is constructed without reference to
+any agent's preferences at all; it depends only on the
+structure of future reachability, the same structure
+Chapter~\ref{ch:reachability} formalised independently of what
+anyone wants. An agent may prefer an inadmissible trajectory
+for reasons entirely orthogonal to admissibility, and nothing
+in this chapter's machinery forbids that; what the chapter
+does establish, and what later chapters build upon, is that
+such a preference comes at a specific, measurable cost in
+future reachable volume.
+
+A third misreading equates admissibility with mere survival
+--- that as long as a system continues to exist, it remains
+admissible by default. Chapter~\ref{ch:beyond-continuation}
+already showed that continuation alone cannot distinguish
+healthy persistence from pathological persistence; the same
+gap reappears here. A system can survive indefinitely along a
+trajectory that steadily narrows its admissible future, right
+up to a final state from which almost nothing further is
+reachable. Survival says a system is still there. Admissibility
+says something about what it can still become.
+
+By the end of this chapter, the admissibility manifold
+$\adm(x,t)$ will have been defined formally, the Admissibility
+Existence Theorem will guarantee its existence under stated
+conditions, and the Projection--Admissibility Gap Theorem will
+show precisely how much admissibility-relevant structure a
+naive feasibility check discards. Chapter~\ref{ch:geometry-futures}
+then extends this chapter's manifold into a fuller invariant
+--- adding curvature and topology to the volume measure
+developed here --- and asks whether the resulting
+preservation criterion can be derived as a strategic
+conclusion rather than assumed as a value judgement.
+
+
+The Admissibility Manifold
+
+\label{sec:ch14-manifold}
+
+\begin{definition}{Future Reachability Function}{future-reach}
+  For a state $y\in X$ and time $t$, define the
+  \emph{future reachability function}
+  $F(y,t,\tau) = V_R(y,t,t+\tau)$: the reachability volume
+  available from $y$ over a further time interval of length
+  $\tau > 0$.
+\end{definition}
+
+\begin{definition}{Admissibility Threshold}{adm-threshold}
+  Fix a threshold $\alpha>0$ and a horizon $\tau>0$. A
+  state $y\in X$ is \emph{$(\alpha,\tau)$-admissible} from
+  $x$ at time $t$ if $y\in\reach(x,t_0,t)$ and
+  $F(y,t,\tau) \ge \alpha\cdot V_R(x,t_0,t)$: the future
+  reachable from $y$ retains at least fraction $\alpha$ of
+  the reachability volume that was available at the start.
+\end{definition}
+
+\begin{definition}{Admissibility Manifold}{adm-manifold}
+  The \emph{admissibility manifold} is the closure of the
+  set of $(\alpha,\tau)$-admissible states:
+  \[
+    \adm(x,t_0,t)
+    = \overline{\{
+        y \in \reach(x,t_0,t) :
+        F(y,t,\tau) \ge \alpha\cdot V_R(x,t_0,t)
+      \}}.
+  \]
+  \index{admissibility!manifold|textbf}
+\end{definition}
+
+The admissibility manifold is a subset of the reachability
+set: $\adm(t) \subseteq \reach(x,t_0,t)$. It contains those
+reachable states from which the future
+remains open.\index{future cone!relation to A(x,t)|textbf}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[scale=1.05]
+\draw[-Stealth,DistGray,thick] (0,0)--(7,0)
+  node[right,font=\small\sffamily]{time $t$};
+\draw[-Stealth,DistGray,thick] (0,-2.5)--(0,2.6)
+  node[above,font=\small\sffamily]{$X$};
+\fill[DistTeal!10]
+  (0.3,0) to[out=65,in=175] (6.5,2.2)
+  -- (6.5,-2.2)
+  to[out=185,in=-65] (0.3,0);
+\draw[DistTeal,very thick]
+  (0.3,0) to[out=65,in=175] (6.5,2.2);
+\draw[DistTeal,very thick]
+  (0.3,0) to[out=-65,in=185] (6.5,-2.2);
+\fill[DistGold!15]
+  (0.3,0) to[out=45,in=178] (6.5,1.1)
+  -- (6.5,-1.1)
+  to[out=182,in=-45] (0.3,0);
+\draw[DistGold,thick,dashed]
+  (0.3,0) to[out=45,in=178] (6.5,1.1);
+\draw[DistGold,thick,dashed]
+  (0.3,0) to[out=-45,in=182] (6.5,-1.1);
+\node[font=\tiny\sffamily\color{DistRed}] at (5.3,1.9)
+  {extractive};
+\node[font=\tiny\sffamily\color{DistRed}] at (5.3,-1.9)
+  {extractive};
+\filldraw[DistBlue] (0.3,0) circle (2pt)
+  node[above left,font=\small\sffamily\color{DistBlue}]{$x$};
+\node[font=\small\sffamily\color{DistTeal}] at (3.2,2.1)
+  {$\reach(x,t)$};
+\node[font=\small\sffamily\color{DistGold}] at (3.1,0)
+  {$\adm(x,t)$};
+\end{tikzpicture}
+\caption{The admissibility manifold $\adm(x,t)$ (gold) is a
+  proper subset of the reachability set (teal). States in
+  the reachability set but outside the admissibility
+  manifold are \emph{extractive}: reaching them collapses
+  future possibility below threshold $\alpha$.}
+\label{fig:adm-manifold}
+\end{figure}
+
+
+Admissibility Existence
+
+\label{sec:ch14-existence}
+
+\begin{theorem}{Admissibility Existence Theorem}{adm-exist}
+  Let $(X,\Phi)$ be a compact dynamical system with
+  continuous $F(\cdot,t,\tau)$ for all $t,\tau>0$. Then for
+  any $\alpha\in(0,1)$ and $\tau>0$, the admissibility
+  manifold $\adm(x,t)$ is non-empty whenever $\reach(x,t)$
+  is non-empty and $V_R(x,t)>0$.
+\end{theorem}
+
+\begin{proof}
+  Since $F(y,t,\tau)$ is continuous on the compact set
+  $\reach(x,t)$, it attains its maximum at some
+  $y^*\in\reach(x,t)$. Let $V^* = F(y^*,t,\tau)$. We need
+  $V^* \ge \alpha\cdot V_R(x,t_0,t)$. At minimum, the
+  trivial continuation $\gamma(s)=y^*$ for
+  $s\in[t,t+\tau]$ gives $F(y^*,t,\tau)\ge0$. Since
+  $\reach(x,t)$ is non-empty and compact, and $F$ is
+  continuous, the supremum is attained. If $V_R(x,t)>0$
+  then $\reach(x,t)$ contains states with non-trivial
+  forward dynamics, so $V^*>0$. Choosing
+  $\alpha < V^*/V_R(x,t_0,t)$ guarantees
+  $\adm(x,t)\ne\emptyset$.
+\end{proof}
+
+\begin{remark}{Non-triviality of the threshold}{adm-threshold-rmk}
+  The Admissibility Existence Theorem guarantees that
+  $\adm$ is non-empty but does not guarantee it contains
+  trajectories that are practically useful. For large
+  $\alpha$ (requiring the future to be nearly as open as
+  the present), the admissibility manifold may be very
+  small. The choice of $\alpha$ is a design parameter
+  reflecting how strongly a system values future openness
+  versus present gain. Chapter~\ref{ch:geometry-futures}
+  discusses how this parameter connects to generative
+  versus extractive trajectories.
+\end{remark}

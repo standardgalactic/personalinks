@@ -1,0 +1,153 @@
+**Experiment N+1 – Adding a New Experiment**
+
+Below is the step‑by‑step checklist you must follow before creating an addi[4D[K
+additional experiment in this catalog.
+
+---
+
+### 1. Classify the Experiment  
+Determine whether it belongs to one of these categories:
+
+| Category | Meaning |
+|----------|---------|
+| **S**    | Concrete state / behavior (e.g., property tests, observer impl[4D[K
+implementations). |
+| **X**    | Purely experimental or speculative; results are not intended f[1D[K
+for production. |
+| **Q**    | Research question – exploratory, may be open or provisional. |[1D[K
+|
+| **I**    | Intentionally “intensional” – used only to demonstrate a theo[4D[K
+theoretical nuance (e.g., identity vs extensionality). |
+
+---
+
+### 2. Document Purpose  
+Write a concise sentence that states the *specific* scientific or design qu[2D[K
+question the experiment is meant to answer.
+
+```python
+PURPOSE: <One‑sentence description of what you are trying to discover>
+```
+
+---
+
+### 3. Check Theory Status  
+Refer to **THEORY_STATUS.md**:
+
+- **Paper‑licensed** (✓) → well‑established, can be used in specifications.[15D[K
+specifications.
+- **Provisional** (→) → still under active discussion; resul[5D[K
+results may change.
+- **Research** (?) → exploratory only, not intended for normative use.
+
+Mark the experiment accordingly.
+
+---
+
+### 4. Mark as Experimental (if applicable)  
+If the purpose is experimental or research‑only, add the pytest marker:
+
+```python
+@pytest.mark.experimental
+```
+
+to any extracted test files so that they are automatically skipped in CI un[2D[K
+unless explicitly run.
+
+---
+
+### 5. Add to This Catalog  
+
+Insert a new entry at the bottom of this document following the **Experimen[11D[K
+**Experiment Template** (see below).  
+Make sure you also update the **Experiment Dependencies** table if your exp[3D[K
+experiment introduces or depends on other layers.
+
+---
+
+### Experiment Template
+
+```python
+"""
+Experiment N+1: <Title – e.g., “Test Multi‑Timescale Continuation”>
+
+CLASS: S | X | Q | I
+LAYER: 0 | 1 | 2 | 3   (e.g., Layer 3)
+THEORY STATUS: Paper-licensed | Provisional | Research
+
+PURPOSE:
+  <Brief description of the question or hypothesis being explored>
+
+PAPER REFERENCE:
+  <Reference to any Appendix, Section, or external paper that supports this[4D[K
+this experiment>
+
+SUCCESS CRITERIA:
+  - <Observable outcome #1 (e.g., replay determinism)>
+  - <Observable outcome #2 (e.g., regret patterns)>
+
+THEORY QUESTIONS:
+  - Lists of open questions raised by the experiment
+    • “Does equal‑content minimal POP commute across scales?”
+    • “What are the limits of horizon‑equivalence for >3 steps?”
+
+EXPECTED OUTCOME:
+  <What success would look like in practice (e.g., passing all regression t[1D[K
+tests)> 
+
+FAILURE MODES:
+  - Conditions under which we accept failure as a learning opportunity
+    • “If replay fails, log configuration divergence.”
+
+REMARKS:
+  – Cross‑reference to existing experiments if they share components.
+  – Note any new dependencies on primitives or observers not yet covered.
+
+"""
+
+```
+
+---
+
+### 6. Update Dependencies  
+
+- **Layer Mapping**  
+  Verify that the experiment’s layer (0, 1, 2, 3) is placed correctly in th[2D[K
+the *Experiment Dependencies* table at the top of this document.
+- **Critical Path**  
+  If your new experiment introduces a primitive or observer used by Layer‑0[7D[K
+Layer‑0 experiments, mark it as part of the critical path and note any re‑o[4D[K
+re‑ordering requirements.
+
+---
+
+### 7. Verify Maintenance Rules  
+
+Remember:
+
+- **Experiments explore**, not enforce; tests verify only.
+- **Specifications prescribe** – if the theory status changes (e.g., from R[1D[K
+Research → Paper‑licensed), you must update both here *and* in **THEORY_STA[12D[K
+**THEORY_STATUS.md**.
+- **Do NOT** “fix” research results by hard‑coding defaults. Document surpr[5D[K
+surprising outcomes as lessons learned.
+
+---
+
+### 8. Final Review  
+
+Before finalizing:
+
+1. Run the automated regression suite (e.g., `pytest -m experimental`) to e[1D[K
+ensure no existing tests break.
+2. Confirm that any new imports or helper functions are added to **test_reg[10D[K
+**test_regressions.py** and referenced in this template.
+3. If the experiment is part of a *critical path*, double‑check that all pr[2D[K
+prerequisite experiments are up‑to‑date.
+
+---
+
+Once these steps are completed, your new experiment will be properly integr[6D[K
+integrated into the system’s knowledge base and future contributors can ref[3D[K
+reference it accurately.
+

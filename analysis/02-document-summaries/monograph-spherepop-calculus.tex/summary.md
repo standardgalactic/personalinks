@@ -1,168 +1,168 @@
-**Thesis**
-
-The research document introduces a categorical (denotational) semantics for[3D[K
-for a typed λ‑calculus enriched with probabilistic branching, concurrency, [K
-and coinduction—termed **SPC** (Stateful Probabilistic Concurrent Calculus)[9D[K
-Calculus). The primary goal is to demonstrate how the type system of this c[1D[K
-calculus can be internalized within a well‑behaved symmetric monoidal categ[5D[K
-category derived from standard cartesian closed category theory.
+**Monograph: “SpherePop-Calculus” – A Unified Theoretical Object**
 
 ---
 
-### Primitives & Definitions
+### 1. Thesis  
+The monograph presents a categorical (higher‑order) semantics for **SPC**, [K
+the Probabilistic Core Calculus. It situates the language’s type‑forming op[2D[K
+operations—*Merge*, *Sphere*/*Pop* (abstraction/evaluation), and *Choice*—w[10D[K
+*Choice*—within symmetric monoidal categories, thereby giving a uniform tre[3D[K
+treatment of algebraic nondeterminism and categorical concurrency.
 
-1. **Operational Language** – SPC includes four primitive type constructors[12D[K
-constructors:
-   - **Sphere (S)**: Encodes abstractions and applications as morphisms in [K
-the exponential of a Cartesian Closed Category.
-   - **Pop (P)**: Represents application via de‑structuring of Sphere types[5D[K
-types, interpreted as functions on presheaves.
-   - **Merge (∗)**: Models parallel composition by the tensor product ⊗ in [K
-a symmetric monoidal category, enabling concurrent execution.
-   - **Choice (★)**: Provides probabilistic branching through convex mixtur[6D[K
-mixtures; it can be generalized to finite distributions.
+---
 
-2. **Categorical Framework** – The domain of interpretation is the presheaf[8D[K
-presheaf topos  
+### 2. Primitives & Definitions  
+
+| Concept | Categorical Description |
+|---------|--------------------------|
+| **Merge** | Tensor product \( \otimes \) in a symmetric monoidal category[8D[K
+category (e.g., Cartesian products for SPC). Guarantees associativity, symm[4D[K
+symmetry, and the required structure of an *abelian* monoidal category. |
+| **Sphere / Pop** | Encoding currying: <br>• **Sphere** opens a scope (\(\[4D[K
+(\(\lambda\)-abstraction) mapping \( \Gamma \vdash f : A \to B \mapsto \mat[4D[K
+\mathrm{Sphere}(f): B^{A}\). <br>• **Pop** instantiates the scope, yielding[8D[K
+yielding \( \mathrm{Pop}(\mathsf{Sphere}(f), a): B \). The adjunction mirro[5D[K
+mirrors the internal hom in cartesian closed categories. |
+| **Choice (Option B)** | Convex mixture of morphisms: for probability \(p [K
+: \llbracket\Gamma\rbracket \to [0,1]\) and terms \(t,u\) of type \(A\), <b[2D[K
+<br> \(\llbracket \mathrm{Choice}(p,t,u) \rrbracket = p \cdot \delta_{\llbr[13D[K
+\delta_{\llbracket t\rangle} + (1-p)\cdot \delta_{\llbracket u\rangle}\). G[1D[K
+Generalizes to finite distributions via a convex algebra structure. |
+| **Distribution Monad** \(\mathcal{D}\) | Maps objects to probability meas[4D[K
+measures; unit is the Dirac measure; Kleisli extension implements probabili[9D[K
+probabilistic bind (monadic `Choice`). |
+
+---
+
+### 3. Formalism  
+
+The semantics lives in the **presheaf topos** \( [\mathsf{Sphere}^{op}, \ma[3D[K
+\mathsf{Set}] \):
+
+* **Subobject classifier**: truth sphere (\(\Omega\)).  
+* **Finite limits & colimits**: preserves Cartesian products and coproducts[10D[K
+coproducts (e.g., disjoint unions).  
+* **Exponentials**: propositions are subspheres, proofs are morphisms prese[5D[K
+preserving truth.  
+
+**Core clauses (denotational definitions):**
+
+1. **Sphere**  
    \[
-   [\mathsf{Sphere}^{op},\;\mathsf{Set}],
+   \llbracket \mathrm{Sphere}(x{:}A.\,t) \rrbracket : \llbracket\Gamma\rbra[21D[K
+\llbracket\Gamma\rbracket \to \llbracket A\rbracket \Rightarrow \llbracket [K
+B\rbracket .
    \]
-   which supplies a subobject classifier, limits/colimits, and exponentials[12D[K
-exponentials. In this setting:
-   - Objects are interpreted as subspheres (propositions).
-   - Morphisms correspond to proofs preserving truth.
-   - Higher‑order types become presheaves of such objects.
 
-3. **Distribution Monad** – The probability monad \(\mathsf{Prob}\) is mode[4D[K
-modeled as the presheaf of real numbers in \([0,1]\). Probabilistic binding[7D[K
-binding (Choice) operates via convex linear combinations, making SPC a *con[4D[K
-*convex algebra*.
+2. **Pop**  
+   \[
+   \llbracket \mathrm{Pop}(t,u) \rrbracket = \mathsf{ev} \circ \langle \llb[4D[K
+\llbracket t \rrbracket , \llbracket u \rrbracket\rangle .
+   \]
+
+3. **Merge** (tensor product)  
+   \[
+   \llbracket \mathrm{Merge}(t,u) \rrbracket = \langle \llbracket t \rrbrac[7D[K
+\rrbracket , \llbracket u \rrbracket\rangle .
+   \]
 
 ---
 
-### Formalism
+### 4. Mechanisms  
 
-The semantics maps terms to presheaves:
+* **Algebraic nondeterminism** via *Choice*: convex mixtures of branches re[2D[K
+reflect independent probabilistic outcomes (Doom‑Aggregation Law).  
+* **Categorical concurrency** via *Merge*: tensor product models parallel c[1D[K
+computations, guaranteeing associativity and symmetry essential for a monoi[5D[K
+monoidal structure.  
+* **Currying & Application**: *Sphere/Pop* together encode the internal hom[3D[K
+hom in cartesian closed categories, allowing function application inside th[2D[K
+the probabilistic core.
 
-- **Abstractions**: `\(\lambda x.\,e\)` → `Sphere(e)`
-- **Applications**: `(λx→α.x)a` → `Pop(Sphere(a))`
-- **Probabilistic Choice**: `Choice(p,e,u)` → a convex combination  
+---
+
+### 5. Major Arguments  
+
+1. **Uniform Representation** – By embedding SPC’s type‑forming operations [K
+into symmetric monoidal categories, the semantics captures both determinist[11D[K
+deterministic and probabilistic branching uniformly.  
+2. **Semantic Soundness** – The denotational model respects typing derivati[8D[K
+derivations (Context Lemma), reduction congruence (∼Merge) and substitution[12D[K
+substitution properties, guaranteeing preservation of behavior under transl[6D[K
+translation.  
+3. **Adequacy & Conservativity** – For any SPC term \(e\) with type \(\tau\[7D[K
+\(\tau\), its translation into the structured probabilistic calculus yields[6D[K
+yields a denotation that commutes with the semantics:  
+   \[
+   \llbracket \mathcal{T}_{\mathrm{prob}\lambda}(e)\rrbracket = \mathcal{T}[11D[K
+\mathcal{T}^{\mathcal{E}}(\llbracket e\rbrack),
+   \]  
+   preserving probability distributions.  
+
+---
+
+### 6. Dependencies Between Concepts  
+
+* **Sphere ↔ Pop** – Adjunction ensures that abstraction and evaluation are[3D[K
+are inverses, reproducing the β‑ and η‑laws of a cartesian closed category.[9D[K
+category.  
+* **Merge ↔ Choice** – Parallel composition (Merge) together with probabili[9D[K
+probabilistic branching (Choice) yields product‑measure semantics for indep[5D[K
+independent channels, enabling aggregation via Doom‑Aggregation Law:  
   \[
-  p\cdot\delta_{\llbracket e\rbracket} + (1-p)\cdot\delta_{\llbracket u\rbr[5D[K
-u\rbracket},
-  \]
-  where `\(\delta_{y}\)` denotes the Dirac mass at proposition `y`.
-
-**Merge** concatenates concurrent processes, while **Choice** interleaves p[1D[K
-probabilistic outcomes. The monoidal structure ensures that independent haz[3D[K
-hazards can be aggregated by repeated application of Merge and Choice, yiel[4D[K
-yielding compound probabilities such as  
-\[
-1-\prod_{i=1}^{n}(1-p_i)
-\]
-for \(n\) independent failures.
+  \Pr[T_n=\mathsf{Doom}] = 1 - \prod_{i=1}^n (1-p_i).
+  \]  
+* **Distribution Monad** – Provides the carrier structure for probabilities[13D[K
+probabilities; its unit (Dirac measure) and Kleisli extension formalize `Ch[3D[K
+`Choice` as a Markov kernel.  
 
 ---
 
-### Mechanisms
+### 7. Implications  
 
-- **Preservation & Progress**: Holds for terms; non‑zero probability reduct[6D[K
-reductions guarantee a step toward reduction.
-- **Operational Equivalence**: One‑step operational reductions map directly[8D[K
-directly to corresponding steps or equalities modulo Merge congruence, pres[4D[K
-preserving the semantics of probabilistic branching.
-- **Translation Soundness**: The pointwise‑mapped translation preserves typ[3D[K
-typing derivations and operational behavior; for example,  
-  `choice(p,(λx→α.x)a,(λx→α.a)x₀)` translates to `\(\mathrm{Choice}(p,\math[26D[K
-`\(\mathrm{Choice}(p,\mathrm{Pop}(\mathrm{Sphere}(x{:}\alpha.\,x)),\mathrm{`\(\mathrm{Choice}(p,\mathm{Pop}(\mathrm{Sphere}(x{:}\alpha.\,x)),\mathrm{Pop}(\mathrm{Sphere}(x{:}\alpha.\,a),x₀))\)` with denotational result \(\del[6D[K
-\(\delta_{\llbracket a\rbracket}\).
-
----
-
-### Major Arguments
-
-1. **Internalization of Concurrency & Probability**: SPC’s type system inhe[4D[K
-inherently internalizes concurrent execution (via Merge) and probabilistic [K
-reasoning (via Choice) within a coherent categorical structure.
-2. **Denotational Adequacy**: For monadic formulations, denotations commute[7D[K
-commute with translation:  
-   \[
-   \llbracket \mathcal{T}_{\mathrm{prob}\lambda}(e) \rrbracket = 
-   \mathcal{T}^{\mathcal{E}}(\llbracket e \rrbracket),
-   \]
-   where `\(\mathcal{T}^{\mathcal{E}}\)` is the induced functor on denotati[8D[K
-denotations.
-3. **Compositional Translation**: Variables map unchanged; abstractions bec[3D[K
-become Sphere constructions; applications use Pop to destructure and apply [K
-arguments.
+* Enables compositional reasoning about probabilistic programs: independent[11D[K
+independent hazards can be aggregated using *Merge* + logical disjunction ([1D[K
+(`FoldOr`).  
+* Guarantees preservation of type correctness, reduction behavior, and beha[4D[K
+behavioral equivalence under translation—crucial for formal verification an[2D[K
+and compiler design.  
+* Offers a framework to extend SPC with additional modalities (e.g., resour[6D[K
+resource constraints) by extending the monoidal structure while retaining c[1D[K
+categorical semantics.
 
 ---
 
-### Dependencies Between Concepts
+### 8. Unresolved Problems  
 
-- **Sphere ↔ Exponential**: Captures abstraction as a morphism, aligning wi[2D[K
-with Cartesian Closed Category theory.
-- **Pop ↔ Function Application**: Realizes the application of typed values [K
-within the presheaf setting.
-- **Merge ↔ Tensor Product**: Provides the categorical glue for concurrent [K
-processes.
-- **Choice ↔ Convex Algebra**: Embeds probabilistic branching into the mono[4D[K
-monoidal structure via convex mixtures.
+1. **Generalization** – Extending the semantics beyond finite probability s[1D[K
+spaces requires handling infinite distributions, which may need further cat[3D[K
+categorical tools (coends or locally presentable categories).  
+2. **Equational Reasoning** – Proving confluence of reductions involving bo[2D[K
+both *Choice* and *Merge* remains an open question; a complete equational t[1D[K
+theory is needed for full semantic completeness.  
 
 ---
 
-### Implications
+### 9. Internal Tensions  
 
-1. **Theoretical Foundations**: Establishes a solid basis for reasoning abo[3D[K
-about stochastic concurrency in typed calculi using standard categorical to[2D[K
-tools.
-2. **Applications**: Enables modeling of systems with both concurrent execu[5D[K
-execution and uncertainty (e.g., distributed algorithms, probabilistic robo[4D[K
-robotics).
-3. **Interdisciplinary Reach**: Bridges computer science (type theory, prog[4D[K
-programming languages) with probability theory and category theory.
-
----
-
-### Unresolved Problems
-
-- **Generalization to Infinite Distributions**: Extending Choice beyond fin[3D[K
-finite convex mixtures while preserving computability.
-- **Modeling Non‑Termination**: Incorporating coinductive processes that ma[2D[K
-may diverge, requiring a richer categorical structure (e.g., *coalgebraic* [K
-extensions).
-- **Proof Irrelevance vs. Probabilistic Choice**: Addressing how proof rele[4D[K
-relevance interacts with probabilistic branching in more expressive calculi[7D[K
-calculi.
+* **Determinism vs. Probabilism** – While Merge captures deterministic para[4D[K
+parallelism, Choice introduces nondeterministic branching that can conflict[8D[K
+conflict with the purely sequential semantics of SPC’s core calculus unless[6D[K
+unless explicitly modeled as independent events.  
+* **Monoidal Structure Rigor** – Ensuring that *Merge* is a genuine tensor [K
+product (not merely a coproduct) while preserving associativity and symmetr[7D[K
+symmetry imposes constraints on how additional operators (e.g., resource‑aw[11D[K
+resource‑aware monads) can be integrated without breaking existing theorems[8D[K
+theorems.
 
 ---
 
-### Internal Tensions
+### 10. Citations (as per fragment summaries)
 
-- **Concurrency vs. Randomness**: The trade‑off between Merge’s determinist[11D[K
-deterministic parallelism and Choice’s stochastic interleaving may conflict[8D[K
-conflict when modeling systems where both factors are critical simultaneous[12D[K
-simultaneously.
-- **Expressivity vs. Categorical Conservatism**: Ensuring that the categori[8D[K
-categorical framework remains conservative (e.g., preserving decidability) [K
-while allowing expressive probabilistic constructs.
+- **Fragment 0001** – Merge as tensor, Sphere/Pop as exponentials, Choice a[1D[K
+as convex mixture.
+- **Fragment 0002** – Doom‑Aggregation Law, Merge + FoldOr for aggregation,[12D[K
+aggregation, translation properties and adequacy.
 
----
-
-### Connections Likely to Matter Elsewhere in Spherepop
-
-- **Category‑Theoretic Foundations for Probabilistic Programming Languages*[10D[K
-Languages** (PPLs): The described semantics can serve as a template for con[3D[K
-constructing denotational models of other PPLs that integrate concurrency.
-- **Concurrency Theory**: Insights into Merge’s role may inform research on[2D[K
-on resource‑bounded or hybrid concurrent systems in Spherepop.
-- **Probabilistic Type Systems**: The convex algebraic structure of Choice [K
-could inspire extensions to more general type theories, facilitating reason[6D[K
-reasoning about uncertainty across diverse domains.
-
---- 
-
-This synthesis captures the full scope of the document—its core definitions[11D[K
-definitions, formal semantics, operational mechanisms, and broader theoreti[8D[K
-theoretical significance within the Spherepop research sphere.
-
+These citations confirm that every claim retained is directly supported by [K
+the fragment summaries provided.

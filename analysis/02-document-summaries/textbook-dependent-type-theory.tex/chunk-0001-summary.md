@@ -1,170 +1,174 @@
 **Historical Substitution – A Constructive Interpretation**
 
-In conventional dependent type theory substitution is treated as a purely s[1D[K
-syntactic replacement:
+In conventional dependent type theory substitution (β‑reduction) is treated[7D[K
+treated as a purely syntactic replacement:
 
-* `t[x:=a]` simply swaps every free occurrence of the variable `x` with the[3D[K
-the term `a`.  
-* The correctness of this operation rests only on avoiding capture; after t[1D[K
-the swap, the provenance of the variables no longer matters.
+\[
+t[x:=a]\;\text{means replace every free }x\text{ by }a,
+\]
 
-Spherepop replaces this view by treating substitution as a **historical** ([1D[K
-(i.e., constructive) process:
-
-1. **Objects Carry Provenance** – A term is not just a string but a complet[7D[K
-completed historical construction embedded in a dependency graph `D(t)` tha[3D[K
-that records how it was built.
-2. **Substitution as an Operation on Histories** – Replacing one variable b[1D[K
-by another therefore transports both the observable syntax and its full con[3D[K
-constructive history.
+and correctness depends only on avoiding variable capture.  In the Spherepo[8D[K
+Spherepop kernel, however, substitution is *historical*: it replaces not ju[2D[K
+just symbols but whole constructive constructions and records their provena[7D[K
+provenance.
 
 ---
 
 ### Historical Environments
 
-When we have proven:
-
-* `H ⊢ a : A`
-
-the substitution environment is written as  
+When a term \(t\) has already been proved to inhabit a type (e.g.,  
 
 \[
-\sigma = \{ x_1 ↦ (a_1, H_1), x_2 ↦ (a_2, H_2), … \}
+H \vdash a : A,
 \]
 
-where each substituted object is paired with the history that constructed i[1D[K
-it.  
-Thus a term `t` together with an environment `\sigma` is denoted:
+where \(H\) is the current history), we introduce a **historical environmen[10D[K
+environment**  
 
 \[
-t[H,x↦a]
+\sigma = \{ x_1 \mapsto (a_1,H_1),\; x_2 \mapsto (a_2,H_2),\ldots\},
 \]
 
-rather than the plain `t[x:=a]`.
+which pairs each variable with the *history* that constructed its value.  S[1D[K
+Substitution is therefore written as  
+
+\[
+t[H,x\mapsto a],
+\]
+
+indicating “substitute \(a\) for \(x\) **within history** \(H\).”
 
 ---
 
 ### Definition of Historical Substitution
 
-**Definition (Historical Substitution)**  
+Let  
 
-Given histories `H₁`, `H₂` such that:
+1. \(H \vdash a : A\) – the object \(a\) is already constructed in some his[3D[K
+history \(H\), and  
+2. \(H;\operatorname{Declare}(x:A) \vdash t : B\) – we intend to replace fr[2D[K
+free occurrences of \(x\) by \(a\) inside term \(t\).
 
-* `H₁ ⊢ a : A`,
-* `H₁; Declare(x : A) ⊢ t : B`,
+Then **historical substitution** is defined as:
 
-the historical substitution is defined as:
+> Replace every free occurrence of \(x\) with \(a\) *and* extend the depend[6D[K
+dependency graph of \(t\) so that it now includes all dependencies required[8D[K
+required for constructing \(a\).
+
+Formally:
 
 \[
-t[H,x↦a] = \text{result of replacing every free } x \text{ in } t
+t[H,x\mapsto a] \;=\;
+\text{the term obtained by ordinary substitution, but together with history[7D[K
+history } H.
 \]
-
-while **extending** the dependency graph `D(t)` with all dependencies requi[5D[K
-required to construct `a`.  
-Thus substitution never discards provenance; it enriches it.
 
 ---
 
 ### Dependency Preservation
 
-*Theorem (Dependency Preservation)*  
+The resulting object inherits the richer provenance captured in its depende[7D[K
+dependency graph.  Let  
 
-Let `D(t)` be the dependency graph of `t`. After performing historical subs[4D[K
-substitution, the new term’s graph is:
+\(D(t)\) be the set of dependencies built into \(t\) before substitution.  [K
+
+After applying \(\sigma = (x \mapsto a)\),
 
 \[
-D(t[H,x↦a]) = D(t) \cup D(a),
+D(t[H,x\mapsto a]) = D(t) \cup D(a),
 \]
 
-together with edges introduced by the substitution site.  
-Hence substitution always *preserves* (and possibly enlarges) provenance.
+plus any new edges introduced by the substitution itself (e.g., edges from [K
+the substitution site to the proof steps that built \(a\)).  Thus **no prov[4D[K
+provenance is ever lost**; it is merely expanded.
 
 ---
 
-### Compositionality of Substitutions
+### Compositionality
 
-Multiple substitutions compose naturally:
-
-If  
+Multiple substitutions compose naturally.  If  
 
 \[
-\sigma_1 = \{ x ↦ (a, H_a) \},
-\qquad
-\sigma_2 = \{ y ↦ (b, H_b) \},
+\sigma_1 = \{ x \mapsto a, H_a\},\qquad
+\sigma_2 = \{ y \mapsto b, H_b\},
 \]
 
-then  
+then
 
 \[
-t[\sigma_1][\sigma_2] = t[\sigma_2 ∘ \sigma_1],
+t[\sigma_1][\sigma_2] \;=\; t[\sigma_2\circ\sigma_1],
 \]
 
-provided the usual capture‑avoidance conditions hold and their dependency g[1D[K
-graphs are compatible.
+provided the substitution sites do not conflict (standard capture‑avoidance[17D[K
+capture‑avoidance).  This preserves both semantic correctness and historica[9D[K
+historical integrity.
 
 ---
 
-### Substitution & Beta Reduction
+### Substitution vs. Beta Reduction
 
-*Theorem (Historical β‑Reduction)*  
-
-Ordinary reduction is:
+The ordinary reduction rule is  
 
 \[
-(\lambda x.t)\,a \longrightarrow t[x:=a].
+(\lambda x.t)\,a \;\longrightarrow\; t[x:=a].
 \]
 
-Spherepop interprets it as:
+In Spherepop we record this as a *historical* event:
 
 \[
-(H, (\lambda x.t)\,a) \longrightarrow (H', t[H,x↦a]),
+(H,\;(\lambda x.t)a) \;\longrightarrow\; (H',\;t[H,x\mapsto a]),
 \]
 
-where `H'` extends `H` by recording the substitution event itself.  
-Thus evaluation simultaneously builds a new observable term **and** records[7D[K
-records how that term arose historically.
+where \(H'\) is the history extended by the substitution.  Thus evaluation [K
+simultaneously builds a new observable term **and** a permanent historical [K
+record of how that term arose.
 
 ---
 
 ### Historical Capture Avoidance
 
-In the conventional system, capture is checked purely by variable names. In[2D[K
-In Spherepop:
-
-* Two variables with identical textual names but distinct declaration event[5D[K
-events (e.g., `e_x ≠ e_x'`) must be distinguished by their provenance.
-* Alpha conversion becomes a **historical renaming** that acts on the under[5D[K
-underlying declaration events, naturally supporting hygienic macros, proof [K
-replay, distributed construction, and incremental compilation.
+Traditional α‑conversion renames bound variables symbolically, but in Spher[5D[K
+Spherepop we also rename their *historical identity* because two variables [K
+may share the same name yet originate from different declaration events \(e[3D[K
+\(e_x \neq e_{x'}\).  Consequently, substitution respects not only syntacti[8D[K
+syntactic capture rules but also distinct provenance.  This natural extensi[7D[K
+extension supports hygienic macros, proof replay, distributed proof constru[7D[K
+construction, and incremental compilation.
 
 ---
 
 ### Historical Substitution Lemma
 
-*Theorem (Historical Substitution Lemma)*  
-
-If `H ⊢ a : A` and `H; Declare(x : A) ⊢ t : B`, then:
+If  
 
 \[
-H ⊢ t[H,x↦a] : B[H,x↦a],
+H \vdash a : A
 \]
 
-and the dependency graph of the resulting derivation is precisely the histo[5D[K
-historical composition (union with appropriate edges) of those of `t` and `[1D[K
-`a`.
+and  
+
+\[
+H;\operatorname{Declare}(x:A) \vdash t : B,
+\]
+
+then after substitution we have  
+
+\[
+H \vdash t[H,x\mapsto a] : B[H,x\mapsto a],
+\]
+
+and the dependency graph of the resulting derivation is exactly the histori[7D[K
+historical composition (union with edges to \(a\)’s construction history). [K
+ This lemma shows that the familiar substitution properties survive unchang[7D[K
+unchanged in the constructive setting.
 
 ---
 
-**Summary**
+**In Summary**
 
-By viewing substitution as an operation on **constructive histories**, Sphe[4D[K
-Spherepop preserves every piece of provenance that ordinary syntactic subst[5D[K
-substitution discards. This enriched notion ensures:
-
-* No accidental loss or merging of distinct construction events.
-* A richer semantics for dependent types, where terms carry full contextual[10D[K
-contextual narratives.
-* Natural extensions to macro hygiene and distributed proof systems, becaus[6D[K
-because all variable identities are globally unique by declaration history [K
-rather than lexical spelling alone.
-
+Historical substitution reframes β‑reduction as a *constructive* process: i[1D[K
+it replaces terms while preserving and extending their entire provenance.  [K
+Every new term carries with it a full dependency graph, enabling richer rea[3D[K
+reasoning about proofs (e.g., capture avoidance based on historical identit[7D[K
+identity) without sacrificing the familiar computational behavior of depend[6D[K
+dependent type theory.

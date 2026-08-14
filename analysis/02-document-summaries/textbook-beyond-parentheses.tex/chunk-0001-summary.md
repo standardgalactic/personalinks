@@ -4,117 +4,117 @@
 
 ### 1. From Substitution to Replay  
 
-Traditional symbolic computation replaces a function’s formal parameter wit[3D[K
-with an actual argument using **substitution**:
+Traditional symbolic computation replaces a formal parameter by an argument[8D[K
+argument using **substitution**:
 
 \[
 (\lambda x.t)\;u \;\longrightarrow\; t[u/x].
 \]
 
-*Why this works:* the substitution operation erases the story of how `u` ca[2D[K
-came into being, leaving only its syntactic value.  
+This operation is elegant because it turns function application into a pure[4D[K
+purely syntactic transformation: the variable disappears, and evaluation pr[2D[K
+proceeds as if the term had *always* denoted the supplied value.
 
-In Spherepop we argue that computation is fundamentally a **continuation of[2D[K
-of historical construction**, not just isolated symbolic manipulation.
+**Spherepop’s observation:**  
+Substitution hides the **history** that produced the argument. The transfor[8D[K
+transformed expression no longer records how `v` came to be, only its curre[5D[K
+current value.  
 
-#### Replay as an Extension Operation  
-
-Instead of inserting the raw argument `v`, replay records both the *value* [K
-and its provenance:
-
-\[
-(v,H_v) \quad\text{where } H_v \text{ is the history that produced } v.
-\]
-
-When a function expects a value of type `A` and we have an argument `v:A` w[1D[K
-with history \(H_v\), application becomes
+**Replay (the primitive operation):**  
+Instead of inserting just `v`, replay inserts a pair \((v,H_v)\), where \(H[3D[K
+\(H_v\) is the entire historical construction that generated `v`. Function [K
+application then becomes:
 
 \[
-(H_f,\;H_v)\;\xrightarrow{\text{Replay}}\;(H',\text{result}),
+\operatorname{Replay}(H_f, H_v) = H',
 \]
 
-where the resulting computation inherits **both** histories. This preserves[9D[K
-preserves every step that led to the value, allowing later analysis (e.g., [K
-debugging, verification) to trace back precisely how a result was obtained.[9D[K
-obtained.
+extending both histories into a larger computational narrative. The resulti[7D[K
+resulting computation inherits provenance: identical values can be distingu[8D[K
+distinguished by their distinct origins (e.g., from probabilistic sampling [K
+vs. pure arithmetic).
 
 ---
 
-### 2. Refusal as an Admissibility Guard  
+### 2. What Happens When No Admissible Continuation Exists?  
 
-#### What is Refusal?  
+While replay focuses on extending existing histories, **Refusal** governs t[1D[K
+the *prevention* of inadmissible continuations.
 
-Refusal is not an error or exception; it is a **computational boundary** th[2D[K
-that blocks any continuation of a history when the proposed step would viol[4D[K
-violate admissible conditions:
+#### Definition
 
-\[
-H \longrightarrow 
-\begin{cases}
-H \| e & \text{if } \operatorname{Adm}(H,e) \text{ holds},\\[4pt]
-\operatorname{Refuse}(r) & \text{otherwise}.
-\end{cases}
-\]
+Given a current history \(H\) and a proposed extension event \(e\), evaluat[7D[K
+evaluate:
 
-*Key point:* a refusal occurs **before** the computation proceeds, preventi[8D[K
-preventing any inadmissible history from being recorded.
+- If \(\operatorname{Adm}(H,e)\) holds → extend:  
+  \[
+  H \;\longrightarrow\; H \mathbin{\|} e.
+  \]
+- Otherwise (the continuation is inadmissible) → refuse:  
+  \[
+  H \;\longrightarrow\; \operatorname{Refuse}(r),
+  \]
+  where \(r\) records the reason for rejection.
 
 #### Why This Matters  
 
-- **Errors are not “after‑the‑fact” failures** but *prevented attempts*.  
-- Types become **operational boundaries**:  
+1. **Failure as a Boundary, Not an Exception**  
+   Traditional languages treat failure (exceptions, error codes) as *post‑h[7D[K
+*post‑hoc* consequences of attempting an invalid computation. Spherepop tre[3D[K
+treats refusal as a *preemptive* guard: the history itself never contains i[1D[K
+inadmissible events.
+
+2. **Types as Historical Boundaries**  
+   A type judgment \(\Gamma \vdash t : A\) is read historically: it asserts[7D[K
+asserts that extending the current context \(\Gamma\) with \(t\) remains wi[2D[K
+within admissible continuations defined by \(A\). Thus types become operati[7D[K
+operational boundaries rather than static value sets.
+
+3. **Contexts as Histories**  
+   The conventional context  
+
   \[
-  \Gamma \vdash t : A
+  \Gamma = x_1:A_1,\,x_2:A_2,\dots ,x_n:A_n
   \]
-  now reads as “`t` may be extended by history `Γ` without violating the co[2D[K
-continuation discipline encoded in type `A`.”  
 
-- Contexts (`Γ = x_1:A_1, …, x_n:A_n`) are interpreted not merely as a list[4D[K
-list of assumptions but as an ordered record of **committed steps** that sh[2D[K
-shape future extension possibilities.
+  is interpreted not merely as a list of assumptions but as an ordered reco[4D[K
+record of admitted computational events. Future extensions inherit these co[2D[K
+commitments and cannot invalidate them.
 
-#### Implications for Verification  
-
-Consider a resource that may be consumed only once (e.g., file handles). Th[2D[K
-The first successful application extends the history normally; any subseque[8D[K
-subsequent attempt to reuse it meets Refusal because no admissible continua[8D[K
-continuation exists. This uniform treatment allows verification tools to en[2D[K
-enforce invariants by checking each continuation against historical constra[7D[K
-constraints, rather than relying on domain‑specific runtime guards.
+4. **Uniform Verification Foundation**  
+   Resource constraints (e.g., “a resource may only be consumed once”) are [K
+naturally expressed via refusal: the first successful consumption extends t[1D[K
+the history, subsequent attempts meet a refusal because no admissible conti[5D[K
+continuation exists. This unifies verification across domains—access contro[6D[K
+control, protocol checking, dependent resources—all as boundary conditions [K
+on historical extension.
 
 ---
 
-### 3. From Symbolic Replaces to Historical Continuation  
+### 3. Consequences for Computation  
 
-The shift from substitution to replay (and complemented by refusal) yields [K
-several conceptual advantages:
+- **Incremental Evaluation:** When parts of a computation change only sligh[5D[K
+slightly, replay identifies and reconstructs the minimal portions whose dep[3D[K
+dependencies have altered, leaving untouched regions valid.
+  
+- **Explanations at Historical Granularity:** Execution traces naturally be[2D[K
+become explanations because they directly trace back to the original admiss[6D[K
+admissible events that produced each value.
 
-1. **Traceability:** Every value carries its full provenance, enabling prec[4D[K
-precise debugging and explanation.
-2. **Incremental Computation:** Only the changed parts of a computation nee[3D[K
-need reconstruction, preserving memory usage.
-3. **Unified Type System:** Types encode admissibility rules directly, elim[4D[K
-eliminating the separation between syntactic typing and semantic constraint[10D[K
-constraints.
-4. **Error Prevention:** Refusal eliminates “exception‑only” handling by bl[2D[K
-blocking impossible steps early.
+- **Persistence of Provenance:** Histories are preserved throughout executi[7D[K
+execution. Identical numerical results from different origins remain distin[6D[K
+distinguishable, enabling richer reasoning about data provenance and model [K
+checking.
 
 ---
 
 ### 4. Summary  
 
-- **Replay** replaces substitution with a *historical continuation* operati[7D[K
-operation:  
-  \[
-  (v,H_v) \;\rightarrow\; H' = \operatorname{Replay}(H_f, H_v).
-  \]  
-- **Refusal** acts as an admissibility guard: if extending history `H` with[4D[K
-with event `e` is not allowed, the computation stops (`Δ → Refuse(r)`).  
-
-Together they turn computation from a sequence of isolated symbol replaceme[9D[K
-replacements into a **dynamic construction of histories**, where every step[4D[K
-step is recorded and can be revisited or verified. This view naturally acco[4D[K
-accommodates incremental updates, verification mechanisms, and robust error[5D[K
-error handling—all grounded in preserving the *history* rather than discard[7D[K
-discarding it.
-
+Spherepop replaces substitution with replay, emphasizing that computation i[1D[K
+is a *continuation* of historical construction rather than the mere manipul[7D[K
+manipulation of isolated symbols. The complementary operation **Refusal** e[1D[K
+ensures histories never contain inadmissible events, treating failure as a [K
+safeguard against invalid extensions. Types and contexts acquire new meanin[6D[K
+meanings as historical boundaries, unifying type‑checking, resource verific[7D[K
+verification, and incremental compilation under a single conceptual framewo[7D[K
+framework: *the preservation and extension of admissible histories*.

@@ -1,0 +1,95 @@
+The following are groundedness-checked analytical summaries of
+consecutive fragments of one research document titled "docs-research_program.md".
+
+This document's synthesis will feed into: cluster synthesis and cross-corpus synthesis
+
+Reconstruct the document as a unified theoretical object. Produce a
+dense scholarly synthesis covering: thesis, primitives/definitions,
+formalism, mechanisms, major arguments, dependencies between
+concepts, implications, unresolved problems, internal tensions.
+
+Preserve every [source: "..."] citation attached to a claim you keep.
+Remove repetition introduced by chunking. Do not flatten genuine
+distinctions. Do not add any claim that did not appear, with its
+citation, in the fragment summaries below.
+
+FRAGMENT SUMMARIES
+===================
+
+--- chunk-0001-summary.md ---
+**1. Definitions and primitive concepts introduced**
+
+- **Accumulating experimental program**: Experiments are no longer isolated[8D[K
+isolated demonstrations but part of a growing body of work that builds on p[1D[K
+previous results.
+- **Machine‑readable manifest**: A JSON file (`experiment_manifest.json`) t[1D[K
+that records all metadata for each experiment, making the data accessible p[1D[K
+programmatically.
+- **Lab runner**: The command `python -m spherepop.lab` is used to launch v[1D[K
+various subcommands (e.g., `list`, `run`, `verify`) for managing experiment[10D[K
+experiments and theory mapping.
+- **Theory claim registry** & **Conjecture registry**: Separate JSON files [K
+(`theory_claims.json` and the conjecture directory) that store formal state[5D[K
+statements about what should hold true or be explored, respectively.
+- **Experiment entry schema**: Each experiment must specify:
+  - *Proposition* (the hypothesis being tested)
+  - *Initial condition C0*
+  - *Operation family Ω* (a set of allowed operations)
+  - *Observable O* (what can be measured/observed)
+  - *Expected invariant I* (conditions that should remain unchanged if the [K
+proposition is true)
+  - *Failure condition F* (the observable sign that the hypothesis fails)
+
+**2. Mathematical claims and formal structures**
+
+- **Operation family Ω**: Defined as a collection of allowable operations ([1D[K
+(e.g., transformations, updates) applicable to an experiment’s state space.[6D[K
+space.
+- **Invariant I**: A logical predicate or property that must hold thr[3D[K
+throughout the execution of an operation within Ω; failure of I triggers de[2D[K
+detection via F.
+
+**3. Mechanisms and processes**
+
+- **Laboratory commands** (`list`, `run`, `verify`, `compare`, `theory‑map`[12D[K
+`theory‑map`) operate with a `--json` flag to produce structured, machine‑r[9D[K
+machine‑readable outputs for reproducibility.
+- **Verification model**: The `verify` command checks that:
+  - The experiment completes without error,
+  - Required evidence snippets are included in the output,
+  - Both invariant I and failure condition F are recorded in the verificati[10D[K
+verification report.
+- This yields *structured observational records* rather than raw terminal l[1D[K
+logs.
+
+**4. Connections to concepts named in the running abstract**
+
+- **Experiment manifest**: Directly maps to “machine‑readable manifest” des[3D[K
+described earlier (`/home/runner/work/personallinks/personalinks/spherepop/[57D[K
+(`/home/runner/work/personallinks/personalinks/spherepop/experiment_manifes(`/home/runner/work/personallinks/personalinks/spherepop/xperiment_manifest.json`).
+- **Lab runner script**: Corresponds to “lab runner `python -m spherepop.la[12D[K
+spherepop.lab`” mentioned in the running abstract.
+- **Theory claim & conjecture registries**: Extend the idea of “registries [K
+for theory claims (`theory_claims`) and conjectures” from the running abstr[5D[K
+abstract, now explicitly tied to JSON file locations.
+- **Verification model** builds on the notion of “verification model ensure[6D[K
+ensures experiments execute successfully … producing structured observation[11D[K
+observational records” in the running abstract.
+
+**5. Unresolved questions or contradictions visible within this chunk**
+
+No explicit contradictions are evident; however, several open points remain[6D[K
+remain:
+- The handling of *bounded state‑space searches* for conjecture failures is[2D[K
+is described as a design intent but not implemented—no algorithmic details [K
+are provided.
+- Automatic promotion of counterexamples to regression fixtures suggests a [K
+future feature without current specification on how it integrates with the [K
+manifest or claim registry.
+- Explicit semantics for failure reasons in adversarial experiment classes [K
+are mentioned but not defined; this could lead to ambiguity about what cons[4D[K
+constitutes an “explicit semantic failure reason.”
+
+*No verbatim quotation from this chunk is required, as each claim directly [K
+reflects the content provided.*
+

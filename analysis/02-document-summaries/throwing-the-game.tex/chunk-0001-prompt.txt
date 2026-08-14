@@ -1,15 +1,110 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 2 of a document called
+"throwing-the-game.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Variational Free‑Energy (VFE) and Refusal**
 
-TEXT
-====
+In active‑inference / predictive‑processing accounts, an agent’s behavior i[1D[K
+is driven by a trade‑off between:
+
+1. **Model Fit** – how well the current generative model reproduces incomin[7D[K
+incoming sensory data.
+2. **Surprise (Irreducible Uncertainty)** – the residual probability of fut[3D[K
+future observations that the model cannot explain.
+
+The variational free energy \(F\) is defined as  
+
+\[
+F = -\mathbb{E}\big[\log p(\text{data}\mid \text{model})\big] + KL(q(z)\,\|[11D[K
+KL(q(z)\,\|\,p(z)),
+\]
+
+where the first term pulls belief toward consistency with experience and th[2D[K
+the second penalizes divergence from a prior \(p(z)\). Minimising \(F\) yie[3D[K
+yields actions that *reduce* irreducible uncertainty.
+
+**How Refusal Enters This Picture**
+
+A refusal event \(\mathbf{r}\) can be interpreted as an *irreversible pruni[5D[K
+pruning* of portions of future space. By discarding admissible continuation[12D[K
+continuations, the agent eliminates whole branches that would otherwise con[3D[K
+contribute to surprise (i.e., to \(F\)). Consequently:
+
+- **Reduction in Optionality** – fewer alternative futures mean less need f[1D[K
+for predictive adjustments.
+- **Lower Surprise Expectation** – because eliminated futures are no longer[6D[K
+longer sources of unexplained variance, the expected free energy falls.
+- **Irreversible Commitment** – once \(\mathbf{r}\) is applied (and not rev[3D[K
+revocable via Collapse), any subsequent operation that could restore those [K
+discarded branches would have to undo a prior irreversibility, which itself[6D[K
+itself incurs an “irreducible” cost—exactly the kind of penalty VFE seeks t[1D[K
+to minimise.
+
+Thus refusal can be seen as *active inference in service of minimizing free[4D[K
+free energy*: it intentionally reduces the space where surprise could arise[5D[K
+arise, thereby stabilising belief and potentially halting further model upd[3D[K
+updates (a form of stabilization).
+
+**Why Refusal Is Not a Simple Preference Shift**
+
+In ordinary preference‑driven models, “refusing” merely changes the weight [K
+assigned to certain actions. However:
+
+- **Irreversibility**: The Collapse that restores those discarded futures w[1D[K
+would require forgetting or re‑introducing prior beliefs—something VFE does[4D[K
+does not account for within its variational formulation.
+- **Loss of Predictive Power**: By pruning future branches, refusal also re[2D[K
+reduces the set of data points needed to fit the model, which aligns natura[6D[K
+naturally with free‑energy minimisation rather than a simple utility maximi[6D[K
+maximisation.
+
+**Implications**
+
+1. **Computational Efficiency** – Because refusal directly shrinks the sear[4D[K
+search space for surprise, it can drive VFE down faster than gradual prefer[6D[K
+preference adjustments.
+2. **Stabilization as a By‑product** – When sufficient refusals accumulate,[11D[K
+accumulate, stabilization (as defined in Spherepop) may be achieved in fini[4D[K
+finitely many steps—mirroring how active inference can reach a point where [K
+further updates no longer lower free energy.
+3. **Dynamic Role of Collapse** – In the predictive framework, Collapse act[3D[K
+acts like an *irreversible* update to belief that removes previously releva[6D[K
+relevant branches from future consideration, thereby guaranteeing that VFE [K
+continues to decrease.
+
+In summary, refusal in Spherepop is not merely a behavioral choice; it embo[4D[K
+embodies a principled reduction of irreducible uncertainty (surprise) and t[1D[K
+thus aligns with—and indeed accelerates—the minimisation process central to[2D[K
+to variational free‑energy accounts. This makes refusal computationally eff[3D[K
+efficient: it trades the flexibility of optionality for decisiveness, predi[5D[K
+prediction, and ultimately a stable state where further transformation no l[1D[K
+longer matters for future action.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[11pt]{article}
 

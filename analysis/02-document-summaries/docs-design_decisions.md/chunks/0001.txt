@@ -1,0 +1,668 @@
+# Design Decision Records (DDRs)
+
+**Purpose**: Document significant implementation choices with rationale  
+**Format**: One section per decision, chronologically ordered  
+**Authority**: Historical record, not specifications (see SPECIFICATIONS.md for current state)
+
+---
+
+## DDR Format
+
+Each decision record contains:
+- **Date**: When decision made
+- **Status**: Proposed | Accepted | Superseded | Rejected
+- **Context**: Problem requiring a decision
+- **Decision**: What was chosen
+- **Rationale**: Why this choice
+- **Alternatives**: What was considered and rejected
+- **Consequences**: Known implications
+- **Theory Status**: Paper-licensed (✓) | Implementation choice (→) | Open (?)
+- **Superseded by**: (if applicable)
+
+---
+
+## DDR-001: POP Uses Identity-on-Content
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted  
+**Theory Status**: → Implementation choice (Q1b)
+
+**Context**:
+Paper specifies POP removes a labeled sphere but doesn't specify how to handle multiple spheres with identical content. Should they be treated as:
+1. Distinct (object identity)
+2. Equivalent (structural identity)
+
+**Decision**:
+POP treats spheres with identical content as equivalent. `Sphere((a,b), "L")` and another `Sphere((a,b), "L")` are the same sphere for POP purposes.
+
+**Rationale**:
+- Simpler implementation (no hidden object identity)
+- Consistent with "sphere is its structure" intuition
+- Avoids hidden state (object IDs)
+- Minimal realization: fewest assumptions
+
+**Alternatives Considered**:
+1. **Object identity**: Each Sphere gets unique ID at construction
+   - Rejected: Introduces hidden state, complicates equality
+   - Would enable: Distinct histories for identical-looking spheres
+2. **Explicit identity parameter**: User provides identity
+   - Rejected: Burdens user, paper doesn't mention
+   - Would enable: Fine-grained control over identity
+
+**Consequences**:
+- ✓ Deterministic: `parse(s)` always produces same sphere
+- ✓ Simple equality: `sphere1 == sphere2` iff structurally equal
+- ✗ Cannot distinguish identical-content spheres
+- ⚠ If paper later requires object identity, significant refactor needed
+
+**Documentation**:
+- THEORY_STATUS.md Q1b
+- SPECIFICATIONS.md: POP specification, implementation notes
+- tests/test_semantics.py: Test POP with identical spheres
+
+---
+
+## DDR-002: Label Uniqueness Enforced
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted  
+**Theory Status**: → Implementation choice (Q8)
+
+**Context**:
+Paper allows labels on spheres but doesn't explicitly require uniqueness. Should multiple spheres have the same label?
+
+**Decision**:
+Enforce label uniqueness: at most one sphere in σ may have any given label.
+
+**Rationale**:
+- Avoids ambiguity in POP operations
+- Simpler path resolution (no tie-breaking needed)
+- Better error messages (no "which L?" confusion)
+- Implementation convenience, not semantic necessity
+
+**Alternatives Considered**:
+1. **Allow duplicate labels**: Require full path for POP
+   - Rejected: Complicates user model, more error-prone
+   - Would enable: Hierarchical labeling schemes
+2. **Scoped labels**: Labels unique within parent only
+   - Rejected: Ambiguity for operations from root
+   - Would enable: `(a:L):L` nested same-label
+
+**Consequences**:
+- ✓ Unambiguous POP operations
+- ✓ Simple error: "Label 'L' already exists"
+- ✗ Cannot reuse labels in separate subtrees
+- ⚠ Not a theoretical requirement; may need relaxing for advanced use cases
+
+**Documentation**:
+- THEORY_STATUS.md Q8
+- SPECIFICATIONS.md: Sphere invariants
+- tests: Label uniqueness tested in test_semantics.py
+
+---
+
+## DDR-003: BIND Uses Existential Semantics on Quotients
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted (PROVISIONAL)  
+**Theory Status**: → Implementation choice (Q3) - awaiting theoretical clarification
+
+**Context**:
+Paper defines BIND predicates on atoms but doesn't specify how predicates lift to quotients. For `Quotient({a, b})`, should `predicate(q)` require:
+1. At least one member matches (existential)
+2. All members match (universal)
+3. Something else
+
+**Decision**:
+Use **existential semantics**: `predicate(Quotient(members)) = true ⇔ ∃ m ∈ members: predicate(m)`
+
+**Rationale**:
+- More permissive (fewer empty results)
+- Natural extension: "quotient matches if any representative would match"
+- Simpler implementation (short-circuit evaluation)
+- Chosen as temporary default to unblock implementation
+
+**Alternatives Considered**:
+1. **Universal semantics**: All members must match
+   - Deferred: More restrictive, possibly better for some predicates
+   - Would enable: Stronger quotient guarantees
+2. **Predicate-specific**: Some predicates existential, others universal
+   - Rejected: Too complex without clear theory
+   - Would enable: Fine-grained control
+3. **Error on quotient**: Require user to COLLAPSE after BIND, not before
+   - Rejected: Too restrictive, awkward workflow
+
+**Consequences**:
+- ⚠ **PROVISIONAL**: Marked experimental, may change
+- ✓ Unblocks testing BIND after COLLAPSE
+- ✗ May not match paper intent when clarified
+- ⚠ All tests using BIND on quotients marked `@pytest.mark.experimental`
+
+**Documentation**:
+- THEORY_STATUS.md Q3
+- SPECIFICATIONS.md: BIND specification, quotient handling (marked PROVISIONAL)
+- test_predicates.py: Tests marked experimental
+- spherepop/predicates.py: Docstring marks as provisional
+
+**Review Criteria**:
+When paper clarifies quotient predicate semantics:
+1. Compare to chosen implementation
+2. If different, assess refactor impact
+3. Update all experimental tests
+4. Remove experimental markers if confirmed
+5. Update this DDR status to Superseded
+
+---
+
+## DDR-004: COLLAPSE Composition Rejected (Conservative)
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted (TEMPORARY)  
+**Theory Status**: ? Open (Q2b) - research question
+
+**Context**:
+Paper defines single-level COLLAPSE but doesn't specify composition: what happens when you COLLAPSE a set containing quotients?
+
+```python
+COLLAPSE({{a, b}})  # Creates Quotient({a,b})
+COLLAPSE({{Quotient({a, b}), c}})  # Now what?
+```
+
+Options:
+1. Flatten: `Quotient({a, b, c})`
+2. Nest: `Quotient({Quotient({a, b}), c})`
+3. Reject: Error
+
+**Decision**:
+Return error on COLLAPSE of quotients (option 3: reject).
+
+**Rationale**:
+- **Conservative**: Doesn't commit to unspecified semantics
+- Prevents users from depending on undefined behavior
+- Forces explicit question: "What should this do?"
+- Easier to relax later (reject → accept) than to change semantics
+
+**Alternatives Considered**:
+1. **Flatten automatically**: Seems intuitive but not explicitly licensed
+   - Deferred: Would be convenient but might violate intensional distinctions
+   - Concern: Loses information about collapse sequence
+2. **Nest quotients**: Preserves structure but complicates equality
+   - Deferred: Would need quotient-of-quotient equality rules
+   - Concern: Paper doesn't define nested quotient semantics
+3. **Make COLLAPSE idempotent**: `COLLAPSE(COLLAPSE(...)) = COLLAPSE(...)`
+   - Rejected: Idempotence not established by paper
+   - Concern: See experiment 06-collapse for idempotence questions
+
+**Consequences**:
+- ✓ No users accidentally depend on undefined behavior
+- ✓ Explicit error guides users to consider alternatives
+- ✗ Cannot collapse after previous collapse (workflow limitation)
+- ⚠ Requires theory resolution before relaxing
+
+**Workarounds**:
+Users needing multi-level collapse must:
+1. Plan collapse structure upfront (single COLLAPSE with all classes)
+2. Or resolve theoretical question first
+
+**Documentation**:
+- THEORY_STATUS.md Q2b
+- SPECIFICATIONS.md: COLLAPSE specification, composition section
+- test_semantics.py: Test that composition raises error
+
+**Review Criteria**:
+When theory resolves COLLAPSE composition:
+1. Implement specified semantics
+2. Update error to behavior
+3. Add comprehensive tests (non-experimental if resolved)
+4. Update this DDR status to Superseded
+
+---
+
+## DDR-005: Quotient Equality by Member Set Only
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted  
+**Theory Status**: ✓ Paper-licensed (quotients are equivalence classes)
+
+**Context**:
+How should quotient equality work? A quotient is an equivalence class, but implementation details matter:
+1. Equality by members + representative?
+2. Equality by members only?
+3. Equality by ID?
+
+**Decision**:
+Quotient equality determined **solely by member set**. No "representative" field exists in the dataclass.
+
+```python
+Quotient({a, b}) == Quotient({b, a})  # True
+Quotient({a, b}) == Quotient({a, c})  # False
+```
+
+**Rationale**:
+- Paper-licensed: Quotients **are** equivalence classes, not "pointers to classes"
+- Mathematical correctness: `{a,b} = {b,a}` as sets
+- Prevents accidental authority: No privileged representative
+- Simpler: One less field to manage
+
+**Alternatives Considered**:
+1. **Store representative field**: Track chosen representative
+   - Rejected: Would make `Quotient({a,b}, rep=a) ≠ Quotient({a,b}, rep=b)`
+   - Problem: Violates quotient = equivalence class principle
+2. **Equality by ID**: Each quotient gets unique ID
+   - Rejected: Two COLLAPSE operations creating same class would be "different"
+   - Problem: Loses extensional equality
+3. **Canonical representative**: Always pick min(members)
+   - Rejected: Still introduces unnecessary asymmetry
+   - Problem: No member is more canonical than others
+
+**Consequences**:
+- ✓ Quotient identity is pure set equality
+- ✓ `frozenset` automatically handles order independence
+- ✓ No hidden representative state
+- ✓ `representative()` function separate (only for display)
+- ⚠ Python's frozenset deduplicates equal quotients automatically
+
+**Documentation**:
+- SPECIFICATIONS.md: Quotient definition
+- SPECIFICATIONS.md: representative() function (display only)
+- test_validation.py: Duplicate quotient test documents Python semantics
+- experiment 19: Quotient representative independence
+
+---
+
+## DDR-006: Validation Returns Violations, Never Repairs
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted  
+**Theory Status**: ✓ Paper principle + OVERSOUL §7
+
+**Context**:
+When validating a Config, should validation:
+1. Return list of violations (observational)
+2. Fix problems and return repaired Config (corrective)
+3. Raise exception on first violation (fail-fast)
+
+**Decision**:
+Validation is **observational only**: returns `List[str]` of violations, never modifies Config.
+
+```python
+def validate_config(c: Config) -> list[str]:
+    violations = []
+    # Check invariants, accumulate violations
+    return violations
+```
+
+**Rationale**:
+- OVERSOUL §7: "Validation SHALL be observational"
+- Separation: Observers compute, they don't authorize
+- Flexibility: Caller decides how to handle violations
+- Completeness: Return all violations, not just first
+- Non-authority: Validation is just another observer
+
+**Alternatives Considered**:
+1. **Auto-repair**: `validate(c) → c'` where c' is fixed
+   - Rejected: Violates observer non-authority
+   - Problem: "Fixed" by whose rules?
+2. **Exception on violation**: `validate(c)` raises exception
+   - Rejected: Fail-fast prevents seeing all problems
+   - Problem: Less informative
+3. **Boolean return**: `validate(c) → bool`
+   - Rejected: No detail about what's wrong
+   - Problem: Not actionable
+
+**Consequences**:
+- ✓ Validation is pure observation
+- ✓ Caller controls response (error, warning, ignore, fix)
+- ✓ Can report multiple violations at once
+- ✓ Consistent with observer non-authority principle
+- ✗ Caller must handle violations explicitly
+
+**Usage Pattern**:
+```python
+violations = validate_config(cfg)
+if violations:
+    for v in violations:
+        log.warning(f"Validation: {v}")
+    # Caller decides: raise, fix, ignore
+```
+
+**Documentation**:
+- SPECIFICATIONS.md: Validation vs Verification section
+- spherepop/validation.py: Comprehensive docstring
+- test_validation.py: Tests observational nature
+
+---
+
+## DDR-007: Continuation Relation ⊑ is Option-Set Superset
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted  
+**Theory Status**: ✓ Paper-licensed (Section 4, Q1a)
+
+**Context**:
+Paper defines continuation relation `(σ₁, O₁) ⊑ (σ₂, O₂)` but could be interpreted as:
+1. `O₁ ⊇ O₂` (option set superset)
+2. `futures(c₁) ⊇ futures(c₂)` (future set superset)
+3. `h₁ ⪯ h₂` (history prefix)
+
+**Decision**:
+Use interpretation 1: `(σ₁, O₁) ⊑ (σ₂, O₂) ⇔ O₁ ⊇ O₂`
+
+**Rationale**:
+- Paper-licensed: Section 4 defines continuation as option reduction
+- Simplest: Direct comparison of option sets
+- Efficient: O(|O|) to check
+- Consistent: REFUSE and BIND both reduce options
+
+**Alternatives Considered**:
+1. **Future set superset**: `c₁ ⊑ c₂ ⇔ futures(c₁) ⊇ futures(c₂)`
+   - Rejected: Expensive to compute, not paper's definition
+   - Would enable: More semantic notion of "continuation"
+2. **History prefix**: `c₁ ⊑ c₂ ⇔ h₁ is prefix of h₂`
+   - Rejected: Different relation (⪯ not ⊑)
+   - Confusion: Two different orderings
+
+**Consequences**:
+- ✓ Efficient ⊑ checking
+- ✓ Clear interpretation from paper
+- ✓ Monotonic: Every operation maintains or reduces O
+- ⚠ Structural changes (POP) don't affect ⊑ directly
+
+**Documentation**:
+- THEORY_STATUS.md Q1a
+- SPECIFICATIONS.md: Continuation Relation section
+- Comments in model.py
+
+---
+
+## DDR-008: Representative Function Uses Lexicographic Min
+
+**Date**: 2026-08-10 (documented retroactively)  
+**Status**: Accepted  
+**Theory Status**: → Implementation choice (must pick something)
+
+**Context**:
+`representative(q: Quotient) → Atom` must pick one member for display. Which one?
+
+**Decision**:
+Pick lexicographically smallest: `min(q.members, key=lambda a: a.value)`
+
+**Rationale**:
+- Deterministic: Same quotient → same representative always
+- Predictable: Users can anticipate which member displayed
+- Simple: One-line implementation
+- No semantic meaning: Still arbitrary, just stable
+
+**Alternatives Considered**:
+1. **Random selection**: `random.choice(q.members)`
+   - Rejected: Non-deterministic, confusing in tests
+2. **First inserted**: Track insertion order
+   - Rejected: Requires extra state, no semantic value
+3. **Shortest string**: `min(q.members, key=lambda a: len(a.value))`
+   - Rejected: Tie-breaking needed, not obviously better
+
+**Consequences**:
+- ✓ Stable representative selection
+- ✓ Testable (always same output)
+- ⚠ Lexicographic choice is arbitrary, could change
+- ⚠ Not semantic: Don't depend on which representative chosen
+
+**Documentation**:
+- SPECIFICATIONS.md: representative() specification
+- spherepop/views.py: Comment marking as arbitrary choice
+- experiment 19: Representative independence
+
+---
+
+## DDR-009: Benchmark Structural Variables Not Wall-Clock
+
+**Date**: 2026-08-13  
+**Status**: Accepted  
+**Theory Status**: OVERSOUL §9
+
+**Context**:
+Performance benchmarks could measure:
+1. Absolute wall-clock time with pass/fail thresholds
+2. Structural scaling T(|h|, |O|, k, b)
+3. Relative performance vs baseline
+
+**Decision**:
+Measure **structural scaling** as functions of:
+- `|h|` = history length
+- `|O|` = option space cardinality
+- `k` = observational horizon
+- `b` = branching factor
+
+Record times but use generous "sanity check" thresholds, not strict perf contracts.
+
+**Rationale**:
+- OVERSOUL §9: "Benchmark as a function of structural variables, not merely wall time"
+- Hardware independence: Reveals algorithmic scaling
+- Informative: Shows where complexity comes from
+- Flexible: Tolerates hardware variance
+
+**Alternatives Considered**:
+1. **Strict wall-clock thresholds**: `assert time < 100ms`
+   - Rejected: Brittle on different hardware, CI slowness
+   - Would enable: Catching performance regressions
+2. **No thresholds**: Just record times
+   - Rejected: Catastrophic regressions go unnoticed
+   - Would enable: Pure observation
+3. **Relative to baseline**: Compare to previous run
+   - Deferred: Requires baseline storage (future work, Phase A)
+
+**Consequences**:
+- ✓ Reveals algorithmic complexity
+- ✓ Hardware-independent insights
+- ✓ Generous thresholds catch only catastrophic regressions
+- ✗ Doesn't catch gradual performance degradation (yet - needs baseline tracking)
+
+**Documentation**:
+- tests/test_performance.py: Comprehensive docstring explains approach
+- FUTURE_DIRECTIONS.md: Benchmark baseline machinery (Phase A)
+
+**Thresholds**:
+```python
+# Sanity checks (catastrophic regression only):
+# - 10k options REFUSE: ~3-5ms acceptable
+# - 100 history operations: ~2-3ms acceptable
+# - horizon_equivalent(k=4): Exponential, use small k only
+```
+
+---
+
+## DDR-010: Pre-commit Hooks Exclude Mypy
+
+**Date**: 2026-08-11  
+**Status**: Accepted  
+**Theory Status**: Infrastructure choice
+
+**Context**:
+Pre-commit hooks can run various checks. Should mypy type-checking run:
+1. In pre-commit (local, before every commit)
+2. In CI only (GitHub Actions)
+3. Both
+
+**Decision**:
+Run mypy in **CI only**, not pre-commit.
+
+**Rationale**:
+- **Speed**: Pre-commit should be fast; mypy takes 3-5 seconds
+- **Philosophy**: Pre-commit = "obvious local problems" (formatting, syntax)
+- **Thoroughness**: CI = "global consistency" (types, tests, coverage)
+- **Iteration**: Local workflow shouldn't block on type errors during exploration
+
+**Alternatives Considered**:
+1. **Mypy in pre-commit**: Run on every commit
+   - Rejected: Slows down local workflow
+   - User feedback: Want fast commits during iteration
+2. **No mypy anywhere**: Skip type checking
+   - Rejected: Type safety valuable for stable core
+3. **Optional pre-commit**: User can enable mypy locally
+   - Deferred: Could add but not default
+
+**Consequences**:
+- ✓ Fast pre-commit (< 1 second)
+- ✓ Type checking still enforced (in CI)
+- ⚠ Type errors discovered later (at CI, not pre-commit)
+- ✓ Local iteration unblocked by type issues
+
+**.pre-commit-config.yaml**:
+```yaml
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    hooks:
+      - id: ruff
+      - id: ruff-format
+  # NO mypy here - runs in CI
+```
+
+**.github/workflows/lint.yml**:
+```yaml
+- name: Type check with mypy
+  run: make type-check
+```
+
+**Documentation**:
+- CONTRIBUTING.md: Explains pre-commit vs CI philosophy
+- .pre-commit-config.yaml: Comment explaining mypy absence
+
+---
+
+## DDR-011: Python 3.12 + 3.13 Both Required
+
+**Date**: 2026-08-11  
+**Status**: Accepted  
+**Theory Status**: Infrastructure choice
+
+**Context**:
+Which Python versions to support? Options:
+1. 3.12 only (current)
+2. 3.11-3.13 (broad compatibility)
+3. 3.12 and 3.13 (recent stable)
+
+**Decision**:
+Support **Python 3.12 and 3.13** (both required to pass).
+
+**Rationale**:
+- User requirement: "Aug 2026, 3.13 is stable"
+- Modern syntax: Native union syntax `str | None` (3.10+)
+- CI testing: GitHub Actions matrix tests both
+- Future-ready: 3.13 is current stable
+
+**Alternatives Considered**:
+1. **3.11+ support**: Broader compatibility
+   - Rejected: User wants modern Python only
+   - Complexity: Would need version checks
+2. **3.12 only**: Simplify to single version
+   - Rejected: User wants both tested
+3. **3.13 only**: Most modern
+   - Rejected: 3.12 still widely used
+
+**Consequences**:
+- ✓ Modern Python features available
+- ✓ Both versions tested in CI
+- ✗ Excludes 3.11 and earlier
+- ✓ Future-ready
+
+**pyproject.toml**:
+```toml
+[project]
+requires-python = ">=3.12"
+```
+
+**.github/workflows/test.yml**:
+```yaml
+strategy:
+  matrix:
+    python-version: ["3.12", "3.13"]
+```
+
+**Documentation**:
+- README.md: Requirements section specifies 3.12+
+- CONTRIBUTING.md: Development setup
+
+---
+
+## Adding New DDRs
+
+**When to create a DDR**:
+- ✓ Significant implementation choice among alternatives
+- ✓ Choice affects multiple modules or tests
+- ✓ Choice might be questioned or need revision
+- ✓ Choice involves tradeoffs worth documenting
+
+**When NOT to create a DDR**:
+- ✗ Trivial choices (variable names, file locations)
+- ✗ Forced by paper (not a choice - goes in SPECIFICATIONS)
+- ✗ Temporary exploratory code
+- ✗ Personal preference with no semantic impact
+
+**DDR Template**:
+```markdown
+## DDR-NNN: <Title>
+
+**Date**: YYYY-MM-DD  
+**Status**: Proposed | Accepted | Superseded | Rejected  
+**Theory Status**: ✓ Paper-licensed | → Implementation choice | ? Open
+
+**Context**:
+<What problem required a decision?>
+
+**Decision**:
+<What was chosen?>
+
+**Rationale**:
+<Why this choice?>
+
+**Alternatives Considered**:
+1. **Alternative 1**: Description
+   - Why rejected/deferred
+   - What it would enable
+
+**Consequences**:
+- ✓ Benefit
+- ✗ Drawback
+- ⚠ Warning/caveat
+
+**Documentation**:
+- <Where is this decision documented?>
+- <What tests cover this?>
+
+**Review Criteria** (if provisional):
+<What would trigger re-evaluation?>
+```
+
+---
+
+## Decision Status
+
+| DDR | Title | Status | Theory Status |
+|-----|-------|--------|---------------|
+| 001 | POP identity-on-content | Accepted | → Choice (Q1b) |
+| 002 | Label uniqueness | Accepted | → Choice (Q8) |
+| 003 | BIND existential quotients | Accepted (PROV) | → Provisional (Q3) |
+| 004 | COLLAPSE composition rejected | Accepted (TEMP) | ? Open (Q2b) |
+| 005 | Quotient equality by members | Accepted | ✓ Paper-licensed |
+| 006 | Validation observational | Accepted | ✓ OVERSOUL §7 |
+| 007 | Continuation is superset | Accepted | ✓ Paper-licensed (Q1a) |
+| 008 | Representative lexicographic | Accepted | → Choice |
+| 009 | Benchmark structural vars | Accepted | OVERSOUL §9 |
+| 010 | Pre-commit excludes mypy | Accepted | Infrastructure |
+| 011 | Python 3.12 + 3.13 | Accepted | Infrastructure |
+
+**Legend**:
+- **Accepted**: Currently in effect
+- **Accepted (PROV)**: Provisional, may change when theory clarifies
+- **Accepted (TEMP)**: Temporary conservative choice
+- **Superseded**: Replaced by later DDR
+- **Rejected**: Considered but not adopted
+
+---
+
+## Version History
+
+- **2026-08-13**: Initial DDR document
+  - Documented 11 historical decisions (DDR-001 through DDR-011)
+  - Established DDR format and process
+  - Cross-referenced THEORY_STATUS.md and SPECIFICATIONS.md

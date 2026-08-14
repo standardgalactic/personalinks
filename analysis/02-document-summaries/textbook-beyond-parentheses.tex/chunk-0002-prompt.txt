@@ -1,15 +1,233 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 6 of a document called
+"textbook-beyond-parentheses.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Operational Semantics for Spherepop**
 
-TEXT
-====
+Below is a detailed exposition of how the Spherepop Calculus is given an op[2D[K
+operational meaning.  It follows directly from the historical interpretatio[13D[K
+interpretation introduced in earlier chapters.
+
+---
+
+### 1. Semantic State
+
+The runtime never stores just a term, but rather a *computational history* [K
+together with a collection of **unresolved Spheres**:
+
+\[
+(H,\mathcal{S}),
+\]
+
+where  
+
+- \(H\) is the current computational (historical) state;  
+- \(\mathcal{S}\) is the set of all spheres that have been opened but not y[1D[K
+yet popped.
+
+Because no mutable global state is primitive, every change to computation i[1D[K
+is captured by extending \(H\) and updating \(\mathcal{S}\).
+
+---
+
+### 2. Cycle of Execution
+
+At each step the machine performs a single evaluation cycle:
+
+\[
+\text{Locate} \;\longrightarrow\; \text{Verify} \;\longrightarrow\;
+\text{Pop} \;\longrightarrow\; \text{Replay} \;\longrightarrow\; \text{Repe[10D[K
+\text{Repeat}.
+\]
+
+* **Locate** – Find the next Ready Sphere (see §3).  
+* **Verify** – Check that all dependencies inside it are already resolved. [K
+ 
+* **Pop Reduction** – Execute the interior computation and replace the sphe[4D[K
+sphere with its value (§4).  
+* **Replay** – Record any dependencies between spheres without mutating his[3D[K
+history (§5).  
+* **Repeat** – Continue until no Ready Sphere remains.
+
+---
+
+### 3. Opening Spheres
+
+When a new computational scope is entered (e.g., by parsing a function or b[1D[K
+block), the runtime introduces that scope as an **Open Sphere**:
+
+\[
+(H,\mathcal{S}) \;\longrightarrow\; 
+(H\|\operatorname{Open}(S),\mathcal{S}\cup\{S\}).
+\]
+
+Opening does *not* compute anything immediately—it merely records a future [K
+environment whose history will later be admissible.
+
+---
+
+### 4. Pop Reduction
+
+A Sphere \(S=(B,I)\) becomes **Ready** when every dependency \(d\) in its b[1D[K
+boundary satisfies \(\operatorname{Resolved}(d)\).  
+
+If the interior computation terminates with value \(v\),
+
+\[
+I \Longrightarrow v,
+\]
+
+then we replace:
+
+\[
+(H,\mathcal{S}\cup\{S\}) \longrightarrow
+(H\|\operatorname{Pop}(S),\; (\mathcal{S}-\{S\})[v]),
+\]
+
+where \([v]\) denotes the substitution of \(S\) by its value throughout the[3D[K
+the remaining unresolved regions.  Crucially, **historical provenance is pr[2D[K
+preserved**—the runtime records not just \(v\) but also the computation tha[3D[K
+that produced it.
+
+---
+
+### 5. Replay
+
+Whenever a region consumes an output from another (e.g., a function call co[2D[K
+consuming an argument), we extend the history with:
+
+\[
+\operatorname{Replay}(H_f,H_a) \quad
+\text{producing} \quad H_{f,a}.
+\]
+
+This rule *extends* rather than *mutates* history, guaranteeing that every [K
+continuation can trace back to its origin.
+
+---
+
+### 6. Refusal
+
+If a proposed continuation fails the admissibility relation (\(\neg\operato[15D[K
+(\(\neg\operatorname{Adm}(H,e)\)), we record:
+
+\[
+\operatorname{Refuse}(r),
+\]
+
+where \(r\) identifies the violated condition. The unresolved set \(\mathca[9D[K
+\(\mathcal{S}\) remains unchanged, preserving historical coherence without [K
+needing rollback or exception mechanisms.
+
+---
+
+### 7. Merge Scheduling
+
+For a set of mutually independent Ready Spheres \(S_1,\dots,S_n\),
+
+\[
+(H,\mathcal{S}) \longrightarrow
+(H\|\operatorname{Merge}(S_1,\dots,S_n),\mathcal{S}').
+\]
+
+Because **Merge** is associative and commutative over independent histories[9D[K
+histories, the scheduler can evaluate them concurrently while preserving ca[2D[K
+causality.  This decouples processor scheduling from semantic correctness.
+
+---
+
+### 8. Choice Reduction
+
+Choice introduces nondeterminism:
+
+\[
+\operatorname{Choice}(p,t,u)
+\]
+
+reduces to either \(t\) (with probability \(p\)) or \(u\) (with probability[11D[K
+probability \(1-p\)).  An alternative is to generate an explicit distributi[10D[K
+distribution \(d:\operatorname{Dist}(A)\) that propagates through the histo[5D[K
+history without immediate collapse, allowing later probabilistic reasoning.[10D[K
+reasoning.
+
+---
+
+### 9. Operational Invariant
+
+At every execution stage the following invariant holds:
+
+| Property | Description |
+|---|---|
+| **Uniqueness of Admitted Events** | Every admitted event belongs to exact[5D[K
+exactly one history. |
+| **Monotonic Growth** | Each history \(H\) grows monotonically (no back‑tr[7D[K
+back‑tracking). |
+| **Pop Removes One Boundary** | Each Pop reduction eliminates a single adm[3D[K
+admissible computational boundary. |
+| **Replay Extends Continuity** | Replay records dependencies without mutat[5D[K
+mutating past events. |
+| **Refusal Preserves Coherence** | Refusal leaves the unresolved set uncha[5D[K
+unchanged, preserving coherence. |
+| **Merge Preserves Independence** | Merge respects causal independence amo[3D[K
+among its arguments. |
+| **Choice Delays/Resolves Commitment** | Choice can either commit immediat[8D[K
+immediately or defer to a later distribution without altering the underlyin[9D[K
+underlying computation graph. |
+
+---
+
+### 10. Summary
+
+The operational semantics of Spherepop is fundamentally *historical*: terms[5D[K
+terms are replaced by records that retain their computational provenance, a[1D[K
+and reduction proceeds through a cycle of locating Ready events, verifying [K
+dependencies, popping computations, replaying dependencies, refusing inadmi[6D[K
+inadmissible continuations, merging independent histories, and handling non[3D[K
+nondeterminism via Choice.  This model unifies traditional substitution wit[3D[K
+with the full spectrum of historical operations (Replay, Refusal) and Ident[5D[K
+Identity, making identity itself an evolving process rather than a static e[1D[K
+equality.
+
+---
+
+**Next Steps**
+
+Having formalized the reduction system for Spherepop, we can now explore ho[2D[K
+how these primitives compose to support:
+
+* Incremental compilation,
+* Distributed version control merging,
+* Database replication with conflict resolution,
+* Probabilistic and concurrent programming models,
+
+all expressed as natural extensions of the historical operational semantics[9D[K
+semantics presented above.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 An important consequence follows immediately.
 

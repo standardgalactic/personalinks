@@ -1,0 +1,4920 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Interpretation of the Content**
+
+The material you have provided is a formal, category‑theoretic exposition o[1D[K
+of a *Historical Algebra* for computations. It consists mainly of:
+
+1. **Set‑theoretic preliminaries** (a poset structure on histories)  
+2. **Category‑theoretic definitions** of the class \(\mathbf{Hist}\) of adm[3D[K
+admissible computational histories, with objects being such histories and m[1D[K
+morphisms being admissible historical continuations.
+3. A series of subsections that give concrete categorical properties:
+   - Identity morphisms
+   - Composition (including associativity)
+   - The product (historical tensor) structure with projections \(\pi_1,\pi[11D[K
+\(\pi_1,\pi_2\), the coproduct, and merge tensor operations (\(\otimes\)) t[1D[K
+together with associatedators, left/right unitor natural transformations, a[1D[K
+and braiding.
+4. **Functorial structures**:
+   - The *Replay* functor \(R\) (an endofunctor) that maps a history to its[3D[K
+itself but interprets it as an “admissible repair” in the monadic sense.
+   - A *Collapse* natural transformation \(\kappa: R\to\operatorname{Id}\) [K
+showing how replay can be collapsed back to identity.
+5. **Monad and comonad structures**:
+   - The historical monad induced by \(R\) with unit \(\eta\) and multiplic[9D[K
+multiplication \(\mu\) satisfying the usual monad identities.
+   - The historical comonad induced by history extraction (counit \(\vareps[9D[K
+\(\varepsilon\) and comultiplication \(\delta\)).
+6. **Advanced categorical constructions**:
+   - Pullbacks (representing dependency synchronization) and pushouts (repr[5D[K
+(representing history merging).
+   - Limits and colimits for finite diagrams, showing that the category is [K
+complete and cocomplete.
+   - Kan extensions in both directions when appropriate, indicating a rich [K
+homotopical structure.
+7. **Presheaf semantics**:
+   - Definition of historical presheaves on a category \(\mathbf{Sphere}\) [K
+(computational regions), with restriction morphisms for open covers.
+   - The sheaf condition ensuring that gluing compatible local data yields [K
+a unique global datum.
+
+**Overall Meaning**
+
+The document is essentially presenting a **category‑theoretic framework** f[1D[K
+for modeling computational histories. It formalizes:
+
+- How histories can be composed and related (via pullbacks, pushouts).
+- How the notion of “repair” or “replay” can be interpreted as a monad that[4D[K
+that respects composition.
+- The idea that algebraic properties (limits/colimits) capture finite aspec[5D[K
+aspects of computation, while global structure is captured by sheaf conditi[7D[K
+conditions.
+
+This formalism allows one to reason about **finite Spherepop computations**[14D[K
+computations** in an abstract setting independent of any particular operati[7D[K
+operational semantics. It provides tools for reasoning about convergence (v[2D[K
+(via least upper bounds), refusal lattices, and the existence of fixed poin[4D[K
+points—key concepts in denotational semantics and domain theory applied to [K
+computation.
+
+**Takeaway**
+
+If you are interested in a categorical foundation for computational models,[7D[K
+models, this exposition gives you:
+
+- A concrete category \(\mathbf{Hist}\) with well‑defined morphisms (contin[7D[K
+(continuations).
+- Functorial interpretations such as Replay and Collapse.
+- Monad/comonad structures that model how computations can be “replayed” or[2D[K
+or “collapsed.”
+- Topological properties via pullbacks, pushouts, limits, colimits, and the[3D[K
+the sheaf condition.
+
+These tools together provide a rigorous mathematical language to analyze bo[2D[K
+both **finite** and potentially infinite computational histories.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-beyond-parentheses.tex
+
+NEW CHUNK
+=========
+
+contain all admissible histories terminating at logical time
+
+\[
+t.
+\]
+
+
+\subsection*{Categorical Completeness Theorem}
+
+
+The category
+
+\[
+\mathbf{Hist}
+\]
+
+is
+
+\[
+\boxed{
+\begin{aligned}
+&\text{complete},\\
+&\text{cocomplete},\\
+&\text{symmetric monoidal},\\
+&\text{cartesian closed on deterministic fragments},\\
+&\text{equipped with replay monads},\\
+&\text{history comonads},\\
+&\text{finite limits and colimits},\\
+&\text{presheaf semantics over computational spheres}.
+\end{aligned}
+}
+\]
+
+Furthermore, every finite Spherepop computation is the image of a commuting
+diagram in
+
+\[
+\mathbf{Hist},
+\]
+
+and every operational execution corresponds to a natural transformation
+between history-valued functors.
+
+\[
+\Box
+\]
+
+
+
+Geometric Semantics
+
+
+
+Let
+
+\[
+P
+\]
+
+be a smooth manifold representing the computational plenum.
+
+Every computational object is realized as a compact embedded submanifold
+
+\[
+S
+\subseteq
+P.
+\]
+
+Execution is interpreted as the geometric evolution of nested computational
+regions within
+
+\[
+P.
+\]
+
+
+\subsection*{Sphere Embedding}
+
+
+A computational Sphere is an embedding
+
+\[
+i_S
+:
+S
+\hookrightarrow
+P.
+\]
+
+Its boundary is
+
+\[
+\partial S.
+\]
+
+The interior is
+
+\[
+S^\circ
+=
+S
+\setminus
+\partial S.
+\]
+
+Nested Spheres satisfy
+
+\[
+S_1
+\subset
+S_2
+\Longrightarrow
+\partial S_1
+\cap
+\partial S_2
+=
+\varnothing.
+\]
+
+
+\subsection*{Boundary Orientation}
+
+
+Every boundary possesses an outward unit normal field
+
+\[
+n
+:
+\partial S
+\rightarrow
+TP.
+\]
+
+Boundary orientation induces the evaluation direction
+
+\[
+n(x)
+\in
+T_xP.
+\]
+
+
+\subsection*{Pop Flow}
+
+
+Let
+
+\[
+\Phi
+:
+P
+\rightarrow
+\mathbb R
+\]
+
+be the computational potential.
+
+The Pop derivative is
+
+\[
+\partial_P\Phi
+=
+(\nabla\cdot n)\,
+\partial_r\Phi
++
+v\cdot\nabla\Phi.
+\]
+
+Here
+
+\[
+v
+\]
+
+is the computational flow field.
+
+
+\subsection*{Minimal Surface Law}
+
+
+If
+
+\[
+\Delta\Phi
+=
+0,
+\]
+
+and
+
+\[
+\nabla\cdot v
+=
+0,
+\]
+
+then
+
+\[
+\partial_P\Phi
+=
+H
+\,
+\partial_r\Phi,
+\]
+
+where
+
+\[
+H
+\]
+
+is the mean curvature of
+
+\[
+\partial S.
+\]
+
+
+\subsection*{Curvature}
+
+
+The second fundamental form is
+
+\[
+II(X,Y)
+=
+\langle
+\nabla_X n,
+Y
+\rangle.
+\]
+
+Principal curvatures are
+
+\[
+\kappa_1,
+\ldots,
+\kappa_{d-1}.
+\]
+
+Mean curvature
+
+\[
+H
+=
+\frac1{d-1}
+\sum_i
+\kappa_i.
+\]
+
+Gaussian curvature
+
+\[
+K
+=
+\prod_i
+\kappa_i.
+\]
+
+
+\subsection*{Geodesic Replay}
+
+
+Replay follows shortest admissible dependency paths.
+
+Let
+
+\[
+\gamma
+:
+[0,1]
+\rightarrow
+P.
+\]
+
+Then
+
+\[
+\nabla_{\dot\gamma}
+\dot\gamma
+=
+0.
+\]
+
+Replay minimizes
+
+\[
+L(\gamma)
+=
+\int_0^1
+\|\dot\gamma\|
+\,dt.
+\]
+
+
+\subsection*{Dependency Foliation}
+
+
+Let
+
+\[
+\mathcal F
+=
+\{
+L_\alpha
+\}
+\]
+
+be the foliation generated by dependency classes.
+
+Each leaf
+
+\[
+L_\alpha
+\]
+
+contains histories sharing identical causal ancestry.
+
+Leaves satisfy
+
+\[
+P
+=
+\bigcup_\alpha
+L_\alpha.
+\]
+
+
+\subsection*{Historical Fibres}
+
+
+Define
+
+\[
+\pi
+:
+P
+\rightarrow
+B.
+\]
+
+The fibre
+
+\[
+\pi^{-1}(b)
+\]
+
+contains all histories representing equivalent observable computations.
+
+
+\subsection*{Hyperplane Boundaries}
+
+
+Logical predicates define hypersurfaces
+
+\[
+\Pi
+=
+\{
+x
+:
+f(x)=0
+\}.
+\]
+
+Positive region
+
+\[
+f>0.
+\]
+
+Negative region
+
+\[
+f<0.
+\]
+
+Boundary
+
+\[
+f=0.
+\]
+
+Pop occurs only after crossing
+
+\[
+\Pi.
+\]
+
+
+\subsection*{Collapse Surface}
+
+
+The Collapse operator induces
+
+\[
+C
+:
+S
+\rightarrow
+\partial S.
+\]
+
+Repeated Collapse satisfies
+
+\[
+C^2=C.
+\]
+
+
+\subsection*{Merge Geometry}
+
+
+Independent histories form disjoint unions
+
+\[
+S_1
+\sqcup
+S_2.
+\]
+
+Shared boundaries induce gluing
+
+\[
+S_1
+\cup_{\partial}
+S_2.
+\]
+
+
+\subsection*{Choice Geometry}
+
+
+Choice defines a probability density
+
+\[
+\rho
+:
+P
+\rightarrow
+[0,1].
+\]
+
+Normalization
+
+\[
+\int_P
+\rho
+\,dV
+=
+1.
+\]
+
+
+\subsection*{Energy Functional}
+
+
+Define
+
+\[
+E(S)
+=
+\int_S
+\left(
+\alpha
++
+\beta H^2
++
+\gamma
+\|\nabla\Phi\|^2
+\right)
+dV.
+\]
+
+Admissible execution minimizes
+
+\[
+E.
+\]
+
+
+\subsection*{Historical Action}
+
+
+Let
+
+\[
+H(t)
+\]
+
+be a one-parameter family of histories.
+
+Define
+
+\[
+\mathcal A(H)
+=
+\int
+L(H,\dot H)
+\,dt.
+\]
+
+Stationary histories satisfy
+
+\[
+\delta
+\mathcal A
+=
+0.
+\]
+
+
+\subsection*{Reachability Volume}
+
+
+The reachable region of a history is
+
+\[
+\mathcal R(H)
+\subseteq
+P.
+\]
+
+Volume
+
+\[
+V(H)
+=
+\operatorname{Vol}
+(\mathcal R(H)).
+\]
+
+Monotonicity
+
+\[
+H_1
+\subseteq
+H_2
+\Longrightarrow
+V(H_1)
+\le
+V(H_2).
+\]
+
+
+\subsection*{Historical Divergence}
+
+
+Define
+
+\[
+\operatorname{Div}(H)
+=
+\nabla\cdot v.
+\]
+
+If
+
+\[
+\operatorname{Div}(H)=0,
+\]
+
+history preserves computational volume.
+
+
+\subsection*{Boundary Collapse Theorem}
+
+
+Let
+
+\[
+S
+\subseteq
+P
+\]
+
+be an admissible computational Sphere.
+
+Suppose
+
+\[
+\Delta\Phi=0,
+\qquad
+\nabla\cdot v=0,
+\]
+
+and
+
+\[
+H>0
+\]
+
+everywhere on
+
+\[
+\partial S.
+\]
+
+Then repeated Pop evolution converges to a unique terminal Collapse
+
+\[
+C(S),
+\]
+
+independent of the local parametrization of
+
+\[
+S.
+\]
+
+
+\subsection*{Geometric Completeness}
+
+
+Every finite Spherepop computation admits a geometric realization
+
+\[
+(\mathcal M,
+g,
+\mathcal F,
+v,
+\Phi),
+\]
+
+where
+
+\[
+\mathcal M
+\]
+
+is a smooth manifold,
+
+\[
+g
+\]
+
+a Riemannian metric,
+
+\[
+\mathcal F
+\]
+
+the dependency foliation,
+
+\[
+v
+\]
+
+the execution vector field,
+
+and
+
+\[
+\Phi
+\]
+
+the computational potential.
+
+Operational semantics correspond to boundary evolution,
+
+Replay corresponds to geodesic reconstruction,
+
+Merge corresponds to manifold gluing,
+
+Choice corresponds to probability densities,
+
+Refusal corresponds to forbidden boundary crossings,
+
+and Collapse corresponds to convergence onto admissible boundary strata.
+
+Consequently, every admissible computation possesses both an operational
+interpretation as a history and a geometric interpretation as the evolution
+of nested computational regions within the computational plenum.
+
+\[
+\Box
+\]
+
+
+
+Reference Grammar and Concrete Syntax
+
+
+
+
+\subsection*{Lexical Alphabet}
+
+
+Let
+
+\[
+\Sigma
+=
+\Sigma_L
+\cup
+\Sigma_D
+\cup
+\Sigma_S
+\cup
+\Sigma_O
+\cup
+\Sigma_W,
+\]
+
+where
+
+\[
+\Sigma_L
+=
+\{A,\ldots,Z,a,\ldots,z,\_\},
+\]
+
+\[
+\Sigma_D
+=
+\{0,\ldots,9\},
+\]
+
+\[
+\Sigma_S
+=
+\{
+(,),
+[,],
+\{,\},
+<,>,
+:,;,
+,
+\},
+\]
+
+\[
+\Sigma_O
+=
+\{
++,-,*,/,=,
+\rightarrow,
+\Leftarrow,
+:=,
+::,
+\otimes,
+\oplus
+\},
+\]
+
+and
+
+\[
+\Sigma_W
+=
+\{\texttt{space},\texttt{tab},\texttt{newline}\}.
+\]
+
+
+\subsection*{Identifiers}
+
+
+Identifier
+
+\[
+I
+::=
+L(L\mid D)^*.
+\]
+
+Formally,
+
+\[
+I
+=
+\{
+x
+\in
+\Sigma^*
+:
+x_1
+\in
+\Sigma_L,
+\;
+x_i
+\in
+\Sigma_L
+\cup
+\Sigma_D
+\}.
+\]
+
+
+\subsection*{Reserved Keywords}
+
+
+\[
+\begin{aligned}
+&
+\mathbf{sphere},
+\mathbf{pop},
+\mathbf{merge},
+\mathbf{choice},
+\mathbf{collapse},
+\mathbf{replay},
+\mathbf{refuse},
+\mathbf{bind},
+\\
+&
+\mathbf{module},
+\mathbf{import},
+\mathbf{export},
+\mathbf{let},
+\mathbf{match},
+\mathbf{history},
+\mathbf{type},
+\mathbf{proof},
+\\
+&
+\mathbf{true},
+\mathbf{false},
+\mathbf{if},
+\mathbf{then},
+\mathbf{else},
+\mathbf{while},
+\mathbf{return}.
+\end{aligned}
+\]
+
+
+\subsection*{Numeric Literals}
+
+
+Integers
+
+\[
+n
+::=
+D^+.
+\]
+
+Reals
+
+\[
+r
+::=
+D^+
+.
+D^+.
+\]
+
+Scientific notation
+
+\[
+a
+::=
+D^+
+(
+.
+D^+
+)?
+E
+(\pm)?
+D^+.
+\]
+
+
+\subsection*{String Literals}
+
+
+\[
+s
+::=
+"
+c_1
+\cdots
+c_n
+".
+\]
+
+
+\subsection*{Comments}
+
+
+Single-line
+
+\[
+\texttt{//}\;
+\alpha
+\rightarrow
+\texttt{newline}.
+\]
+
+Multi-line
+
+\[
+\texttt{/*}
+\;
+\alpha
+\;
+\texttt{*/}.
+\]
+
+
+\subsection*{Concrete Grammar}
+
+
+Program
+
+\[
+P
+::=
+M^*.
+\]
+
+Module
+
+\[
+M
+::=
+\mathbf{module}
+\;
+I
+\;
+D.
+\]
+
+Declaration
+
+\[
+D
+::=
+F
+\mid
+T
+\mid
+V.
+\]
+
+Function
+
+\[
+F
+::=
+\mathbf{let}
+\;
+I
+(
+A
+)
+=
+E.
+\]
+
+Variable
+
+\[
+V
+::=
+\mathbf{let}
+\;
+I
+=
+E.
+\]
+
+Type
+
+\[
+T
+::=
+\mathbf{type}
+\;
+I
+=
+\tau.
+\]
+
+
+\subsection*{Expressions}
+
+
+\[
+\begin{array}{rcl}
+E
+&::=&
+I
+\\
+&
+\mid&
+n
+\\
+&
+\mid&
+r
+\\
+&
+\mid&
+s
+\\
+&
+\mid&
+(E)
+\\
+&
+\mid&
+E\;E
+\\
+&
+\mid&
+\lambda
+I.E
+\\
+&
+\mid&
+\mathbf{sphere}(E)
+\\
+&
+\mid&
+\mathbf{pop}(E)
+\\
+&
+\mid&
+\mathbf{merge}(E,E)
+\\
+&
+\mid&
+\mathbf{choice}(p,E,E)
+\\
+&
+\mid&
+\mathbf{collapse}(E)
+\\
+&
+\mid&
+\mathbf{replay}(E)
+\\
+&
+\mid&
+\mathbf{bind}(E,E)
+\\
+&
+\mid&
+\mathbf{refuse}(R).
+\end{array}
+\]
+
+
+\subsection*{Types}
+
+
+\[
+\begin{array}{rcl}
+\tau
+&::=&
+\mathbf{Bool}
+\\
+&
+\mid&
+\mathbf{Int}
+\\
+&
+\mid&
+\mathbf{Real}
+\\
+&
+\mid&
+\mathbf{History}
+\\
+&
+\mid&
+\tau
+\rightarrow
+\tau
+\\
+&
+\mid&
+\tau
+\times
+\tau
+\\
+&
+\mid&
+\Pi
+x:\tau.
+\tau
+\\
+&
+\mid&
+\Sigma
+x:\tau.
+\tau.
+\end{array}
+\]
+
+
+\subsection*{Operator Precedence}
+
+
+\[
+\begin{array}{ll}
+1&
+()
+\\
+2&
+E\;E
+\\
+3&
+\mathbf{pop}
+\\
+4&
+*
+\;/
+\\
+5&
++
+-
+\\
+6&
+\rightarrow
+\\
+7&
+\mathbf{merge}
+\\
+8&
+\mathbf{choice}
+\\
+9&
+\mathbf{collapse}
+\\
+10&
+\mathbf{bind}
+\end{array}
+\]
+
+
+\subsection*{Abstract Syntax}
+
+
+Define
+
+\[
+\mathcal T
+\]
+
+inductively.
+
+Leaves
+
+\[
+\operatorname{Var}(x),
+\qquad
+\operatorname{Const}(c).
+\]
+
+Unary nodes
+
+\[
+\operatorname{Sphere},
+\operatorname{Pop},
+\operatorname{Replay},
+\operatorname{Collapse}.
+\]
+
+Binary nodes
+
+\[
+\operatorname{Bind},
+\operatorname{Merge},
+\operatorname{Apply}.
+\]
+
+Ternary nodes
+
+\[
+\operatorname{Choice}.
+\]
+
+
+\subsection*{Grammar Homomorphism}
+
+
+Parser
+
+\[
+\pi
+:
+\Sigma^*
+\rightarrow
+\mathcal T.
+\]
+
+Properties
+
+\[
+\pi(xy)
+=
+\pi(x)
+\circ
+\pi(y).
+\]
+
+\[
+\pi
+(
+(E)
+)
+=
+\operatorname{Sphere}
+(
+\pi(E)
+).
+\]
+
+
+\subsection*{Well-Formed Programs}
+
+
+A program
+
+\[
+P
+\]
+
+is well formed iff
+
+\[
+\forall
+x,
+\qquad
+\operatorname{Bind}(x)
+\text{ unique},
+\]
+
+\[
+\operatorname{Depth}(P)
+<
+\infty,
+\]
+
+\[
+G(P)
+\text{ is acyclic},
+\]
+
+\[
+\Gamma
+\vdash
+P.
+\]
+
+
+\subsection*{Parsing Function}
+
+
+\[
+\operatorname{Parse}
+:
+\Sigma^*
+\rightarrow
+(\mathcal T,\Gamma).
+\]
+
+Correctness
+
+\[
+\operatorname{Print}
+(
+\operatorname{Parse}(P)
+)
+=
+P.
+\]
+
+
+\subsection*{Grammar Completeness}
+
+
+For every admissible abstract syntax tree
+
+\[
+T,
+\]
+
+there exists a concrete program
+
+\[
+P
+\]
+
+such that
+
+\[
+\pi(P)
+=
+T.
+\]
+
+Conversely,
+
+\[
+\forall
+P,
+\qquad
+\pi(P)
+\]
+
+is unique.
+
+
+\subsection*{Reference Grammar Theorem}
+
+
+The concrete grammar
+
+\[
+\mathcal G
+=
+(\Sigma,N,P,S)
+\]
+
+is
+
+\[
+\boxed{
+\begin{aligned}
+&\text{unambiguous},\\
+&\text{context-free},\\
+&\text{deterministically parseable},\\
+&\text{structurally complete},\\
+&\text{closed under Sphere formation},\\
+&\text{closed under Replay},\\
+&\text{closed under Merge},\\
+&\text{closed under Collapse}.
+\end{aligned}
+}
+\]
+
+Furthermore, every well-formed program admits a unique abstract syntax tree,
+a unique dependency graph, and a unique hierarchy of computational Spheres,
+up to $\alpha$-equivalence.
+
+\[
+\Box
+\]
+
+
+
+Standard Library Specification
+
+
+
+Let
+
+\[
+\Omega
+=
+\Omega_A
+\cup
+\Omega_H
+\cup
+\Omega_L
+\cup
+\Omega_G
+\cup
+\Omega_P
+\cup
+\Omega_M
+\]
+
+denote the complete primitive operator library.
+
+
+\subsection*{Arithmetic Algebra}
+
+
+Addition
+
+\[
++
+:
+\mathbb Z
+\times
+\mathbb Z
+\rightarrow
+\mathbb Z.
+\]
+
+Multiplication
+
+\[
+\times
+:
+\mathbb Z
+\times
+\mathbb Z
+\rightarrow
+\mathbb Z.
+\]
+
+Division
+
+\[
+/
+:
+\mathbb R
+\times
+\mathbb R^\times
+\rightarrow
+\mathbb R.
+\]
+
+Exponentiation
+
+\[
+(-)^n
+:
+\mathbb R
+\rightarrow
+\mathbb R.
+\]
+
+Identity
+
+\[
+x+0=x,
+\]
+
+\[
+x\cdot1=x.
+\]
+
+Inverse
+
+\[
+x+(-x)=0.
+\]
+
+Associativity
+
+\[
+(x+y)+z=x+(y+z).
+\]
+
+Commutativity
+
+\[
+x+y=y+x.
+\]
+
+Distributivity
+
+\[
+x(y+z)=xy+xz.
+\]
+
+
+\subsection*{Boolean Library}
+
+
+Conjunction
+
+\[
+\land
+:
+\mathbf B^2
+\rightarrow
+\mathbf B.
+\]
+
+Disjunction
+
+\[
+\lor
+:
+\mathbf B^2
+\rightarrow
+\mathbf B.
+\]
+
+Negation
+
+\[
+\neg
+:
+\mathbf B
+\rightarrow
+\mathbf B.
+\]
+
+Exclusive-or
+
+\[
+\oplus
+:
+\mathbf B^2
+\rightarrow
+\mathbf B.
+\]
+
+Truth tables
+
+\[
+x\land y
+=
+xy.
+\]
+
+\[
+x\lor y
+=
+x+y-xy.
+\]
+
+\[
+\neg x
+=
+1-x.
+\]
+
+
+\subsection*{Comparison Operators}
+
+
+Equality
+
+\[
+=
+:
+A
+\times
+A
+\rightarrow
+\mathbf B.
+\]
+
+Ordering
+
+\[
+<
+,\le,
+>,
+\ge.
+\]
+
+Membership
+
+\[
+\in
+:
+A
+\times
+\mathcal P(A)
+\rightarrow
+\mathbf B.
+\]
+
+
+\subsection*{History Operators}
+
+
+Open
+
+\[
+\operatorname{Sphere}
+:
+A
+\rightarrow
+\operatorname{Hist}(A).
+\]
+
+Replay
+
+\[
+\operatorname{Replay}
+:
+H
+\rightarrow
+H.
+\]
+
+Merge
+
+\[
+\operatorname{Merge}
+:
+H
+\times
+H
+\rightarrow
+H.
+\]
+
+Choice
+
+\[
+\operatorname{Choice}
+:
+[0,1]
+\times
+H
+\times
+H
+\rightarrow
+H.
+\]
+
+Collapse
+
+\[
+\operatorname{Collapse}
+:
+H
+\rightarrow
+A.
+\]
+
+Refusal
+
+\[
+\operatorname{Refuse}
+:
+R
+\rightarrow
+H.
+\]
+
+Bind
+
+\[
+\operatorname{Bind}
+:
+H
+\times
+(A\rightarrow H)
+\rightarrow
+H.
+\]
+
+
+\subsection*{History Laws}
+
+
+Replay
+
+\[
+R^2=R.
+\]
+
+Collapse
+
+\[
+C^2=C.
+\]
+
+Merge
+
+\[
+H_1\otimes H_2
+=
+H_2\otimes H_1.
+\]
+
+Associativity
+
+\[
+(H_1\otimes H_2)\otimes H_3
+=
+H_1\otimes(H_2\otimes H_3).
+\]
+
+
+\subsection*{List Library}
+
+
+Empty list
+
+\[
+[]
+.
+\]
+
+Construction
+
+\[
+\operatorname{cons}
+:
+A
+\times
+L(A)
+\rightarrow
+L(A).
+\]
+
+Head
+
+\[
+\operatorname{head}
+:
+L(A)
+\rightarrow
+A.
+\]
+
+Tail
+
+\[
+\operatorname{tail}
+:
+L(A)
+\rightarrow
+L(A).
+\]
+
+Length
+
+\[
+|\cdot|
+:
+L(A)
+\rightarrow
+\mathbb N.
+\]
+
+Concatenation
+
+\[
+++
+:
+L(A)
+\times
+L(A)
+\rightarrow
+L(A).
+\]
+
+
+\subsection*{Set Library}
+
+
+Union
+
+\[
+\cup.
+\]
+
+Intersection
+
+\[
+\cap.
+\]
+
+Difference
+
+\[
+\setminus.
+\]
+
+Power set
+
+\[
+\mathcal P(A).
+\]
+
+Cartesian product
+
+\[
+A\times B.
+\]
+
+
+\subsection*{Graph Library}
+
+
+Vertex
+
+\[
+v
+\in
+V.
+\]
+
+Edge
+
+\[
+(u,v)
+\in
+E.
+\]
+
+Parents
+
+\[
+\operatorname{Pred}(v).
+\]
+
+Children
+
+\[
+\operatorname{Succ}(v).
+\]
+
+Topological ordering
+
+\[
+\operatorname{Topo}
+:
+G
+\rightarrow
+(V_1,\ldots,V_n).
+\]
+
+
+\subsection*{Matrix Library}
+
+
+Addition
+
+\[
+A+B.
+\]
+
+Multiplication
+
+\[
+AB.
+\]
+
+Transpose
+
+\[
+A^T.
+\]
+
+Determinant
+
+\[
+\det(A).
+\]
+
+Inverse
+
+\[
+A^{-1}.
+\]
+
+Trace
+
+\[
+\operatorname{tr}(A).
+\]
+
+Rank
+
+\[
+\operatorname{rank}(A).
+\]
+
+
+\subsection*{Probability Library}
+
+
+Distribution
+
+\[
+\mathcal D(A).
+\]
+
+Expectation
+
+\[
+\mathbb E.
+\]
+
+Variance
+
+\[
+\operatorname{Var}.
+\]
+
+Sampling
+
+\[
+\operatorname{Sample}
+:
+\mathcal D(A)
+\rightarrow
+A.
+\]
+
+Observation
+
+\[
+\operatorname{Observe}
+:
+A
+\rightarrow
+\mathcal D(A).
+\]
+
+
+\subsection*{Differentiable Library}
+
+
+Gradient
+
+\[
+\nabla.
+\]
+
+Jacobian
+
+\[
+J.
+\]
+
+Hessian
+
+\[
+H.
+\]
+
+Chain rule
+
+\[
+D(f\circ g)
+=
+Df
+\cdot
+Dg.
+\]
+
+
+\subsection*{Tensor Library}
+
+
+Tensor product
+
+\[
+\otimes.
+\]
+
+Contraction
+
+\[
+\operatorname{Tr}_i.
+\]
+
+Outer product
+
+\[
+u
+\otimes
+v.
+\]
+
+
+\subsection*{Optimization Library}
+
+
+Gradient descent
+
+\[
+x_{k+1}
+=
+x_k
+-
+\eta
+\nabla f(x_k).
+\]
+
+Newton iteration
+
+\[
+x_{k+1}
+=
+x_k
+-
+H^{-1}
+\nabla f.
+\]
+
+
+\subsection*{Scheduler Library}
+
+
+Ready predicate
+
+\[
+\operatorname{Ready}(S).
+\]
+
+Selection
+
+\[
+\operatorname{Select}(Q).
+\]
+
+Execution
+
+\[
+\operatorname{Execute}(S).
+\]
+
+Historical update
+
+\[
+H'
+=
+H::e.
+\]
+
+
+\subsection*{Library Closure}
+
+
+For every operator
+
+\[
+\omega
+\in
+\Omega,
+\]
+
+there exists
+
+\[
+\omega
+:
+A_1
+\times
+\cdots
+\times
+A_n
+\rightarrow
+B
+\]
+
+such that
+
+\[
+\Gamma
+\vdash
+A_i
+\]
+
+implies
+
+\[
+\Gamma
+\vdash
+\omega
+(A_1,\ldots,A_n).
+\]
+
+
+\subsection*{Library Completeness Theorem}
+
+
+The standard library
+
+\[
+\boxed{\Omega}
+\]
+
+is closed under
+
+\[
+\begin{aligned}
+&
+\text{functional composition},\\
+&
+\text{historical replay},\\
+&
+\text{parallel merge},\\
+&
+\text{probabilistic choice},\\
+&
+\text{logical inference},\\
+&
+\text{graph construction},\\
+&
+\text{linear algebra},\\
+&
+\text{differential operators},\\
+&
+\text{tensor contraction},\\
+&
+\text{historical collapse}.
+\end{aligned}
+\]
+
+Moreover, every primitive operator preserves admissibility, every composite
+operator admits a unique dependency graph, and every finite library expression
+is executable by the Universal Operator Machine through the operational
+semantics of the Spherepop Calculus.
+
+\[
+\Box
+\]
+
+
+
+Rewrite System
+
+
+
+Let
+
+\[
+\mathcal T
+\]
+
+denote the set of all well-typed Spherepop terms.
+
+Define the one-step rewrite relation
+
+\[
+\longrightarrow
+\subseteq
+\mathcal T
+\times
+\mathcal T.
+\]
+
+Its reflexive-transitive closure is
+
+\[
+\longrightarrow^{*}.
+\]
+
+
+\subsection*{Structural Congruence}
+
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\equiv
+H_1\otimes(H_2\otimes H_3).
+\]
+
+\[
+H_1\otimes H_2
+\equiv
+H_2\otimes H_1,
+\]
+
+provided
+
+\[
+H_1
+\perp
+H_2.
+\]
+
+\[
+H\otimes\varepsilon
+\equiv
+H.
+\]
+
+
+\subsection*{$\beta$-Reduction}
+
+
+\[
+\operatorname{Pop}
+(
+\operatorname{Sphere}
+(x.t),
+u
+)
+\rightarrow
+t[u/x].
+\]
+
+
+\subsection*{$\eta$-Reduction}
+
+
+\[
+\operatorname{Sphere}
+(
+x.
+\operatorname{Pop}
+(f,x)
+)
+\rightarrow
+f,
+\]
+
+provided
+
+\[
+x
+\notin
+FV(f).
+\]
+
+
+\subsection*{Replay Rules}
+
+
+Idempotence
+
+\[
+\operatorname{Replay}
+(
+\operatorname{Replay}(H)
+)
+\rightarrow
+\operatorname{Replay}(H).
+\]
+
+Collapse invariance
+
+\[
+\operatorname{Collapse}
+(
+\operatorname{Replay}(H)
+)
+\rightarrow
+\operatorname{Collapse}(H).
+\]
+
+Merge distribution
+
+\[
+\operatorname{Replay}
+(H_1\otimes H_2)
+\rightarrow
+\operatorname{Replay}(H_1)
+\otimes
+\operatorname{Replay}(H_2).
+\]
+
+
+\subsection*{Collapse Rules}
+
+
+Idempotence
+
+\[
+\operatorname{Collapse}
+(
+\operatorname{Collapse}(H)
+)
+\rightarrow
+\operatorname{Collapse}(H).
+\]
+
+Terminal value
+
+\[
+\operatorname{Collapse}(v)
+\rightarrow
+v.
+\]
+
+
+\subsection*{Merge Rules}
+
+
+Associativity
+
+\[
+(H_1\otimes H_2)\otimes H_3
+\rightarrow
+H_1\otimes H_2\otimes H_3.
+\]
+
+Neutral element
+
+\[
+H\otimes\varepsilon
+\rightarrow
+H.
+\]
+
+Duplicate elimination
+
+\[
+H\otimes H
+\rightarrow
+H,
+\]
+
+when
+
+\[
+H
+\]
+
+is observationally identical.
+
+
+\subsection*{Choice Rules}
+
+
+Degenerate probabilities
+
+\[
+\operatorname{Choice}
+(1,H_1,H_2)
+\rightarrow
+H_1.
+\]
+
+\[
+\operatorname{Choice}
+(0,H_1,H_2)
+\rightarrow
+H_2.
+\]
+
+Equal branches
+
+\[
+\operatorname{Choice}
+(p,H,H)
+\rightarrow
+H.
+\]
+
+
+\subsection*{Bind Rules}
+
+
+Left identity
+
+\[
+\operatorname{Bind}
+(
+\operatorname{Return}(x),
+f
+)
+\rightarrow
+f(x).
+\]
+
+Right identity
+
+\[
+\operatorname{Bind}
+(
+H,
+\operatorname{Return}
+)
+\rightarrow
+H.
+\]
+
+Associativity
+
+\[
+\operatorname{Bind}
+(
+\operatorname{Bind}(H,f),
+g
+)
+\rightarrow
+\operatorname{Bind}
+(
+H,
+\lambda x.
+\operatorname{Bind}(f(x),g)
+).
+\]
+
+
+\subsection*{Refusal Rules}
+
+
+Propagation
+
+\[
+\operatorname{Refuse}(r)
+\otimes
+H
+\rightarrow
+\operatorname{Refuse}(r).
+\]
+
+Replay
+
+\[
+\operatorname{Replay}
+(
+\operatorname{Refuse}(r)
+)
+\rightarrow
+\operatorname{Refuse}(r).
+\]
+
+Collapse
+
+\[
+\operatorname{Collapse}
+(
+\operatorname{Refuse}(r)
+)
+\rightarrow
+\operatorname{Refuse}(r).
+\]
+
+
+\subsection*{Historical Simplification}
+
+
+Empty replay
+
+\[
+\operatorname{Replay}(\varepsilon)
+\rightarrow
+\varepsilon.
+\]
+
+Empty merge
+
+\[
+\operatorname{Merge}
+(
+\varepsilon,
+H
+)
+\rightarrow
+H.
+\]
+
+Redundant history
+
+\[
+H::\varepsilon
+\rightarrow
+H.
+\]
+
+
+\subsection*{Graph Rewriting}
+
+
+Inline vertex
+
+\[
+v
+\rightarrow
+\operatorname{Body}(v),
+\]
+
+when
+
+\[
+\deg^{-}(v)=1.
+\]
+
+Constant propagation
+
+\[
+f(c)
+\rightarrow
+c'.
+\]
+
+Dead node elimination
+
+\[
+\operatorname{Succ}(v)
+=
+\varnothing
+\Longrightarrow
+v
+\rightarrow
+\varepsilon.
+\]
+
+
+\subsection*{History Compression}
+
+
+Repeated replay
+
+\[
+H::H
+\rightarrow
+H.
+\]
+
+Replay cache
+
+\[
+H_i
+=
+H_j
+\Longrightarrow
+H_j
+\rightsquigarrow
+\operatorname{Ref}(H_i).
+\]
+
+
+\subsection*{Normalization Rules}
+
+
+Every rewrite decreases
+
+\[
+\mu(T),
+\]
+
+where
+
+\[
+\mu
+:
+\mathcal T
+\rightarrow
+\mathbb N
+\]
+
+is defined by
+
+\[
+\mu(T)
+=
+\#\operatorname{Sphere}
++
+\#\operatorname{Replay}
++
+\#\operatorname{Collapse}
++
+\#\operatorname{Merge}.
+\]
+
+For every rewrite
+
+\[
+T
+\rightarrow
+T',
+\]
+
+\[
+\mu(T')
+<
+\mu(T),
+\]
+
+except replay-preserving transformations.
+
+
+\subsection*{Local Confluence}
+
+
+If
+
+\[
+T
+\rightarrow
+T_1,
+\]
+
+and
+
+\[
+T
+\rightarrow
+T_2,
+\]
+
+then there exists
+
+\[
+T_3
+\]
+
+such that
+
+\[
+T_1
+\rightarrow^{*}
+T_3,
+\]
+
+\[
+T_2
+\rightarrow^{*}
+T_3.
+\]
+
+
+\subsection*{Historical Church--Rosser Conjecture}
+
+
+Suppose
+
+\[
+T
+\rightarrow^{*}
+T_1,
+\]
+
+and
+
+\[
+T
+\rightarrow^{*}
+T_2.
+\]
+
+Then there exists
+
+\[
+T_3
+\]
+
+such that
+
+\[
+T_1
+\rightarrow^{*}
+T_3,
+\]
+
+\[
+T_2
+\rightarrow^{*}
+T_3,
+\]
+
+provided all Replay operations preserve admissible provenance.
+
+
+\subsection*{Rewrite Completeness}
+
+
+Every finite Spherepop program admits a rewrite sequence
+
+\[
+T
+=
+T_0
+\rightarrow
+T_1
+\rightarrow
+\cdots
+\rightarrow
+T_n
+=
+N,
+\]
+
+where
+
+\[
+N
+\]
+
+is in normal form,
+
+\[
+N
+\nrightarrow.
+\]
+
+
+\subsection*{Normal Form}
+
+
+A term
+
+\[
+N
+\]
+
+is in historical normal form iff
+
+\[
+\begin{aligned}
+&
+\operatorname{Replay}
+\notin N,
+\\
+&
+\operatorname{Collapse}
+\notin N,
+\\
+&
+\operatorname{Merge}
+\text{ is flat},
+\\
+&
+\operatorname{Choice}
+\text{ is terminal},
+\\
+&
+\operatorname{Sphere}
+\text{ contains no reducible Pops}.
+\end{aligned}
+\]
+
+
+\subsection*{Rewrite System Theorem}
+
+
+Let
+
+\[
+\mathcal R
+\]
+
+be the rewrite system consisting of all rules defined above.
+
+Then
+
+\[
+\boxed{
+\mathcal R
+=
+\{
+\beta,
+\eta,
+\operatorname{Replay},
+\operatorname{Collapse},
+\operatorname{Merge},
+\operatorname{Choice},
+\operatorname{Bind},
+\operatorname{Refuse},
+\operatorname{Compression},
+\operatorname{Graph}
+\}
+}
+\]
+
+forms a terminating rewrite system over every finite acyclic dependency graph.
+
+Furthermore,
+
+\[
+T
+\rightarrow^{*}
+N
+\]
+
+for every finite well-typed program
+
+\[
+T,
+\]
+
+where
+
+\[
+N
+\]
+
+is unique up to structural congruence and replay equivalence.
+
+\[
+\Box
+\]
+
+
+
+Benchmark Programs
+
+
+
+Let
+
+\[
+\mathcal P
+=
+\{
+P_1,
+P_2,
+\ldots,
+P_n
+\}
+\]
+
+denote the collection of reference Spherepop programs.
+
+Each benchmark consists of
+
+\[
+(P,H,G,T,C),
+\]
+
+where
+
+\[
+P
+\]
+
+is the program,
+
+\[
+H
+\]
+
+its execution history,
+
+\[
+G
+\]
+
+its dependency graph,
+
+\[
+T
+\]
+
+its typing derivation,
+
+and
+
+\[
+C
+\]
+
+its terminal Collapse.
+
+
+\subsection*{Benchmark 1: Identity}
+
+
+\[
+I
+=
+\operatorname{Sphere}(x.x).
+\]
+
+Evaluation
+
+\[
+\operatorname{Pop}(I,a)
+\rightarrow
+a.
+\]
+
+History
+
+\[
+H_I
+=
+(
+\operatorname{Open},
+\operatorname{Bind},
+\operatorname{Pop},
+\operatorname{Collapse}
+).
+\]
+
+Complexity
+
+\[
+O(1).
+\]
+
+
+\subsection*{Benchmark 2: Composition}
+
+
+\[
+(f\circ g)(x)
+=
+f(g(x)).
+\]
+
+Dependency graph
+
+\[
+g
+\prec
+f.
+\]
+
+Execution
+
+\[
+x
+\rightarrow
+g
+\rightarrow
+f.
+\]
+
+History depth
+
+\[
+D=2.
+\]
+
+
+\subsection*{Benchmark 3: Recursive Fibonacci}
+
+
+\[
+F(0)=0,
+\]
+
+\[
+F(1)=1,
+\]
+
+\[
+F(n)
+=
+F(n-1)+F(n-2).
+\]
+
+Replay graph
+
+\[
+G_F
+=
+(V,E).
+\]
+
+Naive complexity
+
+\[
+O(\phi^n).
+\]
+
+Replay-compressed complexity
+
+\[
+O(n).
+\]
+
+Historical compression ratio
+
+\[
+\gamma
+=
+\frac{\phi^n}{n}.
+\]
+
+
+\subsection*{Benchmark 4: Merge Sort}
+
+
+Split
+
+\[
+L
+=
+L_1
+\cup
+L_2.
+\]
+
+Recursive histories
+
+\[
+H
+=
+H_1
+\otimes
+H_2.
+\]
+
+Merge
+
+\[
+H'
+=
+\operatorname{Merge}(H_1,H_2).
+\]
+
+Complexity
+
+\[
+O(n\log n).
+\]
+
+Parallel depth
+
+\[
+O(\log n).
+\]
+
+
+\subsection*{Benchmark 5: Dijkstra}
+
+
+State
+
+\[
+(V,E,w).
+\]
+
+Distance update
+
+\[
+d(v)
+=
+\min
+(d(v),d(u)+w(u,v)).
+\]
+
+Replay records every relaxation.
+
+History size
+
+\[
+O(E).
+\]
+
+Complexity
+
+\[
+O(E\log V).
+\]
+
+
+\subsection*{Benchmark 6: Logic Circuit}
+
+
+Circuit
+
+\[
+C=(V,E).
+\]
+
+Gate
+
+\[
+g_i
+:
+\{0,1\}^k
+\rightarrow
+\{0,1\}.
+\]
+
+Execution
+
+\[
+H_C
+=
+\bigotimes_i
+H_i.
+\]
+
+Collapse
+
+\[
+C
+=
+\operatorname{Collapse}(H_C).
+\]
+
+Complexity
+
+\[
+O(|V|+|E|).
+\]
+
+
+\subsection*{Benchmark 7: Lambda Interpreter}
+
+
+Program
+
+\[
+(\lambda x.x)y.
+\]
+
+Reduction
+
+\[
+(\lambda x.x)y
+\rightarrow
+y.
+\]
+
+Replay records
+
+\[
+\beta
+\]
+
+reductions explicitly.
+
+
+\subsection*{Benchmark 8: SAT Solver}
+
+
+Formula
+
+\[
+\phi
+=
+C_1
+\land
+\cdots
+\land
+C_m.
+\]
+
+Branching
+
+\[
+\operatorname{Choice}
+(
+p,
+H_T,
+H_F
+).
+\]
+
+Conflict
+
+\[
+\operatorname{Refuse}(r).
+\]
+
+Successful assignment
+
+\[
+\operatorname{Collapse}(v).
+\]
+
+
+\subsection*{Benchmark 9: Feedforward Neural Network}
+
+
+Layer
+
+\[
+x_{k+1}
+=
+\sigma(W_kx_k+b_k).
+\]
+
+Execution graph
+
+\[
+H
+=
+H_1
+\otimes
+\cdots
+\otimes
+H_L.
+\]
+
+Replay computes reverse dependencies.
+
+Backpropagation
+
+\[
+\nabla
+L
+=
+J^T
+\nabla
+L.
+\]
+
+
+\subsection*{Benchmark 10: Parser}
+
+
+Input
+
+\[
+w
+\in
+\Sigma^*.
+\]
+
+Parser
+
+\[
+P
+:
+\Sigma^*
+\rightarrow
+\mathcal T.
+\]
+
+History
+
+\[
+\operatorname{Lex}
+\prec
+\operatorname{Parse}
+\prec
+\operatorname{Type}.
+\]
+
+Complexity
+
+\[
+O(n).
+\]
+
+
+\subsection*{Benchmark 11: Historical Replay}
+
+
+Initial history
+
+\[
+H.
+\]
+
+Replay
+
+\[
+R(H).
+\]
+
+Property
+
+\[
+R(R(H))
+=
+R(H).
+\]
+
+Complexity
+
+\[
+O(R(v)).
+\]
+
+
+\subsection*{Benchmark 12: Parallel Scheduler}
+
+
+Ready queue
+
+\[
+Q
+=
+\{
+v
+:
+\operatorname{Ready}(v)
+\}.
+\]
+
+Scheduler
+
+\[
+S
+:
+Q
+\rightarrow
+V.
+\]
+
+Parallel execution
+
+\[
+H
+=
+\bigotimes_i
+H_i.
+\]
+
+Critical path
+
+\[
+D(H).
+\]
+
+Speedup
+
+\[
+S
+=
+\frac{|V|}{D(H)}.
+\]
+
+
+\subsection*{Benchmark Metrics}
+
+
+For every benchmark
+
+\[
+P_i
+\]
+
+measure
+
+\[
+\begin{aligned}
+&
+|V|,
+\\
+&
+|E|,
+\\
+&
+|H|,
+\\
+&
+D(H),
+\\
+&
+W(H),
+\\
+&
+R_{\max},
+\\
+&
+M,
+\\
+&
+T,
+\\
+&
+\gamma,
+\\
+&
+C.
+\end{aligned}
+\]
+
+
+\subsection*{Correctness Criterion}
+
+
+For every benchmark
+
+\[
+P,
+\]
+
+\[
+\operatorname{Collapse}
+(
+\operatorname{Execute}(P)
+)
+=
+\operatorname{Reference}(P).
+\]
+
+Operational correctness
+
+\[
+\llbracket
+P
+\rrbracket
+=
+\llbracket
+P
+\rrbracket_{\mathrm{ref}}.
+\]
+
+
+\subsection*{Historical Benchmark Theorem}
+
+
+Every benchmark program
+
+\[
+P_i
+\]
+
+admits
+
+\[
+\boxed{
+\begin{aligned}
+&
+\text{a unique dependency graph},\\
+&
+\text{a well-typed derivation},\\
+&
+\text{a finite execution history},\\
+&
+\text{a replay reconstruction},\\
+&
+\text{a terminal Collapse},\\
+&
+\text{a canonical normal form}.
+\end{aligned}
+}
+\]
+
+Moreover, execution by the Universal Operator Machine is observationally equivalent to the corresponding mathematical specification, and replay preserves the complete provenance of every benchmark computation.
+
+\[
+\Box
+\]
+
+
+
+Comparison with Existing Formalisms
+
+
+
+Let
+
+\[
+\mathcal F
+=
+\{
+\Lambda,
+\Pi,
+\mathcal L,
+\mathcal C,
+\mathcal P,
+\mathcal S
+\}
+\]
+
+denote the collection of computational formalisms, where
+
+\[
+\Lambda
+\]
+
+is the untyped $\lambda$-calculus,
+
+\[
+\Pi
+\]
+
+the $\pi$-calculus,
+
+\[
+\mathcal L
+\]
+
+linear logic,
+
+\[
+\mathcal C
+\]
+
+the Calculus of Constructions,
+
+\[
+\mathcal P
+\]
+
+Petri nets,
+
+and
+
+\[
+\mathcal S
+\]
+
+the Spherepop Calculus.
+
+
+\subsection*{Computational State}
+
+
+\[
+\begin{array}{c|c}
+\text{Formalism}
+&
+\text{Primary Computational Object}
+\\
+\hline
+\Lambda
+&
+\lambda\text{-term}
+\\
+\Pi
+&
+\text{Channel Process}
+\\
+\mathcal L
+&
+\text{Resource}
+\\
+\mathcal C
+&
+\text{Typed Construction}
+\\
+\mathcal P
+&
+\text{Marking}
+\\
+\mathcal S
+&
+\text{History}
+\end{array}
+\]
+
+
+\subsection*{Scope}
+
+
+\[
+\begin{array}{c|c}
+\text{Formalism}
+&
+\text{Scope Representation}
+\\
+\hline
+\Lambda
+&
+()
+\\
+\Pi
+&
+\nu
+\\
+\mathcal L
+&
+\Gamma
+\\
+\mathcal C
+&
+\Gamma
+\\
+\mathcal P
+&
+\text{Places}
+\\
+\mathcal S
+&
+\text{Embedded Sphere}
+\end{array}
+\]
+
+
+\subsection*{Evaluation}
+
+
+\[
+\begin{array}{c|c}
+\text{Formalism}
+&
+\text{Evaluation Primitive}
+\\
+\hline
+\Lambda
+&
+\beta
+\\
+\Pi
+&
+\text{Communication}
+\\
+\mathcal L
+&
+\text{Cut Elimination}
+\\
+\mathcal C
+&
+\beta\eta
+\\
+\mathcal P
+&
+\text{Transition Firing}
+\\
+\mathcal S
+&
+\operatorname{Pop}
+\end{array}
+\]
+
+
+\subsection*{History}
+
+
+Define
+
+\[
+h(F)
+=
+\begin{cases}
+0,&F\neq\mathcal S,\\
+1,&F=\mathcal S.
+\end{cases}
+\]
+
+Only Spherepop treats execution history as a primitive semantic object.
+
+
+\subsection*{Replay}
+
+
+Replay operator
+
+\[
+R_F
+=
+\begin{cases}
+\varnothing,&F\neq\mathcal S,\\
+R,&F=\mathcal S.
+\end{cases}
+\]
+
+
+\subsection*{Refusal}
+
+
+Refusal structure
+
+\[
+\rho(F)
+=
+\begin{cases}
+0,&\Lambda\\
+0,&\Pi\\
+0,&\mathcal L\\
+0,&\mathcal C\\
+0,&\mathcal P\\
+1,&\mathcal S.
+\end{cases}
+\]
+
+
+\subsection*{Collapse}
+
+
+Collapse operator
+
+\[
+C_F
+=
+\begin{cases}
+\beta,&\Lambda\\
+\operatorname{Commit},&\Pi\\
+\operatorname{Cut},&\mathcal L\\
+\beta,&\mathcal C\\
+\operatorname{Fire},&\mathcal P\\
+\operatorname{Collapse},&\mathcal S.
+\end{cases}
+\]
+
+
+\subsection*{Concurrency}
+
+
+Concurrency algebra
+
+\[
+\begin{array}{c|c}
+F
+&
+\operatorname{Conc}(F)
+\\
+\hline
+\Lambda
+&
+0
+\\
+\Pi
+&
+1
+\\
+\mathcal L
+&
+1
+\\
+\mathcal C
+&
+0
+\\
+\mathcal P
+&
+1
+\\
+\mathcal S
+&
+1
+\end{array}
+\]
+
+
+\subsection*{Probabilistic Semantics}
+
+
+Probability functor
+
+\[
+\mathcal D_F
+=
+\begin{cases}
+\varnothing,&F\neq\mathcal S,\\
+\mathcal D,&F=\mathcal S.
+\end{cases}
+\]
+
+
+\subsection*{Differentiability}
+
+
+Smooth operator algebra
+
+\[
+\delta(F)
+=
+\begin{cases}
+0,&\Lambda\\
+0,&\Pi\\
+0,&\mathcal L\\
+0,&\mathcal C\\
+0,&\mathcal P\\
+1,&\mathcal S.
+\end{cases}
+\]
+
+
+\subsection*{Dependency Geometry}
+
+
+Dependency graph
+
+\[
+G_F
+=
+\begin{cases}
+\text{Implicit},&\Lambda\\
+\text{Channel Graph},&\Pi\\
+\text{Proof Net},&\mathcal L\\
+\text{Typing Tree},&\mathcal C\\
+\text{Petri Graph},&\mathcal P\\
+\text{Historical DAG},&\mathcal S.
+\end{cases}
+\]
+
+
+\subsection*{Categorical Models}
+
+
+\[
+\begin{array}{c|c}
+F
+&
+\text{Category}
+\\
+\hline
+\Lambda
+&
+CCC
+\\
+\Pi
+&
+Process
+\\
+\mathcal L
+&
+SMCC
+\\
+\mathcal C
+&
+LCCC
+\\
+\mathcal P
+&
+Transition
+\\
+\mathcal S
+&
+\mathbf{Hist}
+\end{array}
+\]
+
+where
+
+\[
+CCC
+\]
+
+denotes Cartesian Closed Categories,
+
+\[
+SMCC
+\]
+
+Symmetric Monoidal Closed Categories,
+
+and
+
+\[
+LCCC
+\]
+
+Locally Cartesian Closed Categories.
+
+
+\subsection*{Expressive Embeddings}
+
+
+There exist faithful embeddings
+
+\[
+\Lambda
+\hookrightarrow
+\mathcal S,
+\]
+
+\[
+\Pi
+\hookrightarrow
+\mathcal S,
+\]
+
+\[
+\mathcal C
+\hookrightarrow
+\mathcal S,
+\]
+
+\[
+\mathcal P
+\hookrightarrow
+\mathcal S.
+\]
+
+Consequently
+
+\[
+\mathcal S
+\]
+
+acts as a common operational superstructure.
+
+
+\subsection*{Simulation}
+
+
+For every formalism
+
+\[
+F
+\in
+\mathcal F,
+\]
+
+there exists an interpretation
+
+\[
+I_F
+:
+F
+\rightarrow
+\mathcal S.
+\]
+
+Correctness requires
+
+\[
+\llbracket
+P
+\rrbracket_F
+=
+\llbracket
+I_F(P)
+\rrbracket_{\mathcal S}.
+\]
+
+
+\subsection*{Universality}
+
+
+Define
+
+\[
+\mathfrak U(F)
+=
+1
+\]
+
+iff every finite computation representable in
+
+\[
+F
+\]
+
+is representable in
+
+\[
+\mathcal S.
+\]
+
+Then
+
+\[
+\forall
+F
+\in
+\mathcal F,
+\qquad
+\mathfrak U(F)=1.
+\]
+
+
+\subsection*{Relative Expressiveness}
+
+
+Let
+
+\[
+\preceq
+\]
+
+denote simulation.
+
+Then
+
+\[
+\Lambda
+\preceq
+\mathcal S,
+\]
+
+\[
+\Pi
+\preceq
+\mathcal S,
+\]
+
+\[
+\mathcal C
+\preceq
+\mathcal S,
+\]
+
+\[
+\mathcal P
+\preceq
+\mathcal S.
+\]
+
+Whether
+
+\[
+\mathcal S
+\preceq
+\Lambda
+\]
+
+holds while preserving explicit histories and refusal structures remains open.
+
+
+\subsection*{Comparative Completeness Theorem}
+
+
+The Spherepop Calculus admits faithful embeddings of every formalism listed above while preserving operational semantics up to observational equivalence.
+
+Furthermore, Spherepop uniquely provides
+
+\[
+\boxed{
+\begin{aligned}
+&
+\text{persistent computational histories},\\
+&
+\text{explicit replay semantics},\\
+&
+\text{refusal as a primitive operation},\\
+&
+\text{geometric scoping},\\
+&
+\text{history-preserving execution},\\
+&
+\text{operator-parametric logic},\\
+&
+\text{native probabilistic composition},\\
+&
+\text{a unified operational model for}\\
+&
+\qquad
+\lambda\text{-calculus, process calculi,}\\
+&
+\qquad
+\text{proof theory, graph computation, and}\\
+&
+\qquad
+\text{differentiable computation.}
+\end{aligned}
+}
+\]
+
+Consequently,
+
+\[
+\mathcal S
+\]
+
+may be regarded as a common semantic framework within which diverse computational paradigms admit a unified historical interpretation.
+
+\[
+\Box
+\]
+
+
+
+Formal Conjectures
+
+
+
+Throughout this appendix let
+
+\[
+\mathcal H
+\]
+
+denote the complete lattice of admissible histories,
+
+\[
+\mathcal U
+\]
+
+the Universal Operator Machine,
+
+and
+
+\[
+\mathbf{Hist}
+\]
+
+the category of histories.
+
+The following conjectures summarize the principal mathematical questions that
+remain unresolved.
+
+
+\subsection*{Conjecture 1 (Replay Normalization)}
+
+
+Every finite admissible history
+
+\[
+H
+\]
+
+admits a finite replay normalization sequence
+
+\[
+H
+\longrightarrow^{*}
+N,
+\]
+
+where
+
+\[
+N
+\]
+
+contains no redundant replay operators.
+
+Equivalently,
+
+\[
+R(H)
+=
+R(N),
+\]
+
+and
+
+\[
+N
+\nrightarrow.
+\]
+
+
+\subsection*{Conjecture 2 (Historical Church--Rosser)}
+
+
+If
+
+\[
+H
+\longrightarrow^{*}
+H_1,
+\]
+
+and
+
+\[
+H
+\longrightarrow^{*}
+H_2,
+\]
+
+then there exists
+
+\[
+H_3
+\]
+
+such that
+
+\[
+H_1
+\longrightarrow^{*}
+H_3,
+\]
+
+\[
+H_2
+\longrightarrow^{*}
+H_3.
+\]
+
+
+\subsection*{Conjecture 3 (Strong Historical Normalization)}
+
+
+Every deterministic Spherepop computation satisfies
+
+\[
+H
+\longrightarrow^{*}
+N
+\]
+
+after finitely many reductions.
+
+No infinite replay sequence exists.
+
+
+\subsection*{Conjecture 4 (Probabilistic Normalization)}
+
+
+Suppose
+
+\[
+H
+\]
+
+contains finitely many Choice operators.
+
+Then
+
+\[
+\Pr
+\left(
+H
+\Downarrow
+\right)
+=
+1.
+\]
+
+That is,
+
+\[
+H
+\]
+
+normalizes almost surely.
+
+
+\subsection*{Conjecture 5 (Replay Minimality)}
+
+
+Among all histories observationally equivalent to
+
+\[
+H,
+\]
+
+Replay produces one of minimal provenance complexity.
+
+Formally,
+
+\[
+|R(H)|
+=
+\min
+\{
+|K|
+:
+K
+\sim
+H
+\}.
+\]
+
+
+\subsection*{Conjecture 6 (Scheduler Optimality)}
+
+
+Let
+
+\[
+D(H)
+\]
+
+denote dependency depth.
+
+The scheduler produced by the Universal Operator Machine minimizes execution
+time among all admissible schedulers:
+
+\[
+T_{\mathcal U}
+=
+\inf
+T.
+\]
+
+
+\subsection*{Conjecture 7 (Replay Stability)}
+
+
+There exists
+
+\[
+L>0
+\]
+
+such that
+
+\[
+d(R(H_1),R(H_2))
+\le
+L
+d(H_1,H_2)
+\]
+
+for every pair of histories.
+
+
+\subsection*{Conjecture 8 (Geometric Convergence)}
+
+
+Repeated Pop evolution converges toward a minimal-energy boundary.
+
+If
+
+\[
+S_t
+\]
+
+denotes the evolving computational sphere,
+
+then
+
+\[
+S_t
+\rightarrow
+S_\infty
+\]
+
+where
+
+\[
+S_\infty
+\]
+
+minimizes
+
+\[
+E(S).
+\]
+
+
+\subsection*{Conjecture 9 (Historical Shape Equidistribution)}
+
+
+Let
+
+\[
+\mathcal H_d(X)
+\]
+
+be admissible histories of dependency rank
+
+\[
+d
+\]
+
+ordered by historical discriminant.
+
+Then
+
+\[
+\operatorname{sh}
+(
+\mathcal H_d(X)
+)
+\Rightarrow
+\mu_d
+\]
+
+as
+
+\[
+X
+\rightarrow
+\infty.
+\]
+
+
+\subsection*{Conjecture 10 (Hyperplane Limit)}
+
+
+Let
+
+\[
+C_\beta
+\]
+
+be differentiable circuits whose activation parameter satisfies
+
+\[
+\beta
+\rightarrow
+\infty.
+\]
+
+Then
+
+\[
+F_{C_\beta}
+\rightarrow
+F_C
+\]
+
+uniformly away from decision hyperplanes.
+
+
+\subsection*{Conjecture 11 (Universal Simulation)}
+
+
+Every finite computational calculus
+
+\[
+\mathcal A
+\]
+
+whose primitive operations form a finitely generated operator algebra admits
+a faithful embedding
+
+\[
+I
+:
+\mathcal A
+\hookrightarrow
+\mathcal S.
+\]
+
+
+\subsection*{Conjecture 12 (Historical Completeness)}
+
+
+Every finite computation possesses a unique minimal admissible history
+
+\[
+H_{\min},
+\]
+
+up to replay equivalence.
+
+
+\subsection*{Conjecture 13 (Historical Homotopy)}
+
+
+The quotient space
+
+\[
+\mathcal H/\!\!\sim
+\]
+
+admits a homotopy theory in which replay equivalences determine path
+components.
+
+
+\subsection*{Conjecture 14 (Quantum Replay)}
+
+
+There exists a quantum extension
+
+\[
+R_q
+\]
+
+compatible with unitary evolution satisfying
+
+\[
+R_q(UH)
+=
+UR_q(H)
+\]
+
+for every admissible unitary transformation
+
+\[
+U.
+\]
+
+
+\subsection*{Conjecture 15 (Distributed Histories)}
+
+
+Suppose
+
+\[
+H_1,
+\ldots,
+H_n
+\]
+
+execute concurrently.
+
+Then there exists a unique global replay history
+
+\[
+H_G
+\]
+
+satisfying
+
+\[
+R(H_G)
+=
+\bigotimes_i
+R(H_i)
+\]
+
+up to causal equivalence.
+
+
+\subsection*{Conjecture 16 (Universal Historical Representation)}
+
+
+Every terminating computation may be represented uniquely by
+
+\[
+(G,H,C),
+\]
+
+where
+
+\[
+G
+\]
+
+is a dependency graph,
+
+\[
+H
+\]
+
+an admissible history,
+
+and
+
+\[
+C
+\]
+
+its terminal Collapse.
+
+Two computations are operationally equivalent if and only if these triples are
+isomorphic.
+
+
+\subsection*{Grand Conjecture}
+
+
+There exists a category
+
+\[
+\mathbf{Hist}
+\]
+
+equipped with
+
+\[
+\begin{aligned}
+&
+\text{finite limits},\\
+&
+\text{finite colimits},\\
+&
+\text{a replay monad},\\
+&
+\text{a history comonad},\\
+&
+\text{a symmetric monoidal structure},\\
+&
+\text{a geometric realization functor},\\
+&
+\text{a probabilistic enrichment},\\
+&
+\text{an admissibility topology},
+\end{aligned}
+\]
+
+such that every terminating computation in every finitely generated operator
+calculus factors uniquely through
+
+\[
+\mathbf{Hist},
+\]
+
+preserving operational semantics, denotational semantics, dependency
+structure, replay, provenance, and terminal Collapse up to natural
+isomorphism.
+
+\[
+\boxed{
+\forall
+\mathcal A,
+\qquad
+\exists!\;
+F
+:
+\mathcal A
+\longrightarrow
+\mathbf{Hist}
+}
+\]
+
+where
+
+\[
+F
+\]
+
+is faithful, history-preserving, and computationally complete.
+
+\[
+\Box
+\]
+
+\newpage
+
+
+
+
+
+\begin{thebibliography}{99}
+
+
+
+
+
+\bibitem{Church1936}
+A.~Church.
+\newblock An Unsolvable Problem of Elementary Number Theory.
+\newblock \emph{American Journal of Mathematics}, 58(2):345--363, 1936.
+
+\bibitem{Turing1937}
+A.~M. Turing.
+\newblock On Computable Numbers, with an Application to the Entscheidungsproblem.
+\newblock \emph{Proceedings of the London Mathematical Society}, 42:230--265, 1937.
+
+\bibitem{Post1943}
+E.~L. Post.
+\newblock Formal Reductions of the General Combinatorial Decision Problem.
+\newblock \emph{American Journal of Mathematics}, 65:197--215, 1943.
+
+\bibitem{Kleene1952}
+S.~C. Kleene.
+\newblock \emph{Introduction to Metamathematics}.
+\newblock North-Holland, 1952.
+
+
+
+
+
+\bibitem{Barendregt1984}
+H.~P. Barendregt.
+\newblock \emph{The Lambda Calculus: Its Syntax and Semantics}.
+\newblock North-Holland, 1984.
+
+\bibitem{Pierce2002}
+B.~C. Pierce.
+\newblock \emph{Types and Programming Languages}.
+\newblock MIT Press, 2002.
+
+
+
+
+
+\bibitem{MartinLof1984}
+P.~Martin-L{\"o}f.
+\newblock \emph{Intuitionistic Type Theory}.
+\newblock Bibliopolis, 1984.
+
+\bibitem{Coquand1988}
+T.~Coquand and G.~Huet.
+\newblock The Calculus of Constructions.
+\newblock \emph{Information and Computation}, 76:95--120, 1988.
+
+\bibitem{HoTT2013}
+The Univalent Foundations Program.
+\newblock \emph{Homotopy Type Theory: Univalent Foundations of Mathematics}.
+\newblock Institute for Advanced Study, 2013.
+
+
+
+
+
+\bibitem{MacLane1998}
+S.~Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Springer, Second Edition, 1998.
+
+\bibitem{Awodey2010}
+S.~Awodey.
+\newblock \emph{Category Theory}.
+\newblock Oxford University Press, Second Edition, 2010.
+
+\bibitem{Johnstone2002}
+P.~T. Johnstone.
+\newblock \emph{Sketches of an Elephant}.
+\newblock Oxford University Press, 2002.
+
+
+
+
+
+\bibitem{Scott1970}
+D.~Scott.
+\newblock Outline of a Mathematical Theory of Computation.
+\newblock Oxford University Computing Laboratory Technical Monograph, 1970.
+
+\bibitem{Winskel1993}
+G.~Winskel.
+\newblock \emph{The Formal Semantics of Programming Languages}.
+\newblock MIT Press, 1993.
+
+\bibitem{Plotkin1981}
+G.~D. Plotkin.
+\newblock A Structural Approach to Operational Semantics.
+\newblock Technical Report DAIMI FN-19, Aarhus University, 1981.
+
+
+
+
+
+\bibitem{Milner1989}
+R.~Milner.
+\newblock \emph{Communication and Concurrency}.
+\newblock Prentice Hall, 1989.
+
+\bibitem{Milner1999}
+R.~Milner.
+\newblock \emph{Communicating and Mobile Systems: The Pi Calculus}.
+\newblock Cambridge University Press, 1999.
+
+\bibitem{Petri1966}
+C.~A. Petri.
+\newblock \emph{Communication with Automata}.
+\newblock Technical Report RADC-TR-65-377, 1966.
+
+
+
+
+
+\bibitem{Girard1987}
+J.-Y. Girard.
+\newblock Linear Logic.
+\newblock \emph{Theoretical Computer Science}, 50:1--102, 1987.
+
+
+
+
+
+\bibitem{Aho2007}
+A.~V. Aho, M.~S. Lam, R.~Sethi, and J.~D. Ullman.
+\newblock \emph{Compilers: Principles, Techniques, and Tools}.
+\newblock Addison-Wesley, Second Edition, 2007.
+
+\bibitem{Appel1998}
+A.~W. Appel.
+\newblock \emph{Modern Compiler Implementation}.
+\newblock Cambridge University Press, 1998.
+
+
+
+
+
+\bibitem{Diestel2017}
+R.~Diestel.
+\newblock \emph{Graph Theory}.
+\newblock Springer, Fifth Edition, 2017.
+
+
+
+
+
+\bibitem{CLRS2009}
+T.~H. Cormen, C.~E. Leiserson, R.~L. Rivest, and C.~Stein.
+\newblock \emph{Introduction to Algorithms}.
+\newblock MIT Press, Third Edition, 2009.
+
+
+
+
+
+\bibitem{Billingsley1995}
+P.~Billingsley.
+\newblock \emph{Probability and Measure}.
+\newblock Wiley, Third Edition, 1995.
+
+\bibitem{Giry1982}
+M.~Giry.
+\newblock A Categorical Approach to Probability Theory.
+\newblock In \emph{Categorical Aspects of Topology and Analysis}, 1982.
+
+
+
+
+
+\bibitem{Lee2018}
+J.~M. Lee.
+\newblock \emph{Introduction to Riemannian Manifolds}.
+\newblock Springer, Second Edition, 2018.
+
+\bibitem{doCarmo1992}
+M.~P. do Carmo.
+\newblock \emph{Riemannian Geometry}.
+\newblock Birkh{\"a}user, 1992.
+
+
+
+
+
+\bibitem{Boyd2004}
+S.~Boyd and L.~Vandenberghe.
+\newblock \emph{Convex Optimization}.
+\newblock Cambridge University Press, 2004.
+
+
+
+
+
+\bibitem{Goodfellow2016}
+I.~Goodfellow, Y.~Bengio, and A.~Courville.
+\newblock \emph{Deep Learning}.
+\newblock MIT Press, 2016.
+
+
+
+
+
+\bibitem{Zadeh1965}
+L.~A. Zadeh.
+\newblock Fuzzy Sets.
+\newblock \emph{Information and Control}, 8:338--353, 1965.
+
+
+
+
+
+\bibitem{AbramskyJung1994}
+S.~Abramsky and A.~Jung.
+\newblock Domain Theory.
+\newblock In \emph{Handbook of Logic in Computer Science}, Volume 3, 1994.
+
+
+
+
+
+\bibitem{Bertot2004}
+Y.~Bertot and P.~Cast{\'e}ran.
+\newblock \emph{Interactive Theorem Proving and Program Development}.
+\newblock Springer, 2004.
+
+\bibitem{deMoura2021}
+L.~de Moura et al.
+\newblock The Lean 4 Theorem Prover and Programming Language.
+\newblock 2021.
+
+
+
+
+
+\bibitem{Landin1964}
+P.~J. Landin.
+\newblock The Mechanical Evaluation of Expressions.
+\newblock \emph{Computer Journal}, 6:308--320, 1964.
+
+\bibitem{Krivine2007}
+J.-L. Krivine.
+\newblock A Call-by-Name Lambda Calculus Machine.
+\newblock \emph{Higher-Order and Symbolic Computation}, 20:199--207, 2007.
+
+
+
+
+
+\bibitem{BaaderNipkow1998}
+F.~Baader and T.~Nipkow.
+\newblock \emph{Term Rewriting and All That}.
+\newblock Cambridge University Press, 1998.
+
+
+
+
+
+\bibitem{Bhargava2005}
+M.~Bhargava.
+\newblock The Density of Discriminants of Quintic Rings and Fields.
+\newblock \emph{Annals of Mathematics}, 172:1559--1591, 2010.
+
+\bibitem{BhargavaShankarTsimerman2013}
+M.~Bhargava, A.~Shankar, and J.~Tsimerman.
+\newblock On the Davenport--Heilbronn Theorems and Second Order Terms.
+\newblock \emph{Inventiones Mathematicae}, 193:439--499, 2013.
+
+
+
+
+
+\bibitem{Gentzen1935}
+G.~Gentzen.
+\newblock Investigations into Logical Deduction.
+\newblock \emph{Mathematische Zeitschrift}, 1935.
+
+\bibitem{Tarski1956}
+A.~Tarski.
+\newblock \emph{Logic, Semantics, Metamathematics}.
+\newblock Oxford University Press, 1956.
+
+
+
+
+
+\bibitem{Shannon1948}
+C.~E. Shannon.
+\newblock A Mathematical Theory of Communication.
+\newblock \emph{Bell System Technical Journal}, 27:379--423, 623--656, 1948.
+
+
+
+\end{thebibliography}
+
+\end{document}
+

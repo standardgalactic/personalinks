@@ -1,159 +1,180 @@
-**Spherepop – A Formalism for Causal Histories**
-
-**1. Core Syntax**
-
-A *history* in Spherepop is a well‑formed sequence of statements, each bein[4D[K
-being one of three kinds:
-
-| Type | Production (grammar) |
-|------|-----------------------|
-| **Split**   | `split( <object> ) → <object>,<object>` |
-| **Merge**   | `merge(<object>,<object>) → <object>` |
-| **Direct event transformation** | `<object> → <event> → <object>` |
-
-*Objects* are the regions or “places” that appear on a causal diagram, whil[4D[K
-while *events* describe transitions (split/merge) between them.  
-
-The full grammar is
-
-```
-<history>        ::= <statement>
-                   | <statement> <history>
-
-<statement>      ::= <split>
-                   | <merge>
-                   | <event-transform>
-
-<object>         ::= ...   (name of a region)
-<event>          ::= ...   (label for a transition, e.g., “birth”, “death”)[8D[K
-“death”)
-```
-
-Thus any history is a linear string such as  
-
-`merge(A,B) → D, split(R) → A,B …`.
-
-**2. Event Graph & Causal Ordering**
-
-When parsed, the statements induce an *event graph* – a directed acyclic gr[2D[K
-graph (DAG) where:
-
-- Vertices = objects (regions).  
-- Edges = events that move tokens from one vertex to another.
-
-The DAG encodes causal dependencies: if event \(E_i\) precedes \(E_j\), the[3D[K
-then \(i\) must occur before \(j\) in any admissible execution.  
-
-**3. Normalization**
-
-Normalization orders the events according to this partial order, producing [K
-a *normal form*:
-
-```
-(normal-form) ::= ( <event‑word> )
-```
-
-The *event word* is the linearized list of events after applying commutatio[10D[K
-commutation rules.
-
-**4. Rewriting Rules & Confluence**
-
-Normalization proceeds via a confluent rewriting system defined by two basi[4D[K
-basic operations:
-
-1. **Commutation Rule**  
-   If two adjacent events \(E_i\) and \(E_j\) are independent \((E_i\parall[13D[K
-\((E_i\parallel E_j)\), they may be swapped:  
-
-   \[
-   (E_i, E_j) \;\longrightarrow\; (E_j, E_i)
-   \]
-
-   Independence is symmetric (if \(i\parallel j\) then \(j\parallel i\)) an[2D[K
-and satisfies the *diamond* property: any two independent pairs can be comm[4D[K
-commuted independently.
-
-2. **Structural Rules**  
-   - A merge `merge(A,B) → D` collapses two incoming edges to a single vert[4D[K
-vertex for \(D\).  
-   - A split `split(R) → A,B` collapses one outgoing edge from \(R\) into s[1D[K
-separate outgoing edges to \(A\) and \(B\).
-
-Applying these rules repeatedly yields the *normal form* (the lexicographic[13D[K
-lexicographically smallest word respecting the independence relation).  
-
-**5. Soundness & Completeness**
-
-- **Soundness**: Every well‑typed Spherepop expression corresponds exactly [K
-to one normal form; thus two expressions represent the same historical obje[4D[K
-object iff their normal forms are identical.
-- **Completeness**: The rewriting terminates because the event graph is a D[1D[K
-DAG, guaranteeing that every execution can be reduced to its unique normal [K
-form.
-
-These properties follow from standard results on confluence and termination[11D[K
-termination for trace‑type rewriting systems (see Abramsky 1994; Mazurkiewi[10D[K
-Mazurkiewicz 1987).
-
-**6. Connections with Other Formalisms**
-
-| Framework | Mapping to Spherepop |
-|-----------|----------------------|
-| **Mazurkiewicz Trace Theory** | Event words are equivalence classes of se[2D[K
-sequences modulo commutation, identical to the normalized forms obtained by[2D[K
-by rewriting. |
-| **Petri Nets** | Objects ↔ Places; events ↔ Transitions (split → multiple[8D[K
-multiple output places, merge → single input place). A history is a firing [K
-sequence in the net’s reachability graph. |
-| **String Diagrams** | Objects are wires; morphisms are boxes/nodes (split[6D[K
-(split = box with one output wire branching into two, merge = node taking t[1D[K
-two inputs and emitting one). Sequential transformations compose by connect[7D[K
-connecting output to next input wire. |
-
-These correspondences illustrate Spherepop as a compositional language that[4D[K
-that sits at the intersection of algebraic (trace) and geometric (string di[2D[K
-diagram) representations of causal processes.
-
-**7. Example**
-
-Consider the simple history:
-
-```
-merge(A,B) → D, split(R) → A,B
-```
-
-Parsing yields an event graph with vertices {R, A, B, D} and edges R→A, R→B[3D[K
-R→B, A→D, B→D.  
-Applying commutation (if \(A\parallel B\) we swap `split(R) → B,A`) produce[7D[K
-produces the normal form:
-
-```
-merge(A,B) → D, split(R) → A,B
-```
-
-or after swapping if adjacency allows:  
-
-```
-merge(A,B) → D, split(R) → B,A
-```
-
-Both are valid because they respect the independence relation.
-
-**8. Decision Procedure**
-
-1. **Parse** the expression into a DAG of events (structural rules).  
-2. **Compute a topological sort** (e.g., lexicographic ordering for ties). [K
- 
-3. **Apply commutation** until no two adjacent events can be swapped withou[6D[K
-without violating the sort.  
-
-The resulting event word is unique and serves as the canonical identifier f[1D[K
-for that object.
+Below is a structured, high‑level overview of the material you asked for – [K
+organized into sections that match the structure of the original document. [K
+Feel free to let me know if you need any particular subsection expanded or [K
+reformatted.
 
 ---
 
-*In summary, Spherepop provides an algebraic yet intuitive notation for cau[3D[K
-causal histories: parsed into a DAG of independent events, normalized via c[1D[K
-confluent commutation rules, yielding a unique normal form that serves as t[1D[K
-the identity witness among all syntactically equivalent expressions.*
+## 1. Syntax and Semantics  
 
+### 1.1 Grammar Definitions  
+- **History** (the full syntactic description):  
+
+  ```verilog
+  <history>        ::= <statement>
+                      | <statement> <history>
+
+  <statement>      ::= <split>
+                      | <merge>
+                      | <event-transform>
+
+  <event-transform>::= <object> "->" <event> "->" <object>
+  ```
+
+- **Split** and **Merge** productions (as given):  
+
+  ```verilog
+  <split>   ::= "split" "(" <object> ")" "->" <object> "," <object>
+  <merge>   ::= "merge" "(" <object> "," <object> ) "->" <object>
+  ```
+
+These definitions capture the core idea that a history is simply a sequence[8D[K
+sequence of statements, each of which can be either a split/merge operation[9D[K
+operation or a direct event transformation.
+
+### 1.2 Normal Forms  
+A **normalized Spherepop expression** (the “normal form”) is defined as:
+
+```verilog
+<normal-form> ::= "(" <event-word> ")"
+```
+
+The normal form corresponds to the canonical representation of an execution[9D[K
+execution history after applying the confluence rewriting rules described b[1D[K
+below.
+
+---
+
+## 2. Rewriting Rules and Normalization  
+
+### 2.1 Core Commutation Rule  
+- **Independence Relation**: Events \(E_i\) and \(E_j\) are *independent* ([1D[K
+(\(E_i \parallel E_j\)) if they do not share a common ancestor in the event[5D[K
+event graph.
+- **Rule**:  
+
+  ```text
+  (E_i, E_j)   ->   (E_j, E_i)
+  ```
+
+  whenever \(E_i \parallel E_j\).
+
+This mirrors Mazurkiewicz’s commutation relations for trace equivalence and[3D[K
+and is central to achieving causally‑equivalent histories.
+
+### 2.2 Structural Rules  
+- **Merge Rule**:  
+
+  ```text
+  "merge"(A, B) -> D   can replace two incoming edges into vertex \(D\) in [K
+the event graph.
+  ```
+
+- **Split Rule**:  
+
+  ```text
+  "split"(R) -> A, B   can replace a pair of outgoing edges from \(R\).
+  ```
+
+These rules allow compound symbolic descriptions (e.g., “merge(A, B)”) to b[1D[K
+be collapsed into the underlying graph structure before applying commutatio[10D[K
+commutation.
+
+### 2.3 Normalization Algorithm  
+
+1. **Parse** the expression → build an explicit event graph with vertices =[1D[K
+= regions and edges = events.
+2. **Topological Order**: Compute a DAG ordering (possible because graphs a[1D[K
+are acyclic).
+3. **Apply Commutations**: Repeatedly commute any adjacent independent pair[4D[K
+pairs until no further commutation is possible.
+
+The resulting sequence is the normal form, i.e., the unique representative [K
+of that causal trace.
+
+---
+
+## 3. Confluence Proof  
+
+### Statement  
+*The commutation rewriting system is confluent*: all rewrite paths from a g[1D[K
+given event word converge to the same normal form.
+
+**Proof Sketch**:  
+- The independence relation \(\parallel\) is symmetric; any two adjacent in[2D[K
+independent events can be swapped.
+- If two distinct commutation rules are applicable (e.g., swapping \(E_i, E[1D[K
+E_j\) and then later swapping another pair), applying them in sequence even[4D[K
+eventually yields a single word where all remaining swaps no longer change [K
+the order.  
+- This satisfies the diamond property required for confluence, guaranteeing[12D[K
+guaranteeing termination of the rewriting process.
+
+---
+
+## 4. Connections to Other Process Formalisms  
+
+### 4.1 Trace Theory (Mazurkiewicz)  
+Spherepop histories are exactly the equivalence classes of traces modulo co[2D[K
+commutation of independent events. The independence relation and commutatio[10D[K
+commutation rules correspond directly to Mazurkiewicz’s definitions, making[6D[K
+making Spherepop a concrete instance of trace theory.
+
+### 4.2 Petri Nets  
+- **Places ↔ Regions**: A region in a Spherepop expression corresponds to a[1D[K
+a place (condition/resource) in a Petri net.
+- **Transitions ↔ Events**: Split and merge events correspond to transition[10D[K
+transitions that consume/produce tokens at places; sequential transformatio[13D[K
+transformations correspond to ordered firing of enabled transitions.
+- The DAG nature of the event graph mirrors the property that a Petri net h[1D[K
+has no cycles, ensuring well‑defined execution paths.
+
+### 4.3 String Diagrams  
+In monoidal category theory (Baez & Stay), objects are wires and morphisms [K
+(events) are boxes or nodes linking wires.  
+- **Split** appears as a box with one input and two outputs;  
+- **Merge** appears as a box with two inputs and one output.  
+
+A complete Spherepop history is thus rendered as a compound string diagram [K
+assembled from these elementary components, providing a visual compositiona[12D[K
+compositional semantics.
+
+---
+
+## 5. Illustrative Example (String Diagram)  
+
+```plaintext
++--- split R --> A , B ---+
+|                         |
+|   +---- E1 ----+         |
+|   |            |         v
+|   v            v       +--- merge D <-- E3
+|   |            |       |
++---+------------+     +-----------------+
+```
+
+Here, the split event \(E_1\) creates two descendant regions \(A\) and \(B\[4D[K
+\(B\); later, the merge event \(E_3\) combines them into a single region \([2D[K
+\(D\). This diagrammatic representation aligns with the description in Sect[4D[K
+Section 4.2.
+
+---
+
+## 6. Summary  
+
+- **Syntax**: A history is a sequence of split/merge or direct transformati[12D[K
+transformations.
+- **Normalization**: Achieved via commutation (independence) and structural[10D[K
+structural rules; produces a unique normal form representing causal equival[7D[K
+equivalence.
+- **Confluence**: Guarantees that any rewrite path leads to the same normal[6D[K
+normal form, providing a decision procedure for Spherepop identity.
+- **Connections**: Direct parallels with trace theory, Petri nets, and stri[4D[K
+string diagrams illustrate Spherepop’s role as an expressive, compositional[13D[K
+compositional language for describing causally constrained histories.
+
+---
+
+*Feel free to request deeper dives into any of these sections—e.g., detaile[7D[K
+detailed proofs of confluence, examples using specific event graphs, or a c[1D[K
+comparison table mapping each formalism.*

@@ -1,15 +1,187 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 3 of a document called
+"computation-as-semantic-maintenance.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Computational Pathologies as Semantic Failure**
 
-TEXT
-====
+The architectural distinction between *event‑historical* (or “gesture‑as‑wh[14D[K
+“gesture‑as‑whole”) computation and *storage‑centric* (or “sample‑by‑sample[17D[K
+“sample‑by‑sample”) computation is not merely a matter of convenience—it pr[2D[K
+predicts concrete performance differences that manifest as computational pa[2D[K
+pathologies.
+
+---
+
+### 1. The Swype Keyboard: Architectural Loss
+
+**Swype’s Design Principles**
+
+- **Gesture as a Single Semantic Event:**  
+  Rather than decomposing a swipe into discrete keypresses, Swype treated t[1D[K
+the entire trajectory as one coherent semantic token whose meaning was infe[4D[K
+inferred from its spatial and temporal properties on a constrained keyboard[8D[K
+keyboard topology.
+
+- **Topological Word Space:**  
+  Words were modeled as paths in a high‑dimensional semantic space defined [K
+by keyboard geometry, lexical priors (frequency models), and user‑specific [K
+adaptation (stroke length & pressure calibration).
+
+**Resulting Benefits**
+
+1. **Lower Error Rates for Long/Uncommon Words:**  
+   Because the system could integrate context from the whole gesture—e.g., [K
+distinguishing “programmer” vs. “pro­gram”—it reduced ambiguity that trace k[1D[K
+keyboards cannot capture.
+
+2. **Stability Under Variations:**  
+   Partial occlusions, off‑angle swipes, or sudden speed changes behaved pr[2D[K
+predictably; corrections were less likely to revert mid‑stroke.
+
+3. **Semantic Inertia (Persistence of Intent):**  
+   Once a user established a stable mapping for a particular word, the syst[4D[K
+system resisted over‑correction unless explicit retraining occurred, preser[6D[K
+preserving accumulated contextual knowledge.
+
+**Why Modern Trace Keyboards Fail**
+
+- **Decomposition into Samples:**  
+  Contemporary trace keyboards break gestures into time‑indexed samples (e.[3D[K
+(e.g., “tap at point x₀”). Each sample is treated independently by a probab[6D[K
+probabilistic model that updates predictions continuously.
+
+- **Loss of Event History:**  
+  The semantic continuity supplied by Swype’s holistic gesture view disappe[7D[K
+disappears. A single noisy sample can now trigger drastic re‑interpretation[17D[K
+re‑interpretation, effectively erasing prior intent—a classic case of *sema[5D[K
+*semantic rupture* (Spherepop terminology).
+
+- **Performance Consequences:**  
+  Autocorrect drift—where previously suppressed corrections reappear unpred[6D[K
+unpredictably after system updates or language model retraining—arises beca[4D[K
+because the new architecture no longer preserves local coherence. The “even[5D[K
+“event‑historical” invariant is broken, and overcorrection becomes a defaul[6D[K
+default strategy.
+
+**Implication for Knowledge Systems**
+
+Swype’s discontinuation illustrates that *knowledge loss* can stem from arc[3D[K
+architectural replacement rather than data scarcity or algorithmic depth al[2D[K
+alone. The semantic capability embedded in its codebase (stroke semantics) [K
+was not captured by patents or published descriptions; it vanished when the[3D[K
+the coordination between designers, representations, and maintenance practi[6D[K
+practices dissolved.
+
+---
+
+### 2. Autocorrect Drift: Coordination Collapse
+
+**Observed Symptoms**
+
+- **Temporal Instability:**  
+  Corrections previously suppressed now reappear without user intervention.[13D[K
+intervention. Personalized vocabulary degrades unpredictably after system u[1D[K
+updates or model retraining.
+
+- **Boundary Ambiguity:**  
+  The line between “helpful correction” and “aggressive override” blurs, le[2D[K
+leading to frustration among power users who rely on consistent behavior ac[2D[K
+across sessions.
+
+**Root Cause – Semantic Fragmentation**
+
+1. **Storage‑Centric Abstraction:**  
+   Modern autocorrect systems treat each sampled stroke as an atomic piece [K
+of data (e.g., a keypress likelihood) rather than maintaining the gestural [K
+context.
+
+2. **Loss of Local Context Preservation:**  
+   Because semantic meaning is now rebuilt incrementally, prior contextual [K
+cues are overwritten by newer statistical priors that may have no relation [K
+to the original intent.
+
+3. **Feedback Loop Amplification:**  
+   The system’s continual retraining amplifies noise from rare or atypical [K
+inputs (e.g., a one‑off typo), causing overfitting on those instances and l[1D[K
+leading to regression for common words used in similar contexts.
+
+**Why It Matters for Knowledge Growth**
+
+- **Semantic Loss Translates to Systematic Errors:**  
+  In knowledge systems, error propagation manifests as loss of trusted info[4D[K
+information or misinterpretation of concepts. Autocorrect drift directly un[2D[K
+undermines the reliability of textual data—critical input into databases, r[1D[K
+research pipelines, and communication networks.
+
+- **Inability to Sustain Coherence Under Stress:**  
+  When a system cannot maintain local semantic continuity across events (ge[3D[K
+(gestures), it fails to preserve knowledge under stressors like versioning [K
+changes or model updates—a core principle in Spherepop’s view of computatio[10D[K
+computation after storage.
+
+---
+
+### Synthesis
+
+Both cases exemplify how **semantic maintenance**—the preservation of coher[5D[K
+coherent meaning over time—is essential for robust computational behavior. [K
+When systems shift from event‑historical representations (Swype, gesture co[2D[K
+continuity) to purely sample‑centric models (modern trace keyboards), they [K
+introduce *semantic rupture* that manifests as error drift, instability, an[2D[K
+and loss of trusted knowledge.
+
+Understanding these pathologies through a **Spherepop lens**—where coherenc[8D[K
+coherence is the primary variable rather than raw information—reveals that:[5D[K
+that:
+
+1. **Architectural Choices Directly Affect Knowledge Dynamics:**  
+   The design paradigm (event‑historical vs. storage‑centric) determines wh[2D[K
+whether accumulated semantic context can be preserved across system updates[7D[K
+updates, user interactions, and evolving linguistic norms.
+
+2. **Failure Is Often Hidden in “Efficiency”:**  
+   What appears as a technical shortcut (more data points, finer temporal g[1D[K
+granularity) may actually increase the entropy of meaning, leading to long‑[5D[K
+long‑term degradations that are difficult to diagnose until they manifest a[1D[K
+as widespread mistrust or loss of usable knowledge.
+
+3. **Policy and Design Must Guard Against Semantic Decay:**  
+   In both hardware and software ecosystems, maintaining semantic continuit[9D[K
+continuity requires deliberate architectural choices—e.g., preserving gestu[5D[K
+gesture histories, using probabilistic models with explicit contextual prio[4D[K
+priors rather than pure statistical drift—to prevent the regression from Sw[2D[K
+Swype to autocorrect drift.
+
+By treating semantics as a first‑order concern (rather than an afterthought[12D[K
+afterthought), we can design systems that not only accumulate more data but[3D[K
+but also *retain* and *preserve* the meaning encoded in those data, ensurin[7D[K
+ensuring knowledge grows—not fragments.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[11pt]{article}
 

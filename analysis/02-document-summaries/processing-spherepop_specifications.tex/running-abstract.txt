@@ -1,0 +1,21 @@
+**Updated Running Abstract (≈120 words)**
+
+The code defines a deterministic, replayable event‑driven system modeled on[2D[K
+on abstract algebraic structures. It introduces an **EventKind** enum with [K
+four fixed variants—Pop, Refuse, Bind, and Collapse—to represent removals, [K
+documented inadmissibilities, pairings (with optional tags), and state chan[4D[K
+changes under registered rules, respectively. A **State** struct encapsulat[10D[K
+encapsulates the current option space, committed elements, bound pairs, ref[3D[K
+refusals, and observed collapses, supporting a pure `apply` function that u[1D[K
+updates State without side effects. **CollapseRules**—such as `collapse_quo[13D[K
+`collapse_quotient`, `collapse_meta`, and `collapse_identity`—enforce seman[5D[K
+semantic constraints via deterministic rule application, modeling merge‑sug[9D[K
+merge‑sugar while maintaining type safety (no runtime panics for unregister[10D[K
+unregistered rules). The **Arbiter** struct manages proposal validation and[3D[K
+and commitment, ensuring events respect the option space and registered rul[3D[K
+rules. **Overlay** structs enable non‑authoritative previews without alteri[6D[K
+altering main history, supporting "what‑if" scenarios. Overall, this archit[6D[K
+architecture provides a robust, version‑stable framework for handling event[5D[K
+event sequences with clear separation of concerns between event handling an[2D[K
+and state representation.
+

@@ -1,0 +1,83 @@
+**Adding New DDRs**
+
+A Decision‑Document Record (DDR) should be created **only when the decision[8D[K
+decision truly represents a significant implementation choice with broader [K
+impact across multiple modules or tests**, and it is likely to be questione[9D[K
+questioned or require revision. It does **not** apply to trivial matters su[2D[K
+such as naming conventions, file locations, personal preferences without se[2D[K
+semantic consequence, or code that will only exist temporarily.
+
+### DDR Template
+
+```markdown
+## DDR-NNN: <Title>
+
+**Date**: YYYY‑MM‑DD  
+**Status**: Proposed | Accepted | Superseded | Rejected  
+**Theory Status**: ✓ Paper‑licensed (if the decision is directly tied to a [K
+theoretical model) → Implementation choice (if it reflects an engineering t[1D[K
+trade‑off) or ? Open (if still under debate)
+
+**Context**
+<Describe the problem, goal, and surrounding environment that required this[4D[K
+this decision.>
+
+**Decision**
+<Clearly state what was chosen as the final implementation or design option[6D[K
+option.>
+
+**Rationale**
+<Explain why this choice is preferred over alternatives, including any trad[4D[K
+trade‑offs considered.>
+
+**Alternatives Considered**
+1. **Alternative A**: <Description of A>
+   - Rejected: <Reasons for rejection (e.g., performance, security, maintai[7D[K
+maintainability)>
+2. **Alternative B**: <Description of B>
+   - Deferred: <Why it is not yet decided or will be revisited later>
+
+**Consequences**
+- ✓ Benefit(s): What the decision enables (performance, readability, flexib[6D[K
+flexibility, etc.)
+- ✗ Drawback(s): Risks or limitations introduced by the choice
+- ⚠ Warning/Caveat: Any non‑obvious side effects or dependencies to watch f[1D[K
+for
+
+**Documentation**
+- Where is this decision codified? (e.g., `spherepop/views.py`, `tests/test[11D[K
+`tests/test_performance.py`)
+- What test cases, if any, verify that the chosen path works as intended?
+
+**Review Criteria (if provisional)**
+<What conditions would trigger a re‑evaluation or replacement of this DDR?>[5D[K
+DDR?>
+
+---
+
+### When NOT to Create an DDR
+
+- **Trivial choices**: variable naming, directory layout, simple formatting[10D[K
+formatting options.
+- **Paper‑only decisions**: requirements directly from a theoretical model [K
+that do not affect code structure.
+- **Temporary exploratory work**: code meant for quick prototyping and will[4D[K
+will be discarded later.
+
+---
+
+**Version History**
+
+| Date       | Action |
+|------------|--------|
+| 2026‑08‑13 | Initial DDR document created. |
+|            | Added template, process guidelines, and status definitions ([1D[K
+(✓, → Choice, ⚠). |
+|            | Cross‑referenced THEORY_STATUS.md and SPECIFICATIONS.md for [K
+existing decisions (DDR‑001 through DDR‑011). |
+
+---
+
+Feel free to use this structure whenever you need to capture a significant [K
+design decision within the project.
+

@@ -1,146 +1,115 @@
-Below is a detailed explanation of the formal grammar and semantic structur[8D[K
-structure described in the Spherepop Calculus section. This breakdown clari[5D[K
-clarifies how terms are constructed, how contexts (histories) are formed, a[1D[K
-and what rules govern their evaluation.
+**Formal Grammar of the Spherepop Calculus**
 
----
+Let  
 
-### Formal Grammar
+* \(\mathcal{V}=\{x,y,z,\ldots\}\) be the countable set of variables,  
+* \(\mathcal{C}=\{c_1,c_2,\ldots\}\) the constants, and  
+* \(\mathcal{O}=\{\operatorname{Sphere},\operatorname{Pop},\operatorname{Me\(\mathcal{O}=\{\operatorname{Sphere},\operatorname{Pop},\operatorname{Merge},\operatorname{Choice},\operatorname{Replay},\operatorname{Refuse},\operge},\operatorname{Choice},\operatorname{Replay},\operatorname{Refuse},\operatorname{Collapse},\operatorname{Bind}\}\) the primitive operators.
 
-The calculus defines its syntax using three main types:
-
-1. **Variables**  
-   \[
-   \mathcal{V} = \{x,y,z,\ldots\}
-   \]  
-   These represent the basic symbols used in terms.
-
-2. **Constants**  
-   \[
-   \mathcal{C} = \{c_1,c_2,\ldots\}
-   \]  
-   Constants are predefined values that can appear directly in terms.
-
-3. **Primitive Operators**  
-   \[
-   \mathcal{O} =
-   \{\operatorname{Sphere}, \operatorname{Pop}, \operatorname{Merge},
-    \operatorname{Choice}, \operatorname{Replay}, \operatorname{Refuse},
-    \operatorname{Collapse}, \operatorname{Bind}\}
-   \]  
-   These operators define the operations that can be applied to terms.
-
-#### Term Construction
-
-Terms are built inductively using:
+The grammar of terms is defined inductively by  
 
 \[
-t
-=
+t=
 \begin{cases}
-x & (\text{variable})\\[4pt]
-c & (\text{constant})\\[4pt]
-\operatorname{Sphere}(x:A.t) & (\text{sphere construction})\\[4pt]
-\operatorname{Pop}(t) & (\text{pop operation})\\[4pt]
-\operatorname{Merge}(t,t) & (\text{merge of histories})\\[4pt]
-\operatorname{Choice}(p,t,t) & (\text{conditional branching})\\[4pt]
-\operatorname{Replay}(t,t) & (\text{replaying a history})\\[4pt]
-\operatorname{Refuse}(r) & (\text{refusal of a branch})\\[4pt]
-\operatorname{Collapse}(t) & (\text{irreversible commit})\\[4pt]
-\operatorname{Bind}(t,t). & (\text{binding two histories})
+x &\text{(variable)}\\[4pt]
+c &\text{(constant)}\\[4pt]
+\operatorname{Sphere}(x:A.t) &\text{(spherical abstraction)}\\[4pt]
+\operatorname{Pop}(t) &\text{(pop a value)}\\[4pt]
+\operatorname{Merge}(t,t) &\text{(merge two histories)}\\[4pt]
+\operatorname{Choice}(p,t,t) &\text{(probabilistic branching)}\\[4pt]
+\operatorname{Replay}(t,t) &\text{(re‑execution of a history)}\\[4pt]
+\operatorname{Refuse}(r) &\text{(refusal to commit)}\\[4pt]
+\operatorname{Collapse}(t) &\text{(commit irreversible change)}\\[4pt]
+\operatorname{Bind}(t,t) &\text{(binding of related histories)}
 \end{cases}
 \]
 
-#### Contexts (Histories)
+**Contexts and Histories**
 
-Contexts are ordered lists of historical operations:
+* Contexts are histories:  
+
+  \[
+  \Gamma=
+  \begin{cases}
+  \emptyset &\text{(empty)}\\
+  \Gamma,e,\;e\in\{\operatorname{Open},\operatorname{Pop},\operatorname{Rep\Gamma,e,\;e\in\{\operatorname{Open},\operatorname{Pop},\operatorname{Replay},\operatorname{Merge},\operatorname{Choice},\operatorname{Collapse},\opeay},\operatorname{Merge},\operatorname{Choice},\operatorname{Collapse},\operatorname{Refuse}\}
+  \end{cases}
+  \]
+
+* A history is a finite sequence:  
+
+  \[
+  H=(e_1,e_2,\ldots,e_n).
+  \]
+
+**Well‑formedness of Histories**
+
+Every element \(e_i\) respects the dependency order:
 
 \[
-\Gamma =
-\emptyset \mid \Gamma,e,
-\]  
-
-where \( e \in \{\operatorname{Open}, \operatorname{Pop}, \operatorname{Rep[17D[K
-\operatorname{Replay},
-\operatorname{Merge}, \operatorname{Choice}, \operatorname{Collapse},
-\operatorname{Refuse}\} \).
-
-A **History** is a finite sequence:
-
-\[
-H = (e_1,e_2,\ldots,e_n).
+e_i\prec e_j\;\Longrightarrow\;i<j,
 \]
 
-The dependency order \( \prec \) ensures that operations in a history are
-processed topologically, meaning if \( e_i \prec e_j \), then \( i < j \).
-
-### Well‑formed Histories
-
-Histories must satisfy:
-
-\[
-e_i \prec e_j \Longrightarrow i < j,
-\]
-
-ensuring chronological integrity. Additionally, nested spheres have disjoin[7D[K
-disjoint
-boundaries:
-
-\[
-S_i \subset S_j \Longrightarrow \partial S_i \cap \partial S_j = \varnothin[10D[K
-\varnothing.
-\]
-
-### Sphere Definition
-
-A **Sphere** is defined as:
-
-\[
-S = (B, I),
-\]
-
-where \( B \) is a computational boundary and \( I \) is a finite computati[9D[K
-computation
-graph. Interior nodes belong to exactly one sphere, ensuring clear separati[8D[K
-separation of
-computational regions.
-
-### Dependency Graph
-
-Every admissible program corresponds to a directed acyclic graph:
-
-\[
-G = (V,E)
-\]  
-
-with a **Sphere Assignment** \( \sigma : V \rightarrow \mathcal{S} \) such [K
-that:
-
-\[
-(u,v) \in E \Longrightarrow 
-\sigma(u) \subseteq \sigma(v) \vee \sigma(v) \subseteq \sigma(u) \vee
-\sigma(u) \parallel \sigma(v).
-\]
-
-This ensures that dependencies are respected, and spheres may be independen[10D[K
-independent.
-
-### Operational Semantics
-
-The operational semantics dictate how the language behaves:
-
-- The parser generates a rooted forest of computational regions.
-- The scheduler acts only on **admissible sphere assignments**, ensuring th[2D[K
-that
-  operations respect dependency constraints.
+where “\(\prec\)” denotes the required admissibility condition (no later st[2D[K
+step may depend on an earlier unresolved step).
 
 ---
 
-These components together define the core structure of the Spherepop Calcul[6D[K
-Calculus,
-emphasizing historical construction and geometric well‑formedness as centra[6D[K
-central to
-computation. If you need further elaboration on any specific rule or compon[6D[K
-component,
-feel free to ask!
+### Sphere Definition
 
+A *Sphere* is recursively defined as  
+
+\[
+S=(B,I),
+\]
+
+* \(B\) – a computational boundary,  
+* \(I\) – a finite computation graph.
+
+**Nested‑Sphere Property**
+
+Every interior node of \(I\) belongs to exactly one sphere.  
+If spheres overlap, their boundaries are disjoint:
+
+\[
+S_i \subset S_j \Longrightarrow \partial S_i \cap \partial S_j = \varnothin[10D[K
+\varnothing .
+\]
+
+---
+
+### Well‑formed Programs
+
+An admissible program corresponds to a finite directed acyclic graph  
+
+\[
+G=(V,E)
+\]
+
+together with a sphere assignment  
+
+\[
+\sigma : V \rightarrow \mathcal{S},
+\]
+
+where spheres form a partial order:
+
+\[
+(u,v)\in E \Longrightarrow 
+\sigma(u) \subseteq \sigma(v)\;\vee\;
+\sigma(v) \subseteq \sigma(u)\;\vee\;
+\sigma(u)\parallel\sigma(v),
+\]
+
+with “\(\parallel\)” denoting independent computational regions.
+
+---
+
+### Operational Scheduler
+
+The language’s operational semantics **only** act on admissible sphere assi[4D[K
+assignments, ensuring that evaluation respects the geometric well‑formednes[14D[K
+well‑formedness required by computation. This reflects the core philosophic[11D[K
+philosophical principle: computation is fundamentally the irreversible cons[4D[K
+construction of computational history through successive opening, interacti[9D[K
+interaction, replay, refusal, and dissolution of bounded regions.

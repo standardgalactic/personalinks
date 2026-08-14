@@ -1,0 +1,695 @@
+You are analyzing chunk 1 of 1 of a document called
+"docs-specifications.md", part of a large theoretical/computational research
+repository called Spherepop.
+
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
+
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
+
+**confluent(c: Config, ops: List[Operation]) → bool**
+
+*Specification*
+
+```
+confluent(c, [op₁, op₂, …, opₙ]) = true 
+   ⇔ ∃ result such that for every permutation π of the list ops,
+       eval_program(c, π(ops)) evaluates to the same final configuration re[2D[K
+result.
+```
+
+In words: *If you can reorder any sequence of operations without changing t[1D[K
+the end‑result, then the operation set is confluent.*
+
+*Complexity*: The test requires checking all `|ops|!` possible orderings (p[2D[K
+(permutations) and evaluating each ordering with `eval_program`. Hence the [K
+runtime is exponential in both the number of operations (`n`) and the evalu[5D[K
+evaluation cost of a single program run.
+
+*Purpose*
+
+- **Detect** whether the order of operations matters.
+- **Do not**:
+  - Authorize any particular order,
+  - Modify the original configuration,
+  - Declare semantic validity when confluence fails (non‑confluence does no[2D[K
+not imply an error).
+
+---
+
+**Key points to remember**
+
+1. **Non‑authoritative**: The function only reports a property; it never ch[2D[K
+changes state or validates semantics.
+2. **Exponential cost**: Use with caution—small `ops` lists are the only pr[2D[K
+practical case for runtime feasibility.
+3. **Interpretation of “true”**: If such a common result exists, *any* perm[4D[K
+permutation yields that same final configuration (up to observable equality[8D[K
+equality). If no single result satisfies this, the function returns `false`[7D[K
+`false`.
+
+---
+
+**Example usage**
+
+```python
+c = some_initial_config()
+ops = [OpA(), OpB(), OpC()]
+
+is_confluent = confluent(c, ops)
+
+if is_confluent:
+    print("Operations can be reordered without affecting outcome.")
+else:
+    print("Order matters; consider redesigning the operation sequence.")
+```
+
+---
+
+**Related specifications**
+
+- **divergent**: The opposite test (`¬confluent`).
+- **regretful**: Checks if a single operation eliminates future options—use[11D[K
+options—useful for safety analysis.
+- **admissible**: Pre‑check that an operation can be applied without causin[6D[K
+causing an `EvalError`.
+
+These functions together allow you to reason about operational semantics, d[1D[K
+detect order sensitivity, and analyze the impact of individual operations o[1D[K
+on the overall state space.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
+
+# Spherepop Formal Specifications
+
+**Status**: Normative reference for stable semantic core  
+**Authority**: "The History of Spherepop" (paper) > this document > implementation  
+**Maintenance**: Must be updated when paper interpretation changes
+
+---
+
+## Document Purpose
+
+This document provides **precise, normative specifications** for Spherepop's stable semantic core. It serves as:
+
+1. **Authority hierarchy**: Paper → Specification → Implementation
+2. **Disambiguation**: Where paper leaves choices open, we document the chosen interpretation
+3. **Test oracle**: Every test should trace to a specification claim
+4. **Refactoring anchor**: Implementations may change; specifications constrain how
+
+**What belongs here**:
+- ✓ Precise definitions of primitives {POP, REFUSE, BIND, COLLAPSE}
+- ✓ Transition relation semantics
+- ✓ Configuration invariants (must hold at all times)
+- ✓ Observer contracts (what they compute, what they must NOT do)
+- ✓ Chosen interpretations when paper is ambiguous
+
+**What does NOT belong here**:
+- ✗ Performance characteristics (see benchmarks)
+- ✗ Implementation algorithms (see DEVELOPMENT.md)
+- ✗ Research questions (see THEORY_STATUS.md)
+- ✗ Code examples (see docstrings)
+
+---
+
+## Core Type Definitions
+
+### Config
+
+```
+Config = {
+    sigma:        Sphere,
+    option_space: FrozenSet[Atom | Quotient],
+    history:      Tuple[Operation, ...],
+    collapse_log: Tuple[Tuple[int, Tuple[FrozenSet[Atom], ...]], ...]
+}
+```
+
+**Invariants** (must hold after every transition):
+
+1. **History monotonicity**: `h_t ⪯ h_{t+1}` (history only grows)
+2. **Option space validity**: `option_space ⊆ atoms(sigma) ∪ quotients(collapse_log)`
+3. **Collapse log structure**: `[(idx, classes), ...]` ordered by occurrence
+4. **Non-emptiness**: `option_space ≠ ∅` (empty space is terminal, no further transitions)
+5. **Quotient disjointness**: Classes in collapse_log are pairwise disjoint
+6. **Quotient exhaustiveness**: Each class in collapse_log covers all its members
+
+**Validation** (see `validation.py`):
+- Validation = observation, NOT repair
+- Returns `List[str]` of violations
+- Never modifies Config
+
+### Sphere
+
+```
+Sphere = {
+    items: Tuple[Atom | Sphere, ...],
+    label: str | None
+}
+```
+
+**Invariants**:
+1. **Immutability**: Spheres are frozen after construction
+2. **Label uniqueness** (implementation choice, Q8): Each label identifies at most one Sphere in σ
+3. **Well-founded nesting**: No infinite regress (guaranteed by Python's evaluation order)
+
+### Atom
+
+```
+Atom = { value: str }
+```
+
+**Equality**: By value only (content-based)
+
+### Quotient
+
+```
+Quotient = { members: FrozenSet[Atom] }
+```
+
+**Equality**: By member set only (no "representative" field)
+
+**Critical**: `Quotient([a, b]) == Quotient([b, a])` (order irrelevant)
+
+---
+
+## Primitive Operations: Full Specifications
+
+### POP(label: str)
+
+**Paper Reference**: Appendix C
+
+**Precondition**:
+```
+∃ path in sigma: path[-1].label == label
+  ∧ path[-1] is Sphere (not Atom)
+  ∧ |path| ≥ 1
+```
+
+**Effect**:
+```
+sigma' = sigma[path[:-1]] with path[-2].items replaced by path[-1].items
+option_space' = option_space (unchanged)
+history' = history + (PopOp(label),)
+collapse_log' = collapse_log (unchanged)
+```
+
+**Postcondition**:
+1. Popped sphere's items are promoted to parent level
+2. Popped sphere's label no longer resolves
+3. Option space unchanged (POP is structural only)
+4. History extended by exactly one operation
+
+**Error cases**:
+- Label not found → `EvalError("Label 'X' not found in sphere tree")`
+- Label refers to atom → `EvalError("Cannot POP atom")`
+- Multiple spheres with same label → `EvalError("Ambiguous label")` (implementation prevents this)
+
+**Implementation choice** (Q1b):
+- POP on identical-content spheres treats them as equivalent
+- Identity based on content, not object identity
+- Documented as "minimal realization" not theoretical requirement
+
+---
+
+### REFUSE(refused: FrozenSet[str])
+
+**Paper Reference**: Appendix E
+
+**Precondition**:
+```
+refused ⊆ option_space
+  ∧ refused ≠ ∅
+  ∧ refused ≠ option_space (would leave empty space)
+```
+
+**Effect**:
+```
+sigma' = sigma (unchanged)
+option_space' = option_space \ refused
+history' = history + (RefuseOp(refused=refused),)
+collapse_log' = collapse_log (unchanged)
+```
+
+**Postcondition**:
+1. Refused options removed from option_space
+2. `∅ ⊂ option_space' ⊂ option_space` (strict subset, non-empty)
+3. Structure unchanged
+4. History records exactly what was refused (not what remains)
+
+**Error cases**:
+- `refused ⊄ option_space` → `EvalError("REFUSE requires subset")`
+- `refused = ∅` → `EvalError("REFUSE requires nonempty subset")`
+- `refused = option_space` → `EvalError("REFUSE would leave empty space")`
+
+**Quotient handling**:
+- Refusing a Quotient removes entire equivalence class atomically
+- Cannot refuse individual Quotient members (would violate quotient integrity)
+- **Paper-licensed** (Q4): Quotients are atomic under REFUSE
+
+---
+
+### BIND(predicate: str)
+
+**Paper Reference**: Appendix D
+
+**Precondition**:
+```
+predicate well-formed according to grammar:
+  "ALL"
+  | "prefix:" substring
+  | "contains:" substring
+  | "in:" label
+  | exact_match (no operator)
+
+∧ label (if "in:") exists in sigma
+```
+
+**Effect**:
+```
+sigma' = sigma (unchanged)
+option_space' = {x ∈ option_space | predicate(x) = true}
+history' = history + (BindOp(predicate=predicate),)
+collapse_log' = collapse_log (unchanged)
+```
+
+**Postcondition**:
+1. Only options matching predicate remain
+2. `option_space' ⊆ option_space`
+3. If no matches, `option_space' = ∅` (terminal state, valid)
+4. Structure unchanged
+
+**Error cases**:
+- Malformed predicate → `EvalError("Invalid predicate syntax")`
+- `"in:X"` where X not found → `EvalError("Label 'X' not found")`
+
+**Quotient predicate evaluation** (Q3, **PROVISIONAL**):
+
+Current implementation uses **existential semantics**:
+```
+predicate(Quotient(members)) = true
+  ⇔ ∃ m ∈ members: predicate(m) = true
+```
+
+**Status**: Implementation choice, not paper-licensed  
+**Marking**: All tests using BIND on Quotients marked `@pytest.mark.experimental`  
+**Alternative**: Universal semantics `∀ m ∈ members: predicate(m)`  
+**Theory**: Paper silent on quotient lifting
+
+**Predicate operators**:
+
+1. **"ALL"**: Always true (identity filter)
+   ```
+   ∀x: predicate("ALL", x) = true
+   ```
+
+2. **"prefix:P"**: String prefix match
+   ```
+   predicate("prefix:P", x) = x.startswith(P)
+   ```
+
+3. **"contains:S"**: Substring match
+   ```
+   predicate("contains:S", x) = S in x
+   ```
+
+4. **"in:L"**: Membership in labeled sphere
+   ```
+   predicate("in:L", x) = x ∈ atoms(resolve_label(sigma, L))
+   ```
+
+5. **Exact match**: No operator, exact string equality
+   ```
+   predicate("X", x) = (x == "X")
+   ```
+
+---
+
+### COLLAPSE(classes: Tuple[FrozenSet[str], ...])
+
+**Paper Reference**: Appendix F
+
+**Precondition**:
+```
+∀ C ∈ classes:
+  C ⊆ option_space
+  ∧ C ≠ ∅
+  ∧ |C| ≥ 2 (singleton classes are no-ops)
+
+∧ ∀ C₁, C₂ ∈ classes: C₁ ∩ C₂ = ∅ (pairwise disjoint)
+```
+
+**Effect**:
+```
+sigma' = sigma (unchanged)
+
+For each class C:
+  option_space' = (option_space \ C) ∪ {Quotient(C)}
+
+collapse_log' = collapse_log + ((|history|, classes),)
+history' = history + (CollapseOp(classes=classes),)
+```
+
+**Postcondition**:
+1. Each class C replaced by single Quotient(C)
+2. `|option_space'| = |option_space| - Σ(|C| - 1) for C in classes`
+3. Quotient equality: `Quotient(C₁) == Quotient(C₂) ⇔ C₁ == C₂`
+4. Collapse logged with history index for provenance
+
+**Error cases**:
+- Empty class → `EvalError("Each class must be non-empty")`
+- Singleton class → Warning or no-op (implementation choice)
+- Overlapping classes → `EvalError("Classes must be pairwise disjoint")`
+- Class contains non-options → `EvalError("Class elements must be in option_space")`
+
+**Composition** (Q2b, **UNRESOLVED**):
+
+Successive COLLAPSE on already-quotiented elements:
+```
+COLLAPSE({{a,b}}) → space contains Quotient({a,b})
+COLLAPSE({{Quotient({a,b}), c}}) → ??? 
+```
+
+**Current behavior**: Implementation returns error  
+**Status**: Awaiting theoretical clarification  
+**Alternatives**:
+1. Flatten: `Quotient({Quotient({a,b}), c}) → Quotient({a,b,c})`
+2. Nest: Keep structure `Quotient({Quotient({a,b}), c})`
+3. Reject: Current behavior (conservative)
+
+**Theory**: Paper focuses on single-level collapse; composition unspecified
+
+---
+
+## Continuation Relation ⊑
+
+**Paper Reference**: Section 4
+
+**Definition**:
+```
+(σ₁, O₁) ⊑ (σ₂, O₂) ⇔ O₁ ⊇ O₂
+```
+
+**Interpretation** (Q1a, **PAPER-LICENSED**):
+- Continuation = reduction in options
+- σ may change (via POP) but only O determines ordering
+- **NOT** subset of futures (alternative interpretation rejected)
+
+**Properties**:
+1. **Reflexive**: `(σ, O) ⊑ (σ, O)`
+2. **Transitive**: `c₁ ⊑ c₂ ∧ c₂ ⊑ c₃ ⇒ c₁ ⊑ c₃`
+3. **Antisymmetric** (with extensional equality): `c₁ ⊑ c₂ ∧ c₂ ⊑ c₁ ⇒ O₁ = O₂`
+
+**History invariant** (OVERSOUL §3):
+```
+∀ valid transition (σₜ, hₜ) → (σₜ₊₁, hₜ₊₁):
+  h₁ ⪯ hₜ₊₁ where hₜ₊₁ = hₜ · e for exactly one e ∈ P
+```
+
+---
+
+## Observer Contracts
+
+**Fundamental Principle** (OVERSOUL §4):
+
+For every observer `V : H → X`:
+```
+V(h) ↛ h    (no inverse causal edge)
+V(h₁) = V(h₂) ⇏ h₁ = h₂    (non-authoritative)
+```
+
+Observers **compute properties**, never **authorize continuations**.
+
+### confluent(c: Config, ops: List[Operation]) → bool
+
+**Specification**:
+```
+confluent(c, [op₁, op₂, ..., opₙ]) = true ⇔
+  ∃ result such that ∀ permutations π of ops:
+    eval_program(c, π(ops)) = result
+```
+
+**Complexity**: O(n! × T(eval)), exponential in |ops|
+
+**Purpose**: Check if operation order is irrelevant
+
+**Does NOT**:
+- Authorize any particular order
+- Modify config
+- Define semantic validity (non-confluence ≠ error)
+
+### divergent(c: Config, ops: List[Operation]) → bool
+
+**Specification**:
+```
+divergent(c, ops) = ¬confluent(c, ops)
+```
+
+**Purpose**: Detect order-sensitive operation sequences
+
+### regretful(c: Config, op: Operation) → bool
+
+**Specification** (Q6, **PROVISIONAL**):
+```
+regretful(c, op) = true ⇔
+  c' = transition(c, op)
+  ∧ ∃ op_next: admissible(op_next, c) ∧ ¬admissible(op_next, c')
+```
+
+**Interpretation**: Operation op closes off previously available continuations
+
+**Alternative interpretations** (unexplored):
+- Future-regret: `∃ futures only reachable without op`
+- Pareto-regret: `op reduces option space more than necessary`
+
+**Status**: Chosen minimal definition, others remain research questions
+
+### admissible(op: Operation, c: Config) → bool
+
+**Specification**:
+```
+admissible(op, c) = true ⇔ transition(c, op) succeeds without EvalError
+```
+
+**Purpose**: Precondition checking without executing
+
+**Implementation**: Must match `transition()` preconditions exactly
+
+### equivalent_at(c: Config, ops1: List[Op], ops2: List[Op], depth: int) → bool
+
+**Specification**:
+```
+equivalent_at(c, ops1, ops2, d) = true ⇔
+  final_state(c, ops1) ≈_d final_state(c, ops2)
+```
+
+where `≈_d` is d-prefix equivalence (histories match in first d operations).
+
+**Purpose**: Check if two operation sequences produce equivalent-looking results
+
+### horizon_equivalent(c1: Config, c2: Config, ops: List[Op], k: int) → bool
+
+**Specification**:
+```
+horizon_equivalent(c1, c2, ops, k) = true ⇔
+  reachable_k(c1, ops) = reachable_k(c2, ops)
+```
+
+where `reachable_k(c, ops)` = set of configs reachable in exactly k steps using ops.
+
+**Complexity**: O(|ops|^k), exponential in k
+
+**Purpose**: Check if two configs have same k-step future possibilities
+
+**Expensive**: Use sparingly, small k only
+
+---
+
+## Derived Views (Non-Authoritative)
+
+### extensional_view(c: Config) → FrozenSet[str]
+
+**Specification**:
+```
+extensional_view(c) = {
+  atom.value if atom ∈ option_space
+  for each option in c.option_space
+}
+```
+
+**Quotient handling**: Returns representative (arbitrary member, implementation choice)
+
+**Purpose**: Observable state for equality testing
+
+**Does NOT**: Define intensional identity. `V(c₁) = V(c₂) ⇏ c₁ = c₂`
+
+### representative(q: Quotient) → Atom
+
+**Specification**:
+```
+representative(q) ∈ q.members
+```
+
+**Implementation choice**: `min(q.members, key=lambda a: a.value)` (lexicographic)
+
+**Purpose**: Display/serialization only
+
+**Does NOT**:
+- Define quotient identity (identity is `q.members` set equality)
+- Establish preference (all members are equivalent)
+- Authorize choices (pure observation)
+
+**This is the ONLY function that picks a quotient member for display.**
+
+---
+
+## Grammar (Appendix G)
+
+**Status**: Separate literal BNF implementation
+
+The paper provides an explicit BNF grammar in Appendix G. The `grammar.py` module implements this **literally**, with no extensions:
+
+```
+<expr> ::= <atom> | <sphere>
+<sphere> ::= "(" <items> ")"
+           | "(" <items> ")" ":" <label>
+<items> ::= <expr> | <expr> "," <items>
+<atom> ::= <identifier>
+```
+
+**Critical**: `grammar.py` implements paper grammar exactly, no convenience extensions.
+
+**Separate**: `parser.py` provides a more forgiving parser for tests/experiments.
+
+**Never**: Mix grammar.py (normative) with parser.py (convenient).
+
+---
+
+## Validation vs Verification
+
+**Validation** (`validation.py`):
+- **Observational**: Returns `List[str]` of violations
+- **Advisory**: Does NOT prevent invalid states (caller decides)
+- **Provenance-based**: Checks history/collapse_log consistency
+- **Never repairs**: `validate(c) → List[str]`, not `validate(c) → c'`
+
+**Invariants checked**:
+1. `option_space ⊆ atoms(sigma) ∪ quotients(collapse_log)`
+2. `all(isinstance(h, Operation) for h in history)`
+3. Collapse log well-formed: `[(idx, classes), ...]`
+4. Quotient classes pairwise disjoint
+5. Quotient classes non-empty
+6. No duplicate quotients (Python `frozenset` guarantees this)
+
+**What validation does NOT check**:
+- Performance characteristics
+- Semantic optimality
+- Research question violations (e.g., convergence assumptions)
+- Unresolved theory (reports "unspecified" not "invalid")
+
+---
+
+## Theory Status Cross-Reference
+
+This specification incorporates decisions documented in `THEORY_STATUS.md`:
+
+| Question | Status | Location |
+|----------|--------|----------|
+| Q1a: ⊑ definition | ✓ Paper-licensed | Continuation Relation |
+| Q1b: POP identity | → Implementation choice | POP specification |
+| Q1c: Convergence | ? Open | Not specified |
+| Q2a: COLLAPSE basics | ✓ Paper-licensed | COLLAPSE specification |
+| Q2b: COLLAPSE composition | ? Open | COLLAPSE / Composition |
+| Q3: Quotient predicates | → Existential (provisional) | BIND / Quotient handling |
+| Q4: Quotients atomic | ✓ Paper-licensed | REFUSE / Quotient handling |
+| Q5: History as identity | ✓ Paper-licensed | Config / Invariants |
+| Q6: Regret definition | → Minimal chosen | regretful() specification |
+| Q7: ≈_k alphabet | → Continuation set chosen | equivalent_at() |
+| Q8: Label uniqueness | → Implementation choice | Sphere / Invariants |
+
+**Legend**:
+- ✓ **Paper-licensed**: Explicitly stated in paper
+- → **Implementation choice**: Chosen among valid alternatives
+- ? **Open**: Genuinely underdetermined, research question
+- ⊗ **Contrary**: Would violate paper (none in current specs)
+
+---
+
+## Testing Traceability
+
+Every test SHOULD trace to a specification claim:
+
+**Example**:
+```python
+def test_refuse_maintains_history_monotonicity():
+    """Verifies REFUSE postcondition #4: history extended by exactly one operation.
+    
+    Specification: REFUSE → Postcondition 4
+    Theory Status: Q1a (paper-licensed)
+    """
+    c = make_config(...)
+    c_after = transition(c, RefuseOp(...))
+    assert len(c_after.history) == len(c.history) + 1  # Monotonicity
+```
+
+**Traceability format**:
+```
+Specification: <section name>
+Theory Status: <Q# or "stable">
+Paper Reference: <Appendix X if applicable>
+```
+
+---
+
+## Modification Protocol
+
+**To change this specification**:
+
+1. **Check authority**: Does paper constrain this? If yes, change is blocked.
+2. **Check theory status**: Is this open (?) or chosen (→)?
+   - Open → Requires research, not specification change
+   - Chosen → Requires justification, may need paper author consultation
+3. **Update THEORY_STATUS.md**: Any specification change must update theory status
+4. **Update tests**: All tests tracing to changed specification must be reviewed
+5. **Mark provisional**: If semantics become more experimental, mark tests with `@pytest.mark.experimental`
+
+**Red flags** (require elevated scrutiny):
+- Changes to primitive preconditions/postconditions
+- Changes to observer contracts (especially non-authority principle)
+- Changes to Config invariants
+- Any change that would make existing valid histories invalid
+
+**Epistemic hygiene** (see `OVERSOUL_PERFECTION.md`):
+- Perfection shall not be inferred from absence of violation
+- `specified(x) ⇏ proven(x)`, `implemented(x) ⇏ correct(x)`, `tested(x) ⇏ complete(x)`
+- Specifications mark boundaries; boundaries are not territories
+
+---
+
+## Version History
+
+- **2026-08-13**: Initial specification document (OVERSOUL directive completion)
+  - Consolidated scattered specifications
+  - Formalized observer contracts
+  - Documented all primitives with full pre/post conditions
+  - Traced to THEORY_STATUS.md
+

@@ -1,0 +1,460 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+(none yet)
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: future_directions.md
+
+NEW CHUNK
+=========
+
+# Future Directions
+
+This document outlines potential extensions and research directions for Spherepop, maintaining the distinction between semantic primitives and pragmatic tooling.
+
+## Core Principle
+
+The four primitives `P = {POP, REFUSE, BIND, COLLAPSE}` remain closed. All extensions are either:
+- **Infrastructure** (I): Tooling, optimization, integration
+- **Research** (Q): Open theoretical questions
+- **Experimental** (X): Provisional semantic explorations
+
+No extension becomes normative without explicit theoretical foundation.
+
+---
+
+## Research Directions (Q)
+
+### 1. Plan B Completion (Appendix B Semantics)
+**Status**: `spherepop/poset.py` exists but isolated
+
+**Questions**:
+- Does repeated minimal-element elimination converge to unique maximal element?
+- How do labeled option spaces `O_i = (ℓ_i, C_i)` compose?
+- What is the proper quotient operation over the preorder?
+
+**Approach**: Empirical investigation through extended experiments, not assumed invariants.
+
+### 2. COLLAPSE Composition
+**Status**: Successive collapse on quotients currently unsupported (THEORY_STATUS.md Q2b)
+
+**Questions**:
+- Should `a ~ b` then `a ~ c` yield `[a] = {a, b, c}` by transitivity?
+- Or should second collapse be rejected (distinctions already destroyed)?
+- What is the composition law for overlapping equivalence relations?
+
+**Approach**: Experiment with transitive closure vs rejection before encoding in core semantics.
+
+### 3. Quotient Predicate Lifting
+**Status**: Existential semantics implemented (THEORY_STATUS.md Q3)
+
+**Questions**:
+- Should BIND use existential (`∃x ∈ [q]. β(x)`) or universal (`∀x ∈ [q]. β(x)`)?
+- Or require predicates be well-defined on equivalence classes?
+- How do different lifts affect confluence/regret properties?
+
+**Approach**: Implement alternatives, compare observable behavior in experiments.
+
+### 4. History Compaction
+**Status**: Not addressed; histories grow unboundedly
+
+**Questions**:
+- What is the correct notion of "observational equivalence" for GC?
+- Can we project `h` to `h'` such that all observers agree but `|h'| < |h|`?
+- Is there a minimal history preserving all confluent/regretful/admissible properties?
+
+**Approach**: Define compaction as **observer**, not primitive. Test preservation theorems.
+
+---
+
+## Infrastructure Extensions (I)
+
+### 1. LLM Integration (Ollama/Granite)
+
+**Purpose**: Natural language interface and intelligent suggestion
+
+**Architecture**:
+```
+User ←→ LLM ←→ Spherepop Core
+         ↓
+    proposes ops
+         ↓
+    User commits → h
+```
+
+**Features**:
+- Natural language → operation translation
+- History analysis and summarization  
+- Regret prediction (ML problem over observer results)
+- Interactive REPL with suggestions
+
+**Boundary**: LLM is external oracle. Only user commits to history `h`.
+
+### 2. Enhanced Documentation
+
+**Per-Experiment Guides**:
+- Top-of-file docstrings explaining what each experiment demonstrates
+- Theory → implementation walkthroughs
+- Expected outcomes and interpretations
+
+**Extended Architectural Docs**:
+- Design decision records
+- Theory status deep-dives for each Q1-Q8
+- Pattern catalog (observers, views, validation)
+
+**Tutorial Series**:
+- "First 10 minutes with Spherepop"
+- "Understanding history vs views"
+- "Writing new observers"
+- "When to mark tests experimental"
+
+### 3. CLI and Tooling
+
+**Interactive REPL**:
+```bash
+spherepop repl
+> sigma = (root: a b c)
+> refuse {c}
+> bind prefix:a
+> history
+```
+
+**Batch Processing**:
+```bash
+spherepop eval operations.txt
+spherepop validate config.json
+spherepop compare cfg1.json cfg2.json
+```
+
+**Visualization**:
+```bash
+spherepop visualize history.json --format dot
+spherepop diagram cfg --show-quotients
+```
+
+### 4. Performance Optimization
+
+**Structural Memoization**:
+- Cache `@functools.cache` on pure recursive functions
+- Config → hashable state tuples
+- Invalidation: none needed (immutable structures)
+
+**Algorithmic**:
+- Horizon equivalence: incremental reachability
+- Path resolution: trie-based label lookup
+- Option space ops: frozenset operations hoisting
+
+**Measurement**:
+- Benchmarks as functions of `(|h|, |O|, k, b)`
+- Not wall-clock absolutes - structural scaling laws
+
+### 5. Serialization and Persistence
+
+**JSON Schema**:
+- Full Config roundtrip: `config == from_json(to_json(config))`
+- Quotient preservation
+- History ordering maintained
+
+**Event Streaming**:
+- Append-only event log format
+- Replay from log to reconstruct Config
+- Checkpoint/snapshot at intervals
+
+**Integration**:
+- Export to standard formats (CSV, Parquet for analysis)
+- Import from competitor formats (where applicable)
+
+### 6. Testing Infrastructure
+
+**Property-Based Test Extensions**:
+- Hypothesis strategies for larger Configs
+- Shrinking that preserves semantic validity
+- Metamorphic properties across observer compositions
+
+**Coverage Gap Closure**:
+- Target: 85% stable-core coverage
+- Error branch testing (parser, path resolution)
+- Edge case hardening
+
+**Mutation Testing**:
+- Verify test suite detects semantic violations
+- Ensure observers catch invariant breaks
+
+---
+
+## Experimental Explorations (X)
+
+### 1. Multi-Timescale Scheduling
+
+**Status**: Experiment 29 has initial simulation
+
+**Extensions**:
+- Formalize scope saturation, field recovery, horizon scheduling
+- Define "starved scope" and "recovery latency" precisely  
+- Prove or refute: optimal schedulers for given workloads
+
+### 2. Structural Divergence Characterization
+
+**Status**: Experiment 16 demonstrates sigma shape differences
+
+**Extensions**:
+- Classify divergence types: structural, quotient-based, regretful
+- Characterize irreducibly divergent pairs
+- Find minimal distinguishing continuations
+
+### 3. Regret Accumulation
+
+**Status**: Experiment 23 shows regret persists
+
+**Extensions**:
+- Cumulative regret measures over long horizons
+- Regret minimization strategies
+- "Regret-optimal" planning under uncertainty
+
+### 4. Horizon Equivalence at Scale
+
+**Status**: Experiment 26 computes `h₁ ≈_k h₂`
+
+**Extensions**:
+- Efficient k-equivalence checking (BDD, symbolic)
+- Approximate equivalence (statistical sampling)
+- Equivalence classes: partition histories by ≈_k
+
+---
+
+## Integration Patterns
+
+### Unix Philosophy
+
+Spherepop operations compose via pipes:
+
+```bash
+cat base.json | spherepop refuse '{c}' | spherepop bind 'prefix:a' | spherepop collapse '{a~b}'
+```
+
+Each operation:
+- Reads Config from stdin (JSON)
+- Applies one transition
+- Writes new Config to stdout
+
+Chain arbitrary sequences without programming.
+
+### LLM-Assisted Workflow
+
+```
+User: "I want to keep only the 'auth' related options and merge similar ones"
+LLM:  "I suggest: BIND prefix:auth, then COLLAPSE {auth_user~auth_admin}"
+User: [reviews, approves]
+System: Commits operations to history h
+```
+
+The LLM never writes to `h` directly. It proposes; user commits.
+
+### Observability Stack
+
+```
+Spherepop Core → Observers → Metrics → Prometheus/Grafana
+                      ↓
+                  Validation → Alerts
+                      ↓
+                  Telemetry → (optional, disabled by default)
+```
+
+All observation is read-only. No observer modifies semantics.
+
+---
+
+## Anti-Patterns (What NOT to Do)
+
+### ❌ Adding a 5th Primitive
+
+```python
+# WRONG: Don't add MERGE as a primitive
+def merge(cfg: Config, policies: list) -> Config:
+    ...
+    return Config(..., history=cfg.history + (MergeEvent(...),))
+```
+
+Merge is either:
+- A **sequence** of existing primitives (REFUSE then COLLAPSE)
+- An **observer** that suggests operations
+- A **view** over multiple configs
+
+It is never a primitive unless mathematically defined in the paper.
+
+### ❌ Observers with Authority
+
+```python
+# WRONG: Don't let observers modify history
+def smart_confluent(left, right):
+    policy = infer_best_collapse_policy(left, right)
+    left_prime = transition(left, policy)  # ← MODIFYING
+    right_prime = transition(right, policy)
+    return left_prime == right_prime
+```
+
+Observers **never** call `transition()`. They compute properties, not continuations.
+
+### ❌ Infrastructure as Semantics
+
+```python
+# WRONG: Don't make configuration affect calculus
+if config.get("enable_eager_collapse"):
+    # Change how COLLAPSE works
+```
+
+Configuration affects **performance**, **logging**, **UI** - never semantics.
+
+### ❌ Silently Promoting Defaults
+
+```python
+# WRONG: Don't encode open questions as defaults
+def successive_collapse(cfg, classes):
+    # Assumes transitivity without justification
+    merged = transitive_closure(existing_quotients + classes)
+    ...
+```
+
+Mark as `@experimental`, document in `THEORY_STATUS.md`, study empirically.
+
+---
+
+## Timeline (Indicative)
+
+**Near-term** (complete infrastructure):
+- Performance benchmarks (B)
+- Extended documentation (D)  
+- Changelog machinery (C)
+- Release automation (L)
+
+**Medium-term** (pragmatic tooling):
+- CLI with interactive REPL
+- LLM integration (Ollama/Granite)
+- Serialization and persistence
+- Performance optimization
+
+**Long-term** (research):
+- Plan B integration (after convergence proven)
+- COLLAPSE composition (after semantics clarified)
+- History compaction (after equivalence defined)
+- Regret minimization strategies
+
+**Continuous**:
+- Experiment refinement
+- Coverage improvement
+- Documentation expansion
+- Theory discipline maintenance
+
+---
+
+## Success Criteria
+
+Infrastructure is complete when:
+- ✅ All primitives tested, typed, documented
+- ✅ Observers proven non-authoritative  
+- ✅ Semantic strata clearly separated
+- ✅ Open questions explicitly marked
+- ✅ Examples demonstrate all patterns
+
+Extensions are successful when:
+- ✅ They don't contaminate semantic core
+- ✅ Users can ignore them without penalty
+- ✅ They solve real pragmatic problems
+- ✅ They maintain theory discipline
+
+Research succeeds when:
+- ✅ Open questions get empirical investigation
+- ✅ Provisional semantics tested rigorously
+- ✅ Results inform theory, not replace it
+- ✅ Failures documented as valuable as successes
+
+---
+
+## Contributing New Directions
+
+See `CONTRIBUTING.md` for:
+- How to propose new infrastructure
+- When to mark semantics experimental
+- Theory status documentation requirements
+- Observer vs primitive distinction
+
+**Remember**: Adding a feature is easy. Maintaining semantic purity is hard. When in doubt, ask: "Is this a claim about the calculus, or a tool for working with it?"
+
+---
+
+## Conceptually Related (Separate Projects)
+
+### Stochastic Authorship Signature Protocol
+
+**Status**: Separate LaTeX publication-pipeline project, NOT Spherepop core
+
+**Conceptual Connection**:
+```
+Spherepop:          history ≠ extensional view
+Signature Protocol: generating history ≠ visible artifact
+Both:               identity in trajectory, not state
+```
+
+**Implementation Domain**: LaTeX pre-compilation authorship watermarking
+
+**Architecture**:
+```
+LaTeX source → signature policy θ → mutations → compiled PDF
+                    ↓
+              provenance record R
+```
+
+**Multiscale Event Clocks**:
+- Fast clock: λ = 40 characters (tactical perturbation)
+- Slow clock: λ = 400 characters (strategic signature)
+- Perturbed locations: `p_n = round(n·λ + ε_n)` where `ε_n ~ N(0, σ²)`
+
+**Mutation Mixture**: Sample mechanism `M ~ Categorical(π)`:
+1. **Alphabetic-Gaussian**: Central letters favored
+2. **Random-Noise**: Uniform replacement
+3. **Successor**: Deterministic shift `(i+1) mod 26`
+4. **Keyboard-Neighbor**: Geometric adjacency
+5. **Phonological**: Confusion table similarity
+6. **Markov-Context**: Locally plausible continuation
+
+**Protected Regions** (never mutated):
+- Mathematics, code, commands, citations, URLs
+- Anything where corruption breaks compilation
+
+**Provenance Record**:
+```
+R = {source_hash, output_hash, policy, seed,
+     mutations: [(pos, orig, repl, mechanism), ...]}
+```
+
+**Key Principle**:
+```
+Same visible corruption ⇏ same provenance
+
+Identity: source → policy → seed → mutations → artifact
+Not: surface inspection alone
+```
+
+**Evidence, Not Proof**: Supports likelihood comparison, not cryptographic authentication.
+
+**Why NOT in Spherepop**:
+1. Spherepop is a calculus micro-lab, not a publication toolchain
+2. Would turn personalinks into corpus container
+3. Conceptual principle (history ≠ view) is universal; implementations are domain-specific
+4. Spherepop may reference protocol conceptually; implementation lives elsewhere
+
+**Future Reference**: A test might reference signature concepts without implementing them.
+- How to propose new infrastructure
+- When to mark semantics experimental
+- Theory status documentation requirements
+- Observer vs primitive distinction
+
+**Remember**: Adding a feature is easy. Maintaining semantic purity is hard. When in doubt, ask: "Is this a claim about the calculus, or a tool for working with it?"
+

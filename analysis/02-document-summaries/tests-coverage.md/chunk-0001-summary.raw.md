@@ -1,0 +1,60 @@
+**1. Definitions & Primitive Concepts**
+
+- **Test Coverage:** The percentage of source code lines/executable stateme[7D[K
+statements that are exercised by automated tests (source: “Coverage now exc[3D[K
+exceeds the project target …”).  
+- **Direct‑Path Tests:** Unit tests that exercise specific execution paths [K
+within a module, ensuring core functionality is verified (source: “…primary[9D[K
+“…primary improvements came from direct-path tests for `spherepop.lab`…”). [K
+ 
+- **Full Tests:** Test suites that cover all logical branches and use cases[5D[K
+cases of a component, guaranteeing end‑to‑end behavior (source: “full tests[5D[K
+tests for `spherepop.enterprise`”).  
+- **Defensive Branch Tests:** Additional test cases focused on edge/excepti[12D[K
+edge/exceptional conditions to improve branch coverage without unnecessary [K
+duplication (source: “…defensive branch tests for `spherepop.serialization`[25D[K
+`spherepop.serialization`…”).  
+
+**2. Mathematical Claims & Formal Structures**
+
+- No explicit numerical or formal claims are presented in this chunk; it re[2D[K
+reports percentage‑based coverage metrics rather than derived mathematical [K
+statements.  
+
+**3. Mechanisms & Processes**
+
+- **Generation Process:** A Test Coverage Report is automatically generated[9D[K
+generated on a specific date (source: “Generated: 2026‑08‑13”).  
+- **Reporting Format:** The report lists overall coverage, target complianc[9D[K
+compliance, and module‑level coverage percentages with notes on remaining g[1D[K
+gaps (source: “Overall Coverage: 96.91% … Coverage by Module …”).  
+- **Verification Command:** A command (`make test-cov`) is provided to reco[4D[K
+recompute the reported coverage figures (source: “…Verification can be perf[4D[K
+performed with `make test-cov`.”).  
+
+**4. Connections to Concepts Named in the Running Abstract**
+
+- The report’s focus on “direct‑path tests for `spherepop.lab`, full tests [K
+for `spherepop.enterprise`, and defensive branch tests for `spherepop.seria[16D[K
+`spherepop.serialization`” directly mirrors improvements mentioned earlier [K
+(source: “…primary improvements came from direct-path tests …”).  
+- Module coverage percentages (e.g., `enterprise.py = 100.00%`) correspond [K
+to the “Coverage by module includes: …`enterprise.py` (10(100%)`” listed in[2D[K
+in the abstract, confirming that each reported percentage aligns with previ[5D[K
+previously captured data.  
+
+**5. Unresolved Questions or Contradictions Visible Within This Chunk**
+
+- **Incomplete Branch Coverage:** Specific minor branch‑only path misses ar[2D[K
+are noted for `lab.py`, `semantics.py`, and isolated edge cases in `validat[8D[K
+`validation.py`/`observers.py` (source: “Remaining Misses (Small / Non‑bloc[8D[K
+Non‑blocking) …”). These represent unresolved gaps that could be addressed [K
+by additional test scenarios.  
+- **No Contradictions:** The chunk contains no statements at odds with earl[4D[K
+earlier information; it merely lists remaining coverage shortfalls without [K
+contradicting the abstract’s summary of achieved targets and module scores.[7D[K
+scores.  
+
+*All substantive claims are directly tied to verbatim excerpts from this ch[2D[K
+chunk as required.*
+

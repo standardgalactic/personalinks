@@ -1,124 +1,87 @@
-**Exploration under Partial Observability**
+**Key Points**
 
-When an observer moves through a graph that is only partially observed—i.e.[13D[K
-observed—i.e., the set  
+1. **Reachable Opportunity Volume (Ω(P))**  
+   - Defined as the size of the cumulative reachable set \(R_n = \bigcup_{k[10D[K
+\bigcup_{k=0}^{n} N(v_k)\).  
+   - Unlike raw path length, Ω measures *future accessibility* rather than [K
+distance traveled.
 
-\[
-\mathcal{F}_n = \text{observed subgraph after } n\text{ steps}
-\]
+2. **Opportunity Expansion Theorem**  
+   - If two traversals have equal length (\(|P_1| = |P_2|\)) but different [K
+reachable volumes (Ω), the traversal with larger Ω admits a strictly larger[6D[K
+larger space of future navigational continuations.
 
-is known at each moment—the value of any move can no longer be judged solel[5D[K
-solely by geometry. Instead it must incorporate **epistemic uncertainty** a[1D[K
-about what remains hidden.
+3. **Marginal Opportunity Contribution (ΔΩ(v))**  
+   - Measures how much new territory is uncovered by visiting \(v\): \(\Del[6D[K
+\(\Delta\Omega(v) = |N(v) \setminus R_n|\).  
+   - A vertex’s informational value is thus proportional to its marginal op[2D[K
+opportunity contribution, not just its degree.
 
----
+4. **Two Geometries of the Graph**  
+   - **Structural Geometry**: Fixed by the graph \(G=(V,E)\).  
+   - **Navigational (Opportunity) Geometry** \(G_{\text{nav}}=(V,E,\mathcal[30D[K
+\(G_{\text{nav}}=(V,E,\mathcal{T},\mathcal{W})\) depends on traversal histo[5D[K
+history \(\mathcal{T}\). The weight update rule  
 
-### 1. Epistemic Value
+     \[
+     w_{ij}(t)=\int_0^t e^{-(t-s)/\tau} f_{ij}(s)\,ds
+     \]
 
-For a vertex \(v\) that is not yet in the observed subgraph, define its epi[3D[K
-epistemic value as  
+     makes each edge’s value evolve with traversal frequency \(f_{ij}(s)\).[14D[K
+\(f_{ij}(s)\).
 
-\[
-\mathcal{E}(v \mid \mathcal{F}_n) = H(\mathcal{F}_n) - H(\mathcal{F}_n \cup[4D[K
-\cup \{v\}),
-\]
+5. **Frontier Dominance**  
+   - For large \(n\), opportunity expansion rate is governed by the frontie[7D[K
+frontier size:  
 
-where \(H\) denotes the Shannon entropy of a graph’s topology (or any consi[5D[K
-consistent probability distribution over unknown vertices and edges).  
-*Interpretation*: visiting \(v\) reduces uncertainty, so \(\mathcal{E}(v)\)[18D[K
-\(\mathcal{E}(v)\) measures how much information we expect to gain about th[2D[K
-the surrounding structure.
+     \[
+     \frac{d\Omega}{dn} \approx |\partial R_n| \cdot \bar p_{\text{novel}},[17D[K
+p_{\text{novel}},
+     \]
 
----
+     where \(\bar p_{\text{novel}}\) is the probability a frontier vertex c[1D[K
+connects to unexplored territory. Internal vertices contribute little after[5D[K
+after their neighborhoods are fully explored.
 
-### 2. Expected Information Gain
+6. **Exploration Under Partial Observability**  
+   - The observer only knows an observed subgraph \(\mathcal{F}_n\). Transi[6D[K
+Transition decisions must be based on local information and history.  
 
-Because epistemic value is history‑dependent, the optimal next step must be[2D[K
-be chosen according to **expected** information gain:
+7. **Epistemic Value**  
+   - Defined as the reduction in entropy due to a new vertex:  
 
-\[
-\pi^* = \arg\max_{v\notin\mathcal{F}_n}
-\;\mathbb{E}\big[\Delta\Omega(v) \mid \mathcal{F}_n\big],
-\]
+     \[
+     \mathcal{E}(v|\mathcal{F}_n)=H(\mathcal{F}_n)-H(\mathcal{F}_n\cup\{v\}[70D[K
+\mathcal{E}(v|\mathcal{F}_n)=H(\mathcal{F}_n)-H(\mathcal{F}_n\cup\{v\}),
+     \]
 
-where  
+     where \(H\) is the Shannon entropy of the observed topology. This valu[4D[K
+value changes with each traversal.
 
-\[
-\Delta\Omega(v)=|N(v)\setminus R_n|
-\]
+8. **Optimal Exploration Policy**  
+   - An admissible policy maximizes expected information gain:  
 
-is the size of new neighborhoods that become reachable after the move. This[4D[K
-This expectation accounts for the fact that some vertices may be more infor[5D[K
-informative in certain contexts (e.g., a bridge linking two previously unco[4D[K
-unconnected clusters).
+     \[
+     \pi^*=\arg\max_v \mathbb{E}[\Delta\Omega(v)|\mathcal{F}_n].
+     \]
 
----
+9. **Context Dependence (Proposition)**  
+   - No globally optimal ordering of vertices exists because the epistemic [K
+value depends on \(R_n\). History determines which vertex yields maximal ma[2D[K
+marginal opportunity.
 
-### 3. Consequences
+10. **Community Saturation (Corollary)**  
+    - For any finite community \(C\), after a sufficiently large traversal [K
+length \(n^*\), exploring further within \(C\) yields diminishing returns, [K
+while expanding into neighboring unexplored regions provides higher expecte[7D[K
+expected value.
 
-* **No universal ordering** – There is no single ranking of all vertices in[2D[K
-independent of \(\mathcal{F}_n\). The marginal opportunity contribution cha[3D[K
-changes with the accumulated reachable set \(R_n\) because  
+**Conclusion**
 
-  \[
-  \Delta\Omega(v)=|N(v)\setminus R_n|
-  \]
-
-  directly depends on what has already been explored. Hence, Proposition [C[14D[K
-Proposition [Context Dependence] holds: any ordering that works for all his[3D[K
-histories is impossible.
-
-* **Community saturation** – For any finite community \(C\), after a suffic[6D[K
-sufficiently large number of steps (\(n^*\)), the expected gain from visiti[6D[K
-visiting another vertex inside \(C\) becomes negligible because neighboring[11D[K
-neighboring vertices have already been examined, yielding diminishing margi[5D[K
-marginal returns. This mirrors known phenomena such as “local search exhaus[6D[K
-exhaustion”.
-
-* **Trade‑off with exploitation** – Because \(\mathcal{E}(v)\) can vary dra[3D[K
-dramatically across different histories (e.g., a community that has not yet[3D[K
-yet been penetrated vs. one where most nodes are already discovered), the p[1D[K
-problem naturally splits into an *exploration* component (maximizing uncert[6D[K
-uncertainty reduction) and an *exploitation* component (leveraging known st[2D[K
-structure).  
-
-  A practical heuristic is to select vertices with high \(\Delta\Omega(v)\)[19D[K
-\(\Delta\Omega(v)\) **and** low current coverage \(|R_n|\cap N(v)\), i.e., [K
-“new‑to‑explore” nodes.
-
----
-
-### 4. Practical Implication
-
-In practice, an adaptive algorithm should maintain a data structure that tr[2D[K
-tracks:
-
-1. The size and overlap of each vertex’s neighborhood with the currently kn[2D[K
-known reachable set.
-2. A running estimate of entropy \(H(\mathcal{F}_n)\) to gauge remaining un[2D[K
-uncertainty.
-3. Which sub‑graphs (communities) have already been saturated, prompting pe[2D[K
-periodic “exploratory pivots” into under‑explored regions.
-
-When such a structure is updated after each step, the algorithm can reliabl[7D[K
-reliably choose moves that maximize expected information gain without prema[5D[K
-prematurely committing to a fixed ordering of vertices.
-
----
-
-**Summary**
-
-Exploration in partially observable graphs must be driven by **epistemic va[2D[K
-value**, i.e., how much uncertainty we expect to reduce. This yields an inh[3D[K
-inherently history‑dependent optimization problem where:
-
-* No universal ranking exists,
-* Communities eventually saturate, and
-* The process naturally balances between exploring new regions (exploration[12D[K
-(exploration) and exploiting known structures (exploitation).
-
-These insights directly follow from the definitions of reachable opportunit[10D[K
-opportunity volume \(\Omega(P)\), marginal opportunity contribution \(\Delt[7D[K
-\(\Delta\Omega(v)\), and epistemic value \(H(\mathcal{F}_n)-H(\mathcal{F}_n[34D[K
-\(H(\mathcal{F}_n)-H(\mathcal{F}_n\cup\{v\})\).
-
+The exploration problem is fundamentally *history‑dependent*. Optimal strat[5D[K
+strategies must continually evaluate the current reachable frontier and mar[3D[K
+marginal opportunity contributions, rather than following fixed rankings or[2D[K
+or global distance metrics. This perspective reveals why sparse bridges (hi[3D[K
+(high ΔΩ) often dominate exploratory value despite low local degree, emphas[6D[K
+emphasizing that navigational information—rather than structural centrality[10D[K
+centrality—is what drives cognitive expansion in complex networks.

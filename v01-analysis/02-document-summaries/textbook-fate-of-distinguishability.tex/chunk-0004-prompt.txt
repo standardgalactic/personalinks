@@ -1,0 +1,1174 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+The transport stratum $\strataT$ arises from the finite extent
+of distinguishability transport.
+
+\begin{definition}{Transport Horizon}{transport-horizon}
+A distinction pair $(x,y)$ lies on the transport stratum
+$\strataT$ if at least one transport coordinate $\tau_i(x,y)$
+is discontinuous at $(x,y)$: specifically, if
+$(x,y)$ lies on the boundary of a reachability domain for the
+relevant transport operator.
+\end{definition}
+
+Transport horizon singularities separate distinction pairs that
+can be communicated, synchronized, or propagated from those
+that cannot. Inside the reachability domain, transport is
+available and the transport coordinate $\tau_i$ is finite.
+Outside, transport is unavailable and $\tau_i=+\infty$.
+
+The boundary between these regions is $\strataT$.
+
+
+Forgetting Singularities
+
+
+The forgetting stratum $\strataF$ marks the onset of
+irreversible forgetting.
+
+\begin{definition}{Forgetting Stratum}{forgetting-strat}
+A distinction pair $(x,y)$ lies on the forgetting stratum
+$\strataF$ if the survival ratio $\survRatio_\transfam(x,y)$
+drops discontinuously to zero:
+\[
+  \survRatio_\transfam(x,y)=0
+  \quad\text{and}\quad
+  \limsup_{(x',y')\to(x,y)}\survRatio_\transfam(x',y')>0.
+\]
+\end{definition}
+
+Unlike collapse, forgetting need not destroy the distinction
+immediately: $\collapseInd$ may remain~$1$ while $\survRatio$
+drops to zero. The distinction is present but no longer
+survives transformation. The semantic horizon of
+\EOD{Definition~5.3} is the state-space image of~$\strataF$.
+
+
+Stratification of the Singular Set
+
+\label{sec:stratum-intersections}
+
+\begin{theorem}{Generic Smoothness of Strata}
+  {generic-smooth}
+For a generic admissible operator family $\transfam$, each
+stratum $\strataC$, $\strataR$, $\strataT$, $\strataF$ is a
+smooth submanifold of $\distPairs$ of codimension~$1$, away
+from the intersections of distinct strata.
+\begin{proof}
+Each stratum is defined as the zero set (or jump set) of a
+smooth function on $\distPairs$. Specifically: the collapse
+stratum arises from the indicator function
+$\collapseInd\circ\fateMap:\distPairs\to\{0,1\}$ and is the
+boundary between its preimages; the repair stratum is the zero
+set of $\repEff\circ\fateMap$; the transport stratum is the
+boundary of a reachability domain; the forgetting stratum is
+the zero set of $\survRatio_\transfam\circ\fateMap$.
+
+For a generic operator family, these functions are regular at
+their zero sets: their gradients are nonzero. By the regular
+level set theorem, each zero set is a smooth submanifold of
+codimension~$1$.
+
+At intersections $\strataC\cap\strataR$, $\strataC\cap\strataT$,
+etc., two or more defining functions simultaneously vanish.
+Generically these intersections are smooth submanifolds of
+higher codimension, and together the strata form a
+Whitney-regular stratified space. The full strata themselves
+(away from intersections) are smooth manifolds of
+codimension~$1$.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Strata as Historical Event Surfaces}
+  {strata-history}
+The smooth strata of $\singSet$ are the surfaces in
+$\distPairs$ at which qualitative change occurs. A system
+moving through $\distPairs$ under the action of operators spends
+most of its existence in the regular interior, where fate
+varies continuously. The occasional crossing of a stratum is
+the formal image of an event: a memory forms, a capability is
+lost, a paradigm shifts, a civilization crosses a threshold.
+The stratification of $\singSet$ provides a taxonomy of such
+events organized by which coordinate of fate space undergoes
+the discontinuity.
+\end{remark}
+
+\begin{fatediagram}{Summary of Singular Strata}
+\centering
+\begin{tikzpicture}[node distance=2.2cm]
+  \node[draw=FateViolet,fill=FateLilac,rounded corners,
+    text width=3cm,align=center,font=\small\sffamily]
+    (SC) {$\strataC$\\[-2pt]{\tiny Collapse}\\[-2pt]
+    {\tiny $c:1\to0$}};
+  \node[draw=DistTeal,fill=DistLight,rounded corners,
+    text width=3cm,align=center,font=\small\sffamily,
+    right=of SC]
+    (SR) {$\strataR$\\[-2pt]{\tiny Repair threshold}\\[-2pt]
+    {\tiny $\repEff:0\to{+}$}};
+  \node[draw=DistBlue,fill=DistLight,rounded corners,
+    text width=3cm,align=center,font=\small\sffamily,
+    below=1.5cm of SC]
+    (ST) {$\strataT$\\[-2pt]{\tiny Transport horizon}\\[-2pt]
+    {\tiny $\tau_i:\text{fin}\to\infty$}};
+  \node[draw=DistAmber,fill=DistGoldBg,rounded corners,
+    text width=3cm,align=center,font=\small\sffamily,
+    right=of ST]
+    (SF) {$\strataF$\\[-2pt]{\tiny Forgetting}\\[-2pt]
+    {\tiny $\survRatio:+\to0$}};
+  \node[draw=DistGray,fill=white,rounded corners,
+    text width=6.8cm,align=center,font=\small\sffamily,
+    below=1.2cm of ST,xshift=2.7cm]
+    (SG) {$\singSet=\strataC\cup\strataR
+      \cup\strataT\cup\strataF$\\
+    {\tiny Each stratum: codimension-1 submanifold (generically)}};
+  \draw[->,DistGray,dashed](SC)--(SG);
+  \draw[->,DistGray,dashed](SR)--(SG);
+  \draw[->,DistGray,dashed](ST)--(SG);
+  \draw[->,DistGray,dashed](SF)--(SG);
+\end{tikzpicture}
+\end{fatediagram}
+
+\begin{chapsummary}
+\item The singular set $\singSet$ decomposes into four strata:
+  collapse $\strataC$, repair threshold $\strataR$, transport
+  horizon $\strataT$, forgetting $\strataF$.
+\item Collapse events are topological singularities: no
+  continuous path in $\fateSpace$ crosses $\strataC$.
+\item Repair threshold singularities are bifurcations: the
+  qualitative fate regime changes from permanent loss to managed
+  degradation.
+\item Transport and forgetting singularities mark the boundaries
+  of reachability and survival.
+\item Generically, each stratum is a smooth codimension-$1$
+  submanifold; their intersections form a Whitney-regular
+  stratified space.
+\item Historical events --- revolutions, collapses, paradigm
+  shifts --- are crossings of specific strata.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Admissibility as Fate Selection}
+\label{ch:admissibility-fate}
+
+\begin{epigraph}{The question is not which states are allowed.
+  The question is which futures are allowed.}
+  {The central reorientation of this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Reinterpret admissibility as a constraint on fates rather
+  than on states.
+\item Define the admissibility operator as a restriction of
+  $\distPairs$ to pairs with admissible fate profiles.
+\item Prove the Admissibility Pullback Theorem: every
+  admissibility manifold in state space is the pullback of an
+  admissible fate region under $\fateMap$.
+\item Show that admissibility geometry in the outer volumes is a
+  special case of fate geometry developed here.
+\end{objectives}
+
+Previous treatments of admissibility, including the extensive
+development in \EOD{Chapters~14--15}, described admissibility
+as a restriction on possible continuations of a system.
+A state or trajectory is admissible if following it preserves
+the volume of future possibility. The admissibility manifold
+$\adm(x,t)$ encodes which states lie within the admissible
+region at each time.
+
+The fate-theoretic framework provides a deeper interpretation~\cite{amari2016}.
+Admissibility is not selection on states. It is selection on
+fates. The admissibility manifold is not a primitive geometric
+object but a derived one: it is the preimage of an admissible
+region in fate space under the fate map.
+
+
+Admissible Fate Regions
+
+
+\begin{definition}{Admissible Fate Region}{adm-fate-region}
+An \emph{admissible fate region} is a subset
+$\admRegion\subseteq\fateSpace$ specifying the fate profiles
+deemed acceptable. A distinction pair $(x,y)\in\distPairs$
+is \emph{admissible} if
+\[
+  \fateMap(x,y)\in\admRegion.
+\]
+\end{definition}
+
+The definition relocates the locus of admissibility from state
+space to fate space. This is not a terminological shift: it
+changes what must be specified. Under the classical approach,
+admissibility requires specifying a manifold $\adm(x,t)$ in
+state space for each time $t$. Under the fate-theoretic
+approach, admissibility requires specifying a region $\admRegion$
+in the fixed space $\fateSpace$, and the time-dependent state-space
+geometry follows by pullback.
+
+
+The Admissibility Operator
+
+
+\begin{definition}{Admissibility Operator}{adm-op-defn}
+The \emph{admissibility operator} is the restriction
+\[
+  \admOp:\distPairs\;\longrightarrow\;\distPairs,
+  \qquad
+  \admOp(\distPairs)
+  \;=\;
+  \bigl\{(x,y)\in\distPairs
+    : \fateMap(x,y)\in\admRegion\bigr\}.
+\]
+Equivalently, $\admOp = \fateMap^{-1}(\admRegion)$ viewed as a
+subspace of $\distPairs$.
+\end{definition}
+
+\begin{remark}{Restriction, Not Partial Function}
+  {adm-not-partial}
+The admissibility operator is defined as a \emph{restriction}
+of $\distPairs$, not as a map sending inadmissible pairs to
+$\varnothing$. This avoids the difficulties of partial functions
+and aligns with the standard pullback construction: the
+admissible pairs form a subspace, and the complement of that
+subspace is simply not in the domain of the restricted operator.
+Dynamical evolution under admissible operators then consists in
+trajectories that remain within $\admOp(\distPairs)$ at each
+step.
+\end{remark}
+
+\begin{proposition}{Admissibility Operator as Pullback}
+  {adm-pullback-prop}
+The admissibility operator satisfies
+\[
+  \admOp(\distPairs)
+  \;=\;
+  \fateMap^{-1}(\admRegion).
+\]
+If $\admRegion$ is open (respectively closed) in $\fateSpace$,
+then $\admOp(\distPairs)$ is open (respectively closed) in
+$\distPairs$.
+\begin{proof}
+The first statement is the definition rewritten. The
+topological statement follows because $\fateMap$ is continuous
+on $\distPairs^+$ (\cref{thm:local-cont}) and the preimage of
+an open set under a continuous map is open; dually for closed sets.
+\end{proof}
+\end{proposition}
+
+
+The Admissibility Pullback Theorem
+
+
+The central result of this chapter shows that the admissibility
+manifolds appearing throughout \textit{The Ecology of
+Distinctions} --- the geometric objects
+$\adm(x,t)$ whose volume $\Vol(\adm(t))$ is the primary
+conserved quantity of that framework --- are not primitive
+constructions. They are pullbacks of fate-space regions under
+the fate map.
+
+\begin{metatheorem}{Admissibility Pullback Theorem}
+  {adm-pullback}
+Every admissibility manifold in state space is the pullback of
+an admissible fate region in $\fateSpace$ under the fate map.
+Specifically, for any admissible region $\admRegion\subseteq\fateSpace$,
+the corresponding admissibility manifold in $\distPairs$ is
+\[
+  \adm_{\distPairs}
+  \;=\;
+  \fateMap^{-1}(\admRegion)
+  \;=\;
+  \bigl\{(x,y)\in\distPairs
+    : \fateMap(x,y)\in\admRegion\bigr\}.
+\]
+Conversely, every admissibility manifold in the sense of
+\EOD{Chapter~14} arises in this way for some choice of
+admissible fate region $\admRegion\subseteq\fateSpace$.
+\begin{proof}
+\emph{Forward direction.} Given $\admRegion\subseteq\fateSpace$,
+the set $\fateMap^{-1}(\admRegion)$ is a subset of $\distPairs$
+consisting precisely of those distinction pairs whose fate
+profile lies in $\admRegion$. By
+\cref{prop:adm-pullback-prop}, this set is open or closed in
+$\distPairs$ according to the topology of $\admRegion$.
+It therefore constitutes an admissibility manifold in the
+distinction-pair space.
+
+\emph{Converse direction.} Let $\mathcal{M}\subseteq\distPairs$
+be any admissibility manifold in the sense of \EOD{Chapter~14}:
+a set of distinction pairs satisfying some admissibility
+criterion expressed in terms of future reachability volume.
+Define $\admRegion = \fateMap(\mathcal{M})\subseteq\fateSpace$.
+Then $\mathcal{M}\subseteq\fateMap^{-1}(\admRegion)$.
+For the reverse inclusion, note that any pair with fate profile
+in $\fateMap(\mathcal{M})$ has a fate profile achievable by
+some admissible pair, hence itself satisfies the admissibility
+criterion. Thus $\mathcal{M}=\fateMap^{-1}(\admRegion)$.
+\end{proof}
+\end{metatheorem}
+
+\begin{trilogylink}{Admissibility Geometry in the Outer Volumes}
+In \textit{Persistence Before Truth}, admissibility appears as
+a constraint on reconstruction operators: only admissible
+reconstructions are available to restore a distinction.
+
+In \textit{The Ecology of Distinctions}, admissibility becomes
+a geometric manifold $\adm(x,t)$ in state space whose volume
+$\Vol(\adm(t))$ measures future possibility. The Generative
+Admissibility Principle (\EOD{Chapter~15}) identifies
+$\Vol(\adm(t))$ as the primary conserved quantity.
+
+The Admissibility Pullback Theorem shows that both of these are
+the same object viewed through different projections of the
+same fate-geometric structure. The admissibility manifold is
+not primitive in either outer volume: it is the preimage of a
+region in fate space under the fate map. The central
+quantity $\Vol(\adm(t))$ is therefore the volume of a pullback,
+and its conservation or growth is a consequence of the fate
+map's relationship to the operator monoid.
+\end{trilogylink}
+
+
+Selection and Dynamics
+
+
+\begin{proposition}{Admissible Evolution Remains Admissible}
+  {adm-invariant}
+Let the operator family $\transfam$ be admissible in the sense
+that every $T\in\transfam$ satisfies
+$T^*(\admRegion)\subseteq\admRegion$ (the induced action on fate
+profiles preserves the admissible region). Then admissible
+operators map admissible distinction pairs to admissible
+distinction pairs:
+\[
+  (x,y)\in\fateMap^{-1}(\admRegion)
+  \;\Longrightarrow\;
+  T(x,y)\in\fateMap^{-1}(\admRegion).
+\]
+\begin{proof}
+If $\fateMap(x,y)\in\admRegion$ and $T^*(\admRegion)
+\subseteq\admRegion$, then
+$\fateMap(T(x,y)) = T^*(\fateMap(x,y))\in\admRegion$.
+\end{proof}
+\end{proposition}
+
+This proposition shows that admissibility is preserved under
+admissible evolution not by accident but by definition: the
+condition $T^*(\admRegion)\subseteq\admRegion$ is exactly
+what it means for an operator to be admissible in the
+fate-theoretic sense. Repair, memory, and coordination are
+admissible because they keep fate profiles within $\admRegion$;
+extractive and destructive operators are inadmissible because
+they push fate profiles outside it.
+
+\begin{chapsummary}
+\item Admissibility is reinterpreted as selection on fates: a
+  distinction pair is admissible iff its fate profile lies in
+  the admissible region $\admRegion\subseteq\fateSpace$.
+\item The admissibility operator $\admOp$ is the restriction of
+  $\distPairs$ to admissible pairs; it is the pullback
+  $\fateMap^{-1}(\admRegion)$.
+\item The Admissibility Pullback Theorem establishes that every
+  admissibility manifold in state space arises as such a
+  pullback. Admissibility geometry in the outer volumes is a
+  shadow cast by fate geometry.
+\item Admissible evolution preserves admissibility iff the
+  operator family preserves $\admRegion$ in fate space.
+\end{chapsummary}
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter{Curvature of Fate Space}
+\label{ch:fate-curvature}
+
+\begin{epigraph}{Some regions of possibility are easy to enter
+  and difficult to leave. Others are difficult to reach but
+  easy to destroy.}{The geometry underlying this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Introduce the fate potential as a smooth function on the
+  non-collapse component of fate space.
+\item Define fate curvature as the Hessian of the fate potential.
+\item Classify fate regions as stable (positive curvature),
+  flat, or unstable (negative curvature).
+\item Prove the Repair Basin Theorem: positive curvature implies
+  a locally self-correcting fate region.
+\item Prove the Boundary Curvature Theorem: the curvature of
+  the fate potential diverges at the admissibility boundary.
+\item Establish the link between Chapters 12 and 14 via curvature.
+\end{objectives}
+
+The previous chapters established fate distance, continuity,
+and the singular strata where the fate map fails to be
+continuous. What they did not address is how the space
+\emph{bends}. Two fate profiles may be equally distant from
+a third while requiring radically different amounts of work
+to move between: one transition may be a gentle drift, another
+may require fighting against a strong restoring force. This
+asymmetry is curvature.
+
+Curvature of fate space is the local geometric structure that
+determines whether a distinction pair, once perturbed from its
+fate profile, tends to return or to drift away. It distinguishes
+basins of attraction from unstable saddles in fate geometry.
+It also, as this chapter shows, diverges at the admissibility
+boundary --- providing the differential-geometric interpretation
+of why collapse is not merely topologically irreversible but
+dynamically catastrophic.
+
+
+The Fate Potential
+
+
+To define curvature we require a scalar field on fate space
+measuring the difficulty of continuation. We work throughout
+on the non-collapse component $\fatePos = \fateComp{1}$,
+where the fate metric of Chapter~11 is defined.
+
+\begin{axiom}{Non-Negative Continuation Cost}{nonneg-cost}
+Continuation is never free. There exists a smooth function
+$\fatePot:\fatePos\to\mathbb{R}_{\ge 0}$, the
+\emph{fate potential}, such that:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item $\fatePot(s)\ge 0$ for all $s\in\fatePos$, with
+    $\fatePot(s)=0$ iff $s$ is a fixed point of all admissible
+    operators (a state of zero reconstruction cost);
+  \item $\fatePot$ is smooth on $\fatePos$;
+  \item $\fatePot(s)\to+\infty$ as $s\to\partial\admRegion$,
+    the admissibility boundary.
+\end{enumerate}
+\end{axiom}
+
+The condition $\fatePot\to+\infty$ at $\partial\admRegion$ is
+the key property: it encodes the intuition that approaching the
+admissibility boundary requires increasing work, and that the
+boundary itself is unreachable at finite cost. This is analogous
+to a confining potential in physics, or to the infinite cost of
+reaching the semantic horizon in \EOD{Definition~5.3}.
+
+\begin{remark}{Interpretation of $\fatePot$}{pot-interp}
+The fate potential $\fatePot(s)$ measures the expected
+reconstruction cost to maintain a distinction pair with fate
+profile $s$ against degradation by the operator family
+$\transfam$. Low values of $\fatePot$ indicate that the system
+maintains its distinctions cheaply. High values indicate that
+substantial repair effort is needed. The potential therefore
+encodes the energetics of persistence.
+
+In biological terms: $\fatePot$ is the metabolic cost of
+homeostasis. In institutional terms: the organizational effort
+required to maintain coherence. In cognitive terms: the
+attentional resources required to preserve a memory.
+\end{remark}
+
+
+Fate Curvature
+
+
+\begin{definition}{Fate Curvature}{fate-curvature-defn}
+The \emph{fate curvature tensor} at $s\in\fatePos$ is the
+Hessian of the fate potential:
+\[
+  \fateKurv(s)
+  \;=\;
+  \nabla^2 \fatePot(s)
+  \;\in\;
+  \mathrm{Sym}^2\bigl((\fateTan{s})^*\bigr),
+\]
+the symmetric bilinear form on the tangent space
+$\fateTan{s}\cong\mathbb{R}^{2+k}$ given by the matrix of
+second partial derivatives of $\fatePot$.
+
+The \emph{scalar fate curvature} at $s$ is
+\[
+  \kappa(s) \;=\; \operatorname{tr}(\fateKurv(s))
+  \;=\; \Delta \fatePot(s),
+\]
+the Laplacian of $\fatePot$.
+\end{definition}
+
+\begin{definition}{Fate Region Classification}{fate-region-class}
+A connected open set $U\subseteq\fatePos$ is:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item \emph{a repair basin} if $\kappa(s)>0$ for all
+    $s\in U$ (locally convex potential, locally stable);
+  \item \emph{flat} if $\kappa(s)=0$ for all $s\in U$
+    (harmonic potential, neutrally stable);
+  \item \emph{repulsive} if $\kappa(s)<0$ for all $s\in U$
+    (locally concave potential, locally unstable).
+\end{itemize}
+\end{definition}
+
+The classification parallels the classification of critical
+points in Morse theory: repair basins are neighborhoods of
+local minima, flat regions are locally harmonic, and repulsive
+regions are neighborhoods of saddle points or maxima. However,
+the fate curvature is a field defined everywhere in $\fatePos$,
+not just at critical points.
+
+
+Repair Basins
+
+
+\begin{theorem}{Repair Basin Theorem}{repair-basin}
+Let $U\subseteq\fatePos$ be a connected open set with
+$\kappa(s)>0$ for all $s\in U$, and let $s_0\in U$ be a
+local minimum of $\fatePot\!\restriction_U$. Then for every
+$s_1\in U$ sufficiently close to $s_0$, there exists an
+admissible repair trajectory from $s_1$ to $s_0$ along which
+$\fatePot$ is non-increasing.
+\begin{proof}
+The local minimum $s_0$ satisfies $\nabla\fatePot(s_0)=0$
+and $\fateKurv(s_0)$ positive definite. By continuity of
+$\fateKurv$, there exists an open ball $B_\delta(s_0)\subseteq U$
+throughout which $\fateKurv$ is positive definite, hence $\fatePot$
+is strictly convex on $B_\delta(s_0)$.
+
+For $s_1\in B_\delta(s_0)\setminus\{s_0\}$, the negative
+gradient $-\nabla\fatePot(s_1)$ points strictly toward $s_0$
+by strict convexity. Define the repair trajectory
+$\fateTraj:[0,\infty)\to B_\delta(s_0)$ by the gradient flow
+\[
+  \dot\fateTraj(t) = -\nabla\fatePot(\fateTraj(t)),
+  \qquad
+  \fateTraj(0) = s_1.
+\]
+Along this trajectory,
+\[
+  \frac{d}{dt}\fatePot(\fateTraj(t))
+  = \nabla\fatePot\cdot\dot\fateTraj
+  = -\|\nabla\fatePot\|^2 \le 0,
+\]
+with equality only at $s_0$. Therefore $\fatePot$ is
+non-increasing along $\fateTraj$, and $\fateTraj(t)\to s_0$
+as $t\to\infty$ by Lyapunov stability of the gradient flow
+in a strictly convex region.
+
+This gradient-flow trajectory is an admissible repair trajectory:
+it realizes the repair operator $\repair$ by following the
+direction of decreasing reconstruction cost within the
+admissible region.
+\end{proof}
+\end{theorem}
+
+\begin{corollary}{Repair Basins are Self-Correcting}{self-correct}
+In a repair basin, every sufficiently small disturbance from
+the equilibrium fate profile admits a repair path returning to
+equilibrium. The equilibrium is Lyapunov stable.
+\end{corollary}
+
+The Repair Basin Theorem gives a geometric interpretation to
+the concept of repair that was introduced algebraically in
+Chapter~7. Repair is not an arbitrary process; it is
+gradient descent in the fate potential. A distinction pair that
+has drifted from its equilibrium fate profile is pulled back by
+the curvature of the basin.
+
+
+Boundary Curvature Divergence
+
+
+The admissibility boundary $\partial\admRegion$ separates the
+admissible fate region from the inadmissible. Axiom~1 requires
+the fate potential to diverge there. The curvature inherits
+this divergence.
+
+\begin{theorem}{Boundary Curvature Theorem}{boundary-curv}
+Under Axiom~\ref{axm:nonneg-cost}, the scalar fate curvature
+$\kappa(s)$ diverges as $s\to\partial\admRegion$:
+\[
+  \kappa(s)\;\longrightarrow\;+\infty
+  \qquad
+  \text{as }
+  d_{\fateSpace}(s,\partial\admRegion)\to 0.
+\]
+\begin{proof}
+Let $s_n\in\fatePos$ be a sequence with
+$d_{\fateSpace}(s_n,\partial\admRegion)\to 0$.
+By Axiom~\ref{axm:nonneg-cost}(iii), $\fatePot(s_n)\to+\infty$.
+
+Since $\fatePot$ is smooth and non-negative with $\fatePot\to
++\infty$ at $\partial\admRegion$, and $\fatePos$ is a bounded
+domain in $\mathbb{R}^{2+k}$ (after appropriate compactification),
+the function $\fatePot$ restricted to any sequence approaching
+$\partial\admRegion$ must grow without bound. For a smooth
+confining potential, the Hessian must also grow without bound:
+if $\nabla^2\fatePot$ remained bounded along $s_n$, the
+potential could grow at most quadratically in the distance to
+$\partial\admRegion$, but a compactness argument shows this
+contradicts $\fatePot\to+\infty$ at the boundary in finite
+$d_{\fateSpace}$-distance.
+
+Therefore $\fateKurv(s_n)$ is unbounded, and in particular
+$\kappa(s_n)=\operatorname{tr}(\fateKurv(s_n))\to+\infty$.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Gravitational Analogy}{grav-analogy}
+The Boundary Curvature Theorem makes the admissibility boundary
+behave like a gravitational singularity: curvature diverges as
+the boundary is approached. Just as a massive body warps
+spacetime so severely that geodesics cannot escape the event
+horizon, the admissibility boundary warps fate space so severely
+that admissible trajectories cannot approach it without
+increasing cost.
+
+This provides the differential-geometric version of the
+Collapse Discontinuity Theorem (\cref{meta:collapse-disc} of
+Chapter~10): collapse is not merely a topological event. It is
+the endpoint of a path of diverging curvature through fate space.
+The stratum $\strataC$ is both the topological boundary between
+connected components and the geometric locus of infinite
+curvature.
+\end{remark}
+
+\begin{remark}{Link Between Chapters 12 and 14}{ch12-ch14-link}
+The Boundary Curvature Theorem provides the missing geometric
+link between Chapter~12 (Fate Singularities) and Chapter~14
+(Object Stability). Chapter~12 showed that $\strataC$ is
+topologically singular. Chapter~14 will show that objects are
+stable fate-uniform regions in $\operatorname{int}(\admRegion)$.
+This chapter shows that the geometry explains \emph{why}
+$\operatorname{int}(\admRegion)$ is the right condition: regions
+in the interior are repair basins; regions near $\partial\admRegion$
+face diverging curvature and are dynamically fragile; regions
+on $\strataC$ are topologically disconnected. The progression
+is curvature → stability → objecthood.
+\end{remark}
+
+\begin{chapsummary}
+\item The fate potential $\fatePot:\fatePos\to\mathbb{R}_{\ge0}$
+  encodes reconstruction cost; it diverges at the admissibility
+  boundary by Axiom~1.
+\item Fate curvature $\fateKurv=\nabla^2\fatePot$ classifies fate
+  regions as repair basins ($\kappa>0$), flat ($\kappa=0$),
+  or repulsive ($\kappa<0$).
+\item The Repair Basin Theorem: positive curvature produces
+  Lyapunov-stable repair equilibria; repair is gradient descent
+  in $\fatePot$.
+\item The Boundary Curvature Theorem: curvature diverges at
+  $\partial\admRegion$, making admissibility boundaries
+  geometrically catastrophic, not merely topological.
+\item This chapter bridges Chapter~12 (singular strata as
+  topological events) and Chapter~14 (objects as stable regions)
+  by showing the curvature mechanism that generates stability.
+\end{chapsummary}
+
+
+
+
+
+\chapter{Fate Flows and Geodesics}
+\label{ch:fate-geodesics}
+
+\begin{epigraph}{Persistence is not remaining where you are.
+  Persistence is following a path that continues to exist.}
+  {The variational principle underlying this chapter}
+\end{epigraph}
+
+\begin{objectives}
+\item Define fate trajectories and continuation cost.
+\item Establish the variational principle for optimal repair
+  and persistence.
+\item Prove the Minimal Repair Path Theorem: optimal repair
+  paths exist and are fate geodesics.
+\item Prove the Persistence Geodesic Theorem: persistent
+  systems follow minimum-cost paths through fate space.
+\item Show that RSVP field equations are a special case of
+  fate geodesic dynamics.
+\end{objectives}
+
+The preceding chapter introduced the local geometry of fate
+space through the fate potential and its curvature. This
+chapter develops the global dynamics: how systems move through
+fate space, what determines the cost of movement, and what
+paths minimize that cost. The central insight is that repair
+is not a fixed procedure but a geodesic problem: among all
+paths in fate space that restore a distinction from a degraded
+fate profile to an admissible one, some paths require less
+work than others, and the optimal paths are fate geodesics.
+
+
+Fate Trajectories
+
+
+\begin{definition}{Fate Trajectory}{fate-traj}
+A \emph{fate trajectory} is a continuous map
+$\fateTraj:[0,T]\to\fatePos$ describing the evolution of
+a fate profile over time. The \emph{fate velocity field} is
+\[
+  \fateVel(t) = \dot{\fateTraj}(t)
+  \;\in\; \fateTan{\fateTraj(t)},
+\]
+and the \emph{fate acceleration} is
+\[
+  \fateAcc(t) = \ddot{\fateTraj}(t).
+\]
+A trajectory is \emph{admissible} if $\fateTraj(t)\in\admRegion$
+for all $t\in[0,T]$.
+\end{definition}
+
+\begin{definition}{Continuation Cost and Action}{cont-action}
+The \emph{continuation cost function}
+$\contCost:\fatePos\to\mathbb{R}_{\ge0}$ measures the
+instantaneous cost of maintaining a fate profile. The
+\emph{continuation action} of a trajectory $\fateTraj$ is
+\[
+  \contAction[\fateTraj]
+  = \int_0^T \contCost(\fateTraj(t))\,dt.
+\]
+A natural choice is $\contCost = \fatePot$ (the fate potential),
+but the theory accommodates any non-negative smooth cost function
+satisfying $\contCost\to+\infty$ at $\partial\admRegion$.
+\end{definition}
+
+The continuation action measures the total work required to
+maintain a distinction pair on the trajectory $\fateTraj$ from
+time~$0$ to time~$T$. Trajectories of low action correspond to
+cheap, robust persistence; trajectories of high action correspond
+to costly, fragile persistence.
+
+
+Geodesics in Fate Space
+
+
+\begin{definition}{Fate Geodesic}{fate-geodesic-defn}
+A \emph{fate geodesic} is a trajectory
+$\fateGeo:[0,T]\to\fatePos$ that is a local minimizer of the
+continuation action $\contAction$ subject to its endpoints:
+\[
+  \fateGeo = \arg\min\bigl\{
+    \contAction[\fateTraj] : \fateTraj(0)=s_0,\,\fateTraj(T)=s_1,\,
+    \fateTraj\text{ admissible}
+  \bigr\}.
+\]
+\end{definition}
+
+\begin{theorem}{Minimal Repair Path Theorem}{min-repair}
+Let $\admRegion\subseteq\fatePos$ be closed, let
+$s_0,s_1\in\operatorname{int}(\admRegion)$, and let $\contCost$
+be a non-negative smooth function with $\contCost\to+\infty$
+at $\partial\admRegion$. Then there exists an admissible fate
+geodesic $\fateGeo$ connecting $s_0$ to $s_1$ that minimizes
+$\contAction$ over all admissible trajectories with the same
+endpoints.
+\begin{proof}
+Let $\Gamma$ be the set of all admissible trajectories from
+$s_0$ to $s_1$: continuous paths in $\admRegion$ with the
+given endpoints. Since $s_0,s_1\in\operatorname{int}(\admRegion)$
+and $\admRegion$ is connected (as a convex or path-connected
+admissible fate region), $\Gamma$ is non-empty.
+
+The action $\contAction[\fateTraj]=\int_0^T\contCost(\fateTraj(t))dt$
+is bounded below by $0$ since $\contCost\ge 0$. Let
+$\alpha=\inf_{\fateTraj\in\Gamma}\contAction[\fateTraj]$ and
+let $(\fateTraj_n)$ be a minimizing sequence with
+$\contAction[\fateTraj_n]\to\alpha$.
+
+Since $\contCost\to+\infty$ at $\partial\admRegion$, trajectories
+that approach $\partial\admRegion$ incur large action; thus the
+minimizing sequence stays in a compact subset of $\admRegion$.
+By the Arzel\`{a}--Ascoli theorem (uniform equicontinuity from
+the bounded action and $\contCost$ bounded away from $+\infty$
+in the compact subset), $(\fateTraj_n)$ has a uniformly
+convergent subsequence $\fateTraj_{n_k}\to\fateGeo$.
+
+The limit $\fateGeo$ is continuous, admissible (since $\admRegion$
+is closed), connects $s_0$ to $s_1$, and satisfies
+$\contAction[\fateGeo]\le\liminf_k\contAction[\fateTraj_{n_k}]=\alpha$
+by lower semicontinuity of the action. Hence $\fateGeo$ is a
+minimizer.
+\end{proof}
+\end{theorem}
+
+\begin{corollary}{Repair Chooses the Cheapest Path}{repair-cheapest}
+Optimal repair selects the shortest admissible trajectory in
+fate space: the repair path that minimizes total continuation
+cost. Repair is not arbitrary; it is a solution to a variational
+problem.
+\end{corollary}
+
+
+The Euler--Lagrange Equations of Fate
+
+
+The Minimal Repair Path Theorem guarantees existence of a
+geodesic. The Euler--Lagrange equations characterize it.
+
+\begin{proposition}{Fate Geodesic Equations}{geodesic-eqns}
+An admissible trajectory $\fateGeo$ minimizes
+$\contAction[\fateTraj]=\int_0^T\contCost(\fateTraj)dt$
+subject to its endpoints iff it satisfies the
+Euler--Lagrange equation
+\[
+  \frac{d}{dt}\frac{\partial\contCost}{\partial\fateVel}
+  - \frac{\partial\contCost}{\partial\fateTraj}
+  = 0.
+\]
+When $\contCost=\fatePot(\fateTraj)$ is independent of
+$\fateVel$, this reduces to
+\[
+  -\nabla\fatePot(\fateTraj(t)) = 0,
+\]
+so geodesics are level curves of $\fatePot$ --- paths along
+which the fate potential is constant. When
+$\contCost=\frac{1}{2}|\fateVel|^2+\fatePot(\fateTraj)$
+(kinetic plus potential), the equation becomes
+\[
+  \ddot{\fateTraj}(t) = -\nabla\fatePot(\fateTraj(t)),
+\]
+Newton's second law in fate space.
+\begin{proof}
+Standard calculus of variations: the action is stationary at
+$\fateGeo$ iff it satisfies the Euler--Lagrange equation for
+the Lagrangian $\contCost$.
+\end{proof}
+\end{proposition}
+
+\begin{remark}{Two Natural Lagrangians}{two-lagrangians}
+The two Lagrangians in \cref{prop:geodesic-eqns} capture
+different dynamical regimes.
+
+The potential-only Lagrangian $\contCost=\fatePot$ describes
+\emph{quasi-static repair}: the system moves along paths of
+constant potential, spending exactly the reconstruction cost
+required to maintain its current fate profile. This is
+appropriate for slow processes where the kinetic cost of
+changing fate profiles is negligible.
+
+The kinetic-plus-potential Lagrangian
+$\contCost=\frac{1}{2}|\fateVel|^2+\fatePot$ describes
+\emph{dynamic fate evolution}: the system has inertia in fate
+space. This is the natural setting for physical processes
+where distinction pairs have a characteristic timescale of
+fate change, and the cost of rapid fate changes (large
+$|\fateVel|$) is penalized alongside the reconstruction cost.
+\end{remark}
+
+
+Persistent Systems Follow Geodesics
+
+
+\begin{theorem}{Persistence Geodesic Theorem}{persist-geodesic}
+A system that minimizes total continuation cost over its
+lifespan follows a fate geodesic. Equivalently, persistence
+under resource constraints is geodesic motion in fate space.
+\begin{proof}
+Let $\Sigma$ be a system with an admissible fate trajectory
+$\fateTraj:[0,T]\to\admRegion$. Suppose $\Sigma$ minimizes
+$\contAction[\fateTraj]$ over all admissible trajectories with
+the same initial fate profile $\fateTraj(0)=s_0$, subject to
+reaching a target fate class at time $T$. By the Minimal Repair
+Path Theorem (\cref{thm:min-repair}), the minimizer $\fateGeo$
+exists and is a fate geodesic. Therefore the optimal trajectory
+of a persistence-minimizing system is exactly $\fateGeo$.
+
+The interpretation: a system that survives with minimum
+reconstruction effort follows the path of least continuation
+cost through fate space. Organisms, memories, theories, and
+institutions that persist over long timescales do so by
+finding and following low-action paths --- geodesics of fate
+geometry.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Biological and Institutional Interpretation}
+  {bio-inst-geodesic}
+The Persistence Geodesic Theorem is a variational principle
+for survival. It does not say that all persistent systems are
+optimal in any absolute sense. It says that systems that
+persist with minimum expenditure of repair resources do so by
+following geodesic paths through fate space.
+
+For biological organisms, this corresponds to the principle of
+metabolic efficiency: organisms that survive with lower energy
+expenditure per unit of homeostatic maintenance are, in this
+sense, following fate geodesics. For institutions, it
+corresponds to organizational efficiency: institutions that
+maintain their operative distinctions with minimal overhead are
+on low-action paths. For scientific theories, it corresponds to
+parsimony: theories that maintain explanatory distinctions with
+minimal auxiliary hypotheses are fate-geodesic.
+\end{remark}
+
+
+RSVP as Fate Transport
+
+
+The Relativistic Scalar-Vector Plenum, developed as a physical
+field theory in \EOD{Chapter~16}, becomes a special case of
+fate geodesic dynamics when interpreted in the present framework.
+
+\begin{proposition}{RSVP Equations as Fate Geodesics}{rsvp-fate}
+The RSVP field equations for a scalar capacity field $\Phi$,
+vector transport field $\vec{v}$, and constraint field $S$
+can be recovered as the Euler--Lagrange equations of the
+continuation action
+\[
+  \contAction[\Phi,\vec{v},S]
+  = \int_0^T\!\!\int_\Omega
+  \Bigl[
+    \tfrac{1}{2}|\nabla\Phi|^2
+    + \vec{v}\cdot\nabla\Phi
+    + \lambda S\Phi
+  \Bigr]\,dx\,dt,
+\]
+where $\Omega$ is the spatial domain and $\lambda$ is a
+Lagrange multiplier enforcing the constraint.
+\begin{proof}
+Taking variations of $\contAction$ with respect to $\Phi$,
+$\vec{v}$, and $S$ and setting them to zero yields the
+RSVP field equations as established in \EOD{Chapter~16}.
+The RSVP system is therefore a particular Lagrangian on the
+space of fate trajectories, with the scalar field playing
+the role of the survival ratio coordinate of $\fateSpace$
+and the vector field realizing fate transport.
+\end{proof}
+\end{proposition}
+
+\begin{trilogylink}{RSVP Inside Fate Geometry}
+This proposition establishes the containment
+\[
+  \text{RSVP} \;\subset\; \text{Fate Geometry}.
+\]
+The RSVP framework of \EOD{Chapter~16} is not a separate
+physical theory but a particular instantiation of fate geodesic
+dynamics in a field-theoretic setting. The scalar field $\Phi$
+encodes the survival ratio coordinate of $\fateSpace$; the
+vector field $\vec{v}$ encodes fate transport; the constraint
+field $S$ encodes the admissibility boundary.
+
+This means that the physical derivation of gravity as
+reachability optimization in \EOD{Chapter~17} is a consequence
+of fate geometry, not an independent result. Gravity, on this
+reading, is the curvature of fate space induced by the
+distribution of distinction pairs in physical space.
+\end{trilogylink}
+
+\begin{chapsummary}
+\item Fate trajectories are continuous paths in $\fatePos$;
+  their continuation action $\contAction[\fateTraj]$ measures
+  total reconstruction cost.
+\item The Minimal Repair Path Theorem: for closed admissible
+  regions and confining cost functions, optimal repair paths
+  exist and are fate geodesics (direct method of the calculus
+  of variations).
+\item The Persistence Geodesic Theorem: systems that persist
+  with minimum repair cost follow fate geodesics.
+\item The Euler--Lagrange equations of fate: potential-only
+  Lagrangian gives quasi-static repair; kinetic-plus-potential
+  Lagrangian gives Newton's second law in fate space.
+\item RSVP is a special case of fate geodesic dynamics: the
+  RSVP field equations are the Euler--Lagrange equations of a
+  specific continuation action.
+\end{chapsummary}
+
+
+
+
+
+
+\chapter{Objects as Stable Fate Regions}
+\label{ch:objects}
+
+\begin{epigraph}{What we call a thing is the name we give to a
+  pattern of fate that has held long enough to be noticed.}
+  {Paraphrase of Alfred North Whitehead}
+\end{epigraph}
+
+\begin{objectives}
+\item Define fate-uniform regions of $\distPairs$.
+\item Define objects as connected, fate-uniform, admissibly
+  stable regions.
+\item Prove the Object Stability Theorem.
+\item Show that object boundaries coincide with singular strata.
+\item Demonstrate that objecthood is an ecological achievement,
+  not a primitive ontological category.
+\end{objectives}
+
+The first chapters of this volume deliberately avoided
+objecthood. Objects are familiar; fates are not. The preceding
+development existed precisely to postpone discussion of objects
+until the geometry that underlies them became visible.
+
+Chapter~10 defined the fate map. Chapter~11 showed the fate
+map is generically continuous. Chapter~12 identified where it
+fails to be continuous. Chapter~13 reinterpreted admissibility
+as fate selection. This chapter completes the argument by
+showing that objects --- the familiar entities of ontology and
+science --- are what fate-uniform admissibly stable regions
+look like from the outside.
+
+
+Fate-Uniform Regions
+
+
+\begin{definition}{Fate-Uniform Region}{fate-uniform}
+A connected open set $U\subseteq\distPairs$ is
+\emph{$\fateUnif$} if the fate map $\fateMap$ is constant
+throughout $U$:
+\[
+  \forall\, p,q\in U,\quad \fateMap(p)=\fateMap(q).
+\]
+\end{definition}
+
+A fate-uniform region is a connected set of distinction pairs
+that all share the same fate profile: the same survival ratio,
+repair efficiency, collapse status, and transport distances.
+Within such a region, every pair of states has the same
+prospects. The region behaves, from the perspective of fate
+geometry, as a single undifferentiated entity.
+
+\begin{proposition}{Fate-Uniform Regions and Fate Classes}
+  {fate-unif-classes}
+Every fate-uniform region $U$ is contained in a single fate
+class $\fateClass{p}$ for any $p\in U$.
+\begin{proof}
+For any $p,q\in U$, $\fateMap(p)=\fateMap(q)$ by definition
+of fate-uniformity. Therefore $p$ and $q$ belong to the same
+fate class.
+\end{proof}
+\end{proposition}
+
+\begin{remark}{Maximality}{fate-unif-maximal}
+A maximal fate-uniform region is a connected component of a
+level set of $\fateMap$. Objects, as defined below, are not
+required to be maximal: a region may be fate-uniform and
+object-like while being a proper subset of a larger fate class.
+The relevant condition is stability, not maximality.
+\end{remark}
+
+
+Objects
+
+
+\begin{definition}{Object}{object-defn}
+An \emph{object} (relative to an admissible fate region
+$\admRegion$ and operator family $\transfam$) is a connected
+$\fateUnif$ region $U\subseteq\distPairs$ such that
+\[
+  \fateMap(U)\;\subseteq\;\operatorname{int}(\admRegion),
+\]
+where $\operatorname{int}(\admRegion)$ denotes the topological
+interior of the admissible fate region in $\fateSpace$.
+\end{definition}
+
+This definition replaces identity-based and persistence-based
+accounts of objecthood with a fate-based account. An object is
+not a thing that persists; it is a region of fate space that
+is both uniform (internally coherent) and stable (safely within
+the admissible region). The condition that the fate profile lie
+in the \emph{interior} of $\admRegion$ --- rather than merely
+in $\admRegion$ --- is essential for the stability theorem below.
+
+
+Object Boundaries and Singular Strata
+
+
+\begin{proposition}{Object Boundaries are Fate Singularities}
+  {obj-bdy-sing}
+Let $O$ be an object. Then the boundary $\objBdy$ of $O$ in
+$\distPairs$ satisfies
+\[
+  \objBdy\;\subseteq\;\singSet.
+\]
+\begin{proof}
+Suppose $(x,y)\in\objBdy$. Then every neighbourhood of $(x,y)$
+contains points of $O$ (where $\fateMap$ is constant at
+$\fateMap(O)$) and points outside $O$ (where $\fateMap$ takes
+a different value). Therefore $\fateMap$ is not constant in any
+neighbourhood of $(x,y)$, hence not continuous at $(x,y)$.
+Thus $(x,y)\in\singSet$.
+\end{proof}
+\end{proposition}
+
+\begin{remark}{Ontological Significance of Strata}
+  {strata-onto}
+\Cref{prop:obj-bdy-sing} shows that the boundary of an object
+is always a fate singularity. Combined with the taxonomy of
+\cref{defn:fate-strata}, this means every object boundary is
+classifiable as a collapse boundary, a repair threshold, a
+transport horizon, or a forgetting boundary. The edge of an
+object is not merely a geometric demarcation; it is a surface
+at which the qualitative fate regime changes.
+
+This gives a rigorous meaning to the intuitive observation that
+the boundaries of natural objects are sites of qualitative
+change: the surface of a cell is a transport and repair
+boundary; the edge of a scientific discipline is a collapse
+and forgetting boundary; the border of a legal jurisdiction is
+an admissibility boundary.
+\end{remark}
+
+
+Object Stability
+
+
+Not every fate-uniform region constitutes a stable object.
+A region may lie close to $\singSet$, in which case a small
+perturbation may destroy it. Stability requires positive
+separation from the singular boundary.
+
+\begin{definition}{Fate Margin}{fate-margin-defn}
+The \emph{fate margin} of a fate-uniform region $U$ is
+\[
+  \fateMargin{U}
+  \;=\;
+  d_{\fateSpace}\bigl(
+    \fateMap(U),\;\partial\admRegion
+  \bigr),
+\]
+the fate distance from the fate profile of $U$ to the boundary
+of the admissible region.
+\end{definition}
+
+Regions with $\fateMargin{U}>0$ lie safely within the
+admissible territory. Regions with $\fateMargin{U}=0$ lie at
+the boundary of admissibility and are therefore critical: an
+arbitrarily small perturbation of the operator family or the
+distinction pairs may move them outside $\admRegion$.
+
+\begin{theorem}{Object Stability Theorem}{obj-stability}
+Let $\admRegion$ be a closed admissible fate region and let
+$\transfam$ be an admissible operator family satisfying
+$T^*(\admRegion)\subseteq\admRegion$ for all $T\in\transfam$.
+A connected $\fateUnif$ region $U\subseteq\distPairs^+$ is
+stable under $\transfam$ if and only if
+\[
+  \fateMap(U)\;\subseteq\;\operatorname{int}(\admRegion).
+\]
+\begin{proof}
+\emph{($\Rightarrow$) Stability implies interior.}
+Suppose $\fateMap(U)$ intersects $\partial\admRegion$. Since
+$\admRegion$ is closed, $\partial\admRegion\subseteq\admRegion$,
+so the pair remains in the admissible region. However, since
+$\partial\admRegion$ is also the boundary of the complement of
+$\admRegion$, there exist operator perturbations
+$T_\varepsilon\in\transfam$ with
+$T_\varepsilon^*(\fateMap(U))\not\subseteq\admRegion$ for
+arbitrarily small $\varepsilon>0$. Hence $U$ is not stable
+under all admissible perturbations.

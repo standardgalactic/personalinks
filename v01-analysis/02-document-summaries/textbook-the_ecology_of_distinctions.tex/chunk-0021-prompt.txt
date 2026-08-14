@@ -1,0 +1,2012 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+The MEM\(|\)8 architecture may be summarized by
+
+\[
+M(x,t)
+=
+\sum_i w_i(t)K(x,e_i),
+\]
+
+\[
+E_\theta(t)
+=
+\{x:M(x,t)>\theta\},
+\]
+
+\[
+\chi_\theta(x,t)
+=
+\mathbf 1_{M(x,t)>\theta},
+\]
+
+\[
+H_{\mathrm{rec}}
+=
+-\sum_i\alpha_i\log\alpha_i,
+\]
+
+\[
+\mathrm{FR}(t)
+=
+\frac{\mu(E_\theta(t)\setminus B(r))}
+{\mu(E_\theta(t))},
+\]
+
+and
+
+\[
+\reco(e_i)
+=
+\mu
+\left(
+\{x:w_iK(x,e_i)>\theta\}
+\right).
+\]
+
+
+Computational Admissibility
+
+
+For computational system $C$, reachable volume
+$V_C(t) = |R_C(t)|$.
+
+\begin{theorem}{Computational Admissibility Theorem}{comp-adm-app}
+  A computation is generatively admissible iff
+  $\frac{d}{dt}V_C(t) \ge 0$.
+\end{theorem}
+
+\begin{theorem}{Computational Conservation Law}{comp-conserve}
+  If admissible volume is preserved, distinction capacity
+  cannot collapse:
+  $\frac{dA}{dt} \ge 0 \implies \frac{dD}{dt} \ge -\epsilon$
+  for bounded projection loss $\epsilon$.
+\end{theorem}
+
+\begin{proof}
+  Admissible volume bounds reachability volume.
+  Reachability volume bounds distinction capacity
+  (\cref{thm:reach-dist}).
+  The result follows by transitivity.
+\end{proof}
+
+\begin{definition}[Computational Reachability Entropy]{comp-reachability-entropy}
+
+\[
+S_C(t)
+=
+\log V_C(t).
+\]
+
+\end{definition}
+
+\begin{prop}
+
+\[
+\frac{dS_C}{dt}
+=
+\frac{1}{V_C}
+\frac{dV_C}{dt}.
+\]
+
+\end{prop}
+
+\begin{proof}
+
+Direct differentiation gives
+
+\[
+\frac{d}{dt}
+\log V_C
+=
+\frac{1}{V_C}
+\frac{dV_C}{dt}.
+\]
+
+\end{proof}
+
+
+
+
+
+\chapter{Biological Background}
+\label{app:bio}
+
+Life as Distinction Preservation
+
+
+Let
+
+\[
+\Sigma(t)
+\]
+
+denote a biological system and let
+
+\[
+D(t)
+\]
+
+denote its distinction capacity.
+
+A distinction is any physically realized separation whose
+maintenance contributes to continued organization.
+
+Examples include membrane boundaries, genetic coding
+relationships, immune recognition classes, neural feature
+maps, developmental identities, and ecological niches.
+
+\begin{definition}{Biological Distinction}{biological-distinction}
+A biological distinction is an equivalence relation
+
+\[
+\sim_B
+\]
+
+whose preservation contributes to persistence of the
+system.
+\end{definition}
+
+The total distinction capacity is
+
+\[
+D(t)
+=
+\log |\mathcal P_B(t)|
+\]
+
+where
+
+\[
+\mathcal P_B(t)
+\]
+
+is the biologically relevant partition at time \(t\).
+
+\begin{definition}{Distinction Decay Rate}{distinction-decay}
+The distinction decay rate is
+
+\[
+\delta_D
+=
+-\frac{dD}{dt}.
+\]
+\end{definition}
+
+\begin{definition}{Repair Rate}{repair-rate}
+The distinction repair rate is
+
+\[
+\rho_D
+=
+\frac{dD_R}{dt},
+\]
+
+where \(D_R\) denotes restored distinction capacity.
+\end{definition}
+
+\begin{theorem}{Biological Persistence Theorem}{bio-persistence}
+If
+
+\[
+\rho_D
+<
+\delta_D,
+\]
+
+then biological distinction capacity eventually vanishes.
+\end{theorem}
+
+\begin{proof}
+The net distinction balance is
+
+\[
+\frac{dD}{dt}
+=
+\rho_D-\delta_D.
+\]
+
+If
+
+\[
+\rho_D-\delta_D<0,
+\]
+
+then
+
+\[
+D(t)
+=
+D(0)
++
+(\rho_D-\delta_D)t.
+\]
+
+Therefore
+
+\[
+D(t)\rightarrow0
+\]
+
+in finite time whenever distinction capacity is bounded
+below by zero.
+\end{proof}
+
+\begin{corollary}
+Long-term persistence requires
+
+\[
+\rho_D
+\ge
+\delta_D.
+\]
+\end{corollary}
+
+Thermodynamic Setting
+
+
+Let
+
+\[
+\Sigma
+\]
+
+denote a biological system embedded in environment
+
+\[
+E.
+\]
+
+The Second Law implies
+
+\[
+\frac{dS_{\Sigma\cup E}}{dt}
+\ge0.
+\]
+
+The entropy balance for an open system is
+
+\[
+\frac{dS_\Sigma}{dt}
+=
+\sigma
+-
+J_S,
+\]
+
+where
+
+\[
+\sigma
+\ge0
+\]
+
+is internal entropy production and
+
+\[
+J_S
+\]
+
+is entropy export.
+
+\begin{definition}{Thermodynamic Repair Capacity}{therm-repair-capacity}
+The repair capacity is
+
+\[
+\kappa_T
+=
+J_S-\sigma.
+\]
+\end{definition}
+
+\begin{theorem}{Thermodynamic Persistence Criterion}{therm-persistence}
+A biological system can maintain local order only if
+
+\[
+J_S
+>
+\sigma.
+\]
+\end{theorem}
+
+\begin{proof}
+From the entropy balance equation,
+
+\[
+\frac{dS_\Sigma}{dt}
+=
+\sigma-J_S.
+\]
+
+Local entropy decreases only if
+
+\[
+\frac{dS_\Sigma}{dt}<0.
+\]
+
+Therefore
+
+\[
+J_S>\sigma.
+\]
+\end{proof}
+
+\begin{corollary}
+Repair is necessarily dissipative.
+\end{corollary}
+
+\begin{proof}
+Entropy export requires irreversible processes and
+therefore positive environmental entropy production.
+\end{proof}
+
+Autopoiesis
+
+
+Let
+
+\[
+P
+=
+\{p_1,\ldots,p_n\}
+\]
+
+denote the set of productive processes.
+
+Define a directed graph
+
+\[
+G=(P,E)
+\]
+
+where
+
+\[
+(p_i,p_j)\in E
+\]
+
+iff process \(p_i\) contributes to production of
+\(p_j\).
+
+\begin{definition}{Autopoietic Closure}{autopoietic-closure}
+A production network is autopoietically closed if every
+vertex lies on a directed cycle.
+\end{definition}
+
+\begin{theorem}{Autopoietic Closure Theorem}{autopoietic-closure}
+Autopoietic systems correspond to strongly connected
+directed graphs.
+\end{theorem}
+
+\begin{proof}
+Suppose the graph is strongly connected.
+
+For every pair
+
+\[
+p_i,p_j
+\]
+
+there exists a directed path from
+
+\[
+p_i
+\]
+
+to
+
+\[
+p_j.
+\]
+
+In particular every productive process is reachable from
+the others.
+
+Therefore each process participates in production of every
+other process through some finite chain.
+
+Conversely, if closure holds for all productive
+components, every process must be reachable from every
+other.
+
+Hence the graph is strongly connected.
+\end{proof}
+
+\begin{corollary}
+Removal of a cut vertex may destroy autopoietic closure.
+\end{corollary}
+
+
+Genomes as Historical Archives
+
+
+Evolutionary information:
+$I_E(G) = \log[P(G \mid \text{selection})/P(G \mid \text{random})]$.
+Large values correspond to long histories of selective
+retention. Let $\mu$ = mutation rate, $\rho$ = repair rate.
+
+\begin{theorem}{Genomic Stability Theorem}{genomic-stability}
+  If $\rho < \mu$, long-term distinction preservation
+  is impossible: expected damage grows as $(\mu-\rho)t$.
+\end{theorem}
+
+The repair rate $\rho$ above is not a single mechanism but a
+family of repair pathways with distinct fidelity profiles.
+
+\begin{definition}{Repair Fidelity}{repair-fidelity}
+  A repair operation is \emph{template-based} if it
+  reconstructs a damaged distinction from an independently
+  preserved copy, and \emph{template-free} if it restores
+  continuity (e.g.\ structural integrity) without reference to
+  the original information. Template-based repair has
+  $\reco$ recovery near $1$; template-free repair has
+  $\reco$ recovery strictly less than $1$.
+\end{definition}
+
+Mismatch repair (MMR) is template-based at the single-base
+scale: a MutS/MutL-homolog complex recognises a non-Watson--Crick
+base pair introduced during replication, identifies the newly
+synthesised strand as the error-containing one, and resynthesises
+it using the parental strand as template \parencite{modrich2006}.
+
+\begin{theorem}{Mismatch Repair Fidelity Theorem}{mmr-fidelity}
+  Template-based correction of replication errors reduces
+  residual error frequency by approximately three orders of
+  magnitude relative to uncorrected replication
+  \parencite{modrich2006}.
+\end{theorem}
+
+Homologous recombination (HR) extends the same template-based
+logic to double-strand breaks, using the undamaged sister
+chromatid as template. Non-homologous end-joining (NHEJ), the
+competing pathway for the same lesion, ligates broken ends
+directly with no template.
+
+\begin{theorem}{Recombination Versus End-Joining Theorem}
+  {hr-nhej}
+  Among repair pathways available for a double-strand break,
+  the template-based pathway preserves the distinction at the
+  break site exactly; the template-free pathway restores
+  continuity but typically introduces insertions or deletions
+  at the junction --- a strict loss of $\reco$ relative to the
+  template-based alternative.
+\end{theorem}
+
+
+Immune System as Admissibility Filter
+
+
+Healthy states $A \subseteq X$; immune classifier
+$f: X \to \{0,1\}$.
+Type-I error ($f(x)=0$, $x \in A$): missed pathogen.
+Type-II error ($f(x)=1$, $x \notin A$): autoimmunity.
+Cancer corresponds to systematic Type-I failure.
+
+\begin{theorem}{Cancer Continuation Theorem}{cancer-cont}
+  Tumour success and organism admissibility are
+  anti-correlated: increasing tumour continuation reduces
+  organism admissible volume $V_A(t) \to 0$.
+\end{theorem}
+
+The classifier $f$ is not static. Following first exposure to a
+pathogen-distinction $x$, a subpopulation of antigen-specific
+lymphocytes persists as memory cells long after the initial
+response resolves.
+
+\begin{definition}{Immunological Memory}{immune-memory}
+  Let $\tau(x)$ denote the time required for $f$ to correctly
+  resolve a distinction $x \in A$. Immunological memory is the
+  property that, following a first encounter with $x$, $\tau(x)$
+  is reduced for all subsequent encounters, with the magnitude
+  of response simultaneously increased.
+\end{definition}
+
+\begin{theorem}{Memory as Pre-Cached Repair Theorem}
+  {memory-precached}
+  Immunological memory is repair capacity stored in advance of
+  damage rather than synthesised in response to it: for
+  previously encountered $x$, recoverability $\reco(x,t)$ is
+  bounded below by a constant independent of $t$; for novel
+  $x$, $\reco(x,t)$ must be generated from the naive repertoire
+  at the time of exposure.
+\end{theorem}
+
+\begin{proof}
+  By the Repair Existence Theorem (\cref{thm:repair-exist}),
+  repair requires positive recoverability. Memory cells
+  maintain recoverability for previously catalogued $x$ at a
+  baseline that does not depend on synthesising a new response;
+  naive recognition of novel $x$ requires clonal selection and
+  expansion from a much lower baseline. The asymmetry parallels
+  the asymmetry between a scientific repair algebra acting on a
+  catalogued anomaly versus an uncatalogued one
+  (\cref{thm:anomaly-preserve}).
+\end{proof}
+
+
+Regenerative Stem Cell Systems
+
+
+\begin{definition}{Minimal Regenerative Unit}{min-regen-unit}
+  A \emph{minimal regenerative unit} for a system $\Sigma$ is a
+  substructure $u \subset \Sigma$ from which the repair
+  capacity $\kappa_\Sigma$ of the full system can be
+  reconstructed, given sufficient time and an undamaged
+  environment.
+\end{definition}
+
+\begin{theorem}{Single-Cell Regenerative Sufficiency Theorem}
+  {single-cell-regen}
+  \index{regeneration!biological|textbf}
+  In planarian flatworms, a single clonogenic neoblast --- a
+  pluripotent adult stem cell --- transplanted into a host
+  whose own stem cell population has been eliminated by lethal
+  irradiation is sufficient to restore the host's full
+  regenerative capacity: it proliferates, differentiates into
+  every somatic lineage, and replaces all host tissue
+  \parencite{wagner2011}. The minimal regenerative unit for an
+  entire planarian is, empirically, a single cell.
+\end{theorem}
+
+This is the clearest known biological instance of the claim
+that regenerative capacity is a property of repair-algebra
+access rather than of accumulated structure
+(\cref{thm:regeneration}): the surviving neoblast does not
+inherit the host's prior distinctions; it reconstructs the
+entire distinction manifold from one generatively admissible
+starting point.
+
+Regenerative capacity is not solely intrinsic to the
+regenerating unit, however. A stem cell's capacity to
+self-renew depends on continuous signalling from a surrounding
+microenvironment, its \emph{niche} --- in the intestinal crypt,
+for instance, stem cells are maintained by adjacent Paneth
+cells and stromal Wnt, BMP, Notch, and EGF signals
+\parencite{li2010stemcell}.
+
+\begin{theorem}{Niche Dependence Theorem}{niche-dependence}
+  A stem cell's intrinsic repair capacity and its
+  \emph{exercisable} repair capacity are distinct quantities.
+  Removed from its niche, a stem cell's molecular machinery for
+  self-renewal is typically unchanged, but its exercisable
+  capacity falls to zero: it differentiates or dies rather than
+  self-renewing. Exercisable capacity is a joint property of
+  the unit and its niche, not of the unit alone.
+\end{theorem}
+
+\begin{proof}
+  This is the biological instance of the general principle that
+  a repair algebra which cannot be operated is operationally
+  zero capacity (\cref{thm:regen-epistem}): the niche supplies
+  the operating conditions under which intrinsic repair
+  capacity becomes actual repair.
+\end{proof}
+
+This distinction recurs outside biology: an institution's or a
+scientific field's repair capacity, like a stem cell's, can be
+intrinsically present yet operationally zero if its niche ---
+editorial independence, funding structures, methodological
+diversity --- has been removed (\cref{ch:governance,ch:science-regen}).
+
+
+Developmental Landscapes
+
+
+Let
+
+\[
+U(x)
+\]
+
+denote Waddington's developmental potential.
+
+Dynamics satisfy
+
+\[
+\dot x
+=
+-\nabla U.
+\]
+
+\begin{theorem}{Developmental Stability Theorem}{developmental-stability}
+Every strict local minimum of \(U\) is Lyapunov stable.
+\end{theorem}
+
+\begin{proof}
+Consider
+
+\[
+V(x)
+=
+U(x)-U(x^*).
+\]
+
+Since \(x^*\) is a strict minimum,
+
+\[
+V(x)>0
+\]
+
+for
+
+\[
+x\neq x^*.
+\]
+
+Differentiating along trajectories,
+
+\[
+\dot V
+=
+\nabla U\cdot \dot x.
+\]
+
+Substituting
+
+\[
+\dot x=-\nabla U
+\]
+
+gives
+
+\[
+\dot V
+=
+-\|\nabla U\|^2
+\le0.
+\]
+
+Hence \(V\) is a Lyapunov function.
+\end{proof}
+
+
+Evolutionary Reachability
+
+
+Evolutionary volume $V_E(t) = |R_t|$ where $R_t$ is
+the set of genotypes reachable through mutation and
+selection.
+
+\begin{theorem}{Evolutionary Constraint Theorem}{evo-constraint}
+  Increasing specialisation generally decreases $V_E$
+  (by Theorem~\ref{thm:reach-mono}).
+\end{theorem}
+
+\begin{theorem}{Evolutionary Distinction Theorem}{evo-dist}
+  Major evolutionary transitions increase total
+  distinction capacity: $D_{n+1} > D_n$.
+\end{theorem}
+
+\begin{proof}
+  New organisational levels introduce distinctions
+  unavailable at lower scales
+  \parencite{maynard-smith1995major}.
+\end{proof}
+
+
+Neural Criticality
+
+
+Neural branching ratio $\sigma$:
+subcritical ($\sigma<1$), critical ($\sigma=1$),
+supercritical ($\sigma>1$).
+
+\begin{theorem}{Critical Avalanche Theorem}{critical-avalanche}
+For a branching process with branching ratio
+
+\[
+\sigma,
+\]
+
+expected avalanche size satisfies
+
+\[
+\langle s\rangle
+=
+\frac{1}{1-\sigma}
+\]
+
+for
+
+\[
+\sigma<1.
+\]
+\end{theorem}
+
+\begin{proof}
+The expected descendants are
+
+\[
+1+\sigma+\sigma^2+\cdots.
+\]
+
+Summing the geometric series yields
+
+\[
+\frac{1}{1-\sigma}.
+\]
+\end{proof}
+
+As
+
+\[
+\sigma\rightarrow1^{-},
+\]
+
+the expected avalanche size diverges.
+
+
+Ecological Diversity and Repair
+
+
+Ecosystem as distinction ecology:
+species $\leftrightarrow$ distinction-maintaining processes;
+food web $\leftrightarrow$ repair dependencies.
+
+\begin{theorem}{Ecological Diversity Theorem}{eco-diversity-app}
+  Increasing species diversity weakly increases repair
+  capacity (Diversity--Repair Theorem,
+  \cref{thm:diversity-repair}).
+\end{theorem}
+
+
+Biological Admissibility
+
+
+Let
+
+\[
+X_B
+\]
+
+denote the biological state space of an organism,
+population, lineage, or ecosystem.
+
+Not every biologically reachable state is viable.
+Many reachable states correspond to extinction,
+sterility, developmental failure, mutational meltdown,
+ecological collapse, or loss of adaptive capacity.
+
+The central object of biological admissibility theory is
+therefore not the reachable set itself but the subset of
+reachable states compatible with continued adaptive
+possibility.
+
+\begin{definition}{Biological Admissible Region}{bio-adm-region}
+The biological admissible region is the set
+
+\[
+\mathcal A_B
+\subseteq
+X_B
+\]
+
+consisting of all states from which adaptive,
+developmental, ecological, and reproductive processes
+remain viable.
+\end{definition}
+
+Examples include:
+
+\[
+\text{viable genomes},
+\]
+
+\[
+\text{functional immune states},
+\]
+
+\[
+\text{stable ecological configurations},
+\]
+
+and
+
+\[
+\text{developmentally accessible phenotypes}.
+\]
+
+The admissible region may itself evolve through time as
+environments, developmental constraints, and ecological
+interactions change.
+
+
+Biological Admissibility Volume
+
+
+Let
+
+\[
+\mu
+\]
+
+be a measure on biological state space.
+
+\begin{definition}{Biological Admissibility Volume}{bio-adm-volume}
+The biological admissibility volume is
+
+\[
+V_B(t)
+=
+\mu(\mathcal A_B(t)).
+\]
+\end{definition}
+
+This quantity measures the size of the viable future
+region available to a biological system.
+
+Large admissibility volume corresponds to abundant future
+possibilities.
+
+Small admissibility volume corresponds to fragility.
+
+Vanishing admissibility volume corresponds to biological
+collapse.
+
+\begin{definition}{Biological Admissibility Entropy}{bio-adm-entropy}
+The logarithmic admissibility volume is
+
+\[
+S_B(t)
+=
+\log V_B(t).
+\]
+\end{definition}
+
+The quantity
+
+\[
+S_B
+\]
+
+measures the effective number of biologically viable
+futures.
+
+\begin{proposition}{Admissibility Entropy Evolution}{bio-adm-entropy}
+For
+
+\[
+V_B(t)>0,
+\]
+
+\[
+\frac{dS_B}{dt}
+=
+\frac{1}{V_B}
+\frac{dV_B}{dt}.
+\]
+\end{proposition}
+
+\begin{proof}
+Since
+
+\[
+S_B
+=
+\log V_B,
+\]
+
+differentiation gives
+
+\[
+\frac{dS_B}{dt}
+=
+\frac{1}{V_B}
+\frac{dV_B}{dt}.
+\]
+\end{proof}
+
+
+Generative Biological Systems
+
+
+Repair preserves existing biological distinctions.
+
+Regeneration preserves the ability to generate new
+distinctions.
+
+This distinction motivates the central criterion of
+biological admissibility.
+
+\begin{definition}{Generative Biological System}{gen-bio-system}
+A biological system is generative if
+
+\[
+\frac{dV_B}{dt}
+\ge 0.
+\]
+\end{definition}
+
+Equivalently,
+
+\[
+\frac{dS_B}{dt}
+\ge 0.
+\]
+
+Such systems preserve or expand the space of viable
+future biological configurations.
+
+\begin{theorem}{Biological Generativity Theorem}{bio-generativity}
+If
+
+\[
+\frac{dV_B}{dt}
+\ge 0,
+\]
+
+then biological admissibility entropy cannot decrease.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:bio-adm-entropy},
+
+\[
+\frac{dS_B}{dt}
+=
+\frac{1}{V_B}
+\frac{dV_B}{dt}.
+\]
+
+Since
+
+\[
+V_B>0
+\]
+
+and
+
+\[
+\frac{dV_B}{dt}\ge0,
+\]
+
+it follows that
+
+\[
+\frac{dS_B}{dt}\ge0.
+\]
+\end{proof}
+
+
+Fitness Versus Admissibility
+
+
+Classical evolutionary theory often focuses upon
+short-term reproductive success.
+
+Let
+
+\[
+F(x)
+\]
+
+denote fitness.
+
+Evolutionary dynamics frequently assume selection
+maximizes
+
+\[
+F.
+\]
+
+However, fitness and admissibility need not coincide.
+
+\begin{ex}
+A parasite may increase immediate reproductive success
+while reducing long-term ecological viability.
+
+A tumour lineage may increase cellular replication while
+destroying host survival.
+
+A highly specialized organism may outperform competitors
+within a narrow niche while reducing future adaptive
+capacity.
+\end{ex}
+
+These examples motivate a distinction between fitness and
+admissibility.
+
+\begin{definition}{Admissibility Fitness}{adm-fitness}
+The admissibility fitness of state \(x\) is
+
+\[
+F_A(x)
+=
+F(x)V_B(x).
+\]
+\end{definition}
+
+This quantity weights reproductive success by preservation
+of future possibility.
+
+\begin{prop}
+A trajectory maximizing fitness need not maximize
+admissibility fitness.
+\end{prop}
+
+\begin{proof}
+Let
+
+\[
+x_1,x_2
+\]
+
+satisfy
+
+\[
+F(x_1)>F(x_2)
+\]
+
+but
+
+\[
+V_B(x_1)\ll V_B(x_2).
+\]
+
+Then
+
+\[
+F_A(x_1)
+=
+F(x_1)V_B(x_1)
+\]
+
+may be smaller than
+
+\[
+F_A(x_2)
+=
+F(x_2)V_B(x_2).
+\]
+
+Therefore fitness maximization and admissibility
+maximization can diverge.
+\end{proof}
+
+
+Evolutionary Reachability
+
+
+Let
+
+\[
+R_E(t)
+\]
+
+denote the set of genotypes reachable through mutation,
+selection, recombination, and developmental
+transformation.
+
+Define evolutionary admissibility volume
+
+\[
+V_{BE}(t)
+=
+\mu
+\bigl(
+R_E(t)
+\cap
+\mathcal A_B(t)
+\bigr).
+\]
+
+\begin{definition}{Evolutionary Admissibility}{evo-adm}
+The quantity
+
+\[
+V_{BE}
+\]
+
+measures the volume of reachable and biologically viable
+futures.
+\end{definition}
+
+A lineage may possess a large reachable set while having
+a small admissible reachable set.
+
+The latter quantity is generally more relevant to
+long-term persistence.
+
+
+Evolutionary Curvature
+
+
+The geometry of biological possibility may be described
+through curvature.
+
+Define the biological admissibility potential
+
+\[
+\Psi_B
+=
+-\log V_B.
+\]
+
+\begin{definition}{Biological Admissibility Curvature}{bio-adm-curvature}
+The biological admissibility curvature tensor is
+
+\[
+K^{(B)}_{ij}
+=
+\nabla_i\nabla_j\Psi_B.
+\]
+\end{definition}
+
+The associated scalar curvature is
+
+\[
+K_B
+=
+g^{ij}
+K^{(B)}_{ij}.
+\]
+
+\begin{prop}
+Positive biological admissibility curvature corresponds
+to local contraction of viable evolutionary futures.
+\end{prop}
+
+\begin{proof}
+Positive Hessian curvature implies local convexity of
+
+\[
+\Psi_B.
+\]
+
+Since
+
+\[
+\Psi_B=-\log V_B,
+\]
+
+this corresponds to local contraction of admissible
+volume.
+\end{proof}
+
+\begin{prop}
+Negative biological admissibility curvature corresponds
+to local expansion of adaptive possibility.
+\end{prop}
+
+\begin{proof}
+Negative curvature implies local expansion of
+
+\[
+V_B.
+\]
+
+Hence nearby perturbations increase future viable
+possibility.
+\end{proof}
+
+
+ Biological Collapse
+
+
+\begin{definition}{Biological Collapse}{bio-collapse}
+Biological collapse occurs when
+
+\[
+V_B(t)
+\rightarrow0.
+\]
+\end{definition}
+
+Examples include:
+
+\[
+\text{extinction},
+\]
+
+\[
+\text{mutational meltdown},
+\]
+
+\[
+\text{ecological collapse},
+\]
+
+\[
+\text{irreversible developmental failure},
+\]
+
+and
+
+\[
+\text{terminal immune dysfunction}.
+\]
+
+\begin{theorem}{Biological Collapse Theorem}{bio-collapse-theorem}
+If
+
+\[
+V_B(t)\rightarrow0,
+\]
+
+then
+
+\[
+S_B(t)
+=
+\log V_B(t)
+\rightarrow
+-\infty.
+\]
+\end{theorem}
+
+\begin{proof}
+Immediate from
+
+\[
+\lim_{x\to0^+}\log x=-\infty.
+\]
+\end{proof}
+
+
+ Adaptive Radiation and Admissibility Expansion
+
+
+Adaptive radiations provide examples of admissibility
+growth.
+
+Suppose a lineage enters a region of ecological space
+containing unoccupied niches.
+
+The corresponding admissible region expands from
+
+\[
+\mathcal A_B
+\]
+
+to
+
+\[
+\mathcal A_B'.
+\]
+
+If
+
+\[
+\mathcal A_B
+\subset
+\mathcal A_B',
+\]
+
+then
+
+\[
+V_B'
+>
+V_B.
+\]
+
+\begin{prop}
+Adaptive radiations correspond to positive admissibility
+growth.
+\end{prop}
+
+\begin{proof}
+Expansion of viable niche structure increases admissible
+volume by monotonicity of measure.
+\end{proof}
+
+
+ Biological Admissibility Principle
+
+
+The preceding results may be summarized by a single
+criterion.
+
+\begin{theorem}{Biological Admissibility Principle}{bio-adm-principle}
+A biological trajectory is generatively admissible if and
+only if it preserves or expands biological admissibility
+volume:
+
+\[
+\frac{dV_B}{dt}
+\ge0.
+\]
+\end{theorem}
+
+\begin{proof}
+Preservation or expansion of biological admissibility is
+precisely the definition of generative biological
+admissibility.
+\end{proof}
+
+This criterion distinguishes mere continuation from
+regeneration. A lineage, organism, or ecosystem may
+persist while progressively shrinking its future
+possibility space. Generatively admissible biological
+systems instead preserve or expand the production of
+future distinctions, future adaptations, and future
+evolutionary trajectories.
+
+
+
+
+\chapter{Proof Dependency Tables}
+\label{app:deps}
+
+
+Purpose
+
+
+The argument of this book is cumulative.
+Every theorem is derived from previous theorems.
+This appendix exposes that dependency structure as a
+directed acyclic graph $\mathcal{G} = (V, E)$
+where vertices are results and directed edges encode
+proof dependence.
+
+
+Dependency Relation
+
+
+$T_i \prec T_j$ iff theorem $T_j$ requires $T_i$
+in its proof. The dependency graph is
+$V = \{T_1, \ldots, T_n\}$ and
+$E = \{(T_i, T_j) : T_i \prec T_j\}$.
+
+\begin{theorem}{Acyclicity Theorem}{acyclicity}
+  The theorem dependency graph is a directed acyclic
+  graph (DAG).
+\end{theorem}
+
+\begin{proof}
+  All theorems are introduced in chapter order.
+  A theorem may only depend upon previously established
+  results. Cycles are therefore impossible.
+\end{proof}
+
+
+Foundational Basis
+
+
+Define the foundational basis:
+\[
+  \mathcal{B}
+  = \{A_1, A_2, A_3, A_4, A_5\},
+\]
+where $A_1 =$ Axiom of Distinction,
+$A_2 =$ Information--Distinction Theorem,
+$A_3 =$ Distinction--Entropy Duality,
+$A_4 =$ Law of Historical Compression,
+$A_5 =$ Law of Recoverability.
+
+\begin{theorem}{Foundation Theorem}{foundation}
+  For every theorem $T$ in the text, $\exists A_i \in
+  \mathcal{B}$ such that $A_i \prec^* T$
+  (transitive closure).
+\end{theorem}
+
+\begin{proof}
+  Inspection of the proof graph. All later chapters
+  invoke recoverability, history, entropy, information,
+  or distinction structure.
+\end{proof}
+
+
+Dependency Depth Table
+
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Result & Approximate depth \\
+\midrule
+Axiom of Distinction & 0 \\
+Information--Distinction Theorem & 1 \\
+Distinction--Entropy Duality & 2 \\
+Law of Historical Compression & 3 \\
+Law of Recoverability & 4 \\
+Repair Existence Theorem & 5 \\
+Persistent Anomaly Theorem & 6 \\
+Regeneration Theorem & 7 \\
+Future Cone Theorem & 8 \\
+Admissibility Existence Theorem & 9 \\
+Future Distinction Optimality Theorem & 10 \\
+Preservation of Possibility Theorem & 11 \\
+Ecology of Distinctions Theorem & 12 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+Layer-by-Layer Dependency Matrices
+
+
+\paragraph{Repair layer.}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& $A_5$ & Repair Exist. & Closure & Entropy \\
+\midrule
+$A_5$ & 1&1&1&1 \\
+Repair Exist. & 0&1&1&1 \\
+Closure & 0&0&1&1 \\
+Entropy & 0&0&0&1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Geometry layer.}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+& Reach. & Adm. & Future Vol. & GAT \\
+\midrule
+Reachability & 1&1&1&1 \\
+Admissibility & 0&1&1&1 \\
+Future Volume & 0&0&1&1 \\
+GAT & 0&0&0&1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+Failure Layer Dependency
+
+
+\begin{theorem}{Failure Dependency Theorem}{failure-dep}
+  No theorem in Chapter~\ref{ch:geometry-failure} is
+  derivable without Chapter~\ref{ch:repair}.
+\end{theorem}
+
+\begin{proof}
+  Persistent anomalies are defined relative to repair
+  operators. All later results inherit this dependence.
+\end{proof}
+
+
+Master Dependency Chain
+
+
+The entire book can be represented as:
+
+\[
+\begin{array}{c}
+\text{Distinction} \\
+\downarrow \\
+\text{Information} \\
+\downarrow \\
+\text{Entropy} \\
+\downarrow \\
+\text{History} \\
+\downarrow \\
+\text{Recoverability} \\
+\downarrow \\
+\text{Repair} \\
+\downarrow \\
+\text{Failure} \\
+\downarrow \\
+\text{Intelligence} \\
+\downarrow \\
+\text{Regeneration} \\
+\downarrow \\
+\text{Ecology} \\
+\downarrow \\
+\text{Reachability} \\
+\downarrow \\
+\text{Admissibility} \\
+\downarrow \\
+\text{GAT}
+\end{array}
+\]
+
+
+Realization Functors
+
+
+Each realization chapter corresponds to a functor
+$F_i : \mathcal{T} \to \mathcal{D}_i$ mapping the
+abstract theorem category $\mathcal{T}$ into a domain:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Functor & Domain \\
+\midrule
+$F_\mathrm{RSVP}$ & Physical fields \\
+$F_\mathrm{Gravity}$ & Distinction dynamics \\
+$F_\mathrm{Cosmo}$ & Expyrotic renewal \\
+$F_\mathrm{Semantic}$ & Meaning manifolds \\
+$F_\mathrm{Conscious}$ & Self-reconstruction \\
+$F_\mathrm{Pref}$ & Admissibility gradients \\
+$F_\mathrm{Flow}$ & Distinction transport \\
+$F_\mathrm{Spherepop}$ & History-native computation \\
+$F_\mathrm{HYDRA}$ & Multi-module repair \\
+$F_\mathrm{TARTAN}$ & Multiscale tiling \\
+$F_\mathrm{Fiscal}$ & Policy reachability \\
+$F_\mathrm{Gov}$ & Institutional repair \\
+$F_\mathrm{Science}$ & Epistemic regeneration \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{theorem}{Closure Theorem}{dep-closure}
+  The transitive closure of GAT contains every major
+  theorem in the text: $\mathcal{B} \subseteq \mathcal{G}_A$
+  where $\mathcal{G}_A = \{T : T \prec^* \text{GAT}\}$.
+\end{theorem}
+
+\begin{proof}
+  GAT $\prec^*$ Admissibility $\prec^*$ Reachability
+  $\prec^*$ Regeneration $\prec^*$ Repair
+  $\prec^*$ Recoverability $\prec^*$ History
+  $\prec^*$ Entropy $\prec^*$ Information
+  $\prec^*$ Distinction ($= A_1$).
+  Hence $\mathcal{B} \subseteq \mathcal{G}_A$.
+\end{proof}
+
+
+Minimal Axiom Counts
+
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Theorem & $N(T)$ (foundational axioms required) \\
+\midrule
+Information--Distinction & 1 \\
+Entropy & 2 \\
+History Primacy & 3 \\
+Repair Existence & 5 \\
+Regeneration & 6 \\
+Future Cone & 7 \\
+Admissibility Existence & 8 \\
+Future Distinction Optimality & 8 \\
+Preservation of Possibility & 8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The entire monograph may be viewed as a proof that the
+Generative Admissibility Principle is a consequence of
+the Axiom of Distinction together with the mathematics
+of entropy, history, repair, regeneration, and
+reachability.
+
+
+
+
+
+\printglossaries
+
+\printbibliography[heading=bibintoc,title={References}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter{The Status of Claims in This Book}
+\label{app:claim-status}
+
+A large synthetic work inevitably contains claims of
+different epistemic types: some are proved theorems, some
+are plausible models, some are interpretive framings, and
+some are speculative conjectures. Presenting them all at
+the same rhetorical level risks misleading the reader about
+what has been established. This appendix makes the
+stratification explicit.
+
+The table below classifies the book's central claims by
+epistemic status. The statuses used are:
+
+\begin{itemize}[nosep]
+  \item \textbf{Foundational axiom} --- a primitive
+        assumption on which the framework is built; it
+        is not derived from more basic principles but
+        is adopted as the starting point and can in
+        principle be questioned.
+  \item \textbf{Proved theorem} --- a result derived
+        from the foundational axioms and prior theorems
+        by explicit formal proof. Subject to the
+        correctness of the proofs and the truth of the
+        axioms.
+  \item \textbf{Proved under stated assumptions} ---
+        a result that follows from the axioms plus
+        additional assumptions (e.g.\ independence of
+        constraints, compactness, continuity). The
+        result is as strong as its weakest assumption.
+  \item \textbf{Model hypothesis} --- a specific
+        functional form or parameter choice that is
+        motivated and internally consistent, but is
+        one member of a family of alternatives, not
+        uniquely derived. The choice is adopted for
+        its tractability and naturalness.
+  \item \textbf{Interpretive framework} --- a reframing
+        of known results in the book's vocabulary. The
+        reframing is illuminating and consistent, but
+        does not add empirical content to the known
+        result.
+  \item \textbf{Speculative extension} --- a claim that
+        goes beyond the domain where the formal
+        apparatus has been established, motivated by
+        structural consonance but not yet empirically
+        grounded.
+  \item \textbf{Strategic theorem} --- a conditional
+        result: if certain assumptions about agent
+        goals hold, then a certain conclusion follows.
+        The normative force of the conclusion depends
+        on the assumption.
+  \item \textbf{Open conjecture} --- a claim the
+        framework suggests but has not proved.
+\end{itemize}
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{5.5cm}lp{5cm}}
+\toprule
+\textbf{Claim} & \textbf{Status} & \textbf{Notes} \\
+\midrule
+\multicolumn{3}{l}{\itshape Part I: Distinction} \\[2pt]
+Axiom of Distinction & Foundational axiom &
+  Starting primitive; equivalent alternatives exist \\
+Observational Nontriviality Theorem & Proved theorem &
+  Follows directly from axiom \\
+First Distinction Theorem & Proved theorem &
+  Objects, info, cost, blind spots co-arise \\
+Information--Distinction Theorem & Proved theorem &
+  Shannon entropy as special case \\
+Distinction--Entropy Duality & Proved theorem &
+  Second Law as distinction erosion \\
+\midrule
+\multicolumn{3}{l}{\itshape Parts II--III: History and Repair} \\[2pt]
+History Primacy Theorem & Proved theorem &
+  Under stated measure-theoretic conditions \\
+Law of Recoverability & Proved theorem &
+  Destruction vs.\ dispersal formally distinguished \\
+Repair Existence Theorem & Proved under assumptions &
+  Admissibility condition requires \cref{prop:repair-adm} \\
+Repair Monoid & Proved theorem &
+  Composition and identity explicitly verified \\
+Regeneration Hierarchy Theorem & Proved theorem &
+  Action on repair operators vs.\ on distinctions \\
+Regeneration Theorem & Proved theorem &
+  Characterises $\kappa_\Sigma(t) \ge 0$ condition \\
+Anomaly Preservation Theorem & Proved theorem &
+  Requires $\reco(\mathcal{F}) > 0$ \\
+\midrule
+\multicolumn{3}{l}{\itshape Parts IV--V: Reachability and Admissibility} \\[2pt]
+Constraint Volume Theorem & Proved under assumptions &
+  Independence of constraints assumed \\
+$V_R = K\Phi e^{-S}$ form & Model hypothesis &
+  Simplest satisfying additivity; uniqueness not proved \\
+Reachability--Admissibility Inclusion & Proved theorem &
+  $\mathcal{A}(x) \subseteq \mathcal{R}(x)$ \\
+Generative Admissibility Principle & Proved theorem &
+  Defines condition $\frac{d}{dt}\Vol(\adm) \ge 0$ \\
+Future Distinction Optimality Theorem & Strategic theorem &
+  Conditional on reward non-decreasing in $\Vol(\adm)$ \\
+Generative Admissibility Principle as value criterion
+  & Conditional normative claim &
+  Requires additional value premise; see \cref{sec:ch15-three-layers} \\
+\midrule
+\multicolumn{3}{l}{\itshape Parts VI--VII: Physical Realization} \\[2pt]
+Three-Field Necessity Theorem & Proved under assumptions &
+  Assumes scalar/vector/constraint decomposition is apt \\
+RSVP field equations & Interpretive framework &
+  Physical realization of abstract framework \\
+RSVP Admissibility Theorem & Proved theorem (within RSVP) &
+  Conditional on RSVP field equations \\
+Attractor Convergence Theorem & Proved under assumptions &
+  Compactness and bounded entropy production assumed \\
+Gravity Realization Theorem & Interpretive framework &
+  Gravity as capacity gradients; not derivation of GR \\
+Distinction Raychaudhuri Theorem & Proved theorem (within RSVP) &
+  Structural analogue; GR correspondence not established \\
+Expyrotic Necessity Theorem & Proved theorem (within RSVP) &
+  No derivation from known cosmological dynamics \\
+Apparent Expansion Theorem & Interpretive framework &
+  Alternative reading of expansion; not a falsification \\
+\midrule
+\multicolumn{3}{l}{\itshape Parts VIII--IX: Cognitive and Computational Realization} \\[2pt]
+Consciousness theorems (Ch.\ 21) & Interpretive framework &
+  Functional conditions; hard problem not addressed \\
+Preference Emergence Theorem & Strategic theorem &
+  Conditional on agent valuing future distinction capacity \\
+Flow Admissibility Theorem & Proved theorem &
+  Within pipeline formalism \\
+Spherepop operational semantics & Proved theorem &
+  Within stated transition system \\
+HYDRA Constraint-Guided Intelligence & Proved under assumptions &
+  Product form is a modeling choice \\
+TARTAN Recursive Tiling Theorem & Proved theorem &
+  Threshold family $\{\theta_\ell\}$ is domain-dependent \\
+\midrule
+\multicolumn{3}{l}{\itshape Parts IX--X: Social and Synthesis} \\[2pt]
+Governance Capacity Theorem & Proved theorem &
+  Within fiscal reachability formalism \\
+Democratic Reachability Theorem & Strategic theorem &
+  Conditional on three structural requirements being met \\
+Anomaly Preservation / Replication & Interpretive framework &
+  Recoverability dimension; other factors also operate \\
+Ecology of Distinctions Balance Law & Proved theorem &
+  Balance equation, not conservation law \\
+Preservation Hierarchy Theorem & Proved theorem &
+  Logical implication, not causal mechanism \\
+Unified Invariant Theorem & Proved theorem &
+  Via transformations; strong form requires
+  Preservation Equivalence Theorem \\
+Realization Functors (Table, Ch.\ 30) & Interpretive framework &
+  Functoriality at level of logical structure;
+  explicit categorical proof for Flow Computing only \\
+\midrule
+\multicolumn{3}{l}{\itshape Open Questions} \\[2pt]
+RSVP as empirical physics & Open conjecture &
+  Awaits novel prediction and test \\
+Expyrotic cosmology as physics & Speculative extension &
+  Structural consonance with cyclic models; not derived \\
+Operationalizing $G_F, R_F, L_F$ & Open research programme &
+  See \cref{sec:ch27-proxies,app:open-problems} \\
+Full categorical functoriality & Open conjecture &
+  Twelve of thirteen functors not yet explicitly mapped \\
+Normative grounding of admissibility & Open problem (philosophy) &
+  See \cref{sec:ch15-three-layers,app:open-problems} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{remark}{How to use this table}{claim-status-use}
+  The table is not a confession of weakness but a
+  structural map. A proved theorem under stated assumptions
+  is still a theorem --- its strength depends on how
+  plausible one finds the assumptions, which is a
+  legitimate scientific disagreement. An interpretive
+  framework is still a contribution --- re-reading known
+  results through a new vocabulary can be genuinely
+  illuminating even when it adds no empirical content
+  to the underlying physics or mathematics. A speculative
+  extension is still worth pursuing --- the history of
+  physics is full of structural conjectures that later
+  became theorems. The table simply makes explicit what
+  kind of claim each entry is, so that disagreement can
+  be targeted and productive.
+
+  The overarching claim of the book does not appear in
+  any single row. It is the claim that a single formal
+  primitive --- distinction --- and the repair-regeneration-
+  admissibility ladder built on it, provides a common
+  vocabulary in which physical, cognitive, computational,
+  and social systems can all be described and compared.
+  That claim is supported by the interpretive frameworks
+  in the table above. Whether it rises to the level of a
+  theorem about the world, or remains a productive and
+  illuminating vocabulary, is a question the reader is
+  now better equipped to form a view on.
+\end{remark}
+
+
+
+
+\chapter{Open Problems and Potential Failure Modes}
+\label{app:open-problems}
+
+A framework earns the trust of sophisticated readers not
+by concealing its unresolved questions but by cataloguing
+them with precision. The following problems are genuinely
+open: they are not merely unexplored by this book, but
+questions for which this framework, in its current form,
+does not supply an answer.
+
+
+The Hard Problem of Consciousness
+
+
+Chapter~\ref{ch:consciousness} offers a functional theory of
+consciousness: the structural and computational conditions
+under which a system behaves as conscious systems behave.
+What it does not address is why any physical or
+computational process is accompanied by subjective
+experience at all --- Chalmers's hard problem.
+
+The framework can construct arbitrarily sophisticated
+recursive self-models and show that systems maintaining
+such models satisfy the formal conditions. It cannot show
+that such systems have experiences. Whether the hard problem
+is a genuine explanatory gap, a confused question, or a
+problem that will dissolve under a future theory of
+information and physics is unknown. The framework is
+neutral between these readings and does not resolve the
+question.
+
+
+The Empirical Status of RSVP
+
+
+Chapter~\ref{ch:rsvp} introduces the Relativistic
+Scalar-Vector Plenum as a physical realization of the
+abstract framework. The fields $(\Phi, \mathbf{v}, S)$ are
+motivated by the distinction-repair-reachability chain, and
+the Attractor Convergence Theorem establishes their
+mathematical well-posedness.
+
+What is not established:
+\begin{itemize}[nosep]
+  \item Whether RSVP fields reduce to, or can be identified
+        with, the field content of the Standard Model or
+        general relativity.
+  \item Whether RSVP makes any prediction distinguishable
+        from known physics in any accessible experimental
+        regime.
+  \item Whether the $V_R = K\Phi e^{-S}$ form is uniquely
+        determined by the abstract constraints or merely the
+        simplest member of a family satisfying them.
+\end{itemize}
+The last point deserves particular attention. The proof that
+$V_R = K\Phi e^{-S}$ uses additivity of $S$ across
+independent regions and monotonicity to motivate the
+exponential form. This is a heuristic argument, not a
+uniqueness theorem. A rigorous treatment would either prove
+uniqueness under explicitly stated axioms or acknowledge
+the form as a working hypothesis.
+
+
+The Independence Assumption in Constraint Dynamics
+
+
+Theorem~\ref{thm:constraint-vol} and the reachability
+volume calculations throughout Part~V assume that
+constraints on future reachability are statistically
+independent, permitting the product form
+$V_R \propto \prod_i (1 - \rho_i)$. In most realistic
+systems --- biological networks, economic institutions,
+scientific communities --- constraints interact, cascade,
+and create dependencies. A more complete treatment would
+replace this with:
+\[
+  V_R = F(\rho_1, \ldots, \rho_n, \Sigma),
+\]
+where $\Sigma$ captures the correlation structure of
+constraints. The independence assumption is an analytically
+convenient starting point; whether the qualitative results
+of Parts~IV--V are robust to dependent constraints is an
+open question.
+
+
+The Functorial Realization Programme
+
+
+Chapter~\ref{ch:preservation} argues that each of the
+thirteen domain realizations constitutes a functor from
+the abstract theorem category to a domain-specific
+category. Section~\ref{sec:ch30-functor-meaning} clarifies
+what this claim means and provides an explicit example for
+Flow Computing. What remains:
+\begin{itemize}[nosep]
+  \item Explicit functorial mappings for the remaining
+        twelve domains, with objects, morphisms, and
+        verification of composition and identity
+        preservation.
+  \item Natural transformations between the domain
+        functors --- i.e.\ a proof that the thirteen
+        realizations are not merely parallel structures but
+        components of a single coherent categorical
+        framework.
+  \item A proof or disproof that any two domain functors
+        $F_i, F_j$ are related by a natural transformation,
+        which would constitute a formal sense in which the
+        domains are themselves comparable.
+\end{itemize}
+
+
+Alternative Reachability Metrics
+
+
+Reachability volume $V_R(x,t)$ is defined using a measure
+$\mu$ on the state space. The choice of measure is not
+determined by the abstract framework. Different choices
+produce different reachability volumes for the same
+trajectory, and the optimality claims of Chapter~\ref{ch:geometry-futures}
+depend on the measure being appropriately calibrated to the
+domain. For physical systems, natural measures exist
+(Liouville measure, invariant measures of attractors). For
+social, economic, and epistemic systems, the appropriate
+measure is unclear, and different choices could in principle
+reverse the dominance results. This is a genuine limitation.
+
+
+The Cosmological Tests
+
+
+Chapters~\ref{ch:expyrotic} and \ref{ch:cosmo-completion}
+develop a structural account of cosmological dynamics in
+terms of admissible volume collapse and renewal. The
+following remain open:
+\begin{itemize}[nosep]
+  \item What observational signature, if any, would
+        distinguish an expyrotic renewal event (as
+        characterised by the Reintegration Operator) from
+        standard inflationary dynamics?
+  \item Is the admissibility singularity
+        $\mathcal{V}(t) \to 0$ consistent with conservation
+        of energy and other known cosmological constraints?
+  \item Does the RSVP account of entropic redshift make
+        predictions distinguishable from standard
+        cosmological redshift in any accessible regime?
+\end{itemize}
+Until these questions are answered, the cosmological
+chapters should be read as structural interpretations of
+known results rather than independent physical derivations.
+
+
+Mathematical Foundations of Distinction Ontology
+
+
+The Axiom of Distinction (\cref{axm:dist-axiom}) takes
+partitioning as primitive. This is a philosophical choice
+with consequences. In particular:
+\begin{itemize}[nosep]
+  \item The framework does not specify the cardinality
+        constraints on the domain $X$ being partitioned.
+        For finite $X$, all the information-theoretic
+        results hold cleanly. For infinite or
+        measure-theoretic $X$, measurability conditions
+        are required and are stated informally in several
+        proofs.
+  \item The relation between the book's distinction
+        primitive and the formal concept of a partition
+        in measure theory, topos theory, or type theory
+        is not fully elaborated.
+  \item Whether distinction can be grounded in a more
+        minimal primitive (such as a relation of
+        non-identity) or whether it is genuinely
+        irreducible is an open foundational question.
+\end{itemize}
+
+
+The Normative Completion Problem
+
+
+Chapter~\ref{ch:geometry-futures} (§\ref{sec:ch15-three-layers})
+explicitly distinguishes the strategic from the normative.
+What remains is a genuine philosophical problem:
+\emph{what value premise, if any, licenses the move from
+``generative admissibility dominates in the long run'' to
+``generative admissibility is what we ought to pursue''?}

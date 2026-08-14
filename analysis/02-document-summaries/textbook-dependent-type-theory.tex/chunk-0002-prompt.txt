@@ -1,15 +1,254 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 6 of a document called
+"textbook-dependent-type-theory.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Bidirectional Historical Type Checking**
 
-TEXT
-====
+The historical calculus introduced in the previous chapters is organized in[2D[K
+into **two algorithmic judgments** – *synthesis* and *checking* – which tog[3D[K
+together allow a deterministic, mechanically‑implementable kernel.  Every j[1D[K
+judgment now carries a constructive proof of admissibility (i.e., that the [K
+corresponding history remains well‑formed), so type checking validates both[4D[K
+both observable typing relations and historical provenance simultaneously.
+
+---
+
+### 1. Judgments
+
+| Judgment | Meaning |
+|----------|---------|
+| **Synthesis** \( H \vdash t \Rightarrow A \) | The expression \(t\) *synt[5D[K
+*synthesizes* a type \(A\) when placed in the history context \(H\). |
+| **Checking** \( H \vdash t \Leftarrow A \) | The expression \(t\) is veri[4D[K
+verified to inhabit (i.e., be well‑typed by) the known type \(A\) that alre[4D[K
+already exists in context \(H\). |
+
+These judgments are defined mutually: a successful synthesis step produces [K
+a new history and its associated proof, which then becomes available for su[2D[K
+subsequent checking steps.
+
+---
+
+### 2. Rules
+
+Below is a complete set of bidirectional rules that operate on **configurat[12D[K
+**configurations** \((H,t)\) where \(t\) has type \(A\). All reduction even[4D[K
+events are recorded as historical edges in the context history \(H\); thus [K
+each judgment carries an implicit proof of admissibility.
+
+#### (a) Variables  
+
+```text
+(H, x : A) → H ; e_var   // synthesis: a variable binds its declared type.
+```
+
+```text
+(H, x) ← (H', A)       // checking: substitution is verified by the history[7D[K
+history.
+```
+
+---
+
+#### (b) Lambda Abstraction  
+
+*Synthesis* – introduces an abstracted term and records the binder as an ev[2D[K
+event.
+
+```text
+(H₀ → x : A, λx → t) → H ; e_abst
+  where
+    H = H₀; e_abst = (e_binder(x), [A])   // binder event + dependency edge[4D[K
+edge.
+```
+
+*Checking* – matches a function type from the surrounding context.
+
+```text
+(H', A → B, λx → t) ← (H'', A ; e_app)
+  where
+    H'' = H' and e_app is an application proof recorded in history.
+```
+
+---
+
+#### (c) Application  
+
+*Synthesis* – reduces function values first.
+
+```text
+(H₀ → x : A → B, f → a) → (H₁; e_app)
+  where
+    H₁ = H₀ ; e_abst(f)   // the abstraction event for f is extended.
+```
+
+*Checking* – checks that the argument type matches the function’s domain.
+
+```text
+(H'', f : A → B, a : A) ← (H', t₀ ⇒ A)
+  where
+    H' = H'' and e_app records the application relation.
+```
+
+---
+
+#### (d) Let‑Binding  
+
+*Synthesis* – introduces a binding event that extends the history with the [K
+term’s construction.
+
+```text
+(H, let x : A = t₀ in body) → H ; e_let
+  where e_let encodes both the synthesis of `t₀ ⇒ A` and its insertion.
+```
+
+*Checking* – uses an already‑known type for a bound variable (e.g., from pa[2D[K
+pattern matching).
+
+```text
+(H', let x = t₁ in body) ← (H'', t₁ : A)
+  where H'' provides the checked type \(A\) of `t₁`.
+```
+
+---
+
+#### (e) Type Abstraction  
+
+When we have an existing term and want to *check* its type against a known [K
+abstraction:
+
+```text
+(H', t₀ ⇒ A) ← (H'', λx → t₁ : A)
+  where H'' records the abstracted type.
+```
+
+---
+
+### 3. History Extension
+
+Every rule that produces a new configuration does so by **extending** the e[1D[K
+existing history \(H\) with an event edge of the form:
+
+```text
+(H, e)   where e ∈ {e_var, e_abst, e_app, e_let}
+```
+
+These events carry enough information to reconstruct the derivation later ([1D[K
+(they record variables bound, types introduced, and dependency edges that p[1D[K
+preserve admissibility).
+
+---
+
+### 4. Normalization & Termination
+
+The synthesis judgment terminates when the expression reaches a *value*:
+
+```text
+(H, v) → H ; e_val   // `v` is normalizable.
+```
+
+Checking simply confirms that a given value inhabits its typed context.
+
+**Normalization relation**
+
+\[
+(H_0, t) \Downarrow (H', v)
+\]
+
+is defined analogously to ordinary normalization but records the complete h[1D[K
+history \(H'\).
+
+---
+
+### 5. Determinism
+
+The bidirectional system is deterministic:
+
+* **Uniqueness of reduction:** β‑reduction introduces a unique historical e[1D[K
+event `e_β` that encodes substitution, argument, and dependency.
+* **Historical determinism theorem**
+
+```text
+If (H₀,t) → (H₁,u₁) and (H₀,t) → (H₂,u₂), then u₁ = u₂ and H₁ ≃ H₂.
+```
+
+Thus replaying a computation reconstructs exactly the same history.
+
+---
+
+### 6. Practical Implications
+
+* **Proof verification:** Because every typing judgment is a historical rec[3D[K
+record, proofs can be verified by replaying the underlying history rather t[1D[K
+than trusting external proof objects.
+* **Incremental compilation & reproducible builds:** History extensions are[3D[K
+are immutable; rebuilding from an existing derivation never requires recomp[6D[K
+recomputing intermediate steps.
+* **Distributed reasoning:** The kernel’s algorithm inherently supports par[3D[K
+parallelism since each step is independent and self‑contained (e.g., separa[6D[K
+separate workers can synthesize subterms).
+
+---
+
+### 7. Implementation Sketch
+
+1. **Parser** – builds syntax trees but does not perform any type checking;[9D[K
+checking; it only records parse events in the history.
+2. **Synthesis Engine** – iteratively applies the synthesis rules until a v[1D[K
+value or an error is produced, building `H ; e_*` along the way.
+3. **Checking Engine** – receives a typed context (history + term) and veri[4D[K
+verifies by applying checking rules; it also extends the shared history if [K
+new events are generated.
+4. **Error Reporting** – failures appear as incomplete histories that can b[1D[K
+be inspected for missing binder or application events, directly linking to [K
+source locations.
+
+---
+
+### Conclusion
+
+By treating type checking itself as a historical process—synthesizing and c[1D[K
+checking constructions while preserving an immutable provenance—we obtain:
+
+* A **deterministic kernel** with guaranteed replayability.
+* Integrated support for proof verification, incremental compilation, and d[1D[K
+distributed reasoning without sacrificing the expressive power of dependent[9D[K
+dependent types.
+* A natural bridge between algorithmic type checking and higher‑order logic[5D[K
+logical proofs.
+
+The next chapter will flesh out a concrete implementation of this bidirecti[9D[K
+bidirectional checker in terms of operational semantics over histories, sho[3D[K
+showing how each judgment is executable as a transition on a configuration [K
+\((H,t)\) rather than on an abstract machine state. This completes the move[4D[K
+move from theoretical foundations to a practical kernel that embodies the u[1D[K
+unifying principle: *computation is irreversible growth of admissible histo[5D[K
+history*.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 This theorem plays the same foundational role in the historical calculus that
 the ordinary substitution lemma plays in conventional dependent type theory.

@@ -1,35 +1,50 @@
 #!/usr/bin/env bash
 
-# analyze-spherepop.sh
+# analyze-spherepop.sh (v2)
 #
 # Hierarchical, resumable repository analysis using Ollama / Granite.
+# Same overall shape as v1:
 #
-# Pipeline:
+#   repository -> extraction -> canonicalization -> document summaries
+#       -> thematic cluster syntheses -> cross-corpus synthesis
+#       -> reflexive analysis -> adversarial critique
+#       -> reconstruction -> final theory report
 #
-#   repository
-#       ↓
-#   extraction
-#       ↓
-#   individual summaries
-#       ↓
-#   thematic cluster syntheses
-#       ↓
-#   cross-corpus synthesis
-#       ↓
-#   reflexive analysis
-#       ↓
-#   adversarial critique
-#       ↓
-#   reconstruction
-#       ↓
-#   final theory report
+# What changed from v1, and why (see analysis/ for the full writeup):
 #
-# LaTeX extraction strategy:
+#   - CANONICALIZATION now runs before clustering. Draft versions of
+#     the same document (X.tex / X-v01.tex / X-draft-01.tex) are
+#     grouped and only the canonical one feeds synthesis, so draft
+#     evolution can't be mistaken for corpus contradiction. Review
+#     manifest/plan.json (entries with "needs_review": true) before
+#     letting the run proceed past that stage.
 #
-#   1. Pandoc directly from TeX
-#   2. existing PDF + pdftotext
-#   3. compile TeX -> PDF -> pdftotext
-#   4. conservative source cleanup
+#   - Chunk summarization is POSITION-AWARE: every chunk prompt
+#     carries the document title, "chunk K of N", and a running
+#     one-paragraph abstract carried forward from earlier chunks, so
+#     chunks are never summarized in total isolation from the rest of
+#     their own document.
+#
+#   - Every summary claim requires a quoted source citation, and a
+#     mechanical (non-LLM) groundedness check strips any claim whose
+#     quote doesn't actually appear in the source. This runs after
+#     every chunk summary and every document reduction.
+#
+#   - Cluster and cross-corpus synthesis happen in BATCHES with an
+#     explicit "synthesis so far + new batch" merge prompt, instead
+#     of one single-shot call over the whole cluster/corpus. Read the
+#     running synthesis after any batch to see if it's drifting
+#     before the run continues.
+#
+#   - Caching is content-hashed (model + prompt-template version +
+#     exact prompt text) inside pipeline_functions.py, not
+#     existence-only, so editing a prompt template invalidates only
+#     what it actually affects. FORCE=1 still forces a full rerun.
+#
+# All prompt construction, chunking, hashing, and groundedness logic
+# lives in pipeline_functions.py, next to this script. This file only
+# orchestrates: build the manifest, call each stage in order, loop
+# over documents/batches. Nothing here builds a prompt inline.
 #
 # Usage:
 #
@@ -40,19 +55,25 @@
 #
 #   FORCE=1 ./analyze-spherepop.sh
 #
-# Models may be overridden:
+# Models / batch size may be overridden:
 #
 #   FAST_MODEL=granite4.1:3b \
 #   DEEP_MODEL=granite4.1:8b \
+#   BATCH_SIZE=6 \
 #   ./analyze-spherepop.sh
 
 set -Eeuo pipefail
+shopt -s nullglob   # unmatched globs (e.g. a cluster with 0 members, or a
+                    # stage that produced 0 batches) expand to nothing
+                    # instead of the literal pattern string, which would
+                    # otherwise be treated as a real (nonexistent) filename.
 
 ###############################################################################
 # Configuration
 ###############################################################################
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYLIB="${ROOT}/pipeline_functions.py"
 
 ANALYSIS="${ROOT}/analysis"
 
@@ -74,20 +95,22 @@ DEEP_MODEL="${DEEP_MODEL:-granite4.1:8b}"
 
 FORCE="${FORCE:-0}"
 
-# Keep individual chunks comfortably below model context.
 CHUNK_CHARS="${CHUNK_CHARS:-45000}"
+BATCH_SIZE="${BATCH_SIZE:-6}"
 
 mkdir -p \
-    "$MANIFEST_DIR" \
-    "$TEXT_DIR" \
-    "$SUMMARY_DIR" \
-    "$CLUSTER_DIR" \
-    "$CROSS_DIR" \
-    "$REFLECTION_DIR" \
-    "$CRITIQUE_DIR" \
-    "$RECONSTRUCTION_DIR" \
-    "$FINAL_DIR" \
-    "$CACHE_DIR"
+    "$MANIFEST_DIR" "$TEXT_DIR" "$SUMMARY_DIR" "$CLUSTER_DIR" \
+    "$CROSS_DIR" "$REFLECTION_DIR" "$CRITIQUE_DIR" \
+    "$RECONSTRUCTION_DIR" "$FINAL_DIR" "$CACHE_DIR"
+
+# Self-marker: any directory anywhere under ROOT carrying this file is
+# a pipeline OUTPUT tree — this run's own analysis/, or an archived
+# copy of a previous run that got moved or renamed elsewhere in the
+# repo — and must never be re-ingested as corpus content. The marker
+# travels with the directory even if it's later renamed/moved, so
+# archiving an old run under a new name doesn't require remembering
+# to also update an exclusion list somewhere.
+touch "${ANALYSIS}/.pipeline-output"
 
 touch "$LOG_FILE"
 
@@ -96,9 +119,7 @@ touch "$LOG_FILE"
 ###############################################################################
 
 log() {
-    printf '[%s] %s\n' \
-        "$(date '+%Y-%m-%d %H:%M:%S')" \
-        "$*" >> "$LOG_FILE"
+    printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*" >> "$LOG_FILE"
 }
 
 die() {
@@ -106,56 +127,12 @@ die() {
     exit 1
 }
 
-slugify() {
-    printf '%s' "$1" |
-        tr '[:upper:]' '[:lower:]' |
-        sed \
-            -e 's/[^a-z0-9._-]/-/g' \
-            -e 's/--*/-/g' \
-            -e 's/^-//' \
-            -e 's/-$//'
+pyrun() {
+    python3 "$PYLIB" "$@"
 }
 
-command -v ollama >/dev/null ||
-    die "ollama not found"
-
-command -v python3 >/dev/null ||
-    die "python3 not found"
-
-###############################################################################
-# Ollama
-###############################################################################
-
-run_model() {
-    local model="$1"
-    local prompt_file="$2"
-    local output="$3"
-
-    local partial="${output}.partial"
-
-    if [[ -s "$output" && "$FORCE" != 1 ]]; then
-        echo "[cached] $output"
-        return 0
-    fi
-
-    echo
-    echo "MODEL:  $model"
-    echo "OUTPUT: $output"
-    echo
-
-    log "model=${model} output=${output}"
-
-    rm -f "$partial"
-
-    ollama run "$model" < "$prompt_file" |
-        tee "$partial"
-
-    if [[ ! -s "$partial" ]]; then
-        die "Model produced empty output: $output"
-    fi
-
-    mv "$partial" "$output"
-}
+command -v ollama  >/dev/null || die "ollama not found"
+command -v python3 >/dev/null || die "python3 not found"
 
 ###############################################################################
 # Manifest
@@ -163,634 +140,414 @@ run_model() {
 
 echo "Building repository manifest..."
 
-find "$ROOT" \
-    -type f \
-    ! -path "${ANALYSIS}/*" \
-    ! -path '*/.git/*' \
-    ! -path '*/__pycache__/*' \
+# Directory NAMES that are never corpus content, wherever they occur in
+# the tree — this catches the current archived-analysis situation
+# immediately (v01/analysis/... is excluded because it's named
+# "analysis", regardless of where "v01" sits), plus common CI/tooling
+# directories that showed up in the manifest but aren't research
+# content. Adjust this list for your repo if needed.
+EXCLUDE_DIR_NAMES=(
+    .git __pycache__ analysis
+    .github .pytest_cache .venv venv
+    node_modules dist build .tox .mypy_cache .ruff_cache
+)
+
+# Glob-style directory NAME patterns, matched the same way as above
+# but allowing wildcards — covers your versioned archive convention
+# (v01-analysis, v02-analysis, ...) without needing the marker file
+# or a manual touch after every future archive/rename.
+EXCLUDE_DIR_GLOBS=(
+    '*-analysis'
+)
+
+# Any directory anywhere under ROOT carrying the pipeline's own output
+# marker (see above) is excluded too, regardless of its name — this is
+# what makes a *renamed* archive (not just one named "analysis") safe
+# in future runs without editing this script.
+mapfile -t OUTPUT_TREES < <(find "$ROOT" -type f -name '.pipeline-output' 2>/dev/null | xargs -r -n1 dirname | sort -u)
+
+PRUNE_ARGS=()
+for name in "${EXCLUDE_DIR_NAMES[@]}"; do
+    PRUNE_ARGS+=( ! -path "*/${name}/*" ! -path "*/${name}" )
+done
+for glob in "${EXCLUDE_DIR_GLOBS[@]}"; do
+    PRUNE_ARGS+=( ! -path "*/${glob}/*" ! -path "*/${glob}" )
+done
+for dir in "${OUTPUT_TREES[@]}"; do
+    PRUNE_ARGS+=( ! -path "${dir}/*" ! -path "${dir}" )
+done
+
+if [[ "${#OUTPUT_TREES[@]}" -gt 0 ]]; then
+    echo "Excluding ${#OUTPUT_TREES[@]} marked pipeline-output tree(s) from the manifest:"
+    printf '  %s\n' "${OUTPUT_TREES[@]}"
+fi
+
+find "$ROOT" -type f \
+    "${PRUNE_ARGS[@]}" \
     ! -name '*.pyc' \
-    | sort \
-    > "${MANIFEST_DIR}/all-files.txt"
+    | sort > "${MANIFEST_DIR}/all-files.txt"
 
-find "$ROOT" \
-    -type f \
-    -name '*.tex' \
-    ! -path "${ANALYSIS}/*" \
-    ! -path '*/.git/*' \
-    | sort \
-    > "${MANIFEST_DIR}/tex-files.txt"
+find "$ROOT" -type f -name '*.tex' \
+    "${PRUNE_ARGS[@]}" \
+    | sort > "${MANIFEST_DIR}/tex-files.txt"
 
-find "$ROOT" \
-    -type f \
-    \( -name '*.md' -o -name '*.txt' \) \
-    ! -path "${ANALYSIS}/*" \
-    ! -path '*/.git/*' \
-    | sort \
-    > "${MANIFEST_DIR}/prose-files.txt"
+find "$ROOT" -type f \( -name '*.md' -o -name '*.txt' \) \
+    "${PRUNE_ARGS[@]}" \
+    | sort > "${MANIFEST_DIR}/prose-files.txt"
 
-find "$ROOT/spherepop" "$ROOT/tests" \
-    -type f \
-    -name '*.py' \
-    2>/dev/null |
-    sort \
-    > "${MANIFEST_DIR}/python-files.txt"
+find "$ROOT/spherepop" "$ROOT/tests" -type f -name '*.py' \
+    "${PRUNE_ARGS[@]}" \
+    2>/dev/null | sort > "${MANIFEST_DIR}/python-files.txt"
+
+cat "${MANIFEST_DIR}/tex-files.txt" "${MANIFEST_DIR}/prose-files.txt" \
+    > "${MANIFEST_DIR}/versionable-files.txt"
 
 ###############################################################################
-# LaTeX extraction
+# Canonicalization — runs BEFORE extraction/summarization
+###############################################################################
+
+PLAN_JSON="${MANIFEST_DIR}/plan.json"
+
+echo
+echo "============================================================"
+echo " CANONICALIZATION"
+echo "============================================================"
+echo
+
+if [[ ! -s "$PLAN_JSON" || "$FORCE" == 1 ]]; then
+    pyrun canonicalize "$ROOT" "${MANIFEST_DIR}/versionable-files.txt" "$PLAN_JSON"
+    NEEDS_REVIEW=$(python3 -c "
+import json
+plan = json.load(open('${PLAN_JSON}'))
+flagged = [d for d in plan['logical_documents'] if d.get('needs_review')]
+for d in flagged:
+    print(f\"  {d['stem']}: chose {d['canonical']!r} ({d['reason']})\")
+print(len(flagged))
+" )
+    echo "$NEEDS_REVIEW"
+    echo
+    echo "Review any 'needs_review' picks above (or in ${PLAN_JSON}) before"
+    echo "continuing — edit plan.json directly to override a canonical pick."
+else
+    echo "[cached] $PLAN_JSON"
+fi
+
+###############################################################################
+# LaTeX / prose extraction (unchanged from v1 — this stage was not the
+# problem; kept close to the original strategy: Pandoc, existing PDF,
+# compiled PDF, then a conservative source-cleanup fallback)
 ###############################################################################
 
 extract_tex() {
     local src="$1"
     local rel="${src#$ROOT/}"
-    local slug
-    local out
-
-    slug="$(slugify "$rel")"
+    local slug out
+    slug="$(python3 -c "import sys; sys.path.insert(0,'$ROOT'); from pipeline_functions import slugify; print(slugify(sys.argv[1]))" "$rel")"
     out="${TEXT_DIR}/${slug}.txt"
 
-    if [[ -s "$out" && "$FORCE" != 1 ]]; then
-        return
-    fi
+    [[ -s "$out" && "$FORCE" != 1 ]] && return
 
     echo "Extracting: $rel"
 
-    ###########################################################################
-    # Method 1 — Pandoc
-    ###########################################################################
-
     if command -v pandoc >/dev/null; then
-
-        if pandoc \
-            --from=latex \
-            --to=plain \
-            --wrap=none \
-            "$src" \
-            > "${out}.partial" 2>/dev/null
-        then
+        if pandoc --from=latex --to=plain --wrap=none "$src" > "${out}.partial" 2>/dev/null; then
             if [[ -s "${out}.partial" ]]; then
                 mv "${out}.partial" "$out"
-                printf 'pandoc\t%s\n' "$rel" \
-                    >> "${MANIFEST_DIR}/extraction-methods.tsv"
                 return
             fi
         fi
-
     fi
-
-    ###########################################################################
-    # Method 2 — existing PDF
-    ###########################################################################
 
     local pdf="${src%.tex}.pdf"
-
     if [[ -f "$pdf" ]] && command -v pdftotext >/dev/null; then
+        if pdftotext -layout "$pdf" "${out}.partial" 2>/dev/null && [[ -s "${out}.partial" ]]; then
+            mv "${out}.partial" "$out"
+            return
+        fi
+    fi
 
-        if pdftotext -layout "$pdf" "${out}.partial" 2>/dev/null; then
-            if [[ -s "${out}.partial" ]]; then
+    if command -v latexmk >/dev/null && command -v pdftotext >/dev/null; then
+        local build="${CACHE_DIR}/pdf-${slug}"
+        mkdir -p "$build"
+        if latexmk -pdf -interaction=nonstopmode -halt-on-error \
+            -output-directory="$build" "$src" >/dev/null 2>&1
+        then
+            local generated="${build}/$(basename "${src%.tex}.pdf")"
+            if [[ -f "$generated" ]] && pdftotext -layout "$generated" "${out}.partial" && [[ -s "${out}.partial" ]]; then
                 mv "${out}.partial" "$out"
-                printf 'existing-pdf\t%s\n' "$rel" \
-                    >> "${MANIFEST_DIR}/extraction-methods.tsv"
                 return
             fi
         fi
-
     fi
-
-    ###########################################################################
-    # Method 3 — compile temporary PDF
-    ###########################################################################
-
-    if command -v latexmk >/dev/null &&
-       command -v pdftotext >/dev/null
-    then
-
-        local build="${CACHE_DIR}/pdf-${slug}"
-
-        mkdir -p "$build"
-
-        if latexmk \
-            -pdf \
-            -interaction=nonstopmode \
-            -halt-on-error \
-            -output-directory="$build" \
-            "$src" \
-            >/dev/null 2>&1
-        then
-
-            local generated="${build}/$(basename "${src%.tex}.pdf")"
-
-            if [[ -f "$generated" ]]; then
-
-                if pdftotext \
-                    -layout \
-                    "$generated" \
-                    "${out}.partial"
-                then
-                    if [[ -s "${out}.partial" ]]; then
-                        mv "${out}.partial" "$out"
-                        printf 'compiled-pdf\t%s\n' "$rel" \
-                            >> "${MANIFEST_DIR}/extraction-methods.tsv"
-                        return
-                    fi
-                fi
-
-            fi
-
-        fi
-
-    fi
-
-    ###########################################################################
-    # Method 4 — source fallback
-    ###########################################################################
 
     sed \
         -e 's/%.*$//' \
         -e 's/\\section{\([^}]*\)}/\n\1\n/g' \
         -e 's/\\subsection{\([^}]*\)}/\n\1\n/g' \
         -e 's/\\subsubsection{\([^}]*\)}/\n\1\n/g' \
-        "$src" \
-        > "$out"
-
-    printf 'source-fallback\t%s\n' "$rel" \
-        >> "${MANIFEST_DIR}/extraction-methods.tsv"
+        "$src" > "$out"
 }
 
-: > "${MANIFEST_DIR}/extraction-methods.tsv"
+echo
+echo "============================================================"
+echo " EXTRACTION"
+echo "============================================================"
+echo
 
 while IFS= read -r file; do
     extract_tex "$file"
 done < "${MANIFEST_DIR}/tex-files.txt"
 
-###############################################################################
-# Copy prose
-###############################################################################
-
 while IFS= read -r src; do
-
     rel="${src#$ROOT/}"
-    slug="$(slugify "$rel")"
+    slug="$(python3 -c "import sys; sys.path.insert(0,'$ROOT'); from pipeline_functions import slugify; print(slugify(sys.argv[1]))" "$rel")"
     out="${TEXT_DIR}/${slug}.txt"
-
-    if [[ ! -s "$out" || "$FORCE" == 1 ]]; then
-        cp "$src" "$out"
-    fi
-
+    [[ ! -s "$out" || "$FORCE" == 1 ]] && cp "$src" "$out"
 done < "${MANIFEST_DIR}/prose-files.txt"
 
 ###############################################################################
-# Python/code corpus
+# Resolve canonical set — only these feed summarization/clustering.
+# Superseded drafts stay extracted on disk for manual inspection but
+# are excluded from every downstream synthesis stage.
 ###############################################################################
 
-CODE_CORPUS="${TEXT_DIR}/implementation-python.txt"
+CANONICAL_LIST="${MANIFEST_DIR}/canonical-summaries-input.txt"
+SUPERSEDED_LIST="${MANIFEST_DIR}/superseded-excluded.txt"
 
-if [[ ! -s "$CODE_CORPUS" || "$FORCE" == 1 ]]; then
-
-    : > "$CODE_CORPUS"
-
-    while IFS= read -r src; do
-
-        echo
-        echo "============================================================"
-        echo "FILE: ${src#$ROOT/}"
-        echo "============================================================"
-        echo
-
-        cat "$src"
-
-    done < "${MANIFEST_DIR}/python-files.txt" \
-        > "$CODE_CORPUS"
-
-fi
+pyrun resolve-canonical "$PLAN_JSON" "$ROOT" "$TEXT_DIR" "$CANONICAL_LIST" "$SUPERSEDED_LIST"
 
 ###############################################################################
-# Chunk + summarize one document
+# Per-document summarization (position-aware, groundedness-checked)
 ###############################################################################
 
 summarize_document() {
-
     local src="$1"
-    local base
-    local size
-
+    local base title doc_dir final_summary
     base="$(basename "$src" .txt)"
-    size="$(wc -c < "$src")"
+    title="$base"
+    doc_dir="${SUMMARY_DIR}/${base}"
+    final_summary="${doc_dir}/summary.md"
 
-    local doc_dir="${SUMMARY_DIR}/${base}"
-    mkdir -p "$doc_dir"
-
-    ###########################################################################
-    # Small document
-    ###########################################################################
-
-    if (( size <= CHUNK_CHARS )); then
-
-        local prompt="${doc_dir}/prompt.txt"
-        local output="${doc_dir}/summary.md"
-
-        {
-            cat <<'PROMPT'
-You are analyzing one document from a large theoretical and
-computational research repository called Spherepop.
-
-Produce a dense scholarly summary.
-
-Identify:
-
-1. the central thesis;
-2. definitions and primitive concepts;
-3. mathematical claims;
-4. important equations or formal structures;
-5. mechanisms and processes;
-6. philosophical commitments;
-7. connections to computation;
-8. connections to other likely parts of Spherepop;
-9. unresolved questions;
-10. contradictions, ambiguities, or weaknesses;
-11. concepts that appear unusually important and should survive
-    later compression.
-
-Do not merely paraphrase section by section.
-
-Preserve technical distinctions. Do not invent claims absent from
-the source.
-
-SOURCE DOCUMENT
-===============
-
-PROMPT
-            cat "$src"
-        } > "$prompt"
-
-        run_model "$FAST_MODEL" "$prompt" "$output"
-
+    if [[ -s "$final_summary" && "$FORCE" != 1 ]]; then
+        echo "[cached] $final_summary"
         return
     fi
 
-    ###########################################################################
-    # Large document — chunk it
-    ###########################################################################
+    mkdir -p "$doc_dir"
+    echo "Summarizing: $base"
+    log "summarize_document base=${base}"
 
-    local chunks="${doc_dir}/chunks"
+    local chunks_dir="${doc_dir}/chunks"
+    local n_chunks
+    n_chunks="$(pyrun chunk-file "$src" "$chunks_dir" --chunk-chars "$CHUNK_CHARS")"
 
-    mkdir -p "$chunks"
+    local running_abstract="${doc_dir}/running-abstract.txt"
+    rm -f "$running_abstract"
 
-    python3 - "$src" "$chunks" "$CHUNK_CHARS" <<'PY'
-import pathlib
-import sys
+    local i=1
+    for chunk_file in "$chunks_dir"/*.txt; do
+        local tag; tag="$(printf '%04d' "$i")"
 
-source = pathlib.Path(sys.argv[1])
-destination = pathlib.Path(sys.argv[2])
-limit = int(sys.argv[3])
+        local abstract_prompt="${doc_dir}/chunk-${tag}-abstract-prompt.txt"
+        pyrun build-abstract-prompt "$title" "$chunk_file" "$running_abstract" "$abstract_prompt"
+        pyrun call-model "$FAST_MODEL" "$abstract_prompt" "$running_abstract" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
 
-text = source.read_text(errors="replace")
+        local chunk_prompt="${doc_dir}/chunk-${tag}-prompt.txt"
+        local chunk_raw="${doc_dir}/chunk-${tag}-summary.raw.md"
+        local chunk_summary="${doc_dir}/chunk-${tag}-summary.md"
 
-paragraphs = text.split("\n\n")
+        pyrun build-chunk-prompt "$title" "$i" "$n_chunks" \
+            "cluster synthesis and cross-corpus synthesis" \
+            "$chunk_file" "$running_abstract" "$chunk_prompt"
+        pyrun call-model "$FAST_MODEL" "$chunk_prompt" "$chunk_raw" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
+        pyrun check-groundedness "$chunk_raw" "$chunk_file" "$chunk_summary"
 
-chunks = []
-current = []
-
-size = 0
-
-for paragraph in paragraphs:
-    addition = len(paragraph) + 2
-
-    if current and size + addition > limit:
-        chunks.append("\n\n".join(current))
-        current = []
-        size = 0
-
-    current.append(paragraph)
-    size += addition
-
-if current:
-    chunks.append("\n\n".join(current))
-
-for number, chunk in enumerate(chunks, 1):
-    path = destination / f"{number:04d}.txt"
-    path.write_text(chunk)
-PY
-
-    ###########################################################################
-    # Summarize chunks
-    ###########################################################################
-
-    for chunk in "$chunks"/*.txt; do
-
-        chunk_name="$(basename "$chunk" .txt)"
-        prompt="${doc_dir}/chunk-${chunk_name}-prompt.txt"
-        summary="${doc_dir}/chunk-${chunk_name}-summary.md"
-
-        {
-            cat <<'PROMPT'
-Analyze this fragment of a larger Spherepop document.
-
-Extract the durable theoretical information from it.
-
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
-
-Do not waste space describing prose style or saying that this is
-only a fragment.
-
-TEXT
-====
-
-PROMPT
-            cat "$chunk"
-        } > "$prompt"
-
-        run_model "$FAST_MODEL" "$prompt" "$summary"
-
+        i=$((i + 1))
     done
 
-    ###########################################################################
-    # Reduce chunk summaries into document summary
-    ###########################################################################
-
     local reduction_prompt="${doc_dir}/reduction-prompt.txt"
-    local output="${doc_dir}/summary.md"
+    local reduction_raw="${doc_dir}/summary.raw.md"
 
-    {
-        cat <<'PROMPT'
-The following are analytical summaries of consecutive fragments
-of one research document.
-
-Reconstruct the document as a unified theoretical object.
-
-Produce a dense scholarly synthesis covering:
-
-- thesis;
-- primitives and definitions;
-- formalism;
-- mechanisms;
-- major arguments;
-- dependencies between concepts;
-- implications;
-- unresolved problems;
-- internal tensions;
-- connections likely to matter elsewhere in Spherepop.
-
-Remove repetition introduced by chunking.
-
-Do not flatten genuine distinctions.
-
-FRAGMENT SUMMARIES
-==================
-
-PROMPT
-
-        cat "$doc_dir"/chunk-*-summary.md
-
-    } > "$reduction_prompt"
-
-    run_model "$FAST_MODEL" "$reduction_prompt" "$output"
+    pyrun build-reduction-prompt "$title" \
+        "cluster synthesis and cross-corpus synthesis" \
+        "$doc_dir" "$reduction_prompt"
+    pyrun call-model "$FAST_MODEL" "$reduction_prompt" "$reduction_raw" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
+    pyrun check-groundedness "$reduction_raw" "$src" "$final_summary"
 }
 
-###############################################################################
-# Document summaries
-###############################################################################
-
 echo
 echo "============================================================"
-echo " DOCUMENT ANALYSIS"
+echo " DOCUMENT ANALYSIS (canonical documents only — see ${SUPERSEDED_LIST}"
+echo " for drafts excluded from synthesis)"
 echo "============================================================"
 echo
 
-for src in "$TEXT_DIR"/*.txt; do
+while IFS= read -r src; do
+    [[ -n "$src" ]] || continue
     summarize_document "$src"
-done
+done < "$CANONICAL_LIST"
 
 ###############################################################################
-# Construct thematic corpora from summaries
+# Thematic cluster synthesis — batched, rolling merge
 ###############################################################################
 
 make_cluster() {
-
     local name="$1"
     local regex="$2"
 
-    local corpus="${CLUSTER_DIR}/${name}-corpus.md"
-    local prompt="${CLUSTER_DIR}/${name}-prompt.txt"
-    local output="${CLUSTER_DIR}/${name}.md"
+    local cluster_out="${CLUSTER_DIR}/${name}.md"
+    if [[ -s "$cluster_out" && "$FORCE" != 1 ]]; then
+        echo "[cached] $cluster_out"
+        return
+    fi
 
-    : > "$corpus"
+    local members="${CLUSTER_DIR}/${name}-members.txt"
+    : > "$members"
+    while IFS= read -r src; do
+        [[ -n "$src" ]] || continue
+        local base; base="$(basename "$src" .txt)"
+        local summary="${SUMMARY_DIR}/${base}/summary.md"
+        [[ -s "$summary" ]] || continue
+        if [[ "$base" =~ $regex ]]; then
+            echo "$summary" >> "$members"
+        fi
+    done < "$CANONICAL_LIST"
 
-    find "$SUMMARY_DIR" \
-        -type f \
-        -name summary.md \
-        | sort \
-        | grep -Ei "$regex" \
-        | while IFS= read -r summary; do
+    if [[ ! -s "$members" ]]; then
+        echo "[skip] $name: no matching canonical documents"
+        return
+    fi
 
-            echo
-            echo "============================================================"
-            echo "SOURCE: $summary"
-            echo "============================================================"
-            echo
+    local batch_dir="${CLUSTER_DIR}/${name}-batches"
+    local n_batches
+    n_batches="$(pyrun batch-plan "$members" "$BATCH_SIZE" "$batch_dir")"
 
-            cat "$summary"
+    if [[ "$n_batches" -eq 0 ]]; then
+        echo "[skip] $name: batch-plan produced 0 batches"
+        return
+    fi
 
-        done >> "$corpus" || true
-
-    [[ -s "$corpus" ]] || return 0
-
-    {
-        cat <<PROMPT
-You are performing a second-order synthesis of the Spherepop
-research corpus.
-
-This cluster is:
-
-    ${name}
-
-The inputs are already document-level analytical summaries.
-
-Determine the shared conceptual architecture rather than simply
-summarizing them again.
-
-Identify:
-
-- recurring primitives;
-- changing terminology for equivalent concepts;
-- genuinely different concepts that must not be conflated;
-- mathematical structures;
-- causal or operational mechanisms;
-- chronological development where visible;
-- contradictions between documents;
-- abandoned versus mature ideas;
-- strongest theoretical claims;
-- missing lemmas or bridges;
-- implications not explicitly stated by individual documents.
-
-End with a compact statement of what this cluster contributes to
-Spherepop as a whole.
-
-CORPUS
-======
-
-PROMPT
-
-        cat "$corpus"
-
-    } > "$prompt"
-
-    run_model "$DEEP_MODEL" "$prompt" "$output"
+    local b=1
+    for batch_file in "$batch_dir"/*.txt; do
+        local prompt="${CLUSTER_DIR}/${name}-batch-${b}-prompt.txt"
+        pyrun build-batch-merge-prompt \
+            "cluster '${name}'" "$b" "$n_batches" \
+            "$cluster_out" "$batch_file" "$prompt"
+        pyrun call-model "$DEEP_MODEL" "$prompt" "$cluster_out" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
+        b=$((b + 1))
+    done
 }
 
+echo
+echo "============================================================"
+echo " THEMATIC SYNTHESIS (batches of ${BATCH_SIZE} documents/batch)"
+echo "============================================================"
+echo
+
+make_cluster "identity-history"       'identity|history|event-history|execution-history|forkability'
+make_cluster "admissibility-refusal"  'admissib|refus|commitment|irreversib|collapse'
+make_cluster "geometry-dynamics"      'geodesic|geometry|scope|trajectory|rotation|dynamics'
+make_cluster "computation"            'comput|spherepop-os|specification|python|haskell|racket|implementation'
+make_cluster "memory-attention"       'memory|attention|intelligence|thought|semantic'
+make_cluster "textbook-foundations"   'textbook|foundation|ecology|truth|logic|language|distinction'
+make_cluster "adaptive-trust"         'adaptive-trust|cycle1|cycle2|renewal|diagnosis'
+make_cluster "history-development"    'history-of-spherepop|changelog|future|improvement|theory-status'
+
 ###############################################################################
-# Thematic synthesis
+# Cross-corpus synthesis — batched over cluster syntheses
 ###############################################################################
 
 echo
 echo "============================================================"
-echo " THEMATIC SYNTHESIS"
+echo " CROSS-CORPUS SYNTHESIS"
 echo "============================================================"
 echo
 
-make_cluster \
-    "identity-history" \
-    'identity|history|event-history|execution-history|forkability'
-
-make_cluster \
-    "admissibility-refusal" \
-    'admissib|refus|commitment|irreversib|collapse'
-
-make_cluster \
-    "geometry-dynamics" \
-    'geodesic|geometry|scope|trajectory|rotation|dynamics'
-
-make_cluster \
-    "computation" \
-    'comput|spherepop-os|specification|python|haskell|racket|implementation'
-
-make_cluster \
-    "memory-attention-intelligence" \
-    'memory|attention|intelligence|thought|semantic'
-
-make_cluster \
-    "textbook-foundations" \
-    'textbook|foundation|ecology|truth|logic|language|distinction'
-
-make_cluster \
-    "adaptive-trust" \
-    'adaptive-trust|cycle1|cycle2|renewal|diagnosis'
-
-make_cluster \
-    "history-development" \
-    'history-of-spherepop|changelog|future|improvement|theory-status'
-
-###############################################################################
-# Cross-corpus synthesis
-###############################################################################
-
-CROSS_PROMPT="${CROSS_DIR}/prompt.txt"
 CROSS_OUTPUT="${CROSS_DIR}/spherepop-synthesis.md"
 
-{
-    cat <<'PROMPT'
-You are now analyzing several thematic syntheses produced from a
-large research repository.
+if [[ -s "$CROSS_OUTPUT" && "$FORCE" != 1 ]]; then
+    echo "[cached] $CROSS_OUTPUT"
+else
+    CLUSTER_LIST="${CROSS_DIR}/cluster-members.txt"
+    find "$CLUSTER_DIR" -maxdepth 1 -name '*.md' \
+        ! -name '*-batches' | sort > "$CLUSTER_LIST"
 
-Construct a unified account of Spherepop.
+    CROSS_BATCH_DIR="${CROSS_DIR}/batches"
+    n_batches="$(pyrun batch-plan "$CLUSTER_LIST" "$BATCH_SIZE" "$CROSS_BATCH_DIR")"
 
-Do not merely concatenate the syntheses.
+    if [[ "$n_batches" -eq 0 ]]; then
+        die "cross-corpus synthesis: no cluster syntheses were produced (every cluster matched 0 documents) — check plan.json and the cluster regexes in this script"
+    fi
 
-Determine the smallest conceptual architecture capable of
-explaining the corpus.
-
-Specifically determine:
-
-1. primitive entities or distinctions;
-2. primitive operations;
-3. state and history;
-4. identity;
-5. admissibility;
-6. refusal;
-7. binding;
-8. collapse;
-9. observers and derived views;
-10. trajectory structure;
-11. geometry;
-12. irreversibility;
-13. memory;
-14. computation;
-15. semantics;
-16. multi-timescale continuation;
-17. the relation between implementation and theory.
-
-Explicitly distinguish:
-
-- foundational claims;
-- derived results;
-- metaphors;
-- conjectures;
-- implementation choices;
-- historical artifacts;
-- unresolved inconsistencies.
-
-Search for latent equivalences between terminology used in
-different parts of the corpus.
-
-Also identify places where apparent equivalence is dangerous.
-
-THEMATIC SYNTHESES
-==================
-
-PROMPT
-
-    for file in "$CLUSTER_DIR"/*.md; do
-        [[ "$file" == *-corpus.md ]] && continue
-        [[ "$file" == *-prompt.txt ]] && continue
-
-        echo
-        echo "============================================================"
-        echo "CLUSTER: $(basename "$file")"
-        echo "============================================================"
-        echo
-
-        cat "$file"
+    b=1
+    for batch_file in "$CROSS_BATCH_DIR"/*.txt; do
+        prompt="${CROSS_DIR}/batch-${b}-prompt.txt"
+        pyrun build-batch-merge-prompt \
+            "the full corpus" "$b" "$n_batches" \
+            "$CROSS_OUTPUT" "$batch_file" "$prompt"
+        pyrun call-model "$DEEP_MODEL" "$prompt" "$CROSS_OUTPUT" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
+        b=$((b + 1))
     done
-
-} > "$CROSS_PROMPT"
-
-run_model \
-    "$DEEP_MODEL" \
-    "$CROSS_PROMPT" \
-    "$CROSS_OUTPUT"
+fi
 
 ###############################################################################
-# Reflexive pass
+# Reflexive pass / adversarial critique / reconstruction / final report
+#
+# These four stages are single-shot over already-synthesized,
+# already-groundedness-checked material, so they keep the v1 shape —
+# one prompt, one call — but built via pyrun instead of an inline
+# heredoc, and still content-hash cached.
 ###############################################################################
 
-REFLECTION_PROMPT="${REFLECTION_DIR}/prompt.txt"
-REFLECTION_OUTPUT="${REFLECTION_DIR}/reflexive-analysis.md"
+run_single_stage() {
+    local stage_name="$1" prompt_body_file="$2" input_file="$3" \
+          extra_input_label="$4" extra_input_file="$5" output="$6"
 
-{
-    cat <<'PROMPT'
+    if [[ -s "$output" && "$FORCE" != 1 ]]; then
+        echo "[cached] $output"
+        return
+    fi
+
+    local prompt="${output}.prompt.txt"
+    {
+        cat "$prompt_body_file"
+        cat "$input_file"
+        if [[ -n "$extra_input_file" && -s "$extra_input_file" ]]; then
+            echo; echo; echo "$extra_input_label"; echo "${extra_input_label//?/=}"; echo
+            cat "$extra_input_file"
+        fi
+    } > "$prompt"
+
+    pyrun call-model "$DEEP_MODEL" "$prompt" "$output" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
+}
+
+echo
+echo "============================================================"
+echo " REFLEXIVE ANALYSIS / CRITIQUE / RECONSTRUCTION / FINAL REPORT"
+echo "============================================================"
+echo
+
+REFLECTION_BODY="${REFLECTION_DIR}/prompt-body.txt"
+cat > "$REFLECTION_BODY" <<'PROMPT'
 Read the following attempted synthesis of Spherepop reflexively.
 
-Do not ask merely whether it is correct.
+Every claim below carries a [source: "..."] citation that has
+already been mechanically verified against its source document —
+treat uncited or flagged [UNGROUNDED ...] lines as unreliable and
+do not build on them.
 
-Ask what conceptual machinery the synthesis itself had to use in
-order to make the corpus coherent.
+Do not ask merely whether the synthesis is correct. Ask what
+conceptual machinery the synthesis itself had to use in order to
+make the corpus coherent.
 
-Identify:
-
-- concepts functioning as hidden primitives;
-- circular definitions;
-- concepts doing several incompatible jobs;
-- structures that recur at multiple scales;
-- operations that appear more fundamental than the nouns used
-  to describe them;
-- distinctions lost during synthesis;
-- ideas that become clearer only when documents are considered
-  historically;
-- ideas that become weaker when considered historically;
-- places where the implementation provides a more precise theory
-  than the prose;
-- places where the prose contains theoretical commitments absent
-  from the implementation.
+Identify: concepts functioning as hidden primitives; circular
+definitions; concepts doing several incompatible jobs; structures
+that recur at multiple scales; operations more fundamental than the
+nouns used to describe them; distinctions lost during synthesis;
+ideas clearer when considered historically; ideas weaker when
+considered historically; places where implementation is more precise
+than prose; places where prose contains commitments absent from
+implementation.
 
 Then propose a more economical conceptual basis for Spherepop.
 
@@ -798,247 +555,105 @@ SYNTHESIS
 =========
 
 PROMPT
+REFLECTION_OUTPUT="${REFLECTION_DIR}/reflexive-analysis.md"
+run_single_stage "reflection" "$REFLECTION_BODY" "$CROSS_OUTPUT" "" "" "$REFLECTION_OUTPUT"
 
-    cat "$CROSS_OUTPUT"
-
-} > "$REFLECTION_PROMPT"
-
-run_model \
-    "$DEEP_MODEL" \
-    "$REFLECTION_PROMPT" \
-    "$REFLECTION_OUTPUT"
-
-###############################################################################
-# Adversarial critique
-###############################################################################
-
-CRITIQUE_PROMPT="${CRITIQUE_DIR}/prompt.txt"
-CRITIQUE_OUTPUT="${CRITIQUE_DIR}/critique.md"
-
-{
-    cat <<'PROMPT'
+CRITIQUE_BODY="${CRITIQUE_DIR}/prompt-body.txt"
+cat > "$CRITIQUE_BODY" <<'PROMPT'
 Act as a technically serious skeptical reviewer of the following
 Spherepop synthesis and reflexive analysis.
 
+Every claim in the material below has already been mechanically
+checked against its source document; treat it as reliably grounded
+unless marked [UNGROUNDED ...].
+
 Do not dismiss the project merely because its terminology is
-unusual.
-
-Instead identify exact failure modes.
-
-Look especially for:
-
-- undefined primitives;
-- equivocation;
-- circularity;
-- category errors;
-- claims stronger than their formal support;
-- mathematical statements lacking necessary assumptions;
-- accidental rediscovery of known structures;
-- implementation behavior contradicting prose;
-- examples that do not establish the claimed general result;
-- terminology that obscures simpler formulations;
-- unfalsifiable claims;
-- missing counterexamples;
-- missing invariants;
-- places where multiple theories have been joined without a
-  demonstrated bridge.
+unusual. Instead identify exact failure modes: undefined primitives;
+equivocation; circularity; category errors; claims stronger than
+their formal support; mathematical statements lacking necessary
+assumptions; accidental rediscovery of known structures;
+implementation behavior contradicting prose; examples that do not
+establish the claimed general result; terminology that obscures
+simpler formulations; unfalsifiable claims; missing counterexamples;
+missing invariants; places where multiple theories have been joined
+without a demonstrated bridge.
 
 For each substantial criticism, state what would be required to
-repair it.
+repair it, and cite which specific document(s) the criticism applies
+to rather than the corpus as a whole, where that's determinable from
+the source material.
 
 SYNTHESIS
 =========
 
 PROMPT
+CRITIQUE_OUTPUT="${CRITIQUE_DIR}/critique.md"
+run_single_stage "critique" "$CRITIQUE_BODY" "$CROSS_OUTPUT" "REFLEXIVE ANALYSIS" "$REFLECTION_OUTPUT" "$CRITIQUE_OUTPUT"
 
-    cat "$CROSS_OUTPUT"
-
-    echo
-    echo
-    echo "REFLEXIVE ANALYSIS"
-    echo "=================="
-    echo
-
-    cat "$REFLECTION_OUTPUT"
-
-} > "$CRITIQUE_PROMPT"
-
-run_model \
-    "$DEEP_MODEL" \
-    "$CRITIQUE_PROMPT" \
-    "$CRITIQUE_OUTPUT"
-
-###############################################################################
-# Reconstruction
-###############################################################################
-
-RECON_PROMPT="${RECONSTRUCTION_DIR}/prompt.txt"
-RECON_OUTPUT="${RECONSTRUCTION_DIR}/reconstruction.md"
-
-{
-    cat <<'PROMPT'
+RECON_BODY="${RECONSTRUCTION_DIR}/prompt-body.txt"
+cat > "$RECON_BODY" <<'PROMPT'
 Reconstruct the Spherepop theory after criticism.
 
-You have three inputs:
+You have three inputs: a corpus-level synthesis; a reflexive
+analysis; an adversarial critique. Produce the strongest version of
+the theory justified by the available material.
 
-1. a corpus-level synthesis;
-2. a reflexive analysis;
-3. an adversarial critique.
-
-Produce the strongest version of the theory justified by the
-available material.
-
-Do not defend every historical claim.
-
-Discard weak formulations where necessary.
-
-Separate:
-
-- axioms or primitives;
-- definitions;
-- operations;
-- invariants;
-- derived propositions;
-- conjectures;
-- empirical or computational observations;
-- philosophical interpretations.
+Do not defend every historical claim. Discard weak formulations
+where necessary. Separate: axioms/primitives; definitions;
+operations; invariants; derived propositions; conjectures;
+empirical/computational observations; philosophical interpretations.
 
 Where the critique exposes a genuine gap, preserve the gap
-explicitly rather than inventing a solution.
-
-Where several terms can be unified, propose canonical
-terminology.
-
-Where terms must remain distinct, explain why.
-
-The objective is conceptual compression without conceptual loss.
+explicitly rather than inventing a solution. Where several terms can
+be unified, propose canonical terminology; where terms must remain
+distinct, explain why. The objective is conceptual compression
+without conceptual loss.
 
 CORPUS SYNTHESIS
 ================
 
 PROMPT
+RECON_OUTPUT="${RECONSTRUCTION_DIR}/reconstruction.md"
+# Reconstruction genuinely needs three inputs (synthesis + reflection +
+# critique), unlike the other single/double-input stages, so it's built
+# directly here rather than through run_single_stage.
+if [[ -s "$RECON_OUTPUT" && "$FORCE" != 1 ]]; then
+    echo "[cached] $RECON_OUTPUT"
+else
+    {
+        cat "$RECON_BODY"
+        cat "$CROSS_OUTPUT"
+        echo; echo; echo "REFLEXIVE ANALYSIS"; echo "=================="; echo
+        cat "$REFLECTION_OUTPUT"
+        echo; echo; echo "ADVERSARIAL CRITIQUE"; echo "===================="; echo
+        cat "$CRITIQUE_OUTPUT"
+    } > "${RECON_OUTPUT}.prompt.txt"
+    pyrun call-model "$DEEP_MODEL" "${RECON_OUTPUT}.prompt.txt" "$RECON_OUTPUT" --cache-dir "$CACHE_DIR" ${FORCE:+--force}
+fi
 
-    cat "$CROSS_OUTPUT"
+FINAL_BODY="${FINAL_DIR}/prompt-body.txt"
+cat > "$FINAL_BODY" <<'PROMPT'
+Produce the final research report on the Spherepop repository, useful
+to the author as a map of the entire research program. Write
+substantial, precise prose.
 
-    echo
-    echo
-    echo "REFLEXIVE ANALYSIS"
-    echo "=================="
-    echo
+Include: EXECUTIVE SYNTHESIS; THEORETICAL ARCHITECTURE; FORMAL CORE;
+THEORY/IMPLEMENTATION RELATION; INTELLECTUAL DEVELOPMENT;
+TERMINOLOGY; STRONGEST RESULTS; WEAKEST LINKS; OPEN PROBLEMS;
+CANONICALIZATION (cross-check against manifest/plan.json's canonical
+picks rather than re-deriving this from scratch); COMPRESSION (three
+increasingly compressed descriptions: ~1000 words, ~250 words, one
+paragraph).
 
-    cat "$REFLECTION_OUTPUT"
-
-    echo
-    echo
-    echo "ADVERSARIAL CRITIQUE"
-    echo "===================="
-    echo
-
-    cat "$CRITIQUE_OUTPUT"
-
-} > "$RECON_PROMPT"
-
-run_model \
-    "$DEEP_MODEL" \
-    "$RECON_PROMPT" \
-    "$RECON_OUTPUT"
-
-###############################################################################
-# Final report
-###############################################################################
-
-FINAL_PROMPT="${FINAL_DIR}/prompt.txt"
-FINAL_OUTPUT="${FINAL_DIR}/spherepop-theory-report.md"
-
-{
-    cat <<'PROMPT'
-Produce the final research report on the Spherepop repository.
-
-This report should be useful to the author as a map of the entire
-research program.
-
-Write substantial, precise prose.
-
-Include:
-
-EXECUTIVE SYNTHESIS
-
-Explain what Spherepop appears to be at its deepest level.
-
-THEORETICAL ARCHITECTURE
-
-Give the minimal coherent conceptual architecture.
-
-FORMAL CORE
-
-State the important primitives, operations, relations,
-invariants, equations, and formal claims.
-
-THEORY / IMPLEMENTATION RELATION
-
-Explain what the Python implementation establishes, what it only
-illustrates, and what remains purely theoretical.
-
-INTELLECTUAL DEVELOPMENT
-
-Explain major conceptual changes visible across drafts, histories,
-experiments, and mature documents.
-
-TERMINOLOGY
-
-Identify synonyms, near-synonyms, overloaded terms, and concepts
-that should remain sharply distinct.
-
-STRONGEST RESULTS
-
-Identify the portions of the project that appear most rigorous or
-most conceptually distinctive.
-
-WEAKEST LINKS
-
-Identify unresolved gaps without rhetorical softening.
-
-OPEN PROBLEMS
-
-Construct a prioritized research agenda.
-
-CANONICALIZATION
-
-Recommend which documents appear canonical, which are historical,
-which are exploratory, and which appear superseded.
-
-COMPRESSION
-
-End with three increasingly compressed descriptions:
-
-1. approximately 1000 words;
-2. approximately 250 words;
-3. one paragraph.
-
-Do not introduce unsupported claims merely to make the theory
-appear unified.
+Do not introduce unsupported claims merely to make the theory appear
+unified.
 
 RECONSTRUCTED THEORY
 ====================
 
 PROMPT
-
-    cat "$RECON_OUTPUT"
-
-    echo
-    echo
-    echo "ADVERSARIAL CRITIQUE"
-    echo "===================="
-    echo
-
-    cat "$CRITIQUE_OUTPUT"
-
-} > "$FINAL_PROMPT"
-
-run_model \
-    "$DEEP_MODEL" \
-    "$FINAL_PROMPT" \
-    "$FINAL_OUTPUT"
+FINAL_OUTPUT="${FINAL_DIR}/spherepop-theory-report.md"
+run_single_stage "final" "$FINAL_BODY" "$RECON_OUTPUT" "ADVERSARIAL CRITIQUE" "$CRITIQUE_OUTPUT" "$FINAL_OUTPUT"
 
 ###############################################################################
 # Done
@@ -1049,16 +664,8 @@ echo "============================================================"
 echo " SPHEREPOP REPOSITORY ANALYSIS COMPLETE"
 echo "============================================================"
 echo
-
-echo "Final report:"
-echo
-echo "    $FINAL_OUTPUT"
-echo
-
-echo "Intermediate reasoning:"
-echo
-echo "    $ANALYSIS"
-echo
-
-echo "The analysis tree preserves every reflexive stage."
+echo "Final report:      $FINAL_OUTPUT"
+echo "Canonicalization:   $PLAN_JSON  (check needs_review entries)"
+echo "Excluded drafts:    $SUPERSEDED_LIST"
+echo "Intermediate stages: $ANALYSIS"
 echo

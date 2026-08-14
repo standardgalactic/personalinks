@@ -1,0 +1,942 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \draw[->] (-4,0) -- (4,0) node[right] {\small configuration space};
+  \draw[->] (0,-2.5) -- (0,2.5) node[above] {\small time};
+  \draw[thick] (-3,-2) .. controls (-1,-0.5) .. (2,1);
+  \draw[thick] (-3,2)  .. controls (-1,0.5)  .. (2,1);
+  \filldraw (2,1) circle (3pt);
+  \node at (2.4,1.3) {$X$};
+  \node at (-2.4,-2.3) {$H_1$};
+  \node at (-2.4,2.3)  {$H_2$};
+\end{tikzpicture}
+\caption{Two histories $H_1$ and $H_2$ converging to the same terminal
+configuration.  In the trajectory-based formulation, these represent distinct
+equivalence classes in $\mathcal{T}$ that project to distinct objects in
+$\PathCat$ (since the event words differ) even though both project to the same
+object in $\mathcal{S}$ under $\Collapse$.  Structural identity conflates them;
+Spherepop identity does not.}
+\label{fig:identity}
+\end{figure}
+
+The distinction illustrated in Figure~\ref{fig:identity} now has an explicit
+categorical interpretation.  The two histories $H_1$ and $H_2$ correspond to
+distinct equivalence classes in $\PathCat$ under $\Pi_{\mathrm{hist}}$, and they
+remain distinct under any identity criterion that does not further apply
+$\Collapse$.  Structural identity is the criterion that applies both projections;
+Spherepop identity is the criterion that applies only the first.
+
+
+Identity as a Quotient of Irreversibility
+
+
+The formulation of identity as projected history makes explicit why
+irreversibility is not merely a useful property of the framework but a
+constitutive one.  Because $\mathcal{T}$ has no non-trivial isomorphisms, the
+projection $\Pi_{\mathrm{hist}}$ is a quotient map onto an equally irreversible
+category.  The equivalence relation $\sim$ on $\mathcal{T}$ that defines
+identity is induced by this projection, and its structure is determined entirely
+by which information $\Pi_{\mathrm{hist}}$ preserves and which it discards.
+
+What is preserved: the set of committed events and the order in which they
+occurred.  What is discarded: the intermediate structure of the option spaces,
+the paths through possibility that were available but not taken, and any
+information about the geometry of the contraction that is not encoded in the
+ordered sequence of its outputs.
+
+Identity is therefore a quotient of an irreversible process.  It retains the
+temporal ordering of commitments---because that ordering is the substance of the
+event word---but forgets the full space of alternatives that preceded each
+commitment.  This quotient is not arbitrary or chosen for convenience; it is
+forced by the structure of $\Pi_{\mathrm{hist}}$ and by the irreversibility of
+the dynamics in $\mathcal{T}$ that the projection collapses.
+
+Irreversibility and the Necessity of Historical Identity
+
+\label{sec:necessity}
+
+The preceding sections have developed historical identity as a representational
+choice---a richer framework than extensional identity that preserves the causal
+record which extensional accounts discard.  But the relationship between the two
+is stronger than a mere difference in descriptive power.  Under conditions of
+genuine irreversibility, extensional identity fails as a faithful criterion:
+it identifies objects that are, in any causally or computationally significant
+sense, distinct.  This section makes that failure precise.
+
+\begin{definition}[Extensional equivalence]
+Two histories $H, H' \in \mathcal{E}^{*}$ are \emph{extensionally equivalent}
+if they produce the same observable outcome under the Collapse functor:
+\[
+  H \sim_{\mathrm{ext}} H'
+  \quad\Longleftrightarrow\quad
+  \mathrm{Collapse}(H) = \mathrm{Collapse}(H').
+\]
+\end{definition}
+
+\begin{definition}[Intensional identity]
+Two histories are \emph{intensionally identical} if they are literally equal
+as ordered sequences, or equivalently, if their Spherepop normal forms coincide:
+\[
+  H =_{\mathrm{int}} H'
+  \quad\Longleftrightarrow\quad
+  (\mathrm{spherepop}(H))_{\mathrm{nf}} = (\mathrm{spherepop}(H'))_{\mathrm{nf}}.
+\]
+\end{definition}
+
+The inclusion $=_{\mathrm{int}} \;\subseteq\; \sim_{\mathrm{ext}}$ is
+immediate: intensionally identical histories produce the same observable outcome,
+since Collapse is a functor.  The converse fails in general, and the failure
+is not accidental.
+
+\begin{theorem}[Failure of Extensional Identity under Irreversibility]
+\label{thm:necessity}
+If the event signature contains elements $a, b$ such that
+$T_a \circ T_b \neq T_b \circ T_a$ for some root state $s_0$, then
+extensional equivalence does not define a faithful identity relation on
+histories: there exist histories $H \neq H'$ with
+$\mathrm{Collapse}(H) = \mathrm{Collapse}(H')$ and histories
+$H_1 \neq H_2$ with $\mathrm{Collapse}(H_1) \neq \mathrm{Collapse}(H_2)$.
+In particular, no extensional criterion can recover the full intensional
+structure of the history category.
+\end{theorem}
+
+\begin{proof}
+For the first claim, choose events $a$ and $b$ that happen to commute at a
+particular point: $T_a \circ T_b(s_0) = T_b \circ T_a(s_0)$.  The histories
+$H = (a, b)$ and $H' = (b, a)$ are distinct as ordered sequences, hence
+$H \neq H'$ under intensional identity, yet $\mathrm{Collapse}(H) =
+\mathrm{Collapse}(H')$, so they are extensionally equivalent.  Any identity
+criterion that relies solely on observable output collapses a genuine
+distinction.
+
+For the second claim, choose $a, b$ such that
+$T_a \circ T_b(s_0) \neq T_b \circ T_a(s_0)$, which is possible by hypothesis.
+Then $H_1 = (a, b)$ and $H_2 = (b, a)$ are extensionally distinct.  Since they
+are also intensionally distinct, extensional equivalence is both coarser and
+finer than intensional identity in different parts of the history space: it
+conflates some distinct histories while distinguishing others.  No quotient of
+the extensional equivalence classes faithfully recovers the intensional
+structure.
+\end{proof}
+
+\begin{corollary}[Necessity of Historical Identity]
+\label{cor:necessity}
+In any irreversible system in which commitment order is causally significant,
+the only identity criterion that is simultaneously faithful and compositionally
+coherent is intensional historical identity.
+\end{corollary}
+
+The philosophical weight of this result is substantial.  It transforms the
+Spherepop framework from a representational preference into a logical necessity.
+The argument is not that historical identity is \emph{useful} for recording
+provenance---which it clearly is---but that in a world of genuine irreversibility,
+extensional identity is the wrong notion of identity, and historical identity
+is the only consistent alternative.
+
+This is precisely the position that the Spherepop framework has been developing
+from the opening sections.  Two objects whose present configurations agree but
+whose histories differ are not merely described differently by the two criteria;
+they are genuinely different objects, and any framework that fails to distinguish
+them has changed its subject.  The worked example of Section~\ref{sec:worked},
+the DAG structure of Section~\ref{sec:dags}, the operational semantics of
+Section~\ref{sec:operational}, and the reconstruction analysis of
+Section~\ref{sec:reconstruction} all instantiate the same underlying
+point that Theorem~\ref{thm:necessity} makes precise: history cannot be
+recovered from state, and a theory that identifies by state has lost what
+matters.
+
+
+Equivalence Relations on Histories
+
+\label{sec:equivalences}
+
+The Spherepop identity criterion identifies two objects precisely when their
+normalized event histories coincide.  This is the strictest reasonable notion
+of identity within the framework.  However, many applications require coarser
+comparisons---situations in which two objects are considered equivalent even
+though their detailed histories differ.  This section introduces a stratified
+family of equivalence relations that captures the range of positions between
+strict historical identity and pure structural indistinguishability.
+
+The finest relation is Spherepop identity itself, which has been the focus
+of the preceding sections.  Two objects are Spherepop-identical when their
+normal forms are equal as event words:
+\[
+  X \equiv_{\mathrm{sp}} Y
+  \quad \Longleftrightarrow \quad
+  (\text{spherepop}(X))_{\mathrm{nf}} = (\text{spherepop}(Y))_{\mathrm{nf}}.
+\]
+
+A strictly coarser relation is \emph{causal isomorphism}, which identifies
+objects when their ancestral event graphs are isomorphic as labeled directed
+graphs but does not require that the vertex sets be literally equal:
+\[
+  X \equiv_{\mathrm{ci}} Y
+  \quad \Longleftrightarrow \quad
+  G_X \cong G_Y.
+\]
+Under causal isomorphism two objects are equivalent when they arose from
+histories with the same causal shape and the same event types at each node,
+even if the specific identifiers of intermediate regions differ.  This relation
+is useful in contexts where the labels of intermediate states are considered
+implementation details rather than constitutive features of identity.
+
+Coarser still is \emph{trace equivalence}, which identifies objects when their
+sets of possible executions---their sets of linear extensions of the causal
+poset---coincide:
+\[
+  X \equiv_{\mathrm{tr}} Y
+  \quad \Longleftrightarrow \quad
+  \mathrm{Lin}(G_X) = \mathrm{Lin}(G_Y),
+\]
+where $\mathrm{Lin}(G)$ denotes the set of all linear extensions of the
+event graph $G$.  Trace equivalence captures the idea that two objects are
+indistinguishable with respect to every possible sequential observation of
+their histories, while still retaining causal information beyond what is
+present in the final configuration.
+
+The coarsest relation in this family is \emph{structural isomorphism}, which
+identifies objects when their present configurations are isomorphic without
+any reference to history:
+\[
+  X \equiv_{\mathrm{struct}} Y
+  \quad \Longleftrightarrow \quad
+  C_X \cong C_Y,
+\]
+where $C_X$ denotes the present configuration of $X$.  This is the set-
+theoretic notion of extensional identity discussed in Section~\ref{sec:identity},
+which discards all historical information.
+
+These four relations are ordered by inclusion:
+\[
+  \equiv_{\mathrm{sp}} \;\subseteq\; \equiv_{\mathrm{ci}}
+  \;\subseteq\; \equiv_{\mathrm{tr}} \;\subseteq\; \equiv_{\mathrm{struct}}.
+\]
+Each successive relation is strictly coarser in general, though specific
+examples may make some pairs coincide.  For instance, in a system with no
+branching, all linear event words with the same length over the same alphabet
+are already trace-equivalent, so $\equiv_{\mathrm{sp}}$ and $\equiv_{\mathrm{tr}}$
+coincide.
+
+The choice of which equivalence relation to employ depends on the application.
+For auditing and accountability, full Spherepop identity is appropriate.
+For type-theoretic reasoning about program behavior, causal isomorphism may
+suffice.  For behavioral equivalences in process calculi, trace equivalence
+connects naturally to the Mazurkiewicz tradition \citep{Mazurkiewicz1987}.
+For extensional mathematics, structural isomorphism suffices.  The Spherepop
+framework provides the vocabulary to make these distinctions explicit and to
+reason about what is preserved or lost under each.
+
+
+
+Spherepop as a Free Traced Monoidal Construction
+
+\label{sec:traced}
+
+The compositional structure of Spherepop histories places the framework
+naturally within the theory of categorical process theory.  The primitive
+operations of the formalism---the sequential composition of events, the
+independent parallel occurrence of events, and the merging and splitting
+constructions---correspond to the standard generators of a symmetric monoidal
+category.  When the additional structure of internal closure is taken into
+account, the framework extends to a traced monoidal category.  This section
+makes these connections explicit and uses them to clarify the universal
+properties of the Spherepop construction.
+
+Let $\Sigma$ be a generating signature consisting of primitive event types.
+Each event type in $\Sigma$ is specified by the interface it consumes and the
+interface it produces, where an interface is a collection of regions that the
+event acts upon.  From $\Sigma$ one constructs the free symmetric monoidal
+category $\mathcal{F}(\Sigma)$ in which morphisms correspond to event histories
+assembled from primitive events by sequential composition and monoidal product.
+
+Sequential composition of events corresponds to categorical composition: if
+$E_1 : A \to B$ and $E_2 : B \to C$ are event types, then their sequential
+occurrence produces the composite morphism $E_2 \circ E_1 : A \to C$.  The
+monoidal product $E_1 \otimes E_2 : A_1 \otimes A_2 \to B_1 \otimes B_2$
+corresponds to the independent parallel occurrence of $E_1$ and $E_2$ acting
+on disjoint interfaces.  An event word
+\[
+  (E_{i_1}, E_{i_2}, \dots, E_{i_k})
+\]
+therefore corresponds to the composite morphism
+\[
+  E_{i_k} \circ \cdots \circ E_{i_2} \circ E_{i_1}
+\]
+in $\mathcal{F}(\Sigma)$.  Branching and merging events, when represented as
+string diagrams in $\mathcal{F}(\Sigma)$, appear as boxes with multiple output
+wires and multiple input wires respectively, following the standard graphical
+calculus for monoidal categories \citep{BaezStay2010}.
+
+The commutation rules of Section~\ref{sec:normalization}, which identify
+event words that differ only by the ordering of independent events, correspond
+precisely to the symmetry isomorphisms of the monoidal structure.  In the free
+symmetric monoidal category, the symmetry natural transformation
+\[
+  \sigma_{A,B} : A \otimes B \xrightarrow{\;\sim\;} B \otimes A
+\]
+witnesses the equivalence between the two orderings of independent events.
+The Spherepop normal form selects a canonical representative from each
+such equivalence class, mirroring the canonical form of morphisms in the
+free symmetric monoidal category modulo the coherence axioms.
+
+Many Spherepop histories, however, involve intermediate regions that are
+created in one part of the history and subsequently consumed by a later merge
+event.  Such patterns give rise to internal wires in the string diagram
+representation: wires that connect an output of one box to an input of a later
+box without being visible at the external boundary of the entire diagram.  When
+such internal wires are systematically hidden, the appropriate categorical
+structure is a \emph{traced monoidal category} \citep{BaezStay2010}.
+
+In a traced symmetric monoidal category, the trace operation
+\[
+  \mathrm{Tr}^{U}_{A,B} : \mathrm{Hom}(A \otimes U,\, B \otimes U)
+  \to \mathrm{Hom}(A,B)
+\]
+formalizes the process of routing an intermediate wire of type $U$ from one
+stage of a diagram back into a later stage while hiding it from the external
+interface.  The resulting morphism from $A$ to $B$ retains only the observable
+boundary behavior, abstracting over the internal routing.
+
+Spherepop merge events, and more generally any situation in which intermediate
+regions are created and subsequently absorbed, can be interpreted as trace
+operations applied to the underlying string diagram.  A history in which a
+region $U$ is produced by one event and consumed by a later merge event
+contributes a traced component to the diagram, even though $U$ may not appear
+in the final configuration.
+
+The Spherepop framework may therefore be interpreted as the free traced
+symmetric monoidal category $\mathcal{F}_{\mathrm{tr}}(\Sigma)$ generated by
+the event signature $\Sigma$.  The universal property of this construction
+states that any assignment of concrete morphisms to the primitive event types,
+respecting the traced monoidal structure of the target category, extends
+uniquely to a traced monoidal functor from $\mathcal{F}_{\mathrm{tr}}(\Sigma)$.
+Every Spherepop realization functor of Section~\ref{sec:functors} is an instance
+of this universal property.
+
+What distinguishes Spherepop from an abstract categorical formalism is its
+ontological interpretation.  In an ordinary traced monoidal category, morphisms
+represent processes and objects represent interfaces.  In Spherepop, the
+morphisms are not merely descriptions of processes but constitute the identities
+of the objects they produce.  A Spherepop object is an output boundary
+\emph{together with} its generating morphism class in the free traced monoidal
+category.  Two output boundaries are the same Spherepop object if and only if
+they are generated by the same morphism.
+
+This identification of objects with their generating morphisms is the
+categorical formulation of the historical identity criterion developed
+throughout the paper.  It situates the Spherepop ontology within the
+established framework of categorical process theory while emphasizing the
+philosophical commitment that distinguishes it from purely operational
+formulations of that theory.
+
+
+
+Provenance Graphs and Distributed Event Logs
+
+\label{sec:provenance}
+
+The Spherepop framework bears a close relationship to provenance tracking
+systems used in distributed computation and data management.  In such systems
+the central problem is to record not merely the current state of a dataset but
+the sequence of operations that produced it.  The resulting provenance graph
+serves as a historical record that allows users to verify, reproduce, and audit
+the transformations that generated a given artifact.  This section examines the
+connection between Spherepop and provenance systems, distributed event logs,
+and blockchain-style ledgers, arguing that Spherepop provides a mathematical
+abstraction of patterns that already appear in practical systems.
+
+A provenance graph typically consists of three categories of entities: data
+objects, transformation processes, and dependency relations \citep{Spivak2014}.
+Processes consume input objects and produce output objects, and the directed
+edges of the graph record these causal dependencies.  The structure that results
+is a directed acyclic graph representing the lineage of every object in the
+system.  Spherepop histories may be interpreted as a formal abstraction of
+exactly this structure: regions correspond to data objects, events correspond
+to transformation processes, and the ancestral subgraph $G_X$ defined in
+Section~\ref{sec:dags} is precisely the provenance graph of the object $X$.
+
+This interpretation makes precise a practical motivation for the Spherepop
+identity criterion.  In many data-management contexts it is insufficient to
+know that two datasets are structurally identical; one must also know whether
+they were produced by the same sequence of transformations.  Two files that
+contain identical data may nevertheless be considered distinct artifacts if
+they were produced by different computational workflows, because their different
+workflows may carry different validity guarantees, different institutional
+authorizations, or different reliability expectations.  The Spherepop criterion
+captures this distinction exactly: two objects are identical only when their
+entire generative histories coincide.
+
+Distributed event logs provide a closely related example.  In modern
+distributed systems each component records a sequence of events representing
+local state transitions, and the global behavior of the system is reconstructed
+by combining these logs into a partial order of events, typically using logical
+clock mechanisms or causal message relationships.  The structure that results
+is again a directed acyclic event graph, precisely of the form studied in
+Section~\ref{sec:dags}.  The causal poset of Section~\ref{sec:posets} formalizes
+the partial order that distributed systems practitioners construct from their
+logs, and the normalization procedure of Section~\ref{sec:normalization}
+corresponds to the operation of computing a canonical linearization of
+concurrent events for purposes of comparison or replay.
+
+Blockchain systems provide a particularly vivid illustration of the same
+principle.  In a blockchain ledger the identity of a transaction is
+inseparable from its position within the chain of prior transactions.  The
+ledger records an immutable append-only sequence of state transitions, and
+the validity of each entry depends on the entire chain of entries that
+preceded it.  The identity of any ledger state is therefore constituted by
+the complete history of appended events, not by the final state alone.  This
+is the Spherepop identity criterion applied to a specific computational
+substrate.
+
+These examples suggest that Spherepop is not merely a theoretical construct
+but a mathematical articulation of patterns that arise independently in
+engineering practice.  The framework provides a language for expressing
+precisely what these systems mean when they record a history, for reasoning
+about when two recorded histories represent the same event structure, and for
+studying the invariants that are preserved under different serialization and
+compression strategies.  The normalization theory of Section~\ref{sec:normalization}
+and the rewriting system of Appendix~\ref{app:rewriting} apply directly: the
+question of whether two distributed logs represent the same global computation
+is precisely the question of whether their corresponding event words normalize
+to the same Spherepop normal form.
+
+
+
+
+
+
+
+Operators as Generators of Event Words
+
+\label{sec:opvocab}
+
+The state-pair dynamics introduced in Section~\ref{sec:possibility-preimage}
+and the entropy structure derived in Section~\ref{sec:entropy} establish that
+event words arise from a deeper process of successive exclusion.  The present
+section enriches the event alphabet $\mathcal{E}$ by giving it internal
+structure: rather than treating events as undifferentiated elements of a set,
+we show that every event can be classified as one of four fundamental generator
+types, each corresponding to a distinct mode of commitment.  This classification
+does not change the formal machinery of event words, DAGs, or normalization;
+it adds a typing layer that distinguishes \emph{how} an exclusion occurred from
+the fact that it occurred.
+
+
+Four Modes of Exclusion
+
+
+The following operators are derived from the axioms of
+Section~\ref{sec:possibility-preimage}, not introduced as independent
+primitives.  Each is a specific pattern of state-pair transition.
+
+\medskip
+\noindent\textbf{$\mathbf{Pop}$: Irreversible Commitment.}
+The most fundamental generator.  For an event $x \in \Omega_t$, a
+$\mathbf{Pop}$-transition removes $x$ from the option space and appends it
+to the history as a deliberate, chosen commitment:
+\[
+  \mathbf{Pop}_x(\Omega_t, H_t) \;=\; \bigl(\Omega_t \setminus \{x\},\; H_t \cdot x\bigr).
+\]
+This is the generator corresponding to an ordinary event $E \in \mathcal{E}$
+in the event-word formalism.  Every event in a Spherepop history is, at minimum,
+a $\mathbf{Pop}$ transition.  There is no $\mathbf{Pop}^{-1}$, because by
+Axiom~\ref{ax:irrev} no operation can restore an excluded event.
+
+\medskip
+\noindent\textbf{$\mathbf{Bind}$: Contextual Restriction.}
+A structural narrowing of the option space that leaves the history unchanged.
+For an admissibility predicate $f : \mathcal{E} \to \{0,1\}$:
+\[
+  \mathbf{Bind}_f(\Omega_t, H_t) \;=\; \bigl(\{x \in \Omega_t \mid f(x) = 1\},\; H_t\bigr).
+\]
+$\mathbf{Bind}$ does not append to the event word.  It models the narrowing of
+admissible events by structural constraint or environmental condition before any
+deliberate selection occurs.  The entropy weight $w$ of Section~\ref{sec:entropy}
+registers the reduction in $|\Omega_t|$, but the history is unchanged, so the
+event word carries no direct record of the constraint.  This is precisely the
+distinction between \emph{structural impossibility} and \emph{chosen
+commitment}, which matters for the responsibility weights introduced below.
+
+\medskip
+\noindent\textbf{$\mathbf{Refuse}$: Principled Exclusion.}
+Geometrically identical to $\mathbf{Pop}$ in its effect on the state pair,
+$\mathbf{Refuse}$ differs in the annotation attached to the appended event:
+\[
+  \mathbf{Refuse}_x(\Omega_t, H_t) \;=\;
+  \bigl(\Omega_t \setminus \{x\},\; H_t \cdot (x, \rho_x)\bigr),
+\]
+where $\rho_x \neq 0$ is the responsibility weight recording that this
+exclusion was an act of principled negation rather than instrumental
+selection.  The event word records the exclusion; the annotation records its
+character.  In the typed event alphabet, a $\mathbf{Refuse}$ event is an event
+of type \textsc{Refused} rather than type \textsc{Committed}, which means that
+the equivalence relations of Section~\ref{sec:equivalences} can be refined to
+respect this typing: two histories may be trace-equivalent with respect to the
+raw event sequence but intensionally distinct with respect to the pattern of
+refusals they contain.
+
+\medskip
+\noindent\textbf{$\mathbf{Collapse}$: Reconstruction from History.}
+Not a transition but a projection.  Given a fixed root state $s_0$ and a
+family of transformations $\{T_x\}_{x \in \mathcal{E}}$, the $\mathbf{Collapse}$
+operator is the map that realizes the observable state from the committed
+history:
+\[
+  \mathbf{Collapse}(H_t) \;=\; T_{x_n} \circ \cdots \circ T_{x_1}(s_0)
+  \quad\text{for } H_t = (x_1, \ldots, x_n).
+\]
+This is the same functor introduced in Section~\ref{sec:functors} under the
+name of the realization functor $F : \mathcal{H} \to \mathcal{C}$.  Naming it
+$\mathbf{Collapse}$ emphasises its role in the state-pair framework: it is the
+operation that recovers an observable shadow from the history.  The observable
+state is never stored as a primary object; it is always derived on demand from
+the commitment record.  This inversion of the usual architecture---history is
+primary, state is derived---is the computational expression of the ontological
+commitment established in Section~\ref{sec:possibility-preimage}.
+
+
+Typing the Event Alphabet
+
+
+With these four operator types identified, the event alphabet $\mathcal{E}$ can
+be given a type-theoretic structure.  Define:
+\[
+  \mathcal{E} \;=\; \mathcal{E}_{\mathbf{Pop}} \;\cup\;
+                    \mathcal{E}_{\mathbf{Refuse}} \;\cup\;
+                    \mathcal{E}_{\mathbf{Bind}},
+\]
+where the three sets are not required to be disjoint at the level of underlying
+events but carry distinct semantic annotations.  A $\mathbf{Collapse}$
+event is not an element of $\mathcal{E}$ at all; it is a derived operation on
+the history.  Event words are then typed sequences of elements from this
+partitioned alphabet, and the normalization procedure of
+Section~\ref{sec:normalization} can be refined to respect the typing: two
+events are independent (and hence their order may be commuted in normalization)
+only if they are independent both as elements of $\mathcal{E}$ in the causal
+sense and as bearers of the same type in the semantic sense.
+
+This typing enriches the equivalence relations of
+Section~\ref{sec:equivalences} without disrupting them.  The raw causal
+equivalences---Spherepop identity, causal isomorphism, trace equivalence,
+structural isomorphism---remain defined as before.  But a new dimension of
+equivalence is now available: responsibility-preserving equivalence, which
+identifies two histories only when they agree not only on the causal order
+of events but on the type ($\mathbf{Pop}$ versus $\mathbf{Refuse}$) of each
+event.  This is the finest equivalence in the full lattice, sitting strictly
+above Spherepop identity in discriminatory power.
+
+
+Responsibility as a Weighting on Contractions
+
+
+The entropy weight $w(E)$ introduced in Section~\ref{sec:entropy} measures the
+magnitude of the possibility-space contraction associated with each event.
+The responsibility weight $\rho(E)$ introduced in that section's final
+subsection provides a complementary measure.  We can now be precise about what
+$\rho$ measures.
+
+\begin{definition}[Responsibility weight]
+The \emph{responsibility weight} of an event $E$ in a history is defined by
+\[
+  \rho(E) \;=\;
+  \begin{cases}
+    0       & \text{if } E \in \mathcal{E}_{\mathbf{Bind}}, \\
+    \lambda & \text{if } E \in \mathcal{E}_{\mathbf{Pop}},  \\
+    \mu     & \text{if } E \in \mathcal{E}_{\mathbf{Refuse}},
+  \end{cases}
+\]
+for non-negative constants $\lambda$ and $\mu$ with $0 < \lambda \leq \mu$.
+The total responsibility of an object is
+\[
+  \mathcal{R}(X) \;=\; \sum_{E \in H_k} \rho(E),
+\]
+which is a non-negative real number measuring the accumulated ethical weight
+of the history of exclusions that produced $X$.
+\end{definition}
+
+The ordering $\lambda \leq \mu$ reflects the fact that principled refusal
+carries at least as much weight as instrumental commitment: to refuse on
+principle is to take a stronger stand than merely to choose one option over
+another.  $\mathbf{Bind}$ events carry zero responsibility weight because they
+represent structural impossibility rather than agency; the system did not
+choose against those options, and it would be wrong to hold it answerable for
+their exclusion.
+
+The total responsibility $\mathcal{R}(X)$ provides a second scalar measure on
+histories that runs parallel to the entropy measure $S(X)$.  Both are derived
+from the same contraction of $\Omega_t$, but they answer different questions:
+$S(X)$ measures the total magnitude of the contraction, while $\mathcal{R}(X)$
+measures the portion of that contraction for which the system is answerable.
+The relationship between these two measures characterises the degree to which
+the history of an object was actively constructed by its agent as opposed to
+passively imposed by its environment.
+
+Mechanics of Commitment
+
+\label{sec:lagrangian}
+
+The axioms establish what can and cannot happen in the calculus, but they say
+nothing about the \emph{cost} of building a world---the quantitative relationship
+between the freedom that is lost when a possibility is excluded and the actuality
+that is gained when it is committed.  To capture this we introduce a discrete
+variational mechanics.
+
+\begin{definition}[Local Lagrangian]
+At each step $t$, the local Lagrangian is
+\[
+  \Lagrangian_t \;=\; \Delta\Omega_t \;+\; \lambda\,\Delta C_t,
+\]
+where $\Delta\Omega_t = |\Omega_t| - |\Omega_{t+1}|$ is the reduction in
+optionality at step $t$ and $\Delta C_t$ is the accounting cost---the ethical
+weight of the exclusion---weighted by a coupling constant $\lambda \geq 0$.
+\end{definition}
+
+\begin{definition}[Action]
+The total action along a history $H = (x_1, \ldots, x_n)$ is
+\[
+  S[H] \;=\; \sum_{t=1}^{n} \Lagrangian_t.
+\]
+\end{definition}
+
+The action $S[H]$ is strictly non-decreasing along any admissible history: by
+Axiom~\ref{ax:irreversibility} the option space can only shrink, so
+$\Lagrangian_t \geq 0$ at every step.
+
+\begin{definition}[Commitment Momentum]
+The commitment momentum $\picommit_t$ measures the rate at which future freedom
+is being converted into settled actuality:
+\[
+  \picommit_t \;=\; -\frac{\partial \Lagrangian_t}{\partial \Omega_t}.
+\]
+\end{definition}
+
+\begin{definition}[Hamiltonian]
+The Hamiltonian $\mathcal{H}_t$ represents the agent's remaining
+maneuverability---the extent to which its future is still open:
+\[
+  \mathcal{H}_t \;=\; \picommit_t \,|\Omega_t| \;-\; \Lagrangian_t.
+\]
+\end{definition}
+
+A system that never applies $\Pop$ or $\Refuse$ remains at maximal
+$\mathcal{H}_t$ throughout its existence.  It is free in the most abstract
+sense---and inhabits no world in any concrete sense.  Freedom without commitment
+is not depth; it is weightlessness, and weightlessness is not a form of richness
+but a form of absence.
+
+The relationship to the entropy measures of Section~\ref{sec:entropy} is direct.
+Each application of $\Pop_x$ reduces $|\Omega_t|$ by one, decreasing the
+entropy $\log|\Omega_t|$ of the option space while increasing the Kolmogorov
+complexity of the commitment history.  The Lagrangian makes this directional
+conversion quantitative: worldbuilding trades possibility for structure, and the
+action $S[H]$ measures the total cost of that trade along a given history.
+
+
+
+The End of Philosophical Neutrality
+
+\label{sec:ethics}
+
+The formal structures developed in the preceding sections treat irreversibility
+as a geometric property of histories.  Hans Jonas forces a stronger conclusion:
+irreversibility is also an ethical property, and the two cannot be cleanly
+separated.
+
+Jonas's central argument, developed across \textit{The Phenomenon of Life} and
+\textit{The Imperative of Responsibility}, is that philosophy cannot occupy a
+position of neutral observation with respect to the world it describes.  To know
+is not to stand outside events and register them from a safe distance; to know
+is to participate in the events one describes, and participation carries
+obligation.  Knowledge is always already ethical implication.  The philosopher
+is not an external observer; she is always already involved, always already
+affected by what she studies, and that affectation is itself part of the
+responsibility she has assumed.  The neutrality that the modern tradition aspired
+to---the view from nowhere, the disinterested gaze---is not available.
+
+This argument has a direct formal consequence for the Spherepop calculus, and
+it is not imported from outside the system but follows from the logic of the
+axioms themselves.
+
+\begin{axiom}[Ethical Non-Neutrality]
+\label{ax:non-neutrality}
+Every act of exclusion within an admissible Spherepop process carries a
+non-zero responsibility weight:
+\[
+  \forall x \in H_t, \quad \rweight_x \;\neq\; 0.
+\]
+\end{axiom}
+
+The Axiom of Ethical Non-Neutrality is not an additional decoration placed on
+top of the formal system.  It is what Axiom~\ref{ax:irreversibility} requires
+once one considers its implications carefully.  If an exclusion is genuinely
+irreversible---if it truly and permanently forecloses a possibility---then the
+system that performed the exclusion is bound to it in a way that cannot be
+discharged by any subsequent operation.  The responsibility weight $\rweight_x$
+is the formal trace of that bindingness.
+
+\begin{remark}
+A system that treats all responsibility weights as zero is in effect claiming
+that its exclusions are cost-free---that the possibilities it forecloses carry
+no weight that must be carried forward.  But this claim is inconsistent with
+Axiom~\ref{ax:irreversibility}: if an exclusion is irreversible, then the
+counterfactual world in which that exclusion was not made is permanently
+unavailable, and the system bears whatever consequences flow from that
+unavailability.  The zero-weight assumption and the irreversibility axiom cannot
+both be held.  A system that excludes without responsibility is not performing
+genuine irreversible exclusion; it is simulating exclusion while remaining
+indifferent to it.
+\end{remark}
+
+\begin{definition}[Accountable History]
+An accountable history is a commitment history in which every appended event is
+accompanied by its responsibility weight:
+\[
+  H_t \;:=\; \bigl((x_1, \rweight_{x_1}),\; (x_2, \rweight_{x_2}),\; \ldots,
+  (x_n, \rweight_{x_n})\bigr).
+\]
+\end{definition}
+
+\begin{definition}[Accounting Functor]
+The Accounting Functor
+\[
+  \Acct : \PathCat \;\longrightarrow\; \mathcal{C}_{\mathrm{cost}}
+\]
+maps each history to its cumulative annotated record of why each exclusion
+occurred, distinguishing $\Pop$ (mechanical exclusion) from $\Refuse$
+(principled exclusion) by the annotation attached to each event.  It is a
+functor because the cost of a concatenated history is the composition of the
+costs of its parts.
+\end{definition}
+
+\begin{theorem}[Identity via Refusal]
+\label{thm:refusal-identity}
+An agent's identity class is uniquely determined, up to observational
+equivalence under $\Collapse$, by its refusal set---the collection of events
+to which $\Refuse$ has been applied throughout its history.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Two agents with distinct refusal sets have distinct ethical annotations in their
+accountable histories.  Since $\Acct$ is a functor, it maps distinct annotated
+histories to distinct objects in $\mathcal{C}_{\mathrm{cost}}$.  Two agents
+may have the same $\Collapse$ image---the same observable state---while having
+distinct refusal sets, but they remain intensionally distinct under $\Acct$.
+\end{proof}
+
+Identity is forged as much by what an agent refuses as by what it commits to.
+An agent that commits to everything and refuses nothing has, in a precise sense,
+no more character than an agent that commits to nothing: both have failed to
+create the structure of principled exclusion that constitutes a self capable of
+maintaining integrity across time.
+
+
+
+The Global Structure: Trajectory, History, and State
+
+\label{sec:global-structure}
+
+The development thus far has introduced three distinct but related levels of
+description, each arising from the previous by a projection that discards
+information.  At the most fundamental level lie trajectories in the category
+$\mathcal{T}$ of possibility-history pairs, encoding the progressive contraction
+of admissible events and the full geometry of option-space dynamics.  At the
+next level lie event histories in the Free History Category $\PathCat$, obtained
+by projecting trajectories onto their irreversible commitment records.  At the
+surface level lie observable states in a category $\mathcal{S}$, reconstructed
+from histories by composing the associated transformations.  The present section
+unifies these levels into a single categorical structure and establishes the
+formal properties of the projections that connect them.
+
+
+The Three Levels and Their Projections
+
+
+The two projections have been defined in earlier sections.  The first,
+\[
+  \Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \PathCat,
+\]
+is the history projection of Section~\ref{sec:identity}, which forgets the
+evolution of the option space and retains only the ordered commitment record.
+The second,
+\[
+  \Collapse : \PathCat \longrightarrow \mathcal{S},
+\]
+is the Collapse functor of Section~\ref{sec:functors}, which reconstructs an
+observable state from a history by composing the transformations associated
+with each committed event from a fixed root.
+
+Both are functors.  $\Pi_{\mathrm{hist}}$ respects composition because extending
+two trajectories in sequence produces the concatenation of their event words,
+which is composition in $\PathCat$.  $\Collapse$ respects composition because
+replaying a concatenated history is the same as composing the replays of its
+parts.
+
+
+The Global Commutative Diagram
+
+
+The composition of the two functors defines a map from trajectories directly to
+observable states:
+\[
+  \Collapse \circ \Pi_{\mathrm{hist}} : \mathcal{T} \longrightarrow \mathcal{S}.
+\]
+
+The global structure of the framework is expressed by the following diagram:
+\[
+\begin{tikzcd}[column sep=4em, row sep=3em]
+  \mathcal{T}
+    \arrow[r, "\Pi_{\mathrm{hist}}"]
+    \arrow[dr, swap, "\Collapse \circ \Pi_{\mathrm{hist}}"]
+  &
+  \PathCat
+    \arrow[d, "\Collapse"]
+  \\
+  &
+  \mathcal{S}
+\end{tikzcd}
+\]
+
+\begin{proposition}[Commutativity of the global diagram]
+For every trajectory $\tau \in \mathcal{T}$,
+\[
+  \Collapse\bigl(\Pi_{\mathrm{hist}}(\tau)\bigr)
+  \;=\;
+  (\Collapse \circ \Pi_{\mathrm{hist}})(\tau).
+\]
+\end{proposition}
+
+\begin{proof}
+Immediate from the definition of functor composition.
+\end{proof}
+
+The diagram expresses a fundamental asymmetry: all observable states arise from
+histories, and all histories arise from trajectories, but neither of the reverse
+constructions is available.  The arrows flow in one direction only, from the
+richest description to the coarsest, and the information lost at each step
+cannot be recovered from the output.
+
+
+Non-Existence of Right Inverses
+
+
+The irreversibility of the projections is expressed precisely by the
+non-existence of right inverse functors.
+
+\begin{theorem}[Irreversibility of projections]
+\label{thm:no-right-inverse}
+There exists no functor $\mathcal{S} \to \PathCat$ that is a right inverse
+to $\Collapse$, and no functor $\PathCat \to \mathcal{T}$ that is a right
+inverse to $\Pi_{\mathrm{hist}}$.
+\end{theorem}
+
+\begin{proof}
+A right inverse to $\Collapse$ would be a functor $R : \mathcal{S} \to \PathCat$
+satisfying $\Collapse \circ R = \mathrm{id}_{\mathcal{S}}$.  For every state
+$s \in \mathcal{S}$, the functor $R$ would have to select a unique history $H$
+with $\Collapse(H) = s$.  But as established in the reconstruction analysis of
+Section~\ref{sec:reconstruction} and formalised in the categorical treatment of
+Section~\ref{sec:identity}, multiple distinct histories can produce the same
+observable state.  Any selection would have to introduce additional information
+not present in $s$, contradicting the requirement that $R$ be a functor from
+$\mathcal{S}$ alone.
+
+A right inverse to $\Pi_{\mathrm{hist}}$ would be a functor
+$Q : \PathCat \to \mathcal{T}$ satisfying $\Pi_{\mathrm{hist}} \circ Q =
+\mathrm{id}_{\PathCat}$.  For every event word $H \in \PathCat$, the functor
+$Q$ would have to produce a canonical trajectory $\tau$ with
+$\Pi_{\mathrm{hist}}(\tau) = H$.  But as shown in
+Proposition~\ref{prop:noninjectivity}, multiple distinct trajectories project
+to the same event word, because the intermediate option-space structure is not
+encoded in $H$.  Selecting a canonical trajectory would require information
+about which possibilities were available but not taken---information that
+$\Pi_{\mathrm{hist}}$ has discarded and that is not available from $H$ alone.
+\end{proof}
+
+This theorem is the formal statement that you cannot recover history from state,
+and cannot recover possibility from history.  Each projection discards
+information that is genuinely gone.  The diagram has no section; the arrow of
+commitment is one-way throughout.
+
+
+Entropy and Responsibility as Path Functionals
+
+
+The entropy measure $S$ and the responsibility measure $\mathcal{R}$ introduced
+in Sections~\ref{sec:entropy} and~\ref{sec:opvocab} are defined on trajectories
+and measure properties of the full dynamics in $\mathcal{T}$.  They are
+therefore path functionals on the deepest level:
+\[
+  S : \mathcal{T} \to \mathbb{R}_{\geq 0}, \qquad
+  S(\tau) = \log \frac{|\Omega_0|}{|\Omega_k|},
+\]
+\[
+  \mathcal{R} : \mathcal{T} \to \mathbb{R}_{\geq 0}, \qquad
+  \mathcal{R}(\tau) = \sum_{j=1}^{k} \rho(E_{i_j}).
+\]
+
+Neither measure factors through $\Pi_{\mathrm{hist}}$ in general.
+
+\begin{proposition}[Non-factorization of path measures]
+\label{prop:nonfactorization}
+There exist trajectories $\tau \sim \tau'$ such that
+$\Pi_{\mathrm{hist}}(\tau) = \Pi_{\mathrm{hist}}(\tau')$ but
+$S(\tau) \neq S(\tau')$ and $\mathcal{R}(\tau) \neq \mathcal{R}(\tau')$.
+\end{proposition}
+
+\begin{proof}
+As in the proof of Proposition~\ref{prop:noninjectivity}, consider two
+trajectories that commit the same events in the same order but differ in their
+intermediate option spaces.  If $|\Omega_k|$ differs between the two
+trajectories---because one was subject to additional $\Bind$ constraints that
+reduced the residual option space without committing events---then $S(\tau) =
+\log(|\Omega_0|/|\Omega_k|)$ takes different values.  Similarly, if the two
+trajectories attribute different responsibility weights to the same event
+sequence---one assigning some events as $\mathbf{Refuse}$ type and the other
+assigning them as $\mathbf{Pop}$ type---then $\mathcal{R}$ differs even though
+$\Pi_{\mathrm{hist}}$ maps both to the same event word.
+\end{proof}
+
+This result establishes that entropy and responsibility refine the ontology
+beyond identity: they are properties of the full trajectory that survive the
+quotient $\sim$ only partially.  Two objects with the same identity may
+nevertheless differ in the entropy cost and responsibility attribution of the
+trajectories that produced them.  This does not undermine the identity criterion;
+it locates entropy and responsibility at the appropriate level, which is the
+level of trajectories rather than the level of event words.
+
+
+Stratified Ontology
+
+
+The global diagram, together with the path measures, reveals a stratified
+ontological structure with three levels and two associated scalar measures.  The
+deepest level is the trajectory category $\mathcal{T}$, which carries the full
+geometry of possibility: the shapes of option spaces, the provenance of
+exclusions, and the measures $S$ and $\mathcal{R}$ that quantify those
+properties.  The intermediate level is the Free History Category $\PathCat$,
+which carries the ordered record of committed events and supports the identity
+criterion.  The surface level is the observable state category $\mathcal{S}$,
+which carries only the present configuration derivable from the history without
+further reference to its internal structure.
+
+Information is conserved at the trajectory level and progressively lost at each
+subsequent level.  The projections are the formal instruments of that loss.
+The identity of an object is what remains after the first projection; the
+observable state of an object is what remains after both.  Entropy and
+responsibility are shadows of the trajectory that neither projection fully
+captures, but that leave traces at the levels of history and state through the
+specific event words and state values they constrain.

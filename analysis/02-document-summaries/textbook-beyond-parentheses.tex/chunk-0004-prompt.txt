@@ -1,15 +1,270 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 4 of 6 of a document called
+"textbook-beyond-parentheses.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Formal Grammar of the Spherepop Calculus**
 
-TEXT
-====
+---
+
+### 1. Symbol Sets
+
+- **Variables:** \(\mathcal V = \{x, y, z, \dots\}\)  
+- **Constants:** \(\mathcal C = \{c_1, c_2, \dots\}\)  
+- **Primitive Operators:** \(\mathcal O = \{\operatorname{Sphere}, \operato[8D[K
+\operatorname{Pop}, \operatorname{Merge}, \operatorname{Choice}, \operatorn[10D[K
+\operatorname{Replay}, \operatorname{Refuse}, \operatorname{Collapse}, \ope[4D[K
+\operatorname{Bind}\}\)
+
+---
+
+### 2. Term Grammar
+
+Terms \(t\) are defined inductively as:
+
+\[
+t
+=
+\begin{cases}
+x & (\text{variable})\\[4pt]
+c & (\text{constant})\\[4pt]
+\underbrace{\operatorname{Sphere}(x:A.t)}_{\text{bounded computation}}\\[6p[18D[K
+computation}}\\[6pt]
+\underbrace{\operatorname{Pop}(t)}_{\text{pop operation}}\\[6pt]
+\underbrace{\operatorname{Merge}(t,t)}_{\text{merge two histories}}\\[6pt]
+\underbrace{\operatorname{Choice}(p,t,t)}_{\text{probabilistic/conditional [K
+branch}}\\[6pt]
+\underbrace{\operatorname{Replay}(t,t)}_{\text{symbolic continuation}}\\[6p[19D[K
+continuation}}\\[6pt]
+\underbrace{\operatorname{Refuse}(r)}_{\text{refusal of a region}}\\[6pt]
+\underbrace{\operatorname{Collapse}(t)}_{\text{final commitment}}\\[6pt]
+\underbrace{\operatorname{Bind}(t,t)}_{\text{binding two histories}}
+\end{cases}
+\]
+
+---
+
+### 3. Contexts (Histories)
+
+- **Context:** A history \(\Gamma\) is a finite sequence of execution event[5D[K
+events:
+
+  \[
+  \Gamma = (e_1, e_2, \ldots, e_n)
+  \]
+
+- **Events \(e_i\)** belong to the set  
+
+  \[
+  \{ \operatorname{Open}, \operatorname{Pop}, \operatorname{Replay}, \opera[6D[K
+\operatorname{Merge},
+    \operatorname{Choice}, \operatorname{Collapse}, \operatorname{Refuse} \[1D[K
+\}.
+  \]
+
+- **Well‑formedness:** The dependency order must be preserved:
+
+  \[
+  e_i \prec e_j \;\Longrightarrow\; i < j.
+  \]
+
+---
+
+### 4. Definitions of Core Concepts
+
+#### a) Sphere (Computational Region)
+
+A *Sphere* is recursively defined as:
+
+\[
+S = (B, I)
+\]
+
+- **\(B\)** – the computational boundary (a description of what belongs to [K
+\(S\)).  
+- **\(I\)** – a finite computation graph that fully describes the interior [K
+operations.
+
+Every node in an interior belongs to exactly one Sphere.  
+
+Nested Spheres satisfy:
+
+\[
+S_i \subset S_j \;\Longrightarrow\; \partial S_i \cap \partial S_j = \varno[6D[K
+\varnothing.
+\]
+
+Thus, **\(B\)** is a *computational boundary*—a geometric notion that parti[5D[K
+partitions the history into independent regions.
+
+#### b) Program ↔ Directed Acyclic Graph (DAG)
+
+Every admissible program corresponds to a finite directed acyclic graph
+
+\[
+G = (V, E)
+\]
+
+with a sphere assignment \(\sigma : V \rightarrow \mathcal S\) such that:
+
+\[
+(u,v) \in E \;\Longrightarrow\; 
+\underbrace{\sigma(u)}_{\text{contains } \sigma(v)}
+\vee
+\underbrace{\sigma(v)}_{\text{contains } \sigma(u)}
+\vee
+\underbrace{\sigma(u)}_{\text{parallel to } \sigma(v)}.
+\]
+
+This ensures that the dependency order mirrors geometric containment, allow[5D[K
+allowing the operational scheduler to act only on *admissible* sphere assig[5D[K
+assignments.
+
+---
+
+### 5. Operational Semantics (Key Rules)
+
+#### **Formation Rules**
+
+1. An empty context is always valid:
+
+   \[
+   \frac{}{\emptyset \text{ ctx}}
+   \]
+
+2. Variables can be introduced if they do not already appear in the current[7D[K
+current context:
+
+   \[
+   \frac{\Gamma\;\text{ctx}\quad x\notin\Gamma}{\Gamma,x:A\;\text{ctx}}
+   \]
+
+3. A term is well‑typed iff it originates from a Sphere:
+
+   \[
+   \frac{\Gamma\vDash t : A}{\Gamma\vDash \operatorname{Sphere}(x:A.t)}
+   \]
+
+4. **Pop** consumes the topmost element of a history:
+
+   \[
+   \frac{\Gamma\vDash t}{\Gamma\vDash \operatorname{Pop}(t)}
+   \]
+
+5. **Merge** combines two histories, preserving their order:
+
+   \[
+   \frac{\Gamma\vDash t\;\text{ctx}\quad \Gamma\vDash u\;\text{ctx}}{\Gamma[21D[K
+u\;\text{ctx}}{\Gamma\vDash \operatorname{Merge}(t,u)}
+   \]
+
+6. **Choice** creates a probabilistic/conditional branch (e.g., nondetermin[11D[K
+nondeterminism):
+
+   \[
+   \frac{\Gamma\vDash t\;\text{ctx}\quad \Gamma\vDash u\;\text{ctx}}{\Gamma[21D[K
+u\;\text{ctx}}{\Gamma\vDash \operatorname{Choice}(p,t,u)}
+   \]
+
+7. **Replay** symbolically continues a history without committing:
+
+   \[
+   \frac{\Gamma\vDash t}{\Gamma\vDash \operatorname{Replay}(t,t)}
+   \]
+   (provided the region is *ready* for replay.)
+
+8. **Refuse** marks an unresolved dependency, effectively “undoing” part of[2D[K
+of the computation:
+
+   \[
+   \frac{\Gamma\vDash t}{\Gamma\vDash \operatorname{Refuse}(r)}
+   \]
+
+---
+
+#### **Structural Axioms**
+
+- **Order Preservation:** If a history \(H\) is contained in another \(H'\)[6D[K
+\(H'\), its size cannot exceed that of \(H'\):
+
+  \[
+  H \subseteq H' \;\Longrightarrow\; |H| \le |H'|
+  \]
+
+- **Disjointness:** Incompatible regions are never nested:
+
+  \[
+  H_1 \nsubseteq H_2 \quad \text{and vice‑versa}
+  \]
+
+- **Replay Idempotence:** Replaying a ready region does not change the stat[4D[K
+state further beyond its current position:
+
+  \[
+  \operatorname{Replay}(H) = H \;\text{iff}\; H\text{ contains no unresolve[9D[K
+unresolved dependencies.}
+  \]
+
+- **Pop Dependency:** Popping exactly reduces one computational boundary’s [K
+size by one:
+
+  \[
+  |\partial H'| = |\partial H| - 1.
+  \]
+
+- **Collapse Idempotence:** Committing a collapsed history has no further e[1D[K
+effect:
+
+  \[
+  \operatorname{Collapse}(\operatorname{Collapse}(t)) = \operatorname{Colla[19D[K
+\operatorname{Collapse}(t).
+  \]
+
+- **Refusal Absorbing Property:** Refusing an already‑refused region is a n[1D[K
+no‑op.
+
+---
+
+### 6. Summary
+
+The Spherepop Calculus uses a *dual* notion of computation: **geometric** ([1D[K
+(through the bounded computational regions—Spheres) and **syntactic** (via [K
+histories). The operational semantics enforce that every operation respects[8D[K
+respects both dependency order and geometric containment, allowing for symb[4D[K
+symbolic continuations, probabilistic branching, replay, refusal, and colla[5D[K
+collapse—all while preserving a well‑formed history.
+
+This formalism provides a rigorous foundation for the philosophical ideas p[1D[K
+presented in the main text—especially the intrinsic nature of explanation a[1D[K
+as part of computation itself. The parser is expected to output a rooted fo[2D[K
+forest of non‑overlapping Spheres whose transitive closure yields the depen[5D[K
+dependency graph used throughout the semantics, ensuring that all later opt[3D[K
+optimizations or analyses operate on well‑formed computational histories.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 The central proposal of this paper is intentionally modest despite its broad
 ambitions. Every student already learns the essential computational operation

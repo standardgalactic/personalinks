@@ -1,57 +1,113 @@
-**Summary Overview – Normalisation by Historical Evaluation (NbHE)**  
+Below is a concise high‑level summary of the key ideas presented in the doc[3D[K
+document you shared – a “universal characterization” that ties together his[3D[K
+historical fibrations, dependent types, and the Spherepop kernel’s semantic[8D[K
+semantics. The points are grouped by theme (syntax, operational vs denotati[8D[K
+denotational perspectives, completeness, etc.) so you can see how each conc[4D[K
+concept fits into a coherent picture.
 
-The document describes a kernel‑level evaluation strategy that couples *sem[4D[K
-*semantic domain* with an explicit **historical context**. Below is a conci[5D[K
-concise high‑level view of the main concepts:
+---
 
-1. **Historical Fibrations**  
-   - The semantics are expressed as an indexed category \(\pi:\mathcal E\to[4D[K
-E\to\mathcal H\) (or fibration).  
-   - Each history \(H\) in the base category \(\mathcal H\) corresponds to [K
-a *fiber* that contains exactly those constructions that can be replayed af[2D[K
-after the history is known.  
-   - This replaces ordinary context variables with immutable, traceable his[3D[K
-histories.
+## 1. Syntax & Dependent Types  
 
-2. **Comprehension**  
-   - For a type \(A\) interpreted over a history \(H\), the comprehension o[1D[K
-object \((H,A)\) represents extending the current history by an admissible [K
-“declaration event.”  
-   - Instead of adding arbitrary assumptions to a context, each new constru[7D[K
-construction is recorded as a permanent step in the history.
+- **Indexed Category \(\pi : \mathcal{E} \to \mathcal{H}\)** –  
+  The set of all dependent types is organized as an *indexed category* whos[4D[K
+whose objects are the “historical contexts” \(H\) (i.e., cumulative histori[7D[K
+histories). The fiber over a given context contains exactly those type‑theo[9D[K
+type‑theoretic constructions that can be *replayed* from that history.
 
-3. **Soundness**  
-   - If a term \(t\) is well‑typed as \(H\vdash t:A\), its semantic interpr[7D[K
-interpretation \(\llbracket t \rrbracket\) lies in the appropriate semantic[8D[K
-semantic object \(\llbracket A \rrbracket\).  
-   - Any replay step (changing historical state) preserves denotational mea[3D[K
-meaning, guaranteeing invariant semantics.
+- **Comprehension Objects \((H,A)\)** –  
+  For each interpretation of a base type \(A\) over a historical context \([2D[K
+\(H\), the comprehension object \((H,A)\) records an admissible extension ([1D[K
+(or “declaration event”) to the history. Thus, comprehension is not merely [K
+adding assumptions but *extending* the provenance.
 
-4. **Completeness**  
-   - Every construction that can be produced by the full historical categor[7D[K
-category can be represented as a replayable kernel derivation.  
-   - This establishes equivalence between operational evaluation and semant[6D[K
-semantic interpretation for all well‑formed histories.
+---
 
-5. **Historical Interpretation**  
-   - The denotational model provides a *semantic foundation* where construc[8D[K
-constructive histories become primitive mathematical objects, underpinning [K
-computation, proof systems, dependent types, equality, and categorical stru[4D[K
-structures in Spherepop.
+## 2. Operational vs Denotational Perspectives  
 
-6. **Four Viewpoints**  
-   - **Syntax:** Formal language rules for constructing terms.  
-   - **Operations/Algorithms:** How these constructions are performed compu[5D[K
-computationally (replay‑aware reduction).  
-   - **Semantics:** Meaning of the constructions expressed through historie[8D[K
-histories.  
-   - **Implementation:** Concrete kernel design elements that realise NbHE [K
-in Spherepop’s operating environment.
+### 2‑a. Operational Evaluation  
+- **Replay Steps** – Each step in operational semantics corresponds to a co[2D[K
+concrete historical extension (e.g., applying a declaration event).  
+- **Preservation of Meaning** – The theorem *Semantic Soundness* guarantees[10D[K
+guarantees that the result of any evaluation remains inside the appropriate[11D[K
+appropriate fiber \(\llbracket A\rrbracket\) and thus is still a valid “rep[4D[K
+“replayable” construction.
 
-7. **References**  
-   The bibliography lists foundational works (Church 1940; Milner 1978; Awo[3D[K
-Awodey 2010; Harper 2016, etc.) supporting the soundness and completeness o[1D[K
-of the approach.
+### 2‑b. Denotational Semantics (Categorical Model)  
+- **Historical Category** – The denotational model maps each type to a cate[4D[K
+categorical object indexed by history, making the *historical provenance* e[1D[K
+explicit rather than hidden inside an abstract context shift.
 
-*End of summary.*
+---
 
+## 3. Soundness & Completeness Results  
+
+### 3‑a. Semantic Soundness (Theorem)  
+> **If \(H \vdash t : A\)** then **\(\llbracket t \rrbracket \in \llbracket[10D[K
+\llbracket A \rrbracket\).**  
+- This theorem directly ties syntactic derivations in the historical calcul[6D[K
+calculus to their denotational counterparts, ensuring that every well‑forme[10D[K
+well‑formed derivation yields a meaningful construction.
+
+### 3‑b. Completeness (Converse)  
+> **Every semantic construction generated by the historical category is rep[3D[K
+represented by a replayable kernel derivation.**  
+- This shows that the operational and denotational semantics describe *exac[5D[K
+*exactly* the same class of objects, providing a bridge between algorithmic[11D[K
+algorithmic evaluation and categorical interpretation.
+
+---
+
+## 4. Four‑Fold Perspective  
+
+The author emphasizes four complementary ways to view the kernel:
+
+| Perspective | What It Captures |
+|-------------|------------------|
+| **Syntax** – The formal language (type theory) and its inference rules fo[2D[K
+for historical contexts. |
+| **Operations** – Concrete execution steps (e.g., replaying declaration ev[2D[K
+events). |
+| **Algorithms** – Data structures that implement the replay mechanism effi[4D[K
+efficiently (persistent data structures, event‑sourcing patterns). |
+| **Semantics** – Categorical models and universal properties that make his[3D[K
+historical provenance explicit. |
+
+Together these perspectives form a *mathematically complete specification* [K
+of the Spherepop kernel: they are not merely orthogonal views but mutually [K
+reinforcing components that together give rise to all other features (equal[6D[K
+(equality, categorical structure, etc.).
+
+---
+
+## 5. Bibliographic Highlights  
+
+The bibliography lists foundational works across several sub‑fields:
+
+- **Lambda Calculus & Type Theory** – Barendregt, Church, Martin-Löf, Coqua[5D[K
+Coquand/Huet.
+- **Categorical Logic** – Lambek/Scott, Awodey, MacLane.
+- **Dependent Types in Programming Languages** – Harper’s *Types and Progra[6D[K
+Programming Languages*; Abel’s normalization work.
+- **Event Sourcing & Persistent Data Structures** – Fowler’s Event Sourcing[8D[K
+Sourcing notes; Driscoll et al.’s persistent data structures (1992).
+- **Univalent Foundations** – The Univalent Foundations Program’s *HoTT* bo[2D[K
+book, showing how homotopy‑type theory can embed historical reasoning.
+
+These references collectively validate the claims made in the document and [K
+illustrate that the ideas are grounded in a long tradition of formal method[6D[K
+method research.
+
+---
+
+### TL;DR  
+
+The paper presents a unified model where **dependent types live inside an i[1D[K
+indexed category built from cumulative histories**, each type’s semantics b[1D[K
+being represented by a *comprehension object* (an admissible historical ext[3D[K
+extension). The operational side is captured precisely by replay steps, and[3D[K
+and the denotational side gives a categorical interpretation that makes pro[3D[K
+provenance explicit. Soundness and completeness results guarantee that ever[4D[K
+every well‑formed derivation can be both executed and interpreted semantica[9D[K
+semantically, completing a full specification of the Spherepop kernel acros[5D[K
+across syntax, algorithms, semantics, and category theory.

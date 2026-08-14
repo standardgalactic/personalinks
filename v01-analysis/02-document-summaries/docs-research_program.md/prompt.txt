@@ -1,0 +1,89 @@
+You are analyzing one document from a large theoretical and
+computational research repository called Spherepop.
+
+Produce a dense scholarly summary.
+
+Identify:
+
+1. the central thesis;
+2. definitions and primitive concepts;
+3. mathematical claims;
+4. important equations or formal structures;
+5. mechanisms and processes;
+6. philosophical commitments;
+7. connections to computation;
+8. connections to other likely parts of Spherepop;
+9. unresolved questions;
+10. contradictions, ambiguities, or weaknesses;
+11. concepts that appear unusually important and should survive
+    later compression.
+
+Do not merely paraphrase section by section.
+
+Preserve technical distinctions. Do not invent claims absent from
+the source.
+
+SOURCE DOCUMENT
+===============
+
+# Spherepop Research Program
+
+Spherepop experiments now operate as an accumulating experimental program rather than isolated demonstrations.
+
+## Core Research Artifacts
+
+- **Machine-readable manifest**: `/home/runner/work/personalinks/personalinks/spherepop/experiment_manifest.json`
+- **Lab runner**: `python -m spherepop.lab`
+- **Theory claim registry**: `/home/runner/work/personalinks/personalinks/spherepop/theory_claims.json`
+- **Conjecture registry**: `/home/runner/work/personalinks/personalinks/conjectures/`
+
+Each experiment entry declares:
+- proposition under investigation
+- initial condition `C0`
+- operation family `Ω`
+- observable `O`
+- expected invariant `I`
+- failure condition `F`
+
+## Laboratory Commands
+
+```bash
+python -m spherepop.lab list
+python -m spherepop.lab run 07
+python -m spherepop.lab run 01..29
+python -m spherepop.lab verify
+python -m spherepop.lab compare 07 08
+python -m spherepop.lab theory-map
+```
+
+Use `--json` on every subcommand for machine-readable outputs.
+
+## Verification Model
+
+`verify` executes experiments and validates their declared evidence contract from the manifest:
+
+- experiment must execute successfully
+- output must include declared evidence snippets
+- invariant and failure condition are attached to the verification report
+
+This creates structured, replayable observational records instead of raw terminal-only demonstrations.
+
+## Theory Mapping
+
+`theory-map` emits:
+
+- operation coverage matrix by experiment
+- claim-to-experiment witness mapping
+- uncovered theory claims
+
+Uncovered claims are intentionally visible so CI can later enforce theoretical coverage targets.
+
+## Counterexample and Adversarial Extension Lane
+
+The current framework is designed to support:
+
+- bounded state-space search for conjecture failures
+- automatic promotion of discovered counterexamples to regression fixtures
+- adversarial experiment classes with explicit semantic failure reasons
+
+These extensions should be attached to the same manifest + claim registry model so evidence remains auditable.

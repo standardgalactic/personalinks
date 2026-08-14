@@ -1,15 +1,164 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 3 of 6 of a document called
+"textbook-dependent-type-theory.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Event‑Sourced Proof Objects – A Constructive Foundations**
 
-TEXT
-====
+In the Spherepop kernel we view a theorem not merely as a static lambda ter[3D[K
+term but as an immutable *historical artifact* that records every admissibl[9D[K
+admissible event which produced its proof.  Consequently, a theorem is repr[4D[K
+represented by three inseparable components:
+
+1. **Proposition** \(P:\Prop\) – the logical statement proved.
+2. **Proof Term** \(p:P\) – the observable projection of the constructive p[1D[K
+process.
+3. **Historical Derivation** \(\History(p)\) – a complete, replayable seque[5D[K
+sequence of events (declares, binds, pops, refusals, collapses, reductions,[11D[K
+reductions, etc.) that together reconstruct the proof.
+
+Internally we write  
+
+\[
+\Theta = (P,\;p,\;\History(p)).
+\]
+
+---
+
+### Why This Matters
+
+* **Constructive Identity** – Equality is no longer a primitive logical rel[3D[K
+relation but a *historical equivalence*: if \(a\) and \(b\) are equal, repl[4D[K
+replaying the proof of \(\operatorname{Eq}_A(a,b)\) reproduces the exact tr[2D[K
+transformations that made them interchangeable.
+* **Proof Irrelevance Re‑examined** – Two proofs may be observationally ide[3D[K
+identical (they both evaluate to a given term) yet arise from completely di[2D[K
+different histories.  In our model they remain distinct until we explicitly[10D[K
+explicitly identify them via collapse events, preserving provenance for use[3D[K
+use in the trusted kernel.
+* **Transport & Categorical Structure** – Equality types naturally organize[8D[K
+organize themselves into morphisms between construction histories: an inhab[5D[K
+inhabitant of \(\operatorname{Eq}_A(a,b)\) is interpreted as a map  
+
+  \[
+  \History(a)\;\longrightarrow\; \History(b),
+  \]
+
+  and composition of equality proofs mirrors composition of these historica[9D[K
+historical morphisms, giving rise to intrinsic categorical properties.
+
+---
+
+### The Role of Replay
+
+The **replay operator** turns the history into computational content:
+
+Given \(\Theta = (P,p,\History(p))\) we compute  
+
+\[
+\Replay(\History(p)),
+\]
+
+which reconstructs every primitive event that produced \(p\).  If replay te[2D[K
+terminates successfully, logical correctness follows automatically.  Thus p[1D[K
+proof checking becomes *deterministic historical reconstruction* rather tha[3D[K
+than pattern matching on a static term.
+
+---
+
+### Proof Certificates & Distributed Verification
+
+Because the entire construction history serves as evidence of correctness, [K
+it functions as a **proof certificate**:
+
+- Transmit only the event sequence \(e_1; e_2; \dots ; e_n\).
+- The recipient merely replays the events.
+- Acceptance follows immediately from successful replay.
+
+This enables *efficient incremental verification*: if a theorem’s history c[1D[K
+changes only in its suffix, we start replaying from the cached prefix of co[2D[K
+common ancestors.  Verification scales with modified portions of the depend[6D[K
+dependency graph rather than the whole library—mirroring how human mathemat[8D[K
+mathematicians read proofs incrementally.
+
+---
+
+### Shared Historical Prefixes & Scalability
+
+Large libraries often contain many shared lemmas.  Traditional proof object[6D[K
+objects duplicate this work, whereas the historical kernel stores each lemm[4D[K
+lemma once:
+
+- Two proofs sharing prefix \(H_0\) are stored as  
+
+  \[
+  H_A = H_0; H_A',\qquad
+  H_B = H_0; H_B',
+  \]
+
+  so only the suffixes need to be recomputed when they change, dramatically[12D[K
+dramatically reducing storage and verification time.
+
+---
+
+### Collapse Events & Identity Realization
+
+When an equality proof \(p:\operatorname{Eq}_A(a,b)\) is needed for actual [K
+use (e.g., in later constructions), a **collapse event** \(\Collapse(H,a,b,[18D[K
+\(\Collapse(H,a,b,p)\) may be constructed, extending the history with an ex[2D[K
+explicit identification justified by the equality.  Crucially:
+
+- The histories of \(a\) and \(b\) remain available.
+- No erasure occurs; only a new construction (the collapsed witness) is add[3D[K
+added.
+
+Thus identity becomes *explicitly proven* rather than assumed extensionally[13D[K
+extensionally.
+
+---
+
+### Conclusion
+
+By treating equality, proofs, and their histories as first‑class objects, t[1D[K
+the Spherepop kernel provides:
+
+1. **Constructive reasoning** – equality reflects true computational equiva[6D[K
+equivalence.
+2. **Full provenance** – every proof can be replayed to verify correctness.[12D[K
+correctness.
+3. **Scalable verification** – incremental checks only recomput[8D[K
+recompute changed portions of shared history.
+4. **Interoperability** – histories serve as verifiable certificates, enabl[5D[K
+enabling distributed and collaborative mathematical practice.
+
+The next chapter will formalize these ideas within a categorical semantics [K
+framework, showing how equality types naturally encode the morphisms that u[1D[K
+underlie the kernel’s logical structure.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 
 Variable Synthesis

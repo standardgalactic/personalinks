@@ -1,51 +1,60 @@
 **Event Graphs and Directed Acyclic Structure**
 
-Linear event words work well for histories where each event has at most one[3D[K
-one predecessor and at most one successor. However, many real-world process[7D[K
-processes involve branching (a single region giving rise to multiple descen[6D[K
-descendants) or merging (multiple regions combining into a new one). In suc[3D[K
-such cases the linear notation becomes inadequate because it hides the para[4D[K
-parallel structure of the history.
-
-**Definition – Event Graph**
-
+**Definition – Event Graph**  
 An *event graph* is a directed graph \(G = (V, \mathcal{E})\) where:
 
-- **Vertices (\(V\))**: Represent regions or configurations of a system.
-- **Edges (\(\mathcal{E}\))**: Represent irreversible events. An edge from [K
-vertex \(X\) to vertex \(Y\) denotes that event producing the region \(Y\) [K
-from the region \(X\).
+- The vertices \(V\) represent distinct regions or configurations of the sy[2D[K
+system.
+- Each directed edge \(X \rightarrow Y\) corresponds to an irreversible eve[3D[K
+event that
+  transforms the region \(X\) into the region \(Y\).
 
-When an event produces multiple descendants, its corresponding vertex will [K
-have several outgoing edges; similarly, if a new region is formed by mergin[6D[K
-merging two others, there will be incoming edges representing those contrib[7D[K
-contributions.
+When a history involves branching (a single region giving rise to several
+descendants) or merging (multiple regions combining into one), the graph na[2D[K
+naturally
+contains vertices with multiple outgoing edges (for branching) or incoming [K
+edges
+(for merging). The entire structure of the graph, not just a linear path, e[1D[K
+encodes
+the full generative history.
 
-**Proposition – Directed Acyclicity**
-
+**Proposition – Directed Acyclicity**  
 Every Spherepop event graph is a *directed acyclic graph* (DAG).
 
-**Why Directed Acyclic?**
+*Proof Sketch*: By definition in Section \(\ref{sec:categorical}\), events [K
+are
+irreversible transformations. If a cycle existed—i.e., there were a path
+\(X \rightarrow Y \rightarrow \dots \rightarrow X\)—it would imply that the[3D[K
+the same
+region could be reached through a reversible sequence of events, contradict[10D[K
+contradicting the
+assumption of irreversibility. Hence no such cycles can appear in an event [K
+graph,
+making it acyclic.
 
-1. **Irreversibility**: By definition, each edge in a Spherepop event graph[5D[K
-graph corresponds to an irreversible transformation. If cycles were allowed[7D[K
-allowed—paths that eventually return to the original region—an inverse proc[4D[K
-process would be implied, contradicting irreversibility.
+**Implications**
 
-2. **No Reversible Loops**: In causal or computational systems modeled by S[1D[K
-Spherepop, no sequence of events can reverse itself. A loop (e.g., \(X \rig[4D[K
-\rightarrow Y \rightarrow \dots \rightarrow X\)) would imply a reversible s[1D[K
-step, which is prohibited under the underlying physical or computational as[2D[K
-assumptions.
+1. **Parallel Histories**: Branching vertices allow simultaneous exploratio[10D[K
+exploration of
+   multiple potential futures without ambiguity, reflecting real-world proc[4D[K
+processes
+   where several outcomes are possible from a single state.
+2. **Historical Clarity**: The DAG structure prevents misinterpretation tha[3D[K
+that could
+   arise if one attempted to collapse the graph into an arbitrary linear or[2D[K
+order,
+   preserving the causal directionality inherent in irreversible events.
+3. **Structural Constraints**: In practice, many physical or computational [K
+systems
+   exhibit non‑linear dynamics (e.g., bifurcations, feedback loops). By enf[3D[K
+enforcing a
+   DAG structure for event graphs, Spherepop aligns with these constraints [K
+while
+   maintaining a compositional framework that remains consistent across all[3D[K
+all events.
 
-3. **Structural Consequence**: The requirement that each event be irreversi[9D[K
-irreversible inherently prevents cycles because a cycle would require an in[2D[K
-inverse transformation at some point in the sequence, violating the irrever[7D[K
-irreversibility constraint.
-
-This property (directed acyclicity) is not merely a convenient representati[12D[K
-representation but a structural necessity derived from the core assumptions[11D[K
-assumptions of Spherepop. It aligns with broader principles observed in cat[3D[K
-category theory and graph theory for systems where morphisms represent irre[4D[K
-irreversible processes.
-
+Thus, the use of directed acyclic event graphs naturally captures the essen[5D[K
+essential
+property of irreversibility in Spherepop histories and provides a robust vi[2D[K
+visual
+and computational model for analyzing complex generative processes.

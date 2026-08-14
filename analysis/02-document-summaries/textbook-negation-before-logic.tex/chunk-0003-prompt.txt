@@ -1,15 +1,398 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 3 of 4 of a document called
+"textbook-negation-before-logic.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Below is a cleaned‑up, numbered version of the document that follows your[4D[K
+your formatting instructions.**
 
-TEXT
-====
+---
+
+### 1. Decay Theorem
+
+**Theorem:**  
+Under exponential forgetting,
+
+\[
+\mathcal D_t \le \mathcal D_0 e^{-2\lambda t}.
+\]
+
+**Proof:**  
+From the definition of decay we have  
+
+\[
+\Delta_t = \Delta_0 e^{-\lambda t},
+\]
+
+and squaring gives  
+
+\[
+\Delta_t^2 = \Delta_0^2 e^{-2\lambda t}.
+\] 
+
+Since \(\mathcal D_t\) is proportional to \(\Delta_t^2\),
+
+\[
+\mathcal D_t = C \,\Delta_t^2 \le C \,\Delta_0^2 e^{-2\lambda t},
+\]
+
+where \(C\) is a positive constant.  ∎  
+
+---
+
+### 2. Definitions
+
+#### 2.1 Ecphory Operator
+**Definition:**  
+An ecphory operator is  
+
+\[
+\mathcal E_t : \mathcal H \rightarrow X .
+\]
+
+#### 2.2 Ecphory Threshold
+**Definition:**  
+A threshold parameter \(\theta > 0\) defines retrieval success:
+
+\[
+\mathcal E_t(h) = x \quad\text{iff}\quad |h - E(x)| < \theta .
+\]
+
+#### 2.3 Retrieval Error
+**Definition:**  
+
+\[
+\varepsilon_t(x) = d_R\bigl(x, \mathcal E_t(E(x))\bigr),
+\]
+
+where \(d_R\) is the retrieval distance metric.
+
+#### 2.4 Perfect Ecphory (Theorem)
+**Theorem:**  
+If retrieval reconstructs \(x\) exactly (\(d_R(x,x)=0\)), then  
+
+\[
+\varepsilon_t(x) = 0.
+\]
+
+**Proof:**  
+By definition, perfect reconstruction means the retrieved item equals the o[1D[K
+original, so the distance is zero. ∎  
+
+---
+
+### 3. Persistence of Orientation Structure
+
+#### 3.1 Definition
+**Definition (Orientation Persistence):**  
+Orientation persists iff  
+
+\[
+\omega_t = \omega_0 .
+\]
+
+#### 3.2 Theorem on Invariant Negation Distortion
+
+**Theorem:**  
+If memory preserves orientation structure (\(\omega_t = \omega_0\)), then n[1D[K
+negation distortion remains invariant.
+
+**Proof:**  
+Negation distortion depends solely on the orientation field \(\omega\). If [K
+\(\omega_t = \omega_0\), any change in the retrieval error due to negation [K
+is absent, hence \(D_N^t = D_N^0\). ∎  
+
+---
+
+### 4. Delayed Verification Dynamics
+
+#### 4.1 Definition (Verification Functional)
+**Definition:**  
+
+\[
+V_t(x) = \chi(P,M_t(x)),
+\]
+
+where \(\chi\) is a consistency functional.
+
+#### 4.2 Definition (Verification Latency)
+**Definition:**  
+
+\[
+\tau = \inf\{t : V_t(x)=1\}.
+\]
+
+#### 4.3 Theorem on Verification Latency
+
+**Theorem (Delayed Verification):**  
+If distortion persists (\(\Delta_t = \Delta_0\)), then verification latency[7D[K
+latency remains bounded below by  
+
+\[
+\tau \ge c\,\Delta_0
+\]
+
+for some constant \(c > 0\).
+
+**Proof:**  
+Verification requires reconstruction of orientation, which scales with the [K
+stored distortion. Hence  
+
+\[
+\tau \propto \Delta_0,
+\]
+
+and we can absorb the proportionality into a positive constant \(c\). ∎  
+
+---
+
+### 5. Distortion Persistence Spectrum
+
+Assume eigen‑decomposition:
+
+\[
+K\phi_n = \lambda_n \phi_n .
+\]
+
+#### 5.1 Definition (Persistence Spectrum)
+**Definition:**  
+
+\[
+\sigma_P = \{\lambda_n : |\lambda_n| = 1\}.
+\]
+
+#### 5.2 Definition (Distortion Spectrum)
+**Definition:**  
+
+\[
+\Sigma_D = \{\lambda_n : \phi_n \text{ contributes to } D_N\}.
+\]
+
+#### 5.3 Theorem on Permanent Distortion
+**Theorem:**  
+Modes satisfying \(|\lambda_n| = 1\) produce permanent distortion persisten[9D[K
+persistence.
+
+**Proof:**  
+Such modes do not decay under repeated application of the evolution operato[7D[K
+operator \(K\). ∎  
+
+---
+
+### 6. Recoverability Geometry
+
+#### 6.1 Definition (Recoverability Radius)
+**Definition:**  
+
+\[
+\rho(x) = \sup\{r : B_r(x) \text{ is reconstructible}\}.
+\]
+
+#### 6.2 Definition (Persistence Capacity)
+**Definition:**  
+
+\[
+\Phi_P = \int_X \rho(x)\, d\mu(x).
+\]
+
+#### 6.3 Theorem on Recoverability
+
+**Theorem:**  
+If \(\Phi_P < D_N^{\max}\), then all negation distortions are recoverable.
+
+**Proof:**  
+Every distortion lies within the recoverability radius, so reconstruction e[1D[K
+exists for each term of \(D_N\). ∎  
+
+---
+
+### 7. Delayed Verification Theorem (Extended)
+
+Suppose proposition \(N\) introduces a non‑zero distortion \(D_N(x) > 0\). [K
+Assume memory preserves orientation geometry (\(\omega_t = \omega_0\)). The[3D[K
+Then:
+
+1. Distortion conservation gives  
+   \[
+   \Delta_t(x) = D_N(x)
+   \]
+   for all times.
+2. Verification latency satisfies  
+   \[
+   \tau(x) \ge c\,D_N(x).
+   \]
+
+Consequently, delayed‑verification effects arise naturally from the persist[7D[K
+persistence of orientation distortion rather than repeated syntactic comput[6D[K
+computation.
+
+**Proof:**  
+From (1), any verification attempt must contend with the stored distortion [K
+\(D_N(x)\). By the latency bound theorem, the cost to achieve verification [K
+cannot be smaller than a constant multiple of this distortion. ∎  
+
+---
+
+### 8. Persistence Principle
+
+**Theorem (Persistence Principle):**  
+Memory preserves not propositions but distortions of reachability geometry.[9D[K
+geometry. Negation‑induced displacement survives in memory whenever orienta[7D[K
+orientation structure survives. Therefore, persistence of verification cost[4D[K
+cost is equivalent to persistence of geometric distortion.
+
+**Proof:**  
+All preceding results establish that distortion is a function of orientatio[10D[K
+orientation geometry and that orientation persistence implies distortion pe[2D[K
+persistence. Hence, if the underlying geometric structure (orientation) rem[3D[K
+remains intact, any stored distortion must persist as well. ∎  
+
+---
+
+### 9. Admissibility Geometry
+
+#### 9.1 Definitions
+Let \((M,g)\) be a connected Riemannian manifold with an orientation field [K
+\(\omega : M \to \mathbb{R}\).
+
+- **Admissibility Field:**  
+  \(A : M \to [0,1]\).
+
+- **Admissible Region:**  
+
+  \[
+  \mathcal A = \{x \in M : A(x) > 0\}.
+  \]
+
+- **Fully Admissible Region:**  
+
+  \[
+  \mathcal A_1 = \{x : A(x)=1\}.
+  \]
+
+- **Admissibility Boundary:**  
+
+  \[
+  \partial\mathcal A = \{x : A(x) = 0\}.
+  \]
+
+#### 9.2 Licensing Domains
+
+**Definition (Licensing Domain):**  
+
+\[
+L = \{x \in M : A(x)=1,\;\omega(x)<0\}.
+\]
+
+**Definition (Positive Domain):**  
+
+\[
+P = \{x : A(x)=1,\;\omega(x)>0\}.
+\]
+
+**Definition (Neutral Boundary):**  
+
+\[
+B = \{x : A(x)=1,\;\omega(x)=0\}.
+\]
+
+Thus,
+
+\[
+\mathcal A_1 = P \cup B \cup L .
+\]
+
+#### 9.3 NPI Probe Functions
+
+**Definition (NPI Probe):**  
+An NPI is represented by a probe function  
+
+\[
+\Pi : M \to \{0,1\}.
+\]
+
+**Definition (Licensing Condition):**  
+A probe is licensed at \(x\) iff  
+
+\[
+\Pi(x)=1
+\quad\text{and}\quad
+x \in L.
+\]
+
+Equivalently,
+
+\[
+\Pi = \chi_L,
+\]
+
+where \(\chi_L\) is the characteristic function of the licensing region.
+
+#### 9.4 Connected Licensing Components
+
+**Definition (Licensing Component):**  
+A licensing component is a connected component  
+
+\[
+L_i \subseteq L.
+\]
+
+Then  
+
+\[
+L = \bigsqcup_i L_i .
+\]
+
+**Theorem (Component Licensing Theorem):**  
+Every point of a licensing component licenses NPIs.
+
+**Proof:**  
+If \(x \in L_i\), then by definition \(x \in L\). Hence \(A(x)=1\) and \(\o[4D[K
+\(\omega(x)<0\), so the licensing condition holds for every point in any co[2D[K
+component. ∎  
+
+#### 9.5 Boundary Geometry
+
+Define curvature:
+
+\[
+\kappa_A = \nabla \cdot\!\left(\frac{\nabla A}{|\nabla A|}\right).
+\]
+
+**Definition (Admissibility Curvature):**  
+\(\kappa_A\) is the admissibility curvature.
+
+Similarly, orientation curvature can be defined analogously.  
+
+---
+
+This cleaned version retains all original mathematical content while removi[6D[K
+removing any extraneous formatting or stylistic elements.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 The deeper philosophical claim, which we develop in the final section,
 is that this unified structure reveals something about the relationship

@@ -1,15 +1,91 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 2 of a document called
+"working-execution-history.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Time as History Length**
 
-TEXT
-====
+- **Definition:** The *execution time* (or simply *time*) of a history \(H\[4D[K
+\(H\) is defined as the cardinality of its event sequence.  
+  \[
+  t(H) = |H|
+  \]
+- **Interpretation:** Since histories are ordered by prefix containment, ad[2D[K
+adding an event to a history strictly increases its length and therefore it[2D[K
+its execution time. This makes *time* directly tied to the number of events[6D[K
+events (or “steps”) that have occurred in the system.
+
+**Causal Ordering as Temporal Constraint**
+
+- The partial order \(\leq\) on histories captures causal containment: if \[1D[K
+\(H_1 \leq H_2\), then every event sequence of \(H_1\) appears as an initia[6D[K
+initial segment of \(H_2\) while preserving causality.
+- Consequently, the temporal ordering is *not* absolute but relative to eac[3D[K
+each history; a later history can be considered “later” only if it extends [K
+the causal chain established by earlier histories.
+
+**Irreversibility**
+
+- The extension operator \(\operatorname{ext} : \mathcal{H} \times E \right[6D[K
+\rightarrow \mathcal{H}\) is monotone: extending \(H\) with an event always[6D[K
+always produces a larger history (\(H' = \operatorname{ext}(H, e)\) satisfi[7D[K
+satisfies \(H \leq H'\)).
+- Because extensions are irreversible (once an event \(e\) has been appende[7D[K
+appended, the original state of \(H\) cannot be recovered without additiona[9D[K
+additional metadata), time in this framework is inherently *unidirectional*[16D[K
+*unidirectional*: histories grow monotonically and cannot regress.
+
+**Implications for Computation**
+
+1. **Deterministic Replay:** Given a history \(H\), replaying its events de[2D[K
+deterministically yields a unique final configuration \(\sigma(H)\). This p[1D[K
+property follows from the monotonic extension and deterministic semantics o[1D[K
+of each event.
+2. **Merge Convergence:** When compatible histories are merged, the result [K
+is their least upper bound under the prefix order, ensuring convergence to [K
+a single canonical history representing concurrent updates (e.g., in distri[6D[K
+distributed systems).
+3. **State Representation:** Reduction morphisms \(\sigma : \mathcal{H} \ri[3D[K
+\rightarrow S\) map histories to compressed representations (states, snapsh[6D[K
+snapshots). These mappings preserve structural properties while discarding [K
+intermediate details, reflecting how higher‑level abstractions are built fr[2D[K
+from the irreversible evolution of event histories.
+
+**Conclusion**
+
+In this algebraic view, *time* is not an external clock but a derived measu[5D[K
+measure—specifically, the length of the causal chain encoded by histories. [K
+Causality and irreversibility are intrinsic to the model: each extension ap[2D[K
+appends events in causally valid order, preventing any reversal or reorderi[8D[K
+reordering without altering the underlying history poset structure. This pe[2D[K
+perspective unifies concepts from distributed logs, version control graphs,[7D[K
+graphs, and event‑sourced architectures under a single formalism of history[7D[K
+history‑based computation.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[12pt]{article}
 

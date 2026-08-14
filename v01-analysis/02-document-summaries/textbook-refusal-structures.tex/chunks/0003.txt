@@ -1,0 +1,2101 @@
+Repeated application of local equivalences gradually simplifies the entire graph.
+
+This observation suggests viewing optimization as analogous to algebraic simplification.
+
+Instead of simplifying equations,
+
+the compiler simplifies composition graphs.
+
+The rewrite rules become computational identities.
+
+Optimization becomes the search for shorter or more efficient representatives of an operational equivalence class.
+
+
+Self-Optimizing Programs
+
+
+Once programs are represented explicitly as graph objects,
+
+optimization need no longer remain exclusively a compile-time activity.
+
+Programs may inspect their own graphs,
+
+measure execution histories,
+
+identify expensive regions,
+
+and rewrite themselves dynamically.
+
+A frequently executed subgraph may be specialized.
+
+A branch that is never taken may be removed.
+
+Several operators may be fused into a single composite operator.
+
+Entire regions may migrate from CPU execution to GPU execution.
+
+Because optimization itself is merely graph transformation,
+
+the optimizer need not occupy a privileged role outside the computational system.
+
+It becomes another graph acting upon graph values.
+
+This naturally unifies
+
+interpreters,
+
+compilers,
+
+optimizers,
+
+just-in-time compilation,
+
+adaptive execution,
+
+and reflective programming.
+
+Each becomes a specialized graph rewriting process operating on persistent computational histories.
+
+
+Compilation Without Languages
+
+
+Perhaps the most radical consequence of this viewpoint is that compilation no longer fundamentally concerns programming languages.
+
+Programming languages become one source of computational graphs.
+
+Visual editors become another.
+
+Machine learning systems may generate graphs directly.
+
+Interactive proof assistants may produce graphs.
+
+Optimization systems may synthesize graphs.
+
+Even biological or physical processes may be abstracted as operator graphs.
+
+The compiler therefore need not ask,
+
+"What language was this written in?"
+
+Instead it asks,
+
+"What graph has been presented?"
+
+and
+
+"Into what graph should it be transformed?"
+
+This shifts the emphasis away from syntax and toward computation itself.
+
+Languages become interfaces.
+
+Graphs become the computational reality.
+
+The next section builds upon this foundation by considering cyclic graphs, recursion, persistent state, and fixed-point computation. Whereas directed acyclic graphs capture feed-forward computation, cycles introduce memory, iteration, and self-reference. Rather than requiring an entirely new execution model, these phenomena emerge as natural extensions of the same compositional semantics developed throughout this essay.
+
+
+Cycles, Recursion, Feedback, and Fixed Points
+
+
+Thus far we have concentrated primarily on directed acyclic graphs. This restriction is pedagogically convenient because every computation admits a unique dependency ordering. Once the predecessors of a node have been evaluated, the node itself may be evaluated exactly once, and execution proceeds monotonically toward the outputs.
+
+Real computation, however, is rarely so simple.
+
+Programs contain loops.
+
+Digital circuits contain feedback.
+
+Operating systems maintain persistent state.
+
+Interactive applications respond continuously to external events.
+
+Compilers invoke themselves recursively.
+
+Theorem provers repeatedly refine partial proofs.
+
+Artificial neural networks may contain recurrent connections.
+
+These phenomena appear very different when viewed syntactically. Graphically, however, they share a common feature.
+
+Each introduces one or more directed cycles into the composition graph.
+
+The problem therefore is not how to invent an entirely new execution model. The problem is how to extend the compositional semantics developed earlier so that cycles become meaningful computational objects.
+
+
+The Meaning of a Cycle
+
+
+Consider a graph
+
+\[
+G=(N,E)
+\]
+
+containing a directed path
+
+\[
+n_1
+\rightarrow
+n_2
+\rightarrow
+\cdots
+\rightarrow
+n_k
+\rightarrow
+n_1.
+\]
+
+Unlike an acyclic graph, no topological ordering exists.
+
+Each node appears to depend upon itself indirectly.
+
+This apparent paradox has often motivated special language constructs such as
+
+\[
+\texttt{while},
+\]
+
+\[
+\texttt{for},
+\]
+
+recursive function definitions,
+
+state machines,
+
+or process calculi.
+
+Spherepop instead treats the cycle itself as the primitive object.
+
+A cycle simply records that information produced during one stage of execution may later become an input to another stage of the same computation.
+
+Nothing fundamentally mysterious has occurred.
+
+Composition has simply become self-referential.
+
+
+Time as Successive Histories
+
+
+The difficulty with cycles disappears once histories become explicit.
+
+A value does not feed back into the operator that originally produced it.
+
+Rather,
+
+a value produced during one history participates in the construction of a later history.
+
+Suppose
+
+\[
+h_0,
+h_1,
+h_2,
+\ldots
+\]
+
+are successive execution histories.
+
+A feedback edge should therefore be interpreted as
+
+\[
+h_t
+\longrightarrow
+h_{t+1},
+\]
+
+rather than
+
+\[
+h_t
+\longrightarrow
+h_t.
+\]
+
+The graph itself remains cyclic,
+
+but the histories generated by repeated execution are linearly ordered.
+
+The apparent circularity therefore disappears.
+
+The graph describes structural dependence.
+
+The history describes temporal realization.
+
+Separating these two notions greatly simplifies the semantics.
+
+
+Delay Operators
+
+
+Many computational systems introduce explicit delay operators.
+
+Digital circuits contain registers.
+
+Signal processing systems contain unit delays.
+
+Control systems contain integrators.
+
+Functional reactive languages contain stream delays.
+
+These all perform the same mathematical role.
+
+A delay operator breaks an immediate dependency by replacing it with a dependency upon the previous history.
+
+Formally,
+
+let
+
+\[
+D
+\]
+
+be the delay operator.
+
+Then
+
+\[
+D(x_t)=x_{t-1}.
+\]
+
+The current evaluation therefore depends upon the previously committed history rather than the partially constructed present history.
+
+Operationally,
+
+the scheduler no longer attempts to evaluate a cycle instantaneously.
+
+Instead,
+
+each iteration consumes values committed during earlier histories.
+
+The graph remains unchanged.
+
+Only the interpretation of the feedback edge changes.
+
+
+Iteration as Repeated Graph Evaluation
+
+
+This viewpoint leads to a remarkably simple interpretation of loops.
+
+Rather than repeatedly executing statements,
+
+the runtime repeatedly evaluates the same graph over successive histories.
+
+Suppose
+
+\[
+G
+\]
+
+is the graph representing one iteration.
+
+Execution becomes
+
+\[
+G(h_0)
+\rightarrow
+h_1,
+\]
+
+\[
+G(h_1)
+\rightarrow
+h_2,
+\]
+
+\[
+G(h_2)
+\rightarrow
+h_3,
+\]
+
+and so forth.
+
+Nothing inside
+
+\[
+G
+\]
+
+changes.
+
+The graph is constant.
+
+Only the history supplied to it changes.
+
+Iteration therefore becomes repeated application of one compositional object.
+
+This interpretation naturally generalizes to simulations,
+
+interactive systems,
+
+stream processors,
+
+and operating systems,
+
+all of which repeatedly transform one history into another.
+
+
+Recursion as Self-Composition
+
+
+Recursive functions receive a similarly direct interpretation.
+
+Suppose
+
+\[
+f
+\]
+
+calls itself.
+
+Conventionally,
+
+one introduces special semantic rules describing recursive invocation.
+
+Graphically,
+
+no such distinction is necessary.
+
+The function graph simply contains an edge returning to its own input interface.
+
+Recursive evaluation becomes repeated self-composition.
+
+For example,
+
+\[
+f^{(0)}(x)=x,
+\]
+
+\[
+f^{(1)}(x)=f(x),
+\]
+
+\[
+f^{(2)}(x)=f(f(x)),
+\]
+
+and more generally
+
+\[
+f^{(n)}(x)
+=
+\underbrace{f\circ f\circ\cdots\circ f}_{n\text{ times}}(x).
+\]
+
+Termination corresponds to reaching a history in which further self-composition is no longer required.
+
+From this viewpoint,
+
+recursion is not a separate computational primitive.
+
+It is composition applied repeatedly to the same graph.
+
+
+Fixed Points as Stable Histories
+
+
+Cycles introduce the possibility that repeated graph evaluation eventually stabilizes. Rather than producing an endless sequence of distinct histories,
+
+\[
+h_0,\,
+h_1,\,
+h_2,\,
+\ldots,
+\]
+
+the execution may converge to a history satisfying
+
+\[
+G(h^*) = h^*.
+\]
+
+Such a history is called a fixed point of the computation.
+
+From the traditional perspective, fixed points are often introduced through recursive definitions or domain-theoretic semantics. In Spherepop they arise naturally from repeated composition.
+
+One repeatedly applies the same graph to the current history until no further operational changes occur.
+
+The emphasis therefore shifts from solving equations to observing the evolution of histories.
+
+A fixed point is simply a history that reproduces itself under further admissible composition.
+
+This interpretation is particularly natural for interactive systems.
+
+An operating system never truly terminates.
+
+Instead, it repeatedly evolves toward locally stable configurations before responding to new external events.
+
+Likewise, many optimization algorithms terminate when successive histories become indistinguishable according to some operational criterion.
+
+The notion of convergence is therefore not restricted to numerical analysis.
+
+It becomes a general property of compositional evolution.
+
+
+Persistent State as Committed History
+
+
+Programming languages frequently introduce variables as primitive storage locations.
+
+Graphically this is unnecessary.
+
+Persistent state may instead be viewed as previously committed history.
+
+Suppose a computation produces
+
+\[
+v_t
+\]
+
+during history
+
+\[
+h_t.
+\]
+
+If that value remains available during
+
+\[
+h_{t+1},
+\]
+
+the system has state.
+
+Nothing fundamentally different has been added to the execution engine.
+
+The history has simply become persistent.
+
+Variables,
+
+registers,
+
+memory cells,
+
+database records,
+
+and object fields
+
+all become particular mechanisms for exposing previously committed histories to future computations.
+
+This interpretation removes the apparent distinction between memory and execution.
+
+Memory is simply computation that has already been committed.
+
+Execution is memory that is currently under construction.
+
+The boundary between the two is the
+
+\[
+\Collapse
+\]
+
+operation.
+
+
+Streams Rather Than Variables
+
+
+This perspective also suggests replacing mutable variables with streams of historical values.
+
+Instead of writing
+
+\[
+x := x+1,
+\]
+
+one may regard
+
+\[
+x
+\]
+
+as the sequence
+
+\[
+x_0,\,
+x_1,\,
+x_2,\,
+\ldots.
+\]
+
+Each element belongs to a different history.
+
+The update rule becomes
+
+\[
+x_{t+1}
+=
+x_t+1.
+\]
+
+No value has been overwritten.
+
+Every historical state remains available for inspection.
+
+Many programming paradigms have independently rediscovered versions of this idea.
+
+Functional reactive programming emphasizes streams.
+
+Signal processing emphasizes time series.
+
+Hardware design emphasizes clocked signals.
+
+Version control systems preserve historical revisions.
+
+Event sourcing records immutable events rather than mutable state.
+
+Spherepop unifies these observations by treating every mutable object as an evolving history.
+
+Mutation becomes an interpretation placed upon successive historical values rather than a primitive computational operation.
+
+
+Repair Within Cyclic Computation
+
+
+The explicit representation of histories provides an elegant account of repair in recursive systems.
+
+Suppose repeated evaluation generates
+
+\[
+h_0,
+h_1,
+\ldots,
+h_k.
+\]
+
+If an inconsistency appears during
+
+\[
+h_k,
+\]
+
+there is no need to reconstruct earlier computation.
+
+The previous histories remain available.
+
+Repair may therefore proceed by branching from any earlier history,
+
+modifying a local region,
+
+and continuing execution.
+
+The original history is preserved.
+
+The repaired history becomes an alternative continuation.
+
+This resembles branching in version control systems, but it occurs at the level of operational histories rather than source code.
+
+Repair therefore becomes a first-class computational operation.
+
+Instead of discarding failed executions,
+
+Spherepop records them,
+
+explains them,
+
+and allows new histories to emerge from them.
+
+
+Recurrence Without Language Constructs
+
+
+One consequence of the graph interpretation is that many familiar programming constructs become optional.
+
+Loops,
+
+recursive functions,
+
+iterators,
+
+state machines,
+
+coroutines,
+
+generators,
+
+and reactive systems
+
+all express repeated interaction between successive histories.
+
+Rather than introducing each construct separately,
+
+Spherepop provides only composition,
+
+persistent histories,
+
+feedback edges,
+
+and scheduling.
+
+The higher-level constructs emerge as common graph patterns.
+
+For example,
+
+a finite-state machine is simply a graph whose current committed history determines which subgraph becomes active during the next history.
+
+A coroutine is a graph whose execution is suspended after producing a partial history and resumed during a later history.
+
+A generator repeatedly extends its history by producing one additional value.
+
+These concepts differ operationally only in how histories are scheduled and connected.
+
+The underlying compositional semantics remains unchanged.
+
+
+Histories as the Fundamental Temporal Object
+
+
+Traditional operational semantics often begins with program state and derives execution traces.
+
+Spherepop reverses this relationship.
+
+Execution histories are fundamental.
+
+State is a projection extracted from history.
+
+Memory is committed history.
+
+Time is the ordering of histories.
+
+Recursion is repeated self-composition across histories.
+
+Feedback is the transmission of committed history into future composition.
+
+Iteration is repeated graph evaluation over successive histories.
+
+Fixed points are histories that become invariant under further composition.
+
+Viewed in this way, temporal computation requires remarkably little additional machinery beyond the acyclic semantics developed earlier.
+
+Cycles do not force the introduction of a fundamentally different execution model.
+
+They merely require histories to persist across successive evaluations of the same composition graph.
+
+The next section exploits this observation to show that Boolean logic, fuzzy logic, probabilistic reasoning, symbolic rewriting, neural computation, and other computational paradigms can all be interpreted as different operator libraries executing over the same history-preserving compositional substrate.
+
+
+Simulating Computational Paradigms Through Operator Libraries
+
+
+One of the strongest consequences of the preceding development is that the execution engine no longer embodies any particular computational paradigm. Once computation has been reduced to the evaluation of operator graphs over persistent histories, the distinction between programming languages, logical systems, and computational models shifts almost entirely into the operator library.
+
+This inversion is important. Traditionally one asks whether a language supports logic programming, symbolic computation, neural computation, probabilistic reasoning, or fuzzy inference. From the perspective developed here, the more fundamental question is much simpler.
+
+Which operators are available?
+
+The runtime remains unchanged.
+
+Only the collection of primitive operators changes.
+
+Consequently, Spherepop should not be regarded as another programming language competing with existing paradigms. Rather, it is a compositional substrate upon which many paradigms may coexist simultaneously.
+
+
+Boolean Computation
+
+
+Boolean computation represents perhaps the simplest operator library.
+
+The carrier space is
+
+\[
+B=\{0,1\},
+\]
+
+and the primitive operators may be chosen as
+
+\[
+\mathcal L_B=
+\{
+\land,\,
+\lor,\,
+\lnot,\,
+\oplus
+\}.
+\]
+
+Every combinational circuit becomes a finite composition graph over these operators.
+
+Evaluation proceeds exactly as described in the previous sections.
+
+Each node waits until its predecessors have produced values.
+
+The operator associated with the node is applied.
+
+The resulting value becomes available to successor nodes.
+
+Nothing in the execution engine recognizes that these values represent logical truth.
+
+They are simply members of the carrier space
+
+\[
+B.
+\]
+
+This observation immediately removes the distinction between logical circuits and ordinary computational graphs.
+
+Boolean logic becomes one particular operator algebra.
+
+
+Fuzzy Computation
+
+
+Fuzzy logic enlarges the carrier space.
+
+Instead of
+
+\[
+\{0,1\},
+\]
+
+one works over
+
+\[
+[0,1].
+\]
+
+The graph topology is unchanged.
+
+Only the operators differ.
+
+For example,
+
+\[
+x\land y
+=
+\min(x,y),
+\]
+
+\[
+x\lor y
+=
+\max(x,y),
+\]
+
+and
+
+\[
+\lnot x
+=
+1-x.
+\]
+
+Alternative operator families are equally valid.
+
+One may choose product t-norms,
+
+Lukasiewicz operators,
+
+Gödel operators,
+
+or continuously parameterized conjunctions.
+
+The execution scheduler remains completely unaffected.
+
+It continues evaluating nodes according to graph dependencies.
+
+Only the local transformation performed at each node has changed.
+
+This illustrates one of the central principles of Spherepop.
+
+Logical systems are operator libraries.
+
+They are not execution engines.
+
+
+Probabilistic Computation
+
+
+The same reasoning extends naturally to probabilistic computation.
+
+Instead of propagating truth values,
+
+nodes propagate probability distributions.
+
+The carrier space now becomes
+
+\[
+\mathcal P(X),
+\]
+
+the collection of probability measures over some domain
+
+\[
+X.
+\]
+
+Primitive operators perform familiar probabilistic transformations.
+
+Some combine distributions.
+
+Others condition upon observations.
+
+Others perform Bayesian updates.
+
+Others sample from distributions.
+
+Operationally nothing changes.
+
+Each node still receives inputs.
+
+Each node still produces outputs.
+
+The scheduler still traverses the graph.
+
+Probability therefore appears not as a separate computational paradigm but as another operator algebra acting upon a different carrier space.
+
+
+Symbolic Computation
+
+
+Symbolic systems appear, at first glance, completely different from numerical computation.
+
+Instead of numbers,
+
+they manipulate expressions,
+
+equations,
+
+proofs,
+
+or syntax trees.
+
+Yet the compositional viewpoint reveals the same underlying structure.
+
+Each node simply performs a rewrite.
+
+Suppose
+
+\[
+R
+\]
+
+is a rewrite operator.
+
+Then
+
+\[
+R:E\rightarrow E,
+\]
+
+where
+
+\[
+E
+\]
+
+is the space of symbolic expressions.
+
+The graph itself remains identical to the graphs used for arithmetic or logic.
+
+Only the local operators now perform substitutions,
+
+normalizations,
+
+simplifications,
+
+or theorem-proving steps.
+
+The runtime neither knows nor needs to know that symbolic manipulation is occurring.
+
+It merely evaluates operator nodes.
+
+
+Neural Computation
+
+
+Artificial neural networks provide another illustration.
+
+Each neuron computes
+
+\[
+y
+=
+\sigma
+\left(
+\sum_i
+w_i x_i+b
+\right),
+\]
+
+where
+
+\[
+\sigma
+\]
+
+is an activation function.
+
+Graphically,
+
+every neuron is simply another operator node.
+
+The weighted connections become edges.
+
+Layers become collections of nodes.
+
+Entire networks become operator graphs.
+
+The forward pass is one traversal of the graph.
+
+Backpropagation is another traversal over essentially the same topology using derivative operators instead of activation operators.
+
+Thus neural computation does not require a fundamentally different execution engine.
+
+It merely requires another operator library together with a second graph traversal for learning.
+
+The compositional substrate remains identical.
+
+
+Arithmetic Computation
+
+
+Ordinary arithmetic appears even simpler.
+
+Primitive operators include
+
+\[
++,
+-,
+\times,
+\div,
+\sqrt{\phantom{x}},
+\sin,
+\cos,
+\exp,
+\log.
+\]
+
+The carrier space becomes
+
+\[
+\mathbb R,
+\]
+
+or perhaps arbitrary precision integers,
+
+complex numbers,
+
+or matrices.
+
+Again,
+
+the graph does not change.
+
+Only the interpretation of each operator changes.
+
+Arithmetic therefore occupies exactly the same conceptual status as Boolean logic or fuzzy reasoning.
+
+It is another operator algebra.
+
+
+The Uniformity Principle
+
+
+The repeated appearance of the same execution pattern suggests a general principle.
+
+\begin{theorem}[Uniformity Principle]
+Let
+\[
+\mathcal G
+\]
+be a composition graph and let
+\[
+\mathcal L
+\]
+be any operator library whose operators act upon a carrier space
+\[
+X.
+\]
+Then the execution algorithm depends only upon
+\[
+\mathcal G,
+\]
+while the computational interpretation depends only upon
+\[
+\mathcal L.
+\]
+\end{theorem}
+
+The proof is immediate.
+
+The scheduler examines graph dependencies alone.
+
+Operator semantics are invoked only after a node has become executable.
+
+Therefore replacing one operator library by another leaves the scheduling algorithm unchanged.
+
+This theorem captures the central architectural separation advocated throughout this essay.
+
+Topology determines computation.
+
+Operators determine meaning.
+
+Neither determines the other.
+
+A single compositional substrate may therefore execute Boolean circuits,
+
+fuzzy inference systems,
+
+Bayesian networks,
+
+symbolic theorem provers,
+
+arithmetic expressions,
+
+or neural networks without changing its operational semantics.
+
+The differences arise entirely from the operators attached to graph nodes rather than from the execution mechanism itself.
+
+
+Hybrid Computational Graphs
+
+
+Perhaps the most important consequence of the operator-library viewpoint is that there is no longer any reason to insist that an entire program belong to a single computational paradigm.
+
+Traditional language design often forces such a commitment.
+
+One language is called functional.
+
+Another logical.
+
+Another probabilistic.
+
+Another symbolic.
+
+Another differentiable.
+
+Another hardware-oriented.
+
+These classifications arise because the language itself has been identified with a particular collection of primitive operators.
+
+Spherepop deliberately separates these notions.
+
+The graph is universal.
+
+Only the local operators vary.
+
+Consequently, different regions of the same graph may employ entirely different computational semantics.
+
+One subgraph may perform Boolean reasoning,
+
+another fuzzy inference,
+
+another symbolic rewriting,
+
+another matrix multiplication,
+
+another probabilistic sampling,
+
+and another neural inference.
+
+The outputs of each region become ordinary values consumed by the next region.
+
+No boundary exists between computational paradigms except the choice of local operators.
+
+This permits hybrid computational systems to be constructed naturally rather than through awkward foreign-function interfaces or language embeddings.
+
+
+Operators as First-Class Values
+
+
+An even stronger consequence follows if operators themselves are permitted to flow through the graph.
+
+Suppose the carrier space contains not only ordinary values but operators,
+
+\[
+\mathcal O \subseteq \mathcal V.
+\]
+
+Then an operator may become the output of one computation and the input to another.
+
+Formally, one may define higher-order operators
+
+\[
+M:\mathcal O\rightarrow\mathcal O,
+\]
+
+or
+
+\[
+C:\mathcal O\times\mathcal O\rightarrow\mathcal O,
+\]
+
+which modify or compose existing operators.
+
+Examples include
+
+operator fusion,
+
+automatic differentiation,
+
+partial application,
+
+currying,
+
+symbolic simplification,
+
+or optimization.
+
+The execution engine again remains unchanged.
+
+The only novelty is that some values now happen to represent executable operators.
+
+This is entirely analogous to the treatment of functions as first-class values in functional programming, except that Spherepop generalizes the idea from functions to arbitrary computational operators.
+
+
+Learning New Operators
+
+
+If operators are ordinary values, they may also be constructed during execution.
+
+Suppose an optimization procedure observes many execution histories,
+
+\[
+h_1,h_2,\ldots,h_n.
+\]
+
+Rather than merely optimizing parameters,
+
+the system may synthesize an entirely new operator
+
+\[
+f^\ast
+\]
+
+whose behavior approximates a frequently occurring subgraph.
+
+Operationally,
+
+the original graph
+
+\[
+G
+\]
+
+contains a large repeated region
+
+\[
+H.
+\]
+
+After sufficient observation,
+
+that region may be replaced by a single synthesized node
+
+\[
+f^\ast.
+\]
+
+The graph becomes smaller,
+
+evaluation becomes faster,
+
+and the learned operator itself becomes part of the available operator library.
+
+This process resembles compiler optimization,
+
+library construction,
+
+and machine learning simultaneously.
+
+From the graph perspective, all three are instances of operator synthesis.
+
+
+Universality Through Composition Rather Than Instruction Sets
+
+
+Traditional computer architecture places great emphasis on instruction sets.
+
+Processors are classified according to the primitive instructions they provide.
+
+Spherepop suggests that this emphasis may be somewhat misleading.
+
+The truly fundamental property is not the instruction set itself but unrestricted composition.
+
+Suppose two systems possess different primitive operators,
+
+\[
+\mathcal O_1
+\]
+
+and
+
+\[
+\mathcal O_2.
+\]
+
+If every operator in
+
+\[
+\mathcal O_1
+\]
+
+can be expressed as a finite composition of operators from
+
+\[
+\mathcal O_2,
+\]
+
+then every graph over
+
+\[
+\mathcal O_1
+\]
+
+may be rewritten into an equivalent graph over
+
+\[
+\mathcal O_2.
+\]
+
+Conversely,
+
+if the reverse translation also exists,
+
+the two operator libraries are computationally equivalent.
+
+This shifts the notion of universality away from particular machines.
+
+Universality becomes a property of compositional expressiveness.
+
+Instruction sets,
+
+logical connectives,
+
+language primitives,
+
+and circuit components all become different generating sets for the same algebra of compositions.
+
+
+Simulation as Graph Translation
+
+
+Simulation now admits a particularly elegant formulation.
+
+Suppose one wishes to simulate Boolean computation using fuzzy operators.
+
+One does not modify the execution engine.
+
+Instead,
+
+one constructs a graph translation
+
+\[
+T:G_B\rightarrow G_F,
+\]
+
+mapping each Boolean operator into an equivalent fuzzy subgraph.
+
+Likewise,
+
+a symbolic rewrite system may be translated into graph reductions,
+
+a finite automaton into a feedback graph,
+
+or a neural network into ordinary arithmetic operators.
+
+Every simulation becomes a graph homomorphism preserving observable histories.
+
+The remarkable diversity of computational paradigms therefore reflects the diversity of available operator libraries rather than diversity in the underlying mechanism of computation.
+
+
+The Ontological Status of Logical Systems
+
+
+These observations suggest a different philosophical interpretation of logic itself.
+
+Logic is often regarded as a foundational description of computation.
+
+Spherepop instead places logic one level higher.
+
+Primitive composition comes first.
+
+Operator libraries come second.
+
+Logical systems arise when particular operator libraries are interpreted as truth-preserving transformations.
+
+Boolean logic,
+
+fuzzy logic,
+
+modal logic,
+
+temporal logic,
+
+probabilistic logic,
+
+and intuitionistic logic
+
+are therefore not different computational universes.
+
+They are different semantic organizations imposed upon the same compositional substrate.
+
+The computation does not know that it is performing logic.
+
+It merely composes operators.
+
+Logic emerges only when an observer interprets particular operators as logical connectives and particular values as truth-like objects.
+
+This inversion is central to the philosophy developed throughout this essay.
+
+Composition generates computation.
+
+Operator libraries generate computational behavior.
+
+Logical systems generate interpretation.
+
+Each level explains the one below without being required for its existence.
+
+The next section develops perhaps the strongest consequence of this inversion by arguing that syntax, grammars, type systems, and even abstract syntax trees should themselves be viewed as human-oriented descriptive layers rather than primitive computational objects.
+
+
+Construction Without Types or Syntax
+
+
+The previous sections have argued that many apparently distinct computational paradigms differ only in their operator libraries. The same argument may be pushed one step further. Not only are logical systems secondary to composition, but much of what programming language theory traditionally regards as foundational is likewise secondary.
+
+Syntax, grammars, type systems, abstract syntax trees, namespaces, modules, and even programming languages themselves should be understood as descriptive technologies. They help human beings construct, organize, verify, communicate, and maintain computations. They are not the computation itself.
+
+The computation is the composition graph.
+
+Everything else is an interface to that graph.
+
+
+Programs Before Languages
+
+
+It is common to speak as though a program is ``written in'' some programming language.
+
+This expression is convenient but philosophically misleading.
+
+A program is not fundamentally a sequence of characters.
+
+It is a computational object.
+
+The textual representation merely provides one convenient method for communicating that object between humans and machines.
+
+The same computation may be represented by
+
+ordinary source code,
+
+a visual node editor,
+
+an abstract syntax tree,
+
+an S-expression,
+
+a hardware schematic,
+
+a serialized graph,
+
+or even a handwritten diagram.
+
+These representations differ enormously.
+
+The underlying composition graph need not.
+
+Consequently, programming languages should be regarded as external notations rather than computational substrates.
+
+They describe graphs.
+
+They do not create them.
+
+
+The Secondary Role of Grammar
+
+
+Formal grammars occupy a central position in compiler theory.
+
+A grammar specifies which strings belong to a language.
+
+Parsing transforms those strings into an internal representation suitable for execution.
+
+From the graph perspective, grammars perform only one task.
+
+They recover graph structure from linear notation.
+
+Human beings naturally communicate sequentially.
+
+Speech unfolds over time.
+
+Writing unfolds along a line.
+
+Computers, however, need not execute linearly.
+
+Their internal computations are overwhelmingly graph structured.
+
+The parser therefore performs a dimensional expansion.
+
+It converts a one-dimensional representation into a higher-dimensional dependency graph.
+
+Nothing computationally fundamental has occurred.
+
+The parser has reconstructed relationships that were implicit in the textual serialization.
+
+The graph already contained the computation.
+
+The grammar merely made it communicable.
+
+
+Abstract Syntax Trees as Transitional Objects
+
+
+Abstract syntax trees occupy an interesting intermediate position.
+
+They are substantially closer to computation than source code, yet they remain shaped by syntax.
+
+Every node corresponds to a grammatical construct.
+
+Parent-child relationships largely reflect textual nesting.
+
+This makes ASTs extremely useful for parsing and semantic analysis.
+
+Nevertheless, they should not be mistaken for the computational object itself.
+
+The computational graph frequently differs from the syntax tree.
+
+Common subexpressions become shared nodes.
+
+Evaluation dependencies cross syntactic boundaries.
+
+Optimization introduces new structures absent from the original syntax.
+
+Data-flow edges become explicit.
+
+Control dependencies become explicit.
+
+Eventually the syntax tree disappears almost entirely.
+
+What remains is the operator graph.
+
+ASTs therefore function as transitional representations.
+
+They bridge human syntax and computational topology.
+
+They are neither the beginning nor the end of the compilation process.
+
+
+Why Types Feel Fundamental
+
+
+Type systems often create the impression that they define the nature of computation.
+
+One cannot apply an integer as though it were a function.
+
+One cannot add strings to matrices without defining suitable operators.
+
+One cannot access fields that do not exist.
+
+These observations are entirely correct.
+
+What they demonstrate, however, is not that types generate computation.
+
+Rather, they demonstrate that types summarize regularities within families of computations.
+
+Suppose an operator
+
+\[
+f
+\]
+
+expects two floating-point numbers.
+
+Nothing in the execution engine requires the existence of a floating-point type.
+
+The operator merely expects certain inputs.
+
+The type system records this expectation in a form convenient for reasoning.
+
+In other words,
+
+types are compressed descriptions of operator compatibility.
+
+The runtime ultimately checks only whether an operator can be evaluated.
+
+The type checker predicts this before execution begins.
+
+Its purpose is explanatory and preventative rather than generative.
+
+
+Types as Regions of the Composition Graph
+
+
+The graph viewpoint suggests an alternative interpretation of types.
+
+Instead of regarding a type as a set of values,
+
+one may regard it as a region within the graph where particular operators may interact safely.
+
+Suppose a family of operators repeatedly appears together.
+
+The type system recognizes this regularity and assigns it a name.
+
+The resulting type is therefore not an intrinsic property of the values themselves.
+
+It is a property of admissible compositions.
+
+Viewed this way,
+
+typing is fundamentally relational.
+
+It concerns compatibility between operators rather than ontology of objects.
+
+The same value may legitimately participate in many different typed regions depending upon which operators surround it.
+
+This interpretation aligns naturally with Spherepop's emphasis on histories and admissibility rather than intrinsic object classifications.
+
+
+Construction as Human Compression
+
+
+One may push the argument even further.
+
+Programming itself may be viewed as an act of compression.
+
+Instead of manipulating millions of primitive operator nodes directly,
+
+human beings construct
+
+functions,
+
+classes,
+
+modules,
+
+packages,
+
+libraries,
+
+and programming languages.
+
+Each level suppresses detail while exposing reusable structure.
+
+These abstractions are extraordinarily valuable.
+
+Without them,
+
+large software systems would be impossible to understand.
+
+Their value, however, lies in cognitive organization rather than computational necessity.
+
+The execution engine ultimately expands every abstraction back into compositions of primitive operators.
+
+Abstraction therefore performs the inverse role of compilation.
+
+Compilation expands human descriptions into executable graphs.
+
+Programming compresses executable graphs into human-manageable descriptions.
+
+Both processes manipulate the same underlying computational object from opposite directions.
+
+This observation explains why programming language theory and compiler theory mirror one another so closely.
+
+They study opposite transformations between graph topology and human representation.
+
+
+Programming Languages as Views Rather Than Realities
+
+
+The graph-first interpretation suggests a useful analogy with geometry.
+
+A three-dimensional object may be viewed from many directions.
+
+Each projection reveals certain features while hiding others.
+
+No single projection is the object itself.
+
+Programming languages play an analogous role.
+
+Lisp presents computation as nested symbolic expressions.
+
+C presents computation as imperative procedures over memory.
+
+Haskell presents computation through typed functional composition.
+
+Prolog presents computation as logical inference.
+
+Verilog presents computation as interconnected hardware modules.
+
+Python emphasizes readability and dynamic composition.
+
+Each language encourages a particular way of viewing computation.
+
+None of them constitutes computation itself.
+
+They are coordinate systems on an underlying compositional object.
+
+The same computational graph may therefore possess many equally valid textual representations.
+
+Translating between languages becomes analogous to changing coordinates.
+
+The underlying graph remains unchanged.
+
+Only its description changes.
+
+This viewpoint explains why apparently different languages can often express exactly the same algorithms with surprisingly small semantic differences.
+
+
+The Illusion of Sequential Programs
+
+
+Most programming languages encourage the programmer to think sequentially.
+
+[OStatements appear one after another.
+
+Functions occupy contiguous blocks of text.
+
+Control appears to flow from the beginning of the file toward the end.
+
+This sequential appearance is almost entirely a consequence of human communication.
+
+The underlying computation is rarely sequential.
+
+Even a simple arithmetic expression
+
+\[
+(a+b)(c+d)
+\]
+
+contains two independent additions that may execute simultaneously.
+
+Likewise,
+
+large software systems contain enormous amounts of implicit parallelism.
+
+The compiler spends considerable effort recovering this parallel structure from sequential syntax.
+
+Spherepop proposes beginning with the parallel structure directly.
+
+The graph already records true computational dependence.
+
+Sequential execution becomes merely one scheduling policy among many.
+
+This inversion removes a significant amount of accidental complexity introduced solely by textual programming languages.
+
+
+Naming as Compression
+
+
+Names also deserve reinterpretation.
+
+Variables,
+
+functions,
+
+classes,
+
+modules,
+
+packages,
+
+and namespaces all assign symbolic names to portions of a graph.
+
+Nothing computationally requires these names.
+
+The execution engine could assign anonymous identifiers to every node.
+
+Human beings, however, are extremely poor at remembering large anonymous structures.
+
+Naming therefore acts as another compression mechanism.
+
+Instead of repeatedly reconstructing a complicated subgraph,
+
+one simply writes
+
+\[
+f,
+\]
+
+or
+
+\[
+sort,
+\]
+
+or
+
+\[
+parse.
+\]
+
+The name becomes a pointer into the much larger composition graph.
+
+This explains why naming conventions play such a large role in software engineering while playing essentially no role in execution semantics.
+
+Names are cognitive tools.
+
+They are not computational primitives.
+
+
+Syntax as a Lossy Projection
+
+
+Textual syntax possesses another important property.
+
+It is inherently lossy.
+
+A graph explicitly records every dependency.
+
+Linear text cannot.
+
+Many important relationships become implicit.
+
+For example,
+
+data dependencies,
+
+parallel evaluation,
+
+sharing,
+
+resource usage,
+
+and communication structure
+
+must often be reconstructed through sophisticated analysis.
+
+This reconstruction occupies much of modern compiler theory.
+
+The compiler repeatedly attempts to recover information that was lost when the graph was serialized into text.
+
+From the Spherepop perspective,
+
+this effort is largely unnecessary.
+
+If the graph remains the primary representation,
+
+dependency information is never discarded.
+
+Surface syntax becomes merely an import and export format rather than the canonical computational object.
+
+
+Reasoning Directly About Graphs
+
+
+Once graphs become primary,
+
+many traditional analyses become considerably simpler.
+
+Reachability becomes ordinary graph traversal.
+
+Dependency analysis becomes edge inspection.
+
+Parallel scheduling becomes graph partitioning.
+
+Dead code elimination becomes removal of disconnected subgraphs.
+[I
+Inlining becomes graph substitution.
+
+Common subexpression elimination becomes graph merging.
+
+Loop analysis becomes cycle analysis.
+
+Function composition becomes graph composition.
+
+The remarkable diversity of compiler algorithms therefore reflects different questions asked about one mathematical object.
+
+Instead of studying separate theories of parsing,
+
+optimization,
+
+control flow,
+
+and data flow,
+
+one studies a single theory of graph transformations.
+
+This conceptual economy is one of the strongest motivations for adopting a graph-first computational ontology.
+
+
+The Spherepop Philosophy of Construction
+
+
+The central philosophical claim of this section may now be stated succinctly.
+
+Human beings construct descriptions.
+
+Machines construct histories.
+
+Descriptions consist of
+
+syntax,
+
+grammars,
+
+types,
+
+modules,
+
+proofs,
+
+and abstractions.
+
+Histories consist of composed operator evaluations.
+
+Descriptions are optimized for understanding.
+
+Histories are optimized for execution.
+
+Compilation transforms descriptions into histories.
+
+Program comprehension transforms histories back into descriptions.
+
+Neither direction is more fundamental.
+
+Both operate upon the same underlying composition graph.
+
+Spherepop therefore refuses to identify computation with any particular descriptive framework.
+
+Languages,
+
+type systems,
+
+and proof calculi remain indispensable engineering achievements.
+
+They dramatically improve reliability,
+
+maintainability,
+
+verification,
+
+and communication.
+
+Yet they should be understood as sophisticated human interfaces to a simpler computational reality.
+
+That reality consists only of operators,
+
+their compositions,
+
+and the histories generated by their execution.
+
+The next section turns from representation to optimization. Once computation is understood as graph transformation, optimization itself becomes a geometric process of rewriting composition graphs into observationally equivalent forms that reduce cost, increase parallelism, improve locality, or simplify subsequent transformations.
+
+
+Optimization as Graph Transformation
+
+
+The graph-first interpretation developed throughout this essay naturally changes the meaning of optimization. Conventionally, optimization is viewed as an assortment of compiler techniques whose purpose is to improve execution speed, reduce memory consumption, or decrease code size. Individual optimizations are usually presented independently, each possessing its own algorithms and correctness arguments.
+
+From the perspective of Spherepop, these distinctions are secondary.
+
+Optimization is fundamentally the search for a better representative of an operational equivalence class.
+
+The graph being optimized is not changed because its computation is incorrect.
+
+It is changed because the same history can be generated more efficiently.
+
+Every optimization therefore becomes a graph transformation preserving observable computational behavior while improving some resource measure.
+
+
+Optimization Objectives
+
+
+Suppose a graph
+
+\[
+G
+\]
+
+possesses observable behavior
+
+\[
+\mathcal H(G).
+\]
+
+Rather than speaking simply of "the" optimized graph, we introduce an objective function
+
+\[
+J(G),
+\]
+
+which measures computational cost.
+
+Typical objectives include
+
+execution time,
+
+memory usage,
+
+communication cost,
+
+power consumption,
+
+latency,
+
+parallel efficiency,
+
+or numerical stability.
+
+Optimization then becomes the search for
+
+\[
+G^*
+=
+\arg\min_{G'}
+J(G')
+\]
+
+subject to
+
+\[
+\mathcal H(G')
+\cong
+\mathcal H(G).
+\]
+
+Different execution environments therefore produce different optimal graphs even when they compute exactly the same histories.
+
+Optimization is relative to computational objectives rather than absolute.
+
+
+Observational Equivalence Classes
+
+
+Every computation determines not one graph but an entire family of equivalent graphs.
+
+Define
+
+\[
+[G]
+=
+\{
+G'
+\mid
+\mathcal H(G')
+\cong
+\mathcal H(G)
+\}.
+\]
+
+This equivalence class contains every graph producing the same observable computation.
+
+Optimization never leaves this class.
+
+Instead,
+
+it searches within it.
+
+This interpretation immediately unifies many apparently unrelated compiler techniques.
+
+Inlining,
+
+constant propagation,
+
+instruction selection,
+
+operator fusion,
+
+parallel scheduling,
+
+and graph partitioning
+
+all remain inside the same equivalence class.
+
+They merely move toward different representatives.
+
+The compiler therefore behaves less like a translator than like a navigator moving through a space of equivalent composition graphs.
+
+
+Graph Geometry
+
+
+This suggests assigning a geometry to computational graphs.
+
+Suppose each rewrite operator
+
+\[
+R_i
+\]
+
+acts locally upon a graph.
+
+The collection of admissible rewrites generates a graph of graphs,
+
+whose vertices are computational graphs
+
+and whose edges represent elementary rewrites.
+
+Optimization becomes a path through this higher-order graph.
+
+Rather than asking
+
+"How do we optimize this program?"
+
+one asks
+
+"What path through graph space leads to a lower-cost representative?"
+
+This viewpoint connects naturally with search algorithms,
+
+local optimization,
+
+simulated annealing,
+
+genetic programming,
+
+and machine-learned optimizers.
+
+All become methods for navigating graph space.
+
+
+Operator Fusion
+
+
+One particularly natural graph rewrite is operator fusion.
+
+Suppose two adjacent nodes compute
+
+\[
+f
+\]
+
+followed immediately by
+
+\[
+g.
+\]
+
+Rather than evaluating them separately,
+
+one constructs a composite operator
+
+\[
+h
+=
+g\circ f.
+\]
+
+Graphically,
+
+two nodes become one.
+
+The surrounding topology remains unchanged.
+
+Fusion may reduce memory traffic,
+
+improve locality,
+
+or expose additional optimization opportunities.
+
+This technique appears throughout modern computation.
+
+Neural network compilers fuse activation functions with matrix multiplication.
+
+Signal processing systems fuse filter stages.
+
+Database engines fuse query operators.
+
+Functional languages fuse list transformations.
+
+These examples differ operationally only in the operators being composed.
+
+The graph transformation itself is identical.
+
+
+Graph Partitioning
+
+
+Not every optimization reduces graph size.

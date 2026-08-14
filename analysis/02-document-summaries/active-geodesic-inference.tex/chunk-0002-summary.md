@@ -1,181 +1,154 @@
-**Spherepop – A Typed Operational Semantics for Active Geodesic Inference**[11D[K
-Inference**
+**Active Geodesic Inference (AGI) Overview**
 
-Below we present the formal, step‑by‑step operational semantics that makes [K
-explicit how Spherepop (the execution calculus derived from Axioms 1–6) res[3D[K
-respects the core principles of active geodesic inference: energetic descen[6D[K
-descent, irreversibility, synchronization‑driven coherence, and isomeric mu[2D[K
-multiplicity.
+The set of Axioms 1–6 together define a formalism for *active geodesic infe[4D[K
+inference*—a reasoning process that:
+
+1. **Selects paths on the semantic manifold** via Gibbsian bond energies (A[2D[K
+(Axiom 4).  
+2. **Enforces synchronization across multiple components** at each semantic[8D[K
+semantic locus, ensuring coherent long‑chain-of‑thought behavior (Axiom 5).[10D[K
+(Axiom 5).  
+3. Recognizes that *multiple equivalent minimal energy histories* can exist[5D[K
+exist for the same observable output, preventing naive merging of distinct [K
+reasoning trajectories (Axiom 6).
+
+These principles give rise to **Spherepop**, a typed operational semantics [K
+that makes explicit at compile‑time:
+
+- **Irreversibility** via entropy monotonicity.  
+- **Energetic descent** through scope boundaries and type constraints.  
+- **Non‑mergeability** of isomorphic histories except under compatibility.
 
 ---
 
-### 1. Configurations & Typing Contexts  
+### Appendix C – Typed Operational Semantics for Spherepop
 
-A **Spherepop program** executes as a sequence of configurations
+#### 1. Configurations & Judgments  
+
+A program executes as a sequence of configurations  
 
 \[
-\langle \Gamma,\Sigma\rangle,
+\langle \Gamma, \Sigma \rangle,
 \]
 
-* \(\Gamma\) – typing context that records all semantic commitments (e.g., [K
-provenance, activation states).  
-* \(\Sigma\) – runtime configuration consisting of the current scope stack [K
-and event history.
+where  
 
-Execution proceeds by **small‑step transitions**
+* \(\Gamma\) encodes semantic commitments (types, bounds).  
+* \(\Sigma\) records the current scope stack and event history.
+
+Execution proceeds by a small‑step relation  
 
 \[
-\langle \Gamma,\Sigma\rangle \;\longrightarrow\; \langle \Gamma',\Sigma'\ra[18D[K
-\Gamma',\Sigma'\rangle,
+\langle \Gamma, \Sigma \rangle \;\longrightarrow\; \langle \Gamma', \Sigma'[7D[K
+\Sigma' \rangle,
 \]
 
-subject to:
+subject to **typing** and **energetic constraints**.
 
-* Type safety (typing constraints),  
-* Entropy monotonicity, and  
-* Energy non‑increasingness (geodesic descent).
+#### 2. Types with Bounds  
 
----
-
-### 2. Types with Energetic & Entropic Bounds  
-
-Typical typing judgments have the form
+Typing judgments have the form  
 
 \[
-\Gamma \vdash e : \tau \;[\mathcal{E},\mathcal{S}],
+\Gamma \vdash e : \tau \; [\mathcal{E}, \mathcal{S}],
 \]
 
-meaning:
+meaning *expression* \(e\) yields a value of type \(\tau\) while incurring [K
+at most energy cost \(\mathcal{E}\) and entropy contribution \(\mathcal{S}\[14D[K
+\(\mathcal{S}\). These are **abstract bounds** derived from the RSVP action[6D[K
+action functional, not literal counters.
 
-* Under context \(\Gamma\), expression \(e\) yields a value of type \(\tau\[7D[K
-\(\tau\);  
-* It incurs at most energetic cost \(\mathcal{E}\) and contributes entropy [K
-\(\mathcal{S}\).
+#### 3. Scopes as Typed Energy Cells  
 
-These annotations are **abstract** bounds derived from the RSVP action func[4D[K
-functional, not explicit counters. They encode:
-
-* **Action bound** – prevents runaway computational effort (geodesic descen[6D[K
-descent).  
-* **Entropy bound** – enforces monotonicity (\(S' \ge S\)) and non‑reversib[12D[K
-non‑reversibility.
-
----
-
-### 3. Scopes as Typed Energy Cells  
-
-A *scope* corresponds to a typed semantic cell whose boundary conditions co[2D[K
-constrain internal execution:
-
-1. **Entry** introduces a fresh type extension  
-   \[
-   \Gamma \;\mapsto\; \Gamma, x : \tau [\mathcal{E}_x,\mathcal{S}_x],
-   \]
-   where the annotation reflects local RSVP field values.
-
-2. **Energy constraint**: Scope entry is allowed only if the projected acti[4D[K
-action decrease satisfies  
-   \[
-   \mathcal{E}_{\text{parent}} \geq \mathcal{E}_{\text{child}}.
-   \]  
-
-   This statically enforces that execution proceeds along descending energy[6D[K
-energy directions of the semantic manifold.
-
-3. **Exit**: Upon closure, internal bindings are discarded; only the bounda[6D[K
-boundary contribution remains in context. Hence closed scopes cannot be re‑[3D[K
-re‑entered or mutated without paying extra energetic cost (new scopes).
-
----
-
-### 4. Operational Semantics Rules  
-
-The semantics respect a global entropy invariant:
-
-* For every transition \(\langle \Gamma,\Sigma\rangle \rightarrow \langle \[1D[K
-\Gamma',\Sigma'\rangle\) we have  
+- Entering a scope adds a fresh context extension  
   \[
-  S(\Sigma') \geq S(\Sigma),
+  \Gamma \;\mapsto\; \Gamma, x : \tau [\mathcal{E}_x, \mathcal{S}_x].
   \]
-  with strict increase for scope‑closing transitions.  
 
-* **Exploratory scopes** are typed with *relaxed entropy bounds*, allowing [K
-temporary entropy growth that is confined to the local boundary. Discarding[10D[K
-Discarding such a scope erases high‑entropy branches before closure, ensuri[6D[K
-ensuring stability.
+- Scope entry is permitted only if the projected action decrease satisfies [K
+ 
 
-* **Reflective operations** (e.g., meta‑reasoning) are typed as entropy‑neu[11D[K
-entropy‑neutral but locally energy‑increasing; the increase is compensated [K
-by reductions in global inconsistency, embodying the long‑range stabilizing[11D[K
-stabilizing effect of reflection without violating monotonicity.
+  \[
+  \mathcal{E}_{\text{parent}} \geq \mathcal{E}_{\text{child}},
+  \]
 
----
+  guaranteeing descent along the semantic manifold (Axiom 2).
 
-### 5. Action‑Boundedness Theorem  
+- Exiting a scope discharges its bindings, enforcing **irreversibility** at[2D[K
+at the typing level: closed scopes cannot be re‑entered or mutated without [K
+adding new energetic cost via fresh scopes.
 
-The central meta‑theoretic result (see Appendix C) states:
+#### 4. Entropy Monotonicity  
 
-> **Action Boundedness**  
-> If a Spherepop program \(P\) is well‑typed under initial context \(\Gamma[8D[K
-\(\Gamma_0\) with global bounds \([\mathcal{E}_0,\mathcal{S}_0]\), then eve[3D[K
-every execution trace of \(P\) corresponds to a history whose RSVP action d[1D[K
-does not exceed \(\mathcal{E}_0\) and whose entropy contribution is monoton[7D[K
-monotone, bounded below by \(\mathcal{S}_0\).
+Every transition must satisfy  
 
-This theorem guarantees that well‑typed programs map directly onto admissib[8D[K
-admissible reasoning geodesics—i.e., trajectories that minimize external ob[2D[K
-observable cost while respecting the thermodynamic constraints encoded in A[1D[K
-Axioms 2–6.
+\[
+S(\Sigma') \geq S(\Sigma),
+\]
 
----
+with strict inequality for scope‑closing steps, embodying the second‑law pr[2D[K
+principle (Axiom 3). Global entropy is bounded below by the initial bound \[1D[K
+\(S_0\) of the well‑typed program.
 
-### 6. Interpretation of Components  
+#### 5. Exploratory Scopes & Reflection  
 
-| Component | Role in Semantics |
-|-----------|-------------------|
-| **Types \(\tau\)** | Encode logical content and semantic commitments (e.g[4D[K
-(e.g., activation coherence, flow alignment). |
-| **Energetic bound \(\mathcal{E}\)** | Guarantees that the computation doe[3D[K
-does not exceed a predetermined action cost, preventing runaway inference. [K
-|
-| **Entropy bound \(\mathcal{S}\)** | Enforces irreversibility and monotoni[8D[K
-monotonicity of information—any history extension cannot decrease overall e[1D[K
-entropy. |
-| **Scope Stack** | Mirrors hierarchical RSVP fields (scalar, vector, entro[5D[K
-entropy) that partition the semantic manifold into locally stable cells. |
-| **Reflective Operations** | Model meta‑reasoning as neutral energy increm[6D[K
-increments compensated by inconsistency reduction, embodying the reflective[10D[K
-reflective stabilization axiom. |
+Exploratory scopes receive **relaxed entropy bounds**, allowing temporary e[1D[K
+entropy increases that do not leak beyond scope boundaries, modeling transi[6D[K
+transient reasoning without violating monotonicity.
+
+Reflective operations are **entropy‑neutral** yet locally increase energy ([1D[K
+(reducing inconsistency), reflecting the stabilizing role of reflection.
+
+#### 6. Action Boundedness Theorem  
+
+*Theorem (Action Boundedness).*  
+If a Spherepop program \(P\) is well‑typed under initial context \(\Gamma_0[10D[K
+\(\Gamma_0\) with global bounds \([\mathcal{E}_0, \mathcal{S}_0]\), then ev[2D[K
+every execution trace of \(P\) corresponds to a reasoning history whose RSV[3D[K
+RSVP action does **not exceed** \(\mathcal{E}_0\) and whose entropy contrib[7D[K
+contribution is monotone and bounded below by \(\mathcal{S}_0\).
 
 ---
 
-### 7. Minimality & Completeness  
+### Consequences & Interpretation  
 
-The axioms together are *minimal*: removing any one collapses a distinct st[2D[K
-structural feature:
-
-* **Axiom 1 (Provenance)** – without provenance we cannot distinguish seman[5D[K
-semantic isomers.  
-* **Axiom 2 (Geodesic Selection)** – removes geodesic selection, reducing i[1D[K
-inference to unconstrained search.  
-* **Axiom 3 (Entropy Monotonicity)** – permits reversible execution, underm[6D[K
-undermining stability and privacy guarantees.  
-* **Axiom 4 (Gibbsian Bonding)** – breaks energetic interpretation of atten[5D[K
-attention, dissolving bond topology.  
-* **Axiom 5 (Synchronization Coupling)** – eliminates phase structure, redu[4D[K
-reducing reasoning to scalar optimization.  
-* **Axiom 6 (Isomeric Multiplicity)** – removes the mechanism for non‑disti[9D[K
-non‑distillability and mixture failure.
-
-Thus Spherepop’s operational semantics is *exactly* what is required to rec[3D[K
-recover all phenomena motivated by Axioms 1–6.
+- **Irreversibility**: Enforced at the type level, preventing naive backtra[7D[K
+backtracking.  
+- **Energy Cost Modeling**: Energetic annotations map directly to Gibbsian [K
+bond energies (Axiom 4).  
+- **Multi‑Component Synchronization**: Five coupled order parameters enforc[6D[K
+enforce a phase transition between disordered and ordered reasoning regimes[7D[K
+regimes (Axiom 5).  
+- **Isomorphic Multiplicity**: Guarantees that distinct minimal‑energy hist[4D[K
+histories are non‑mergeable unless they satisfy compatibility constraints, [K
+explaining why simple mixture/distillation can degrade performance.  
 
 ---
 
-**In summary**, the typed operational semantics of Spherepop makes explicit[8D[K
-explicit how each axiom translates into concrete constraints on type safety[6D[K
-safety, scope management, energetic descent, entropy monotonicity, and the [K
-non‑mergeability of distinct reasoning histories. This formalism ensures th[2D[K
-that every executed program corresponds to a valid geodesic trajectory in t[1D[K
-the semantic manifold described by active geodesic inference.
+### Remark on Minimality  
 
+Each of the six axioms is essential:
+
+| Axiom | Role |
+|-------|------|
+| 1 (Provenance) | Distinguishes between isomers; without it, distinct hist[4D[K
+histories become indistinguishable. |
+| 2 (Geodesic Selection) | Provides the selection rule for active geodesics[9D[K
+geodesics; removal eliminates structured inference. |
+| 3 (Entropy Monotonicity) | Guarantees irreversible execution and stabilit[8D[K
+stability; removal permits reversible loops. |
+| 4 (Gibbsian Bonds) | Gives energetic meaning to attention, modeling macro[5D[K
+macromolecular folding. |
+| 5 (Synchronization Coupling) | Introduces multi‑component alignment, enab[4D[K
+enabling coherent reasoning topologies. |
+| 6 (Isomeric Multiplicity) | Prevents accidental merging of distinct histo[5D[K
+histories, explaining non‑distillability effects. |
+
+Thus the axioms collectively define a **complete inference calculus** where[5D[K
+where semantic stability and computational efficiency are inseparable.
+
+--- 
+
+*Spherepop thus serves as both an execution model and a syntactic normal fo[2D[K
+form for active geodesic inference, embodying all theoretical constraints o[1D[K
+outlined in Axioms 1–6.*

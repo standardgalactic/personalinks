@@ -1,15 +1,78 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 2 of a document called
+"monograph-spherepop-calculus.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Summary**
 
-TEXT
-====
+The document outlines a compositional translation \(\mathcal{T}_{\lambda}\)[25D[K
+\(\mathcal{T}_{\lambda}\) from the probabilistic λ‑calculus (internal choic[5D[K
+choice) into SPC (structured programming calculus), together with preservat[9D[K
+preservation properties, substitution lemmas, and an end‑to‑end worked exam[4D[K
+example.  
+
+Key points:
+
+1. **Typing Preservation** – If a term \(e\) is typable in STLC (\(\Gamma\v[11D[K
+(\(\Gamma\vdash e:\tau\)), then \(\mathcal{T}_{\lambda}(e)\) is correctly t[1D[K
+typed in SPC with the mapped types.
+
+2. **Operational Preservation** – Source β‑reductions correspond to single [K
+reductions in SPC, guaranteed by the Substitution Lemma and Preservation Co[2D[K
+Corollary.
+
+3. **Choice & Merge Example**  
+   - A source term \(\mathbf{choice}(p,\;(\lambda x.\,x)a,\;(\lambda x.\,a)[6D[K
+x.\,a)x_0)\) translates into a single‑choice term in SPC:  
+     \[
+     \mathrm{Choice}\big(p,\;\mathrm{Pop}(\mathrm{Sphere}(x{:}\alpha.x),a),[70D[K
+\mathrm{Choice}\big(p,\;\mathrm{Pop}(\mathrm{Sphere}(x{:}\alpha.x),a),\;\ma\mathrm{Choice}\big(p,\;\mathrm{Pop}(\mathrm{Sphere}(x{:}\alpha.x),a),;\mathrm{Pop}(\mathrm{Sphere}(x{:}\alpha.a),x_0)\big).
+     \]  
+   - Operationally this reduces to \(a\) in either branch because both bran[4D[K
+branches evaluate to the same value.
+
+4. **Denotational Interpretation (Distribution Monad)** – In the presheaf t[1D[K
+topos with a distribution monad, the denotation of the above term is a Dira[4D[K
+Dirac mass at \(a\). For distinct outcomes \(\alpha=O=\{\mathsf{Safe},\math[32D[K
+\(\alpha=O=\{\mathsf{Safe},\mathsf{Doom}\}\),  
+   \[
+   \Pr[\text{doom}] = 1 - \prod_{i=1}^n (1-p_i),
+   \]  
+   matching the operational sampling behavior.
+
+5. **Aggregation via Merge & Choice** – For independent hazards \(R_i=\math[11D[K
+\(R_i=\mathrm{Choice}(p_i,\mathsf{Doom},\mathsf{Safe})\), merging them and [K
+applying FoldOr yields a term whose probability of doom is exactly \(1-\pro[8D[K
+\(1-\prod_{i=1}^n(1-p_i)\).
+
+These results demonstrate that the translation preserves typing, operationa[10D[K
+operational behavior, and probabilistic semantics while allowing compositio[10D[K
+compositional construction of complex programs from independent components.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \paragraph{Adequacy.}
 Operational and denotational semantics agree: if $\emptyset \vdash M : A$,
@@ -812,3 +875,4 @@ disjunction $\mathsf{anyDoom}:O^n\to O$.
 \bibliography{references}
 
 \end{document}
+

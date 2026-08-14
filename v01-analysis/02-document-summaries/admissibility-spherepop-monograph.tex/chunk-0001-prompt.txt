@@ -1,0 +1,466 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+
+
+
+
+
+
+
+
+
+
+\documentclass[12pt,openany]{book}
+
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\usepackage{microtype}
+
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Pagella Math}
+
+
+\usepackage[
+  paperwidth=6.5in,
+  paperheight=9.5in,
+  top=1.15in,
+  bottom=1.15in,
+  inner=1.1in,
+  outer=0.9in,
+  marginparwidth=0pt,
+  headheight=15pt
+]{geometry}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\itshape Spherepop}
+\fancyhead[RO]{\small\itshape\leftmark}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+\usepackage{titlesec}
+
+
+\titleformat{\part}[display]
+  {\centering\normalfont\Large\scshape}
+  {\partname\ \thepart}
+  {1em}
+  {\LARGE\bfseries}
+
+
+\titleformat{\chapter}[display]
+  {\normalfont\large\scshape}
+  {\chaptername\ \thechapter}
+  {0.5em}
+  {\huge\bfseries\raggedright}
+\titlespacing*{\chapter}{0pt}{30pt}{20pt}
+
+
+\titleformat{\section}
+  {\normalfont\large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+
+
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries\itshape}
+  {\thesubsection}
+  {1em}
+  {}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+
+
+\usepackage{tocloft}
+\renewcommand{\cftpartfont}{\bfseries\scshape}
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftsecfont}{\itshape}
+\setlength{\cftbeforechapskip}{6pt}
+\setlength{\cftbeforesecskip}{2pt}
+
+
+\usepackage[dvipsnames, svgnames]{xcolor}
+\definecolor{SpherepopBlue}{RGB}{30, 60, 110}
+\definecolor{SpherepopGold}{RGB}{160, 120, 40}
+\definecolor{SpherepopGray}{RGB}{90, 90, 90}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{construction}[theorem]{Construction}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{note}[theorem]{Note}
+
+
+
+
+
+
+
+
+
+
+\newcommand{\spop}[1]{\mathsf{pop}\!\left(#1\right)}
+\newcommand{\srefuse}[1]{\mathsf{refuse}\!\left(#1\right)}
+\newcommand{\scollapse}[1]{\mathsf{collapse}\!\left(#1\right)}
+\newcommand{\sbind}[2]{\mathsf{bind}_{#1}\!\left(#2\right)}
+\newcommand{\sadm}{\mathsf{Adm}}
+\newcommand{\shist}{\mathcal{H}}
+\newcommand{\sscope}[2][r]{\left\langle #2 \right\rangle_{#1}}
+\newcommand{\seval}[1]{\llbracket #1 \rrbracket}   
+\newcommand{\snested}[2]{#1 \subset\!\subset #2}   
+
+
+\usepackage{stmaryrd}
+
+
+\usepackage[
+  colorlinks=true,
+  linkcolor=SpherepopBlue,
+  citecolor=SpherepopGold,
+  urlcolor=SpherepopGray,
+  pdftitle={Spherepop: Geometry, Cognition, and the Transparency of Computation},
+  pdfauthor={Flyxion},
+  pdfsubject={Philosophy of Computation, Cognitive Science, Theoretical Computer Science},
+  pdfkeywords={Spherepop, RSVP, constraint, topology, computation, cognition, thermodynamics}
+]{hyperref}
+
+
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  sorting=nyt,
+  maxbibnames=99
+]{biblatex}
+
+
+
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\setlist{nosep, leftmargin=*}
+\usepackage{epigraph}
+\setlength{\epigraphwidth}{0.62\textwidth}
+\renewcommand{\epigraphflush}{center}
+\usepackage{setspace}
+\setstretch{1.18}
+\usepackage{emptypage}
+\usepackage{afterpage}
+
+
+\newcommand{\chapterrule}{
+  \vspace{4pt}
+  {\color{SpherepopBlue}\rule{\textwidth}{0.8pt}}
+  \vspace{10pt}
+}
+
+
+\newenvironment{chapterprecis}{
+  \begin{quote}\small\itshape}{
+  \end{quote}\medskip}
+
+
+
+
+\begin{document}
+
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{2.5in}
+\begin{center}
+  {\LARGE\bfseries\scshape Spherepop}\\[0.5em]
+  {\large\itshape Geometry, Cognition, and the Transparency\\[0.2em]
+  of Computation}\\[2em]
+  {\large Flyxion}\\[1em]
+  {\normalsize 2026}
+\end{center}
+\vfill
+\end{titlepage}
+ \clearpage
+
+
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+\small
+\textcopyright\ 2026 Flyxion.\\[0.5em]
+Typeset in TeX Gyre Pagella with Lua\LaTeX.\\[0.5em]
+\textit{All rights reserved.}
+\end{center}
+\vspace*{\fill}
+ \clearpage
+
+
+\setcounter{tocdepth}{2}
+\tableofcontents
+ \clearpage
+
+
+
+
+\chapter*{Introduction: The Crisis of Flattened Thought}
+\addcontentsline{toc}{chapter}{Introduction}
+\markboth{Introduction}{}
+\chapterrule
+
+\begin{chapterprecis}
+This introduction diagnoses the cognitive pathology that motivates
+the entire monograph: the systematic flattening of structured
+thought into opaque symbolic strings. It argues that modern
+computational and mathematical notation, despite its expressive
+power, routinely conceals the very structure it encodes, producing
+a kind of epistemic opacity that is neither necessary nor
+inevitable. Spherepop is introduced as a philosophical and
+computational response to this crisis.
+\end{chapterprecis}
+
+
+\section*{Symbolic Compression and the Loss of Structure}
+
+Modern notation systems compress evaluation history into terminal outputs. This is not an accident of history, nor a correctable deficiency in any particular notational tradition. It is a design choice, made consistently and for intelligible reasons across centuries of mathematical and computational practice: the choice to optimize representational density at the cost of operational transparency. The choice produces notation that is concise, portable, and formally precise. It also produces notation that is, in a specific and diagnosable sense, cognitively hostile — notation that requires its users to reconstruct, from surface syntax alone, the structural information that the notation has systematically suppressed.
+
+The suppression is not total. A practiced reader of the expression $1 + 3 \times 2^2$ knows, without conscious effort, that the exponentiation must be resolved before the multiplication, and the multiplication before the addition. The knowledge is real. But it is implicit, encoded in a memorized convention rather than visible in the expression itself. The expression does not show its evaluation order; it presupposes that the reader will supply it from prior training. For a reader who has internalized the convention, this presupposition is harmless. For a reader who has not, the expression is structurally opaque: its surface form gives no indication of which operations are nested within which, which must be resolved first, or what the computation's trajectory through its intermediate states looks like. The terminal value $13$ is accessible; the shape of the computation that produces it is not.
+
+This monograph is a sustained investigation of that suppression: what it costs, why it is not necessary, and what a representational practice that recovers visible structure looks like. The investigation proceeds through eight parts that address the same underlying question from the directions of computation, cognition, thermodynamics, emergence, philosophy of science, semantics, geometry, and ethics. What holds the investigation together is a single structural claim: that the suppression of evaluation history is not merely a notational inconvenience but a systematic epistemological failure, and that recovering visible structure is not merely a pedagogical improvement but a philosophical necessity for genuine intelligibility across all these domains.
+
+
+\section*{Why Traditional Notation Becomes Cognitively Opaque}
+
+The cognitive opacity of conventional notation is not a mysterious phenomenon. It has a clear structural explanation: conventional notation compresses structural relations that are operationally meaningful into syntactic conventions that must be actively decoded. Operator precedence conventions compress evaluation order. Linear text compresses spatial nesting. Terminal values compress computation histories. In each case, the compression is lossy in a specific way: it preserves the extensional content — the correct answer — while discarding the intensional content — the structure of the process that generated it.
+
+The cognitive cost of this compression is borne by the reader, who must reconstruct the discarded structure from the surface notation at the time of reading. This reconstruction is not free. It consumes working memory resources that would otherwise be available for understanding, consumes attentional resources that would otherwise support retention, and introduces error at exactly the points where the conventions are most complex — precisely the points where the structural information being suppressed is most important. A student who must simultaneously parse a nested expression, maintain a model of operator precedence, and track the current evaluation state is doing three cognitively demanding things at once, all because the notation has externalized none of them.
+
+The alternative is not to eliminate compression — compression is necessary for cognition to function at all, as the analysis of Part~II will establish — but to compress in ways that preserve the structural relations that matter for understanding. A notation system that makes evaluation order visible in its spatial structure does not require the reader to reconstruct evaluation order from memorized conventions. A notation system that encodes scope in physical containment does not require the reader to maintain an internal scope model from delimiter counting. The cognitive resources saved by these externalizations are not trivial. They are the difference between a notation system that supports understanding and one that merely encodes correct answers.
+
+
+\section*{Computation as History Rather Than Instantaneous Result}
+
+The deepest claim of this monograph is not about notation. It is about the ontology of computation itself. The claim is that a computation is not primarily a mapping from input to output — a function that takes an expression and returns a value — but primarily a history: an ordered sequence of admissible transformation events through which a structured possibility space is navigated from an initial state to a terminal state. The terminal value is one feature of this history, and an important one. But it is not the whole of the computation, any more than the destination of a journey is the whole of the journey.
+
+This claim has consequences that run through every subsequent chapter. If computation is fundamentally historical, then a representational system that preserves only terminal values is not merely incomplete but is systematically misleading about what computation is. It presents the residue of a computation as though it were the computation itself, the endpoint of a trajectory as though it were the trajectory. Understanding a computation, on this view, requires access to the history — the ordered sequence of evaluation events, the constraint conditions in force at each step, the admissibility structure of the transformations performed — not merely to the terminal result. A pedagogy that delivers only terminal results trains students to produce correct answers without understanding why those answers are correct. A software system that exposes only terminal outputs provides no basis for understanding why those outputs were produced or whether they would remain correct under variations in the input.
+
+Spherepop is the name given, in this monograph, to the formalism and the philosophical framework that takes this claim seriously. The name reflects the core operation: a \emph{pop} event is the explicit, visible resolution of a locally admissible evaluation region — a bubble — into its result, with the resolution recorded in the computation's history rather than silently incorporated into a running total. The bubble is not merely a graphical convenience. It is a formal object: an admissibility region with a boundary that encodes scope, a history that records prior reductions, and a constraint structure that determines which further reductions are admissible. The pop event is not merely a computation step. It is a strongly admissible reduction that reorganizes the bubble's topology, preserves a transportable invariant, and modifies the future admissibility conditions of the computation in a way that the history records and the terminal value does not.
+
+
+\section*{The Calculator as a Metaphor for Modern Abstraction}
+
+The handheld calculator is a nearly perfect embodiment of the epistemological condition this monograph sets out to examine. It accepts a structured expression as input and returns a terminal value as output, collapsing the entire computational history into an instantaneous result. The collapse is efficient: for the user who wants the answer and nothing else, the calculator is an ideal tool. But the collapse is also complete: no information about how the answer was reached is preserved, no record of the intermediate states is accessible, no indication is given of which operations were performed in which order or under which constraints. The computation is invisible. Only its residue is delivered.
+
+This invisibility is not a limitation of the calculator's hardware. It is a design commitment: the decision that the terminal value is what matters and that the computational history is implementation detail. For most uses of calculators, this commitment is perfectly reasonable. For a student learning arithmetic, it is pedagogically destructive. The student who keys in $1 + 3 \times 2^2$ and receives $13$ has learned that $13$ is correct, but has learned nothing about why it is correct — why the exponentiation was resolved before the multiplication, what would have happened if the additions had been performed first, what the nested structure of the expression means and why it matters. The calculator has delivered the endpoint of an educational journey without supplying the journey itself.
+
+The calculator is a metaphor — but only a metaphor — for a much broader condition in modern technical systems. Statistical models, compiled software, opaque algorithmic decision systems, and large language models all share the calculator's fundamental architecture: they accept inputs and produce outputs, and the process mediating the two is invisible to the user and often to the system's designers. The scale is different. The consequences are different. But the structural situation is the same: a computation whose history has been suppressed, delivering a terminal value whose provenance is inaccessible. The critique this monograph develops applies to all of them, not by treating them as the same as calculators, but by identifying the common structural feature — the suppression of operational history — that makes them all instances of the same epistemological failure.
+
+
+\section*{A Different Intuition: Geometry Before Symbolism}
+
+There is a different way of representing computation, one that is older than symbolic algebra and more deeply rooted in human spatial cognition than any formal notation system. It is the way of containers: the intuition that complex things are made of simpler things inside boundaries, that what is inside a boundary is local to it, that things inside smaller containers must be dealt with before the larger containers can be resolved. This intuition is not a mathematical theory. It is a cognitive primitive — one of the earliest and most neurologically robust organizational principles available to human minds.
+
+Children understand containers before they understand formal syntax. They understand that things inside boxes are not the same as things outside boxes, that a box within a box is at a different level from the box that contains it, that to get at the innermost object you must open the outermost container first. These are spatial and operational intuitions that develop in infancy, long before any formal mathematical training begins. Conventional mathematical notation does not exploit them. It compresses the nested structure of computation into a linear string of symbols and then requires the reader to reconstruct the nesting from precedence conventions that have no spatial correlate. The container intuition is available; the notation ignores it.
+
+Spherepop exploits it. The nested bubble structure of Spherepop notation is not an arbitrary visual choice. It is a deliberate alignment between the formal structure of computation — which is genuinely hierarchical, genuinely nested, genuinely organized by containment and boundary — and the cognitive architecture of the human mind, which is uniquely well-equipped to process exactly that kind of spatial hierarchical organization. The alignment is productive not because it makes computation easier in some superficial sense, but because it makes the structural features of computation visible rather than hidden: the scope of each subexpression is physically enclosed, the evaluation order is geometrically encoded in nesting depth, the dependency structure is spatially apparent rather than syntactically implicit.
+
+
+\section*{Spatial Cognition and Nested Scope}
+
+The spatial encoding of computational structure in Spherepop is not a pedagogical accommodation to visual learners. It is a consequence of a deeper principle about the relationship between spatial cognition and structural understanding. Human brains process spatial hierarchies — nested containment, bounded regions, levels of enclosure — using cognitive machinery that is both developmentally early and neurologically robust. The same machinery that allows a child to understand that a toy is inside a box, which is inside a room, which is inside a house, is the machinery that Spherepop recruits for the understanding that an exponentiation is inside a multiplication context, which is inside an addition context. The structural operation is the same. The cognitive resources engaged are the same. Only the domain differs.
+
+The significance of this is not merely that Spherepop notation is easier to read. It is that the cognitive resources recruited by spatial hierarchical processing are available in parallel with the symbolic processing resources recruited by conventional notation, distributing the cognitive load of comprehension across more of the brain's architecture. A reader processing a Spherepop diagram does not have to choose between perceiving the spatial structure and reasoning about the symbolic content. The spatial structure is the symbolic content: the containment relations encode the scope relations, the nesting depth encodes the evaluation priority, the bubble boundary encodes the scope limit. Cognitive geometry and symbolic computation are aligned rather than in competition.
+
+
+\section*{Why Children Understand Containers Before Formal Syntax}
+
+The developmental priority of container understanding over formal syntax is well established in the cognitive science literature. Infants in the first year of life demonstrate sensitivity to containment relations: they distinguish objects that are inside containers from objects that are beside them, and they respond differently to violations of containment expectations. The understanding of nested containment — that one container can be inside another — develops in the second year. The understanding of hierarchical nesting — that multiple levels of containment form an ordered structure — develops across the preschool years, well before formal mathematical instruction begins.
+
+Formal mathematical syntax, by contrast, is a late acquisition. The understanding of operator precedence conventions requires years of formal instruction and is imperfectly acquired even by many adults who use mathematical notation regularly. The conventions are arbitrary in the sense that they could have been different — nothing in the mathematical objects themselves requires that multiplication bind more tightly than addition — and they must be memorized as rules rather than perceived as structural features. They do not exploit the container intuition; they override it. The student who has a strong container intuition and encounters $1 + 3 \times 2^2$ will naturally read the expression left to right, performing the addition before the multiplication — exactly the order that the notation's conventions forbid but that the container intuition predicts. The precedence rules must then be learned as explicit overrides of a natural cognitive tendency.
+
+Spherepop inverts this relationship. In Spherepop notation, the evaluation order is encoded in the containment structure: the innermost bubble is evaluated first not because of a memorized convention but because it is innermost, and container intuition dictates that inner containers are resolved before outer ones. The student's natural cognitive tendency — to process inner containers before outer ones — is aligned with the correct evaluation order rather than in conflict with it. The cognitive work of learning Spherepop is not the work of overriding a natural tendency but the work of recognizing that a natural tendency correctly tracks a real structural feature of the computation.
+
+
+\section*{The Central Thesis of the Essay}
+
+The central thesis of this monograph can now be stated precisely. Modern notation systems — mathematical, computational, and increasingly artificial — systematically optimize representational density at the cost of operational transparency. They compress evaluation histories into terminal values, suppress structural information that is operationally meaningful, and require users to reconstruct from surface syntax what has been hidden in the compression. This suppression is not accidental. It is a consequence of the historical conditions under which formal notation developed: conditions of paper, ink, typesetting, and linear textual transmission that rewarded conciseness and penalized spatial complexity. Those conditions no longer obtain in the same way. But the notational habits formed under them persist, and with them the epistemological costs.
+
+Spherepop is a response to those costs. It is a theory of visible structure: a formalism, a cognitive model, and a philosophical framework that take seriously the claim that computation is fundamentally historical, that meaning is fundamentally navigational, and that intelligibility requires the preservation of structural provenance across transformations. Against opacity, not against structure: the target of Spherepop's critique is not abstraction or formalism as such, but abstraction that conceals the operational geometry of what it abstracts. The proposal is not to abandon compression but to compress in ways that preserve what matters for understanding. The measure of what matters is the admissibility structure of the computation: the constraints that govern which transformations are possible at each step, which histories are admissible, and which terminal values are reachable by which routes.
+
+ \clearpage
+
+
+
+
+\part{Spherepop and the Geometry of Computation}
+
+
+\chapter{The Origins and Architecture of Spherepop}
+\chapterrule
+
+\begin{chapterprecis}
+This chapter traces the origins of the Spherepop formalism and
+establishes its foundational architecture. Arithmetic is recast
+as nested containment, and the \emph{pop} operator is introduced
+as an explicit, visible evaluation event. The chapter argues that
+preserving computational provenance is not a luxury but a
+structural necessity for genuine understanding. It closes with a
+section of foundational definitions that stabilizes the
+monograph's core terminology: the primary register of Spherepop,
+the three levels of geometry, constraint as primitive, the
+ontology of a Spherepop object, layered admissibility, the
+Principle of Contextual Equivalence, understanding as stabilized
+navigational compression, and the scope of the monograph's
+physical claims.
+\end{chapterprecis}
+
+
+Arithmetic as Nested Containment
+
+
+The claim that arithmetic can be represented as nested containment is not a metaphor. It is a structural observation about what arithmetic expressions actually are, prior to any decision about how to notate them. An arithmetic expression like $1 + 3 \times 2^2$ is not a linear sequence of symbols. It is a hierarchically structured dependency graph in which certain subexpressions must be evaluated before others because they provide inputs to the operations that contain them. The exponentiation $2^2$ must be evaluated before the multiplication $3 \times (\cdot)$ because the multiplication requires the result of the exponentiation as one of its operands. The multiplication must be evaluated before the addition $1 + (\cdot)$ for the same reason. The dependency structure is hierarchical, and the hierarchy is one of containment: the exponentiation is contained within the multiplication context, the multiplication is contained within the addition context.
+
+Standard algebraic notation represents this hierarchy by a combination of operator symbols, grouping parentheses, and precedence conventions. The hierarchy is encoded, but it is not visible: a reader must actively reconstruct it from the surface syntax. Spherepop represents the same hierarchy by literal spatial containment: the exponentiation bubble is physically enclosed within the multiplication bubble, which is physically enclosed within the addition bubble. The reconstruction is not needed. The hierarchy is visible in the diagram's spatial structure, and the evaluation order — inner bubbles before outer bubbles — is a consequence of the spatial organization rather than a memorized convention imposed on top of it.
+
+\begin{construction}[Spherepop Representation of Arithmetic]
+The Spherepop representation of an arithmetic expression is obtained by the following procedure:
+\begin{enumerate}[label=(\arabic*)]
+  \item Identify the top-level operation — the operation whose result is the value of the entire expression. Draw an outer bubble enclosing the entire expression.
+  \item For each operand of the top-level operation that is itself a compound expression, draw an inner bubble enclosing that operand.
+  \item Repeat recursively for each inner bubble until all bubbles contain only atomic values (numerals or variables).
+  \item Label each bubble with its operation.
+\end{enumerate}
+The resulting structure is a system of nested bubbles in which containment directly encodes evaluation dependency: a bubble $B_1$ is enclosed within a bubble $B_2$ if and only if the result of the computation within $B_1$ is required as an input to the computation within $B_2$, and $B_1$ must therefore be popped before $B_2$ can be popped.
+\end{construction}
+
+For the expression $1 + 3 \times 2^2$, this procedure produces three nested bubbles: the innermost bubble enclosing $2^2$ (labeled with the exponentiation operation), enclosed within a middle bubble enclosing $3 \times \spop{2^2}$ (labeled with multiplication), enclosed within an outer bubble enclosing $1 + \spop{3 \times \spop{2^2}}$ (labeled with addition). The evaluation order — exponentiation, then multiplication, then addition — is immediately visible as the order of nesting: innermost first. No precedence convention is needed. The structural fact that the expression encodes is visible in the structure of the representation.
+
+
+Pop as an Explicit Evaluation Event
+
+
+The \emph{pop} operation is the core primitive of the Spherepop formalism. A pop event is the evaluation of an innermost bubble — a bubble that contains no other bubbles — resulting in the replacement of that bubble by the value it computed. The key features of the pop operation that distinguish it from ordinary algebraic reduction are visibility and historicity: the pop event is explicit rather than implicit, and it is recorded in the computation's history rather than silently incorporated into the expression's running value.
+
+\begin{definition}[Pop Event]
+A \emph{pop event} $\spop{B}$ at step $t$ of a Spherepop computation is the locally admissible reduction of an innermost bubble $B = (U, \partial U, \sigma, \tau)$, where $U$ is the internal content of the bubble, $\partial U$ is its boundary, $\sigma$ is its scope context, and $\tau$ is its accumulated evaluation history. The pop event:
+\begin{enumerate}[label=(\arabic*)]
+  \item Evaluates the contents of $U$ according to the operation labeling $B$, producing a result value $v$.
+  \item Removes $B$ from the current bubble topology $\mathcal{B}_t$, producing the updated topology $\mathcal{B}_{t+1} = \mathcal{B}_t \setminus \{B\}$.
+  \item Substitutes $v$ for the bubble $B$ in the containing bubble, updating the containing bubble's content.
+  \item Records the event $(B, v, t)$ in the computation's global history $H$, preserving the bubble's identity, the value produced, and the step at which the pop occurred.
+\end{enumerate}
+The pop event is locally admissible — it constitutes a strongly admissible reduction in the sense of Section~\ref{sec:foundations} — if and only if $B$ is an innermost bubble (no admissible bubble is nested strictly within $B$) and the constraint conditions on $B$'s boundary $\partial U$ are satisfied by the current evaluation state.
+\end{definition}
+
+The explicitness of the pop operation — the fact that it is a named, recorded event rather than a silent transformation step — is not a formalism for its own sake. It reflects the ontological commitment that evaluation steps are history-forming events, not merely state-updating operations. A computation that has performed a pop is not in the same condition as a computation that has not, even if the current expression state were (counterfactually) the same: the histories differ, and differing histories imply differing future admissibility conditions, by the path sensitivity principle of Section~\ref{sec:foundations}. The pop record is the medium through which history propagates through the computation.
+
+
+Preserving Computational Provenance
+
+
+Computational provenance is the record of how a result was reached: the ordered sequence of evaluation events, the constraint conditions in force at each step, the bubbles that were popped in which order, and the admissibility structure that governed each pop. Provenance is not the same as the result. Two computations with identical results may have entirely different provenances, and their difference in provenance is semantically significant under any collapse operator that preserves more than terminal values.
+
+The preservation of computational provenance is the central practical commitment of Spherepop, and the argument for it has two levels. The first level is pedagogical: a student who has access to the provenance of a computation can understand why the result is what it is, can identify where errors entered the computation, and can reconstruct the reasoning that produced the result. A student who has access only to the result can verify it against an expected answer but cannot understand it, cannot diagnose errors in it, and cannot generalize from it to new problems with different structures. Provenance is the difference between a worked example and a black box.
+
+The second level is formal: provenance is required for the correct assessment of semantic identity under the Principle of Contextual Equivalence. Two computations that produce the same terminal value but via different provenances are identified by some collapse operators and distinguished by others. The choice of collapse operator is not arbitrary; it depends on what structural invariants are relevant to the use to which the result will be put. For a use that requires only the numerical value, the collapse that identifies them is appropriate. For a use that requires knowing the evaluation order — for instance, a pedagogical use, an audit use, or a use in a system where the computational cost of different evaluation paths matters — the collapse must be coarser, preserving the provenance rather than quotienting it away. The appropriate collapse depends on the context, and the context cannot be assessed without knowing what information the provenance contains. Erasing provenance forecloses the possibility of making this assessment correctly.
+
+\begin{remark}
+The formal relationship between provenance preservation and the action functional of Chapter~12 is direct: the action $S[\gamma] = \sum_t \mathcal{L}_t$ is defined over the full provenance $\gamma$ of a computation, not over its terminal state. The distinction between high-action and low-action trajectories — between computationally costly and computationally efficient evaluation paths — is meaningful only for computations whose provenances are preserved. A system that discards provenance cannot measure computational cost in the action-functional sense; it can only verify that a terminal value was produced.
+\end{remark}
+
+
+From Parentheses to Topology
+
+
+The transition from parentheses to topology is a transition in the ontological status of the structural elements of computation. In standard algebraic notation, parentheses are syntactic markers: they instruct the reader to treat their contents as a unit for the purpose of precedence resolution, but they have no further formal status. They are erased in the process of evaluation: the expression $(2^2)$ becomes $4$, and the parentheses disappear. The structural information they encoded — that this subexpression was to be evaluated as a unit, before the operations that contained it — is consumed in the act of evaluation and does not survive into the result.
+
+In Spherepop, the bubble that corresponds to a parenthesized subexpression is not a syntactic marker but a topological object: a bounded region of the computation's admissibility manifold, with a boundary that encodes constraint conditions, an interior that encodes the current state of the subcomputation, and a history that records the sequence of prior reductions within it. The bubble is not erased in evaluation; it is popped — transformed from an active evaluation region into a recorded event in the computation's history. The structural information it encoded — the scope of the subexpression, the constraints that governed its evaluation, the sequence of steps that produced its result — is preserved in the pop record rather than consumed in the act of evaluation.
+
+This transition from erasure to preservation is not merely a notational change. It reflects the deeper ontological shift described in the Introduction: from treating computation as a mapping from input to output, to treating computation as an ordered history of admissible transformations through a structured possibility space. Parentheses are erased because, in the mapping conception, they are implementation detail — scaffolding that is needed during evaluation but has no standing in the final result. Bubbles are popped and recorded because, in the historical conception, each evaluation step is a permanent event in the computation's history, with consequences for the future admissibility structure that cannot be recovered from the terminal result alone.
+
+The topological character of bubbles also has formal consequences that parentheses lack. Two parenthesized expressions can be syntactically identical while having entirely different semantic roles depending on context. Two bubbles with the same interior content but different boundary conditions — different scope contexts, different constraint configurations, different evaluation histories — are formally distinct objects with potentially different admissibility structures. The topology distinguishes what the syntax does not. This distinction matters wherever the structural context of a computation is as important as its terminal result, which, the arguments of this monograph maintain, is nearly everywhere.
+
+
+
+
+
+
+
+
+
+Foundational Commitments and Stable Terminology
+
+\label{sec:foundations}
+
+The material developed in this monograph spans pedagogy, cognitive science, thermodynamics, topology, philosophy of science, and the theory of computation. Such breadth invites terminological drift: the same word acquiring subtly different meanings in different chapters, the same concept appearing under different names in different domains, analogies hardening imperceptibly into identity claims. The present section is designed to prevent that drift. It states, explicitly and in one place, the framework's core ontological commitments, its central distinctions, and the precise senses in which its key terms are used. Readers are encouraged to return to it when later chapters use terms in ways that might otherwise seem ambiguous.
+
+\subsection*{The Primary Register of Spherepop}
+
+Spherepop is not primarily a notation system, nor primarily a formal calculus, nor primarily a philosophy of science. It is a theory of visible structure: a systematic account of why constrained systems — physical, cognitive, computational, semantic — become intelligible through the preservation of navigable relational structure across transformations, and become unintelligible through its erasure. The notation, the operators, the geometric models, the action formalism, and the philosophical arguments developed in this monograph are not separate inventions that happen to share terminology. They are local expressions of a single underlying claim:
+
+\begin{quote}
+\itshape
+Meaning, understanding, and computation arise through navigable transformations within constrained spaces of possibility. Preserving visible structure across those transformations is essential for genuine intelligibility.
+\end{quote}
+
+This claim operates simultaneously as a pedagogical principle (visible structure reduces cognitive load), a semantic principle (meaning is relational and navigational, not atomistic), a computational principle (evaluation histories contain information that terminal values do not), a geometric principle (nested scope and dependency are more naturally expressed spatially than linearly), and a philosophical principle (modern technical systems increasingly optimize prediction at the cost of intelligibility and provenance). These registers are mutually reinforcing. The pedagogical principle is grounded in the cognitive science of working memory and semantic grouping. The semantic principle is grounded in the formal theory of admissible trajectories through constraint manifolds. The computational principle is grounded in the action formalism of Chapter~12. The geometric principle is grounded in the neuroscience of spatial and symbolic cognition examined in Part~II. The philosophical principle is grounded in the political and ethical analysis of opacity developed in Part~VIII. No register is primary; each provides evidence for the others.
+
+\subsection*{Three Kinds of Geometry}
+
+The monograph makes extensive use of geometric language: admissibility manifolds, semantic configuration spaces, constraint fields, curvature in semantic space, topological scope, and so forth. It is essential that these uses be distinguished carefully, because they operate at three different levels.
+
+\emph{Representational geometry} is geometry as visualization aid: the use of spatial diagrams, nested bubbles, and topological pictures to make structural relations easier to perceive and remember. This is the most conservative claim, requiring no commitment beyond the empirical observation that spatial representations often support comprehension better than linear ones.
+
+\emph{Cognitive geometry} is the stronger claim that spatial cognition is structurally prior to symbolic cognition in human intelligence: that containment, nesting, locality, trajectory, and boundary are among the earliest and most neurologically robust cognitive structures, and that notation systems grounded in these structures therefore recruit cognitive resources that purely symbolic systems leave unused. This claim is empirical and is defended in Part~II by appeal to the neuroscience of program comprehension, working memory, and semantic grouping.
+
+\emph{Physical geometry} is the claim that relational constraint structure is intrinsic to physical law: that physics is not merely describable geometrically but is organized through constraint manifolds, admissible trajectories, symmetries, and variational principles in a sense that is literal rather than metaphorical. This claim is defended in Part~III in the thermodynamic domain, where it is made literally, and extended by structural analogy in Parts~VII and~VIII.
+
+Spherepop's central geometric claim is that these three levels are deeply coupled through shared organizational principles — structural recurrence across scales — without being identical. The reason cognitive geometry works so well is not arbitrary: biological intelligence evolved to navigate a world that is itself geometrically organized at the physical level. The reason physical geometry is so productive in thermodynamics is not a coincidence: constraint structure is the common language through which both physical and cognitive systems become navigable. Geometry is therefore treated throughout this monograph as \emph{the recurring structural language through which constrained systems become intelligible}, at whatever level the system operates.
+
+\subsection*{Constraint as Primitive}
+
+The word \emph{constraint} appears throughout the monograph in several apparently different senses: logical restriction, energetic restriction, semantic admissibility, computational tractability, topological obstruction, and evaluative boundary. These are not analogies for each other, nor are they accidentally sharing a name. The claim of this monograph is that they are all manifestations of one deeper structure: \emph{constraint is the primitive}.
+
+\begin{definition}
+A \emph{constraint} on a system $X$ is any condition that restricts the set of admissible transitions from the current state of $X$. The \emph{admissibility set} $\sadm(\mathcal{C})$ of a constraint configuration $\mathcal{C}$ is the subset of all states accessible from the current state that satisfy all constraints in $\mathcal{C}$. Constraints may be logical (valid inference rules), energetic (conservation laws), semantic (coherent interpretation conditions), computational (type constraints, scope rules), or topological (boundary conditions on evaluation regions). All are instances of the same formal structure: a restriction of the admissibility set.
+\end{definition}
+
+The unification of these senses under a single primitive is not a casual metaphorical move. It is the foundational commitment that makes the monograph's cross-domain arguments possible. When Part~III argues that thermodynamic entropy is accessibility volume and that Spherepop's collapse operator is structurally identical to thermodynamic coarse-graining, the argument depends on this unification. When Part~II argues that working memory limitations and scope rules are both constraint structures governing cognitive navigation, the argument depends on it. When Part~VI argues that semantic grounding is a constraint satisfaction problem and that opacity is a failure of constraint visibility, the argument depends on it. Readers who resist the unification will find the cross-domain arguments unconvincing. Readers who accept it will find them convergent.
+
+\subsection*{The Ontology of a Spherepop Object}
+
+A Spherepop object is not a state, a value, a symbol, or an expression. It is \emph{an admissible historical trajectory through a structured possibility space}. This is the monograph's primary ontological commitment, and it has consequences that run through every subsequent chapter.
+
+The ontology is layered, and the layers are non-arbitrary:
+
+\begin{description}
+\item[Region.] A structured possibility space defining which transformations are admissible. Regions are the primary geometric objects: they constitute the admissibility manifold $\mathcal{A}(X)$ of a computation, the phase space of a thermodynamic system, the semantic configuration space of an interpretation. Regions are primary \emph{geometrically}.
+
+\item[History.] An ordered trajectory $\gamma = (e_1, e_2, \ldots, e_n)$ through a region, recording the sequence of admissible transitions actually traversed. Histories are the primary \emph{semantic} objects: they carry the provenance, the evaluation order, the constraint sequence, and the commitment profile that terminal values do not contain. Histories are primary semantically.
+
+\item[Process.] The local dynamics that generate individual transitions along a trajectory: the mechanism by which each step $e_t$ is produced from the current state and constraint configuration. Processes are primary \emph{dynamically}, but they are not the most fundamental objects, because the same process may generate different histories under different constraint configurations.

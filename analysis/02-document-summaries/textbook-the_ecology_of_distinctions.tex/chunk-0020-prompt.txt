@@ -1,15 +1,231 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 20 of 22 of a document called
+"textbook-the_ecology_of_distinctions.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+Below are concise summary formulae for each of the key concepts and results[7D[K
+results presented in the document:
 
-TEXT
-====
+---
+
+### 1. Memory Decay (Exponential Forgetting)
+
+**Differential Equation**
+
+\[
+\frac{dw_i}{dt}= -\lambda_i w_i , \qquad \lambda_i \ge 0.
+\]
+
+**Solution**
+
+\[
+w_i(t)= w_i(0)\,e^{-\lambda_i t}.
+\]
+
+**Memory Field**
+
+\[
+M(x,t)=\sum_{i} w_i(0)\,e^{-\lambda_i t}\,K(x,e_i).
+\]
+
+---
+
+### 2. Exponential Forgetting Theorem
+
+If all decay rates satisfy  
+
+\[
+\lambda_i \ge \lambda_{\min}>0,
+\]
+
+then the memory field decays as a geometric function:
+
+\[
+M(x,t) \le e^{-\lambda_{\min}t}\,M(x,0).
+\]
+
+*Proof Sketch*: Since \(e^{-\lambda_i t} \le e^{-\lambda_{\min}t}\) for eac[3D[K
+each \(i\) and all terms are non‑negative, factor out the smallest rate:
+
+\[
+M(x,t)=\sum_i w_i(0)e^{-\lambda_i t}K(x,e_i)
+       \le e^{-\lambda_{\min}t}\sum_i w_i(0)K(x,e_i)=e^{-\lambda_{\min}t}M([37D[K
+w_i(0)K(x,e_i)=e^{-\lambda_{\min}t}M(x,0).
+\]
+
+---
+
+### 3. Recall Time Bound (Corollary)
+
+Given an initial field \(M(x,0) > \theta\) and a common decay rate \(\lambd[8D[K
+\(\lambda\),
+
+\[
+t < \frac{1}{\lambda}\log\!\left(\frac{M(x,0)}{\theta}\right)
+\]
+
+ensures that recall persists (i.e., \(M(x,t)>\theta\)).
+
+*Proof Sketch*: For constant reinforcement with rate \(\lambda\), the solut[5D[K
+solution is  
+
+\[
+w_i(t)= w_i(0)e^{-\lambda t} + \frac{\eta_i r_i}{\lambda}(1-e^{-\lambda t})[3D[K
+t}),
+\]
+
+so \(M(x,t)=e^{-\lambda t}M(x,0)\). Setting \(M(x,t)>\theta\) gives the abo[3D[K
+above inequality.
+
+---
+
+### 4. Reinforced Memory Equilibrium (Proposition)
+
+Under constant reinforcement (\(r_i(t)=r_i\)), the equilibrium trace weight[6D[K
+weight is
+
+\[
+w_i^* = \frac{\eta_i r_i}{\lambda_i}.
+\]
+
+*Proof Sketch*: At equilibrium, \(\frac{dw_i}{dt}=0\) implies  
+
+\[
+-\lambda_i w_i + \eta_i r_i = 0 \;\Rightarrow\; w_i^* = \frac{\eta_i r_i}{\[6D[K
+r_i}{\lambda_i}.
+\]
+
+---
+
+### 5. Kernel Memory as Projection
+
+Let the feature map be \(\Phi: X \to \mathcal H_K\) such that  
+
+\[
+K(x,e)=\langle\Granite(x),\Granite(e)\rangle_{\mathcal H_K}.
+\]
+
+Then the memory field can be written as a linear functional:
+
+\[
+M(x,t)=\big\langle\Granite(x), m(t)\big\rangle_{\mathcal H_K},
+\qquad 
+m(t)=\sum_i w_i(t)\,\Granite(e_i).
+\]
+
+*Proposition*: The MEM\(|8\) memory field is a linear functional in feature[7D[K
+feature space.
+
+---
+
+### 6. False Recall Region
+
+Define the intended recall neighborhood  
+
+\[
+B_i(r)=\{x:d(x,e_i)<r\}.
+\]
+
+The union of all such neighborhoods for stored events forms  
+
+\[
+B(r)=\bigcup_i B_i(r).
+\]
+
+**False Recall Region**
+
+\[
+F_\theta(t)=E_\theta(t)\setminus B(r),
+\]
+
+where \(E_\theta(t)=\{x:M(x,t)>\theta\}\).
+
+*Definitions*:  
+- **False Recall Rate**  
+
+  \[
+  \mathrm{FR}(t)=\frac{\mu(F_\theta(t))}{\mu(E_\theta(t))}
+  \quad (\text{if } \mu(E_\theta(t))>0).
+  \]
+
+---
+
+### 7. Memory Capacity Bound
+
+Assuming each event occupies a ball of measure  
+
+\[
+b_\theta = \mu(B_i(r_\theta)),
+\]
+
+and requiring pairwise disjoint neighborhoods for unambiguous recall, the m[1D[K
+maximum number of memories is
+
+\[
+N_{\max}\le \frac{\mu(X)}{b_\theta},
+\]
+
+where \(X\) is the cue space.
+
+*Proof Sketch*: The total measure occupied by all memory balls must not exc[3D[K
+exceed the measure of \(X\):
+
+\[
+Nb_\theta \le \mu(X) \;\Rightarrow\; N \le \frac{\mu(X)}{b_\theta}.
+\]
+
+---
+
+### 8. Recoverability–Basin Relation (Proposition)
+
+For a Gaussian trace with weight \(w_i>\theta\),
+
+\[
+\reco(e_i)=\mu\!\left(\{x:w_iK(x,e_i)>\theta\}\right)
+           =\mu(B_i(r_\theta)).
+\]
+
+**Result**: Recoverability is proportional to the ecphoric basin measure, w[1D[K
+which grows with  
+
+\[
+\sigma\sqrt{2\log\!\left(\frac{w_i}{\theta}\right)}.
+\]
+
+*Proof Sketch*: The radius of the ball is \(r_\theta=\sigma\sqrt{2\log(w_i/[33D[K
+\(r_\theta=\sigma\sqrt{2\log(w_i/\theta)}\). Since ball measure increases m[1D[K
+monotonically with radius, recoverability also increases monotonically.
+
+---
+
+These formulae encapsulate the core mathematical relationships governing de[2D[K
+decay, forgetting bounds, memory capacity limits, and false recall phenomen[8D[K
+phenomena described in the document.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 The corresponding entropy is
 

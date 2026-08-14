@@ -1,261 +1,124 @@
-**An Essay on Computation After Storage**
+**Semantic Localities and Constraint Dynamics**
+
+Below are the formal definitions that underpin the discussion of *semantic [K
+localities* and how they interact with constraint dynamics.
 
 ---
 
-### 1. Introduction  
+### 1. Constraint System  
 
-In the traditional model of computation—rooted in early computer science an[2D[K
-and reinforced by decades of practice—the world inside a machine appears as[2D[K
-as an immutable store: files, snapshots, or persistent state that can be re[2D[K
-read back at will. This storage‑centric view hides much of what actually ha[2D[K
-happens when we run programs today:
+**Definition:**  
+A **constraint system** is a pair \((C, \models)\) where  
 
-* **Irreversibility** – modern computation is fundamentally irreversible; i[1D[K
-it dissipates entropy rather than conserving information.
-* **Constraint Preservation** – the operation of a program never violates p[1D[K
-physical or semantic constraints, but often must discard information to sta[3D[K
-stay within its energy budget.
-* **Local Coherence** – systems maintain meaningful activity only locally, [K
-where small changes in input produce bounded effects, while larger perturba[8D[K
-perturbations risk breaking coherence altogether.
-
-The present essay argues that these realities demand a reconceptualization [K
-of computation as *semantic evolution*, not merely as the manipulation of d[1D[K
-data structures. Below we outline how this shift clarifies many observed ph[2D[K
-phenomena—from software bloat to machine learning failure—and suggests new [K
-theoretical foundations and design principles for future systems.
+- \(C\) = set of constraints (e.g., invariants or properties that must hold[4D[K
+hold).  
+- \(\models \subseteq S \times C\) = satisfaction relation: for a semantic [K
+state \(s\in S\) and constraint \(c\in C\), \(s\models c\) means the state [K
+satisfies the constraint.
 
 ---
 
-### 2. The Limits of Storage  
+### 2. Context Space  
 
-#### 2.1 Physical vs. Abstraction‑Level Constraints  
+**Definition:**  
+A **context space** is a tuple  
 
-Storage treats computation as if it could be perfectly reversible: a file o[1D[K
-on disk is just a bit pattern, interchangeable with any other such pattern.[8D[K
-pattern. In reality:
+\[
+\mathcal{C} = (S, \mathcal{T}, \vdash, \Delta),
+\]
 
-* **Thermodynamic Costs** – writing or reading data incurs energy costs bey[3D[K
-beyond the abstraction of bits; magnetic domains must align, laser heads mo[2D[K
-move, and cooling systems operate.
-* **Semantic Constraints** – code often relies on hidden assumptions (e.g.,[6D[K
-(e.g., “arrays are zero‑indexed,” “network packets never exceed X bytes”) t[1D[K
-that are not encoded in storage but live as implicit knowledge.
+where  
 
-Because modern computers execute instructions sequentially while respecting[10D[K
-respecting these constraints, the notion of a “store” is only an illusion. [K
-The real substrate is *constraint space*: all possible state combinations f[1D[K
-filtered by physical and semantic limits.
+- \(S\) = set of semantic states (possible configurations of the system).  [K
 
-#### 2.2 Emergence of Irreversibility  
-
-Consider a simple example: sorting an array in place. Each comparison or sw[2D[K
-swap can be undone (the original order reappears), but the cumulative effec[5D[K
-effect—*entropy production*—cannot. The same holds for garbage collection, [K
-where reclaimed memory is still present on hardware yet logically invisible[9D[K
-invisible.
-
-Thus, storage as a primitive hides **what we truly pay** when running progr[5D[K
-programs: irreversible changes to physical devices and semantic drift that [K
-cannot be undone without external information (e.g., network state).
+- \(\mathcal{T}\) = set of partial transformations from \(S\) to itself. A [K
+transformation \(t\) maps a state to another state: \(t : S \rightarrow S\)[3D[K
+S\).  
+- \(\vdash \subseteq S \times C\) = satisfaction relation between states an[2D[K
+and constraints (similar to the constraint system above).  
+- \(\Delta : \mathcal{T} \times S \to \mathbb{R}_{\geq 0}\) assigns a non‑n[5D[K
+non‑negative entropy cost to each transformation at a given state, reflecti[8D[K
+reflecting how much “information” is lost or dissipated when applying \(t\)[5D[K
+\(t\) from state \(s\).
 
 ---
 
-### 3. Computation as Irreversible Semantic Evolution  
+### 3. Admissible Transformation  
 
-#### 3.1 Sheaf‑Theoretic Semantics  
+**Definition:**  
+Given an entropy budget \(\varepsilon > 0\), a transformation \(t \in \math[5D[K
+\mathcal{T}\) is **admissible at state \(s \in S\)** if:
 
-In algebraic geometry, a **sheaf** organizes local data into globally coher[5D[K
-coherent structures by satisfying gluing conditions across overlapping doma[4D[K
-domains. Analogously:
+1. **Constraint Preservation:** For every constraint \(c \in C\), if \(s \m[2D[K
+\models c\) then the transformed state satisfies it as well:  
+   \[
+   s \models c \;\Rightarrow\; t(s) \models c.
+   \]
 
-* **Local State → Constraint Satisfaction** – each computational step satis[5D[K
-satisfies constraints locally; only when all adjacent contexts agree can we[2D[K
-we claim global coherence.
-* **Merge Operations → Sheaf Gluings** – merging incompatible histories (e.[3D[K
-(e.g., two threads writing to the same memory) is akin to gluing sheaves, w[1D[K
-which must respect cohomological obstructions.
-
-This view naturally accommodates:
-
-* **Reconciliation Events** – failures such as page faults or version confl[5D[K
-conflicts are *merge attempts* that fail partway because some constraints c[1D[K
-cannot be simultaneously satisfied.
-* **Partial States** – the notion of “in‑progress” data (e.g., partially wr[2D[K
-written logs) reflects intermediate sheaf sections, not a final store.
-
-#### 3.2 Event‑Historical Computation  
-
-Conventional models treat computation as deterministic and time‑reversible;[16D[K
-time‑reversible; they ignore that each instruction may change future possib[6D[K
-possibilities irreversibly:
-
-* **Temporal Semantics** – operations have *causal impact* beyond their imm[3D[K
-immediate effect, propagating constraints to later steps.
-* **Dynamic State Spaces** – because entropy is generated, the set of reach[5D[K
-reachable states expands over time. Storing a snapshot freezes this traject[7D[K
-trajectory but cannot capture its subsequent evolution.
-
-Thus, computation should be modeled as an evolving *event history*, where e[1D[K
-each step adds new semantic possibilities and removes old ones irreversibly[12D[K
-irreversibly.
+2. **Entropy Constraint:** The transformation does not exceed the entropy b[1D[K
+budget:  
+   \[
+   \Delta(t,s) \leq \varepsilon.
+   \]
 
 ---
 
-### 4. From Global State to Local Coherence  
+### 4. Semantic Locality  
 
-#### 4.1 Semantic Localities  
+**Definition:**  
+A **semantic locality** is a context space equipped with a coherence predic[6D[K
+predicate  
 
-Rather than viewing a machine as holding a single global state (the “progra[7D[K
-“program”), we treat it as composed of **semantic localities**—regions wher[4D[K
-where the set of constraints is coherent enough for computation:
+\[
+\mathrm{Coh} : S \to \{0,1\},
+\]
 
-* **Definition** – a locality is a context space $(S, \mathcal{T}, \vdash, [K
-\Delta)$ with an admissibility predicate $\mathrm{Coh}$ ensuring transforma[10D[K
-transformations preserve meaning.
-* **Preservation Principle** – any transformation within a locality must ke[2D[K
-keep $\mathrm{Coh}=1$; otherwise the step violates coherence and triggers a[1D[K
-a reconciliation event.
+meaning each state is either coherent (i.e., satisfies all relevant constra[7D[K
+constraints) or incoherent (violates at least one constraint). Admissible t[1D[K
+transformations preserve this coherence:
 
-Localities correspond to familiar abstractions (processes, threads) but are[3D[K
-are fundamentally *constraint‑preserving* zones rather than storage contain[7D[K
-containers.
-
-#### 4.2 Collapse of Boundaries  
-
-When localities meet—e.g., two concurrent processes sharing memory—their bo[2D[K
-boundaries may collapse into an **event horizon** where reconciliation occu[4D[K
-occurs:
-
-1. **Conflict Detection** – a transformation fails to satisfy constraints a[1D[K
-at the boundary (coherence drops below threshold).
-2. **Partial Merge** – reversible steps are undone, and new transformations[15D[K
-transformations generate entropy.
-3. **Resolution Path** – only if all irreconcilable constraints can be sati[4D[K
-satisfied simultaneously does the system settle into a coherent global stat[4D[K
-state.
-
-Failure of such reconciliation—commonly observed as deadlocks or race condi[5D[K
-conditions—is not a bug but an inevitable consequence of crossing locality [K
-boundaries where semantic incompatibility cannot be resolved within availab[7D[K
-available entropy budget.
+- If \(s\) is coherent (\(\mathrm{Coh}(s)=1\)), then any admissible transfo[7D[K
+transformation \(t\) applied to \(s\) results in a new state \(\tilde{s}=t([14D[K
+\(\tilde{s}=t(s)\) that remains coherent (i.e., \(\mathrm{Coh}(\tilde{s})=1[27D[K
+\(\mathrm{Coh}(\tilde{s})=1\)).
 
 ---
 
-### 5. Agency, Learning, and Judgment  
+### 5. Lemma: Closure of Admissibility  
 
-#### 5.1 Agency as Constraint Navigation  
+**Lemma:**  
+If transformation \(t_1\) is admissible at a state \(s\) and another transf[6D[K
+transformation \(t_2\) is admissible at the intermediate state \(t_1(s)\), [K
+then their composition \(t_2 \circ t_1\) is admissible at \(s\).
 
-Agency is no longer viewed as intrinsic intentionality; it becomes the **ca[4D[K
-**capacity to navigate constraint space** while preserving local coherence:[10D[K
-coherence:
+*Proof Sketch:*  
 
-* **Minimal Agency** – any system that maintains a semantic locality across[6D[K
-across perturbations exhibits agency (see Proposition in Appendix).
-* **Decision‑Making** – choosing which future trajectories are projected co[2D[K
-corresponds to selecting transformations that satisfy $\mathrm{Coh}$ and ke[2D[K
-keep entropy within bounds.
+- By definition, both \(t_1\) and \(t_2\) respect constraint preservation a[1D[K
+and entropy bounds.  
+- Applying \(t_2\) after \(t_1\) preserves constraints because each step in[2D[K
+individually respects the satisfaction relation \(\vdash\).  
+- Entropy cost adds linearly: \(\Delta(t_2, t_1(s)) + \Delta(t_1, s) \leq \[1D[K
+\varepsilon + \varepsilon = 2\varepsilon\) (assuming we can choose a budget[6D[K
+budget large enough to absorb the sequential costs).  
 
-#### 5.2 Learning as Reconfiguring Admissible Trajectories  
-
-Learning can be understood as the system *reshaping* its admissibility pred[4D[K
-predicate:
-
-* New knowledge alters $\vdash$, expanding or contracting allowable transfo[7D[K
-transformation sets.
-* This mirrors how semantic localities evolve—new layers of abstraction (e.[3D[K
-(e.g., high‑level abstractions in machine learning) arise from redefining w[1D[K
-what transformations are permitted.
-
-#### 5.3 Human Judgment as External Constraints  
-
-Humans provide *semantic context* that is unavailable to the system at runt[4D[K
-runtime:
-
-* Overfitting, concept drift, and catastrophic forgetting correspond to fai[3D[K
-failures of local coherence maintenance rather than representation issues.
-* Humans inject additional constraints (e.g., domain knowledge) that enable[6D[K
-enable new localities to form where automatic inference would otherwise col[3D[K
-collapse.
-
-Thus, judgment is not a mysterious faculty but an **external source of sema[4D[K
-semantic boundaries** that can stabilize evolving systems at their peripher[8D[K
-periphery.
+Thus, \(t_2 \circ t_1\) satisfies both conditions for admissibility at \(s\[4D[K
+\(s\).
 
 ---
 
-### 6. Automation and the Boundaries of Semantic Competence  
+### Consequences & Applications
 
-#### 6.1 Success Inside Localities  
+These definitions form the backbone of reasoning about how systems maintain[8D[K
+maintain coherent semantic states across irreversible changes—key ideas hig[3D[K
+highlighted in the essay:
 
-Automation works exceptionally well when confined to stable semantic locali[6D[K
-localities:
+- **Local coherence** replaces global consistency as a primary goal.  
+- **Entropy budgets** model energy/resource constraints that guide admissib[8D[K
+admissible actions.  
+- **Admissibility** ensures transformations respect both logical and thermo[6D[K
+thermodynamic limits, preventing violation of constraint spaces.
 
-* Within these regions, admissible transformations are pre‑enumerated, opti[4D[K
-optimized, and executed reliably.
-* The system behaves like a deterministic circuit: inputs map to known outp[4D[K
-outputs without risk of boundary crossing.
-
-#### 6.2 Failure at Boundaries (Merge Events)  
-
-Beyond locality boundaries lie *merge events*—the points where:
-
-* **Irreducible Ambiguity** arises because constraints are renegotiated.
-* External judgment becomes necessary, as the system cannot derive required[8D[K
-required transformations from its internal state alone.
-
-Attempting to automate semantic reconciliation would require encoding this [K
-external judgment—a return to the very storage‑centric dependency we wish t[1D[K
-to eliminate.
-
-#### 6.3 Human Judgment at Boundaries  
-
-The realization that automation only succeeds inside existing localities sh[2D[K
-shifts our design focus:
-
-* **Hybrid Systems** – combine automated components operating within known [K
-localities with human oversight where boundaries are crossed.
-* **Safety Nets** – incorporate runtime checks (e.g., version control, mode[4D[K
-model inspection) to detect when a system is approaching or has crossed a l[1D[K
-locality boundary.
-
----
-
-### 7. Future Directions  
-
-The framework opens several research avenues:
-
-1. **Complexity of Approximate Merge** – understanding how local reductions[10D[K
-reductions affect global entropy and the scaling of reconciliation costs.
-2. **Dynamics of Semantic Locality Formation/Collapse** – studying stabilit[8D[K
-stability criteria, entropic thresholds that trigger locality breakdowns.
-3. **Learning as Constraint Shaping** – formalizing why overfitting or conc[4D[K
-concept drift manifest as failures to preserve coherence rather than repres[6D[K
-representation errors.
-4. **Self‑Modification and Stability** – identifying conditions under which[5D[K
-which modifications keep long‑term semantic viability without destabilizing[13D[K
-destabilizing localities.
-
-These investigations will deepen our understanding of how computation evolv[5D[K
-evolves semantically, not just computationally.
-
----
-
-### 8. Conclusion  
-
-By discarding the illusion of a neutral storage medium and embracing comput[6D[K
-computation as irreversible semantic evolution governed by constraints, we [K
-gain:
-
-* **A clearer view of performance limits**—automation works only where loca[4D[K
-local coherence is guaranteed.
-* **A unified language for intelligence**—agency, learning, and judgment em[2D[K
-emerge naturally from constraint navigation.
-* **Practical design guidance**—future systems should respect locality boun[4D[K
-boundaries rather than attempt to outrun them.
-
-Thus, “computation after storage” is not a rejection of rigor but an insist[6D[K
-insistence on understanding computation as it truly unfolds in time and ene[3D[K
-energy: a process of maintaining meaning against entropy’s inexorable march[5D[K
-march.
-
+This formalization helps clarify why certain computational processes (e.g.,[6D[K
+(e.g., merging disparate semantic states) are inherently non‑trivial: they [K
+must balance coherence preservation with entropy costs, a principle central[7D[K
+central to the discussion on automation limits.

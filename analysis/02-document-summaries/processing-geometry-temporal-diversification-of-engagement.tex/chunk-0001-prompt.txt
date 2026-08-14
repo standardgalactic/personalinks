@@ -1,0 +1,108 @@
+You are analyzing chunk 1 of 1 of a document called
+"processing-geometry-temporal-diversification-of-engagement.tex", part of a large theoretical/computational research
+repository called Spherepop.
+
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
+
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
+
+Temporal diversification of engagement extends the marginal compression gai[3D[K
+gain formalism from The Geometry of Boredom to portfolios of scopes with un[2D[K
+unequal horizons. For each scope \(S_i=(O_i,\tau_i)\) (where \(\tau_1\ll\cd[14D[K
+\(\tau_1\ll\cdots\ll\tau_n\)), define local expected marginal compression g[1D[K
+gain at time \(t\) as the expectation over actions in the option space \(O_[4D[K
+\(O_i\) of the reduction in compressed state size from processing an action[6D[K
+action. Local saturation occurs when this gain is approximately zero for al[2D[K
+all actions, while field saturation requires saturation across all scopes. [K
+The paper shows that local saturation does not imply field saturation; oper[4D[K
+operator drift can later restore non‑zero gains even within a saturated sco[3D[K
+scope. Under long horizons, progress need not rely on immediate POP (Progre[7D[K
+(Progressive Optimization Procedure); repeated constraint‑shaping events li[2D[K
+like BIND/REFUSE/COLLAPSE can enhance continuation quality without closing [K
+the scope prematurely. This framework highlights that sustained engagement [K
+arises from maintaining an ecology of unfinished histories sampled across d[1D[K
+different temporal scales.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
+
+
+Temporal Diversification of Engagement
+
+
+The expected marginal compression gain formalism from \emph{The Geometry of Boredom}
+extends naturally from one task to a portfolio of unresolved scopes operating at unequal
+horizons. Let
+\[
+\mathcal{T}=\{(S_i,\tau_i)\}_{i=1}^n,\qquad S_i=(O_i,\tau_i),\qquad \tau_1\ll\tau_2\ll\cdots\ll\tau_n,
+\]
+where each scope $S_i$ has a local option space $O_i$ and characteristic resolution horizon
+$\tau_i$.
+
+\paragraph{Scope note.}
+This section is a formal extension proposal and should not be read as an implementation claim
+about the repository's pending Appendix B poset semantics.
+
+At time $t$, with accumulated history $H_t$ and current operator $F_t=C(H_t)$, define local
+expected marginal compression gain
+\[
+\mathrm{EMCG}_i(a\mid F_t)=\mathbb{E}_{o(a)}\big[\,|C(H_t)|-|C(H_t\cup\{a,o(a)\})|\,\big],\qquad a\in O_i.
+\]
+Then distinguish:
+\begin{itemize}
+  \item \textbf{Local saturation at scope $i$:}
+  \[
+  \max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx 0.
+  \]
+  \item \textbf{Field saturation:}
+  \[
+  \max_i\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx 0.
+  \]
+\end{itemize}
+
+\begin{proposition}[Scope-switch recovery]
+Local saturation in one scope does not imply field saturation. If
+$\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx0$ but
+$\max_{a\in O_j}\mathrm{EMCG}_j(a\mid F_t)>0$ for some $j\neq i$, then a policy that permits
+scope switching admits continued compression progress without requiring external novelty.
+\end{proposition}
+
+\begin{proposition}[Operator-drift recovery]
+For a fixed scope $S_i$ and action $a\in O_i$, one can have
+\[
+\mathrm{EMCG}_i(a\mid F_t)\approx0\quad\text{and later}\quad
+\mathrm{EMCG}_i(a\mid F_{t+\Delta t})>0,
+\]
+after intermediate work on other scopes updates the operator from $F_t$ to $F_{t+\Delta t}$.
+Thus, returns can be structurally informative even when the underlying scope is unchanged.
+\end{proposition}
+
+\begin{proposition}[BIND-as-progress under long horizons]
+For long-horizon scopes ($\tau_i$ large), progress need not require immediate POP. Repeated
+constraint-shaping events (BIND/REFUSE/COLLAPSE) can increase continuation quality while the
+scope remains unresolved, preserving admissible future work without premature closure.
+\end{proposition}
+
+The anti-boredom consequence is scheduling-theoretic: sustained engagement is not the demand
+that one process remain perpetually high-gain, but maintenance of a heterogeneous ecology of
+unfinished histories whose local gains are sampled across clocks.
+

@@ -1,0 +1,425 @@
+You are analyzing chunk 1 of 1 of a document called
+"theory_status.md", part of a large theoretical/computational research
+repository called Spherepop.
+
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
+
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
+
+The preorder \(O₁ ⊑ O₂\) is defined as continuation‑set inclusion:
+
+\[
+O₁ ⊑ O₂ \;\;⟺\;\; content(O₁) ⊆ content(O₂)
+\]
+
+This definition follows directly from Appendix B, which states that a conti[5D[K
+continuation of an option set must be contained in the larger set. With lab[3D[K
+labeled `OptionSpace` objects, the structure is technically a preorder unti[4D[K
+until equal‑content nodes are quotient identified (two differently‑labeled [K
+scopes can have identical contents).
+
+The implementation note clarifies that while the mathematical relationship [K
+holds, practical realization may involve identifying equivalent‑content nod[3D[K
+nodes as a single element, which is an optional step rather than a mandator[8D[K
+mandatory part of the abstract definition.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
+
+# Theory Status: Paper vs Implementation vs Open Questions
+
+**Last Updated**: 2026-08-13  
+**Purpose**: Distinguish what Spherepop theory explicitly states from implementation choices and genuinely open questions.
+
+---
+
+## Architectural Discipline
+
+> **Critical Principle**: Don't turn an unanswered semantic question into an implementation default and then later mistake the default for Spherepop theory.
+
+This document tracks the status of every significant semantic choice in the codebase.
+
+---
+
+## Status Categories
+
+- **✓ Paper-Licensed**: Explicitly stated or directly derivable from the paper
+- **→ Implementation Choice**: A chosen realization among valid alternatives
+- **? Open**: Genuinely underdetermined by current theory; experimental investigation needed
+- **⊗ Contrary**: Would contradict stated theory if implemented
+
+---
+
+## Plan B: Poset Structure (Appendix B)
+
+### Q1a: Preorder Definition
+
+**Status**: ✓ **Paper-Licensed** (Appendix B explicit)
+
+The preorder `O₁ ⊑ O₂` is defined as continuation-set inclusion:
+
+```
+O₁ ⊑ O₂  ⟺  content(O₁) ⊆ content(O₂)
+```
+
+This is faithful to Appendix B: every continuation admissible in O₁ is also admissible in O₂.
+
+**Implementation Note**: With labeled `OptionSpace` objects, the structure is technically a preorder until equal-content nodes are quotient-identified (two differently labeled scopes can have identical contents).
+
+**Location**: `spherepop/poset.py` (isolated, not yet integrated)
+
+---
+
+### Q1b: POP as Identity-on-Content
+
+**Status**: → **Implementation Choice** (Chosen minimal realization)
+
+When popping O_min to produce O', we implement:
+
+```
+content(O') = content(O_min)
+```
+
+This is the **identity-on-content realization of π**, not a theorem that Spherepop POP is always identity-on-content.
+
+**What Appendix B Actually Says**: 
+
+```
+π: O_min → O'
+```
+
+must produce an O' appropriately below its upper contexts. It does **not** specify a meet, union, intersection, or recomputation rule.
+
+**Implication**: Other realizations are possible. Document this as our chosen interpretation, not as the unique semantics.
+
+**Location**: `spherepop/semantics.py` (implicit in `_pop_path`)
+
+---
+
+### Q1c: Convergence to Unique Maximal Element
+
+**Status**: ? **Open** (No theoretical or experimental justification yet)
+
+Appendix B states that termination corresponds to a unique maximal element, but does **not prove** that the concrete minimal-element elimination process converges to one.
+
+**Current Status**: Plan B (`spherepop/poset.py`) is isolated and tested but not connected. Whether repeated minimal-element elimination converges remains an open question for future experiments.
+
+**Action**: Plan B should **investigate** this, not encode it as an invariant.
+
+**Location**: `spherepop/poset.py` (standalone module)
+
+---
+
+## COLLAPSE Semantics
+
+### Q2a: Splitting Quotients with Successive COLLAPSE
+
+**Status**: ⊗ **Contrary to Theory**
+
+A second COLLAPSE should **not split** an existing Quotient. COLLAPSE is described as irreversible identification:
+
+```
+Ō = O/≡_C,    q: O → Ō
+```
+
+Distinctions identified by ≡_C are **no longer available to future computation**. Refining by splitting would contradict stated irreversibility unless a new operation were introduced.
+
+**Current Implementation**: Correctly rejects splitting. Comment in `semantics.py` marks this as "out of scope."
+
+**Location**: `spherepop/semantics.py:171` (COLLAPSE branch comment)
+
+---
+
+### Q2b: Successive COLLAPSE Composition
+
+**Status**: ? **Open** (Mathematically natural, not paper-specified)
+
+When overlapping successive COLLAPSEs occur (e.g., `{a,b}` then `{a,c}`), the mathematically natural extension is equivalence closure:
+
+```
+a ~ b,  a ~ c  ⟹  [a] = {a, b, c}
+```
+
+by transitivity.
+
+**But**: This is inference from ordinary quotient/equivalence semantics, not explicitly specified in Appendix C.
+
+**Current Implementation**: Second COLLAPSE over Quotient is **unsupported** (correctly provisional).
+
+**Action**: Make COLLAPSE composition its own experiment before promoting transitive closure to core semantics.
+
+**Location**: `spherepop/semantics.py:171-177` (COLLAPSE branch)
+
+---
+
+## BIND Predicate Semantics
+
+### Q3: Existential vs Universal Semantics for Quotients
+
+**Status**: ? **Open** (Paper does not specify)
+
+Appendix E defines BIND through predicate β:
+
+```
+O_h' = {o ∈ O_h | β(o)}
+```
+
+But it never specifies how β should lift from primitive options to quotient classes.
+
+**Three Plausible Lifts**:
+
+1. **Existential** (current implementation):
+   ```
+   β_∃([x]) ⟺ ∃x_i ∈ [x]: β(x_i)
+   ```
+
+2. **Universal**:
+   ```
+   β_∀([x]) ⟺ ∀x_i ∈ [x]: β(x_i)
+   ```
+
+3. **Well-defined on equivalence classes** (strongest):
+   ```
+   x ≡_C y  ⟹  β(x) = β(y)
+   ```
+
+**Implication**: The third may ultimately be cleanest (quotients should admit predicates that respect the quotient relation), but this requires research.
+
+**Current Implementation**: Existential semantics with explicit "provisional" marking in docstring.
+
+**Location**: `spherepop/predicates.py:115-159`
+
+---
+
+## REFUSE on Quotients
+
+### Q4: Quotients as Atomic Options
+
+**Status**: ✓ **Paper-Licensed** (Strongly supported)
+
+The paper states explicitly that identified distinctions "are no longer available for future computation."
+
+**Implication**: Refusing one former member should **not** secretly re-split the class. Either:
+- The refusal operates on the quotient as an atomic option, or
+- The requested refusal is not well-formed at that level of description
+
+**Governing Principle**:
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ COLLAPSE may coarsen distinctions further,                     │
+│ but should NOT refine them again.                              │
+└────────────────────────────────────────────────────────────────┘
+```
+
+**Current Implementation**: Refusing one member refuses the whole Quotient (atomic).
+
+**Location**: `spherepop/semantics.py:136-161` (REFUSE branch)
+
+---
+
+## Identity and Equivalence
+
+### Q5a: Intensional vs Extensional Equivalence
+
+**Status**: ✓ **Paper-Licensed** (Core theory)
+
+Intensional equivalence has **more than implementation significance**. Appendix A states:
+
+```
+(σ, h) ≢ (τ, h')  unless  h = h'
+```
+
+But this does **not** mean every observer must distinguish them. Appendix D explicitly permits different view functors to erase distinctions while leaving authoritative history untouched.
+
+**The Right Distinction**:
+
+```
+identity of histories ≠ identity under a chosen observation
+```
+
+**Current Implementation**: 
+- `intensionally_equivalent()` checks history equality
+- `extensionally_equivalent()` checks rendered sigma + option space
+- Both are legitimate, serving different purposes
+
+**Location**: `spherepop/observers.py:86-99`
+
+---
+
+### Q5b: History as Primary Identity
+
+**Status**: ✓ **Paper-Licensed** (Core claim)
+
+The theory treats **historical/intensional identity as primary**, while extensional sameness is observer-relative or collapse-relative.
+
+Two configurations may look identical under a chosen view without thereby becoming the same history. This is not an implementation accident — it is one of Spherepop's central claims.
+
+**Implication**: Observers that report extensional equivalence should not be taken to claim the configurations are "the same" in the authoritative sense.
+
+**Location**: Philosophy reflected throughout `spherepop/observers.py`
+
+---
+
+## Regret
+
+### Q6: Local vs Cumulative Regret
+
+**Status**: ✓ **Paper-Licensed** (Local), → **Derived Extension** (Cumulative)
+
+The paper's formal definition of regret is **local** — comparing two continuations from a common prefix:
+
+```
+h = p·e₁···eₙ,  h' = p·e'₁···e'ₘ,  O_h ⊂ O_h'
+```
+
+**Cumulative regret** (measuring repeated regret relations along a trajectory) is conceptually reasonable as an extension, but the paper only licenses the local definition directly.
+
+**Current Implementation**: 
+- `regretful()` implements local comparison
+- Experiment 23 (`regret-accumulation`) explores cumulative as derived statistic
+
+**Location**: `spherepop/observers.py:101-122`, `spherepop/23-regret-accumulation/`
+
+---
+
+## Horizon Equivalence
+
+### Q7: Relativization to Operator Alphabet
+
+**Status**: → **Implementation Choice** (Must be relativized)
+
+The paper defines ≈_k by equality of sets of length-k extensions. It does **not** provide a canonical finite operator alphabet.
+
+**Implication**: Any executable implementation necessarily relativizes the comparison to some specified admissible-event generator.
+
+**Suggested Notation**:
+
+```
+h₁ ≈_k^A h₂
+```
+
+where A is the operator-generation policy.
+
+**For Larger k**: Obvious approximations include:
+- Bounded symbolic exploration
+- Bisimulation-style partition refinement
+- Memoization over extension-equivalent configurations
+- Sampling
+
+These would be engineering/research extensions, not claims already in the paper.
+
+**Current Implementation**: `horizon_equivalent()` requires explicit `candidate_ops` parameter (correctly relativized).
+
+**Location**: `spherepop/observers.py:147-183`
+
+---
+
+## Labels (Appendix G)
+
+### Q8: Global Label Uniqueness
+
+**Status**: → **Implementation Choice** (Concrete-syntax convenience)
+
+Appendix G defines:
+
+```
+<Sphere> ::= "(" <Label> ":" <Expr>* ")"
+```
+
+and uses labels as event arguments. It does **not** state global uniqueness.
+
+**Our Choice**: Enforce global label uniqueness to make `pop(label)` unambiguous.
+
+**Alternative**: Scoped labels would be plausible:
+
+```
+root.left.x  vs.  root.right.x
+```
+
+If nesting is semantically important, lexical/scoped identity may ultimately be more faithful than imposing global names.
+
+**Current Implementation**: `find_label_path()` raises if label is ambiguous.
+
+**Action**: Document this as a **concrete-syntax convenience**, not a theoretical requirement.
+
+**Location**: `spherepop/path_utils.py:211-249`
+
+---
+
+## Summary Table
+
+| Issue | Status | Documentation Location |
+|-------|--------|----------------------|
+| ⊑ as subset inclusion | ✓ Paper-Licensed | `poset.py` |
+| O' identity-on-content | → Chosen realization | `semantics.py` |
+| Unique-max termination | ? Open | Plan B investigation |
+| COLLAPSE splitting quotients | ⊗ Contrary to theory | Correctly rejected |
+| Successive COLLAPSE composition | ? Open | Make an experiment |
+| ∃/∀ BIND lift | ? Open | `predicates.py` marked |
+| Quotients atomic under REFUSE | ✓ Paper-Licensed | `semantics.py` |
+| History as intensional identity | ✓ Core theory | `observers.py` |
+| Cumulative regret | → Derived extension | Experiment 23 |
+| ≈_k operator alphabet | → Must relativize | `observers.py` |
+| Global label uniqueness | → Implementation choice | `path_utils.py` |
+
+---
+
+## Actionable Implications for Development
+
+1. **Documentation (Phase 3)**: 
+   - Mark provisional semantics explicitly in docstrings
+   - Reference this document in CONTRIBUTING.md
+   - Add "Theory Status" sections to module docstrings where relevant
+
+2. **Testing (Phase 4)**:
+   - Don't encode open questions as validated behavior
+   - Tests for "Open" items should be marked as `@pytest.mark.experimental`
+   - Document test assumptions: "This tests our chosen realization, not paper theorem"
+
+3. **API Design**:
+   - Avoid hardening unresolved points into public API guarantees
+   - Consider `experimental=True` flags for features with open semantics
+   - Make relativity explicit (e.g., `horizon_equivalent(..., candidate_ops=...)`)
+
+4. **Future Work**:
+   - Plan B integration should investigate Q1c empirically
+   - COLLAPSE composition deserves its own experiment before integration
+   - BIND semantics may need a "well-defined on classes" validator
+
+---
+
+## References
+
+- **Appendix A**: Identity and configurations
+- **Appendix B**: Poset structure and POP semantics  
+- **Appendix C**: COLLAPSE and quotients
+- **Appendix D**: View functors and observation
+- **Appendix E**: REFUSE and BIND predicates
+- **Appendix F**: Horizon equivalence ≈_k
+- **Appendix G**: Labeled sphere grammar
+
+---
+
+**Maintained By**: Development team in consultation with theory authors  
+**Review Frequency**: After each semantic experiment or Plan B integration step
+

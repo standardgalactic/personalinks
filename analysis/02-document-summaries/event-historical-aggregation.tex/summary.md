@@ -1,155 +1,149 @@
-Below is the unified theoretical synthesis of the research document you pro[3D[K
-provided. It integrates the thesis, definitions, formal structures, mechani[7D[K
-mechanisms, major arguments, dependencies, implications, unresolved issues,[7D[K
-issues, internal tensions, and connections to other fields in Spherepop (ev[3D[K
-(event‑historical aggregation).
+**Reconstructed Document: Event‑Historical Aggregation in “event-historical[17D[K
+“event-historical-aggregation.tex”**
 
 ---
 
-## **Spherepop: Event‑Historical Aggregation**
+### 1. Introduction to Event‑Historical Semantics  
 
-### 1. Thesis
-Spherepop proposes that distributed aggregation should be modeled as an **e[3D[K
-**event‑historical** process where each contribution carries a weight refle[5D[K
-reflecting its authority. This approach preserves the trace of what was con[3D[K
-considered versus excluded, allowing explicit refusal rules and auditable i[1D[K
-influence.
+The document frames attention mechanisms and aggregation processes as *comm[5D[K
+*commitment*—the act of deliberately choosing which inputs influence a mode[4D[K
+model’s output, rather than merely computing numerical values. This perspec[7D[K
+perspective shifts the focus from “what is produced?” to “how are decisions[9D[K
+decisions made?”.
 
-### 2. Primitives & Definitions
+- **Reducer Object**: A reducer is not just a vector; it records:
+  - Which neighboring nodes (or events) were attended to,
+  - The weights assigned during aggregation.
+  
+Standard transformers, by contrast, collapse the entire history immediately[11D[K
+immediately after reduction, discarding all traceability about how choices [K
+were made.  
 
-| Primitive | Definition |
-|-----------|-------------|
-| **Weighted Sum ($\diamond$)** | An aggregation operation where each term [K
-$h_i$ is weighted by a factor reflecting its authority in contributing to t[1D[K
-the final result. The process records which neighboring elements were atten[5D[K
-attended to, preserving this history. |
-| **Attention as Refusal Rules** | Attention masks are interpreted as *refu[5D[K
-*refusal rules*: if an edge $(i,j)$ is masked, merging $v_j$ into reducer a[1D[K
-at node $i$ is disallowed. This formalizes a “no‑access” policy for particu[7D[K
-particular connections. |
-
-### 3. Formalism
-
-- **Masking as Refusal (Proposition)**  
-  *Statement.* Let $(i,j)$ be a masked edge; any attempted merge of $v_j$ i[1D[K
-into reducer at $i$ is refused.  
-  *Proof.* Masking forces $\alpha_{ij}=0$, indicating no authorization for [K
-the merge, separating principled exclusion from accidental irrelevance.
-
-- **Multi‑Head Attention as Parallel Reducers (Proposition)**  
-  *Statement.* Reducer histories of different attention heads are independe[9D[K
-independent and can be collapsed or audited separately.  
-  *Proof.* Each head uses unique query/key/value projections $\{Q_h, K_h, V[1D[K
-V_h\}$, ensuring disjoint histories.
-
-- **Independence of Attention Heads**  
-  The concatenation step after multi‑head attention merely binds parallel r[1D[K
-reducer objects; standard Transformers collapse this binding outright.
-
-### 4. Mechanisms
-
-1. **Event‑Historical Aggregation (Proposition – Masking as Refusal)**  
-   - Masks encode refusal, preventing accidental irrelevance.
-2. **Multi‑Head Attention**  
-   - Decomposes aggregation into several parallel reducers, each with its o[1D[K
-own payload operation determined by unique projections $\{Q_h, K_h, V_h\}$.[7D[K
-V_h\}$.
-3. **Limits of Value‑Centric Attention**  
-   - Conventional Transformers erase semantic context (which inputs were co[2D[K
-considered/excluded), leading to issues like prompt sensitivity and instabi[7D[K
-instability under long horizon composition.
-
-### 5. Major Arguments
-
-- **Against Standard Transformer Attention:**  
-  The event‑historical perspective reveals that standard attention collapse[8D[K
-collapses histories too aggressively, discarding crucial information needed[6D[K
-needed for auditable influence.
-- **For Event‑Historical Aggregation:**  
-  Retaining at least some event history enables explicit refusal, auditabil[9D[K
-auditability, and controlled forgetting—structural properties rather than r[1D[K
-runtime checks.
-
-### 6. Dependencies Between Concepts
-
-- **Weighted Sum ↔ Attention Masks:**  
-  Masking determines which merges are authorized, directly influencing the [K
-weighted sum’s authority.
-- **Multi‑Head Attention ↔ Independent Reducers:**  
-  Each head provides a separate reducer history, allowing distinct auditabi[8D[K
-auditability and composability later in higher‑level representations.
-
-### 7. Implications
-
-- **Improved Semantic Stability:**  
-  By preserving which inputs were considered, models can better handle prom[4D[K
-prompt sensitivity and long‑horizon composition.
-- **Auditable Systems:**  
-  Refusal encoded numerically (zeros) becomes explicit structural informati[9D[K
-information, enabling transparency and debugging of aggregation processes.
-- **Scalability to Machine Learning:**  
-  The event‑historical framework aligns distributed systems with machine‑le[10D[K
-machine‑learning architectures by treating activations as events with autho[5D[K
-authority.
-
-### 8. Unresolved Problems
-
-1. **Efficient Implementation:**  
-   How to implement these mechanisms without incurring prohibitive computat[8D[K
-computational overhead due to explicit history tracking.
-2. **Scalability Across Large Datasets:**  
-   Maintaining tractable histories for massive data streams while preservin[9D[K
-preserving semantic fidelity.
-3. **Integration with Existing Architectures:**  
-   Bridging event‑historical aggregation into current deep learning pipelin[7D[K
-pipelines (e.g., Transformers) without major redesign.
-
-### 9. Internal Tensions
-
-- **Trade‑off Between Fidelity and Complexity:**  
-  Preserving full history increases computational cost; the challenge is ba[2D[K
-balancing fidelity with practical efficiency.
-- **Policy vs. Performance:**  
-  Explicit refusal rules may conflict with performance goals (e.g., batch p[1D[K
-processing), requiring sophisticated policy engines.
-
-### 10. Connections Likely to Matter Elsewhere in Spherepop
-
-1. **Categorical Semantics of Event‑Historical Aggregation**  
-   - Unifies map‑reduce, streaming aggregation, and attention under a commo[5D[K
-common categorical framework, preserving asymmetries introduced by commitme[8D[K
-commitment and refusal.
-2. **Partial Monoidal Structure for Merge**  
-   - Treats merge as partial (only when authorization constraints are satis[5D[K
-satisfied), allowing for non‑commutative aggregation that respects semantic[8D[K
-semantic constraints.
-3. **Collapse Functor as Quotient**  
-   - Provides a formal way to model irreversible forgetting, analogous to t[1D[K
-techniques in persistent data structures and quantum information theory.
-
-### Conclusion
-
-Spherepop redefines distributed aggregation by treating it as an event‑hist[10D[K
-event‑historical process where authority, refusal, and auditable influence [K
-are intrinsic properties rather than post‑hoc checks. This shift promises m[1D[K
-more stable, interpretable models and opens avenues for integrating categor[7D[K
-category theory, traced monoidal categories, and irreversible computation i[1D[K
-into both systems design and machine learning.
-
-### Future Directions
-
-- **Policy‑Aware Attention Networks:**  
-  Design neural architectures that retain explicit event histories, enablin[7D[K
-enabling semantic reasoning.
-- **Learning Dynamics as Commitment Sequences:**  
-  Treat training itself as a sequence of commitments, with each step preser[6D[K
-preserving historical constraints.
-- **Cross‑Field Synergies:**  
-  Explore connections to traced monoidal categories, persistent data struct[6D[K
-structures, and quantum information theory for deeper theoretical grounding[9D[K
-grounding.
+**Why This Matters**: Retaining event histories enables explicit refusal of[2D[K
+of unwanted contributions, provides auditability for regulatory compliance [K
+(e.g., finance or healthcare), and supports controlled forgetting mechanism[9D[K
+mechanisms.
 
 ---
 
-*End of Unified Theoretical Synthesis.*
+### 2. Attention Masks as Refusal Rules  
 
+- **Proposition**: If an edge \((i,j)\) is masked (\(\alpha_{ij}=0\)), then[4D[K
+then the merge that incorporates \(v_j\) into node \(i\)’s reducer history [K
+is refused.
+  
+**Proof Sketch**:
+  - Masking enforces a zero weight for merging, which corresponds to a prin[4D[K
+principled exclusion criterion (e.g., relevance or safety standards).
+  - In standard attention models, a numeric zero does not differentiate int[3D[K
+intentional exclusion from accidental irrelevance, potentially leading to u[1D[K
+unintended behavior.
+
+**Implication**: Masks act as structural refusal rules rather than mere num[3D[K
+numerical cutoffs.
+
+---
+
+### 3. Multi‑Head Attention  
+
+- **Independence of Heads**: Each head constructs its own reducer history u[1D[K
+using distinct query, key, and value projections \((Q_h,K_h,V_h)\). The his[3D[K
+histories remain independent because different heads explore separate aspec[5D[K
+aspects (e.g., syntactic vs. semantic relationships).
+  
+- **Higher‑Level Merge**: After multi‑head aggregation, concatenated result[6D[K
+results form a single representation, mirroring conventional transformer pr[2D[K
+practice where further collapse occurs.
+  
+**Importance**: Multi‑head attention preserves the ability to audit and ref[3D[K
+refuse selectively in downstream stages.
+
+---
+
+### 4. Limits of Value‑Centric Attention  
+
+Standard attention collapses all structural information into numeric values[6D[K
+values, leading to:
+- **Prompt Sensitivity**: Slight changes in input phrasing can dramatically[12D[K
+dramatically affect outputs.
+- **Instability Under Long Horizon Composition**: Errors accumulate across [K
+many steps without traceability.
+- **Difficulty Enforcing Hard Constraints**: Without an event history, it’s[4D[K
+it’s hard to guarantee that masked nodes remain excluded.
+
+**Spherepop Proposal**: Introduce mechanisms that retain at least partial e[1D[K
+event histories, enabling explicit refusal and auditable influence—turning [K
+aggregation from a purely numeric operation into a commitment‑forming proce[5D[K
+process.
+
+---
+
+### 5. Categorical Semantics of Event‑Historical Aggregation  
+
+- **Category \(\mathcal{H}\)**: Objects are event histories modulo authoriz[8D[K
+authorized collapse; morphisms represent authorized extensions.
+- **Partial Composition**: Concatenation is allowed only when compatible un[2D[K
+under the policy, otherwise a morphism does not exist (indicating an imposs[6D[K
+impossible construction).
+  
+**Identity Morphism**: Represents no change; **Composition**: Combines sequ[4D[K
+sequences of events if they remain compatible. **Refusal as Non‑Existence**[15D[K
+Non‑Existence**: Violating policies results in non‑existence rather than un[2D[K
+undefined behavior.
+
+**Collapse Functor \(C_I\)**: Maps histories to equivalence classes preserv[7D[K
+preserving chosen invariants \(I\). It is idempotent and non‑invertible, re[2D[K
+reflecting that forgetting is permanent yet traceable (as a committed event[5D[K
+event).
+
+---
+
+### 6. Map‑Reduce and Attention as Monoidal Folding  
+
+- **Map‑Reduce**: A fold over families of objects in \(\mathcal{H}\), where[5D[K
+where mapping produces independent histories and reduction uses the monoida[7D[K
+monoidal structure induced by merge.
+  
+- **Attention Mechanisms**: Parameterized folds over graph‑indexed families[8D[K
+families, with folding weights determined by learned compatibility function[8D[K
+functions. Standard transformers collapse immediately after reduction.
+
+**Multi‑Head Attention**: Corresponds to parallel folds followed by a highe[5D[K
+higher‑level fold, aligning with layered neural architectures while exposin[7D[K
+exposing commitment points.
+
+---
+
+### 7. Conclusion and Future Directions  
+
+- **Event‑Historical Aggregation**: Treats aggregation as a deliberate choi[4D[K
+choice process rather than blind computation.
+- **Applications**: Enables robustness (explicit refusal), interpretability[16D[K
+interpretability, and compliance in high‑stakes domains.
+- **Future Work**:
+  - Extend categorical semantics to support dynamic policy updates.
+  - Integrate machine learning models that respect event histories for impr[4D[K
+improved generalization.
+
+---
+
+### References  
+
+The document draws on foundational works across distributed systems, inform[6D[K
+information theory, category theory, and the actor model:
+
+- Lamport (1978), Gray & Reuter (1993) – Distributed systems foundations.  [K
+
+- Landauer (1961) – Thermodynamic limits of computation.  
+- Pearl (2009, 2010) – Causal inference and free‑energy principles.  
+- Girard (1987), MacLane (1998), Winskel (1987) – Category theory for concu[5D[K
+concurrency.  
+- Hewitt (1973), Milner (1989) – Actor model fundamentals.
+
+---
+
+**Note**: This reconstruction synthesizes the core ideas presented in “even[5D[K
+“event-historical-aggregation.tex”. For detailed proofs, additional context[7D[K
+context from surrounding chapters or formal language definitions would be r[1D[K
+required to fully flesh out specific technical details such as exact payloa[6D[K
+payload merge operations (`⊙`) or static admissibility rules.

@@ -1,15 +1,224 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 19 of 22 of a document called
+"textbook-the_ecology_of_distinctions.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Step‑by‑step explanation of the concepts**
 
-TEXT
-====
+Below is a concise, organized summary that captures the main ideas presente[8D[K
+presented in the material on *Admissibility Geometry* (Volume, Entropy, Cur[3D[K
+Curvature, Boundary, Gradient, Generative Admissibility, Collapse, and thei[4D[K
+their relation to Reachability).
+
+---
+
+### 1. Admissibility Volume  
+
+- **Definition**:  
+  \(V_A(\mathcal A)\) measures the size of the set \(\mathcal A\) (the “via[4D[K
+“viable future region”).  
+- **Interpretation**:
+  - *Large* volume → broad flexibility (many admissible futures).  
+  - *Small* volume → fragility (few or no admissible futures).  
+  - *Zero* volume → collapse (no reachable state).
+
+---
+
+### 2. Admissibility Entropy  
+
+Because raw volume depends on the dimension and units of space, we often us[2D[K
+use a logarithmic quantity:
+
+- **Definition**: \(S_A = \log V_A\).  
+- **Interpretation**:
+  - Like thermodynamic entropy, it quantifies *effective number* of admissi[7D[K
+admissible futures.  
+  - It is additive for independent systems: if two future possibilities are[3D[K
+are independent (\(\mathcal A_1\) and \(\mathcal A_2\)), then  
+
+    \[
+    S_A(\mathcal A_1 \times \mathcal A_2) = S_A(\mathcal A_1) + S_A(\mathca[11D[K
+S_A(\mathcal A_2).
+    \]
+
+  - This additive property mirrors the linear nature of entropy in statisti[8D[K
+statistical mechanics and reachability theory.
+
+---
+
+### 3. Admissibility Potential  
+
+To capture *local* sensitivity rather than just global volume, we introduce[9D[K
+introduce a potential:
+
+- **Definition**: \(\Psi(x) = -\log V_A(x)\), where \(V_A(x)\) is the local[5D[K
+local admissible volume around \(x\).  
+- **Interpretation**:
+  - Large \(\Psi\) (high admissibility potential) indicates regions with *s[2D[K
+*scarce* futures.  
+  - Small \(\Psi\) corresponds to regions with *abundant* future flexibilit[10D[K
+flexibility.
+
+---
+
+### 4. Admissibility Curvature  
+
+Curvature describes how quickly the notion of “admissible” changes under sm[2D[K
+small perturbations:
+
+- **Definition**: The admissibility curvature tensor is \(K_{ij} = \nabla_i[8D[K
+\nabla_i \nabla_j \Psi\) (equivalently, \(K_{ij}= *\,\nabla_i \nabla_j \log[4D[K
+\log V_A\)).  
+  - It is the Hessian of \(\Psi\); thus it measures *second‑order* sensitiv[8D[K
+sensitivity.  
+
+- **Scalar Curvature**: \(K_A = g^{ij} K_{ij}\), where \(g\) is the metric.[7D[K
+metric.
+
+**Interpretation**:
+
+| Curvature Sign | Meaning |
+|----------------|---------|
+| Positive       | Local contraction of admissible volume (fragility). |
+| Negative       | Local expansion of admissible volume (generativity). |
+
+---
+
+### 5. Boundary Geometry  
+
+The boundary \(\partial\mathcal A\) is crucial because it marks the edge wh[2D[K
+where future possibility changes:
+
+- **Definition**: The *boundary distance* \(d_A(x) = d(x, \partial\mathcal [K
+A)\).  
+- **Proposition**: Larger boundary distances imply larger admissible pertur[6D[K
+perturbation neighborhoods (i.e., more robustness to small disturbances).
+
+---
+
+### 6. Admissibility Gradient  
+
+The gradient tells us the direction of maximal expansion:
+
+- **Definition**: The *admissibility gradient* is \(\nabla V_A\).  
+- **Proposition**: It points in the direction where admissible volume grows[5D[K
+grows fastest (first‑order generative motion).
+
+---
+
+### 7. Admissible Flows  
+
+A flow \(\phi_t\) on the state space is *admissible* if it preserves viabil[6D[K
+viability:
+
+- **Definition**: A flow satisfies \(\phi_t(\mathcal A) \subseteq \mathcal [K
+A\) for all \(t\ge0\).  
+- In practice, many systems only approximately satisfy this condition, maki[4D[K
+making admissibility a stability problem.
+
+---
+
+### 8. Generative Admissibility  
+
+The core geometric principle is *expansion*, not mere preservation:
+
+- **Definition**: A system is generatively admissible if \(\frac{dV_A}{dt} [K
+\ge 0\).  
+- This condition ensures that the volume of viable futures never shrinks.
+
+**Generativity Theorem**: If \(\frac{dV_A}{dt} \ge 0\), then \(S_A(t)\) (ad[3D[K
+(admissibility entropy) is non‑decreasing:
+
+\[
+\frac{dS_A}{dt} = \frac{1}{V_A}\frac{dV_A}{dt} \ge 0.
+\]
+
+---
+
+### 9. Admissibility and Reachability  
+
+- **Reachability** asks: *What futures can be reached?*  
+- **Admissibility** asks: *Which of those reachable futures should remain r[1D[K
+reachable?*  
+
+We define the *admissible reachability volume*:
+
+\[
+V_{AR} = \mu(R_t \cap \mathcal A),
+\]
+
+where \(R_t\) is the set of points reachable at time \(t\). This measures h[1D[K
+how much of the reachable set actually satisfies admissibility constraints.[12D[K
+constraints.
+
+---
+
+### 10. Summary of Relationships  
+
+| Concept | What it Quantifies | Relation to Other Concepts |
+|---------|-------------------|----------------------------|
+| **Volume** (\(V_A\)) | Size of viable future region | Basis for entropy a[1D[K
+and curvature |
+| **Entropy** (\(S_A = \log V_A\)) | Effective number of futures (robustnes[10D[K
+(robustness) | Additive for independent systems |
+| **Potential** (\(\Psi = -\log V_A\)) | Sensitivity to local perturbations[13D[K
+perturbations | Determines curvature sign |
+| **Curvature** (\(K_{ij}\), \(K_A\)) | Rate of change of admissibility | P[1D[K
+Positive ⇒ fragility, negative ⇒ generativity |
+| **Boundary Distance** (\(d_A(x)\)) | Robustness near the edge | Larger di[2D[K
+distance → larger safe perturbation region |
+| **Gradient** (\(\nabla V_A\)) | Direction for maximal expansion (generati[9D[K
+(generative flow) | Guides admissible trajectories |
+| **Admissibility Gradient** | Maximizes local increase in volume | Provide[7D[K
+Provides a natural “generative” direction |
+| **Generative Admissibility** | \(dV_A/dt \ge 0\) | Guarantees non‑decreas[11D[K
+non‑decreasing entropy, ensuring future possibility does not collapse |
+| **Collapse Condition** (\(V_A \to 0\)) | Complete loss of viable futures [K
+| Leads to \(S_A \to -\infty\) (entropy becomes undefined) |
+
+---
+
+### 11. Practical Implications  
+
+1. **Design & Control**: Aim for *negative* curvature where possible to pro[3D[K
+promote generativity and robustness.  
+2. **Safety Analysis**: Large boundary distances and high entropy indicate [K
+systems that can tolerate disturbances without losing viability.  
+3. **Optimization**: Use the admissibility gradient as a guide for optimal [K
+trajectories, steering away from regions of positive curvature (potential c[1D[K
+collapse).  
+
+---
+
+This structured overview should help you understand how each geometric conc[4D[K
+concept interrelates within the framework of *Admissibility Geometry*, prov[4D[K
+providing both theoretical foundations and practical guidelines for analyzi[7D[K
+analyzing system viability over time.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 Since every squared term is nonnegative,
 

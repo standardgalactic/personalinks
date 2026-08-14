@@ -1,0 +1,187 @@
+The following are groundedness-checked analytical summaries of
+consecutive fragments of one research document titled "contributing.md".
+
+This document's synthesis will feed into: cluster synthesis and cross-corpus synthesis
+
+Reconstruct the document as a unified theoretical object. Produce a
+dense scholarly synthesis covering: thesis, primitives/definitions,
+formalism, mechanisms, major arguments, dependencies between
+concepts, implications, unresolved problems, internal tensions.
+
+Preserve every [source: "..."] citation attached to a claim you keep.
+Remove repetition introduced by chunking. Do not flatten genuine
+distinctions. Do not add any claim that did not appear, with its
+citation, in the fragment summaries below.
+
+FRAGMENT SUMMARIES
+===================
+
+--- chunk-0001-summary.md ---
+Below is a concise guide to the development workflow for **spherepop**, fol[3D[K
+following the conventions and guidelines laid out in the `CONTRIBUTING.md` [K
+file.
+
+---
+
+## 📖 Quick Overview
+
+### Core Principles
+- **Provisional Semantics**: Many parts of the code are tied to specific th[2D[K
+theoretical papers (Appendices A‑G). If you encounter a gap, check or updat[5D[K
+update `THEORY_STATUS.md`.
+- **Closed Algebra**: The four primitives (`POP`, `REFUSE`, `BIND`, `COLLAP[7D[K
+`COLLAPSE`) form a closed algebra. Adding a fifth primitive requires extens[6D[K
+extensive justification and discussion.
+- **Observers Only**: They must be pure functions that never modify the con[3D[K
+configuration; they only return plain values.
+
+### Workflow Steps
+1. **Open an Issue First** – For any major change, especially new operation[9D[K
+operations or experiment additions, create an issue to discuss before codin[5D[K
+coding.
+2. **Write Tests** – Add unit tests (or `@pytest.mark.experimental` for pro[3D[K
+provisional behavior) that cover edge cases and verify the expected output.[7D[K
+output.
+3. **Run Lint & Checks** – Ensure all linters (`ruff`, `mypy`) pass:[5D[K
+pass:
+   ```bash
+   make lint
+   make type-check
+   make test
+   ```
+4. **Commit with Conventional Messages** – Follow the commit style template[8D[K
+template to keep history readable and searchable.
+5. **Update Documentation** – If you expose a new public API or change exis[4D[K
+existing semantics, update relevant READMEs or docs files.
+
+### Code Structure
+
+| Directory / File | Purpose |
+|------------------|---------|
+| `spherepop/` | Core implementation modules (e.g., primitives, observers).[11D[K
+observers). |
+| `tests/` | Test suite (`test_*` modules) – each test file maps to a speci[5D[K
+specific concept. |
+| `python -m spherepop.lab verify` | Structured invariant verification for [K
+experiments. |
+| `THEORY_STATUS.md` | Tracks status of every semantic claim (paper‑license[14D[K
+(paper‑licensed, provisional, open, contrary). |
+| `docs/DEVELOPMENT.md` | Architecture overview and maintainers’ notes. |
+
+### Contributing Checklist
+
+- [ ] **Issue opened** for any nontrivial change.
+- [ ] **Tests added** covering new logic or edge cases.
+- [ ] All linters (`ruff`, `mypy`) pass.
+- [ ] Commit message follows the Conventional Commits format.
+- [ ] Documentation (README, docstrings) is updated if public API changes.
+
+---
+
+## 🛠️ Detailed Sections
+
+### 1. Adding New Operations
+1. **Discuss in Issue** – Propose a new primitive and justify why it’s need[4D[K
+needed (paper reference or proof sketch).
+2. **Explain Infeasibility Derivation** – Show that the operation cannot be[2D[K
+be expressed using existing primitives.
+3. **Proceed Only if Theory Status Updated** – If not provisional, file an [K
+issue to update `THEORY_STATUS.md`.
+
+### 2. Observers
+- **Definition**: Pure functions returning non‑`Config` values (bools, ints[4D[K
+ints, tuples, etc.).
+- **Guidelines**:
+  - Prefix with a clear docstring explaining the property being checked.
+  - Place in `spherepop/observers.py`.
+  - Add tests to `tests/test_observers.py`.
+  - Mark as experimental (`@pytest.mark.experimental`) if behavior is provi[5D[K
+provisional per theory status.
+
+### 3. Experiments
+- **Structure**:
+  ```bash
+  spherepop/<next-number>/<experiment-name>/
+    run.py          # Execution script
+    README.md       # What the experiment investigates
+    expected.txt?   # Expected output (optional)
+  ```
+- **Manifest Update**: Add entry to `spherepop/experiment_manifest.json` wi[2D[K
+with:
+  - Proposition / invariant (`C0`, `Ω`, observable, failure condition).
+- **Verification** – Run `python -m spherepop.lab verify` to ensure correct[7D[K
+correctness.
+
+### 4. Plan B (Poset Semantics)
+- Currently isolated in `spherepop/poset.py`.
+- **Integration**: Requires a major refactor; discuss via an issue before t[1D[K
+touching the code.
+- Review Appendix B carefully and update related manifest entries according[9D[K
+accordingly.
+
+### 5. Commit & PR Process
+```markdown
+feat(observers): Add irreducibly_divergent observer
+
+Checks divergence under various COLLAPSE policies.
+See THEORY_STATUS.md Q2b for composition semantics.
+
+- Added `irreducibly_divergent()` to observers.py.
+- Updated tests in test_observers.py (all 72 passing).
+- Marked as experimental pending resolution of composition theory.
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+```
+
+### 6. Code Formatting & Linting
+```bash
+# Install dependencies and type checker
+make install
+
+# Run all checks
+make test   # Executes tests + linters + mypy
+
+# Fix style issues automatically (if possible)
+make fmt    # Uses ruff for formatting
+```
+
+### 7. Reporting Issues / Questions
+- **Bug Report**: Include Python version, spherepop commit hash, minimal re[2D[K
+reproducible code snippet, expected vs actual behavior, full traceback.
+- **Theory Question**: Check `THEORY_STATUS.md`; if not addressed, open an [K
+issue with:
+  - Code location,
+  - Paper reference (Appendix/equation),
+  - Your interpretation versus current implementation,
+  - Proposed resolution.
+
+### 8. Common Pitfalls
+| Symptom | Likely Cause |
+|----------|--------------|
+| Tests fail silently | Missed edge case; add a test using `pytest.mark.par[16D[K
+`pytest.mark.parametrize`. |
+| Linting errors | Use of deprecated syntax (e.g., old Python 2 style). Run[3D[K
+Run `ruff` to auto‑fix. |
+| Theory mismatch | Forgot to update status in `THEORY_STATUS.md`; provisio[8D[K
+provisional items may require experimental tests. |
+
+---
+
+## 📚 References
+
+- **Paper**: “The History of Spherepop” – contains definitions for POP, REF[3D[K
+REFUSE, BIND, COLLAPSE.
+- **Appendices** (A‑G) – detailed algebraic properties and proofs.
+- **THEORY_STATUS.md** – keeps track of provisional vs paper‑licensed conce[5D[K
+concepts.
+
+---
+
+## 🙌 You’re Ready!
+
+Follow the above steps to submit a high‑quality contribution. Your work wil[3D[K
+will help solidify both the implementation and our theoretical understandin[12D[K
+understanding of Spherepop.
+
+Happy coding! 🚀
+

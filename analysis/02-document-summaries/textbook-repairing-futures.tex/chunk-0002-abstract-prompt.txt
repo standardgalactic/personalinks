@@ -1,0 +1,447 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+Below is an analysis and explanation of the ideas presented in your passage[7D[K
+passage.
+
+---
+
+### 1. Weighting Contact Events Heavily
+
+**Why it matters:**  
+- **Admissibility Boundaries:** In trajectory data—especially for robot mot[3D[K
+motion or physical simulations—the admissible region (the set of all physic[6D[K
+physically possible trajectories) is often sharply defined near contacts, o[1D[K
+obstacles, or changes in dynamics.  
+- **Difficulty of Learning from Smooth Trajectories Alone:** Without explic[6D[K
+explicitly modeling these constraints, a model trained only on smooth (Gaus[5D[K
+(Gaussian‑noise‑perturbed) data may miss subtle violations that are critica[7D[K
+critical for correctness.  
+- **Impact of Contact Events:** They represent abrupt transitions where the[3D[K
+the governing physical laws (e.g., momentum conservation, constraint satisf[6D[K
+satisfaction) change. Modeling them heavily forces the network to learn the[3D[K
+these high‑impact regions explicitly.
+
+**Practical Consequence:**  
+Training on contact events helps the model capture non‑linear dynamics and [K
+enforce constraints more reliably, reducing errors in scenarios that rely o[1D[K
+on precise adherence to admissibility boundaries (e.g., collision avoidance[9D[K
+avoidance).
+
+---
+
+### 2. Diffusion Without Gaussian Noise
+
+#### A. Repair Interpretation of Diffusion
+- **Traditional Diffusion:** Standard diffusion models perturb the target w[1D[K
+with Gaussian noise and train a network to invert this noisy mapping.
+- **Why Gaussian May Be Inappropriate for Trajectories:**  
+  - *Lack of Physical Meaning:* Adding Gaussian noise corrupts trajectories[12D[K
+trajectories without any reference to physical admissibility. It doesn’t mo[2D[K
+model realistic violations (like rigidity or momentum conservation) that ar[2D[K
+are crucial in trajectory prediction.
+- **More Principled Perturbation:**  
+  - *Rigidity Violation:* Introduce non‑preserved pairwise vertex distances[9D[K
+distances, simulating an elastic deformation where a rigid body deforms.
+  - *Momentum Violation:* Add drift to vertex velocities so total momentum [K
+isn’t conserved.
+  - *Temporal Discontinuity:* Insert random gaps, making the next time step[4D[K
+step not a smooth continuation.
+
+#### B. Admissibility‑Structured Perturbation (Definition)
+- **Mapping Family \(\mathcal{P}_\sigma(H)\):** For any admissible history [K
+\(H\) and parameter \(\sigma > 0\), the perturbed trajectory \(\mathcal{P}_[14D[K
+\(\mathcal{P}_\sigma(H)\) deliberately breaks a specific physical constrain[9D[K
+constraint in \(\Phi\) while preserving full adherence for \(\sigma = 0\). [K
+ 
+- **Purpose:** This creates controlled violations that mimic real‑world dis[3D[K
+disturbances, allowing the denoiser to learn repair operators (e.g., restor[6D[K
+restoring rigidity or momentum).
+
+#### C. Repair‑Based Training Objective
+The objective is to minimize  
+
+\[
+\mathcal{L}_{\text{repair}}(\theta) = \mathbb{E}_{H \in \A(w),\, \sigma}\,
+\| x_\theta(\mathcal{P}_\sigma(H), \sigma) - H \|^2 .
+\]
+
+- **Goal:** Train \(x_\theta\) to predict the clean admissible history from[4D[K
+from its perturbed counterpart.
+- **Result:** The network learns repair operators for specific constraint c[1D[K
+classes (rigidity, momentum conservation, temporal continuity) rather than [K
+generic denoising.
+
+#### D. Repair‑Equivalence of Admissibility‑Structured Diffusion (Theorem)
+**Assumption:** For every \(H \in \A(w)\), the perturbed trajectory \(\math[7D[K
+\(\mathcal{P}_\sigma(H)\) admits a unique projection back onto \(\A(w)\) fo[2D[K
+for sufficiently small \(\sigma\).
+
+- **Implication:** The minimizer of \(\mathcal{L}_{\text{repair}}\) behaves[7D[K
+behaves like a repair operator.  
+- **Convergence:** Iterating with \(H_{k+1} = x_\theta(H_k, \sigma_k)\) and[3D[K
+and decreasing \(\sigma_k\) leads to convergence to an admissible history.
+
+**Why This Matters:** It shows that the mathematical structure of diffusion[9D[K
+diffusion (in terms of repair) is preserved whether we use Gaussian noise o[1D[K
+or structured physical perturbations. The former learns coordinate‑space co[2D[K
+corruption; the latter learns physically meaningful constraint violations, [K
+which aligns better with trajectory dynamics.
+
+---
+
+### 3. Objecthood as Emergent Coherence
+
+#### A. Factorized Attention in PHYSIFORMER
+- **Design Choice:** No explicit object identifiers are used. Instead, atte[4D[K
+attention operates separately over time, space, and objects.
+- **Resulting Property:** Permutation invariance—objects can appear in any [K
+order without affecting the prediction.
+
+#### B. Definition of Historical Coherence (Definition)
+Given a trajectory \(H \in \H\), vertices \(i\) and \(j\) are *historically[13D[K
+*historically coherent* (\(i \sim_H j\)) if their relative displacement  
+\(\pi_t(H)_i - \pi_t(H)_j\) can be recovered from either vertex’s individua[9D[K
+individual trajectory using the admissible reconstruction family.
+
+- **Proper Class:** The equivalence classes partition vertices into *object[7D[K
+*objects*. A rigid body is a class where all pairwise displacements remain [K
+constant over time. An elastic body forms a class where such displacements [K
+vary but are still reconstructible.
+
+#### C. Proposition on Historical Coherence
+The relation \(\sim_H\) is an equivalence relation (reflexive, symmetric, t[1D[K
+transitive) and partitions the vertex set into disjoint object classes \([i[4D[K
+\([i]_H\). This means:
+
+- **Rigid Body:** Consistent pairwise distances over time → constant relati[6D[K
+relative displacements.
+- **Elastic Body:** Distances vary with deformation but remain reconstructi[12D[K
+reconstructible from any member’s trajectory.
+
+#### D. Philosophical Implication
+Objecthood is not a primitive property of the world; it emerges from cohere[6D[K
+coherence in temporal trajectories. By relying on relational properties (hi[3D[K
+(historical coherence), PHYSIFORMER captures object identity without pre‑de[6D[K
+pre‑defining objects, enabling generalization to unseen numbers of objects.[8D[K
+objects.
+
+---
+
+### Summary
+
+1. **Contact events** are weighted heavily because they mark sharp changes [K
+in admissibility that cannot be captured by smooth Gaussian noise alone.
+2. **Diffusion models** can be reformulated using *admissibility‑structured[25D[K
+*admissibility‑structured perturbations* (rigidity, momentum, temporal cont[4D[K
+continuity) to align the learning objective with physical constraints rathe[5D[K
+rather than generic coordinate corruption.
+3. The resulting repair‑based training leads to a model that behaves like a[1D[K
+a repair operator, ensuring convergence to physically admissible trajectori[10D[K
+trajectories.
+4. **Objecthood** in PHYSIFORMER emerges as historical coherence: vertices [K
+sharing constant relative displacements (rigid bodies) or variable but reco[4D[K
+reconstructible deformations (elastic bodies) form emergent objects rather [K
+than being imposed as primitives.
+
+These insights collectively argue for a design that emphasizes physical con[3D[K
+constraint modeling over pure coordinate noise, enabling more robust and ph[2D[K
+physically faithful trajectory predictions.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-repairing-futures.tex
+
+NEW CHUNK
+=========
+
+The generalization to unseen geometries is the strongest evidence for this claim.
+PHYSIFORMER trains on simple convex primitives with at most 88 vertices and
+successfully generates physically plausible motion for fish, teapots, bunnies,
+and other complex meshes with hundreds of vertices per object. A model that had
+learned object-specific dynamics would fail at this task, because the cube and
+the teapot are different geometric objects. A model that has learned admissibility
+class invariants succeeds, because the cube and the teapot belong to the same
+rigid-body admissibility class. They are different shapes but the same coherence
+structure. Their trajectories satisfy the same distance-preservation constraints,
+the same momentum equations, and the same collision geometry (up to local curvature
+effects). The admissibility manifold does not distinguish between geometrically
+distinct rigid bodies; it only cares whether the history satisfies the underlying
+coherence relations. PHYSIFORMER's generalization is therefore not object
+recognition under distribution shift but admissibility class recognition across
+geometric variation. A cube is not a bunny, but both are rigid, and rigidity is
+what the model has actually learned.
+
+This picture is consistent with the broader theme of the present paper. Objects,
+like trajectories, are not the primitive elements of physical description. They
+are derived from the persistence structure of histories. A trajectory is admissible
+if it lies on the physical constraint manifold. An object is identified if it
+constitutes a coherent persistent distinction within that admissible trajectory.
+Objecthood emerges from admissibility, and admissibility is the fundamental
+concept.
+
+
+World Models as Admissibility Engines
+
+
+The trajectory-generation perspective admits a natural generalization that
+connects to the broader problem of world modelling. A world model is typically
+described as a system that predicts future observations given present ones.
+Under the admissibility interpretation, this description is imprecise. A world
+model need not predict future observations. It must construct admissible
+continuations of present states, where admissibility is determined by the
+constraint structure of the domain being modelled.
+
+\begin{definition}[Admissibility Engine]
+An admissibility engine for domain \(\W\) is a map
+\[
+\mathcal{E} : \W_0 \times \Omega \to \H
+\]
+where \(\W_0\) is the space of initial conditions, \(\Omega\) is a probability
+space, and the output \(\mathcal{E}(w, \omega)\) lies in \(\A(w)\) for almost
+every \(\omega \in \Omega\). The engine samples admissible continuations from
+an implicit distribution over \(\A(w)\).
+\end{definition}
+
+PHYSIFORMER is an admissibility engine for the domain of Newtonian rigid and
+elastic mechanics. The initial condition \(w = (X_0, V_0)\) determines the
+constraint set \(\A(w)\), and the diffusion process samples from this set by
+iterative repair. The generality of the definition, however, is not restricted
+to physics. The same structure applies to language: a language model that generates
+grammatically and semantically coherent continuations from a prompt is an
+admissibility engine for the domain of natural language, where admissibility
+is determined by grammatical, semantic, and pragmatic constraints. It applies to
+planning: a trajectory planner that generates dynamically feasible paths from an
+initial configuration is an admissibility engine for the domain of robot motion.
+It applies to simulation in any domain where continuations are constrained by
+rules: physical laws, grammatical rules, economic laws, institutional rules.
+
+An admissibility engine that generates trajectories \(X(t)\) can be extended to
+generate trajectory-optionality pairs \((X(t), \Omega(x, t))\), where the
+optionality field measures how many admissible futures remain available at each
+point in spacetime.
+
+\begin{definition}[Optionality Field]
+Let \(\mu\) be a reference measure on \(\H\). The optionality field is the map
+\[
+\Omega : \mathcal{S} \times [0, T] \to \mathbb{R}_{\geq 0}, \qquad
+\Omega(x, t) = \log \mu\!\left(\{H \in \A : \pi_t(H) = x\}\right).
+\]
+High optionality at \((x, t)\) means that many admissible futures pass through
+position \(x\) at time \(t\). Low optionality means the trajectory is strongly
+constrained at that point.
+\end{definition}
+
+The optionality field has a natural physical interpretation. During free flight,
+the admissible continuation set is large because the trajectory is fully determined
+by the current state and the unobserved parameters have limited influence. The
+optionality is high. During a collision, the contact geometry, friction, and
+restitution interact to produce sensitive dependence on unobserved parameters.
+Small differences in impact angle produce large differences in post-collision
+trajectories. The optionality is low. The moment of impact is a rapid optionality
+collapse: a large admissible set contracts suddenly to a much smaller one as the
+collision event locks in the subsequent trajectory.
+
+\begin{proposition}[Optionality Monotonicity Under Constraint]
+If \(\Phi' \supset \Phi\) (strictly stronger physical constraints), then
+\(\Omega'(x, t) \leq \Omega(x, t)\) for all \((x, t)\), where \(\Omega'\) and
+\(\Omega\) are the optionality fields under \(\Phi'\) and \(\Phi\) respectively.
+\end{proposition}
+
+\begin{proof}
+Stronger constraints reduce the admissible set: \(\A(\Phi') \subseteq \A(\Phi)\).
+The fiber \(\{H \in \A(\Phi') : \pi_t(H) = x\}\) is therefore a subset of
+\(\{H \in \A(\Phi) : \pi_t(H) = x\}\), and the logarithmic measure of a subset
+does not exceed that of the set.
+\end{proof}
+
+An admissibility engine extended with the optionality field would produce qualitatively
+richer outputs than PHYSIFORMER currently does. Instead of only reporting what happens,
+it would report how constrained the future has become at each moment of the generated
+trajectory. A scene in which two rigid bodies narrowly miss each other would show a
+brief optionality spike near the near-miss event, reflecting the sensitivity of the
+post-near-miss trajectories to the exact geometry. A scene in which a deformable
+object strikes a rigid surface would show optionality collapse at impact and gradual
+optionality recovery as the deformation field stabilizes. These patterns are invisible
+to any model that outputs only vertex trajectories.
+
+The unifying insight is that successful prediction under partial information
+is not the computation of a unique truth from complete specifications. It is
+the construction of admissible continuations from incomplete witnesses, together
+with a characterization of how tightly those witnesses constrain the future.
+PHYSIFORMER provides the first large-scale empirical confirmation of the former
+principle in the domain of physical trajectory generation. The optionality field
+extends it to the latter.
+
+\section*{Conclusion}
+
+The PHYSIFORMER paper presents itself as an engineering contribution: a better
+architecture for neural physical simulation. The present paper has argued that
+it is also a conceptual contribution, confirming at scale a set of theoretical
+claims about the structure of prediction under partial information.
+
+Those claims are as follows. State-centric simulation is an idealization of complete
+knowledge; realistic physical prediction operates over sets of admissible continuations
+rather than unique trajectories. Histories are prior to states by the Historical
+Simulation Theorem: not every history generator factors through a local transition
+operator, and PHYSIFORMER is the first large-scale empirical demonstration of a
+useful history generator in this non-Markovian class. Diffusion-based trajectory
+generation is iterative repair on the manifold of admissible histories; the denoiser
+is a repair operator in the formal sense, and the Gaussian noise is not fundamental
+but is one implementation of a more general inadmissibility perturbation structure
+that makes repair the primitive. Initial conditions function as witnesses; the witness
+adequacy functional \(\Lambda(w)\) quantifies how tightly the initial condition
+constrains the future, and the diversity of PHYSIFORMER's generated trajectories
+is a direct readout of high \(\Lambda\). Objecthood is historical coherence rather
+than a primitive label: the coherence classes \([i]_H\) are the objects, and
+PHYSIFORMER's generalization to unseen object counts is evidence that the model
+has learned to detect coherence rather than to represent predetermined objects.
+The optionality field \(\Omega(x, t)\) extends the model's outputs beyond
+trajectory coordinates to a geometrically grounded characterization of how
+constrained the future has become at each moment.
+
+Taken together, these claims constitute a single thesis, which is the cleanest
+way to characterize what PHYSIFORMER does when interpreted through these frameworks:
+
+\medskip
+\noindent\textit{PHYSIFORMER is a learned repair operator on admissible physical histories.}
+\medskip
+
+It is an empirical instance of the larger claim that worlds are not best understood
+as static states plus transition rules, but as persistent histories whose futures
+are reconstructed, repaired, constrained, and collapsed from partial witnesses.
+In Computational Worlds terms, the mesh vertices are the world-state registers,
+the material labels are permission constraints, and the generated trajectory is
+the world-history, reconstructed in a single pass rather than ticked forward.
+In the History Before State program, the primary output is the trajectory \(H\),
+not any intermediate state, and state access is projection \(X_t = \pi_t(H)\).
+In repair theory, the denoising loop is iterative repair \(\tilde{H} \to R(\tilde{H})\)
+converging to the admissible manifold. In admissibility theory, the distribution
+\(p(H \mid X_0, V_0, m)\) is a distribution over \(\A(X_0, V_0, m)\), not over
+noise. In the Geometry of Witnesses, the initial condition is a witness of bounded
+adequacy \(\Lambda(w)\) from which the continuation space is reconstructed rather
+than stored. In RSVP, the model currently learns the coordinate shadow of field
+dynamics; the extension to field prediction would make the causal structure explicit.
+
+The Admissibility Compression Principle connects all of these to a single underlying
+reason why the approach works: the admissible trajectory manifold \(\Mca\) is
+vastly lower-dimensional than the ambient history space \(\mathbb{R}^{3NT}\).
+Physical worlds are massively overconstrained. The set of coherent histories is
+so thin relative to the set of possible histories that a model can learn to
+detect and repair admissibility violations without ever learning the laws that
+define admissibility. The generalization to unseen geometries confirms this:
+a cube and a bunny are different objects but the same admissibility class, and
+the model has learned the class, not the object. The failure modes at contact
+boundaries confirm it from the other direction: contacts are the high-curvature
+regions of \(\Mca\) where the compression breaks down and the manifold is hardest
+to approximate.
+
+The deepest lesson is therefore not about diffusion models or physical simulation
+specifically. It is about the structure of coherent continuation in overconstrained
+worlds:
+\[
+\text{Persistence} \;\to\; \text{Recoverability} \;\to\; \text{Repairability} \;\to\; \text{Prediction.}
+\]
+Prediction works because coherent histories can be repaired from partial witnesses.
+PHYSIFORMER is a large-scale empirical machine for learning how physical histories
+repair themselves. The frameworks developed here show what that means precisely,
+and what the extensions look like.
+
+The conclusion is not that PHYSIFORMER has solved physical simulation. The paper
+itself is clear about the model's limitations: interpenetrations, orientation
+discontinuities, and fixed trajectory length indicate that the repair operator
+does not yet achieve perfect convergence to the admissible manifold. The conclusion
+is that the architecture implicitly demonstrates a principle that deserves to be
+explicit: a world model need not represent physical truth. It need only construct
+admissible futures.
+
+\begin{thebibliography}{99}
+
+\bibitem{chen2026physiformer}
+Chen, Y., Lan, Y., and Vedaldi, A.
+{PHYSIFORMER}: Learning to Simulate Mechanics in World Space.
+\textit{arXiv preprint},
+arXiv:2606.27364, 2026.
+
+\bibitem{battaglia2016}
+Battaglia, P.~W., Pascanu, R., Lai, M., Rezende, D.~J., and Kavukcuoglu, K.
+Interaction Networks for Learning about Objects, Relations and Physics.
+\textit{Advances in Neural Information Processing Systems},
+29, 2016.
+
+\bibitem{pfaff2021}
+Pfaff, T., Fortunato, M., Sanchez-Gonzalez, A., and Battaglia, P.~W.
+Learning Mesh-Based Simulation with Graph Networks.
+\textit{International Conference on Learning Representations},
+2021.
+
+\bibitem{sanchezgonzalez2020}
+Sanchez-Gonzalez, A., Godwin, J., Pfaff, T., Ying, R., Leskovec, J., and Battaglia, P.~W.
+Learning to Simulate Complex Physics with Graph Networks.
+\textit{International Conference on Machine Learning},
+2020.
+
+\bibitem{shao2022}
+Shao, Y., Loy, C.~C., and Dai, B.
+Transformer with Implicit Edges for Particle-Based Physics Simulation.
+\textit{European Conference on Computer Vision},
+2022.
+
+\bibitem{peebles2023}
+Peebles, W., and Xie, S.
+Scalable Diffusion Models with Transformers.
+\textit{International Conference on Computer Vision},
+2023.
+
+\bibitem{lipman2022}
+Lipman, Y., Chen, R.~T.~Q., Ben-Hamu, H., Nickel, M., and Le, M.
+Flow Matching for Generative Modeling.
+\textit{arXiv preprint},
+arXiv:2210.02747, 2022.
+
+\bibitem{ho2020}
+Ho, J., Jain, A., and Abbeel, P.
+Denoising Diffusion Probabilistic Models.
+\textit{Advances in Neural Information Processing Systems},
+33, 6840--6851, 2020.
+
+\bibitem{todorov2012}
+Todorov, E., Erez, T., and Tassa, Y.
+{MuJoCo}: A Physics Engine for Model-Based Control.
+\textit{International Conference on Intelligent Robots and Systems},
+2012.
+
+\bibitem{allen2022}
+Allen, K.~R., Rubanova, Y., Lopez-Guevara, T., Whitney, W., Sanchez-Gonzalez, A.,
+Battaglia, P., and Pfaff, T.
+Learning Rigid Dynamics with Face Interaction Graph Networks.
+\textit{arXiv preprint},
+arXiv:2212.03574, 2022.
+
+\bibitem{chen2024diffusion}
+Chen, B., Monso, D.~M., Du, Y., Simchowitz, M., Tedrake, R., and Sitzmann, V.
+Diffusion Forcing: Next-Token Prediction Meets Full-Sequence Diffusion.
+\textit{Advances in Neural Information Processing Systems},
+2024.
+
+\bibitem{li2019}
+Li, Y., Wu, J., Tedrake, R., Tenenbaum, J.~B., and Torralba, A.
+Learning Particle Dynamics for Manipulating Rigid Bodies, Deformable Objects, and Fluids.
+\textit{International Conference on Learning Representations},
+2019.
+
+\bibitem{kabsch1976}
+Kabsch, W.
+A Solution for the Best Rotation to Relate Two Sets of Vectors.
+\textit{Acta Crystallographica},
+32(5), 922--923, 1976.
+
+\end{thebibliography}
+
+\end{document}
+

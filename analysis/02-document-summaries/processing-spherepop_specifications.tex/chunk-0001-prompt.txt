@@ -1,15 +1,170 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 2 of a document called
+"processing-spherepop_specifications.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Explanation of the Code Structure and Its Intent**
 
-TEXT
-====
+Below is a high‑level overview of what each part of the code does, based on[2D[K
+on the Rust comments and design notes provided. The purpose here is to unde[4D[K
+understand how the system models event handling in a deterministic, replaya[7D[K
+replayable manner while enforcing safety through type‑level guarantees.
+
+---
+
+### 1. **Event Kind Enumeration (`EventKind`)**
+
+- **Purpose**: Represents the four fundamental kinds of events that can be [K
+emitted by the system.
+- **Values**:
+  - `Pop`: Removes an element `x` from the option space `Omega`.
+  - `Refuse`: Documents a documented inadmissibility for `x` with a rationa[7D[K
+rationale.
+  - `Bind`: Couples two objects `(a, b)`, optionally tagged with a relation[8D[K
+relation label (used for merge‑sugar).
+  - `Collapse`: Observes a state change under a registered collapse rule.
+
+- **ABI Stability Note**: The enum is fixed at four variants due to the com[3D[K
+completeness theorem. This reduces the risk of breaking changes across vers[4D[K
+versions because any future addition would require a new version rather tha[3D[K
+than modifying existing types.
+
+---
+
+### 2. **State Struct**
+
+- **Purpose**: Holds the current state of the system, encapsulating:
+  - `option_space`: Elements currently considered optional (part of `Omega`[7D[K
+`Omega`).
+  - `committed`: Elements that have been popped from `Omega`.
+  - `bound`: Pairs and relation labels representing bindings.
+  - `refused`: Historical records of refusals with positions and reasons.
+  - `observed`: Log of collapse events with the rule applied.
+
+- **Replay Functionality**: The `replay` method allows reconstructing a pas[3D[K
+past state from an initial set of option space elements by iterating over t[1D[K
+the history in order.
+
+---
+
+### 3. **History Struct**
+
+- **Purpose**: Stores the sequence of events (`Vec<Event>`) that have been [K
+committed to the system.
+- **Interaction with State**: The `replay` method on `State` iteratively ap[2D[K
+applies each event from `History`, updating the state accordingly.
+
+---
+
+### 4. **Apply Function (`apply`)**
+
+- **Purpose**: A pure function that updates a given `State` based on an ind[3D[K
+individual `Event`.
+- **Behavior**:
+  - For `Pop`, removes the element from `option_space` and records it in `c[2D[K
+`committed`.
+  - For `Refuse`, logs the refusal with position, target object, and reason[6D[K
+reason.
+  - For `Bind`, adds the binding to `bound` along with an optional tag.
+  - For `Collapse`, records the observation under a registered rule without[7D[K
+without storing the observed value itself.
+
+- **Replay Validity**: Because it is pure (no side effects beyond updating [K
+state) and deterministic, it ensures that replaying history yields consiste[8D[K
+consistent results across different runs.
+
+---
+
+### 5. **Collapse Rules**
+
+These are external functions to `apply` that determine how certain events ([1D[K
+(`Bind`) contribute to the quotient structure of objects:
+
+- **`collapse_quotient`**: Groups elements connected by a binding into equi[4D[K
+equivalence classes, effectively modeling merge‑sugar.
+- **`collapse_meta`**: Handles special cases labeled with `"__meta__"` for [K
+meta‑level tracking (SetMeta-sugar).
+- **`collapse_identity`**: Represents the identity rule where nothing is qu[2D[K
+quotiented.
+
+---
+
+### 6. **Arbiter Struct**
+
+Manages validation and commitment of proposals:
+
+- **Purpose**:
+  - Stores the current `History`.
+  - Holds a registry of admissible collapse rules (`rules`).
+
+- **Validation Logic**:
+  - Ensures that popping events occur only within the option space.
+  - Checks that any `Collapse` event references a registered rule, preventi[8D[K
+preventing unregistered or uncertified operations.
+
+- **Proposal Submission**:
+  - Accepts an unordered `Proposal` (containing future‑positioned events) a[1D[K
+and validates them before committing.
+  - Returns a list of actual log positions after positioning events accordi[7D[K
+according to the current history length (`base_len`).
+
+---
+
+### 7. **Overlay Struct & OverlayManager**
+
+- **Purpose**: Facilitates non‑authoritative previews or "what‑if" scenario[8D[K
+scenarios without altering the main history.
+
+- **Usage**:
+  - `create` method generates an overlay with a pending proposal.
+  - `preview` reconstructs the state as if the overlay were applied to an i[1D[K
+initial option space, using only the current history and no additional exte[4D[K
+external data (enforcing Requirement~\ref{req:view}).
+
+---
+
+### Summary
+
+The code defines a disciplined event‑driven system where:
+
+- Events are immutable records that can be replayed in order.
+- State evolves deterministically based on these events without side effect[6D[K
+effects beyond state updates.
+- Collapse rules enforce semantic constraints and support specialized behav[5D[K
+behaviors like merge‑sugar while maintaining type safety (no runtime panics[6D[K
+panics for unregistered rules).
+- Validation ensures logical consistency, preventing illegal operations suc[3D[K
+such as popping elements outside the option space or collapsing with unregi[6D[K
+unregistered rules.
+
+This design supports a robust, version‑stable architecture suitable for app[3D[K
+applications requiring auditability, non‑interference, and clear separation[10D[K
+separation of concerns between event handling and state representation.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[12pt]{article}
 

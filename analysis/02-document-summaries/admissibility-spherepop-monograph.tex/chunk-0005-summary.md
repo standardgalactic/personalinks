@@ -1,93 +1,187 @@
-**Computational Geodesics**
+**1.  What a “computational geodesic’’ is**
 
-The variational principle in Spherepop computation can be visualized throug[6D[K
-through the concept of *computational geodesics*: admissible trajectories t[1D[K
-that are stationary (i.e., extremal) with respect to infinitesimal variatio[8D[K
-variations while preserving the initial and final states. These geodesics g[1D[K
-generalize the idea of “straight lines” from classical mechanics but operat[6D[K
-operate within a highly structured, multi‑dimensional configuration space d[1D[K
-defined by both evaluation steps and constraint configurations.
+In differential geometry a *geodesic* is a curve on a manifold that locally[7D[K
+locally minimizes distance (or, more generally, makes the action stationary[10D[K
+stationary).  
+When we speak of **computational geodesics** in Spherepop we replace “dista[6D[K
+“distance” by the **action functional \(S[\gamma]\)** defined for a computa[7D[K
+computational trajectory \(\gamma\):
 
-1. **Definition**  
-   For an initial expression \(X_0\) and a terminal reduced form \(X_n\), c[1D[K
-consider the space \(\mathcal{A}(X_0, X_n)\) of all admissible sequences (h[2D[K
-(histories) that connect them. A *computational geodesic* \(\gamma^*\) is d[1D[K
-defined as:
+* \(S[\gamma]=\sum_{t=0}^{n}\mathcal{L}_{t}(e_t,\Delta C_t,\Delta\Omega_t)\[20D[K
+C_t,\Delta\Omega_t)\)  
+  – each increment \(\mathcal{L}_t\) contains the *commitment cost* \(\Delt[7D[K
+\(\Delta C_t\) (how much future accessibility is lost by popping a bubble) [K
+and the *accessibility gain* \(\Delta\Omega_t\) (how much new evaluation ro[2D[K
+routes become available).
 
-   \[
-   \gamma^* = \operatorname*{arg\,stationary}_{\gamma \in \mathcal{A}(X_0,\[17D[K
-\mathcal{A}(X_0,\, X_n)} S[\gamma],
-   \]
+A **computational geodesic** is therefore an admissible trajectory \(\gamma[8D[K
+\(\gamma^*\in\mathcal{A}(X_0,X_n)\) that makes \(S[\gamma]\) stationary und[3D[K
+under all *admissible variations*: any infinitesimal perturbation of the pa[2D[K
+path (while keeping the start state \(X_0\) and final state \(X_n\) fixed, [K
+and staying inside \(\mathcal{A}\)) cannot lower the total action. Mathemat[8D[K
+Mathematically,
 
-   where the action functional \(S[\gamma] = \sum_t \mathcal{L}_t\) sums th[2D[K
-the local contribution of each evaluation step (pop event) according to its[3D[K
-its commitment cost \(\Delta C_t\) and accessibility change \(\Delta\Omega_[15D[K
-\(\Delta\Omega_t\).
+\[
+\delta S[\gamma^*]=0\qquad\text{for all admissible }\delta\gamma .
+\]
 
-2. **Stationarity Condition**  
-   The stationarity condition is expressed as:
+Because the variation is global (the whole trajectory must be unchanged), t[1D[K
+the principle of stationary action captures not merely a local “greedy’’ ch[2D[K
+choice but a *global optimality*: it balances early‑time commitment against[7D[K
+against later‑time deferred evaluation.
 
-   \[
-   \delta S[\gamma + \delta\gamma] = 0,
-   \]
+---
 
-   for all admissible variations \(\delta\gamma\) that keep the boundary st[2D[K
-states fixed (i.e., \(X_0\) maps to itself and \(X_n\) remains reachable). [K
-This condition is analogous to the Euler–Lagrange equations in classical me[2D[K
-mechanics but applied globally across the entire trajectory.
+**2.  Formulating the variational problem**
 
-3. **Euler–Lagrange Analogue**  
-   In discrete settings, stationarity translates into a balance of local ch[2D[K
-changes: each pop event must be chosen so that perturbing it slightly (whil[5D[K
-(while staying within admissibility) does not reduce the total action. This[4D[K
-This yields constraints on how commitment and accessibility are interwoven [K
-at every step.
+Let  
 
-4. **Multiple Geodesics**  
-   Unlike classical mechanics where a unique minimum-energy path often exis[4D[K
-exists, computational geometry may admit multiple stationary trajectories d[1D[K
-due to symmetries or equivalent cost structures (e.g., different sequences [K
-of popping exponents vs. multiplication). Each geodesic represents a distin[6D[K
-distinct *computational path* that minimizes the total structural commitmen[9D[K
-commitment.
+* \(X_0\) – the initial unreduced expression (full bubble topology \(\mathc[8D[K
+\(\mathcal{B}_0\)).  
+* \(X_n\) – the final fully reduced expression (empty bubbles).  
 
-5. **Implications for Computation**  
-   - **Global Determinism**: The actual computational route is not determin[8D[K
-determined by local greedy choices but by the global optimum within \(\math[7D[K
-\(\mathcal{A}(X_0, X_n)\). This aligns with the philosophical claim that un[2D[K
-understanding a computation requires knowledge of its trajectory, not just [K
-final values.
-   - **Optimality Across All Steps**: By balancing early commitment and fut[3D[K
-future accessibility, computational geodesics embody the *principle of leas[4D[K
-least structural commitment*: they avoid premature over‑commitment (which w[1D[K
-would waste resources) and delayed over-commitment (which would accumulate [K
-deferred costs).
-   - **Geometric Interpretation**: The semantic configuration space can be [K
-viewed as a manifold where each admissible path is a geodesic in this nonli[5D[K
-nonlinear metric defined by \(S[\gamma]\). Shortest paths correspond to min[3D[K
-minimal action, analogous to light rays following straight lines in gravita[7D[K
-gravitational potential.
+Define the **admissibility manifold** for an object \(X\),
 
-6. **Visualization**  
-   Imagine the configuration space of expressions with dimensions represent[9D[K
-representing:
-   - Bubble topology (which parts are constrained),
-   - Evaluation depth (how far along the pop sequence we are), and
-   - Commitment cost (resource used).
+\[
+\mathcal{A}(X)=\{\gamma:\{0,\dots ,n\}\to\text{Admissible trajectories from[4D[K
+from }X\}.
+\]
 
-   A computational geodesic is then a curve that locally minimizes the acti[4D[K
-action functional, much like how light travels along straight lines in a cu[2D[K
-curved spacetime. By mapping these geodesics onto physical intuition, one g[1D[K
-gains insight into why certain evaluation orders are inherently more effici[6D[K
-efficient.
+The action functional is
 
-**Conclusion**
+\[
+S[\gamma]=\sum_{t=0}^{n}
+   \underbrace{\bigl(\Delta C_t + \lambda\Delta\Omega_t\bigr)}_{\text{local[41D[K
+\lambda\Delta\Omega_t\bigr)}_{\text{local cost}}
+   =\sum_{t}\mathcal{L}_t .
+\]
 
-Computational geodesics provide a rigorous framework for understanding whic[4D[K
-which sequences of pop events constitute optimal computation within Spherep[7D[K
-Spherepop’s semantic configuration space. They highlight the necessity of v[1D[K
-viewing computation as a global optimization problem—where local greedy str[3D[K
-strategies may fail to achieve minimal overall structural cost, emphasizing[11D[K
-emphasizing that genuine insight into computational processes requires know[4D[K
-knowledge of the entire trajectory through the admissibility manifold.
+The variational problem is:
 
+\[
+\boxed{
+\gamma^*=\operatorname*{arg\,stationary}_{\gamma\in\mathcal{A}(X_0,X_n)} S[[2D[K
+S[\gamma]
+}
+\tag{1}
+\]
+
+Solving (1) yields the **computational geodesic** \(\gamma^*\).  
+
+---
+
+**3.  Euler‑Lagrange equations in discrete form**
+
+Because we work with a *discrete* action, the “Euler‑Lagrange’’ condition b[1D[K
+becomes:
+
+> For every admissible step \(e_t\) on \(\gamma^*\) there exists a local ba[2D[K
+balance
+> \[
+> \Delta C_t^{(opt)} = f\bigl(\text{future accessibility gained at }t\bigr)[8D[K
+}t\bigr),
+> \]
+> where the function \(f\) is determined by the *global* minimization of \([2D[K
+\(S[\gamma]\).
+
+In practice this translates into:
+
+* **Early‑time bubbles**: pop only when it creates a structural shortcut (e[2D[K
+(e.g., turning “\((a+b)c\)’’ into “\(ac+bc\)”) that reduces \(\Delta C_{t'}[6D[K
+C_{t'}\) for later steps.  
+* **Deferred‑evaluation bubbles**: postpone popping until the remaining exp[3D[K
+expression is uniquely constrained, because popping earlier would incur unn[3D[K
+unnecessary commitment.
+
+These constraints are captured by a *variational constraint* on each step:
+
+\[
+\frac{\partial S[\gamma]}{\partial e_t}
+   = \underbrace{\text{increase in }\Delta C_t}_{\text{commitment}} 
+     - \underbrace{\text{decrease in future }\Delta\Omega_{t'}}_{\text{acce[31D[K
+}\Delta\Omega_{t'}}_{\text{accessibility}}
+     = 0 .
+\]
+
+---
+
+**4.  Why the principle is not a “greedy’’ rule**
+
+A greedy evaluator would always pop the *most convenient* expression at eve[3D[K
+every step, ignoring later costs. The variational condition shows that:
+
+* A trajectory may be locally cheaper (smaller \(\Delta C_t\)) but become g[1D[K
+globally more expensive because it forces premature commitments.
+* Conversely, a conservative trajectory can avoid immediate commitment yet [K
+accumulate deferred‑evaluation cost later.
+
+Thus the optimal strategy is *global*, not local: we must examine the whole[5D[K
+whole path before deciding whether an admissible step improves the total ac[2D[K
+action. This mirrors classical mechanics where stable equilibria are found [K
+by stationary actions rather than by “minimum at every point’’ rules.
+
+---
+
+**5.  From geometry to semantics**
+
+The analogy with **geodesics in physics** helps us interpret what a computa[7D[K
+computational geodesic means semantically:
+
+* **Initial and final states** correspond to the *semantic configuration sp[2D[K
+space* of the expression: start = unreduced, end = fully reduced.
+* The admissibility manifold \(\mathcal{A}(X)\) encodes all possible ways b[1D[K
+bubbles could be popped while respecting the current bubble topology (the “[1D[K
+“constraint structure’’).
+* The action \(S[\gamma]\) measures total *structural commitment* plus *fut[4D[K
+*future accessibility gain*.  
+  Minimizing it is equivalent to minimizing future computational overhead: [K
+we want the path that keeps evaluation routes open for as long as possible.[9D[K
+possible.
+
+Hence, a computational geodesic is a **semantically optimal reduction route[5D[K
+route**—the “least structural commitment’’ trajectory through the configura[9D[K
+configuration space of bubbles and constraints.
+
+---
+
+**6.  Concrete illustration – \(1+3\times2^2\)**
+
+| Step | Expression before step | Bubble popped (local reason) | \(\Delta C[1D[K
+C_t\) increase | Future accessibility gain \(\Delta\Omega_{t'}\) |
+|------|------------------------|------------------------------|-----------|------|------------------------|------------------------------|--------------------------|-----------------------------------------------|
+| 0    | \(1+3\times(2^2)\)    | **Exponentiation** → pop `\(2^2\)’’ to get[3D[K
+get scalar value. | Low commitment (only a single multiplication). | Opens [K
+path for linear combinations, reducing later multiplies. |
+| 1    | \((1+12)\)            | **Addition** → pop the whole parenthetical[13D[K
+parenthetical sum. | Still low (adds two numbers). | Creates a single large[5D[K
+large number that can be used in future multiplications without extra paren[5D[K
+parentheses. |
+| 2    | \(13\)                | **Result** – no further bubble to pop. | N[1D[K
+No new commitment needed. | Final state reached; cost minimized globally. |[1D[K
+|
+
+If we had popped the addition first, we would have created a single large t[1D[K
+term \((1+3)=4\), forcing later multiplication by `\(2^2=4\)’’ (costly beca[4D[K
+because it creates ambiguity). Conversely, popping exponentiation last forc[4D[K
+forces us to multiply 3 and then repeatedly add 13, incurring higher commit[6D[K
+commitment. The geodesic is exactly the order **Exponent → Addition** becau[5D[K
+because this sequence makes \(S[\gamma]\) stationary.
+
+---
+
+### Summary
+
+* A **computational geodesic** is an admissible trajectory that minimizes ([1D[K
+(or makes stationary) the total action functional over all possible variati[7D[K
+variations, analogous to a spacetime geodesic in physics.
+* The variational problem (1) and its discrete Euler‑Lagrange conditions gi[2D[K
+give us a *global* optimality criterion: balance early commitment against d[1D[K
+deferred evaluation across the whole trajectory.
+* This principle is called **least structural commitment**: it tells us why[3D[K
+why greedy or overly conservative strategies can be suboptimal, and why und[3D[K
+understanding computation requires knowledge of the full path—not just its [K
+endpoints.
+* Semantically, this corresponds to finding a *geodesic* through the config[6D[K
+configuration space of bubbles and constraints, minimizing future accessibi[9D[K
+accessibility loss while keeping evaluation routes open as long as possible[8D[K
+possible.

@@ -1,0 +1,1288 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+Fate theory must inhabit the fate space it describes.
+
+
+Open Problems
+
+
+Several questions raised by this volume remain unresolved and
+constitute directions for future work. Where the question is
+sufficiently well-posed to admit a precise statement, it is
+given the status of a conjecture.
+
+\begin{conjecture}{Empirical Fate Estimation}{empirical-fate}
+For any knowledge configuration $(X\times X, \fateMap,
+\transfam)$ arising from a physically realizable system, the
+fate map $\fateMap$ can be estimated from finite empirical
+observations with error bounded by the Lipschitz constant
+$\fateLip$ of the fate map and the resolution of the
+observational family $\obs$.
+
+More precisely: there exists a sample complexity function
+$n(\varepsilon, \fateLip, |\obs|)$ such that from $n$
+independent observations of distinction pairs and their
+fate profiles, the estimate $\hat{\fateMap}$ satisfies
+$\|\hat{\fateMap}-\fateMap\|_\infty < \varepsilon$ with
+high probability.
+\end{conjecture}
+
+\begin{conjecture}{Stratum Detection from Sensitivity}{stratum-detect}
+Let $\gamma:[0,T]\to\distPairs$ be an observable trajectory.
+The approach of $\gamma(t)$ to a singular stratum is detectable
+from the time series $\fateSens{\gamma(t)}$ before the stratum
+is crossed: there exists a detection function $D(t)$ computable
+from $\fateSens{\gamma(s)}$ for $s\leq t$ such that
+$D(t)\to+\infty$ as $\gamma(t)\to\singSet$.
+
+This would convert the Fate Criticality Theorem
+(\cref{thm:fate-criticality} in Chapter~11) from a theoretical
+result into a practical early-warning criterion.
+\end{conjecture}
+
+Can biological evolution be represented directly in fate space?
+The evolutionary dynamics of \EOD{Chapter~31} are described in
+terms of admissibility and reachability volume. Expressing
+natural selection as a trajectory in $\fateSpace$ --- a process
+that selects for positive $\repEff$ and high $\survRatio$ ---
+would unify the biological and mathematical treatments.
+
+Can civilizations be ranked by fate-transport efficiency? The
+Civilization Theorem defines civilizations as functors
+$\civFunc:\catDist\to\catFate$. Different civilizations may
+implement functors of varying quality: some preserve the
+operator algebra faithfully while others introduce distortions.
+A metric on such functors would provide a basis for comparing
+civilizational health in a way that is independent of material
+or cultural particulars.
+
+\begin{conjecture}{Functor Metric on Civilizations}{civ-metric}
+There exists a natural metric on the space of functors
+$\civFunc:\catDist\to\catFate$ that preserves the admissible
+operator monoid, such that:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item the metric is zero iff the functor is a full
+    isomorphism of the operator algebra;
+  \item the metric increases monotonically as the functor
+    introduces more distortion in fate-class transport;
+  \item the metric can be estimated from empirical observations
+    of how distinction pairs are transported through the
+    civilizational apparatus.
+\end{enumerate}
+Such a metric would make the Civilization Theorem empirically
+applicable rather than merely structurally illuminating.
+\end{conjecture}
+
+These conjectures belong to future work.
+
+
+Final Remark
+
+
+The traditional image of knowledge is accumulation. Facts
+accumulate. Archives grow. Civilizations add achievements.
+Progress moves forward.
+
+The picture that emerges from fate theory is different.
+Persistence is not accumulation. It is navigation. A
+distinction survives not because it remains fixed but because
+it continues to possess viable futures. A memory survives
+because repair remains possible. A theory survives because
+reinterpretation remains possible. A civilization survives
+because continuation remains possible.
+
+The relevant question at every scale is never only: what
+exists? The relevant question is: what fates remain open?
+
+\textit{Persistence Before Truth} established that distinctions
+must survive for knowledge to be possible.
+\textit{The Fate of Distinguishability} has characterized the
+geometry of survival: the operator algebra, the fate space, the
+singular strata, the admissible region, and the functor
+connecting individual distinctions to civilizational fate.
+\textit{The Ecology of Distinctions} explores what follows when
+entire populations of distinctions are allowed to live,
+compete, repair, and regenerate.
+
+The common subject of all three volumes is not truth, memory,
+objects, knowledge, or civilization. It is the condition under
+which any of these remains possible.
+
+It is the fate of distinction itself.
+
+
+
+\appendix
+\renewcommand{\thechapter}{\Alph{chapter}}
+\renewcommand{\theHchapter}{\Alph{chapter}}
+
+
+
+\appendix
+
+
+
+
+
+\chapter{Foundations of Distinguishability Spaces}
+\label{app:foundations}
+
+\begin{epigraph}{The purpose of an appendix is to prove what
+  the main text asserts.}{Working principle}
+\end{epigraph}
+
+This appendix provides rigorous foundations for the
+distinguishability spaces introduced in Chapters~1--4. The
+main text assumes a metric $d_Y$ on the measurement space $Y$
+and a measurable observational family $\obs$. Here we establish
+which assumptions are genuinely needed, give the most general
+form of the Observational Pseudometric Theorem, and prove the
+partition lattice structure in full generality.
+
+
+General Observational Families
+
+
+The main text assumes $\obs=\{o:X\to Y\}$ with a single
+measurement space $Y$. In full generality, each observation
+may map to a different space.
+
+\begin{definition}{Generalized Observational Family}{gen-obs}
+A \emph{generalized observational family} is a collection
+$\obs=\{(o_\alpha, Y_\alpha, d_\alpha):\alpha\in\mathcal{I}\}$
+where each $o_\alpha:X\to Y_\alpha$ and each
+$(Y_\alpha,d_\alpha)$ is a metric space~\cite{suppes2002}.
+
+The \emph{generalized observational distance} is
+\[
+  \distMetric(x,y)
+  \;=\;
+  \sup_{\alpha\in\mathcal{I}} d_\alpha(o_\alpha(x),o_\alpha(y)).
+\]
+\end{definition}
+
+\begin{theorem}{General Pseudometric}{gen-pseudometric}
+The generalized observational distance is a pseudometric for
+any index set $\mathcal{I}$ and any collection of metric
+spaces $(Y_\alpha,d_\alpha)$.
+\begin{proof}
+Non-negativity and symmetry follow from those properties of
+each $d_\alpha$. Triangle inequality: for each $\alpha$,
+$d_\alpha(o_\alpha(x),o_\alpha(z))\le d_\alpha(o_\alpha(x),
+o_\alpha(y))+d_\alpha(o_\alpha(y),o_\alpha(z))\le
+\distMetric(x,y)+\distMetric(y,z)$. Taking suprema over
+$\alpha$ gives $\distMetric(x,z)\le\distMetric(x,y)+
+\distMetric(y,z)$.
+\end{proof}
+\end{theorem}
+
+
+Completeness and Separability
+
+
+\begin{theorem}{Completeness of Quotient}{completeness}
+If each $(Y_\alpha,d_\alpha)$ is complete and $\mathcal{I}$
+is countable, then the metric quotient $(\quotientObs,
+\bar{d}_\obs)$ is complete.
+\begin{proof}
+Let $([x_n])$ be a Cauchy sequence in $\quotientObs$. Then
+for each $\alpha$, the sequence $(o_\alpha(x_n))$ is Cauchy
+in the complete space $(Y_\alpha,d_\alpha)$, hence convergent.
+The joint limit defines a limiting equivalence class in
+$\quotientObs$. Countability of $\mathcal{I}$ ensures the
+convergence is uniform over $\alpha$.
+\end{proof}
+\end{theorem}
+
+
+Partition Lattice: Full Proof
+
+
+\begin{theorem}{Partition Lattice is Complete}{complete-lattice}
+The set of all partitions of $X$ ordered by refinement forms
+a complete lattice: arbitrary (not just finite) meets and joins
+exist.
+\begin{proof}
+\emph{Arbitrary meets.} Given a family $\{\Pi_\alpha\}$ of
+partitions, their meet is the partition generated by all
+intersections $\bigcap_\alpha B_\alpha$ with $B_\alpha\in
+\Pi_\alpha$. This is well-defined: the intersection is
+non-empty for any compatible family (families sharing a
+common element). The resulting partition refines every
+$\Pi_\alpha$.
+
+\emph{Arbitrary joins.} The join of $\{\Pi_\alpha\}$ is the
+coarsest partition that each $\Pi_\alpha$ refines. Construct
+it by the equivalence relation generated by $\bigcup_\alpha
+\sim_{\Pi_\alpha}$: take the transitive closure.
+This gives the least upper bound.
+\end{proof}
+\end{theorem}
+
+
+Capacity as a Lattice Homomorphism
+
+
+\begin{proposition}{Capacity is a Lattice Homomorphism}
+  {capacity-hom}
+The map $\Pi\mapsto\log|\Pi|$ from the partition lattice to
+$(\mathbb{R}_{\ge0},\le)$ is order-preserving (a lattice
+homomorphism into a chain).
+\begin{proof}
+If $\Pi_1\preceq\Pi_2$ then $|\Pi_1|\ge|\Pi_2|$ (finer
+partition has more blocks), so $\log|\Pi_1|\ge\log|\Pi_2|$.
+The map is order-reversing in partition order but
+order-preserving in the natural order on capacity values.
+This is the standard information-theoretic convention:
+more refined partition $\leftrightarrow$ more information
+$\leftrightarrow$ higher capacity.
+\end{proof}
+\end{proposition}
+
+\begin{appsummary}
+\item The observational pseudometric holds for generalized
+  families with different measurement spaces per observation.
+\item The metric quotient is complete when each measurement
+  space is complete and the index set is countable.
+\item The partition lattice is complete: arbitrary meets and
+  joins exist.
+\item Capacity is a lattice homomorphism from refinement order
+  to the natural order on $\mathbb{R}_{\ge0}$.
+\end{appsummary}
+
+
+
+
+
+\chapter{Operator-Algebraic Foundations}
+\label{app:operator-algebra}
+
+\begin{epigraph}{The algebraic structure is the same at every
+  scale. The scale is not.}{Unifying observation}
+\end{epigraph}
+
+This appendix develops the category-theoretic and algebraic
+structure of distinguishability operators, extending the monoid
+analysis of Chapters~8--9. The key results are: the category
+$\catDistOp$, the identification of the operator monoid as an
+endomorphism monoid, the collapse ideal structure, and the
+repair semigroup.
+
+
+The Category of Distinguishability Operators
+
+
+\begin{definition}{Category $\catDistOp$}{catdistop}
+The \emph{category of distinguishability systems}
+$\catDistOp$ has:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item \emph{Objects}: pairs $(X,\obs)$ consisting of a
+    state space $X$ and an observational family $\obs$.
+  \item \emph{Morphisms}: $\mathrm{Hom}((X,\obs),(X',\obs'))
+    = \{F:X\times X\to X'\times X' :
+    F\text{ is admissible}\}$, where admissible means
+    $F$ does not increase observational distance:
+    $d_{\obs'}(F(x),F(y))\le d_\obs(x,y)$.
+  \item \emph{Composition}: function composition.
+  \item \emph{Identity}: $\mathrm{Id}_{(X,\obs)}(x,y)=(x,y)$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}{$\catDistOp$ is a Category}{catdistop-cat}
+$\catDistOp$ satisfies all category axioms.
+\begin{proof}
+Identity morphisms exist by definition.
+Composition of admissible operators is admissible: if $F$
+does not increase $d_{\obs'}$ and $G$ does not increase
+$d_\obs$, then $F\circ G$ does not increase $d_\obs$
+(since $d_{\obs'}(F(G(x)),F(G(y)))\le d_\obs(G(x),G(y))
+\le d_\obs(x,y)$).
+Associativity is function composition.
+\end{proof}
+\end{theorem}
+
+
+The Endomorphism Monoid
+
+
+For a fixed object $(X,\obs)\in\catDistOp$, the endomorphisms
+$\mathrm{End}(X,\obs)=\mathrm{Hom}((X,\obs),(X,\obs))$ are
+precisely the admissible operators from $X\times X$ to itself.
+
+\begin{theorem}{Endomorphism Monoid Identification}
+  {endo-monoid}
+$\mathrm{End}(X,\obs) = (\distOp,\circ,\mathrm{Id})$ as
+defined in Chapter~8.
+\begin{proof}
+An endomorphism $F:(X,\obs)\to(X,\obs)$ is an admissible
+operator from $X\times X$ to $X\times X$. The set of all
+such operators is $\distOp$. Composition in the category
+is function composition in $\distOp$. The identity endomorphism
+is $\mathrm{Id}$. Hence the two structures coincide.
+\end{proof}
+\end{theorem}
+
+The operator monoid of Part~II is therefore not an ad hoc
+construction but the canonical endomorphism monoid of a
+distinguishability system in the category $\catDistOp$~\cite{awodey2010}.
+
+
+Collapse Ideals
+
+
+\begin{definition}{Collapse Ideal}{collapse-ideal-app}
+The \emph{collapse ideal} is
+\[
+  \collapIdeal
+  \;=\;
+  \bigl\{F\in\distOp :
+    \capObs{F(X,\obs)} < \capObs{X,\obs}
+  \bigr\},
+\]
+the set of operators that strictly decrease distinguishability
+capacity.
+\end{definition}
+
+\begin{theorem}{Collapse Ideal is a Left Ideal}
+  {collapse-left-ideal}
+For any $G\in\distOp$ and $F\in\collapIdeal$:
+$G\circ F\in\collapIdeal$.
+\begin{proof}
+$F\in\collapIdeal$ means $\capObs{F(X)}<\capObs{X}$.
+Since $G$ is admissible (non-amplifying in capacity):
+$\capObs{G(F(X))}\le\capObs{F(X)}<\capObs{X}$.
+Hence $G\circ F\in\collapIdeal$.
+\end{proof}
+\end{theorem}
+
+The left-ideal property is algebraically significant: once a
+collapse operator has acted, any subsequent admissible operator
+preserves the reduced capacity. Collapse is an absorbing
+direction in $\distOp$.
+
+\begin{remark}{Right Ideal Failure}{right-ideal}
+$\collapIdeal$ is not a right ideal. An operator $F\in
+\distOp\setminus\collapIdeal$ (a repair or transport operator)
+composed on the right before $C\in\collapIdeal$ may result
+in $C\circ F\notin\collapIdeal$ if $F$ first increases
+capacity enough that $C$ fails to reduce it below the
+original. This reflects the non-commutativity of repair
+and collapse established in Chapter~7.
+\end{remark}
+
+
+Repair Semigroup
+
+
+\begin{definition}{Repair Semigroup}{repair-semi}
+The \emph{repair semigroup} is
+\[
+  \repairSemi
+  \;=\;
+  \bigl\{F\in\distOp :
+    \distMetric(F(D(x)),F(D(y)))\ge\distMetric(D(x),D(y))
+    \text{ for all degraded pairs }(D(x),D(y))
+  \bigr\},
+\]
+the set of operators that are non-contracting after
+degradation.
+\end{definition}
+
+\begin{theorem}{Repair Semigroup}{repair-semi-thm}
+$(\repairSemi,\circ)$ is a semigroup: closed under
+composition, but without an identity in general.
+\begin{proof}
+\emph{Closure}: if $F,G\in\repairSemi$, then
+$\distMetric(F(G(D(x))),F(G(D(y))))\ge\distMetric(G(D(x)),
+G(D(y)))\ge\distMetric(D(x),D(y))$ (applying $G$'s
+non-contraction then $F$'s). Hence $F\circ G\in\repairSemi$.
+
+\emph{No identity in general}: the identity $\mathrm{Id}$
+is in $\repairSemi$ only if $\distMetric(D(x),D(y))\ge
+\distMetric(D(x),D(y))$, which holds trivially, so in fact
+$\mathrm{Id}\in\repairSemi$. The repair semigroup is a
+monoid. However, many natural repair processes require
+external information and are not automorphisms of the system,
+so the repair semigroup is strictly smaller than $\distOpInv$.
+\end{proof}
+\end{theorem}
+
+
+The Interplay: Ideal--Semigroup Duality
+
+
+The collapse ideal and repair semigroup are algebraically
+dual. Collapse is an absorbing direction (left ideal); repair
+is a regenerating direction (semigroup). Their interaction is
+the central algebraic object of fate theory.
+
+\begin{proposition}{Non-Trivial Intersection}
+  {ideal-semigroup-intersection}
+$\collapIdeal\cap\repairSemi=\varnothing$.
+\begin{proof}
+$F\in\collapIdeal$ strictly decreases capacity:
+$\capObs{F(X)}<\capObs{X}$. $F\in\repairSemi$ requires
+$F$ to be non-contracting after degradation. A strict
+capacity decrease is incompatible with non-contraction of
+observational distance in general position: decreasing the
+number of distinguishable categories implies decreasing some
+distances. Hence no single operator belongs to both.
+\end{proof}
+\end{proposition}
+
+\begin{appsummary}
+\item $\catDistOp$ is a well-defined category with
+  admissibility-preserving morphisms.
+\item The operator monoid $(\distOp,\circ,\mathrm{Id})$ is
+  the endomorphism monoid $\mathrm{End}(X,\obs)$ in
+  $\catDistOp$.
+\item The collapse ideal $\collapIdeal$ is a left ideal of
+  $\distOp$: collapse is algebraically absorbing.
+\item The repair semigroup $\repairSemi$ is a monoid
+  (contains identity) and is disjoint from $\collapIdeal$.
+\item The ideal--semigroup duality formalizes the
+  collapse/repair opposition.
+\end{appsummary}
+
+
+
+
+
+\chapter{Topology and Geometry of Fate Space}
+\label{app:topology}
+
+\begin{epigraph}{Topology is the study of what cannot be
+  continuously deformed into what.}{The relevant question
+  for collapse}
+\end{epigraph}
+
+This appendix develops the topological and differential-geometric
+structure of fate space $\fateSpace$ beyond what was needed in
+the main text. The key results are the precise topology of the
+two-component decomposition, the homotopy classification of
+fate trajectories, the curvature analysis of admissible
+boundaries, and the Whitney stratification of the singular set.
+
+
+Product Topology and Component Structure
+
+
+\begin{theorem}{Fate Space Decomposition}{fate-decomp-app}
+The fate space $\fateSpace=[0,1]^2\times\{0,1\}\times
+\mathbb{R}_{\ge0}^k$ equipped with the product topology
+decomposes as a topological coproduct:
+\[
+  \fateSpace \;\cong\; \fateComp{0}\sqcup\fateComp{1},
+\]
+where each component is homeomorphic to
+$[0,1]^2\times\mathbb{R}_{\ge0}^k$.
+\begin{proof}
+The factor $\{0,1\}$ with the discrete topology has exactly
+two connected components, $\{0\}$ and $\{1\}$. In the product
+topology, the preimage of each component under the projection
+$\pi_c:\fateSpace\to\{0,1\}$ is open and closed (clopen).
+The two preimages $\fateComp{0}$ and $\fateComp{1}$ partition
+$\fateSpace$. Each is homeomorphic to $[0,1]^2\times
+\mathbb{R}_{\ge0}^k$ by the natural identification dropping
+the constant factor $\{c\}$.
+\end{proof}
+\end{theorem}
+
+\begin{theorem}{Contractibility of Each Component}
+  {component-contractible}
+Each component $\fateComp{c}$ is contractible.
+\begin{proof}
+$\fateComp{c}\cong[0,1]^2\times\mathbb{R}_{\ge0}^k$.
+The product of contractible spaces is contractible:
+$[0,1]^2$ contracts to a point via the straight-line
+homotopy $H(s,t)=(1-t)s$ on each coordinate; $\mathbb{R}
+_{\ge0}^k$ contracts to the origin similarly.
+\end{proof}
+\end{theorem}
+
+\begin{corollary}{Trivial Homotopy Groups}{trivial-homotopy}
+$\pi_n(\fateComp{c})=0$ for all $n\ge1$: each component
+has trivial homotopy groups. The interesting topology of
+fate space lives in the fate \emph{image} of a specific
+system, not in the ambient $\fateSpace$.
+\end{corollary}
+
+This corollary justifies the approach of Chapter~18: fate
+topology must be studied as the topology of the fate image
+$\fateMap(\distPairs)$ for a specific system, not of the
+abstract fate space.
+
+
+Homotopy Classification of Fate Trajectories
+
+
+\begin{definition}{Fate Trajectory Classes}{traj-classes}
+Let $s_0,s_1\in\fateComp{c}$ lie in the same component.
+The set of homotopy classes of paths from $s_0$ to $s_1$
+in $\fateComp{c}$ is denoted $\pi_1(\fateComp{c};s_0,s_1)$.
+\end{definition}
+
+\begin{theorem}{Unique Path Class in Each Component}
+  {path-class}
+For $s_0,s_1$ in the same component $\fateComp{c}$, there
+is exactly one homotopy class of paths from $s_0$ to $s_1$
+in $\fateComp{c}$.
+\begin{proof}
+$\fateComp{c}$ is contractible by
+\cref{thm:component-contractible}. A contractible space is
+simply connected: any two paths with the same endpoints are
+homotopic. Hence $|\pi_1(\fateComp{c};s_0,s_1)|=1$.
+\end{proof}
+\end{theorem}
+
+\begin{corollary}{Collapse Homotopy Barrier}{collapse-homotopy}
+No continuous path from $\fateComp{1}$ to $\fateComp{0}$
+exists, hence no homotopy class connects them.
+\end{corollary}
+
+This corollary is the homotopy-theoretic restatement of the
+Collapse Discontinuity Meta-Theorem. It is stronger: not
+only is no continuous path possible, but the two components
+are in different path-components of $\fateSpace$.
+
+
+Curvature of the Admissibility Boundary
+
+
+Let $\partial\admRegion$ be the boundary of the admissible
+fate region $\admRegion\subseteq\fatePos$, assumed to be a
+smooth hypersurface~\cite{lee2013}.
+
+\begin{definition}{Second Fundamental Form}
+  {second-fund-form}
+The \emph{second fundamental form} $\secondForm$ of
+$\partial\admRegion$ at a point $s\in\partial\admRegion$ is
+the bilinear form on the tangent space
+$T_s(\partial\admRegion)$ given by
+$\secondForm(u,v)=-\langle\nabla_u\hat{n},v\rangle$,
+where $\hat{n}$ is the inward unit normal to $\partial\admRegion$.
+\end{definition}
+
+\begin{theorem}{Boundary Curvature and Fate Sensitivity}
+  {boundary-curv-app}
+Let $\fatePot:\fatePos\to\mathbb{R}_{\ge0}$ be the fate
+potential (Appendix~A, Chapter~14). The principal curvatures
+$\kappa_i$ of $\partial\admRegion$ are bounded below by:
+\[
+  \kappa_i(s)
+  \;\ge\;
+  c\,\fateSens{s}
+\]
+for a positive constant $c>0$ depending on $\fatePot$,
+where $\fateSens{s}=\|\nabla\fatePot(s)\|$.
+\begin{proof}
+By Axiom~1 of Chapter~14, $\fatePot\to+\infty$ at
+$\partial\admRegion$. The gradient $\nabla\fatePot$ therefore
+grows unboundedly near $\partial\admRegion$. The Hessian
+$\nabla^2\fatePot$ (the fate curvature tensor $\fateKurv$)
+dominates the second fundamental form of the level sets of
+$\fatePot$ near $\partial\admRegion$. Since $\partial\admRegion$
+is a level set of the admissibility constraint near the
+boundary, its principal curvatures are controlled by
+$\|\nabla^2\fatePot\|\ge c\|\nabla\fatePot\|=c\fateSens{s}$
+by the blow-up condition.
+\end{proof}
+\end{theorem}
+
+
+Whitney Stratification of the Singular Set
+
+
+\begin{theorem}{Whitney Stratification}{whitney-strat}
+The singular set $\singSet=\strataC\cup\strataR\cup\strataT
+\cup\strataF$ of the fate map, with the strata as defined
+in Chapter~12, forms a Whitney-regular stratified space.
+\begin{proof}
+Each stratum is the zero set or level set of a smooth
+function on $\distPairs$ (the collapse indicator, the
+repair efficiency function, transport horizon functions,
+the survival ratio). Under the generic transversality
+condition (gradients nonzero at zero sets), each stratum
+is a smooth submanifold. The frontier condition holds
+(closure of each stratum contains only lower-dimensional
+strata) by the hierarchy: collapse dominates repair, which
+dominates transport, which dominates forgetting. Whitney's
+conditions (a) and (b) hold at stratum intersections by
+standard transversality arguments.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Classification of Fate Events}{fate-event-class}
+The Whitney stratification provides a complete topological
+classification of fate events. The generic stratum codimension
+determines the event type:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item Codimension 1: generic fate transitions (single
+    stratum crossing)
+  \item Codimension 2: catastrophic fate events (double
+    stratum crossing)
+  \item Higher: degenerate events (multiple simultaneous
+    strata)
+\end{itemize}
+Historical events of civilizational significance typically
+correspond to high-codimension stratum crossings.
+\end{remark}
+
+\begin{appsummary}
+\item Each fate space component $\fateComp{c}$ is
+  contractible; the interesting topology is in fate
+  images of specific systems.
+\item In each component there is exactly one homotopy
+  class of paths between any two points.
+\item No path connects the two components: the collapse
+  barrier is homotopy-theoretic.
+\item Boundary curvature of $\partial\admRegion$ is
+  bounded below by fate sensitivity.
+\item The singular set is Whitney-regular stratified,
+  providing a complete classification of fate events by
+  codimension.
+\end{appsummary}
+
+
+
+
+
+\chapter{Measure Theory and Fate-Class Dynamics}
+\label{app:measure}
+
+\begin{epigraph}{A population is a measure. Its ecology is
+  the dynamics of that measure.}{The measure-theoretic
+  viewpoint}
+\end{epigraph}
+
+This appendix gives the measure-theoretic foundation of the
+fate ecology introduced in Chapter~17. The main text uses
+fate class populations $N_i(t)$ as counts. Here we treat
+them as measures, derive the master equation from first
+principles, and establish existence of the stationary
+distribution.
+
+
+Measures on Distinction-Pair Space
+
+
+\begin{definition}{Fate Measure Space}{fate-measure}
+Let $(X,\mathcal{B}_X,\stateMeasure)$ be a $\sigma$-finite
+measure space. The \emph{distinction-pair measure space}
+is $(X\times X, \mathcal{B}_X\otimes\mathcal{B}_X,
+\pairMeasure)$.
+\end{definition}
+
+\begin{definition}{Pushforward Fate Measure}{pushforward-fate}
+The \emph{pushforward fate measure} is
+\[
+  \pushFate \;=\; \fateMap_*(\pairMeasure),
+\]
+defined for any measurable $B\subseteq\fateSpace$ by
+\[
+  \pushFate(B) \;=\; \pairMeasure(\fateMap^{-1}(B)).
+\]
+\end{definition}
+
+\begin{theorem}{Pushforward is a Measure}{pushforward-measure}
+$\pushFate$ is a $\sigma$-finite measure on $(\fateSpace,
+\mathcal{B}_\fateSpace)$.
+\begin{proof}
+$\pushFate(\varnothing)=\pairMeasure(\fateMap^{-1}(\varnothing))=0$.
+For countably many disjoint sets $B_n$:
+$\pushFate(\bigsqcup_n B_n)=\pairMeasure(\fateMap^{-1}(
+\bigsqcup_n B_n))=\pairMeasure(\bigsqcup_n\fateMap^{-1}(B_n))
+=\sum_n\pairMeasure(\fateMap^{-1}(B_n))=\sum_n\pushFate(B_n)$.
+$\sigma$-finiteness follows from that of $\pairMeasure$.
+\end{proof}
+\end{theorem}
+
+
+Fate Class Populations as Measures
+
+
+In the discrete case, fate classes $\{i\}$ partition
+$\fateSpace$ into finitely many regions. The fate class
+population is $N_i(t)=\pushFate_t(\{i\})$ where $\pushFate_t$
+is the time-$t$ pushforward.
+
+In the continuous case, the fate class population is a
+density: $N_i(t)\,di = \pushFate_t(di)$ where $di$ is a
+volume element in $\fateSpace$.
+
+
+The Master Equation
+
+
+The operator family $\transfam$ induces transitions between
+fate classes. When these transitions are Markovian (the fate
+at time $t+dt$ depends only on the fate at time $t$, not on
+the full history), the dynamics are governed by the master
+equation.
+
+\begin{definition}{Transition Rate Matrix}{trans-matrix}
+The \emph{transition rate matrix} $\transRate=(K_{ij})$ has
+entries:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item $K_{ji}>0$ for $j\neq i$: rate of transition from
+    class $i$ to class $j$ (caused by repair, transport,
+    or discovery operators moving pairs between fate classes).
+  \item $K_{ii}=-\sum_{j\neq i}K_{ji}$: diagonal entry
+    ensuring probability conservation.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}{Master Equation}{master-eq}
+Under the Markov assumption, the fate class populations
+satisfy the master equation:
+\[
+  \frac{d}{dt}N_i(t)
+  \;=\;
+  \sum_{j\neq i}K_{ji}N_j(t)
+  - N_i(t)\sum_{j\neq i}K_{ij},
+\]
+which in matrix form is $\dot{N}=\transRate^{\top}N$ where
+$N=(N_1,\ldots,N_n)^{\top}$.
+\begin{proof}
+By the Kolmogorov forward equations for a continuous-time
+Markov chain: the rate of change of the probability of
+being in state $i$ equals the rate of influx from all
+other states minus the rate of efflux to all other states.
+\end{proof}
+\end{theorem}
+
+\begin{remark}{Connection to Ecology Equation}{master-ecology}
+The master equation is the microscopic foundation of the
+ecology equation~(15.2) of Chapter~17. The birth rate $b_i$,
+death rate $d_i$, and migration rates $m_{ij}$ of that
+equation are read off from $\transRate$: $d_i=K_{\mathrm{collapse},i}$,
+$m_{ji}=K_{ji}$ for repair/transport transitions,
+$b_i=K_{\mathrm{creation},i}$ from discovery operators.
+\end{remark}
+
+
+Stationary Distribution and Fate Equilibrium
+
+
+\begin{theorem}{Fate Equilibrium Theorem}{fate-equil}
+Let $\transRate$ be irreducible (any fate class is reachable
+from any other by a sequence of transitions) and positive
+recurrent~\cite{li2008}. Then there exists a unique stationary probability
+distribution $\statDist=(\pi_1,\ldots,\pi_n)$ satisfying
+$\transRate^{\top}\statDist=0$ and $\sum_i\pi_i=1$.
+\begin{proof}
+For a continuous-time Markov chain with irreducible and
+positive recurrent generator $\transRate$, the Perron--Frobenius
+theorem guarantees a unique stationary distribution: the
+left eigenvector of $\transRate$ corresponding to eigenvalue
+$0$, normalized to sum to $1$.
+\end{proof}
+\end{theorem}
+
+The stationary distribution $\statDist$ describes the
+asymptotic composition of the fate class population: the
+fraction of distinction pairs in each fate class when the
+system has reached dynamical equilibrium.
+
+
+Entropy of Fate Populations
+
+
+\begin{definition}{Fate Population Entropy}{fate-pop-entropy}
+The \emph{fate population entropy} of a distribution $N$
+(normalized to $\sum_i N_i=1$) is
+\[
+  \fateEntropy(N)
+  \;=\;
+  -\sum_i N_i\log N_i.
+\]
+The stationary fate entropy is $\fateEntropy(\statDist)$.
+\end{definition}
+
+\begin{theorem}{Entropy Maximization at Equilibrium}
+  {entropy-max}
+Among all distributions satisfying the constraints imposed
+by $\transRate$ (detailed balance, if it holds), the
+stationary distribution $\statDist$ maximizes $\fateEntropy$.
+\begin{proof}
+Under detailed balance ($K_{ij}\pi_j=K_{ji}\pi_i$ for all
+$i,j$), the stationary distribution is the maximum-entropy
+distribution subject to the detailed balance constraints.
+This follows from the variational characterization of the
+stationary distribution as the unique fixed point of the
+dynamics $\dot{N}=\transRate^{\top}N$ that also satisfies
+detailed balance.
+\end{proof}
+\end{theorem}
+
+The fate population entropy $\fateEntropy(\statDist)$
+measures the diversity of fate classes at equilibrium.
+A low value indicates a system dominated by a few fate
+classes; a high value indicates many fate classes in
+approximately equal proportion.
+
+\begin{appsummary}
+\item Fate class populations are measures: $N_i(t)=
+  \pushFate_t(\{i\})$ where $\pushFate_t$ is the
+  pushforward of the pair measure under the fate map.
+\item The pushforward fate measure is $\sigma$-finite.
+\item The master equation governs fate class dynamics
+  under the Markov assumption.
+\item Irreducible positive-recurrent systems have a unique
+  stationary distribution $\statDist$ (Perron--Frobenius).
+\item The stationary distribution maximizes fate population
+  entropy under detailed balance.
+\end{appsummary}
+
+
+
+
+
+\chapter{Category Theory of Distinction Systems}
+\label{app:categories}
+
+\begin{epigraph}{A functor is a translation that preserves
+  structure. The trilogy is three translations of the same
+  structure.}{The categorical view of the series}
+\end{epigraph}
+
+This appendix develops the full categorical machinery
+underlying the Civilization Theorem (Chapter~29) and
+prepares the Rosetta Stone construction of Appendix~G.
+The key objects are the categories $\catDist$ and $\catFate$,
+their morphisms, and the functors between them.
+
+
+The Category $\catDist$
+
+
+\begin{definition}{Category of Distinction Pairs}
+  {catdist-full}
+The \emph{category of distinction pairs} $\catDist$ has:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item \emph{Objects}: distinction pairs $(x,y)\in
+    X\times X$ for varying state spaces $X$.
+  \item \emph{Morphisms}: admissible operators
+    $F:(x,y)\to F(x,y)$ in $\distOp$, preserving
+    operational distinguishability: if $x\not\sim_\obs y$
+    then $F(x)\not\sim_\obs F(y)$ (for preservation
+    morphisms) or the weaker admissibility condition.
+  \item \emph{Composition}: function composition.
+  \item \emph{Identity}: $\mathrm{Id}(x,y)=(x,y)$.
+\end{itemize}
+\end{definition}
+
+
+The Category $\catFate$
+
+
+\begin{definition}{Category of Fate Classes}
+  {catfate-full}
+The \emph{category of fate classes} $\catFate$ has:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item \emph{Objects}: fate classes $\fateClass{x,y}
+    \in\fateClasses$ for varying distinction pair spaces.
+  \item \emph{Morphisms}: admissible transformations of
+    fate profiles $\phi:\fateClass{x,y}\to
+    \fateClass{x',y'}$ induced by operators in $\distOp$:
+    $\phi$ is a morphism iff there exists $F\in\distOp$
+    such that $\fateMap(F(x,y))=\phi(\fateMap(x,y))$.
+  \item \emph{Composition}: induced from $\distOp$.
+  \item \emph{Identity}: identity on fate classes.
+\end{itemize}
+\end{definition}
+
+
+The Fate Functor
+
+
+\begin{theorem}{Fate Functor}{fate-functor}
+The fate map induces a functor
+$\hat{\fateMap}:\catDist\to\catFate$:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item On objects: $(x,y)\mapsto\fateClass{x,y}$.
+  \item On morphisms: $F\mapsto\hat{F}$ where
+    $\hat{F}(\fateClass{x,y})=\fateClass{F(x,y)}$.
+\end{itemize}
+\begin{proof}
+\emph{Well-definedness on morphisms}: if $(x,y)\approx_
+\fateMap(x',y')$ (same fate class), then $F(x,y)\approx_\fateMap
+F(x',y')$ iff $F$ respects the fate equivalence.
+This holds for admissible $F$ by the definition of
+morphisms in $\catDist$.
+
+\emph{Functoriality}: $\hat{\fateMap}(\mathrm{Id})=\mathrm{Id}$
+(the fate class of $(x,y)$ under identity is $\fateClass{x,y}$).
+$\hat{\fateMap}(F\circ G)=\hat{F}\circ\hat{G}$ because
+$\fateClass{F(G(x,y))}=\hat{F}(\fateClass{G(x,y)})=
+\hat{F}(\hat{G}(\fateClass{x,y}))=(\hat{F}\circ\hat{G})
+(\fateClass{x,y})$.
+\end{proof}
+\end{theorem}
+
+
+Natural Transformations and Repair
+
+
+\begin{definition}{Repair Natural Transformation}
+  {repair-nat-trans}
+A \emph{repair natural transformation} is a natural
+transformation $\eta:F\natTrans G$ between two functors
+$F,G:\catDist\to\catDist$ such that for every
+$(x,y)\in\catDist$, the component
+$\eta_{(x,y)}:F(x,y)\to G(x,y)$ is a repair operator.
+\end{definition}
+
+Natural transformations~\cite{riehl2016} capture the idea that repair
+operators do not just act on individual distinction pairs
+but relate entire operator strategies. A natural
+transformation $\eta:F\natTrans G$ says that replacing
+operator $F$ by operator $G$ everywhere is coherent.
+
+
+The Civilizational Functor
+
+
+The Civilization Theorem (Chapter~29) states that a
+civilization is a functor $\civFunc:\catDist\to\catFate$
+preserving the operator monoid. In categorical terms:
+
+\begin{definition}{Civilizational Functor}{civ-functor}
+A \emph{civilizational functor} is a strong monoidal functor
+$\civFunc:(\catDist,\otimes_{\catDist})\to
+(\catFate,\otimes_{\catFate})$ where:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item $\otimes_{\catDist}$ is the monoidal product on
+    $\catDist$ given by juxtaposition of distinction pairs:
+    $(x_1,y_1)\otimes(x_2,y_2)=((x_1,x_2),(y_1,y_2))$.
+  \item $\otimes_{\catFate}$ is the monoidal product on
+    $\catFate$ given by product of fate profiles.
+  \item Strong monoidal means: $\civFunc$ sends monoidal
+    structure to monoidal structure, up to coherent
+    isomorphism.
+\end{itemize}
+\end{definition}
+
+The strong monoidal condition captures the requirement from
+Chapter~29 that the civilization preserves the operator
+composition structure: $\civFunc(T_1\circ T_2)=\civFunc(T_1)
+\circ\civFunc(T_2)$.
+
+\begin{appsummary}
+\item $\catDist$ and $\catFate$ are well-defined categories.
+\item The fate map induces a functor $\hat{\fateMap}:
+  \catDist\to\catFate$.
+\item Repair operators organize into natural transformations
+  between operator strategies.
+\item A civilization is a strong monoidal functor
+  $\civFunc:\catDist\to\catFate$, making the Civilization
+  Theorem a precise categorical statement.
+\end{appsummary}
+
+
+
+
+
+\chapter{Connections to the Outer Volumes}
+\label{app:connections}
+
+\begin{epigraph}{The most important theorem of this volume
+  is that the other two volumes are special cases.}
+  {The claim of the trilogy}
+\end{epigraph}
+
+This appendix makes explicit the formal connections between
+fate theory and the mathematical structures of
+\textit{Persistence Before Truth} (\textsc{pbt}) and
+\textit{The Ecology of Distinctions} (\textsc{eod}).
+Each connection is stated as a theorem rather than an analogy.
+
+
+PBT: Persistence as Fate Equilibrium
+
+
+The central claim of \textit{Persistence Before Truth} is
+that recoverable distinctions are the condition of
+possibility for knowledge. Fate theory subsumes this:
+persistence is a special fate regime, not a foundational
+primitive.
+
+\begin{theorem}{PBT Embedding}{pbt-embedding}
+Every theorem in \textit{Persistence Before Truth}
+concerning recoverable distinctions holds within fate theory
+by restricting to the persistence regime
+$\persRegime=\{(x,y)\in\distPairs:\survRatio_\transfam(x,y)=1,
+\repEff(x,y)>0\}$.
+\begin{proof}
+The persistence regime $\persRegime$ consists of distinction
+pairs that survive every transformation (unit survival ratio)
+and can be recovered after degradation (positive repair
+efficiency). Within $\persRegime$, all the conditions of
+\PBT{Definition~2.1} (recoverably persistent distinction)
+are satisfied by construction. The necessity arguments of
+PBT's central theorems show that truth-evaluation,
+reference, and memory require distinctions in $\persRegime$.
+Fate theory derives this as a consequence: $\persRegime$
+is the fate regime corresponding to the admissible stable
+interior, and the PBT arguments become special cases of
+the Object Stability Theorem (Chapter~16) restricted to
+the persistence regime.
+\end{proof}
+\end{theorem}
+
+
+EOD: Admissibility Volume as Fate Volume
+
+
+\textit{The Ecology of Distinctions} organizes its analysis
+around admissibility volume $\Vol(\adm(t))$ as the primary
+conserved quantity. Fate theory shows this is a fate volume.
+
+\begin{theorem}{EOD Admissibility as Fate Pullback}
+  {eod-admissibility}
+The admissibility manifold $\adm(x,t)$ of EOD is the
+pullback $\fateMap^{-1}(\admRegion)$ of the admissible fate
+region, and $\Vol(\adm(t))$ is the fate volume restricted to
+the admissible region:
+\[
+  \Vol(\adm(t))
+  \;=\;
+  \Vol_{\pairMeasure}\bigl(\fateMap^{-1}(\admRegion)\bigr)
+  \;=\;
+  \pushFate(\admRegion).
+\]
+\begin{proof}
+This is the Admissibility Pullback Meta-Theorem
+(Chapter~13) combined with the definition of the pushforward
+fate measure (Appendix~D). The admissibility manifold is
+$\fateMap^{-1}(\admRegion)$ by the Pullback Theorem; its
+volume in the pair measure equals the pushforward measure
+of $\admRegion$ in fate space.
+\end{proof}
+\end{theorem}
+
+\begin{corollary}{Generative Admissibility as Fate Conservation}
+  {eod-gap-fate}
+The Generative Admissibility Principle of EOD
+(\EOD{Chapter~15}) --- that admissible systems maintain or
+increase $\Vol(\adm(t))$ --- is equivalent to the Fate
+Conservation Law (Chapter~21): $\pushFate_t(\admRegion)$
+is non-decreasing under admissible operators.
+\end{corollary}
+
+
+EOD: The Preservation Hierarchy
+
+
+EOD establishes a hierarchy of preservation classes
+$\mathfrak{P}\subsetneq\mathfrak{A}\subsetneq\mathfrak{G}
+\subsetneq\mathfrak{R}\subsetneq\mathfrak{M}\subsetneq
+\mathfrak{D}$. Each class corresponds to a fate regime.
+
+\begin{proposition}{Preservation Hierarchy as Fate Regimes}
+  {preservation-hierarchy}
+The EOD preservation hierarchy corresponds to the following
+nested fate regimes:
+\[
+  \persRegime
+  \;\subsetneq\;
+  \{(x,y):\fateMap(x,y)\in\operatorname{int}(\admRegion)\}
+  \;\subsetneq\;
+  \{(x,y):\fateVol{x,y}>0\}
+  \;\subsetneq\;
+  \{(x,y):\repEff(x,y)>0\}
+  \;\subsetneq\;
+  \{(x,y):\survRatio(x,y)>0\}
+  \;\subsetneq\;
+  \distPairs.
+\]
+\begin{proof}
+Each containment follows from the definitions. Persistent
+distinctions ($\survRatio=1$) are properly contained in
+admissibly stable ones (interior of $\admRegion$); those
+in turn are contained in fate-volume-positive ones; those
+in memory-capable ones ($\repEff>0$); those in partially
+surviving ones ($\survRatio>0$); and the full distinction
+space.
+\end{proof}
+\end{proposition}
+
+\begin{appsummary}
+\item PBT's persistence is the fate regime $\persRegime$
+  with unit survival ratio and positive repair efficiency.
+\item EOD's admissibility volume is the pushforward fate
+  measure of the admissible fate region.
+\item The Generative Admissibility Principle is the Fate
+  Conservation Law restricted to $\admRegion$.
+\item EOD's preservation hierarchy is a chain of nested
+  fate regimes distinguished by their fate coordinates.
+\end{appsummary}
+
+
+
+
+
+\chapter{The Rosetta Stone of the Trilogy}
+\label{app:rosetta}
+
+\begin{epigraph}{Three coordinate systems. One geometry.}
+  {The claim proved here}
+\end{epigraph}
+
+This appendix constructs the three categories $\catPBT$,
+$\catFate$, and $\catEOD$ and the functors between them,
+proving that the three volumes are three coordinate systems~\cite{bateson1972}
+on the same underlying mathematical object. This is the
+formal realization of the claim that Fate Theory is the
+hinge of the trilogy.
+
+
+The Three Trilogy Categories
+
+
+\begin{definition}{The PBT Category}{catpbt}
+The \emph{PBT category} $\catPBT$ has:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item \emph{Objects}: recoverable distinction structures
+    $(X,\obs,\transfam,\recon)$ where $\recon$ is a family
+    of reconstruction operators.
+  \item \emph{Morphisms}: maps preserving recoverability:
+    $f:(X,\obs,\transfam,\recon)\to(X',\obs',\transfam',
+    \recon')$ such that if $(x,y)$ is recoverable in
+    $(X,\obs,\transfam,\recon)$ then $(f(x),f(y))$ is
+    recoverable in $(X',\obs',\transfam',\recon')$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}{The EOD Category}{cateod}
+The \emph{EOD category} $\catEOD$ has:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item \emph{Objects}: distinction ecologies
+    $(\fateClasses, \transRate, \admRegion)$ consisting
+    of a fate class space, a transition rate matrix, and
+    an admissible fate region.
+  \item \emph{Morphisms}: ecology maps preserving
+    admissibility and transition structure.
+\end{itemize}
+\end{definition}
+
+The $\catFate$ category was defined in Appendix~E.
+
+
+The Functors
+
+
+\begin{definition}{The PBT-to-Fate Functor}
+  {functor-pbt-fate}
+The functor $\functorPBT:\catPBT\to\catFate$ sends:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item Objects: $(X,\obs,\transfam,\recon)\mapsto
+    (\distPairs,\fateMap)$ where $\fateMap$ is constructed
+    from $(\obs,\transfam,\recon)$ as in Chapter~10.
+  \item Morphisms: recoverability-preserving maps $f$
+    are sent to the induced map on fate classes:
+    $\hat{f}(\fateClass{x,y})=\fateClass{f(x),f(y)}$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}{The Fate-to-EOD Functor}
+  {functor-fate-eod}
+The functor $\functorEOD:\catFate\to\catEOD$ sends:
+\begin{itemize}[nosep,leftmargin=2em]
+  \item Objects: $(\distPairs,\fateMap)\mapsto
+    (\fateClasses,\transRate,\admRegion)$ where
+    $\fateClasses=(X\times X)/{\approx_\fateMap}$ is the
+    fate class quotient, $\transRate$ is the transition
+    rate matrix derived from the operator family, and
+    $\admRegion$ is the admissible fate region.
+  \item Morphisms: admissible operator maps are sent to
+    the induced transition rate modifications.
+\end{itemize}
+\end{definition}
+
+
+The Rosetta Stone Theorem
+
+
+\begin{metatheorem}{The Rosetta Stone Theorem}{rosetta}
+There exist functors
+\[
+  \catPBT
+  \;\xrightarrow{\;\functorPBT\;}
+  \catFate
+  \;\xrightarrow{\;\functorEOD\;}
+  \catEOD
+\]
+such that:
+\begin{enumerate}[nosep,label=(\roman*)]
+  \item $\functorPBT$ is faithful: distinct recoverability
+    structures have distinct fate structures.
+  \item $\functorEOD$ is full: every ecology morphism arises
+    from an admissible operator.
+  \item The composite $\functorEOD\circ\functorPBT:
+    \catPBT\to\catEOD$ sends PBT's persistence structures
+    to EOD's ecological structures.
+  \item The persistence regime $\persRegime$ in $\catFate$
+    corresponds to the equilibrium distributions in
+    $\catEOD$ with $\dot{N}=0$.
+  \item The viability regime $\viabRegime=\{(x,y):
+    \fateVol{x,y}>0\}$ in $\catFate$ corresponds to the
+    positive-recurrent objects of $\catEOD$.
+\end{enumerate}
+\begin{proof}
+\emph{(i) Faithfulness of $\functorPBT$}: if two
+recoverability structures $(X,\obs,\transfam,\recon)$ and
+$(X',\obs',\transfam',\recon')$ are distinct, then either
+their state spaces differ (giving different $\distPairs$)
+or their operator families differ (giving different fate
+maps $\fateMap$). Either way, the fate structures
+$(\distPairs,\fateMap)$ are distinct. Hence $\functorPBT$
+is injective on objects. Faithfulness on morphisms follows
+similarly.
+
+\emph{(ii) Fullness of $\functorEOD$}: given a morphism
+$\phi$ in $\catEOD$ between two ecology objects, we must
+produce an admissible operator $F$ in $\catFate$ such that
+$\functorEOD(F)=\phi$. Since $\phi$ preserves admissibility
+and transition structure, the operator $F(x,y)=
+\phi^{-1}(\fateClass{x,y})$ (choosing a representative)
+is admissible. Hence $\phi$ is in the image of
+$\functorEOD$.
+
+\emph{(iii) Composite}: $\functorEOD\circ\functorPBT$
+sends $(X,\obs,\transfam,\recon)\mapsto(\fateClasses,
+\transRate,\admRegion)$, which is precisely the ecology
+object whose dynamics are governed by the operator family
+$\transfam$ and whose admissible region $\admRegion$
+encodes the recoverability constraints of $\recon$.
+
+\emph{(iv) Persistence as equilibrium}: the persistence
+regime $\survRatio=1,\repEff>0$ corresponds in
+$\catEOD$ to fate classes with $K_{ii}=0$ (no death rate)
+and $K_{ji}>0$ for repair transitions: exactly the
+equilibrium condition $\dot{N}_i=0$.
+
+\emph{(v) Viability as positive recurrence}: $\fateVol{x,y}
+>0$ means the reachable fate region has positive measure,
+which in $\catEOD$ corresponds to the transition matrix
+$\transRate$ being positive recurrent: the system
+returns to any fate class with probability 1.
+\end{proof}
+\end{metatheorem}
+
+
+The Trilogy as a Diagram of Categories
+
+
+The Rosetta Stone Theorem can be visualized as follows.

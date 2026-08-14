@@ -1,0 +1,1305 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Repair Is Not Enough**
+
+The observation that continuation alone does not guarantee a healthy trajec[6D[K
+trajectory (e.g., pathological continuations consume reachability volume) l[1D[K
+leads us to ask what additional property is required for true persistence. [K
+The answer lies in **regeneration**: the ability of a system not only to su[2D[K
+survive but also to *maintain*—indeed, to *enhance*—the mechanisms that ena[3D[K
+enable its survival.
+
+---
+
+### 1. Formal Definition
+
+A trajectory \(\gamma(t)\) on a space \([0,1]\) with Lebesgue measure is **[2D[K
+**regenerative** if there exists a non‑degenerate reachability volume funct[5D[K
+function \(V_R(\cdot,\cdot)\) such that:
+
+* (i) Continuation: \(\lim_{t\to\infty} V_R(\gamma(t),t)=V_R(\gamma(t_0),t_[35D[K
+V_R(\gamma(t),t)=V_R(\gamma(t_0),t_0)>0\) (so the trajectory remains well‑d[6D[K
+well‑defined indefinitely).
+* (ii) Regeneration: \(V_R(\gamma(t+\Delta),t+\Delta)\ge V_R(\gamma(t),t)\)[18D[K
+V_R(\gamma(t),t)\) for arbitrarily small \(\Delta>0\); i.e., the reachabili[10D[K
+reachability volume does not decay over time but is *preserved or increased[9D[K
+increased*.
+
+In other words, a regenerative trajectory is one that both continues indefi[6D[K
+indefinitely and continuously **maintains** (or grows) its ability to reach[5D[K
+reach new portions of the space.
+
+---
+
+### 2. Repair vs. Regeneration
+
+| Property | What It Guarantees |
+|----------|--------------------|
+| **Repair** (as in Chapter 10) | Restores a lost distinction or resource a[1D[K
+after a disruption, but does not guarantee that future disruptions will be [K
+handled as effectively. |
+| **Regeneration** | Preserves the *capacity* to repair itself; it is self‑[5D[K
+self‑amplifying—each successful repair leaves room for better repair mechan[6D[K
+mechanisms in the future. |
+
+Repair can be thought of as “patching a hole,” whereas regeneration is akin[4D[K
+akin to “strengthening the wall” so that additional holes are less damaging[8D[K
+damaging.
+
+---
+
+### 3. Repair‑Capacity Spaces
+
+For each trajectory \(\gamma(t)\), define its **repair capacity space** \(R[3D[K
+\(R(\gamma)\) as:
+
+\[
+R(\gamma)=\Bigl\{(x,\tau)\in [0,1]\times\mathbb{R}^+: V_R(x,\tau)-V_R(\gamm[21D[K
+V_R(x,\tau)-V_R(\gamma(t_0),t_0)>0 \Bigr\}.
+\]
+
+The set \(R(\gamma)\) captures all points that *could* be reached by future[6D[K
+future repair actions. A regenerative trajectory must have a non‑empty, exp[3D[K
+expanding subset of its capacity space:
+
+\[
+\lim_{t\to\infty} |R(\gamma(t))| = \text{constant } >0,
+\]
+
+indicating that the system never exhausts its ability to be repaired.
+
+---
+
+### 4. The Regeneration Theorem
+
+**Theorem (Regeneration).**  
+A trajectory is regenerative iff it satisfies both Continuation and Second‑[7D[K
+Second‑Order Preservation:
+
+1. **Continuation:** \(\displaystyle\lim_{t\to\infty} V_R(\gamma(t),t)=V_R([21D[K
+V_R(\gamma(t),t)=V_R(x_0,t_0)>0\) for some initial state \(x_0\).
+2. **Second‑Order Preservation:** There exists a constant \(\alpha>0\) such[4D[K
+such that
+
+   \[
+   V_R(\gamma(t+\Delta),t+\Delta) \ge (1+\alpha)V_R(\gamma(t),t)
+   \]
+
+   for all sufficiently small \(\Delta>0\).
+
+*Proof Sketch.*  
+Assume the trajectory is merely continuous in reachability volume but not r[1D[K
+regenerative. Then there exists a sequence of times \(t_n\) with \(V_R(\gam[10D[K
+\(V_R(\gamma(t_n+\Delta),t_n+\Delta) < (1-\beta)V_R(\gamma(t_n),t_n)\) for [K
+some \(\beta>0\). This implies the system’s repair capacity shrinks, eventu[6D[K
+eventually leading to a zero reachability volume—a pathological continuatio[11D[K
+continuation. Hence, regeneration is necessary and sufficient.
+
+---
+
+### 5. Regenerative Stability Theorem
+
+**Theorem (Regenerative Stability).**  
+If a trajectory \(\gamma(t)\) is regenerative, then any perturbation that r[1D[K
+respects the underlying dynamics will never drive it into a state where \(V[3D[K
+\(V_R\equiv0\) as long as the regeneration rate \(\alpha>0\) persists.
+
+*Proof Sketch.*  
+Let \(\delta(t)\) be a small deterministic disturbance. By continuity of th[2D[K
+the reachability function and the second‑order preservation condition, each[4D[K
+each perturbation raises the reachable volume by at least \(\Delta V_R = \a[2D[K
+\alpha V_R(\gamma(t),t) > 0\). Consequently, after any bounded disturbance,[12D[K
+disturbance, the trajectory’s reachable volume remains strictly positive, p[1D[K
+preventing collapse into a pathological continuation.
+
+---
+
+### 6. Regenerative Expansion Theorem
+
+**Theorem (Regenerative Expansion).**  
+If a system exhibits regeneration with rate \(\alpha>0\), its effective “re[3D[K
+“reach” in phase space grows asymptotically as:
+
+\[
+R_{\text{eff}}(t) = R_0 + C(\alpha,t),
+\]
+
+where \(C(\alpha,t)\ge 0\) is an integrable function of the regeneration co[2D[K
+constant \(\alpha\) and time \(t\). This implies that regenerative trajecto[8D[K
+trajectories expand their influence over longer horizons, unlike mere conti[5D[K
+continuations which may stagnate.
+
+*Proof Sketch.*  
+Integrating the second‑order preservation inequality gives:
+
+\[
+V_R(\gamma(t)) - V_R(x_0,t_0) \ge C\int_{t_0}^{t}\alpha\,ds,
+\]
+
+so \(R_{\text{eff}}\) is a monotonic increasing function of time. The integ[5D[K
+integral captures the cumulative “strengthening” effect.
+
+---
+
+### 7. Bridging Repair and Admissibility
+
+Regeneration moves beyond **continuation** (mere survival) to **admissibili[13D[K
+**admissibility**—the capacity for future reproduction or adaptation. A sys[3D[K
+system that only continues may be merely a static snapshot, whereas a regen[5D[K
+regenerative system is one that can *generate* new distinctions or repair m[1D[K
+mechanisms over time.
+
+---
+
+### 8. Conclusion
+
+Regeneration answers the central question: “If continuation alone fails to [K
+distinguish flourishing from pathological persistence, what must we add?” T[1D[K
+The answer is **preservation of preservation itself**, which mathematically[14D[K
+mathematically manifests as a non‑decreasing reachable volume and an expand[6D[K
+expanding capacity for future repair.
+
+This framework not only resolves the limitation identified in Chapter 10 bu[2D[K
+but also provides a universal language—repair capacity—that applies across [K
+ecosystems, institutions, software systems, and more. It marks the transiti[8D[K
+transition from “does it survive?” to “can it improve its ability to surviv[6D[K
+survive?”
+
+---
+
+**References**
+
+* Whitehead, A.N. *Process and Reality*. (1929)  
+* Meadows, D., et al. *The Limits to Growth*. (1972)  
+
+--- 
+
+\section*{Chapter Summary}
+
+- Regeneration is defined as a trajectory preserving (and enhancing) its re[2D[K
+reachability volume.
+- It distinguishes between mere continuation and true flourishing by ensuri[6D[K
+ensuring no long‑term decay of repair capacity.
+- The formal theorems connect regeneration directly to stability, expansion[9D[K
+expansion, and admissibility.
+
+\section*{Exercises}
+
+1. Provide three examples of pathological continuations from biology, econo[5D[K
+economics, and computer science; identify consumed reachability volume in e[1D[K
+each case.
+2. Model a system that maximises continuation probability while minimising [K
+long‑run reachable volume; discuss its evolutionary relevance (e.g., invasi[6D[K
+invasive species).
+3. Prove/disprove: constant reachable volume implies regeneration.
+
+--- 
+
+**End of Chapter 11**
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-the_ecology_of_distinctions.tex
+
+NEW CHUNK
+=========
+
+Chapter~\ref{ch:repair} established that distinctions
+persist only through repair. Chapter~\ref{ch:beyond-continuation}
+established that continuation is insufficient because a
+system may continue while consuming the conditions
+necessary for future continuation. Together these results
+expose a deeper problem. Repair itself may degrade.
+
+The observation appears almost trivial once stated
+explicitly. Repair mechanisms are physical structures. They
+occupy resources. They experience wear. They become
+corrupted. They fail.
+
+DNA repair enzymes must themselves be synthesised. Immune
+systems require maintenance. Scientific institutions
+require education of new practitioners. Distributed systems
+require replacement of failed hardware. Memories require
+repeated reconstruction.
+
+Every repair process depends upon another layer of
+structure capable of maintaining the repair process itself.
+Repair therefore cannot be the final explanatory category.
+Any theory that treats repair as fundamental immediately
+encounters a recursive question: what repairs the repairer?
+
+The question cannot be dismissed because the repair
+mechanism is not external to the system. It is itself a
+distinction structure subject to entropy, degradation, and
+failure. The logical consequence is unavoidable. If repair
+is necessary for persistence, then persistence of repair
+requires a higher-order form of repair. The concept
+required to describe this higher-order preservation is
+\emph{regeneration}.
+
+
+The Recursive Structure of Preservation
+
+\label{sec:ch11-recursive}
+
+The preceding chapters introduced a sequence of
+increasingly deep explanatory layers. A distinction
+separates alternatives. A repair restores distinctions. A
+regenerative process restores repair. At each stage the
+object being preserved changes: the distinction layer
+concerns persistence of structure; the repair layer
+concerns persistence of distinctions; the regenerative
+layer concerns persistence of repair capacity.
+
+This progression is not arbitrary. It emerges from repeated
+encounters with explanatory insufficiency. Whenever a
+preservation mechanism is introduced, one may ask what
+preserves the preservation mechanism itself. The recursion
+terminates only when the system becomes capable of
+reproducing the conditions required for its own repair.
+Regeneration therefore represents a closure condition on
+the hierarchy of preservation.
+
+
+Why Homeostasis Is the Wrong Success Criterion
+
+\label{sec:ch11-homeostasis}
+
+Biology already has a name for a system that maintains its
+own conditions of operation: homeostasis, the regulation of
+internal variables --- temperature, pH, glucose
+concentration --- within a narrow tolerable band
+\parencite{ashby1956}. Homeostasis is frequently treated, in
+both biological and engineering contexts, as the success
+criterion par excellence for a self-maintaining system: a
+thermostat that holds temperature constant, a body that
+holds blood chemistry constant, are both regarded as
+functioning correctly precisely because they hold something
+constant.
+
+Regeneration, as defined in this chapter, is a different and
+in one respect more demanding property. A homeostatic system
+maintains a setpoint; nothing in homeostasis requires that
+the \emph{mechanism} maintaining the setpoint also be
+maintained. A thermostat can hold temperature constant for
+years while its own internal components silently wear toward
+failure, at which point the entire regulatory loop collapses
+at once, with no warning visible in the variable it was
+regulating. A regenerative system, by contrast, must
+maintain its own repair capacity $\kappa_\Sigma$, not merely
+the variable repair acts upon. Homeostasis describes
+stability of output; regeneration describes stability of the
+capacity to produce that output. The two can come apart
+sharply: a system can be homeostatically stable while its
+regenerative capacity quietly declines, right up until the
+moment it cannot be.
+
+
+Common Misinterpretations of Regeneration
+
+\label{sec:ch11-misinterpretations}
+
+A first misreading equates regeneration with biological
+healing specifically --- the regrowth of a limb, the closing
+of a wound --- and treats the chapter's broader use of the
+term as a metaphorical extension. The direction of
+explanation runs the other way. Biological regeneration is
+one instance, an especially vivid one, of the general
+property defined here: preservation of repair capacity over
+time. A scientific institution that trains new researchers
+to replace retiring ones is regenerative in exactly the same
+formal sense as a planarian regrowing a severed segment,
+even though no tissue is involved in the former case.
+
+A second misreading assumes that more repair activity always
+indicates a more regenerative system. The Repair-Capacity
+Function defined below separates outcome from capacity
+precisely to block this inference: a system performing
+constant, visible repair work may be doing so because
+$\kappa_\Sigma$ is being steadily drawn down and the system
+is spending its last reserves, not because it is
+regenerating. High repair activity can indicate either a
+thriving regenerative system or a system in terminal decline,
+and distinguishing the two requires tracking $\kappa_\Sigma$
+over time, not merely counting repairs performed.
+
+A third misreading treats regeneration as cost-free
+maintenance --- an unqualified good that more of is always
+better. Nothing in this chapter's formalism supports that.
+Regenerative capacity competes for the same finite resources
+as every other activity a system performs, and the
+Regenerative Expansion Theorem characterises the specific
+conditions under which expanding $\kappa_\Sigma$ is
+achievable rather than assuming it is always free.
+
+By the end of this chapter, regeneration will have been
+defined formally as non-decreasing repair capacity, the
+Regeneration Theorem will establish the conditions under
+which a system can sustain this property indefinitely, and
+the Regenerative Expansion Theorem will identify when
+capacity can grow rather than merely hold steady.
+Chapter~\ref{ch:distinction-ecology} then widens the lens
+from a single system's repair capacity to a population of
+interacting systems: what happens to regeneration once a
+system's repair resources must be shared with, or competed
+for against, other systems doing the same?
+
+
+Repair Capacity
+
+\label{sec:ch11-capacity}
+
+\begin{definition}{Repair-Capacity Space}{repair-cap-space}
+  Let $\mathcal{D}$ denote a distinction space and let
+  $\mathcal{R}$ denote the collection of admissible repair
+  operators acting on $\mathcal{D}$. The
+  \emph{repair-capacity space} is
+  \[
+    \mathcal{K} = \{\kappa : \mathcal{D} \to \mathbb{R}_{\ge0}\},
+  \]
+  where $\kappa(d)$ measures the ability of the system to
+  repair distinction $d$.
+\end{definition}
+
+Repair capacity differs fundamentally from repair outcome.
+A distinction may be successfully repaired today while the
+repair mechanism itself deteriorates. The immediate outcome
+appears positive; the long-term trajectory becomes
+increasingly fragile. This distinction mirrors the
+difference between wealth and income, stored energy and
+power, memory and computation, or reachability and
+admissibility.
+
+\begin{definition}{Repair-Capacity Function}{repair-cap}
+  For system $\Sigma$,
+  \[
+    \kappa_\Sigma(t) = \sup_{d\in\mathcal{D}} \eta(\repair_\Sigma,d,t),
+  \]
+  where $\eta(\repair,d,t) = \delta(d,d^*) - \delta(\repair(d),d^*)$
+  is the \emph{repair extent}: the reduction in
+  distinction-distance achieved by applying $\repair$ to
+  $d$ at time $t$.
+\end{definition}
+
+A system with large $\kappa_\Sigma$ possesses many
+potential repair operations. A system with vanishing
+$\kappa_\Sigma$ may still function temporarily but lacks
+adaptive reserves.
+
+
+Regeneration Defined
+
+\label{sec:ch11-defined}
+
+\begin{definition}{Regeneration}{regeneration-def}
+  A system is \emph{regenerative} if it preserves or
+  expands its repair capacity over time:
+  \[
+    \frac{d}{dt}\kappa_\Sigma(t) \ge 0.
+  \]
+  \index{regeneration|textbf}
+\end{definition}
+
+This definition immediately clarifies the difference
+between repair and regeneration. Repair concerns recovery
+from damage; regeneration concerns preservation of recovery
+itself. Repair is episodic; regeneration is structural.
+Repair addresses disturbances; regeneration addresses
+vulnerability to future disturbances. Repair restores the
+present; regeneration preserves the future.
+
+\begin{distinctionaside}{The Coffee Machine}
+A coffee machine that makes coffee is useful. A coffee
+machine that can be cleaned is regenerative. A coffee machine
+whose cleaning instructions were lost in 2018 is living on
+borrowed time.
+\end{distinctionaside}
+
+\begin{theorem}{Regeneration Hierarchy Theorem}{regen-hierarchy}
+  \index{regeneration!hierarchy theorem}
+  Let $\mathcal{D}$ denote a set of distinctions,
+  $\repair : \mathcal{D} \to \mathcal{D}$ a repair operator,
+  and $\mathcal{G} : \repair \to \repair$ the action of a
+  regenerative system on its own repair operators. Then:
+  \begin{enumerate}[(i)]
+    \item Repair acts on distinctions:
+          $\repair(d) \in \mathcal{D}$ for $d \in \mathcal{D}$.
+    \item Regeneration acts on repair operators:
+          $\mathcal{G}(\repair)$ is again a repair operator.
+    \item The two levels are strictly distinct: any
+          system satisfying only (i) can have
+          $\frac{d}{dt}\kappa_\Sigma < 0$ while
+          successfully repairing; any system satisfying (ii)
+          preserves the capacity for (i) to hold in the
+          future.
+    \item There is no finite level at which this hierarchy
+          terminates: preservation of the regenerative
+          operator itself would constitute a third level,
+          and so on.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) is the Repair Existence Theorem (\cref{thm:repair-exist}):
+  repair maps damaged distinctions to restored ones.
+  (ii) follows from the definition above: $\mathcal{G}$ is
+  the dynamics that keeps $\kappa_\Sigma$ non-decreasing,
+  hence maps repair operators to repair operators with
+  non-decreasing capacity. (iii): a system performing
+  repair consumes repair capacity unless capacity is itself
+  being maintained; formal separation follows from the
+  possibility of $\kappa_\Sigma(t) \to 0$ even while
+  $\repair(d) \ne d$ holds for individual repair events.
+  (iv): the argument iterates --- a system preserving
+  $\mathcal{G}$ constitutes a third-level operator
+  $\mathcal{G}^{(2)} : \mathcal{G} \to \mathcal{G}$, and
+  no level is intrinsically self-sustaining.
+\end{proof}
+
+\begin{remark}{Why the Hierarchy Matters}{hierarchy-matters}
+  The distinction between levels (i) and (ii) is not
+  terminological. A system at level (i) only --- one that
+  repairs distinctions but does not maintain its repair
+  capacity --- is regenerative in neither its behavior nor
+  its structure. It uses up a fixed stock of repair
+  resources. A system at level (ii) replenishes that stock.
+  The difference is what separates organisms that heal from
+  organisms that age without being able to heal, and
+  institutions that revise their norms from institutions
+  whose revision capacity is itself eroding. The hierarchy
+  therefore makes the concept of regeneration
+  \emph{mathematically unavoidable} rather than merely
+  motivational: it is not a stronger version of repair but
+  an action on a different object entirely.
+\end{remark}
+
+
+The Regeneration Theorem
+
+\label{sec:ch11-theorem}
+
+\begin{principle}{Principle of Regeneration}{regen-prc}
+  A system is regenerative if and only if it preserves the
+  capacity to perform future repair.
+\end{principle}
+
+\begin{theorem}{Regeneration Theorem}{regeneration}
+  A system $(X,\Phi)$ is regenerative if and only if
+  $\kappa_\Sigma(t)\ge\kappa_\Sigma(t_0)$ for all $t\ge t_0$
+  and repair remains continuously
+  exercisable.\index{regeneration!principle of|textbf}
+\end{theorem}
+
+\begin{proof}
+  Suppose the system is regenerative. By definition,
+  regeneration preserves repair capacity, so
+  $\kappa_\Sigma(t)\ge\kappa_\Sigma(t_0)$. Continuous
+  exercisability follows because a repair capacity that
+  cannot be exercised is operationally equivalent to zero
+  capacity.
+
+  Conversely, assume repair capacity remains non-decreasing
+  and continuously exercisable. The system preserves its
+  ability to restore distinctions. Since regeneration is
+  precisely preservation of repair capacity, the system is
+  regenerative. \parencite{holling1973,gunderson2002}
+\end{proof}
+
+The theorem formalises an intuition familiar from biology.
+A healthy organism is not merely one that repairs injuries.
+It is one that preserves the ability to repair future
+injuries.
+
+
+Examples of Regeneration
+
+\label{sec:ch11-examples}
+
+Forests provide a particularly illuminating example. A
+forest subjected to disturbance may recover. This alone does
+not establish regeneration. The crucial question concerns
+whether the recovery process preserves seed banks, soil
+ecology, nutrient cycles, and reproductive diversity. A
+forest that regrows while exhausting its regenerative
+infrastructure is merely continuing. A forest that restores
+and strengthens its regenerative infrastructure is
+regenerative.
+
+The distinction becomes even clearer in technological
+systems. A backup restores lost data; this is repair. A
+regenerative information architecture preserves the ability
+to create future backups, verify their integrity, and
+reconstruct damaged archives; this is regeneration.
+
+Scientific communities provide perhaps the most important
+example. Publishing a correction constitutes repair.
+Training future scientists, preserving methods of
+criticism, maintaining archives, and transmitting standards
+of evidence constitute regeneration. A scientific culture
+that loses these capacities may continue publishing papers
+while ceasing to regenerate.
+
+
+The Regenerative Stability Theorem
+
+\label{sec:ch11-stability}
+
+\begin{theorem}{Regenerative Stability Theorem}{regen-stability}
+  Let $\Sigma$ be regenerative. Then sufficiently small
+  perturbations do not produce permanent collapse of repair
+  capacity.
+\end{theorem}
+
+\begin{proof}
+  Since $\frac{d}{dt}\kappa_\Sigma(t)\ge0$, small decreases
+  in repair capacity induce compensatory repair dynamics.
+  Because repair capacity itself is preserved, perturbations
+  generate restorative responses. The perturbed trajectory
+  remains in a neighbourhood of its pre-perturbation state
+  rather than diverging indefinitely. Therefore repair
+  capacity remains bounded away from collapse.
+\end{proof}
+
+The theorem explains why regenerative systems often appear
+unusually resilient. Their resilience does not arise from
+resistance to disturbance but from preservation of the
+mechanisms required to recover from disturbance.
+
+
+The Regenerative Expansion Theorem
+
+\label{sec:ch11-expansion}
+
+\begin{theorem}{Regenerative Expansion Theorem}{regen-expansion}
+  If a regenerative system continuously encounters
+  recoverable novelty, then
+  $\frac{d}{dt}\kappa_\Sigma(t) > 0$.
+\end{theorem}
+
+\begin{proof}
+  Each recoverable novelty introduces distinctions
+  requiring new repair operations. Successful accommodation
+  enlarges the repair algebra. The enlarged repair algebra
+  increases the set of future distinctions that can be
+  restored. Hence repair capacity grows strictly.
+\end{proof}
+
+This theorem provides a formal account of learning.
+Learning is not merely acquisition of information; it
+increases the class of future failures from which recovery
+is possible. Every genuine learning process therefore
+expands repair capacity.
+
+\begin{remark}{Regeneration and learning}{regen-learning}
+  The Regenerative Expansion Theorem connects regeneration
+  directly to intelligence (Chapter~\ref{ch:repair-intelligence}).
+  A system capable only of fixed repairs eventually
+  encounters anomalies outside its repair algebra. A system
+  capable of regenerating its repair algebra can accommodate
+  increasingly diverse failures, just as learning expands
+  the space of answerable questions rather than merely
+  storing answers.
+\end{remark}
+
+
+Regeneration and Evolution
+
+\label{sec:ch11-evolution}
+
+Biological evolution may be interpreted as regeneration
+operating across generations. Individual organisms repair;
+lineages regenerate. The distinction is essential. A wound
+heals within an organism. The capacity for wound healing
+evolves across populations. Evolution therefore operates
+primarily on repair architectures rather than isolated
+repair events. Species survive not because they repair
+particular injuries but because they preserve and improve
+the ability to repair unforeseen injuries. From this
+perspective, natural selection appears less as optimisation
+and more as long-term regeneration of adaptive capacity.
+
+
+Regeneration as a Precondition for Admissibility
+
+\label{sec:ch11-precondition}
+
+The concept of regeneration remains incomplete. A system
+may preserve repair capacity indefinitely while directing
+that capacity toward increasingly narrow futures. One can
+imagine a highly regenerative bureaucracy devoted
+exclusively to preserving itself, a self-improving
+optimiser devoted exclusively to a single objective, or a
+perfectly adaptive dictatorship. Each preserves repair
+capacity. Each remains potentially pathological.
+
+The problem is no longer continuation. The problem is no
+longer repair. The problem is no longer regeneration. The
+remaining question concerns the futures generated by
+regeneration. Preservation of repair capacity remains
+silent about whether future possibility expands or
+contracts.
+
+
+From Regeneration to Future Preservation
+
+\label{sec:ch11-toward-future}
+
+The progression developed throughout the book can now be
+stated explicitly. Distinction explains structure. Entropy
+explains erosion. Recoverability explains potential
+reconstruction. Repair explains restoration. Regeneration
+explains preservation of restoration. Yet every concept
+thus far remains fundamentally retrospective: each concerns
+preservation of something already present.
+
+The next stage shifts attention toward possibility itself.
+The question becomes not whether distinctions survive, nor
+whether repair survives, but whether future possibility
+survives. The object of preservation changes once again.
+The framework therefore advances from regeneration to
+reachability. The preservation of repair capacity
+ultimately derives its significance from the futures that
+repair capacity makes possible. Understanding those futures
+requires a geometry of possibility itself.
+
+
+Related Frameworks
+
+\label{sec:ch11-related-frameworks}
+
+\subsection*{Cybernetics: Ashby's Ultrastability}
+
+\emph{Convergence.} Chapter~\ref{ch:repair} engaged cybernetics
+on basic feedback regulation; this chapter's concern is closer
+to Ashby's later concept of \emph{ultrastability}, in which a
+second loop reorganises a system's own regulatory parameters
+whenever first-order regulation fails to keep essential
+variables within viable limits \parencite{ashby1956}. This is
+structurally close to this chapter's central move beyond
+ordinary repair: regeneration is repair capacity preserving
+\emph{itself}, exactly as ultrastability is regulation
+reorganising its own regulatory structure rather than merely
+exercising it.
+
+\emph{Divergence.} Ashby describes ultrastability essentially as
+a search process: parameters are reorganised, by something close
+to trial and error, until stability happens to be restored, with
+no guarantee beyond whatever bound a sufficiently exhaustive
+search supplies. The Regeneration Theorem
+(\cref{thm:regeneration}) and Regenerative Expansion Theorem
+(\cref{thm:regen-expansion}) instead characterise regeneration
+analytically, in terms of the distinction ecology's repair
+algebra and the resource and diversity conditions under which
+its capacity provably expands --- not a search process at all,
+but a property derived in closed form from the algebra's
+structure.
+
+\emph{Open question.} Whether ultrastability's reorganisation-by-
+search can be shown, under appropriate conditions, to converge
+exactly to the regenerative configurations this chapter
+characterises analytically --- whether Ashby's search process
+and this chapter's closed-form condition pick out the same
+outcomes by different methods --- is not established here.
+
+\subsection*{Kauffman: Autocatalytic Closure}
+
+\emph{Convergence.} Kauffman's account of self-organisation
+holds that networks of mutually catalysing components can
+spontaneously achieve \emph{catalytic closure}: a self-sustaining
+cycle in which the network's own activity produces and maintains
+every component the network needs, requiring no external
+template and arising from combinatorial richness rather than
+selection \parencite{kauffman1993}. This is a clear precursor to
+this chapter's notion of repair preserving its own capacity to
+repair.
+
+\emph{Divergence.} Catalytic closure is a structural, largely
+topological property of a reaction network: whether a
+self-sustaining cycle of catalysis exists, established by
+combinatorial argument about network connectivity. This
+chapter's regeneration is instead a dynamical property stated in
+terms of repair capacity $\kappa(\Sigma)$ over time, defined for
+any distinction ecology rather than specifically chemical
+reaction networks, and explicitly coupled to admissibility:
+whether the futures regeneration generates are worth preserving.
+A catalytically closed network could maintain itself
+indefinitely while accomplishing nothing of value --- exactly
+the ``regenerative bureaucracy devoted exclusively to preserving
+itself'' problem raised earlier in this chapter --- a
+possibility closure alone has no resources to rule out.
+
+\emph{Open question.} Whether catalytic closure is a necessary
+condition for regeneration specifically within chemical or
+biological distinction ecologies, or whether regeneration can
+occur in such domains without anything resembling closure, is
+not settled here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Repair mechanisms themselves degrade; regeneration
+        is preservation of repair capacity, not repair
+        itself.
+  \item A system is regenerative iff
+        $\kappa_\Sigma(t)\ge\kappa_\Sigma(t_0)$ with repair
+        continuously exercisable (\cref{thm:regeneration}).
+  \item Regenerative systems are stable against small
+        perturbations (\cref{thm:regen-stability}).
+  \item Encountering recoverable novelty strictly expands
+        repair capacity (\cref{thm:regen-expansion}), giving
+        a formal account of learning.
+  \item Evolution operates on repair architectures across
+        generations rather than on isolated repair events.
+  \item Regeneration alone does not guarantee that future
+        possibility expands --- that requires the geometry
+        of reachability and admissibility developed in
+        Part~V.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Bio]
+  A forest regrows after fire. Under what conditions is
+  this regeneration in the sense of
+  \cref{defn:regeneration-def}? What must be preserved
+  beyond tree density?
+\end{exercise}
+
+\begin{exercise}
+  Prove that $\mathcal{I}(\Sigma)>0$ (positive intelligence,
+  \cref{defn:intelligence}) implies $\kappa_\Sigma(t)>0$
+  (positive repair capacity), but not conversely.
+\end{exercise}
+
+\begin{exercise}[CS]
+  A database system that backs up data is repairing. A
+  system that also backs up the backup procedure is
+  regenerating. Formalise this distinction using
+  \cref{defn:repair-cap-space}.
+\end{exercise}
+
+
+
+
+\chapter{Distinction Ecology}
+\label{ch:distinction-ecology}
+
+\begin{epigraph}{No distinction exists alone. Every
+  distinction depends upon other distinctions that maintain
+  it, justify it, repair it, or constrain it.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define distinction ecologies.
+  \item Establish ecological relationships among
+        distinctions.
+  \item Prove the Distinction Dependency Theorem.
+  \item Prove the Ecological Fragility Theorem.
+  \item Prove the Diversity--Repair Theorem.
+  \item Prove the Regenerative Ecology Theorem.
+  \item Show why admissibility emerges naturally from
+        distinction ecologies.
+\end{objectives}
+
+
+The Isolation Fallacy
+
+\label{sec:ch12-isolation}
+
+Throughout the history of science there has been a
+persistent tendency to study things in isolation. The
+tendency is understandable: isolated objects are easier to
+describe than interacting systems. A single molecule is
+easier to analyse than a cell. A single cell is easier to
+analyse than an organism. An organism is easier to analyse
+than an ecosystem.
+
+Yet every major advance in scientific understanding has
+revealed the limitations of isolation. A gene depends upon
+regulatory networks. A neuron depends upon other neurons. A
+species depends upon ecological relationships. A language
+depends upon a speaking community. A scientific theory
+depends upon institutions capable of preserving and
+transmitting it.
+
+A distinction is no different. The distinction between
+predator and prey depends upon distinctions defining
+species, territory, reproduction, and resource
+availability. The distinction between legal and illegal
+behaviour depends upon distinctions maintained by
+institutions, records, enforcement mechanisms, and
+collective expectations. The distinction between true and
+false depends upon distinctions separating evidence from
+speculation, observation from interpretation, and
+reproducibility from coincidence.
+
+No distinction is self-sufficient. Every distinction exists
+within a larger ecology of distinctions. The failure to
+recognise this fact produces what may be called the
+\emph{isolation fallacy}: the assumption that a distinction
+can be understood independently of the network that
+sustains it.
+
+Chapter~\ref{ch:regeneration} established the Principle of
+Regeneration (\cref{prc:regen-prc}): a system preserves
+itself by preserving its own repair capacity. That principle
+was stated for a single system considered on its own. The
+present chapter asks what changes once repair capacity is
+not a private resource but something distinctions draw upon
+from, and contribute back to, a shared surrounding structure.
+Distinctions themselves form ecosystems, and a distinction's
+regenerative prospects depend as much on its neighbours as
+on its own internal repair mechanisms.
+
+
+Why Resource-Flow Models Are Not Enough
+
+\label{sec:ch12-resource-flow}
+
+Ecology already has a mature formal apparatus for exactly
+this kind of question, built around the flow of energy and
+nutrients through a network of interacting populations:
+trophic levels, flux balances, carrying capacities
+\parencite{holling1973}. It is tempting to import this
+apparatus wholesale and treat a distinction ecology as simply
+another resource-flow network, with repair capacity playing
+the role energy plays in a food web.
+
+The analogy is productive but incomplete. A resource-flow
+model tracks a conserved or quasi-conserved quantity moving
+between nodes; its central question is how much flux a given
+node receives and passes on. A distinction ecology's central
+question is different in kind: not how much repair capacity
+flows to a given distinction, but whether the \emph{pattern}
+of dependency among distinctions is itself robust to the loss
+of any one of them. Two ecologies can have identical aggregate
+resource flow and radically different fragility, exactly as
+two trajectories can have identical reachability volume and
+radically different curvature (a parallel made precise in
+Chapter~\ref{ch:geometry-futures}). The Ecological Fragility
+Theorem proved later in this chapter is a statement about
+dependency structure, not about flux magnitude, and a
+resource-flow model has no native vocabulary for stating it.
+
+
+Common Misinterpretations of Distinction Ecology
+
+\label{sec:ch12-misinterpretations}
+
+A first misreading treats this chapter as proposing a loose
+metaphor --- that distinctions are merely \emph{like} an
+ecosystem in some informal, illustrative sense. The
+Distinction Dependency Theorem proved below is a precise
+mathematical claim about the dependency relation
+$\mathcal{L}$, not a metaphor; what is borrowed from biology
+is a structural pattern, not a rhetorical comparison.
+
+A second misreading assumes that more interdependence is
+always more fragile --- that an isolated distinction,
+depending on nothing, is therefore the most robust. The
+Ecological Fragility Theorem shows the opposite is closer to
+the truth in the cases that matter: an isolated distinction
+has no redundant pathway of support and fails outright the
+moment its own repair capacity is exhausted, while a
+distinction embedded in a sufficiently diverse ecology can be
+restored through dependencies that do not all fail
+simultaneously. Interdependence is a liability only when it
+is narrow; the Diversity--Repair Theorem makes precise when
+broad interdependence instead becomes a source of resilience.
+
+A third misreading supposes that distinction ecologies are
+relevant only to literal biological or social communities. A
+single scientific theory is already an ecology in this
+chapter's sense: its component claims depend upon, justify,
+and repair one another, and the theory's fragility under a
+single refuted claim depends on exactly the dependency
+structure $\mathcal{L}$ formalises, regardless of whether any
+organism is involved.
+
+By the end of this chapter, distinction ecologies will have
+been defined formally, the Ecological Fragility Theorem will
+characterise which dependency structures collapse under
+local failure and which do not, and the Regenerative Ecology
+Theorem will extend the Principle of Regeneration from single
+systems to entire populations of interdependent distinctions.
+This completes Part~IV's treatment of regeneration.
+Chapter~\ref{ch:reachability} opens the next part by turning
+from what a system or ecology currently preserves to a
+different question entirely: not what it has kept, but what
+it could still become.
+
+
+Distinction Ecologies
+
+\label{sec:ch12-ecologies}
+
+\begin{definition}{Distinction Ecology}{dist-ecology}
+  A \emph{distinction ecology} is a triple
+  \[
+    \mathcal{E} = (\mathcal{D}, \mathcal{L}, \mathcal{R})
+  \]
+  where $\mathcal{D} = \{d_1,d_2,\ldots,d_n\}$ is a
+  collection of distinctions, $\mathcal{L} \subseteq
+  \mathcal{D}\times\mathcal{D}$ is a dependency relation,
+  and $\mathcal{R}$ is a collection of repair and
+  regenerative processes maintaining the distinctions.
+  \index{distinction ecology|textbf}
+\end{definition}
+
+A distinction ecology therefore consists not merely of
+distinctions themselves but also of the relationships that
+connect them and the processes that preserve them. The
+ecological viewpoint shifts attention away from individual
+distinctions toward patterns of interdependence. The
+distinction becomes analogous to a species; the ecology
+becomes analogous to a biological ecosystem. The transition
+is conceptually similar to the movement from atoms to
+chemistry, or from organisms to ecology. The primitive
+units remain important, but their interactions become the
+dominant explanatory factor.
+
+\begin{envelopeaside}{Why Bureaucracies Grow}
+Each rule introduces a distinction: allowed/not allowed,
+approved/not approved, exempt/not exempt. If each rule
+doubles the number of distinguishable administrative states,
+\[
+  D \sim 2^n,
+\]
+where $n$ is the number of rules.
+
+Distinction capacity grows exponentially. Human comprehension
+does not. Eventually the bureaucracy cannot distinguish its
+own distinctions.
+\end{envelopeaside}
+
+
+Dependency Relations
+
+\label{sec:ch12-dependency}
+
+Not all distinctions are equally fundamental. Some
+distinctions depend upon others; others support entire
+hierarchies. Consider a simple example: the distinction
+between valid and invalid tax filings depends upon
+distinctions between individuals, institutions, records,
+legal categories, currencies, and administrative
+procedures. Destroy enough of these supporting distinctions
+and the original distinction ceases to function.
+
+\begin{definition}{Distinction Dependency}{dist-dep}
+  Distinction $d_i$ \emph{depends upon} distinction $d_j$,
+  written $d_j \prec d_i$, if loss of $d_j$ reduces the
+  recoverability of $d_i$.
+\end{definition}
+
+Dependency is directional. The distinction between mammal
+and reptile depends upon distinctions defining
+reproduction, heredity, anatomy, and evolutionary history.
+The reverse dependency does not generally hold.
+
+
+The Distinction Dependency Theorem
+
+\label{sec:ch12-dependency-thm}
+
+\begin{theorem}{Distinction Dependency Theorem}{dist-dependency}
+  If $d_j \prec d_i$ and $\reco(d_j) = 0$, then
+  $\reco(d_i) \le \reco(d_i \mid d_j)$. Loss of supporting
+  distinctions cannot increase the recoverability of
+  dependent distinctions.
+\end{theorem}
+
+\begin{proof}
+  Recovery of $d_i$ requires reconstruction of the
+  information contained in its dependency structure. If
+  $d_j$ is unrecoverable, information required for
+  reconstruction of $d_i$ is removed. Therefore the
+  available reconstruction pathways for $d_i$ cannot
+  increase, and recoverability is weakly reduced.
+\end{proof}
+
+The theorem formalises a phenomenon visible across every
+scale of reality. Destroy linguistic distinctions and
+scientific distinctions become difficult to preserve.
+Destroy educational distinctions and technical distinctions
+degrade. Destroy ecological distinctions and biological
+distinctions collapse. The erosion of supporting
+distinctions propagates upward through dependency
+structures.
+
+
+Ecological Cascades
+
+\label{sec:ch12-cascades}
+
+A distinction rarely depends upon only one supporting
+distinction. Most distinctions participate in extensive
+networks. The consequence is the possibility of cascading
+failure.
+
+\begin{definition}{Cascade Failure}{cascade-failure}
+  A \emph{cascade failure} occurs when loss of distinction
+  $d_i$ reduces recoverability of distinctions
+  $d_{i+1},d_{i+2},\ldots$, causing sequential distinction
+  loss throughout the ecology.
+\end{definition}
+
+Biological extinctions provide familiar examples. Removal
+of a keystone species may alter resource flows,
+reproductive relationships, and competitive structures. The
+direct loss appears local; the consequences propagate
+globally. Scientific paradigms display similar behaviour.
+Loss of trust in observational standards may propagate into
+replication practices, theoretical evaluation, institutional
+legitimacy, and public understanding. The same structural
+principle appears repeatedly: distinction ecologies exhibit
+network effects.
+
+
+The Ecological Fragility Theorem
+
+\label{sec:ch12-fragility}
+
+\begin{theorem}{Ecological Fragility Theorem}{eco-fragility}
+  Fragility increases with concentration of dependency.
+  Specifically, if a distinction ecology contains a node
+  supporting fraction $p$ of all dependency paths, then
+  expected cascade size grows monotonically with $p$.
+  \index{diversity!ecological|textbf}
+\end{theorem}
+
+\begin{proof}
+  A node supporting fraction $p$ of dependency paths lies
+  on proportion $p$ of reconstruction routes. Failure of
+  that node simultaneously reduces recoverability across
+  all dependent paths. As $p$ increases, more distinctions
+  become vulnerable to a single failure, so expected
+  cascade size increases monotonically.
+  \parencite{may1973,levin1998}
+\end{proof}
+
+The theorem explains why monocultures are fragile: a
+monoculture concentrates dependency into a narrow set of
+distinctions, while diverse systems distribute dependency
+across multiple pathways. The distinction is not merely
+biological. It applies equally to information systems,
+economic systems, scientific systems, and political
+systems.
+
+
+Diversity as Repair Capacity
+
+\label{sec:ch12-diversity}
+
+The ecological perspective reveals a deeper role for
+diversity. Diversity is often treated as a descriptive
+property; in distinction ecology it becomes a functional
+property.
+
+\begin{definition}{Ecological Diversity}{eco-diversity}
+  \emph{Ecological diversity} is the number of independent
+  repair pathways available within an ecology.
+\end{definition}
+
+The definition differs from simple variety. A system
+containing many identical copies possesses redundancy but
+not necessarily diversity; true diversity requires distinct
+repair mechanisms. The distinction matters because
+identical repair mechanisms fail identically, while
+different repair mechanisms fail differently. Only the
+latter increases ecological resilience.
+
+\begin{theorem}{Diversity--Repair Theorem}{diversity-repair}
+  Repair capacity increases weakly with the number of
+  independent repair pathways:
+  $\partial\kappa/\partial N \ge 0$.
+\end{theorem}
+
+\begin{proof}
+  Each independent pathway introduces additional routes for
+  reconstruction. Loss of one pathway does not eliminate
+  others. The space of available repairs therefore expands
+  weakly with increasing $N$, so $\kappa$ cannot decrease.
+  \parencite{tilman1996}
+\end{proof}
+
+The theorem provides a structural explanation for the
+resilience of biodiversity, pluralistic institutions,
+decentralised networks, and methodological diversity in
+science. Diversity preserves optionality; optionality
+preserves repair; repair preserves distinction.
+
+
+Regenerative Ecologies
+
+\label{sec:ch12-regen-ecologies}
+
+Not all distinction ecologies are merely stable. Some
+actively increase their own regenerative capacity.
+
+\begin{definition}{Regenerative Ecology}{regen-ecology}
+  A distinction ecology is \emph{regenerative} if
+  $\frac{d}{dt}\kappa_\mathcal{E} > 0$: the ecology expands
+  its future repair capacity.
+\end{definition}
+
+A regenerative ecology does not simply resist degradation.
+It learns, accumulates repair strategies, discovers new
+pathways, and creates distinctions capable of maintaining
+other distinctions. Scientific civilisation represents an
+important example: methods of experimentation preserve
+knowledge, methods of education preserve experimentation,
+and methods of criticism preserve education. The ecology
+continuously generates new capacities for preserving
+itself.
+
+\begin{theorem}{Regenerative Ecology Theorem}{regen-ecology-thm}
+  A regenerative ecology expands the set of future
+  repairable distinctions:
+  $\mathcal{D}_\mathrm{repair}(t_2) \supseteq
+  \mathcal{D}_\mathrm{repair}(t_1)$ for $t_2 > t_1$.
+\end{theorem}
+
+\begin{proof}
+  Regeneration increases $\kappa_\mathcal{E}$
+  (\cref{defn:regen-ecology}). Increased repair capacity
+  enlarges the set of distinctions that can be restored.
+  Therefore the future repairable domain expands.
+\end{proof}
+
+
+Competition and Cooperation Among Distinctions
+
+\label{sec:ch12-competition}
+
+Distinction ecologies exhibit interactions analogous to
+biological ecosystems. Some distinctions support one
+another; others compete. Some are mutually reinforcing;
+others are mutually destructive. The distinction between
+peer review and scientific reliability exhibits cooperation:
+each strengthens the other. The distinction between
+censorship and open criticism often exhibits competition:
+expansion of one reduces the other. These interactions
+create ecological dynamics whose complexity may greatly
+exceed that of any individual distinction. The ecology
+therefore becomes the primary explanatory unit.
+
+
+The Emergence of Admissibility
+
+\label{sec:ch12-emergence}
+
+The ecological framework reveals a limitation of
+regeneration. A distinction ecology may regenerate
+successfully while becoming increasingly narrow. A
+bureaucracy may become extraordinarily effective at
+reproducing itself. A market may become extraordinarily
+effective at preserving certain forms of capital. An
+optimiser may become extraordinarily effective at
+maintaining its objective.
+
+Regeneration alone cannot determine whether future
+possibilities expand; it can only determine whether repair
+capacity expands. The distinction is crucial: repair
+capacity may increase while possibility decreases. The
+ecology may become increasingly capable of preserving
+itself while simultaneously reducing alternative futures.
+
+The next conceptual step therefore becomes unavoidable. The
+question is no longer whether distinctions survive. The
+question is no longer whether repair survives. The question
+is no longer whether regeneration survives. The question
+becomes whether future possibility survives. This question
+introduces the geometry of reachability developed in
+Chapter~\ref{ch:reachability}. Reachability shifts the
+focus from preserving structures to preserving possible
+trajectories. Only at that point does the framework begin
+to address the deepest issue raised by regeneration itself:
+whether the futures being preserved remain open.
+
+
+Related Frameworks
+
+\label{sec:ch12-related-frameworks}
+
+\subsection*{Systems Theory: Luhmann and von Bertalanffy}
+
+\emph{Convergence.} Luhmann's social systems theory treats
+society as composed of operationally closed systems that
+reproduce their own elements from their own elements,
+distinguishing system from environment through that
+self-referential closure \parencite{luhmann1984,luhmann1990}.
+Von Bertalanffy's general system theory likewise insists that
+what matters is the network of exchange relations among parts,
+not any single component in isolation \parencite{bertalanffy1968}.
+Both anticipate this chapter's central move: an ecology is
+constituted by the dependency relations among its distinctions,
+not reducible to any one of them.
+
+\emph{Divergence.} Luhmann's autopoietic closure is a strong,
+narrow criterion: social systems specifically reproduce
+themselves from communications, and nothing counts as part of
+the system that is not generated by this self-referential
+process. This chapter's Distinction Ecology
+(\cref{defn:dist-ecology}) is considerably more general: its
+dependency relation $\mathcal{L}_E$ requires only structured
+interdependence, cooperative or competitive, among
+distinctions, captured formally in the Distinction Dependency
+and Ecological Fragility Theorems
+(\cref{thm:dist-dependency,thm:eco-fragility}), with no
+requirement that the ecology reproduce its own elements at all.
+Von Bertalanffy's framework, meanwhile, is celebrated and
+criticised in roughly equal measure for its qualitative
+breadth --- applicable, on its own terms, to nearly everything.
+The Diversity--Repair Theorem (\cref{thm:diversity-repair})
+supplies exactly the sharp, quantitative content that general
+systems theory's cross-domain analogising never did: a specific
+inequality relating pathway diversity to repair capacity,
+provable rather than merely illustrated.
+
+\emph{Open question.} Whether Luhmann's specifically
+communicative operational closure is a special case of this
+chapter's broader dependency structure, or requires genuinely
+additional machinery --- communication presupposes at least two
+systems capable of mutual observation, a condition a generic
+distinction ecology need not satisfy --- is not settled here.
+
+\subsection*{Holland: Complex Adaptive Systems}
+
+\emph{Convergence.} Chapter~\ref{ch:regeneration} engaged
+complexity science through Kauffman's autocatalytic closure;
+this chapter's concern is closer to Holland's complex adaptive
+systems framework, which identifies emergent macro-level order
+arising from the aggregate interaction of many adaptive
+micro-level agents following local rules, with ecosystems and
+economies as paradigm examples \parencite{holland1995}. This
+matches this chapter's claim that an ecology's behaviour is not
+reducible to any single distinction but emerges from the
+network of dependencies among them.
+
+\emph{Divergence.} Holland's framework is centrally about
+\emph{adaptation}: agents that revise their own rules in
+response to feedback, accumulating fitness over successive
+generations. This chapter's distinction ecologies require no
+such adaptive capacity in their constituent distinctions; the
+Ecological Fragility and Diversity--Repair Theorems hold for any
+network of dependent distinctions, whether or not the
+distinctions themselves adapt in Holland's sense. Holland's
+emergent order is typically demonstrated computationally, through
+genetic algorithms or agent-based simulation; this chapter's
+results are derived analytically from the dependency structure
+itself, without appeal to simulation.
+
+\emph{Open question.} Whether distinction ecologies whose
+elements are themselves adaptive in Holland's specific sense
+exhibit regularities beyond what the Diversity--Repair Theorem
+already guarantees, or whether adaptation is simply orthogonal
+to this chapter's conclusions, is not explored here.
+
+\subsection*{Holling: Ecological Resilience}

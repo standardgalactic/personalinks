@@ -1,0 +1,1137 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\documentclass[11pt]{article}
+
+
+
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{csquotes}
+\usepackage{hyperref}
+
+\geometry{margin=1in}
+\setstretch{1.15}
+
+
+
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{remark}{Remark}
+
+
+
+
+\newcommand{\POP}{\textsc{pop}}
+\newcommand{\LINK}{\textsc{link}}
+\newcommand{\MERGE}{\textsc{merge}}
+\newcommand{\COLLAPSE}{\textsc{collapse}}
+\newcommand{\REFUSE}{\textsc{refuse}}
+
+
+
+
+\title{Event--Historical Aggregation:\\
+Map--Reduce as Commitment in Spherepop}
+\author{Flyxion}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\section*{Abstract}
+
+
+This essay develops an event--historical semantics for distributed aggregation,
+recasting the classical map--reduce paradigm as a process of irreversible
+commitment rather than value computation. Working within the Spherepop calculus,
+computation is understood as a history of authorized, replayable transformations
+whose meaning lies in the constraints they impose on future possibilities.
+Mapping corresponds to the construction of local event histories that culminate
+in committed summaries, while reduction is realized as a sequence of
+\textsc{merge} events that irreversibly bind these local commitments into a
+durable global object.
+
+The paper introduces a formal semantics for event--historical aggregation,
+derives algebraic correctness properties for provenance--guarded reducers, and
+shows how associativity, commutativity, and idempotence emerge only after
+quotienting histories by authorized collapse. Refusal is treated as a first--class
+semantic operator, rendering invalid aggregations ontologically inadmissible
+rather than merely erroneous. The resulting framework subsumes classical
+map--reduce and CRDT semantics as special cases while extending them with
+auditability, policy enforcement, and controlled forgetting.
+
+
+
+Introduction
+
+
+
+Map--reduce occupies a foundational role in distributed systems. Its enduring
+appeal lies in a simple abstraction: large computations can be decomposed into
+local mappings over shards of data and a reduction that aggregates partial
+results. Correctness, scalability, and parallelism are achieved by requiring the
+reducer to satisfy algebraic properties such as associativity and, in many
+settings, commutativity and idempotence.
+
+Despite its practical success, the classical formulation of map--reduce is
+conceptually thin. Aggregation is treated as a function from values to values,
+and the identity of the result is exhausted by its final numerical or symbolic
+content. Provenance, policy constraints, and correctness conditions beyond pure
+algebra are relegated to informal assumptions or external mechanisms.
+
+This paper argues that this value--centric framing obscures what aggregation
+actually does in practice. Real distributed aggregation is not merely the
+calculation of a number; it is the construction of a durable commitment about
+which inputs have been accepted, which combinations are permitted, and which
+alternatives have been ruled out. These commitments persist across time, shape
+future computation, and often carry normative or policy significance.
+
+Spherepop provides a calculus in which such commitments are explicit. In
+Spherepop, computation is event--sourced: objects are not defined by their
+current state but by the irreversible history of authorized events that brought
+them into being. Within this setting, map--reduce admits a natural and precise
+reinterpretation. The map phase constructs many local histories, each culminating
+in a committed summary. The reduce phase composes these histories through
+authorized merges, producing a global object whose identity is inseparable from
+the commitments encoded in its lineage.
+
+The contribution of this essay is threefold. First, it provides a rigorous
+event--historical semantics for map--reduce in Spherepop. Second, it derives the
+algebraic correctness conditions of reducers as emergent properties of
+provenance--guarded merge operations rather than as primitive assumptions.
+Third, it demonstrates how refusal and controlled forgetting can be integrated
+directly into the semantics of aggregation, yielding a framework that is both
+more expressive and more faithful to real distributed practice.
+
+
+
+Computation as Event History
+
+
+
+Traditional programming models identify computation with the evaluation of
+functions over values. A computation is correct if it produces the right output,
+and the internal steps leading to that output are, at best, an implementation
+detail. In contrast, Spherepop treats computation as the construction of a
+history. An object exists if and only if there is an authorized sequence of
+events that introduces it, transforms it, and commits it as a fact of the world.
+
+This event--historical stance entails a fundamental shift in semantics. The
+meaning of an object is not given by its extensional content alone, but by the
+constraints its history imposes on future computation. A committed object rules
+out alternative possibilities: once a \POP\ event has occurred, the system may
+no longer behave as though the committed fact were absent or different.
+
+Within this framework, aggregation cannot be understood as a mere operation on
+values. Aggregation constructs an object whose identity records which inputs
+have been bound together and under what conditions. The question \enquote{what
+value did we compute?} is secondary to the question \enquote{what commitments
+have we made?}
+
+Map--reduce, reinterpreted in this light, is a disciplined method for constructing
+global commitments from local ones. Mapping produces locally committed facts;
+reduction binds those facts together into a larger commitment that persists as a
+world--bearing artifact.
+
+
+
+Mapping as Local Commitment
+
+
+
+The map phase in Spherepop begins with the introduction of input shards as
+authorized objects. Each shard is established as a legitimate participant in
+the computation through a commitment event. A mapper then performs some local
+analysis over the shard. This analysis may be pure and reversible at the level of
+ordinary computation, but its output becomes meaningful only when it is
+committed.
+
+Formally, a mapper produces a summary object whose existence is fixed by a
+\POP\ event. A subsequent \LINK\ event binds the summary to its originating
+shard, establishing provenance as a structural property of the object rather
+than as external metadata. Once these events have occurred, the mapper output
+cannot be silently rewritten or replaced without creating a new history.
+
+The result of mapping is therefore a collection of objects that are independent
+in the sense that their histories share no reduction commitments, yet grounded
+in the sense that each carries an explicit lineage to the data that produced it.
+These objects form the raw material for reduction, not as interchangeable
+values, but as historically situated facts.
+
+
+
+Event--Historical Semantics
+
+
+
+To reason rigorously about aggregation in Spherepop, we now introduce a formal
+semantics in which computation is modeled as the construction and extension of
+event histories. The purpose of this semantics is not to reproduce classical
+denotational or operational accounts, but to make precise the sense in which
+aggregation derives its meaning from irreversible commitment rather than from
+terminal values.
+
+
+Histories and Authorization
+
+
+Let $\mathcal{E}$ denote a fixed set of primitive event types, including
+$\POP$, $\LINK$, $\MERGE$, $\COLLAPSE$, and $\REFUSE$. A history is a finite,
+totally ordered sequence
+\[
+H = (e_1, e_2, \ldots, e_n),
+\]
+where each $e_i \in \mathcal{E}$. Histories are constructed incrementally: at
+each step, a candidate event may or may not be admissible, depending on the
+history constructed so far.
+
+Authorization is taken as a primitive relation
+\[
+\mathsf{auth}(H, e),
+\]
+which holds when the event $e$ is permitted as an extension of the history $H$.
+Authorization subsumes typing constraints, policy rules, domain invariants, and
+resource conditions. Crucially, authorization is evaluated with respect to the
+entire prefix history, not merely the current state of some object.
+
+\begin{definition}[Admissible Extension]
+Given a history $H$ and an event $e$, the extension $H \cdot e$ is admissible if
+and only if $\mathsf{auth}(H, e)$ holds.
+\end{definition}
+
+If an event is not authorized, no successor history exists. This absence is not
+modeled as an error state, but as a lack of admissible continuation.
+
+
+Replay Semantics
+
+
+The meaning of a history is given by its replay. Let
+\[
+\llbracket H \rrbracket
+\]
+denote the object induced by replaying the events of $H$ in order. Replay is a
+partial function from histories to objects: it is defined only for admissible
+histories. Two histories that differ syntactically may nevertheless replay to
+objects that are semantically equivalent under collapse, as discussed below.
+
+Objects are therefore intensional: their identity depends on the history that
+produced them, not merely on an extensional value.
+
+\begin{remark}
+This contrasts with state--based semantics, where histories are erased once their
+effects are incorporated into a state. In Spherepop, history is never erased
+implicitly; it can only be transformed or quotienting via explicit events.
+\end{remark}
+
+
+Commitment and Monotonicity
+
+
+Commitment is introduced through the $\POP$ event. Informally, a $\POP$ asserts
+that an object now exists as a fact of the world and may be referenced by future
+events.
+
+\begin{definition}[Commitment]
+An object $x$ is committed at history $H$ if $H$ contains a $\POP(x)$ event.
+\end{definition}
+
+Commitment is irreversible in the following precise sense.
+
+\begin{proposition}[Monotonicity of Commitment]
+If an object $x$ is committed at history $H$, then for any admissible extension
+$H' \succeq H$, $x$ remains committed in $H'$.
+\end{proposition}
+
+\begin{proof}
+By definition, commitment is witnessed by the presence of a $\POP(x)$ event in
+the history. Since histories are extended only by appending events, no admissible
+extension can remove or negate a prior $\POP(x)$. Therefore, once committed, $x$
+remains committed in all admissible future histories.
+\end{proof}
+
+This monotonicity property formalizes the intuitive notion that commitment rules
+out alternative futures in which the committed fact did not occur.
+
+
+Refusal as Semantic Partiality
+
+
+Refusal plays a central role in the semantics of aggregation. Rather than being an
+exceptional outcome within the system, refusal is modeled as the absence of an
+authorized extension.
+
+\begin{definition}[Refusal]
+Given a history $H$ and a candidate event $e$, refusal occurs when
+$\mathsf{auth}(H, e)$ does not hold. In this case, no history $H \cdot e$ exists.
+\end{definition}
+
+In particular, a $\REFUSE$ annotation may be used to document the reason for
+inadmissibility, but it does not create a successor object. Refusal is therefore
+ontological rather than operational: the forbidden aggregation simply cannot
+happen.
+
+\begin{theorem}[No Recovery from Refusal]
+If an event $e$ is refused at history $H$, then there exists no history $H'$
+extending $H$ in which the effects of $e$ are realized.
+\end{theorem}
+
+\begin{proof}
+By definition, refusal means that $H \cdot e$ is not admissible. Since all
+histories are constructed by admissible extensions, and no alternative event can
+realize the same effects without violating authorization, there exists no
+admissible history extending $H$ in which the effects attributed to $e$ occur.
+\end{proof}
+
+This theorem captures the distinction between refusal and error handling. An
+error may be corrected or compensated for in later computation. A refusal
+precludes the existence of any history in which the forbidden act took place.
+
+
+Collapse and Equivalence of Histories
+
+
+While histories are never implicitly erased, Spherepop permits explicit,
+authorized forgetting through $\COLLAPSE$ events. Collapse defines an equivalence
+relation on histories that preserves selected invariants while discarding others.
+
+\begin{definition}[Collapse Equivalence]
+Given a set of invariants $I$, a collapse operation induces an equivalence
+relation $\equiv_I$ on histories such that $H \equiv_I H'$ if and only if
+$\llbracket H \rrbracket$ and $\llbracket H' \rrbracket$ agree on all invariants
+in $I$.
+\end{definition}
+
+Collapse is irreversible and idempotent: once distinctions are forgotten, they
+cannot be recovered by further admissible extensions.
+
+\begin{proposition}[Idempotence of Collapse]
+If $H$ collapses to $H'$ under invariants $I$, then collapsing $H'$ again under
+$I$ yields $H'$.
+\end{proposition}
+
+\begin{proof}
+By definition, $H'$ already satisfies the equivalence constraints induced by $I$.
+A second collapse under the same invariants cannot identify any further
+distinctions and therefore leaves $H'$ unchanged.
+\end{proof}
+
+This completes the core semantic framework. With histories, authorization,
+commitment, refusal, and collapse formally defined, we can now turn to the
+semantics of aggregation itself and derive the algebraic properties of reducers
+as theorems rather than assumptions.
+
+
+
+Merge Semantics and Reducer Construction
+
+
+
+With the event--historical framework in place, we now give a precise semantics
+for reduction by merge. The central claim of this section is that reducer
+correctness properties traditionally assumed as algebraic axioms arise, in
+Spherepop, as consequences of authorization, provenance constraints, and
+collapse.
+
+
+Reducer Objects and Provenance
+
+
+A reducer object is an object whose history includes one or more merge events.
+Semantically, a reducer object represents a commitment that binds together a
+collection of mapper outputs. Each reducer therefore carries both a payload and
+a provenance component.
+
+\begin{definition}[Reducer Summary]
+A reducer summary is a pair $(v, P)$, where $v$ is a semantic payload and $P$ is a
+finite set of shard identifiers indicating provenance.
+\end{definition}
+
+The interpretation of the payload $v$ is domain--specific. For example, in a
+word--count application it may be a frequency table, while in numerical
+aggregation it may be a sum or vector. Provenance, by contrast, has a fixed
+semantic role: it constrains admissible composition.
+
+
+Merge as an Authorized Extension
+
+
+A merge is an event that takes two existing objects---typically a current reducer
+and a mapper output---and produces a new reducer object whose history extends the
+histories of its inputs.
+
+\begin{definition}[Merge Authorization]
+Let $(v_1, P_1)$ and $(v_2, P_2)$ be reducer summaries. The merge event
+$\MERGE((v_1, P_1), (v_2, P_2))$ is authorized if and only if
+$P_1 \cap P_2 = \varnothing$.
+\end{definition}
+
+When authorized, the merge produces a new summary
+\[
+(v_1, P_1) \oplus (v_2, P_2) = (v_1 \diamond v_2, P_1 \cup P_2),
+\]
+where $\diamond$ is a binary operation on payloads. When the authorization
+condition fails, the merge is refused and no successor history exists.
+
+\begin{remark}
+The authorization condition enforces a strong correctness guarantee: each shard
+may contribute at most once to a reducer history. Duplication is therefore not
+handled by idempotence at the value level, but excluded at the level of
+admissible histories.
+\end{remark}
+
+
+Monotonicity and Irreversibility of Reduction
+
+
+Reduction by merge is monotone in a precise sense: each authorized merge strictly
+extends the set of commitments encoded in the reducer history.
+
+\begin{proposition}[Monotonic Growth of Provenance]
+Let $r$ be a reducer summary with provenance $P$. If $r'$ is obtained from $r$ by
+an authorized merge with a mapper output whose provenance is $Q$, then the
+provenance of $r'$ is $P \cup Q$, and $P \subsetneq P \cup Q$.
+\end{proposition}
+
+\begin{proof}
+By merge definition, $P \cap Q = \varnothing$ and the resulting provenance is
+their union. Since $Q$ is nonempty for any nontrivial mapper output, the union is
+a strict superset of $P$.
+\end{proof}
+
+This strict growth property implies irreversibility.
+
+\begin{theorem}[Non--Reversibility of Merge]
+Let $r'$ be obtained from $r$ by an authorized merge. There exists no admissible
+history extending the history of $r'$ in which the commitments introduced by
+that merge are undone.
+\end{theorem}
+
+\begin{proof}
+Undoing the merge would require either removing provenance elements from the
+summary or negating the effect of a prior $\POP$ event. Neither operation is
+authorized under the event--historical semantics, as histories may only be
+extended, not rewritten. Therefore no admissible extension can reverse the
+commitments introduced by the merge.
+\end{proof}
+
+
+Associativity up to Collapse
+
+
+Classical reducers rely on associativity to permit reordering and parallel
+combination of inputs. In Spherepop, merge is not strictly associative at the
+level of histories, since different merge orders produce distinct event
+sequences. Associativity instead emerges at the level of collapsed objects.
+
+\begin{definition}[Associativity up to Collapse]
+Let $m_1, m_2, m_3$ be mapper outputs with pairwise disjoint provenance. Merge is
+associative up to collapse if the reducer objects obtained by
+\[
+((m_1 \oplus m_2) \oplus m_3)
+\quad \text{and} \quad
+(m_1 \oplus (m_2 \oplus m_3))
+\]
+are equivalent under an authorized collapse that preserves payload and
+provenance invariants.
+\end{definition}
+
+\begin{theorem}[Associativity of Provenance--Guarded Merge]
+If the payload operation $\diamond$ is associative and commutative, then merge is
+associative up to collapse.
+\end{theorem}
+
+\begin{proof}
+Both merge trees produce reducer summaries with identical payload
+$v_1 \diamond v_2 \diamond v_3$ and identical provenance
+$P_1 \cup P_2 \cup P_3$. The only difference lies in the internal structure of
+their histories. A collapse that preserves payload and provenance invariants
+identifies these histories, yielding equivalent reducer objects.
+\end{proof}
+
+This result justifies parallel and incremental reduction without erasing the
+historical information that distinguishes different execution paths.
+
+
+Commutativity and Structural Symmetry
+
+
+A similar argument establishes commutativity up to collapse.
+
+\begin{proposition}[Commutativity up to Collapse]
+If $\diamond$ is commutative, then for any two mapper outputs $m_1$ and $m_2$ with
+disjoint provenance, the reducer objects obtained by merging $m_1$ into $m_2$
+and $m_2$ into $m_1$ are equivalent under collapse.
+\end{proposition}
+
+\begin{proof}
+The two merge orders produce summaries with identical payload and provenance.
+As in the associative case, a collapse preserving these invariants identifies
+the resulting histories.
+\end{proof}
+
+
+Idempotence via Refusal
+
+
+Idempotence is often required to tolerate duplicate inputs. In Spherepop, this
+property arises from refusal rather than from algebraic absorption.
+
+\begin{theorem}[Idempotence by Inadmissibility]
+Let $m$ be a mapper output with provenance $P$. Attempting to merge $m$ into a
+reducer whose provenance already includes $P$ is refused. Consequently, each
+mapper output can contribute to a reducer at most once.
+\end{theorem}
+
+\begin{proof}
+If $P \subseteq P_r$, then $P \cap P_r \neq \varnothing$, violating the merge
+authorization condition. The merge is therefore inadmissible, and no successor
+history exists in which the duplicate contribution occurs.
+\end{proof}
+
+This completes the derivation of the classical algebraic properties of reducers
+as consequences of event--historical semantics rather than as primitive axioms.
+Reduction is thus revealed as a process of constructing increasingly constrained
+objects through authorized composition.
+
+
+
+Incremental and Streaming Reduction
+
+
+
+A salient advantage of event--historical aggregation is that it supports
+incremental and streaming computation without additional machinery. Because
+each merge yields a new committed reducer object rather than mutating an
+existing one, aggregation naturally unfolds as a monotone sequence of
+commitments indexed by time.
+
+Let $\{m_i\}_{i \ge 1}$ be a potentially unbounded stream of mapper outputs with
+pairwise disjoint provenance. An incremental reducer constructs a sequence of
+reducer objects $\{r_i\}_{i \ge 0}$ such that $r_0$ is an explicitly committed
+empty summary and
+\[
+r_{i+1} = r_i \oplus m_{i+1}
+\]
+whenever the merge is authorized. Each $r_i$ is a distinct object with its own
+history, and the transition from $r_i$ to $r_{i+1}$ is marked by a $\MERGE$
+followed by a $\POP$.
+
+\begin{proposition}[Prefix Soundness]
+For any $i < j$, the reducer object $r_i$ represents a sound aggregation of the
+prefix $\{m_1, \ldots, m_i\}$ of the input stream.
+\end{proposition}
+
+\begin{proof}
+By construction, $r_i$ is obtained by a sequence of authorized merges starting
+from $r_0$ and incorporating exactly the mapper outputs $m_1$ through $m_i$.
+Authorization ensures that no mapper output outside this prefix can be included,
+and monotonicity of commitment ensures that no included output can be removed.
+\end{proof}
+
+This prefix property implies that at any moment the reducer exposes a coherent,
+auditable snapshot of the aggregation so far, without requiring global
+synchronization or quiescence.
+
+
+
+Checkpointing and Rollback as Event Construction
+
+
+
+Checkpointing in Spherepop does not require copying state or persisting mutable
+variables. To checkpoint a computation is simply to name a particular reducer
+object and record its identity. Because reducer objects are immutable once
+committed, a checkpoint is a stable reference to a specific history.
+
+Rollback, correspondingly, is not a reversal of time. It is the construction of
+a new branch of history that resumes aggregation from an earlier checkpoint.
+Formally, let $r_k$ be a previously committed reducer object. A rollback resumes
+computation by using $r_k$ as the base reducer for subsequent merges, thereby
+producing a new sequence $\{r'_i\}$ whose histories extend that of $r_k$ but not
+that of later reducer objects.
+
+\begin{theorem}[Rollback without Reversal]
+Rollback does not violate irreversibility: no committed reducer object is
+destroyed or undone by resuming from an earlier checkpoint.
+\end{theorem}
+
+\begin{proof}
+Rollback constructs new histories that extend an earlier committed history.
+Later histories remain intact and committed, but are no longer extended along
+the new branch. Since no history is shortened or rewritten, irreversibility is
+preserved.
+\end{proof}
+
+This treatment of rollback aligns aggregation with versioned data structures
+and persistent computation, while retaining explicit causal semantics.
+
+
+
+Controlled Forgetting via Collapse
+
+
+
+While histories are semantically significant, unbounded growth of reducer
+histories is neither necessary nor desirable. Spherepop addresses this through
+explicit collapse events that authorize forgetting under specified invariants.
+
+A collapse operation takes a reducer object with history $H$ and produces a new
+object with history $H'$ such that $H \equiv_I H'$ for a declared set of
+invariants $I$. Typical invariants include payload totals and provenance sets,
+while internal merge structure is often dispensable.
+
+\begin{proposition}[Safety of Collapse]
+If a collapse preserves payload and provenance invariants, then any property of
+the reducer that depends only on these invariants is preserved under collapse.
+\end{proposition}
+
+\begin{proof}
+By definition of collapse equivalence, the replay of $H$ and $H'$ agree on all
+invariants in $I$. Any property definable solely in terms of these invariants
+therefore has the same truth value for both objects.
+\end{proof}
+
+Collapse is itself an irreversible commitment. Once a history has been collapsed,
+the distinctions it discards cannot be recovered by further admissible
+extensions.
+
+\begin{theorem}[Irreversibility of Forgetting]
+There exists no admissible history extending a collapsed history that restores
+discarded distinctions.
+\end{theorem}
+
+\begin{proof}
+Restoring discarded distinctions would require introducing information not
+derivable from the preserved invariants. Since admissible extensions may only
+operate on existing committed objects and events, and collapse explicitly
+forgets those distinctions, no authorized event can reconstruct them.
+\end{proof}
+
+This explicit treatment of forgetting distinguishes Spherepop from systems in
+which optimization silently erases causal structure.
+
+
+
+Auditability and Lineage Guarantees
+
+
+
+A principal motivation for event--historical aggregation is auditability. Because
+reducer objects retain their histories unless explicitly collapsed, it is always
+possible to reconstruct the lineage of an aggregate.
+
+\begin{theorem}[Lineage Completeness]
+Let $r$ be a reducer object whose history has not been collapsed with respect to
+provenance. Then the set of mapper outputs contributing to $r$ is uniquely
+recoverable from its history.
+\end{theorem}
+
+\begin{proof}
+Each authorized merge introduces explicit links from the new reducer object to
+both its prior reducer and the mapper output being incorporated. By traversing
+these links recursively, one can enumerate all mapper outputs contributing to
+$r$. Authorization ensures that no mapper output appears more than once.
+\end{proof}
+
+Even after collapse, auditability can be preserved at a coarser granularity by
+retaining provenance invariants. The choice of invariants thus determines the
+resolution at which auditability is maintained.
+
+Taken together, incremental reduction, checkpointing, rollback, and controlled
+forgetting demonstrate that Spherepop supports the practical requirements of
+distributed aggregation while preserving a principled semantic account of
+commitment and history.
+
+
+
+Worked Examples of Event--Historical Aggregation
+
+
+
+This section presents concrete instances of map--reduce expressed in the
+event--historical semantics of Spherepop. The goal is to demonstrate that common
+distributed aggregation tasks arise naturally from the merge calculus, while
+exhibiting properties---such as refusal and explicit provenance---that are
+difficult to express in value--centric models.
+
+
+Word Frequency Aggregation
+
+
+Consider a corpus partitioned into shards $\{s_i\}$. Each shard contains a finite
+sequence of tokens. A mapper processes shard $s_i$ to produce a local frequency
+map $h_i : \Sigma \to \mathbb{N}$ together with provenance $P_i = \{i\}$.
+
+The mapper output is committed via a $\POP$ event and linked to its shard. The
+reducer aggregates these outputs using merge. The payload operation $\diamond$
+is pointwise addition of frequency maps, which is associative and commutative.
+
+\begin{theorem}[Correctness of Word Count Aggregation]
+Let $r_n$ be the reducer object obtained by merging mapper outputs
+$m_1, \ldots, m_n$ with pairwise disjoint provenance. Then the payload of $r_n$
+assigns to each word $w \in \Sigma$ the total number of occurrences of $w$ across
+shards $s_1, \ldots, s_n$.
+\end{theorem}
+
+\begin{proof}
+By induction on $n$. The base case $n=0$ holds trivially for the empty reducer.
+Assume correctness for $r_n$. Merging $m_{n+1}$ adds $h_{n+1}$ to the payload via
+$\diamond$, yielding correct totals over all $n+1$ shards. Provenance guarantees
+that no shard is counted twice.
+\end{proof}
+
+Attempting to re--merge a mapper output whose shard has already contributed is
+refused, preventing duplication at the semantic level.
+
+
+Group--By Aggregation
+
+
+Group--by operations can be expressed by lifting reducers to keyed families. A
+mapper emits pairs $(k, m)$, where $k$ is a key and $m$ a mapper output for that
+key. The reducer maintains a map from keys to reducer objects, each governed by
+its own provenance constraints.
+
+\begin{proposition}[Independent Key Aggregation]
+Reducer histories for distinct keys are independent, and merges for one key do
+not affect the admissibility of merges for another.
+\end{proposition}
+
+\begin{proof}
+Provenance sets are disjoint across keys by construction, and merge authorization
+is checked per reducer object. Therefore histories evolve independently.
+\end{proof}
+
+This decomposition preserves parallelism while maintaining event--historical
+auditability per key.
+
+
+
+Relation to CRDT Semantics
+
+
+
+Conflict--free replicated data types (CRDTs) provide a widely adopted framework
+for distributed aggregation without coordination. At first glance, Spherepop
+reducers appear similar, as both rely on associative and commutative combination
+rules. However, the semantic commitments of the two frameworks differ
+fundamentally.
+
+CRDT semantics are state--based or operation--based but ultimately value--centric.
+Correctness is expressed as eventual convergence: replicas that receive the same
+set of updates, possibly in different orders, converge to the same state. The
+causal history of updates is instrumental rather than meaningful.
+
+Spherepop, by contrast, treats histories as first--class semantic objects. Merge
+is an irreversible commitment that constructs a new object whose identity
+records which inputs were accepted and how. Convergence, when desired, is
+realized via explicit collapse rather than implicit erasure of history.
+
+
+Embedding CRDTs into Spherepop
+
+
+Despite these differences, CRDTs can be embedded into Spherepop under suitable
+restrictions.
+
+\begin{theorem}[CRDT Embedding]
+Any state--based CRDT whose join operation is associative, commutative, and
+idempotent can be represented as a Spherepop reducer by imposing the following
+constraints: refusal rules are disabled, provenance is ignored or collapsed
+immediately, and collapse is applied eagerly after each merge.
+\end{theorem}
+
+\begin{proof}
+Under these constraints, each merge produces a reducer object that immediately
+collapses to a canonical representative of its payload state. Since collapse
+erases history, only the join--semilattice structure remains. Associativity,
+commutativity, and idempotence of the join operation ensure convergence
+equivalent to that of the original CRDT.
+\end{proof}
+
+This embedding shows that Spherepop strictly generalizes CRDT semantics.
+
+
+Limits of CRDT Expressiveness
+
+
+The converse embedding does not hold. CRDTs cannot express refusal, policy
+constraints that render certain merges inadmissible, or explicit forgetting as a
+committed act.
+
+\begin{theorem}[Strict Extension]
+There exist Spherepop reducers that cannot be faithfully represented as CRDTs.
+\end{theorem}
+
+\begin{proof}
+Consider a reducer with provenance--guarded merge that refuses duplicate shard
+contributions. CRDT idempotence absorbs duplicates silently, whereas Spherepop
+renders them inadmissible. No CRDT state transition can distinguish refusal from
+successful idempotent merge, so no faithful representation exists.
+\end{proof}
+
+This result highlights the semantic gain of event--historical aggregation: it
+allows distributed computation to encode normative and policy constraints
+directly in its semantics.
+
+
+
+Attention as Aggregation on Graphs
+
+
+
+The map--reduce interpretation developed thus far extends beyond classical batch
+aggregation. In this section, we show that the core mechanism of an attention
+head, as used in transformer architectures, can be reconstructed as a particular
+form of aggregation over a graph. This reconstruction clarifies the structural
+role of attention and prepares the ground for an event--historical
+reinterpretation.
+
+Let $G = (V, E)$ be a directed graph whose nodes represent tokens, entities, or
+states, and whose edges represent potential interactions. Each node $i \in V$
+carries an embedding vector $x_i \in \mathbb{R}^d$. A graph neural network (GNN)
+updates node representations by aggregating information from neighbors. In its
+most general form, a GNN layer computes
+\[
+h_i = \phi\!\left(x_i, \bigoplus_{j \in \mathcal{N}(i)} \psi(x_i, x_j, e_{ij})\right),
+\]
+where $\mathcal{N}(i)$ denotes the neighborhood of $i$, $\psi$ computes a
+message from neighbor $j$ to $i$, $\oplus$ is an aggregation operator, and $\phi$
+produces the updated representation.
+
+Attention mechanisms instantiate a particular choice of $\psi$ and $\oplus$ in
+which the contribution of each neighbor is weighted by a learned relevance
+score. The critical observation is that attention is not fundamentally a
+sequence operation; it is a structured aggregation over a graph whose edges are
+dynamically reweighted.
+
+
+
+Constructing an Attention Head on a Graph
+
+
+
+An attention head may be defined on a graph by introducing three linear maps:
+\[
+Q : \mathbb{R}^d \to \mathbb{R}^{d_k}, \quad
+K : \mathbb{R}^d \to \mathbb{R}^{d_k}, \quad
+V : \mathbb{R}^d \to \mathbb{R}^{d_v}.
+\]
+For each node $i$, the query, key, and value vectors are given by
+\[
+q_i = Q x_i, \quad k_i = K x_i, \quad v_i = V x_i.
+\]
+
+Given a directed edge $(i, j) \in E$, the compatibility between $i$ and $j$ is
+computed as
+\[
+\alpha_{ij} = \frac{\exp(\langle q_i, k_j \rangle)}{\sum_{k \in \mathcal{N}(i)}
+\exp(\langle q_i, k_k \rangle)}.
+\]
+The updated node representation is then
+\[
+h_i = \sum_{j \in \mathcal{N}(i)} \alpha_{ij} v_j.
+\]
+
+This computation is a weighted reduction over the neighborhood of $i$. The
+softmax normalization enforces a simplex constraint, ensuring that attention
+weights sum to one. From an algebraic perspective, attention is therefore a
+convex aggregation of neighbor values, parameterized by learned compatibility
+functions.
+
+\begin{remark}
+Nothing in this construction depends essentially on linear order. Transformers
+can be understood as GNNs operating on complete graphs with positional or causal
+masking.
+\end{remark}
+
+
+
+Event--Historical Interpretation of Attention
+
+
+
+The standard attention formulation is value--centric. It computes a weighted sum
+and discards the intermediate relevance structure once the output vector is
+produced. From an event--historical perspective, this erasure is semantically
+significant.
+
+We reinterpret attention in Spherepop by treating each attention head as a
+reducer operating over a graph--indexed collection of mapper outputs. Each node
+$j$ produces a mapper output consisting of its value vector $v_j$ together with
+provenance identifying the source node. The attention head at node $i$ performs
+a reduction over these mapper outputs.
+
+The attention weights $\alpha_{ij}$ are not merely coefficients but encode a
+policy of admissible influence. In Spherepop terms, they define which merges are
+authorized and with what relative strength. A sharp attention distribution
+corresponds to a near--exclusive commitment to a small subset of inputs, while a
+diffuse distribution corresponds to a weaker, more distributed commitment.
+
+\begin{definition}[Attention as Weighted Merge]
+An attention head induces a merge operation in which the payload combination
+operator $\diamond$ is a weighted sum, and authorization is governed by the
+attention mask and normalization constraints.
+\end{definition}
+
+Under this interpretation, computing $h_i$ corresponds to constructing a reducer
+object whose history records which neighbors were attended to and under what
+weights. Standard transformers immediately collapse this history, retaining only
+the final vector. Spherepop makes this collapse explicit and optional.
+
+
+
+Attention, Refusal, and Masking
+
+
+
+Attention masks, commonly used to enforce causality or sparsity, acquire a
+natural interpretation as refusal rules. If an edge $(i, j)$ is masked, then the
+corresponding merge is inadmissible: node $j$ cannot contribute to the reducer
+history of node $i$.
+
+\begin{proposition}[Masking as Refusal]
+Let $(i, j)$ be a masked edge. Then any attempted merge incorporating $v_j$ into
+the reducer at $i$ is refused.
+\end{proposition}
+
+\begin{proof}
+Masking enforces $\alpha_{ij} = 0$ by construction. In event--historical terms,
+this corresponds to the absence of authorization for the merge event involving
+$j$. No admissible history exists in which $j$ contributes to $i$.
+\end{proof}
+
+This reframing highlights a limitation of standard attention: refusal is encoded
+numerically rather than structurally. A masked edge contributes a zero vector,
+but the system cannot distinguish between principled exclusion and accidental
+irrelevance.
+
+
+
+Multi--Head Attention as Parallel Reducers
+
+
+
+Multi--head attention decomposes aggregation into multiple parallel reducers,
+each operating with its own query, key, and value projections. In Spherepop
+terms, each head constructs a distinct reducer history over the same set of
+mapper outputs.
+
+\begin{proposition}[Independence of Attention Heads]
+Reducer histories corresponding to distinct attention heads are independent and
+may be collapsed or audited separately.
+\end{proposition}
+
+\begin{proof}
+Each head uses a distinct payload operation determined by its projections
+$(Q_h, K_h, V_h)$. Since no merge events are shared across heads, their histories
+are disjoint and evolve independently.
+\end{proof}
+
+The concatenation and projection step following multi--head attention may be
+understood as a higher--level merge that binds these parallel reducer objects
+into a single representation, again followed by collapse in standard practice.
+
+
+
+Limits of Value--Centric Attention
+
+
+
+From the event--historical viewpoint, standard attention mechanisms systematically
+erase the very information that makes aggregation meaningful: which inputs were
+considered, which were excluded, and how strongly each influenced the result.
+All such structure is collapsed immediately into a vector.
+
+This explains a number of empirical phenomena observed in transformer models,
+including sensitivity to prompt phrasing, instability under long--horizon
+composition, and difficulty enforcing hard constraints. These are not merely
+optimization issues, but consequences of treating attention as a value
+computation rather than as a commitment--forming process.
+
+Spherepop suggests an alternative research direction: attention mechanisms that
+retain, at least partially, their event histories, enabling explicit refusal,
+auditable influence, and controlled forgetting.
+
+
+
+A Categorical Semantics of Event--Historical Aggregation
+
+
+
+The event--historical semantics developed in the preceding sections admits a
+natural categorical formulation that clarifies the structural commitments of
+Spherepop and unifies map--reduce, streaming aggregation, and attention under a
+single formal lens. This categorical perspective does not replace the
+event--level semantics; rather, it abstracts from it while preserving the
+essential asymmetries introduced by commitment, refusal, and collapse.
+
+
+The Category of Event Histories
+
+
+We define a category $\mathcal{H}$ whose objects are event histories modulo
+authorized collapse. Two histories are identified when they are equivalent under
+a declared set of invariants. Morphisms in $\mathcal{H}$ are authorized
+extensions of histories: a morphism $H \to H'$ exists if and only if $H'$ can be
+constructed from $H$ by a finite sequence of authorized events.
+
+Identity morphisms correspond to empty extensions, and composition is given by
+concatenation of event sequences. Because authorization is history--dependent,
+composition in $\mathcal{H}$ is partial: not all pairs of morphisms are
+composable.
+
+\begin{remark}
+This partiality is essential. It encodes refusal as the absence of a morphism,
+rather than as a morphism to an error object. Invalid aggregations therefore do
+not merely fail; they are unrepresentable.
+\end{remark}
+
+
+Merge as a Partial Monoidal Structure
+
+
+Merge induces a monoidal structure on $\mathcal{H}$, but one that is partial and
+policy--dependent. When two objects $H_1$ and $H_2$ have compatible provenance,
+their tensor product $H_1 \otimes H_2$ is defined as the history obtained by
+merging them. The empty reducer object serves as the monoidal unit.
+
+Associativity and symmetry of this tensor hold only up to collapse. That is,
+$\mathcal{H}$ is not a strict monoidal category but a monoidal category modulo a
+quotient functor induced by collapse. This precisely mirrors the earlier result
+that reducer correctness properties hold only after identifying histories that
+preserve the same invariants.
+
+
+Refusal as Non--Existence of Morphisms
+
+
+In this categorical setting, refusal corresponds to the non--existence of a
+morphism. If merging two objects violates authorization constraints, then no
+morphism exists that would compose them. This design choice has important
+consequences. It ensures that invalid constructions cannot be accidentally
+composed with subsequent operations, and it renders correctness a structural
+property rather than a runtime condition.
+
+
+Collapse as a Quotient Functor
+
+
+Collapse is formalized as a functor
+\[
+C_I : \mathcal{H} \to \mathcal{H}_I
+\]
+that maps histories to equivalence classes preserving a chosen set of
+invariants $I$. This functor is idempotent and non--invertible. Applying collapse
+forgets distinctions permanently, but the fact that forgetting occurred remains
+visible in the history as a committed event.
+
+Different choices of $I$ yield different quotient categories, corresponding to
+different trade--offs between fidelity and tractability.
+
+
+
+Map--Reduce and Attention as Monoidal Folding
+
+
+
+From the categorical perspective, map--reduce is a fold over a family of objects
+in $\mathcal{H}$. Mapping produces a collection of independent objects, while
+reduction folds them using the monoidal structure induced by merge. Unlike
+classical folds, this folding operation is constrained by authorization and may
+be partial.
+
+Attention mechanisms fit naturally into this picture. An attention head is a
+parameterized fold over a graph--indexed family of objects, where the fold
+weights are determined by learned compatibility functions. Standard transformers
+instantiate a fold followed immediately by collapse, erasing the event
+structure.
+
+Multi--head attention corresponds to parallel folds, whose results are
+themselves merged at a higher level. This hierarchical folding structure mirrors
+the layered architecture of modern neural networks while exposing the points at
+which semantic commitments are made and then forgotten.
+
+
+
+Conclusion and Future Directions
+
+
+
+This essay has developed an event--historical account of distributed aggregation,
+recasting map--reduce as a process of irreversible commitment rather than as a
+function on values. Within the Spherepop calculus, mapping constructs local
+histories that culminate in committed summaries, while reduction composes these
+histories through authorized merges. Classical algebraic properties of reducers
+emerge not as axioms but as theorems, holding only up to authorized collapse.
+
+By treating refusal as semantic partiality and collapse as explicit forgetting,
+the framework accommodates policy constraints, auditability, and controlled
+abstraction as first--class concerns. Streaming aggregation, checkpointing, and
+rollback arise naturally from the immutability of committed histories.
+
+Extending the analysis to attention mechanisms reveals that attention is itself a
+form of aggregation whose semantic structure is obscured by value--centric
+implementations. Interpreting attention as event--historical folding exposes the
+cost of immediate collapse and suggests new directions for architectures that
+retain, reason over, and selectively forget their own commitments.
+
+Several avenues for future work present themselves. One direction is the design
+of attention mechanisms and graph neural networks that preserve partial event
+histories to enable explicit refusal and auditability. Another is the
+integration of event--historical aggregation with learning dynamics, treating
+training itself as a sequence of commitments rather than as gradient descent in
+parameter space. Finally, the categorical framework developed here invites
+connections to traced monoidal categories, persistent data structures, and
+semantics of irreversible computation.
+
+More broadly, event--historical aggregation offers a way to align distributed
+systems, machine learning architectures, and semantic computation around a
+shared notion of meaning as constraint. Aggregates are no longer ephemeral
+values, but durable objects whose identities encode how the world was allowed to
+become the way it is.
+
+\newpage
+
+\appendix
+
+Algebraic Properties of Provenance--Guarded Reducers
+
+
+
+This appendix provides formal proofs of the algebraic properties attributed to
+Spherepop reducers in the main text. The objective is to show that associativity,
+commutativity, and idempotence arise as derived properties of event--historical
+constraints, rather than as axioms imposed on reducer functions.
+
+
+
+Reducer Domain and Partiality
+
+
+
+Let $\mathcal{S}$ denote a countable set of shard identifiers. A reducer summary
+is a pair $(v, P)$ where $v \in V$ is a payload drawn from some carrier set $V$
+and $P \subseteq \mathcal{S}$ is a finite provenance set.
+
+Let $\diamond : V \times V \to V$ be a binary operation on payloads.

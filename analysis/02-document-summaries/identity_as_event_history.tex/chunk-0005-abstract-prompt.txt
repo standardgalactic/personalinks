@@ -1,0 +1,314 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Spherepop – Causal Traces, Petri Nets, and String Diagrams**
+
+The formalism of Spherepop can be seen as a unifying bridge between three w[1D[K
+well‑established frameworks for reasoning about causally structured process[7D[K
+processes:
+
+| Framework | Core Idea | How It Maps to Spherepop |
+|-----------|-----------|--------------------------|
+| **Mazurkiewicz Trace Theory** (concurrency) | An *event word* is an equiv[5D[K
+equivalence class of sequences where independent events may be commuted. Tw[2D[K
+Two words are equal if they differ only by such commuting steps. | The inde[4D[K
+independence relation $\parallel$ in Spherepop together with the commutatio[10D[K
+commutation rule \((E_i,E_j)\to(E_j,E_i)\) implements exactly this trace‑eq[8D[K
+trace‑equivalence. Normalizing a history to its canonical form is precisely[9D[K
+precisely selecting a representative from each trace class. |
+| **Petri Nets** (resource/condition modeling) | Places hold tokens; transi[6D[K
+transitions consume input tokens and create output tokens, thereby moving t[1D[K
+the system configuration forward. Splitting corresponds to a transition tha[3D[K
+that creates multiple new places (tokens), while merging merges existing to[2D[K
+tokens into a single place. The acyclic nature of Petri nets mirrors Sphere[6D[K
+Spherepop’s DAG event graphs, guaranteeing termination of any execution pat[3D[K
+path. | A history in Spherepop maps to a firing sequence in a Petri net: th[2D[K
+the initial region \(R\) corresponds to an initial marking; split events co[2D[K
+correspond to “fan‑out” transitions creating descendant regions \(A,B\); me[2D[K
+merge events correspond to “fan‑in” transitions combining those regions int[3D[K
+into a new region \(D\). |
+| **String Diagrams** (monoidal category geometry) | Objects are wires, mor[3D[K
+morphisms are boxes or nodes through which wires pass; sequential compositi[9D[K
+composition is drawn by connecting outputs to inputs, and parallel composit[8D[K
+composition by placing wires side‑by‑side. This graphical language captures[8D[K
+captures compositional structure without reference to coordinates. | Sphere[6D[K
+Spherepop events map directly: a split event appears as a box with one inpu[4D[K
+input wire (the parent region) and two output wires (the child regions); a [K
+merge event is a box with two inputs and one output; sequential transformat[11D[K
+transformations are single‑wire nodes linking the outputs of one event to t[1D[K
+the inputs of another. The entire history becomes a composite string diagra[6D[K
+diagram built from these elementary components. |
+
+### Illustrative Example
+
+Consider the simple history:
+
+```
+split(R) -> A, B
+merge(A,B) -> D
+```
+
+**Trace Theory View:**  
+The sequence “\(E_1,E_2\)” (where \(E_1 = \text{split}(R)\) and \(E_2 = \te[3D[K
+\text{merge}(A,B)\)) is trace‑equivalent to any ordering of these independe[9D[K
+independent events. The normalization rule orders them according to the DAG[3D[K
+DAG topological sort, yielding a canonical trace.
+
+**Petri Net View:**  
+- Initial marking: place \(R\) with one token.  
+- Transition \(E_1\): consumes token from \(R\) and produces places \(A\) a[1D[K
+and \(B\) (each with one token).  
+- Transition \(E_2\): consumes tokens in both \(A\) and \(B\) and creates a[1D[K
+a new place \(D\) with one token. The net therefore moves deterministically[17D[K
+deterministically from initial marking to the final marking \([D]\).
+
+**String Diagram View:**  
+
+```
+   ┌─────┐          ┌───────┐
+  R ─►│split│ → A, B ─►│merge │ → D
+   └─────┘          └───────┘
+```
+
+The diagram shows a single input wire (region \(R\)), two outgoing wires fo[2D[K
+for the split event (\(A\) and \(B\)), and one incoming wire to the merge e[1D[K
+event that yields region \(D\).
+
+### Why These Connections Matter
+
+1. **Decomposability:**  
+   - The trace‑theory perspective gives us a *semantic* notion of identity [K
+(causal equivalence) rather than syntactic order.
+   - Petri nets provide an algorithmic model for simulating histories, usef[4D[K
+useful for verification and execution analysis.
+   - String diagrams offer a visual proof system: compositionality is encod[5D[K
+encoded in the way wires connect, making proofs intuitive and diagrammatic.[13D[K
+diagrammatic.
+
+2. **Tool Transfer:**  
+   Researchers familiar with any of these frameworks can translate problems[8D[K
+problems into another without loss of generality:
+   - Convert a trace problem (e.g., “does two independent events commute?”)[10D[K
+commute?”) to a Petri net reachability question.
+   - Translate verification conditions expressed in string diagrams directl[7D[K
+directly into symbolic traces.
+
+3. **Interoperability:**  
+   Spherepop can be compiled or interpreted through these lenses—e.g., gene[4D[K
+generating a Petri net model from a history, or automatically normalizing h[1D[K
+histories using trace equivalence algorithms.
+
+In summary, Spherepop sits at the intersection of causal trace reasoning (M[2D[K
+(Mazurkiewicz), resource‑based concurrency modeling (Petri nets), and compo[5D[K
+compositional diagrammatic representation (string diagrams). This multi‑dis[9D[K
+multi‑disciplinary grounding not only justifies its design but also opens a[1D[K
+a toolbox for analysis across formal verification, model checking, and visu[4D[K
+visual proof assistants.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: identity_as_event_history.tex
+
+NEW CHUNK
+=========
+
+As illustrated in Figure~\ref{fig:string}, string diagrams make the
+compositional structure of event histories visually transparent.  Sequential
+composition corresponds to vertical stacking of diagram components, while
+parallel processes correspond to horizontal juxtaposition.  The diagram in
+Figure~\ref{fig:string} corresponds to the simple history
+$(\text{spherepop}(D)) = (E_1, E_3)$, where $E_1$ is the split and $E_3$ is
+the merge.  More complex histories are represented by more elaborate compound
+diagrams.
+
+What distinguishes Spherepop from the standard monoidal category framework is
+its emphasis on \emph{historical identity} as the primary ontological criterion.
+The string diagrams and Petri net representations provide operational and
+geometric pictures of the same underlying structure, while the event-word and
+normal-form apparatus provides a canonical symbolic encoding.  Spherepop
+integrates these perspectives into a unified framework where causal structure,
+compositional irreversibility, and identity under historical comparison are
+treated as equally fundamental features.
+
+
+
+Spherepop and Derived Causal Categories
+
+\label{app:derived}
+
+The constructions developed in the main text suggest that Spherepop histories
+may be situated within a higher-categorical framework in which the causal
+categories of Section~\ref{sec:functors} are enriched by the rewriting
+operations of Appendix~\ref{app:rewriting}.  This section sketches the relevant
+structures and their relationship to derived categories and sheaf theory, with
+the aim of indicating where more technical development could be pursued.
+
+In the causal history category $\mathcal{H}$ introduced in
+Section~\ref{sec:functors}, morphisms are irreversible events and their
+compositions are directed causal chains.  The rewriting rules of
+Appendix~\ref{app:rewriting} provide natural transformations between parallel
+event chains that differ only by the ordering of independent events.  A
+commutation
+\[
+  (E_i, E_j) \Rightarrow (E_j, E_i)
+  \quad \text{when } E_i \parallel E_j
+\]
+may be interpreted as a 2-morphism in a bicategory or 2-category in which
+1-morphisms are event chains and 2-morphisms are commutation steps.  The
+confluence result of Appendix~\ref{app:rewriting} then corresponds to the
+coherence of these 2-morphisms: any two sequences of commutation steps
+relating the same pair of event chains are connected by higher-order
+equivalences.
+
+This higher-categorical structure suggests that the objects of Spherepop might
+profitably be studied as objects of a derived category, where the derived
+functor construction extracts invariant information from equivalence classes
+of resolutions.  In the Spherepop context, the relevant resolutions are the
+various syntactic descriptions of a single event graph, and the derived
+invariant is the normal form.  The normalization functor of
+Section~\ref{sec:normalization} plays the role of the derived functor,
+extracting the canonical representative from a class of equivalent
+descriptions.
+
+Large histories may also be assembled from smaller components defined on
+overlapping subgraphs of the event graph.  If $\{H_i\}$ is a collection of
+local histories defined on overlapping regions and these histories agree on
+their pairwise intersections---that is, the restrictions of $H_i$ and $H_j$
+to the subgraph $G_i \cap G_j$ are equal---then a global history may be
+assembled by gluing.  This gluing condition is precisely the condition that
+appears in sheaf theory when local sections over open sets of a topological
+space are assembled into a global section.  Spherepop histories therefore
+exhibit the structure of a sheaf over the underlying causal graph, where the
+``open sets'' are the hereditary sub-DAGs and the ``sections'' are compatible
+local histories.
+
+The sheaf-like structure has a natural operational interpretation.  In a
+distributed computation, different processors may have direct knowledge only
+of the events that occurred within their local scope.  The global history of
+the computation is assembled from these local records by verifying consistency
+on the overlaps and then gluing compatible pieces together.  The Spherepop
+sheaf structure captures exactly this assembly process, and the normal form
+provides a canonical global section that encodes the complete causal history
+of the computation.
+
+From this perspective, Spherepop may be embedded into a broader framework of
+derived causal categories in which objects correspond to terminal nodes of
+event diagrams, morphisms correspond to irreversible processes, 2-morphisms
+represent rewriting equivalences between histories, and normalization extracts
+canonical representatives from these equivalence classes.  The present essay
+has laid the conceptual and formal foundations on which this programme of
+technical development can proceed.
+
+\newpage
+\bibliographystyle{plainnat}
+\begin{thebibliography}{12}
+
+\bibitem[Abramsky and Jung(1994)]{Abramsky1994}
+Samson Abramsky and Achim Jung.
+Domain theory.
+In \textit{Handbook of Logic in Computer Science}, volume~3, pages 1--168.
+Oxford University Press, 1994.
+
+\bibitem[Baez and Stay(2010)]{BaezStay2010}
+John Baez and Mike Stay.
+Physics, topology, logic and computation: a Rosetta Stone.
+In Bob Coecke, editor, \textit{New Structures for Physics},
+Lecture Notes in Physics, pages 95--172.
+Springer, 2010.
+
+\bibitem[Mac~Lane(1998)]{MacLane1998}
+Saunders Mac~Lane.
+\textit{Categories for the Working Mathematician}.
+Springer, 2nd edition, 1998.
+
+\bibitem[Mazurkiewicz(1987)]{Mazurkiewicz1987}
+Antoni Mazurkiewicz.
+Trace theory.
+In Wilfried Brauer, Wolfgang Reisig, and Grzegorz Rozenberg, editors,
+\textit{Petri Nets: Applications and Relationships to Other Models of Concurrency},
+Lecture Notes in Computer Science, pages 279--324.
+Springer, 1987.
+
+\bibitem[Meijer(2017)]{Meijer2017}
+Erik Meijer.
+\textit{Category Theory for Programmers}.
+Self-published lecture manuscript, 2017.
+
+\bibitem[Meijer and Bierman(2011)]{MeijerBierman2011}
+Erik Meijer and Gavin Bierman.
+A co-relational model of data for large shared data banks.
+\textit{Communications of the ACM}, 54(4):49--58, 2011.
+
+\bibitem[Needham(1997)]{Needham1997}
+Tristan Needham.
+\textit{Visual Complex Analysis}.
+Oxford University Press, 1997.
+
+\bibitem[Needham(2021)]{Needham2021}
+Tristan Needham.
+\textit{Visual Differential Geometry and Forms: A Mathematical Drama in Five Acts}.
+Princeton University Press, 2021.
+
+\bibitem[Petri(1966)]{Petri1966}
+Carl Adam Petri.
+\textit{Communication with Automata}.
+Technical Report RADC-TR-65-377, 1966.
+
+\bibitem[Pratt(1995)]{Pratt1995}
+Vaughan Pratt.
+Chu spaces and their interpretation as concurrent objects.
+In Jan van Leeuwen, editor, \textit{Computer Science Today},
+Lecture Notes in Computer Science, pages 392--405.
+Springer, 1995.
+
+\bibitem[Spivak(2014)]{Spivak2014}
+David~I. Spivak.
+\textit{Category Theory for the Sciences}.
+MIT Press, 2014.
+
+\bibitem[Hiott(2020)]{Hiott2020}
+Andrea Hiott.
+\textit{The Lens of the Labyrinth: Understanding the World via Structure,
+Dynamics, and Interaction}.
+Open access manuscript and lectures, 2020.
+
+\bibitem[Jonas(1966)]{Jonas1966}
+Hans Jonas.
+\textit{The Phenomenon of Life: Toward a Philosophical Biology}.
+Harper \& Row, 1966.
+
+\bibitem[Jonas(1979)]{Jonas1979}
+Hans Jonas.
+\textit{The Imperative of Responsibility: In Search of an Ethics for the
+Technological Age}.
+University of Chicago Press, 1979.
+
+\bibitem[Landauer(1961)]{Landauer1961}
+Rolf Landauer.
+Irreversibility and heat generation in the computing process.
+\textit{IBM Journal of Research and Development}, 5(3):183--191, 1961.
+
+\bibitem[Bennett(1973)]{Bennett1973}
+Charles H.\ Bennett.
+Logical reversibility of computation.
+\textit{IBM Journal of Research and Development}, 17(6):525--532, 1973.
+
+\bibitem[Shannon(1948)]{Shannon1948}
+Claude E.\ Shannon.
+A mathematical theory of communication.
+\textit{Bell System Technical Journal}, 27:379--423, 623--656, 1948.
+
+\bibitem[Pearl(2009)]{Pearl2009}
+Judea Pearl.
+\textit{Causality: Models, Reasoning, and Inference}.
+Cambridge University Press, 2nd edition, 2009.
+
+\end{thebibliography}
+
+\end{document}
+

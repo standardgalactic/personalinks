@@ -1,0 +1,1185 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\begin{remark}{Reading this chapter: structural results,
+  not empirical derivations}{ch18-upfront-caveat}
+  The theorems in this chapter are mathematical consequences
+  of the RSVP framework developed in
+  Chapters~\ref{ch:rsvp}--\ref{ch:gravity}. They are
+  structural results: given certain assumptions about how
+  capacity, transport, and constraint evolve, certain
+  conclusions about cosmological dynamics follow. They are
+  not independent derivations of cosmological dynamics
+  from observational data, and they do not show that RSVP
+  predictions are distinguishable from standard
+  $\Lambda$CDM, inflationary, or cyclic cosmological
+  models in any presently accessible observational regime.
+  The chapter is best read as asking: \emph{what would
+  cosmological dynamics look like, interpreted through the
+  distinction-theoretic language developed in Parts~I--VI?}
+  The answer is illuminating. Whether it is also correct
+  physics is a further question addressed in
+  \cref{app:open-problems}.
+\end{remark}
+
+
+Reachability Replaces Size
+
+\label{sec:ch18-replaces}
+
+Chapter~18 is where the framework stops looking like a
+field theory and becomes a cosmology. The central idea is
+not ordinary expansion. The preceding chapters have already
+defined the primary quantity governing a system's future:
+admissible volume. The question ``how large is the
+universe?'' is replaced by the question ``how much future
+remains reachable?'' In this formulation, cosmology becomes
+the dynamics of admissible volume.
+
+Chapter~\ref{ch:gravity} derived gravity from capacity
+gradients via the Gravity Realization Theorem
+(\cref{thm:gravity-realization}), recovering local
+gravitational behaviour without postulating mass-energy as an
+independent source of curvature. This chapter extends that
+derivation to the largest scale available: not the behaviour
+of a single gradient, but the trajectory of an entire
+universe's admissible volume over cosmological time.
+
+Standard cosmology faces a well-known difficulty at exactly
+this scale. The horizon problem asks why causally
+disconnected regions of the observable universe exhibit
+nearly identical temperatures, when standard Big Bang
+expansion gives them no opportunity to have exchanged
+information. Inflationary cosmology's solution posits a
+period of exponential expansion early in the universe's
+history, large enough to bring those regions within causal
+contact before inflation began \parencite{guth1981}. This
+solution works, in the sense that it reproduces observed
+homogeneity, but it does so by positing a specific, otherwise
+unmotivated inflaton field and expansion rate, calibrated
+after the fact to produce the observed result. An alternative
+tradition, ekpyrotic and cyclic cosmology, replaces inflation
+with a contracting phase preceding the hot Big Bang, smoothing
+inhomogeneities through contraction rather than expansion
+\parencite{steinhardt2002}. This chapter's framework is closer
+in spirit to the second tradition than the first --- both
+treat homogenisation as something a prior dynamical phase
+achieves rather than something imposed by fiat --- but it
+departs from both by asking the question in terms of
+admissible volume rather than physical scale factor. The
+question this chapter asks is not how large the universe is,
+or how fast it expanded, but how much admissible future
+$\mathcal{V}(t)$ a given cosmological history preserves, and
+what happens to $\mathcal{V}(t)$ when that history reaches its
+apparent end.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch18-falsifiability}
+
+This chapter's central construction is the reintegration
+operator, formalised later in the chapter as a mechanism by
+which a universe approaching admissibility collapse ---
+$\mathcal{V}(t)\to0$ --- can be carried through that collapse
+into a renewed phase rather than terminating. The claim that
+cosmological renewal is a genuine instance of repair, in the
+sense of Chapter~\ref{ch:repair}, rather than an independently
+postulated cosmological mechanism dressed in repair
+vocabulary, is falsifiable against a specific structural test.
+The Reintegration Fixed-Point Theorem
+(\cref{thm:reintegration-fixed-point}), proved later in this
+chapter, should be structurally identical to the Repair
+Existence Theorem (\cref{thm:repair-exist}) once restricted to
+the cosmological domain --- the same existence argument,
+applied to a different distinction space. If the reintegration
+construction required machinery not already present in the
+general theory of repair, or if its fixed point failed to
+correspond to the repair-theoretic fixed point under the
+appropriate restriction, the claim that cosmological renewal
+realizes repair, rather than merely resembling it, would fail.
+
+
+What This Chapter Establishes
+
+\label{sec:ch18-preview}
+
+By the end of this chapter, cosmological admissible volume
+will replace the scale factor as the fundamental quantity
+governing a universe's history, the Admissibility Collapse
+Theorem will characterise the conditions under which
+$\mathcal{V}(t)\to0$, and the reintegration operator will show
+how such a collapse can be survived rather than simply
+endured. Chapter~\ref{ch:cosmo-completion} then asks what
+happens after arbitrarily many such cycles: whether a universe
+undergoing repeated reintegration approaches a final,
+qualitatively different endpoint, or repeats indefinitely
+without ever genuinely completing.
+
+
+Reachability and Cosmological Admissible Volume
+
+\label{sec:ch18-replaces-defs}
+
+\begin{definition}{Cosmological Admissible Volume}{cosmo-adm}
+  Define
+  \[
+    \mathcal{V}(t) = \Vol\bigl(\mathcal{A}(t)\bigr).
+  \]
+  \index{cosmology!admissible volume|textbf}
+  \index{admissibility!physical}
+\end{definition}
+
+Unlike standard cosmology, the scale factor $a(t)$ is no
+longer fundamental. Instead $\mathcal{V}(t)$ is fundamental.
+
+\begin{theorem}{Cosmological Reachability Theorem}{cosmo-reach}
+  The long-term future of a universe is determined by
+  $\mathcal{V}(t)$ rather than by physical size.
+\end{theorem}
+
+\begin{proof}
+  Physical volume measures spatial extent. Reachability
+  volume measures future possibility. A large universe may
+  possess $\mathcal{V} \approx 0$ if all trajectories
+  terminate. A small universe may possess large
+  $\mathcal{V}$ if many futures remain reachable. Therefore
+  future structure depends on $\mathcal{V}$ rather than on
+  spatial size.
+\end{proof}
+
+\begin{remark}{From geometry to possibility}{cosmo-philosophy}
+  This theorem is philosophically significant: it shifts
+  cosmology from a science of geometry to a science of
+  possibility.
+\end{remark}
+
+
+Cosmological Constraint and Collapse
+
+\label{sec:ch18-collapse}
+
+\begin{definition}{Cosmological Constraint Functional}{cosmo-constraint}
+  \[
+    \mathcal{S}(t) = \int_U S(x,t)\, dV.
+  \]
+\end{definition}
+
+This is the universe-wide RSVP entropy field, integrated
+over the entire spatial domain $U$.
+
+\begin{theorem}{Admissibility Collapse Theorem}{adm-collapse}
+  If $\mathcal{S}(t) \to \infty$ while $\Phi$ remains
+  bounded, then $\mathcal{V}(t) \to
+  0$.\index{collapse!admissibility collapse|textbf}
+\end{theorem}
+
+\begin{proof}
+  By Chapter~16, $V_R = K\Phi e^{-S}$. Integrating over the
+  universe gives
+  \[
+    \mathcal{V} = K \int_U \Phi e^{-S} \, dV.
+  \]
+  As $S \to \infty$ pointwise with $\Phi$ bounded, the
+  exponential factor vanishes throughout $U$. Therefore
+  $\mathcal{V} \to 0$.
+\end{proof}
+
+This is the RSVP analogue of heat death.
+
+\begin{definition}{Admissibility Singularity}{adm-singularity}
+  An \emph{admissibility singularity} occurs when
+  $\mathcal{V}(t) = 0$.
+  \index{singularity!admissibility|textbf}
+\end{definition}
+
+Notice that no divergence of density and no divergence of
+curvature is required for this singularity. It is defined
+purely by exhaustion of futures.
+
+
+Expyrotic Necessity
+
+\label{sec:ch18-necessity}
+
+\begin{theorem}{Expyrotic Necessity Theorem}{expyrotic-necessity}
+  A universe satisfying $\mathcal{V}(t) \to 0$ must either
+  terminate or undergo distinction renewal.
+\end{theorem}
+
+\begin{proof}
+  When $\mathcal{V} = 0$, no future trajectories remain, and
+  continuation is impossible. To avoid termination, new
+  reachable states must be generated, which requires
+  creation of new distinction capacity. Therefore renewal
+  is necessary if termination is to be avoided.
+\end{proof}
+
+This theorem is essentially the Principle of Regeneration
+(Chapter~\ref{ch:regeneration}) applied
+cosmologically.
+
+\begin{definition}{Cosmological Renewal Operator}{cosmo-renewal}
+  \[
+    \mathfrak{E} : \mathcal{A}_{\min} \to \mathcal{A}_{\max}.
+  \]
+  \index{expyrotic renewal operator|textbf}
+  \index{regeneration!cosmological|textbf}
+\end{definition}
+
+The expyrotic operator $\mathfrak{E}$ maps near-zero
+admissibility volume to renewed admissibility volume.
+
+\begin{theorem}{Expyrotic Cycle Theorem}{expyrotic-cycle}
+  A cosmological cycle satisfies
+  \[
+    \mathcal{V}_{\max} \to \mathcal{V}_{\min}
+    \xrightarrow{\ \mathfrak{E}\ } \mathcal{V}_{\max}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Entropy accumulation reduces admissible volume. By the
+  Admissibility Collapse Theorem, $\mathcal{V}$ approaches
+  zero. The renewal operator $\mathfrak{E}$ creates new
+  distinction capacity, by definition. Therefore
+  $\mathcal{V}$ returns to a high value after renewal.
+\end{proof}
+
+
+Cosmological Evolution
+
+\label{sec:ch18-evolution}
+
+\begin{definition}{Cosmological Potential}{cosmo-potential}
+  \[
+    \mathcal{U}(\mathcal{V}) = \lambda \mathcal{S} - \mu \Phi.
+  \]
+\end{definition}
+
+\begin{theorem}{Cosmological Evolution Equation}{cosmo-evolution}
+  The admissibility volume obeys
+  \[
+    \frac{d\mathcal{V}}{dt} = \alpha \Phi - \beta \mathcal{S}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Capacity production increases reachable futures at rate
+  proportional to $\Phi$; constraint accumulation decreases
+  reachable futures at rate proportional to $\mathcal{S}$.
+  Combining both contributions linearly yields
+  $\frac{d\mathcal{V}}{dt} = \alpha\Phi - \beta\mathcal{S}$.
+\end{proof}
+
+This is the simplest cosmological RSVP equation consistent
+with the Capacity Conservation and Constraint Accumulation
+Theorems of Chapter~16.
+
+\begin{theorem}{Apparent Expansion Theorem}{apparent-expansion}
+  Growth of $\mathcal{V}(t)$ can be observed as spatial
+  expansion even when the primary dynamics occur in
+  admissibility space.
+\end{theorem}
+
+\begin{proof}
+  Increasing admissible volume enlarges the set of
+  reachable configurations. Observers embedded within the
+  manifold interpret this enlargement as increasing spatial
+  separation between distinguishable configurations, since
+  spatial separation is itself a derived distinction.
+  Hence admissibility growth may project as cosmological
+  expansion.
+\end{proof}
+
+\begin{remark}{Expansion as interpretive equivalence}{expansion-projection}
+  The theorem establishes that a distinction-theoretic
+  description can reproduce the phenomenology associated
+  with cosmological expansion: observers embedded in the
+  manifold register growth in admissible volume as
+  increasing spatial separation between distinguishable
+  configurations. It does not establish that physical
+  metric expansion is absent, or that standard cosmological
+  models are wrong. The theorem therefore provides an
+  \emph{alternative interpretive framework} that is
+  consistent with observed expansion, not a falsification
+  of the standard account. Whether the two frameworks
+  diverge in any empirically accessible regime requires
+  the derivations that, as the following remark notes,
+  the theorem does not yet supply.
+\end{remark}
+
+\begin{remark}{Status of the Apparent Expansion Theorem}
+  {apparent-expansion-status}
+  The proof above is an interpretive argument, not a
+  physical derivation. It does not supply:
+  \begin{enumerate}[(i)]
+    \item a correspondence between the admissibility
+          metric $g_{ij} = \Phi e^{-S}\delta_{ij}$ and
+          the FLRW metric of standard cosmology;
+    \item a derivation of the redshift-magnitude relation
+          from $\mathcal{V}(t)$ growth; or
+    \item a prediction distinguishing RSVP cosmological
+          expansion from standard $\Lambda$CDM in any
+          presently accessible observational regime.
+  \end{enumerate}
+  What the theorem does establish is a conceptual
+  reframing: \emph{if} spatial separation is a derived
+  distinction (as argued in Chapter~\ref{ch:geometry-futures}),
+  and \emph{if} admissible volume grows, \emph{then} what
+  appears as metric expansion can be reread as growth in
+  the set of distinguishable configurations. This is a
+  philosophical interpretation of cosmological expansion,
+  not an independent physical derivation of it. Whether
+  the interpretation can be made precise enough to make
+  distinguishable predictions is an open question listed
+  in \cref{app:open-problems}.
+\end{remark}
+
+
+Cosmological Memory
+
+\label{sec:ch18-memory}
+
+\begin{theorem}{Cosmological Memory Theorem}{cosmo-memory}
+  Successive expyrotic cycles need not be independent.
+\end{theorem}
+
+\begin{proof}
+  If $\reco(\mathcal{U}) > 0$, then information from
+  previous cycles survives renewal. By the Law of
+  Recoverability (Chapter~\ref{ch:recoverability}), partial
+  reconstruction remains possible across the renewal
+  operator $\mathfrak{E}$. Therefore cosmological memory may
+  persist.
+\end{proof}
+
+This is the direct cosmological analogue of repair, and it
+sets up Chapter~19's treatment of cross-cycle conservation.
+
+
+Expyrotic Admissibility
+
+\label{sec:ch18-admissibility}
+
+\begin{theorem}{Expyrotic Admissibility Theorem}{expyrotic-adm}
+  Cosmological renewal is generatively admissible.
+  \parencite{steinhardt2002,penrose2010}
+\end{theorem}
+
+\begin{proof}
+  Renewal transforms $\mathcal{V}_{\min}$ into
+  $\mathcal{V}_{\max}$, so $\Delta\mathcal{V} > 0$. By the
+  Generative Admissibility Principle
+  (\cref{prc:gap-final}), $\frac{d}{dt}\Vol(\mathcal{A}) \ge 0$
+  defines generative admissibility. Hence cosmological
+  renewal satisfies the defining condition of generative
+  admissibility.
+\end{proof}
+
+This theorem is the reason Chapter~15 already cited
+expyrotic renewal as a corollary of the Generative
+Admissibility Principle. It closes the loop between
+cosmology and the rest of the book: the universe itself
+becomes the largest regenerative system, cycling between
+admissibility exhaustion and admissibility renewal. In the
+architecture of this monograph, the Big Bang is no longer
+the beginning of existence but one instance of a more
+general repair operation acting on the global distinction
+manifold.
+
+
+The Reintegration Operator
+
+\label{sec:ch18-reintegration}
+
+The Expyrotic Cycle Theorem (\cref{thm:expyrotic-cycle})
+asserts the existence of a renewal operator
+$\mathfrak{E}:\mathcal{A}_{\min}\to\mathcal{A}_{\max}$
+without specifying its mechanism. This section supplies a
+concrete construction --- a reintegration operator acting
+on cosmic microwave background structure --- and proves that
+it possesses a fixed point characterising the
+post-renewal state, together with a theorem on the
+asymptotic suppression of large-scale entropy gradients.
+
+\begin{definition}{Reintegration Kernel}{reintegration-kernel}
+  Let $\Phi_\mathrm{CMB}(x,t)$ denote the capacity field
+  restricted to the cosmic microwave background surface, and
+  let $K:\mathbb{R}_{\ge0}\to\mathbb{R}_{\ge0}$ be an
+  integrable kernel supported on $[0,T_P]$ for renewal
+  period $T_P$. The \emph{reintegration operator} is
+  \[
+    (\mathcal{K}\Phi)(x,t)
+    = \int_{t-T_P}^{t} K(t-t')\, \Phi_\mathrm{CMB}(x,t')\, dt'.
+  \]
+  \index{reintegration operator|textbf}
+\end{definition}
+
+The reintegration operator aggregates capacity-field
+structure from the preceding cycle, weighted by recency
+through $K$, to construct the capacity field with which the
+next cycle begins.
+
+\begin{theorem}{Reintegration Fixed-Point Theorem}{reintegration-fixed-point}
+  Suppose $\mathcal{K}$ acts on a compact, convex set of
+  admissible capacity-field configurations
+  $\mathcal{C} \subset \{\Phi_\mathrm{CMB}\}$ and is
+  continuous on $\mathcal{C}$. Then there exists
+  $\Phi^*\in\mathcal{C}$ with $\Phi^* = \mathcal{K}(\Phi^*)$.
+\end{theorem}
+
+\begin{proof}
+  By construction, $\mathcal{K}$ is a bounded linear
+  (hence continuous) operator on the space of capacity-field
+  configurations, since it is given by convolution against
+  the integrable kernel $K$. Under the stated compactness
+  hypothesis on $\mathcal{C}$ and convexity, the
+  Schauder Fixed-Point Theorem applies directly to
+  $\mathcal{K}|_\mathcal{C} : \mathcal{C}\to\mathcal{C}$
+  (well-defined since $\mathcal{K}$ preserves admissibility
+  by the non-negativity of $K$ and $\Phi_\mathrm{CMB}$),
+  giving existence of $\Phi^*\in\mathcal{C}$ with
+  $\Phi^* = \mathcal{K}(\Phi^*)$.
+\end{proof}
+
+\begin{remark}{Interpretation of the fixed point}{reintegration-interpretation}
+  The fixed point $\Phi^*$ represents a self-consistent
+  post-renewal capacity configuration: a capacity field
+  that, when reintegrated through $\mathcal{K}$ across one
+  renewal period, reproduces itself. This is the
+  mathematical content of the Cosmological Memory Theorem
+  (\cref{thm:cosmo-memory}): it identifies the specific
+  configurations through which cross-cycle correlation
+  $\reco(\mathcal{U})>0$ can be realized, rather than merely
+  asserting their possible existence.
+\end{remark}
+
+\begin{theorem}{Asymptotic Entropy-Gradient Suppression Theorem}
+  {entropy-gradient-suppression}
+  Under reintegration via a fixed point $\Phi^*$ of
+  \cref{thm:reintegration-fixed-point}, large-scale entropy
+  gradients are asymptotically suppressed:
+  \[
+    \lim_{t\to\infty} \nabla S(x,t) = 0
+  \]
+  uniformly on length scales exceeding the reintegration
+  correlation length $\ell_K$ determined by the support of
+  $K$.
+\end{theorem}
+
+\begin{proof}
+  By the Constraint Accumulation Theorem
+  (\cref{thm:constraint-accumulation-rsvp}),
+  $\partial S/\partial t = \alpha D - \beta R + \gamma\nabla^2 S$.
+  At the fixed point $\Phi^*$, reintegration injects capacity
+  uniformly on scales up to $\ell_K$ (by the averaging
+  property of convolution against $K$), which by the
+  Lamphrodyne Stability Theorem (\cref{thm:lamphrodyne})
+  drives $\partial S/\partial\Phi \to 0$ on those scales as
+  $t\to\infty$, since the system relaxes toward the fixed
+  point along trajectories satisfying
+  $dS/dt = -\mu(\partial S/\partial\Phi)^2 \le 0$ with
+  equality only when $\partial S/\partial\Phi = 0$. Spatial
+  uniformity of the injected capacity on scales $\ge\ell_K$
+  forces $S$ itself to become spatially uniform on those
+  scales in the limit, hence $\nabla S \to 0$ uniformly
+  there.
+\end{proof}
+
+\begin{remark}{Horizon smoothing}{horizon-smoothing-remark}
+  The Asymptotic Entropy-Gradient Suppression Theorem
+  supplies the mathematical mechanism behind horizon
+  smoothing in the expyrotic picture: reintegration through
+  $\mathcal{K}$ does not merely renew admissible volume in
+  aggregate (\cref{thm:expyrotic-adm}) but actively erases
+  large-scale entropy gradients left over from the
+  preceding cycle, in direct analogy with the role played by
+  inflation in suppressing large-scale inhomogeneity in the
+  standard cosmological picture --- but derived here from
+  the reintegration operator rather than postulated as an
+  independent inflationary phase.
+\end{remark}
+
+
+On the Speculative Status of This Chapter
+
+\label{sec:ch18-speculative-status}
+
+The theorems in this chapter are genuine mathematical
+results within the RSVP framework. The Expyrotic Necessity
+Theorem, the Reintegration Operator, and the Cosmological
+Memory Theorem follow from the formal apparatus of
+Chapters~\ref{ch:rsvp}--\ref{ch:gravity}. What they do
+not do, and do not claim to do, is derive cosmological
+dynamics from physical first principles.
+
+Specifically, the chapter does not show:
+\begin{enumerate}[(i)]
+  \item that the reintegration operator $\mathfrak{E}$ is
+        consistent with energy-momentum conservation or
+        with the laws of known cosmological dynamics;
+  \item that the expyrotic transition predicts any
+        observation distinguishable from standard
+        inflationary or cyclic cosmological models; or
+  \item that $\mathcal{V}(t)$ as defined here is
+        measurable, or that its approach to zero
+        corresponds to a specific observational signature
+        in the cosmic microwave background, large-scale
+        structure, or gravitational wave spectrum.
+\end{enumerate}
+
+\begin{remark}{Reading the Cosmological Chapters}
+  {cosmo-reading-guide}
+  The expyrotic cosmology and cosmological completion
+  chapters establish a structural result: \emph{any} physical
+  system that obeys the RSVP field equations and approaches
+  an admissibility singularity must satisfy the conditions
+  the Expyrotic Necessity Theorem identifies. This is a
+  theorem about the RSVP framework, not an independent
+  derivation of cyclic cosmology from observational data.
+  The connection to Steinhardt--Turok cyclic models, Penrose
+  conformal cyclic cosmology, and related proposals is one
+  of \emph{structural consonance} --- the formal patterns
+  rhyme --- rather than derivation. Whether the RSVP
+  framework constitutes a genuine physical proposal, and
+  what observations would test it, is explicitly listed as
+  an open problem in \cref{app:open-problems}.
+\end{remark}
+
+These caveats do not diminish the content of the chapter.
+They place it accurately. Structural necessity results ---
+theorems that show what \emph{must} hold within a formal
+system --- have a long and legitimate history in
+theoretical physics, from thermodynamics before statistical
+mechanics, to the Penrose singularity theorems before
+quantum gravity, to the holographic bounds before string
+theory. This chapter belongs in that tradition: a
+structural result whose physical interpretation is
+established but whose empirical derivation remains future
+work.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Cosmology is governed by admissible volume
+        $\mathcal{V}(t) = \Vol(\mathcal{A}(t))$, not by
+        spatial size (\cref{thm:cosmo-reach}).
+  \item Unbounded constraint growth drives
+        $\mathcal{V} \to 0$, the admissibility singularity
+        (\cref{thm:adm-collapse,defn:adm-singularity}).
+  \item Approach to $\mathcal{V} = 0$ forces either
+        termination or renewal
+        (\cref{thm:expyrotic-necessity}).
+  \item Cosmological cycles alternate between
+        $\mathcal{V}_{\max}$ and $\mathcal{V}_{\min}$ via
+        the renewal operator $\mathfrak{E}$
+        (\cref{thm:expyrotic-cycle}).
+  \item Observed expansion may be the projection of growth
+        in admissible volume
+        (\cref{thm:apparent-expansion}).
+  \item Cosmological renewal is generatively admissible
+        (\cref{thm:expyrotic-adm}), making expyrotic
+        cosmology the cosmological instance of the
+        Generative Admissibility Principle.
+  \item The renewal operator $\mathfrak{E}$ is realized
+        concretely by a reintegration operator $\mathcal{K}$
+        possessing a fixed point under standard compactness
+        hypotheses (\cref{thm:reintegration-fixed-point}).
+  \item Reintegration at the fixed point asymptotically
+        suppresses large-scale entropy gradients
+        (\cref{thm:entropy-gradient-suppression}), giving a
+        derived mechanism for horizon smoothing.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Using the Cosmological Evolution Equation, determine the
+  condition on $\alpha, \beta, \Phi, \mathcal{S}$ under
+  which a steady-state universe ($d\mathcal{V}/dt = 0$) is
+  possible without renewal.
+\end{exercise}
+
+\begin{exercise}[Physics]
+  Compare the Admissibility Singularity
+  (\cref{defn:adm-singularity}) to the standard Big Crunch.
+  What observational signature, if any, would distinguish
+  the two?
+\end{exercise}
+
+\begin{exercise}
+  Prove that $\reco(\mathcal{U}) = 0$ is sufficient (though
+  not necessary) for successive expyrotic cycles to be
+  statistically independent.
+\end{exercise}
+
+\begin{exercise}[Physics]
+  Show that if $K$ is taken to be a Dirac delta at
+  $t'=t-T_P$ (perfect periodicity, no averaging), the
+  Reintegration Fixed-Point Theorem still applies but the
+  Entropy-Gradient Suppression Theorem fails. What does this
+  imply about the necessity of kernel smoothing for horizon
+  smoothing?
+\end{exercise}
+
+
+
+
+\chapter{Cosmological Completion}
+\label{ch:cosmo-completion}
+
+\begin{epigraph}{
+  Nothing essential is destroyed. It is only made
+  unreachable.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define the global cosmological capacity functional
+        and prove its conservation across cycles.
+  \item Define the distinction horizon and prove the
+        Distinction Horizon Theorem.
+  \item Prove the Cycle Memory Theorem and the Universe as
+        Repair System Theorem.
+  \item Prove the No Terminal Equilibrium Theorem.
+  \item Prove the Cosmological Productivity and
+        Cosmological Optimality Theorems.
+  \item Prove the Cosmological Completion Theorem, closing
+        Part~VI.
+\end{objectives}
+
+
+What Is Conserved
+
+\label{sec:ch19-conserved}
+
+Chapter~19 introduces no fundamentally new machinery. Its
+role is to complete the cosmology of Chapter~18 and connect
+the physical realization back to the rest of the monograph.
+Chapters~16--18 introduced the RSVP triple
+$(\Phi,\mathbf{v},S)$, gravity as admissibility geometry,
+and expyrotic renewal. The remaining question is: what
+global quantity is actually conserved across cycles? The
+answer is not matter, not energy, and not information in
+the Shannon sense. The natural conserved object in this
+framework is distinction-producing capacity.
+
+The traditional alternative endpoint for a cosmological
+history is heat death: the prediction, following directly
+from an unbounded Second Law, that entropy increases without
+limit until the universe reaches a state of maximum entropy
+and uniform temperature, after which no further structure can
+be extracted or sustained \parencite{prigogine1984}. Heat
+death is not wrong as a statement about entropy; it follows
+from the Second Law as standardly formulated. What it lacks
+is any mechanism, internal to the standard account, by which a
+universe approaching maximum entropy could do anything other
+than approach it asymptotically and remain there. The Second
+Law of Distinction Dynamics (\cref{law:second-law-dist})
+already re-derived entropy increase as distinction erosion in
+the absence of repair; this chapter asks what changes once
+repair --- in its cosmological form, reintegration --- is
+taken into account at the scale of the universe as a whole,
+and whether the resulting endpoint is heat death after all, or
+something importantly different.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch19-falsifiability}
+
+The claim this chapter defends is that ``saturation without
+exhaustion'' and ``heat death'' are not two names for the same
+endpoint described with different vocabulary, but genuinely
+distinguishable predictions on the same field content. This is
+the falsifiable core of the chapter. The Asymptotic Saturation
+Theorem (\cref{thm:asymptotic-saturation}), proved later in
+this chapter, should be directly contrastable with a
+heat-death model built on the identical RSVP field content
+introduced in Chapter~\ref{ch:rsvp}: the two models share
+$(\Phi,\mathbf{v},S)$ but diverge in their long-run prediction
+for $\mathcal{C}(t)$. If the asymptotic-saturation construction
+collapsed onto the heat-death prediction once worked through in
+detail --- if reintegration turned out to conserve nothing
+that a standard thermodynamic treatment does not already
+conserve --- the claim that this framework predicts something
+genuinely different from heat death, rather than relabelling
+it, would fail. The No Terminal Equilibrium Theorem is written
+to make this divergence explicit and checkable against the
+standard model's own asymptotic behaviour.
+
+
+What This Chapter Establishes
+
+\label{sec:ch19-preview}
+
+By the end of this chapter, the Cosmological Capacity
+Conservation Theorem will establish what is conserved across
+expyrotic cycles, the No Terminal Equilibrium Theorem will
+rule out heat death as this framework's predicted endpoint,
+and the Cosmological Completion Theorem will close Part~VI by
+connecting the physical realization back to the abstract
+admissibility geometry of Part~V. This completes the book's
+treatment of physical realizations.
+Chapter~\ref{ch:semantic-geometry} turns from the physical to
+the cognitive, opening Part~VII by asking whether meaning
+itself --- not matter, not spacetime, but semantic content ---
+has the same admissibility-geometric structure already found
+to govern capacity, gravity, and cosmological history.
+
+\begin{definition}{Cosmological Distinction Capacity}{cosmo-distinction-capacity}
+  Define
+  \[
+    \mathcal{C}(t) = \int_U \Phi(x,t)\, e^{-S(x,t)} \, dV.
+  \]
+\end{definition}
+
+This is the global admissible capacity of the universe. It
+is closely related to $\mathcal{V}(t)$ but distinct: $\mathcal{V}$
+measures actual admissible volume, while $\mathcal{C}$
+measures the capacity to generate admissible volume.
+
+
+Cosmological Capacity Conservation
+
+\label{sec:ch19-conservation}
+
+\begin{theorem}{Cosmological Capacity Conservation}{cosmo-capacity}
+  For a closed RSVP universe,
+  \[
+    \frac{d}{dt}\bigl(\mathcal{C} + \mathcal{S}_{\mathrm{hidden}}\bigr)
+    = 0,
+  \]
+  where $\mathcal{S}_{\mathrm{hidden}}$ represents
+  distinction capacity inaccessible to current observers.
+\end{theorem}
+
+\begin{proof}
+  Local entropy production reduces observable $\Phi e^{-S}$.
+  However, Chapter~\ref{ch:recoverability} established that
+  destruction and dispersal are not equivalent: lost
+  capacity may become inaccessible without being
+  annihilated. Therefore observable capacity decreases
+  while hidden capacity increases by the same amount, and
+  the sum remains constant.
+\end{proof}
+
+This is the cosmological version of recoverability,
+extending the Law of Recoverability (\cref{thm:reco-law})
+to the scale of the universe as a whole.
+
+\begin{definition}{Distinction Horizon}{dist-horizon}
+  The \emph{distinction horizon} is
+  \[
+    \mathcal{H}_D = \partial \mathcal{A}.
+  \]
+  \index{horizon!distinction|textbf}
+\end{definition}
+
+This replaces the ordinary notion of a cosmological or
+event horizon with a boundary defined purely in terms of
+admissibility.
+
+\begin{theorem}{Distinction Horizon Theorem}{dist-horizon-thm}
+  A region beyond $\mathcal{H}_D$ is unreachable but not
+  necessarily nonexistent.
+\end{theorem}
+
+\begin{proof}
+  The horizon $\mathcal{H}_D$ is defined by loss of
+  admissible trajectories, not by loss of ontological
+  status. Existence is not equivalent to reachability
+  (\cref{ch:reachability}). Therefore crossing $\mathcal{H}_D$
+  removes accessibility rather than removing existence.
+\end{proof}
+
+This theorem links directly to the Future Cone Theorem of
+Chapter~\ref{ch:reachability}.
+
+
+Memory Across Cycles
+
+\label{sec:ch19-memory}
+
+\begin{definition}{Cycle Recoverability}{cycle-recoverability}
+  \[
+    \reco_c = \frac{I_{\mathrm{recovered}}}{I_{\mathrm{previous}}}.
+  \]
+\end{definition}
+
+\begin{theorem}{Cycle Memory Theorem}{cycle-memory}
+  If $\reco_c > 0$, successive cosmological cycles are
+  correlated.
+\end{theorem}
+
+\begin{proof}
+  Positive recoverability implies partial reconstruction
+  of prior-cycle distinctions, by the Reconstruction
+  Theorem (\cref{thm:reconstruction}). Recovered
+  distinctions constrain future evolution, since they
+  enter as boundary conditions on the renewal operator
+  $\mathfrak{E}$. Therefore cycles are not statistically
+  independent.
+\end{proof}
+
+This is the cosmological analogue of memory developed in
+Chapter~\ref{ch:memory}.
+
+\begin{theorem}{Universe as Repair System}{universe-repair}
+  Expyrotic renewal is a repair operator acting on the
+  global distinction
+  manifold.\index{regeneration!cosmological}
+\end{theorem}
+
+\begin{proof}
+  Let $\mathcal{A}_{\min}$ denote the collapsed
+  admissibility manifold. Renewal maps
+  $\mathcal{A}_{\min} \to \mathcal{A}_{\max}$, restoring
+  future distinction-production capacity. By the Repair
+  Operator definition (\cref{defn:repair-op}) and the Repair
+  Existence Theorem (\cref{thm:repair-exist}), this map
+  satisfies the defining conditions of repair.
+\end{proof}
+
+
+No Terminal Equilibrium
+
+\label{sec:ch19-no-terminal}
+
+\begin{theorem}{No Terminal Equilibrium Theorem}{no-terminal-equilibrium}
+  If renewal remains possible, $\mathcal{V} = 0$ cannot be
+  a permanent state.
+\end{theorem}
+
+\begin{proof}
+  Permanent heat death requires $\mathcal{V}(t) = 0$ for all
+  future $t$. By the Expyrotic Necessity Theorem
+  (\cref{thm:expyrotic-necessity}), if renewal remains
+  possible, then there exists $t^*$ such that
+  $\mathcal{V}(t^*) > 0$, contradicting permanence.
+\end{proof}
+
+
+Cosmological Productivity
+
+\label{sec:ch19-productivity}
+
+\begin{definition}{Cosmological Productivity}{cosmo-productivity}
+  \[
+    P_U(t) = \frac{dD_U}{dt},
+  \]
+  where $D_U$ is total distinction capacity of the
+  universe.
+\end{definition}
+
+\begin{theorem}{Cosmological Productivity Theorem}{cosmo-productivity-thm}
+  A cosmological phase is generative iff $P_U(t) > 0$.
+\end{theorem}
+
+\begin{proof}
+  Positive productivity creates new distinction structures.
+  By the Future Distinction Dominance Theorem
+  (Chapter~\ref{ch:preservation}), new distinctions
+  increase future admissible volume. Therefore positive
+  $P_U$ is equivalent to a generative phase, and conversely
+  a generative phase requires net distinction creation,
+  i.e.\ $P_U(t) > 0$.
+\end{proof}
+
+
+Cosmological Optimality
+
+\label{sec:ch19-optimality}
+
+\begin{theorem}{Cosmological Optimality Theorem}{cosmo-optimality}
+  Among cosmological trajectories satisfying the same
+  conservation laws, generatively admissible trajectories
+  maximize asymptotic distinction capacity.
+\end{theorem}
+
+\begin{proof}
+  By the Future Distinction Optimality Theorem
+  (\cref{thm:gat-final}), $\frac{d}{dt}\Vol(\mathcal{A}) \ge 0$
+  dominates extractive alternatives over a sufficiently
+  long horizon. Applying this theorem to the universe as a
+  whole, with $\mathcal{A}$ interpreted as the global
+  admissibility manifold, gives maximal asymptotic $D_U$
+  among trajectories sharing the same conserved quantities.
+\end{proof}
+
+This theorem imports the entire admissibility programme of
+Part~V into cosmology without modification.
+
+
+Asymptotic Saturation Without Exhaustion
+
+\label{sec:ch19-saturation}
+
+The chapter's results so far establish conservation
+(\cref{thm:cosmo-capacity}), boundedness of horizons
+(\cref{thm:dist-horizon-thm}), and optimality among
+generative trajectories (\cref{thm:cosmo-optimality}). What
+remains is to state precisely the asymptotic regime toward
+which a generatively admissible universe tends: local
+distinction production saturates, while global admissible
+volume remains permanently bounded away from zero.
+
+\begin{definition}{Total Distinguishable Cosmological Volume}{total-dist-vol}
+  Let $\mathcal{D}_t$ denote the set of distinctions
+  actively produced by the universe up to cosmic time $t$.
+  Define
+  \[
+    V_D(t) = \Vol(\mathcal{D}_t).
+  \]
+\end{definition}
+
+$V_D(t)$ differs from the cosmological admissible volume
+$\mathcal{V}(t)$ of \cref{defn:cosmo-adm}: $V_D$
+measures\index{admissibility!physical}
+distinctions actually realised, while $\mathcal{V}$ measures
+the volume of futures still admissible. The Cosmological
+Productivity Theorem (\cref{thm:cosmo-productivity-thm})
+concerns the rate of change of total distinction capacity
+$D_U$; $V_D$ is its realised, cumulative counterpart.
+
+\begin{theorem}{Asymptotic Saturation Theorem}{asymptotic-saturation}
+  Under generatively admissible cosmological dynamics with
+  bounded local capacity production rate, the universe
+  satisfies
+  \[
+    \lim_{t\to\infty} \frac{dV_D}{dt} = 0
+    \qquad\text{while simultaneously}\qquad
+    \limsup_{t\to\infty} \Vol(\mathcal{A}_t) > 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  \emph{Local saturation.} By the Reintegration Fixed-Point
+  Theorem (\cref{thm:reintegration-fixed-point}), the
+  capacity field approaches a fixed configuration $\Phi^*$
+  under repeated reintegration. At a fixed point, local
+  production of new distinctions --- which by
+  \cref{defn:cosmo-productivity} occurs at rate
+  $P_U(t) = dD_U/dt$ --- is itself driven by the residual
+  $\Phi - \Phi^*$, which tends to zero by definition of the
+  fixed point. Since $V_D(t)$ accumulates realised
+  distinctions at a rate bounded above by $P_U(t)$ (not
+  every increment in capacity is realised as an actual
+  distinction), and $P_U(t)\to0$, we obtain
+  $dV_D/dt \to 0$.
+
+  \emph{Global non-exhaustion.} By the No Terminal
+  Equilibrium Theorem (\cref{thm:no-terminal-equilibrium}),
+  $\mathcal{V}(t) = \Vol(\mathcal{A}_t) = 0$ cannot hold for
+  all sufficiently large $t$ while renewal remains possible.
+  By the Expyrotic Cycle Theorem
+  (\cref{thm:expyrotic-cycle}), renewal recurs, driving
+  $\mathcal{V}$ back to $\mathcal{V}_{\max} > 0$ infinitely
+  often. Hence
+  $\limsup_{t\to\infty}\Vol(\mathcal{A}_t) \ge
+  \mathcal{V}_{\max} > 0$.
+\end{proof}
+
+\begin{remark}{Saturation is not exhaustion}{saturation-not-exhaustion}
+  The Asymptotic Saturation Theorem formalises the central
+  cosmological claim of this chapter: a generatively
+  admissible universe need not produce unboundedly many new
+  local distinctions forever to remain viable. Local
+  distinction production can saturate --- $dV_D/dt\to0$ ---
+  without admissible future volume ever being exhausted, so
+  long as the global cycling guaranteed by the Expyrotic
+  Cycle Theorem continues to refresh $\mathcal{V}(t)$ away
+  from zero. Saturation of realised distinction is therefore
+  compatible with, and indeed expected under, permanent
+  preservation of distinction-producing \emph{capacity} ---
+  exactly the distinction the Ecology of Distinctions
+  Theorem (\cref{thm:ecology-final-31}) draws between
+  $D_U$ and $\liminf\Vol(\adm(t))$.
+\end{remark}
+
+
+Completion
+
+\label{sec:ch19-completion}
+
+\begin{theorem}{Cosmological Completion Theorem}{cosmo-completion}
+  The physical universe may be interpreted as a
+  regenerative distinction ecology evolving under capacity
+  transport, constraint accumulation, repair, and
+  admissibility preservation.
+\end{theorem}
+
+\begin{proof}
+  Chapters~16--18 established $\Phi$ as distinction
+  capacity, $\mathbf{v}$ as capacity transport, $S$ as
+  constraint accumulation, and expyrotic renewal as repair
+  (\cref{thm:universe-repair}). Chapters~11--15 established
+  regeneration, reachability, and admissibility as abstract
+  structures. Combining these — physical fields realizing
+  abstract structures — yields a regenerative distinction
+  ecology operating at cosmological scale.
+\end{proof}
+
+This gives Part~VI a complete logical arc:
+\[
+  \text{RSVP} \to \text{Gravity} \to \text{Expyrosis}
+  \to \text{Cosmological Completion},
+\]
+and, more importantly, closes the loop back to
+Chapters~7--15. The universe is no longer merely a
+collection of fields evolving in spacetime. It becomes the
+largest instance of the same hierarchy already developed
+throughout the book:
+\[
+  \text{Distinction} \to \text{Repair} \to \text{Regeneration}
+  \to \text{Admissibility}.
+\]
+At this point the physical realization section is
+structurally complete, and the cognitive realization
+section of Part~VII can begin.
+
+
+Related Frameworks
+
+\label{sec:ch19-related-frameworks}
+
+\subsection*{Dynamical Systems Theory: Asymptotic Regimes}
+
+\emph{Convergence.} Chapter~\ref{ch:rsvp} engaged dynamical
+systems theory on the mechanics of convergence; this chapter's
+concern is the classification of long-run behaviour itself.
+Dynamical systems theory's vocabulary for asymptotic
+behaviour --- fixed points, periodic orbits, strange attractors
+--- supplies the natural language for evaluating cosmological
+end states \parencite{strogatz2015,arnold1989}. The No Terminal
+Equilibrium Theorem and Asymptotic Saturation Theorem
+(\cref{thm:no-terminal-equilibrium,thm:asymptotic-saturation})
+are framed in exactly this vocabulary: does the cosmological
+trajectory converge to a fixed point, or does it not?
+
+\emph{Divergence.} Classical dynamical systems theory treats
+fixed points neutrally --- a stable fixed point is one possible
+long-run behaviour among others, with no inherent preference for
+it over a limit cycle or a strange attractor beyond questions of
+stability. This chapter's No Terminal Equilibrium Theorem argues
+that a true fixed point would constitute a cosmological failure
+mode specifically: a state of zero distinction-production
+capacity, the dynamical analogue of heat death, and proves the
+system described here cannot reach one. The Asymptotic Saturation
+Theorem then characterises the actual long-run behaviour as
+saturation --- bounded but non-vanishing ongoing activity ---
+a third regime that the standard fixed-point/periodic/chaotic
+taxonomy does not single out as a named category in its own
+right.
+
+\emph{Open question.} Whether saturation in the sense proved here
+is equivalent to convergence toward some already-studied
+attracting structure --- a slow manifold, for instance, or an
+attracting set of measure zero but nonempty interior in a
+suitable quotient space --- or constitutes a genuinely distinct
+asymptotic regime not yet named in the existing taxonomy, is left
+open.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Cosmological distinction capacity
+        $\mathcal{C} + \mathcal{S}_{\mathrm{hidden}}$ is
+        conserved (\cref{thm:cosmo-capacity}).
+  \item The distinction horizon marks loss of
+        reachability, not loss of existence
+        (\cref{thm:dist-horizon-thm}).
+  \item Positive cycle recoverability correlates
+        successive cosmological cycles
+        (\cref{thm:cycle-memory}).
+  \item Expyrotic renewal is formally a repair operator
+        (\cref{thm:universe-repair}).
+  \item Permanent heat death is impossible while renewal
+        remains possible (\cref{thm:no-terminal-equilibrium}).
+  \item Generatively admissible cosmological trajectories
+        maximize asymptotic distinction capacity
+        (\cref{thm:cosmo-optimality}).
+  \item The universe is a regenerative distinction ecology
+        at cosmological scale
+        (\cref{thm:cosmo-completion}), completing Part~VI.
+  \item Local distinction production saturates,
+        $dV_D/dt\to0$, while global admissible volume never
+        falls to permanent zero,
+        $\limsup\Vol(\mathcal{A}_t)>0$
+        (\cref{thm:asymptotic-saturation}): saturation is not
+        exhaustion.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Show that the Cosmological Capacity Conservation Theorem
+  reduces to the ordinary Law of Recoverability
+  (\cref{thm:reco-law}) when the universe is treated as a
+  single distinction $d$.
+\end{exercise}
+
+\begin{exercise}[Physics]
+  Discuss whether the distinction horizon $\mathcal{H}_D$
+  could in principle coincide with an ordinary cosmological
+  event horizon. Under what RSVP conditions would the two
+  notions diverge?
+\end{exercise}
+
+\begin{exercise}
+  Apply the Cosmological Productivity Theorem to a universe
+  undergoing accelerated expansion with declining structure
+  formation. Is such a universe generative, extractive, or
+  ambiguous under the framework of this chapter?
+\end{exercise}
+
+\begin{exercise}[Physics]
+  Construct a toy model in which $dV_D/dt \to 0$ but
+  $\Vol(\mathcal{A}_t) \to 0$ as well (saturation
+  \emph{with} exhaustion). Identify which hypothesis of the
+  Asymptotic Saturation Theorem fails in your model.
+\end{exercise}
+
+\part{Cognitive Realizations}
+
+\chapter{Semantic Geometry}
+\label{ch:semantic-geometry}
+
+\begin{epigraph}{
+  A concept is not a thing.
+  A concept is a stable region in a space of distinctions.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define meaning manifolds and conceptual spaces
+        as distinction-structured geometries.
+  \item Prove the Meaning Distance Theorem.
+  \item Prove the Semantic Curvature Theorem.
+  \item Prove the Conceptual Attractor Theorem.
+  \item Prove the Meaning Repair Theorem.
+  \item Prove the Semantic Horizon Propagation Theorem.
+  \item Connect semantic geometry to RSVP, admissibility,
+        and the ecology of cognitive distinctions.
+\end{objectives}
+
+
+Meaning as Distinction Structure
+
+
+The traditional philosophical question asks what meanings
+are: abstract objects, mental representations, social
+norms, use patterns, or functional roles.
+The distinction-theoretic framework dissolves this
+dispute by reframing it.
+Meanings are not things. Meanings are geometric
+structures over distinction spaces.

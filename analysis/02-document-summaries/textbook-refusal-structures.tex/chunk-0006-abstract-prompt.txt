@@ -1,0 +1,254 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Summary**
+
+The reference runtime presented in this appendix is deliberately minimal. I[1D[K
+Its responsibilities are limited to:
+
+* Maintaining a composition graph  
+* Loading operator libraries  
+* Scheduling executable nodes  
+* Recording persistent histories  
+* Processing refusal and collapse events  
+* Applying graph rewrites when requested  
+
+Because the core of Spherepop’s design is *composition*—the building up of [K
+computational behavior through the juxtaposition of operators rather than t[1D[K
+through any particular language or logical system—a small, mathematically u[1D[K
+uniform runtime can be extended to support a wide variety of practical appl[4D[K
+applications (typing, theorem proving, compilation, optimization, fuzzy inf[3D[K
+inference, symbolic reasoning, neural computation, repair, and learning) si[2D[K
+simply by supplying different operator libraries and graph transformations.[16D[K
+transformations. This economy is the principal engineering consequence of a[1D[K
+adopting a “graph‑first” philosophy: a compact runtime can serve many dispa[5D[K
+disparate computational paradigms because composition itself becomes the pr[2D[K
+primitive operation.
+
+**Towards a Composition‑First Calculus**
+
+The operational machinery developed in earlier sections naturally motivates[9D[K
+motivates an extension to a formal calculus that treats graph construction [K
+and history evolution as its primitives. Rather than starting from abstract[8D[K
+abstraction, application, or typing, the proposed *composition‑first calcul[6D[K
+calculus* begins with judgments such as:
+
+\[
+H \vdash G \Downarrow H',
+\]
+
+read “executing graph \(G\) extends history \(H\) into history \(H'\).”
+
+Key primitive rules are:
+
+* **Identity rule:**  
+  \[
+  \frac{ }{\; H \vdash \operatorname{Id} \Downarrow H. }
+  \]
+
+* **Composition rule:**  
+  \[
+  \frac{
+    H \vdash G_1 \Downarrow H_1
+    \quad\text{and}\quad
+    H_1 \vdash G_2 \Downarrow H_2
+  }{
+    H \vdash G_2 \circ G_1 \Downarrow H_2 .
+  }
+  \]
+
+These two rules replace many language‑specific evaluation rules (sequential[11D[K
+(sequential execution, function application, pipeline execution, module com[3D[K
+composition, hardware composition) with a single compositional operation.
+
+**Operator Evaluation**
+
+When an executable node \(n\) of operator \(f\) is evaluated, the rule:
+
+\[
+\frac{
+  v = f(v_1,\dots,v_k)
+}{
+  H \vdash n \Downarrow (H,e),
+}
+\]
+
+where \(e=(n,f,v)\), records both the result and the computational event. T[1D[K
+This makes history an explicit trace of computation rather than a hidden si[2D[K
+side‑effect.
+
+**Refusal & Collapse**
+
+The calculus also includes rules for handling refusal and committed outcome[7D[K
+outcomes:
+
+* **Refusal rule:**  
+  \[
+  \frac{
+    r\text{ is a refusal reason}
+  }{
+    H \vdash n \Downarrow (H,\Refuse(r)).
+  }
+  \]
+
+* **Collapse rule:**  
+  \[
+  \frac{
+    v\text{ has already been produced}
+  }{
+    H \vdash \Collapse(v) \Downarrow (H,\Collapse(v)).
+  }
+  \]
+
+These mechanisms unify speculative execution, interactive computation, symb[4D[K
+symbolic reasoning, and fuzzy evaluation under a single framework.
+
+**Conservativity Principle**
+
+A central theorem states that any extension of the composition‑first calcul[6D[K
+calculus by adding descriptive judgments (types, proofs, logical systems, e[1D[K
+etc.) does not alter its primitive operational rules. Thus richer computati[9D[K
+computational systems are *extensions* rather than replacements of executio[8D[K
+execution semantics. This formalizes the thesis that execution precedes des[3D[K
+description.
+
+**Hierarchy of Concepts**
+
+The resulting hierarchy can be expressed as:
+
+\[
+\text{composition}
+\Longrightarrow
+\text{graphs}
+\Longrightarrow
+\text{histories}
+\Longrightarrow
+\text{execution}
+\Longrightarrow
+\text{optimization}
+\Longrightarrow
+\text{description}
+\Longrightarrow
+\text{verification}.
+\]
+
+Unlike conventional programming‑language theory, where execution is derived[7D[K
+derived from syntax and types, Spherepop’s composition‑first calculus place[5D[K
+places *composition* as the primitive computational operation that everythi[8D[K
+everything else (syntax, type systems, proof assistants, etc.) constrains.
+
+This approach provides a unifying foundation for many disparate domains of [K
+computation by treating graphs—and the histories they generate—as the funda[5D[K
+fundamental building blocks rather than language constructs.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-refusal-structures.tex
+
+NEW CHUNK
+=========
+
+\bibitem{Graham1989}
+R. L. Graham, D. E. Knuth, and O. Patashnik.
+\newblock \emph{Concrete Mathematics}.
+\newblock Addison--Wesley, 1989.
+
+\bibitem{Harary1969}
+F. Harary.
+\newblock \emph{Graph Theory}.
+\newblock Addison--Wesley, 1969.
+
+\bibitem{Hennessy2019}
+J. L. Hennessy and D. A. Patterson.
+\newblock \emph{Computer Architecture: A Quantitative Approach}.
+\newblock 6th ed., Morgan Kaufmann, 2019.
+
+\bibitem{Hoare1969}
+C. A. R. Hoare.
+\newblock An Axiomatic Basis for Computer Programming.
+\newblock \emph{Communications of the ACM}, 12(10):576--580, 1969.
+
+\bibitem{Hopcroft2006}
+J. E. Hopcroft, R. Motwani, and J. D. Ullman.
+\newblock \emph{Introduction to Automata Theory, Languages, and Computation}.
+\newblock 3rd ed., Addison--Wesley, 2006.
+
+\bibitem{Knuth1968}
+D. E. Knuth.
+\newblock \emph{The Art of Computer Programming}, Vol.~1.
+\newblock Addison--Wesley, 1968.
+
+\bibitem{MacLane1998}
+S. Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock 2nd ed., Springer, 1998.
+
+\bibitem{Milner1978}
+R. Milner.
+\newblock A Theory of Type Polymorphism in Programming.
+\newblock \emph{Journal of Computer and System Sciences}, 17(3):348--375, 1978.
+
+\bibitem{Milner1989}
+R. Milner.
+\newblock \emph{Communication and Concurrency}.
+\newblock Prentice Hall, 1989.
+
+\bibitem{Pierce2002}
+B. C. Pierce.
+\newblock \emph{Types and Programming Languages}.
+\newblock MIT Press, 2002.
+
+\bibitem{Plotkin1981}
+G. D. Plotkin.
+\newblock A Structural Approach to Operational Semantics.
+\newblock DAIMI Technical Report FN-19, Aarhus University, 1981.
+
+\bibitem{Reynolds1983}
+J. C. Reynolds.
+\newblock Types, Abstraction, and Parametric Polymorphism.
+\newblock \emph{Information Processing}, 1983.
+
+\bibitem{Russell1913}
+B. Russell and A. N. Whitehead.
+\newblock \emph{Principia Mathematica}.
+\newblock Cambridge University Press, 1913.
+
+\bibitem{Selinger2011}
+P. Selinger.
+\newblock A Survey of Graphical Languages for Monoidal Categories.
+\newblock In \emph{New Structures for Physics}, Springer, 2011.
+
+\bibitem{Tarjan1972}
+R. E. Tarjan.
+\newblock Depth-First Search and Linear Graph Algorithms.
+\newblock \emph{SIAM Journal on Computing}, 1(2):146--160, 1972.
+
+\bibitem{Turing1936}
+A. M. Turing.
+\newblock On Computable Numbers, with an Application to the Entscheidungsproblem.
+\newblock \emph{Proceedings of the London Mathematical Society}, 42:230--265, 1936.
+
+\bibitem{Voevodsky2013}
+The Univalent Foundations Program.
+\newblock \emph{Homotopy Type Theory: Univalent Foundations of Mathematics}.
+\newblock Institute for Advanced Study, 2013.
+
+\bibitem{Wadler1992}
+P. Wadler.
+\newblock The Essence of Functional Programming.
+\newblock \emph{Proceedings of the ACM Symposium on Principles of Programming Languages}, 1992.
+
+\bibitem{Zadeh1965}
+L. A. Zadeh.
+\newblock Fuzzy Sets.
+\newblock \emph{Information and Control}, 8(3):338--353, 1965.
+
+\end{thebibliography}
+
+\end{document}
+

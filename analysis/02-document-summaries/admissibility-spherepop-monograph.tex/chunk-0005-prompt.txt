@@ -1,15 +1,206 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 5 of 11 of a document called
+"admissibility-spherepop-monograph.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**1.  What a “computational geodesic’’ is**
 
-TEXT
-====
+In differential geometry a *geodesic* is the straightest possible curve bet[3D[K
+between two points in a curved manifold – it locally minimizes distance (or[3D[K
+(or, more generally, the action) while obeying the constraints of the space[5D[K
+space (e.g., staying within a submanifold).  
+
+Applying this idea to Spherepop computation:
+
+* **Manifold** – The *semantic configuration space* \( \mathcal{A}(X_0,X_n)[20D[K
+\mathcal{A}(X_0,X_n)\) is the curved “space’’ we are moving through. It con[3D[K
+consists of all admissible sequences of evaluation events (the different wa[2D[K
+ways we can pop bubbles, resolve constraints, and accumulate commitment cos[3D[K
+costs).
+
+* **Action functional** – The quantity that geodesics try to minimize is th[2D[K
+the *action* \(S[\gamma]=\sum_t \mathcal{L}_t\) for a trajectory \(\gamma\)[10D[K
+\(\gamma\). Here \(\mathcal{L}_t\) captures both thermodynamic cost (energy[7D[K
+(energy spent) and structural commitment (how much future evaluation power [K
+is locked in by popping bubbles).
+
+* **Constraint submanifold** – Only trajectories that stay inside the admis[5D[K
+admissibility manifold (i.e., respect bubble topology and constraint rules [K
+at each step) are allowed. This mirrors how a geodesic must remain within t[1D[K
+the allowed region of a Riemannian manifold.
+
+Thus, a *computational geodesic* is the trajectory in \(\mathcal{A}(X_0,X_n[21D[K
+\(\mathcal{A}(X_0,X_n)\) that makes \(S[\gamma]\) stationary (i.e., satisfi[7D[K
+satisfies the Euler–Lagrange equations for computation). It represents the [K
+“most economical’’ way of converting future accessibility into present comm[4D[K
+commitment without unnecessary detours.
+
+---
+
+**2.  Variational formulation**
+
+1. **Space of histories**  
+   \[
+   \mathcal{A}(X_0,X_n)=\{\gamma:\{0,\dots ,n\}\to A(X)\;|\;\text{each step[4D[K
+step respects the constraint configuration at that moment}\}.
+   \]
+
+2. **Action functional**  
+   \[
+   S[\gamma]=\sum_{t=1}^{n}\mathcal{L}_t(\gamma_t),
+   \]
+   where each local Lagrangian \(\mathcal{L}_t\) encodes the commitment cos[3D[K
+cost \(\Delta C_t\) and accessibility change \(\Delta\Omega_t\) incurred by[2D[K
+by popping a particular bubble at step \(t\).
+
+3. **Stationary condition**  
+   A trajectory \(\gamma^*\) is a computational geodesic if for every admis[5D[K
+admissible variation \(\delta\gamma\) with fixed endpoints (\(X_0,\,X_n\)):[16D[K
+(\(X_0,\,X_n\)):
+   \[
+   \frac{d}{dt}\Big|_{t=0} S[\gamma+\varepsilon\delta\gamma]=0,
+   \]
+   where \(\varepsilon\) is an infinitesimal parameter. This condition guar[4D[K
+guarantees that the total action does not decrease when we perturb the whol[4D[K
+whole path while staying inside \(\mathcal{A}(X_0,X_n)\).
+
+---
+
+**3.  Why “least structural commitment’’ matters**
+
+- **Aggressive early commits** (e.g., popping a bubble that later forces ma[2D[K
+many more pops) raise the total action because future evaluation power is l[1D[K
+lost cheaply now.
+- **Conservative deferral** (avoiding any pop until forced) may accumulate [K
+deferred‑commitment cost, which eventually becomes expensive to resolve.
+
+The *principle of least structural commitment* states that admissible compu[5D[K
+computation chooses a trajectory where these two penalties balance. It is n[1D[K
+not “greedy’’ (always pop the first possible bubble) nor “lazy’’ (defer eve[3D[K
+every pop). Instead it spreads commitments so that the sum of all future ac[2D[K
+accessibility costs equals the present commitment cost.
+
+---
+
+**4.  From classical mechanics to Spherepop**
+
+| Classical Mechanics | Spherepop Computation |
+|---------------------|-----------------------|
+| Action principle: minimise \(\int L(q,\dot q)\) along a path in configura[9D[K
+configuration space. | Action functional \(S[\gamma]\) measures total futur[5D[K
+future‑accessibility cost minus present commitment, evaluated over all admi[4D[K
+admissible trajectories connecting the same start and end states. |
+| Local Euler–Lagrange equations follow from global stationarity. | Station[7D[K
+Stationary geodesics (variational problem) imply local balance of \(\Delta [K
+C_t\) and \(\Delta\Omega_t\) at each step via the Euler–Lagrange condition [K
+for computation. |
+
+The key point is that *the selection rule*—whether a given pop event is tak[3D[K
+taken—is determined by an *global* property of the whole trajectory, not me[2D[K
+merely the instantaneous local energy or potential.
+
+---
+
+**5.  Semantic configuration space & topology**
+
+- **Initial state**: unreduced expression \(X_0\) with full bubble topology[8D[K
+topology \(\mathcal{B}_0\).
+- **Terminal state**: fully reduced expression \(X_n\) (all bubbles popped,[7D[K
+popped, all constraints resolved).
+- **Intermediate points**: partial reductions where a subset of bubbles has[3D[K
+has been popped; each point carries the current constraint configuration an[2D[K
+and accumulated commitment cost.
+
+The *path metric* in this space is precisely the action \(S[\gamma]\). Stat[4D[K
+States that can be reached with low‑cost steps are “close’’ (small action),[8D[K
+action), while states requiring costly mandatory pops are distant. This top[3D[K
+topology mirrors how one might walk on a mountain: staying near flat valley[6D[K
+valleys (low action) yields an overall shorter route.
+
+---
+
+**6.  Concrete example – evaluating \(1+3\times2^2\)**
+
+| Step | Expression after pop | Bubble popped | Commitment cost \(\Delta C\[2D[K
+C\) | Accessibility change \(\Delta\Omega\) |
+|------|-----------------------|---------------|---------------------------|------|-----------------------|---------------|----------------------------|----------------------------------------|
+| 0 (start) | `1 + 3 * X`           | –             | 0                    [K
+       | 0                                      |
+| 1      | `1 + 3 * 4`           | \(2^2\)       | \(\Delta C_1 = a\)      [K
+    | \(\Delta\Omega_1 = b\)                 |
+| 2      | `1 + 12`              | (none)        | \(\Delta C_2 = c\)      [K
+    | \(\Delta\Omega_2 = d\)                 |
+| 3      | `13`                   | –             | \(\Delta C_3 = e\)     [K
+     | \(\Delta\Omega_3 = f\)                 |
+
+The *geodesic* (least‑cost trajectory) is the one that first pops \(2^2\) b[1D[K
+because it yields a lower total action than any alternative ordering that w[1D[K
+would force an earlier pop of `+` or `*`. The computed path “exponentiation[15D[K
+“exponentiation → multiplication → addition’’ minimizes:
+
+\[
+S = \Delta C_1 + \Delta C_2 + \Delta C_3,
+\]
+
+subject to the constraint that each step respects the current bubble topolo[6D[K
+topology (e.g., you cannot multiply before \(2^2\) is computed).
+
+---
+
+**7.  Why exposing the trajectory matters**
+
+An opaque system that returns only the final value (`13`) hides:
+
+1. **Which bubbles were forced early**, indicating hidden bottlenecks.
+2. **The cumulative commitment cost** at each step, which may be non‑linear[10D[K
+non‑linear (e.g., popping a high‑cost bubble now can save later cheap pops)[5D[K
+pops).
+3. **Potential for alternative low‑cost paths** that might have been avoide[6D[K
+avoided due to premature reduction.
+
+Understanding computation requires the *semantic configuration space* and i[1D[K
+its metric; otherwise we cannot diagnose inefficiencies or redesign evaluat[7D[K
+evaluations without re‑running the whole process.
+
+---
+
+### TL;DR
+
+A computational geodesic is the admissible path in the semantic configurati[11D[K
+configuration space of a Spherepop expression that minimizes the total acti[4D[K
+action functional, analogous to how a straight line (geodesic) minimizes di[2D[K
+distance on a curved manifold. By solving the variational problem “arg stat[9D[K
+“arg stationary \(S[\gamma]\)” we obtain trajectories that balance early co[2D[K
+commitment costs against future accessibility penalties—exactly what the pr[2D[K
+principle of *least structural commitment* prescribes. This global optimali[8D[K
+optimality condition, encoded in the path metric (action), explains why mer[3D[K
+merely knowing the final value is insufficient for understanding computatio[10D[K
+computation; the full trajectory’s structure must be retained and examined.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 
 To say that thermodynamics is a theory of structural transformation is not to offer a metaphor. It is to make a precise claim about what thermodynamic laws actually govern. The first law is a statement about the conservation of a certain quantity — internal energy — under the transformations that constitute thermodynamic processes. The second law is a statement about the asymmetry of those transformations: that not all transformations are equally available at all times, that the space of futures accessible from a given state is constrained in a particular way, and that this constraint is not incidental to the theory but is its deepest content. What the second law really says, at the level of conceptual structure rather than formal statement, is that \emph{the set of admissible futures shrinks in a characteristic direction under spontaneous evolution}.

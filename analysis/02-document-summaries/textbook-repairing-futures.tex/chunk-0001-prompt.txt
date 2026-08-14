@@ -1,15 +1,179 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 2 of a document called
+"textbook-repairing-futures.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+Below is an analysis and explanation of the ideas presented in your passage[7D[K
+passage.
 
-TEXT
-====
+---
+
+### 1. Weighting Contact Events Heavily
+
+**Why it matters:**  
+- **Admissibility Boundaries:** In trajectory data—especially for robot mot[3D[K
+motion or physical simulations—the admissible region (the set of all physic[6D[K
+physically possible trajectories) is often sharply defined near contacts, o[1D[K
+obstacles, or changes in dynamics.  
+- **Difficulty of Learning from Smooth Trajectories Alone:** Without explic[6D[K
+explicitly modeling these constraints, a model trained only on smooth (Gaus[5D[K
+(Gaussian‑noise‑perturbed) data may miss subtle violations that are critica[7D[K
+critical for correctness.  
+- **Impact of Contact Events:** They represent abrupt transitions where the[3D[K
+the governing physical laws (e.g., momentum conservation, constraint satisf[6D[K
+satisfaction) change. Modeling them heavily forces the network to learn the[3D[K
+these high‑impact regions explicitly.
+
+**Practical Consequence:**  
+Training on contact events helps the model capture non‑linear dynamics and [K
+enforce constraints more reliably, reducing errors in scenarios that rely o[1D[K
+on precise adherence to admissibility boundaries (e.g., collision avoidance[9D[K
+avoidance).
+
+---
+
+### 2. Diffusion Without Gaussian Noise
+
+#### A. Repair Interpretation of Diffusion
+- **Traditional Diffusion:** Standard diffusion models perturb the target w[1D[K
+with Gaussian noise and train a network to invert this noisy mapping.
+- **Why Gaussian May Be Inappropriate for Trajectories:**  
+  - *Lack of Physical Meaning:* Adding Gaussian noise corrupts trajectories[12D[K
+trajectories without any reference to physical admissibility. It doesn’t mo[2D[K
+model realistic violations (like rigidity or momentum conservation) that ar[2D[K
+are crucial in trajectory prediction.
+- **More Principled Perturbation:**  
+  - *Rigidity Violation:* Introduce non‑preserved pairwise vertex distances[9D[K
+distances, simulating an elastic deformation where a rigid body deforms.
+  - *Momentum Violation:* Add drift to vertex velocities so total momentum [K
+isn’t conserved.
+  - *Temporal Discontinuity:* Insert random gaps, making the next time step[4D[K
+step not a smooth continuation.
+
+#### B. Admissibility‑Structured Perturbation (Definition)
+- **Mapping Family \(\mathcal{P}_\sigma(H)\):** For any admissible history [K
+\(H\) and parameter \(\sigma > 0\), the perturbed trajectory \(\mathcal{P}_[14D[K
+\(\mathcal{P}_\sigma(H)\) deliberately breaks a specific physical constrain[9D[K
+constraint in \(\Phi\) while preserving full adherence for \(\sigma = 0\). [K
+ 
+- **Purpose:** This creates controlled violations that mimic real‑world dis[3D[K
+disturbances, allowing the denoiser to learn repair operators (e.g., restor[6D[K
+restoring rigidity or momentum).
+
+#### C. Repair‑Based Training Objective
+The objective is to minimize  
+
+\[
+\mathcal{L}_{\text{repair}}(\theta) = \mathbb{E}_{H \in \A(w),\, \sigma}\,
+\| x_\theta(\mathcal{P}_\sigma(H), \sigma) - H \|^2 .
+\]
+
+- **Goal:** Train \(x_\theta\) to predict the clean admissible history from[4D[K
+from its perturbed counterpart.
+- **Result:** The network learns repair operators for specific constraint c[1D[K
+classes (rigidity, momentum conservation, temporal continuity) rather than [K
+generic denoising.
+
+#### D. Repair‑Equivalence of Admissibility‑Structured Diffusion (Theorem)
+**Assumption:** For every \(H \in \A(w)\), the perturbed trajectory \(\math[7D[K
+\(\mathcal{P}_\sigma(H)\) admits a unique projection back onto \(\A(w)\) fo[2D[K
+for sufficiently small \(\sigma\).
+
+- **Implication:** The minimizer of \(\mathcal{L}_{\text{repair}}\) behaves[7D[K
+behaves like a repair operator.  
+- **Convergence:** Iterating with \(H_{k+1} = x_\theta(H_k, \sigma_k)\) and[3D[K
+and decreasing \(\sigma_k\) leads to convergence to an admissible history.
+
+**Why This Matters:** It shows that the mathematical structure of diffusion[9D[K
+diffusion (in terms of repair) is preserved whether we use Gaussian noise o[1D[K
+or structured physical perturbations. The former learns coordinate‑space co[2D[K
+corruption; the latter learns physically meaningful constraint violations, [K
+which aligns better with trajectory dynamics.
+
+---
+
+### 3. Objecthood as Emergent Coherence
+
+#### A. Factorized Attention in PHYSIFORMER
+- **Design Choice:** No explicit object identifiers are used. Instead, atte[4D[K
+attention operates separately over time, space, and objects.
+- **Resulting Property:** Permutation invariance—objects can appear in any [K
+order without affecting the prediction.
+
+#### B. Definition of Historical Coherence (Definition)
+Given a trajectory \(H \in \H\), vertices \(i\) and \(j\) are *historically[13D[K
+*historically coherent* (\(i \sim_H j\)) if their relative displacement  
+\(\pi_t(H)_i - \pi_t(H)_j\) can be recovered from either vertex’s individua[9D[K
+individual trajectory using the admissible reconstruction family.
+
+- **Proper Class:** The equivalence classes partition vertices into *object[7D[K
+*objects*. A rigid body is a class where all pairwise displacements remain [K
+constant over time. An elastic body forms a class where such displacements [K
+vary but are still reconstructible.
+
+#### C. Proposition on Historical Coherence
+The relation \(\sim_H\) is an equivalence relation (reflexive, symmetric, t[1D[K
+transitive) and partitions the vertex set into disjoint object classes \([i[4D[K
+\([i]_H\). This means:
+
+- **Rigid Body:** Consistent pairwise distances over time → constant relati[6D[K
+relative displacements.
+- **Elastic Body:** Distances vary with deformation but remain reconstructi[12D[K
+reconstructible from any member’s trajectory.
+
+#### D. Philosophical Implication
+Objecthood is not a primitive property of the world; it emerges from cohere[6D[K
+coherence in temporal trajectories. By relying on relational properties (hi[3D[K
+(historical coherence), PHYSIFORMER captures object identity without pre‑de[6D[K
+pre‑defining objects, enabling generalization to unseen numbers of objects.[8D[K
+objects.
+
+---
+
+### Summary
+
+1. **Contact events** are weighted heavily because they mark sharp changes [K
+in admissibility that cannot be captured by smooth Gaussian noise alone.
+2. **Diffusion models** can be reformulated using *admissibility‑structured[25D[K
+*admissibility‑structured perturbations* (rigidity, momentum, temporal cont[4D[K
+continuity) to align the learning objective with physical constraints rathe[5D[K
+rather than generic coordinate corruption.
+3. The resulting repair‑based training leads to a model that behaves like a[1D[K
+a repair operator, ensuring convergence to physically admissible trajectori[10D[K
+trajectories.
+4. **Objecthood** in PHYSIFORMER emerges as historical coherence: vertices [K
+sharing constant relative displacements (rigid bodies) or variable but reco[4D[K
+reconstructible deformations (elastic bodies) form emergent objects rather [K
+than being imposed as primitives.
+
+These insights collectively argue for a design that emphasizes physical con[3D[K
+constraint modeling over pure coordinate noise, enabling more robust and ph[2D[K
+physically faithful trajectory predictions.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[12pt,oneside]{article}
 

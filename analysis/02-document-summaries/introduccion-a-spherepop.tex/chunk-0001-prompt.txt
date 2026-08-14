@@ -1,0 +1,810 @@
+You are analyzing chunk 1 of 3 of a document called
+"introduccion-a-spherepop.tex", part of a large theoretical/computational research
+repository called Spherepop.
+
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
+
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
+
+**Resumen del Axioma de Irreversibilidad (9.1):**
+
+El Axioma 9.1 en Spherepop establece que los eventos no solo producen resul[5D[K
+resultados, sino que también alteran permanentemente el espacio de posibili[8D[K
+posibilidades disponibles para un sistema. Esto refleja una visión más real[4D[K
+realista de la evolución de sistemas complejos, donde las acciones pasadas [K
+influyen en las opciones futuras y limitan la reversibilidad.
+
+### Explicación Detallada:
+
+1. **Irreversibilidad de Eventos:**
+   - Cualquier evento irreversible \( e : X \rightarrow X' \) (donde \( X, [K
+X' \in X \)) reduce o mantiene la cardinalidad del espacio de opciones (\(|[4D[K
+(\(|X'| \leq |X|\)).
+   - No existe un inverso reversible \( e^{-1} \) tal que \( e^{-1} \circ e[1D[K
+e = id_X \). Esto significa que una vez que se produce un evento irreversib[10D[K
+irreversible, las trayectorias reversibles no pueden regresar al estado ant[3D[K
+anterior.
+
+2. **Historia Irreversible (H):**
+   - La composición de eventos \( H = en \circ \cdots \circ e1 : X0 \righta[7D[K
+\rightarrow Xn \) constituye una historia irreversiblemente alterada del si[2D[K
+sistema.
+   - Esta propiedad asegura que el estado final depende exclusivamente de l[1D[K
+la secuencia de eventos pasados, sin posibilidad de revertir a estados ante[4D[K
+anteriores.
+
+3. **Espacios de Opciones (Definición 9.2):**
+   - Un espacio de opciones \( X \) representa todas las trayectorias futur[5D[K
+futuras compatibles con todos los eventos ocurridos hasta el presente.
+   - El espacio inicial \( X0 \) contiene todas las posibilidades iniciales[9D[K
+iniciales antes de cualquier evento irreversible.
+
+### Ilustración en la Figura 6:
+
+- **\(X0\):** Representa el conjunto completo de trayectorias futuras que p[1D[K
+podrían haber ocurrido si ningún evento irreversiblemente había transcurrid[11D[K
+transcurrido.
+- **Eventos Irreversibles (\(f1, f2, e3\)):** Cada uno elimina algunas tray[4D[K
+trayectoras posibles (por ejemplo, \(f4\) y \(f7\)) debido a las restriccio[10D[K
+restricciones introducidas por los eventos.
+- **\(X_H\):** El conjunto activo de trayectorías después de aplicar la sec[3D[K
+secuencia de eventos irreversibles (\(H = { f1, f3, f11, f13, f31, f32 }\))[4D[K
+}\)). Esta muestra cómo el espacio de opciones disminuye y se especializa e[1D[K
+en solo unas pocas posibilidades viables.
+
+### Conclusión:
+
+El Axioma 9.1 proporciona una estructura fundamental para entender que los [K
+sistemas no son meramente computacionales o abstractos, sino que están prof[4D[K
+profundamente influenciados por su historia y las consecuencias irreversibl[11D[K
+irreversibles de eventos pasados. Este concepto es crucial para modelar din[3D[K
+dinámicas reales en aplicaciones como la economía, la ingeniería social y e[1D[K
+el diseño de sistemas autónomos donde el pasado moldea fuertemente el futur[5D[K
+futuro posible.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
+
+                    Introducción a Spherepop
+                       Un cálculo de historia de eventos
+
+                                         Flyxion
+                                   August 13, 2026
+
+
+                                          Abstract
+Este ensayo introduce Spherepop, un marco conceptual, visual y formal basado en eventos
+irreversibles para la construcción de significado, identidad y computación. A diferencia de
+los sistemas matemáticos y computacionales que parten de estados, conjuntos o axiomas
+atemporales [7, 22], Spherepop comienza con eventos que ocurren una sola vez, modifican el
+espacio de posibilidades posteriores y dejan un historial auditable. Bajo esta perspectiva, la
+estructura no se supone previamente dada sino que emerge de la acumulación histórica de
+acciones, en un sentido análogo al que Whitehead denomina el carácter “processual” de la
+realidad [52].
+    El enfoque propone una mereología constructiva basada en la historia [46], donde las
+relaciones parte-todo se forman gradualmente conforme ocurren eventos que integran nuevos
+componentes en estructuras existentes. La identidad de los objetos no se define por pertenencia
+abstracta ni por propiedades intrínsecas aisladas, sino por el historial de eventos que los ha
+producido, en consonancia con el principio de individuación causal discutido por Kim [24] y
+Fine [15]. Dos entidades se consideran idénticas si y sólo si comparten exactamente el mismo
+historial de eventos que les dio origen.
+    Spherepop se presenta también como un lenguaje visual de ámbitos anidados representados
+por burbujas evaluadas explícitamente, que hace visibles relaciones frecuentemente implícitas
+en otros sistemas formales [19, 1], como el alcance, el orden de evaluación y las dependencias
+históricas entre eventos. Su formalización matemática se articula dentro de la teoría de
+categorías [30, 4], donde los eventos actúan como morfismos irreversibles que transforman
+espacios de opciones. Se demuestra que el sistema resultante es expresivamente equivalente
+a sistemas computacionales concatenativos completos [34] y se conecta con trabajos sobre
+irreversibilidad y entropía computacional [27, 8]. El ensayo desarrolla estas ideas mediante
+ejemplos cotidianos y formalizaciones matemáticas que muestran cómo estructuras complejas
+pueden surgir de la acumulación de eventos históricos sin recurrir a pertenencia global ni a
+comprensión irrestricta.
+Introducción a Spherepop                                                                      2
+
+
+Contents
+1   Introducción                                                                              4
+
+2   Motivación: comenzar con eventos en lugar de estados                                      6
+
+3   Mereología histórica y construcción de estructura                                         7
+
+4   Identidad como historial de eventos                                                       9
+
+5 Ámbitos anidados y representación visual mediante burbujas                                 11
+
+6   Relación con trabajos previos                                                            13
+
+7   Formalización matemática de eventos e historias                                          14
+
+8   Restricción histórica y evitación de paradojas                                           16
+
+9   El axioma de irreversibilidad y espacios de opción                                       17
+
+10 Operadores fundamentales de Spherepop                                                     19
+
+11 Construcción de compuertas lógicas                                                        20
+
+12 Un lenguaje mínimo basado en pila                                                         22
+
+13 Una máquina mínima de cálculo                                                             23
+
+14 Nombres, funciones y trayectorias históricas                                              24
+
+15 Métrica de opcionalidad y entropía histórica                                              25
+
+16 Implicaciones para sistemas cognitivos, computacionales y sociales                        27
+
+17 Interpretación categórica                                                                 28
+
+18 Conclusión                                                                                29
+
+A Apéndice A: Historias de eventos y estructuras matemáticas                                 31
+  A.1 Historias de eventos . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   31
+  A.2 Espacios de opción . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   31
+  A.3 Operadores fundamentales . . . . . . . . . . . . . . . . . . . . . . . . . . . .       32
+Introducción a Spherepop                                                                     3
+
+
+   A.4 Semántica de pila . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+   A.5 Lógica como restricción de posibilidades . . . . . . . . . . . . . . . . . . . . 33
+   A.6 Interpretación categórica . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+
+B Apéndice B: Semántica categórica                                                          34
+
+C Apéndice C: Historias de eventos y registros distribuidos                                 35
+
+D Apéndice D: Completitud computacional                                                     36
+
+E Apéndice E: Métrica de opcionalidad y entropía histórica                                  37
+Introducción a Spherepop                                                                 4
+
+
+1    Introducción
+La mayor parte de los lenguajes formales con los que se describen la lógica, la matemática
+y la computación comienza con entidades que ya se suponen disponibles. En la tradición
+cantoniana se parte de conjuntos y relaciones de pertenencia [10, 55]; en los sistemas
+de tipos se parte de tipos habitados y funciones entre ellos [31, 22]; en los sistemas
+operacionales de la semántica denotacional se parte de dominios ya construidos [42, 1].
+Incluso cuando estos sistemas permiten describir cambio, ejecución o transformación,
+con frecuencia lo hacen sobre un fondo conceptual donde la estructura básica ya estaba
+disponible antes de cualquier acontecimiento. El presente ensayo propone invertir ese
+orden de fundamentación.
+    Spherepop parte de la hipótesis de que la historia no es un accidente secundario de los
+sistemas reales, sino su condición constitutiva. Antes que estados estáticos o totalidades
+dadas de antemano, lo primero son eventos irreversibles. Un evento irreversible es una
+ocurrencia que no sólo sucede, sino que altera el espacio de posibilidades posteriores
+y deja un rastro. Una vez ocurrido, el sistema ya no se encuentra conceptualmente en
+la misma situación que antes. La estructura, bajo esta perspectiva, no es originaria sino
+sedimentada. Esta orientación tiene antecedentes filosóficos en la ontología del proceso de
+Whitehead [52], en la fenomenología de la temporalidad de Heidegger [21], y en la filosofía
+del acontecimiento de Badiou [5], aunque el presente trabajo no persigue una exégesis de
+ninguna de estas tradiciones sino la construcción de un aparato formal original.
+    Esta intuición se vuelve inmediata en ejemplos cotidianos. Cuando una persona
+envía un mensaje, no sólo produce una cadena de texto sino que crea una nueva situación
+interpersonal con consecuencias posibles que antes no existían: una respuesta, un malentendido,
+una reconciliación o un conflicto. Del mismo modo, cuando una taza se rompe no estamos
+frente a una simple transición entre dos estados equivalentes de una descripción física,
+sino ante una irreversibilidad concreta que reorganiza las acciones disponibles [40]. Ambos
+ejemplos comparten una estructura formal: el evento modifica el horizonte de acciones
+futuras de manera que no puede revertirse sin introducir nuevos eventos que reconfiguren
+el sistema.
+    Spherepop toma en serio este tipo de ejemplos y los eleva al rango de principio formal.
+En lugar de preguntar primero qué objetos existen y después cómo interactúan, pregunta
+qué eventos han ocurrido y qué estructuras han quedado constituidas por ellos. El
+cambio de punto de partida es profundo. Significa que la identidad de una entidad no se
+entiende como una esencia previa [2] sino como una trayectoria histórica [24]. También
+significa que las relaciones parte-todo no se conciben como mera inclusión abstracta entre
+elementos ya definidos, sino como articulaciones que se construyen a través de secuencias
+Introducción a Spherepop                                                                           5
+
+
+de incorporación, dependencia y estabilización [46, 50].
+    Esta orientación responde además a una dificultad recurrente en múltiples tradiciones
+formales. Cuando se parte de mecanismos de pertenencia global o de principios de
+comprensión demasiado amplios, aparecen paradojas y sobrecargas ontológicas bien
+documentadas [41, 55]. La tentación de definir cualquier colección por cualquier propiedad
+genera sistemas poderosos pero también ambigüedades y tensiones conceptuales difíciles
+de resolver. Spherepop propone un camino distinto: en lugar de permitir que la complejidad
+crezca por licencia axiomática, restringe su crecimiento a lo que efectivamente ha sucedido.
+Sólo hay estructura allí donde ha habido historia. Sólo hay identidad allí donde puede
+trazarse una continuidad de eventos. Sólo hay composición allí donde una relación
+constructiva la ha producido.
+    Bajo esta formulación, el lenguaje visual de las burbujas no es un adorno pedagógico
+sino una consecuencia natural del marco. Si las dependencias, los ámbitos y las evaluaciones
+son históricas, entonces conviene representarlas de manera en que el alcance y la anidación
+sean visibles. Las burbujas de Spherepop cumplen precisamente esa función: hacen
+perceptible que ciertos procesos ocurren dentro de otros, que ciertas evaluaciones sólo
+tienen sentido en contextos delimitados, y que la forma en que una estructura se integra a
+otra depende del orden concreto en que los eventos han tenido lugar. La Figura 1 ofrece
+una primera ilustración de este principio.
+
+                                               Bext
+
+                           evento externo e2              Bmed                 evento externo e1
+
+
+                                                            e3
+
+                                                      ≺            ≺
+                                                                          e1
+                                                 e2
+
+
+
+
+                                                      evento interno e3
+
+
+Figure 1: Representación introductoria de ámbitos anidados en Spherepop. La burbuja
+exterior Bext contiene a Bmed , cuyo interior aloja el evento e3 . Los eventos externos e1 y e2
+preceden causalmente a e3 , representado por las flechas de precedencia ≺.
+
+   El objetivo de este ensayo es exponer la propuesta en un recorrido gradual. En la
+Sección 2 se introducen intuiciones básicas a partir de experiencias ordinarias. La Sección 3
+desarrolla la mereología histórica. La Sección 4 formaliza la identidad como historial
+compartido. La Sección 5 introduce los ámbitos anidados y su representación visual.
+La Sección 6 sitúa el trabajo en relación con tradiciones existentes. Las Secciones 7 a 13
+Introducción a Spherepop                                                                 6
+
+
+desarrollan la formalización matemática progresivamente. Las secciones finales discuten
+las implicaciones para sistemas reales y concluyen el trabajo. Los apéndices presentan
+material técnico adicional.
+    Desde esta perspectiva, Spherepop puede leerse simultáneamente como filosofía de
+la estructura, como lenguaje visual y como programa formal. Su apuesta central consiste
+en afirmar que significado, identidad y computación no deben derivarse de entidades
+estáticas a las que después se añade el tiempo, sino de eventos situados cuyo carácter
+irreversible constituye la trama misma de lo real formalizable.
+
+
+2    Motivación: comenzar con eventos en lugar de estados
+La motivación principal de Spherepop surge de una insatisfacción con los marcos descriptivos
+que tratan el cambio como una modificación externa de estructuras ya completas. En
+muchos modelos de la semántica de programas [1, 38], un sistema se representa como una
+colección de estados posibles y una relación de transición entre ellos. Esta estrategia tiene
+utilidad indudable, pero encierra una presuposición fuerte: lo fundamental sería el espacio
+de estados, mientras que la historia concreta de las transiciones sería secundaria, o en el
+mejor de los casos derivable. Spherepop invierte esa prioridad y propone que la historia
+efectiva es anterior, tanto conceptual como constructivamente, al inventario abstracto de
+estados.
+    La diferencia se aprecia con claridad en situaciones ordinarias. Considérese el acto de
+firmar un contrato. Desde una perspectiva puramente estática podría decirse que antes
+existía un estado en que el contrato no estaba firmado y después otro en que sí lo estaba.
+Sin embargo, esa descripción pierde el núcleo de la situación. Lo decisivo no es sólo que el
+sistema haya cambiado de un estado a otro, sino que ocurrió un acto fechado, situado y
+vinculante que reconfiguró derechos, expectativas y obligaciones [43, 3]. Lo que importa
+no es sólo la fotografía del antes y del después, sino el hecho de que un evento ocurrió y
+dejó consecuencias normativas. La firma no es un detalle accidental de la transición; es el
+origen histórico de una nueva estructura institucional.
+    Algo semejante ocurre al guardar un archivo con cambios importantes. Después de
+escribir un párrafo nuevo o borrar una sección entera, el documento puede todavía llevar
+el mismo nombre. Sin embargo, su identidad operativa ha cambiado porque existe una
+secuencia concreta de ediciones que explica por qué ese archivo es ahora lo que es [12].
+El documento no se comprende adecuadamente si se lo trata como un estado aislado;
+se comprende mejor como la condensación de una historia de modificaciones donde
+cada guardado delimita un umbral, cada revisión agrega irreversibilidad, y aun cuando
+el sistema permite deshacer ciertas acciones, esa capacidad misma depende de haber
+Introducción a Spherepop                                                                    7
+
+
+conservado el historial de los pasos previos [36].
+    La vida social ofrece ejemplos todavía más inmediatos. Una amistad no consiste
+en un conjunto abstracto de propiedades compartidas entre dos personas, sino en una
+secuencia de encuentros, conversaciones, favores, tensiones y recuerdos [20]. Cuando
+alguien recuerda una discusión, una promesa o una traición, no está introduciendo detalles
+contingentes a una identidad ya definida; está señalando los eventos que constituyen
+esa identidad relacional. La historia no se agrega desde fuera; es el medio mismo de
+individuación [24, 15].
+    Spherepop generaliza esta observación. Un sistema real, sea cognitivo, computacional
+o social, no se distingue solamente por las configuraciones que pueden describirse en
+un instante, sino por la secuencia irreversible de eventos que lo ha llevado hasta allí.
+Esto obliga a revisar el punto de partida de la formalización. Si la historia es constitutiva,
+entonces no conviene modelar primero un universo de objetos ya delimitados para después
+introducir cambios. Conviene modelar eventos, rastros y dependencias, y dejar que de ahí
+emerjan los objetos y sus relaciones [54, 39].
+    Esta prioridad de los eventos también tiene una ventaja de economía conceptual. En
+los sistemas basados en estados, suele ser necesario postular un espacio muy amplio de
+posibilidades para alojar todas las configuraciones concebibles. En cambio, un enfoque
+histórico permite que la complejidad crezca únicamente a partir de lo que efectivamente
+ocurre. No es necesario suponer de entrada una totalidad exuberante de entidades
+posibles; basta con registrar qué ha sucedido, qué ha quedado fijado por ello y qué
+nuevas posibilidades se han abierto o cerrado como consecuencia [17, 14].
+    Por esa razón, Spherepop no entiende los eventos como meras actualizaciones sobre una
+base previamente establecida. Cada evento es una operación constitutiva que introduce
+una diferencia duradera, deja una marca y modifica las condiciones de integración de
+eventos futuros. La tesis puede formularse de manera precisa: un sistema no debe definirse
+primariamente por lo que contiene en abstracto, sino por lo que le ha ocurrido. La pregunta
+fundamental deja de ser “¿qué elementos pertenecen aquí?” y pasa a ser “¿qué eventos han
+constituido este aquí?”. Esta reformulación no sólo cambia la semántica del sistema; cambia
+también su lógica de construcción, su noción de identidad y su manera de visualizar el
+alcance, la dependencia y el orden.
+
+
+3    Mereología histórica y construcción de estructura
+Si los eventos irreversibles constituyen el punto de partida de Spherepop, entonces las
+relaciones parte-todo no pueden entenderse como inclusión abstracta entre elementos
+previamente dados. En cambio, deben concebirse como el resultado de una historia de
+Introducción a Spherepop                                                                            8
+
+
+incorporación. La mereología [46, 50, 11], bajo este enfoque, no describe simplemente
+cómo se organizan entidades ya existentes, sino cómo ciertas entidades llegan a formar
+parte de otras a través de eventos concretos.
+    Para ilustrar esta idea conviene considerar un ejemplo cotidiano. Supóngase la construcción
+de una casa. La casa no aparece como una totalidad completa desde el principio. Primero
+se delimita un terreno, después se colocan los cimientos, posteriormente se levantan las
+paredes, se instala el techo y se añaden puertas, ventanas y sistemas internos. Cada paso
+es un evento que modifica la estructura existente. Cuando una pared se integra a los
+cimientos, la relación parte-todo no es una relación lógica abstracta; es la consecuencia
+histórica de un acto constructivo específico [46].
+
+   e1 : terreno                  e2 : cimientos               e3 : paredes             e4 : techo
+
+        ∆                             ∆                           ∆                       ∆
+
+
+
+         S1                           S2                          S3                    S4 (casa)
+  H ( a ) ⊆ H ( S4 )
+
+Figure 2: Mereología histórica de la construcción de una casa. Cada evento ei contribuye
+con un incremento estructural ∆(ei ) que expande la estructura Si en Si+1 . La relación
+parte-todo se deriva de la inclusión de historiales: H (cimientos) ⊆ H (casa).
+
+    Un fenómeno semejante ocurre en el ámbito digital. Cuando un programador desarrolla
+un proyecto de software, el repositorio no es una colección estática de archivos; se forma
+mediante una serie de confirmaciones, modificaciones y revisiones [12]. Cada confirmación
+incorpora cambios específicos y establece una nueva versión del sistema. Un archivo forma
+parte del proyecto porque ha sido añadido o modificado en un evento histórico particular
+dentro del repositorio. Incluso si dos archivos tienen el mismo contenido, su papel dentro
+del proyecto depende del historial que los vincula con ese sistema de desarrollo.
+    Spherepop generaliza esta intuición mediante una mereología basada en eventos. Las
+relaciones parte-todo se establecen cuando ocurre un evento de incorporación, el cual
+registra que una estructura existente se ha expandido para incluir un nuevo componente.
+
+Definición 3.1 (Historia de eventos). Sea E un conjunto de eventos irreversibles. Una
+historia es un par ordenado H = ( EH , ≺) donde EH ⊆ E es el conjunto de eventos que
+han ocurrido y ≺ es una relación de orden parcial estricto sobre EH que representa la
+precedencia causal. La relación ≺ satisface:
+
+            irreflexividad:   ¬(e ≺ e),      transitividad:   e1 ≺ e2 ∧ e2 ≺ e3 ⇒ e1 ≺ e3 .
+Introducción a Spherepop                                                                       9
+
+
+Definición 3.2 (Función de incremento estructural). Para cada evento e ∈ EH se define una
+función de contribución estructural ∆(e) que representa la modificación introducida por e en
+la estructura del sistema. La estructura en el estado t es
+
+                                                           ∆(e)
+                                                G
+                                      St =
+                                             e∈ EH , e≺t
+
+       F
+donde denota la amalgamación histórica de contribuciones, respetando las dependencias
+causales.
+
+Definición 3.3 (Mereología histórica). Una entidad a es parte mereológica histórica de una
+entidad b, escrito a ⪯ M b, si y sólo si el historial que constituye a está contenido en el
+historial que constituye b:
+
+                               a ⪯M b     ⇐⇒         H ( a ) ⊆ H ( b ),
+
+donde H ( x ) denota el conjunto de eventos que han contribuido a la formación de la
+entidad x.
+
+Proposición 3.4. La relación ⪯ M es un preorden sobre el conjunto de entidades del sistema, y es
+un orden parcial si la relación de historial es antisimétrica.
+
+Proof. La reflexividad a ⪯ M a se sigue inmediatamente de H ( a) ⊆ H ( a). La transitividad:
+si H ( a) ⊆ H (b) y H (b) ⊆ H (c) entonces H ( a) ⊆ H (c), de donde a ⪯ M c. La antisimetría:
+si H ( a) ⊆ H (b) y H (b) ⊆ H ( a) entonces H ( a) = H (b), lo cual define la identidad histórica
+en la Definición 4.2 de la sección siguiente.
+
+    Esta reformulación tiene consecuencias importantes. En primer lugar, elimina la
+necesidad de postular un universo global de pertenencia donde todas las relaciones
+posibles estén definidas desde el inicio [55]. En segundo lugar, garantiza que la complejidad
+del sistema crezca únicamente en función de los eventos que realmente han ocurrido.
+Finalmente, permite que la estructura del sistema refleje de manera directa la historia de
+su formación [46, 17].
+
+
+4    Identidad como historial de eventos
+Si la estructura de un sistema emerge de la acumulación de eventos irreversibles, entonces
+la identidad de sus componentes tampoco puede entenderse como una propiedad previa e
+independiente de la historia. En Spherepop, la identidad es el resultado de una trayectoria
+Introducción a Spherepop                                                                     10
+
+
+histórica [24, 15, 53]. Dos entidades son idénticas si y sólo si comparten exactamente el
+mismo historial de eventos que las ha producido.
+    Esta idea puede parecer inusual en términos formales, pero en la vida cotidiana resulta
+bastante natural. Considérese el caso de un documento digital. Dos archivos pueden
+contener exactamente el mismo texto en un momento dado y, sin embargo, si uno fue
+escrito directamente y el otro es una copia creada posteriormente, su historia es diferente.
+En muchos contextos esa diferencia importa: un documento original firmado tiene un
+valor jurídico distinto al de una copia, incluso si el contenido textual es idéntico [3]. Lo
+que distingue al original no es su estructura visible, sino la secuencia de eventos que lo
+produjo.
+    Algo similar ocurre con la identidad personal en la tradición filosófica anglosajona [37,
+29]. Dos individuos pueden compartir características físicas o psicológicas similares,
+pero su identidad no depende únicamente de esas propiedades; depende de la historia
+de eventos que han vivido. En este sentido, la identidad se comporta más como una
+trayectoria que como una etiqueta.
+Definición 4.1 (Historial de una entidad). Sea x una entidad dentro de un sistema con
+historia H = ( EH , ≺). El historial de x es el conjunto
+                      
+             H ( x ) = e ∈ EH | e contribuye causalmente a la formación de x .
+
+Este conjunto hereda la relación de precedencia causal de H, de modo que ( H ( x ), ≺ | H ( x) )
+es a su vez un orden parcial estricto.
+Definición 4.2 (Identidad histórica). Dos entidades x e y son históricamente idénticas, escrito
+x = H y, si y sólo si sus historiales coinciden:
+
+                               x =H y    ⇐⇒      H ( x ) = H ( y ).
+
+Observación 4.3. La identidad histórica es más fina que la igualdad observacional. Dos
+entidades pueden ser observacionalmente indistinguibles en un momento dado, es decir,
+compartir todos sus atributos presentes, y sin embargo tener historiales distintos. La
+Definición 4.2 las trataría como entidades distintas, reflejando así diferencias causales que
+podrían ser relevantes para el comportamiento futuro del sistema [24, 15]. Esta distinción
+es análoga a la que Parfit realiza entre continuidad psicológica e identidad personal [37].
+   La Figura 3 ilustra el contraste entre identidad observacional e identidad histórica
+mediante un diagrama de divergencia de historiales.
+   Desde un punto de vista computacional, la identidad basada en historial tiene implicaciones
+concretas. En sistemas distribuidos, la consistencia de los datos depende a menudo de
+Introducción a Spherepop                                                                        11
+
+
+                                       e1              e2              x
+                       trayectoria α
+
+
+                                                                       x ≈obs y
+                       e0                              x ̸= H y
+
+                       trayectoria β
+
+                                       e1′             e2′              y
+
+
+Figure 3: Divergencia entre identidad observacional e identidad histórica. Dos entidades
+x e y pueden ser observacionalmente similares (x ≈obs y) pero históricamente distintas
+(x ̸= H y) cuando sus historiales divergen a partir de un punto común e0 .
+
+
+mantener un registro ordenado de operaciones que han ocurrido en el sistema [26, 45].
+Técnicas como los registros de eventos o las cadenas de bloques funcionan precisamente
+porque cada estado se deriva de una secuencia verificable de eventos anteriores [25, 35].
+Spherepop generaliza este principio y lo convierte en una definición fundamental de
+identidad.
+
+Teorema 4.4 (Conservación de la identidad bajo extensión compatible). Sea H = ( EH , ≺)
+una historia y sean x, y dos entidades con x = H y. Si se añade un nuevo evento e ∈      / EH que
+contribuye a ambas de la misma manera, la identidad se conserva: x = H ′ y en la historia extendida
+H ′ = ( E H ∪ { e }, ≺ ′ ).
+
+Proof. Por hipótesis H ( x ) = H (y). El nuevo evento e contribuye a la formación de x si y
+sólo si contribuye a la formación de y, por la condición de compatibilidad. Por lo tanto
+H ′ ( x ) = H ( x ) ∪ {e} = H (y) ∪ {e} = H ′ (y), lo que da x = H ′ y.
+
+
+5 Ámbitos anidados y representación visual mediante burbujas
+Una consecuencia importante del enfoque histórico de Spherepop es que el alcance, la
+dependencia y el orden de evaluación dejan de ser aspectos implícitos del sistema y pasan
+a ser propiedades visibles de su estructura. Si los eventos se organizan históricamente y
+si las relaciones parte-todo surgen de incorporaciones sucesivas, entonces resulta natural
+representar estas relaciones mediante ámbitos anidados [13, 38]. En Spherepop estos
+ámbitos se visualizan mediante burbujas.
+    La idea básica puede entenderse a partir de situaciones cotidianas donde los contextos
+se encuentran contenidos unos dentro de otros. Considérese una conversación en una
+reunión: dentro de una reunión general pueden surgir pequeños grupos de discusión,
+y dentro de uno de esos grupos alguien puede contar una historia que incluye otra
+Introducción a Spherepop                                                                 12
+
+
+conversación anterior. Cada nivel introduce un nuevo contexto que delimita qué afirmaciones
+tienen sentido en ese momento [20, 3]. Lo que se dice dentro de una historia no necesariamente
+se aplica al contexto de la reunión completa. El significado depende del ámbito en que se
+produce el evento lingüístico.
+
+Definición 5.1 (Burbuja y ámbito histórico). Una burbuja B es un par ( EB , ≺ B ) donde
+EB ⊆ EH es un subconjunto de eventos y ≺ B =≺ | EB es la restricción de la precedencia
+causal a ese subconjunto. La relación de anidación entre burbujas se define como:
+
+                                       B1 ⊆B B2        ⇐⇒       EB1 ⊆ EB2 .
+
+                                          / EB′ para ninguna sub-burbuja B′ ⊊B B.
+Un evento e ∈ EB se dice propio de B si e ∈
+
+Observación 5.2. En términos computacionales, la estructura de burbujas es análoga al
+concepto de alcance léxico en lenguajes de programación [13, 38]. Una función puede
+definir variables locales cuyo significado depende del bloque de código en que aparecen.
+Sin embargo, en Spherepop la noción de alcance no se limita a un mecanismo sintáctico; se
+vincula directamente con la historia de los eventos que han construido ese ámbito [54].
+
+   La Figura 4 ilustra una jerarquía de burbujas con eventos distribuidos en distintos
+niveles de alcance.
+                                  B0
+
+                                           B1                    B2
+
+                                            B11
+                                                                       e3
+                                                  e1             ≺          ≺
+                                                       ≺
+                                                                       e4
+                                                           e2
+                                                                                ≺
+
+                           B11 ⊆ B1 ⊆ B0                                        e5
+                           B2 ⊆ B0
+
+
+
+Figure 4: Jerarquía de burbujas anidadas. B11 está contenida en B1 , que a su vez está
+contenida en B0 . La burbuja B2 es hermana de B1 dentro de B0 . Las flechas de precedencia
+≺ pueden cruzar fronteras de burbujas, representando dependencias históricas inter-
+ámbito.
+
+    La representación mediante burbujas tiene una ventaja conceptual importante: hace
+visible que las dependencias entre eventos no son meramente lineales. La historia puede
+ramificarse, fusionarse y reorganizarse en diferentes niveles de contexto. Las dependencias
+históricas inter-ámbito, representadas por flechas que cruzan fronteras de burbujas, expresan
+Introducción a Spherepop                                                                        13
+
+
+que la historia de un ámbito interior puede depender causalmente de eventos ocurridos en
+ámbitos exteriores, pero no al revés, garantizando así la coherencia histórica del sistema.
+
+Proposición 5.3 (Coherencia de la anidación). Si B1 ⊆B B2 y e ∈ EB2 es un evento anterior
+en la precedencia causal a algún evento e′ ∈ EB1 , es decir e ≺ e′ , entonces e puede pertenecer a
+B2 \ EB1 sin contradecir la relación de anidación. Sin embargo, no puede ocurrir que un evento
+interior preceda a un evento exterior en sentido estricto, ya que esto violaría la dirección causal
+establecida por la historia H.
+
+
+6    Relación con trabajos previos
+El marco presentado en este trabajo no surge en aislamiento. Diversas tradiciones intelectuales
+han explorado aspectos parciales de la relación entre historia, irreversibilidad y computación.
+Spherepop puede entenderse como una síntesis conceptual que reorganiza estas intuiciones
+dentro de un cálculo explícitamente basado en eventos irreversibles.
+    Una de las influencias más cercanas aparece en la teoría de estructuras de eventos
+desarrollada por Winskel [54]. En este enfoque, los sistemas concurrentes se describen
+mediante eventos parcialmente ordenados que representan la historia causal de una
+computación. Spherepop comparte con esta tradición la idea de que la historia es la
+estructura fundamental del sistema. Sin embargo, introduce una diferencia importante: en
+lugar de considerar los eventos únicamente como descripciones semánticas de programas
+concurrentes, los trata como operadores que transforman directamente el espacio de
+posibilidades disponible para el sistema. Esta distinción es análoga a la diferencia entre
+semántica denotacional y operacional señalada por Plotkin [38].
+    Otra línea relacionada aparece en la lógica lineal de Girard [19], desarrollada para
+modelar situaciones donde los recursos no pueden duplicarse ni eliminarse arbitrariamente.
+En ese contexto, cada uso de un recurso modifica el estado del sistema. Esta idea se
+aproxima al principio central de Spherepop según el cual la opcionalidad se comporta
+como un recurso consumible [19, 1]. Sin embargo, mientras la lógica lineal se formula
+principalmente como un sistema deductivo, Spherepop enfatiza la interpretación geométrica
+de estas restricciones como transformaciones del espacio de futuros posibles. La conexión
+con la lógica lineal es además semántica: la semántica de espacios de coherencia de
+Girard [19] puede verse como un caso especial de la estructura de espacios de opción de
+Spherepop.
+    En el ámbito de los sistemas distribuidos modernos, conceptos similares aparecen en el
+paradigma de event sourcing [17, 25]. En estos sistemas, el estado de una aplicación no se
+almacena directamente, sino que se deriva a partir del registro histórico de eventos que
+Introducción a Spherepop                                                                  14
+
+
+han ocurrido. Esta arquitectura refleja una intuición fundamental: la historia del sistema
+es la fuente primaria de verdad, en un sentido cercano al que Lamport formaliza mediante
+relojes lógicos y ordenamiento de eventos [26]. Los tipos de datos replicados libres de
+conflicto [45] extienden esta idea al caso distribuido, permitiendo que múltiples historiales
+parciales se reconcilien de manera consistente.
+    La teoría de categorías proporciona otro marco conceptual relevante. En muchos
+contextos categóricos, los procesos se interpretan como morfismos entre estructuras [30,
+4, 23]. Esta perspectiva permite describir sistemas complejos mediante composiciones de
+transformaciones. Spherepop adopta una visión compatible con esta tradición al describir
+la evolución del sistema como una composición de eventos irreversibles
+
+                                     H = e n ◦ · · · ◦ e1 .
+
+Baez y Stay [6] han explorado conexiones profundas entre categorías, topología y computación
+dentro del programa de física matemática que Spherepop frecuenta de manera lateral. La
+interpretación de los eventos como morfismos irreversibles conecta además con la teoría
+de trazas y la semántica de procesos de Abramsky [1].
+    Finalmente, los lenguajes concatenativos basados en pila, como Forth [34], ofrecen una
+analogía computacional particularmente cercana. En estos lenguajes, los programas se
+construyen mediante la composición secuencial de transformaciones sobre una pila de
+datos [36, 48]. Spherepop adopta una arquitectura similar, pero interpreta la pila como
+una representación del espacio de opciones disponible en cada momento de la historia del
+sistema.
+
+
+7    Formalización matemática de eventos e historias
+Las secciones anteriores han introducido la intuición conceptual de Spherepop mediante
+ejemplos cotidianos y representaciones visuales. En esta sección comenzamos a traducir
+esas intuiciones en una formulación matemática más precisa, comenzando por la estructura
+de orden parcial sobre la que se sustenta la historia y derivando de ella las nociones de
+entidad, identidad y relación mereológica [30, 4, 54].
+
+Definición 7.1 (Universo de eventos). Un universo de eventos es una clase E cuyos elementos
+se denominan eventos atómicos. Los eventos no se suponen indexados ni etiquetados
+previamente; su identidad es la de ocurrencias singulares dentro de una historia concreta.
+
+Definición 7.2 (Estructura histórica). Una estructura histórica es una cuádrupla H = ( EH , ≺
+, #, λ) donde:
+Introducción a Spherepop                                                                         15
+
+
+      EH ⊆ E es el conjunto finito o contable de eventos ocurridos,
+
+      ≺ ⊆ EH × EH es un orden parcial estricto que representa la causalidad,
+
+      # ⊆ EH × EH es una relación simétrica irreflexiva de conflicto, y
+
+      λ : EH → Λ es una función de etiquetado hacia un conjunto de tipos de eventos Λ.
+
+La estructura satisface la condición de herencia de conflicto: si e#e′ y e ≺ e′′ entonces e′′ #e′ .
+
+Observación 7.3. La Definición 7.2 extiende la noción de estructura de eventos de Winskel [54]
+añadiendo la función de etiquetado λ, que permite distinguir tipos de eventos (incorporación,
+exclusión, ligadura, colapso) de manera explícita dentro de la historia.
+
+   La figura 5 ilustra una estructura histórica con tres eventos, una relación de precedencia
+y un conflicto.
+
+                                         e2
+                                ≺                   ≺
+                                                                 e2 #e3 : conflicto
+                           e1                 #             e4   e1 ≺ e2 , e1 ≺ e3
+                                                                 e2 ≺ e4 , e3 ≺ e4
+                                ≺                   ≺
+                                         e3
+
+
+Figure 5: Estructura histórica con cuatro eventos, dos relaciones de precedencia transitivas
+y un conflicto e2 #e3 . Los eventos e2 y e3 representan bifurcaciones de la historia que no
+pueden ocurrir simultáneamente.
+
+   A partir de esta estructura histórica se pueden definir las entidades del sistema. En
+Spherepop una entidad no se introduce como un objeto primitivo; se define como una
+condensación de eventos dentro de la historia [52, 54].
+
+Definición 7.4 (Entidad histórica). Dado un sistema con estructura histórica H, una entidad
+histórica es un par x = ( H (x), ϕx ) donde H (x) ⊆ EH es el historial de x y ϕx : H (x) → Φ es
+una función que especifica la contribución estructural de cada evento al estado de la entidad.
+
+Definición 7.5 (Identidad histórica – versión refinada). Dos entidades x e y son históricamente
+idénticas, escrito x = H y, si y sólo si:
+
+                                    H (x) = H (y)       y   ϕx = ϕy .
+Introducción a Spherepop                                                                 16
+
+
+    La relación parte-todo también puede formularse en términos históricos. Decimos
+que una entidad a es parte de una entidad b si el historial de a está contenido dentro del
+historial de b:
+                             a ⪯ M b ⇐⇒ H (a) ⊆ H (b).
+
+   Finalmente, la evolución del sistema puede representarse como una expansión progresiva
+de la historia. Cuando ocurre un nuevo evento e, el conjunto de eventos se amplía:
+
+                                    EHt+1 = EHt ∪ {e}.
+
+La historia crece únicamente a partir de eventos que han ocurrido realmente. No es
+necesario postular de antemano todas las entidades posibles; las entidades emergen
+gradualmente conforme la historia se expande [17, 25].
+
+
+8    Restricción histórica y evitación de paradojas
+Una de las motivaciones importantes para adoptar una perspectiva basada en eventos
+históricos es la dificultad bien conocida que surge cuando los sistemas formales permiten
+pertenencia global o comprensión irrestricta [41, 55]. En muchos marcos clásicos se supone
+la existencia de un universo suficientemente amplio donde cualquier colección definida
+por una propiedad puede considerarse un objeto legítimo [18]. Este tipo de principio
+resulta extremadamente poderoso pero también conduce a paradojas cuando la definición
+se aplica de manera reflexiva.
+    El ejemplo más conocido es la paradoja de Russell [41]: si se permite formar libremente
+conjuntos definidos por cualquier propiedad, se vuelve posible construir la colección de
+todos los conjuntos que no se contienen a sí mismos, generando una contradicción interna.
+El problema no surge de un error técnico aislado sino de una suposición estructural: la idea
+de que todas las colecciones concebibles pueden coexistir dentro de un mismo dominio de
+pertenencia [55, 51].
+    Spherepop adopta una estrategia distinta. En lugar de permitir que la complejidad del
+sistema se expanda por definición, restringe su crecimiento a eventos que han ocurrido
+efectivamente dentro de la historia del sistema. Esta restricción elimina la posibilidad
+de introducir entidades únicamente por comprensión abstracta. Toda entidad debe estar
+respaldada por un historial concreto de eventos que haya producido su estructura.
+
+Axioma 8.1 (Restricción histórica). En un sistema Spherepop, toda entidad x satisface la
+condición:
+                                      H (x) ⊆ EH ,
+Introducción a Spherepop                                                                        17
+
+
+donde EH es el conjunto finito de eventos que han ocurrido efectivamente en la historia
+del sistema hasta el momento actual. No se permite introducir entidades cuya formación
+requiera la ocurrencia de eventos que no pertenecen a EH .
+
+   La clave del Axioma 8.1 es que EH no representa un universo ilimitado de posibilidades,
+sino únicamente los eventos efectivamente registrados [17]. Cualquier entidad debe
+corresponder a una configuración histórica derivada de esos eventos.
+
+Teorema 8.2 (Ausencia de auto-referencia paradójica). En un sistema Spherepop que satisface
+el Axioma 8.1 y donde la relación de precedencia causal ≺ es acíclica, no pueden formarse entidades
+cuya identidad se defina auto-referencialmente mediante su propia historia.
+
+Proof. Supóngase por reducción al absurdo que existe una entidad x tal que x ∈ H (x), es
+decir, que algún evento en el historial de x requiere la existencia previa de x para ocurrir.
+Por el Axioma 8.1, H (x) ⊆ EH , y por la Definición 7.2, ≺ es un orden parcial estricto sobre
+EH , en particular acíclico. La formación de x requiere que todos sus eventos constitutivos
+hayan ocurrido con anterioridad causal a la consolidación de x. Si x fuese requerida
+por alguno de sus propios eventos constitutivos, existiría un ciclo e ≺ · · · ≺ e en EH ,
+contradiciendo la aciclia de ≺.
+
+    Desde un punto de vista computacional, este principio se asemeja a sistemas donde la
+ejecución produce estados acumulativos que dependen de operaciones anteriores [36, 25].
+Un programa no contiene de manera implícita todos los resultados posibles de su ejecución;
+cada resultado aparece sólo después de que la secuencia correspondiente de operaciones
+ha ocurrido. La consecuencia filosófica es que el sistema no necesita asumir una ontología
+infinita desde el inicio [52]: el dominio de entidades se construye gradualmente a partir de
+la historia efectiva del sistema.
+
+
+9    El axioma de irreversibilidad y espacios de opción
+Gran parte de la teoría contemporánea de la computación describe los sistemas como
+configuraciones que cambian con el tiempo [1, 38]. Sin embargo, muchos fenómenos
+cotidianos sugieren que esta descripción es incompleta. Las acciones humanas, las
+instituciones sociales e incluso los sistemas técnicos dependen profundamente de la historia
+que los produjo. Dos situaciones pueden parecer idénticas en el presente y, sin embargo,
+tener consecuencias completamente distintas debido a su pasado [40, 27].
+    Spherepop formaliza este tipo de situaciones mediante el axioma de irreversibilidad.
+El principio fundamental establece que los eventos no sólo producen resultados, sino que
+transforman permanentemente el espacio de posibilidades.
+Introducción a Spherepop                                                                                                18
+
+
+Axioma 9.1 (Irreversibilidad). Sea X el conjunto de espacios de opción del sistema. Para
+todo evento irreversible e : X → X ′ con X, X ′ ∈ X , se tiene:
+
+                                                   | X ′ | ≤ | X |,
+
+y en general no existe ningún evento e−1 tal que e−1 ◦ e = idX . La composición de eventos
+H = en ◦ · · · ◦ e1 : X0 → Xn es irreversible como historia completa.
+
+Definición 9.2 (Espacio de opciones). Un espacio de opciones X es un conjunto (finito o
+infinito) de trayectorias futuras compatibles con todos los eventos que han ocurrido en la
+historia hasta el momento presente. El espacio inicial X0 representa todas las posibilidades
+antes de que ocurra ningún evento.
+
+   La figura 6 representa la dinámica de un espacio de opciones bajo una secuencia de
+eventos irreversibles.
+
+                                                    X0
+
+                                                                          trayectorias eliminadas
+                           f1                        f2                   por eventos
+                                                                               f       e1 , e2
+                                                                                    3
+                                                                      trayectorias activas
+                                                                      X H = { f 1 , f 3 , f 11 , f 13 , f 31 , f 32 }
+                f 11       f 12        f 13 f 21           f 22          f 31             f 32

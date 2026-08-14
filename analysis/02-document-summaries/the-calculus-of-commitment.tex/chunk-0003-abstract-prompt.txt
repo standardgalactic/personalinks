@@ -1,0 +1,390 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**State, Continuations, and Mutation through the Merge‑Collapse Lens**
+
+Below we reinterpret three constructs that are often treated as unrelated i[1D[K
+in standard presentations—state monads, continuation‑passing style (CPS), a[1D[K
+and mutable state—using the unified structural picture of *merge* followed [K
+by *collapse*. In this view every computation is fundamentally a sequence o[1D[K
+of effect atoms that accumulate into an “event log”, which is then interpre[8D[K
+interpreted (collapsed) to produce observable side effects.
+
+---
+
+### 1. The State Monad as an Explicit Evolving Region
+
+**Traditional description:**  
+A stateful value is modeled as  
+
+\[
+\texttt{State}\;S\;A \;\cong\; S \to (A \times S),
+\]
+
+i.e., a function that consumes the current environment \(S\) and returns bo[2D[K
+both a result \(A\) and an updated state.
+
+**Merge‑Collapse view:**  
+
+1. **Region as a log:**  
+   The type \(S\) is not just a carrier of values; it represents *regions* [K
+(or “commitments”) that record what has happened so far. Think of each poss[4D[K
+possible \(S\) as a distinct page in an append‑only event log.
+
+2. **Execution as staged merge:**  
+   Running a stateful program updates the region through successive merges:[7D[K
+merges:
+
+   \[
+   S_{t+1}= \operatorname{collapse}\big(S_t \oplus \Delta_t\big),
+   \]
+
+   where \(\Delta_t\) is the atomic change contributed by the current step.[5D[K
+step. The operation *is not destructive* in a functional sense—it creates a[1D[K
+a new region rather than rewriting an existing one.
+
+3. **Compositional history:**  
+   Because each update produces a new region, composition of multiple state[5D[K
+stateful steps yields a sequence of regions:
+
+   \[
+   S_{t+2}= \operatorname{collapse}\big(S_{t+1} \oplus \Delta_{t+1}\big),
+   \]
+
+   preserving the algebraic identity that concatenation (merge) is associat[8D[K
+associative and has an empty region as its identity.
+
+**Result:**  
+State monads encode exactly this pattern: they accumulate effect atoms in a[1D[K
+a mutable “region” \(S\) and later collapse it to produce results. No hidde[5D[K
+hidden side‑effects are introduced; everything is visible as part of the ev[2D[K
+event log.
+
+---
+
+### 2. Continuation‑Passing Style (CPS) as Explicit Control of What Happens[7D[K
+Happens Next
+
+**Traditional description:**  
+A CPS transformation replaces a function’s return value with an extra argum[5D[K
+argument—*the continuation* \(k\)—so that control is explicitly passed forw[4D[K
+forward:
+
+\[
+A \;\to\; (A \to R) \to R.
+\]
+
+In other words, instead of yielding a result immediately, the current compu[5D[K
+computation hands off its remaining work to another function.
+
+**Merge‑Collapse view:**  
+
+1. **Continuations are future collapses:**  
+   In our language, continuations represent *what will happen next* in the [K
+pipeline. They carry with them the promise (or “plan”) for subsequent merge[5D[K
+merge and collapse operations that will materialize later.
+
+2. **Staged merging:**  
+   When a CPS function produces an intermediate value \(a\), it yields a co[2D[K
+continuation that consumes this value and subsequently decides how to norma[5D[K
+normalize it (i.e., perform its own collapse). This mirrors the staged‑merg[11D[K
+staged‑merge pattern:
+
+   \[
+   s \xrightarrow{m} s' \xrightarrow{k(a)} s''.
+   \]
+
+3. **Control of when/what collapses:**  
+   By passing a continuation, we can defer the moment and manner in which a[1D[K
+any intermediate effect is collapsed (interpreted). This gives us fine‑grai[9D[K
+fine‑grained control over where collapse occurs—whether immediately after e[1D[K
+each step or only at higher levels.
+
+**Result:**  
+CPS therefore becomes not just a stylistic transformation but a mechanism f[1D[K
+for controlling the *stage* of collapse. It emphasizes that computation is [K
+fundamentally about *how and when* we merge effect atoms into observable re[2D[K
+results, rather than merely producing values instantly.
+
+---
+
+### 3. Mutation as Untracked Collapse at the Boundary
+
+**Traditional description:**  
+Mutable state often means “overwriting” a variable in place; it breaks refe[4D[K
+referential transparency because the new value replaces (and discards) hist[4D[K
+history.
+
+**Merge‑Collapse view:**  
+
+1. **Mutation = collapse without recording history:**  
+   In our framework, mutation corresponds to *collapsing* an effect atom in[2D[K
+into its current region **without preserving a record of that atom in the e[1D[K
+event log**. Formally:
+
+   \[
+   S_{t+1} \leftarrow S_{t+2},
+   \]
+
+   where \(S_{t+1}\) is overwritten by the new state, and no entry for the [K
+former state (or its effect atoms) remains.
+
+2. **Loss of replayability:**  
+   Because the prior region becomes unavailable as a stable semantic object[6D[K
+object, we lose the ability to *replay* or *undo* that portion of history—s[9D[K
+history—something that would be trivial with an append‑only log.
+
+3. **Boundary collapse:**  
+   This “boundary” collapse happens at the highest level where the system t[1D[K
+treats mutable state as instantaneous change rather than a cumulative merge[5D[K
+merge operation. It is thus not captured by our free monoid event‑log model[5D[K
+model, which assumes each step leaves a traceable entry in the log.
+
+**Result:**  
+Mutation appears paradoxical when viewed through the lens of algebraic effe[4D[K
+effects: it’s simply a collapse that deliberately discards the structural e[1D[K
+evidence (the previous region) rather than adding it to an evolving event l[1D[K
+log. Understanding mutation this way clarifies why reasoning about mutable [K
+programs can be so much harder—because we are intentionally ignoring part o[1D[K
+of the computation history.
+
+---
+
+### Unified Takeaway
+
+All three constructs—**state monads, CPS continuations, and mutation**—shar[15D[K
+mutation**—share a common underlying principle: they differ only in *where*[7D[K
+*where* collapse occurs relative to the accumulation (merge) stage. In each[4D[K
+each case:
+
+- **Merge** records effect atoms as parts of an evolving region/event log.
+- **Collapse** interprets these accumulated structures into observable resu[4D[K
+results.
+
+Whether the collapse happens immediately after every step (pure functions),[11D[K
+functions), deferred via continuations, or outright discarding prior histor[6D[K
+history (mutation), the essential invariant remains: *computation is a seri[4D[K
+series of merges that are interpreted later.* This perspective unifies what[4D[K
+what often feels like disparate concepts by exposing their shared algebraic[9D[K
+algebraic structure.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: the-calculus-of-commitment.tex
+
+NEW CHUNK
+=========
+
+Conversely, one can reconstruct the benefits of mutation while retaining structural clarity by recording updates as events. The event log then restores the separation:
+
+\[
+\text{authority} = \text{append-only merge of events},
+\qquad
+\text{view} = \text{collapse by replay}.
+\]
+
+In this light, state monads and event sourcing are not stylistic choices. They are structural disciplines preventing collapse from erasing provenance.
+
+
+A Unifying Structural Summary
+
+
+We may now summarize:
+
+\begin{center}
+\begin{tabular}{lll}
+Paradigm & Structural Mechanism & Spherepop Interpretation \\
+\hline
+State monad & $S \to (A \times S)$ & region transformer with explicit state channel \\
+CPS & $(A \to R) \to R$ & explicit ``rest of pipeline'' controlling collapse staging \\
+Mutation & in-place update & untracked collapse that erases replay structure \\
+\end{tabular}
+\end{center}
+
+All three are variations on one theme: where does the system store commitment, and where is it permitted to collapse it?
+
+
+Control of Collapse as the Deep Invariant
+
+
+Across $\lambda$-calculus, types, pipes, stacks, monads, algebraic effects, state, CPS, and mutation, the same structural invariant repeats.
+
+Merge accumulates commitments.
+Collapse resolves commitments canonically.
+
+The paradigms differ only in their discipline about when collapse is permitted, and whether the history of commitment remains replayable.
+
+Spherepop provides a minimal vocabulary for this discipline.
+
+
+Final Synthesis: The Calculus of Commitment
+
+
+We are now in a position to integrate the threads developed throughout this text.
+
+We began not with machines, syntax, or evaluation rules, but with a minimal structural substrate: finite regions equipped with two primitive operations, merge and collapse. From this sparse beginning, increasingly rich computational phenomena were reconstructed. What appeared at first as a pedagogical device revealed itself as a generative core.
+
+Merge accumulates commitment. Collapse resolves commitment under equivalence. Optionality measures structural freedom. Abstraction introduces disciplined identification. Composition extends invariants across accumulated structure. These operations, taken together, generate the dynamic cycle that underlies all subsequent constructions.
+
+The $\lambda$-calculus emerged as a disciplined fragment of this substrate. Variables were interpreted as atomic commitments. Abstraction was reinterpreted as quotient introduction. Application became merge followed by canonical collapse. Confluence followed not from syntactic accident, but from associativity of accumulation and stability of projection.
+
+Type theory arose as invariant preservation under merge and collapse. Typing judgments were recast as structural guarantees: certain identifications are permitted, others prohibited. Product types reflected structured merge; function types expressed controlled region transformation; categorical semantics clarified the algebra already implicit in the base operations.
+
+Stack machines made explicit what functional semantics leaves implicit: evaluation as sequenced region transformation. Currying revealed that multi-argument computation reduces to iterated unary transformation. Unix pipelines, postfix composition, and higher-order functions were shown to share a single associative backbone. Their surface differences masked an identical structural discipline.
+
+Functional programming appeared not merely as a style, but as a commitment to replayable history. Pure evaluation preserved structural provenance. Monads were interpreted as delayed collapse: effect structure accumulated internally and was interpreted only at controlled boundaries. Algebraic effects separated description from interpretation. State, continuations, and mutation differed only in where collapse was permitted and whether commitment history remained visible.
+
+Across these domains, the same invariant recurred. Computation is not arbitrary transformation. It is structured reorganization of commitment under compositional constraint. Merge introduces distinctions. Collapse removes distinctions in accordance with chosen invariants. Abstraction governs the boundary between them.
+
+The perspective developed here does not replace established theories. It does not challenge the Church–Turing thesis, nor displace $\lambda$-calculus, type systems, or categorical semantics. Rather, it identifies a minimal algebraic substrate from which these theories can be seen as stratified refinements. Where classical presentations emphasize syntax and rule systems, the present account emphasizes structural accumulation and canonical resolution.
+
+In this light, computation acquires a geometric character. Before symbols are rewritten, commitments are accumulated. Before evaluation rules fire, equivalences are introduced. Before types are checked, invariants are selected. The visible calculi of programming languages become surface expressions of a deeper structural logic.
+
+The calculus of commitment therefore names not a new formalism, but a way of seeing. It proposes that beneath abstraction, typing, composition, effects, and control lies a simple discipline: accumulate structure, identify what is irrelevant, normalize canonically, and compose again. From that discipline, the architectures of modern computation follow.
+
+If the exposition has succeeded, the reader may now recognize familiar formalisms as particular crystallizations of this underlying dynamic. The metaphor introduced under the name \emph{Spherepop} was intended only as a compact vessel for that dynamic—a way of speaking about regions, commitment, and collapse without presupposing the vocabulary of any single tradition.
+
+What remains is refinement. The same substrate can be extended toward dependent type theory, richer categorical models, cost semantics, or effect systems with finer granularity. Yet even at this level, the central insight stands: abstraction is controlled collapse; composition is associative accumulation; computation is structured transformation of commitment.
+
+\newpage
+\begin{thebibliography}{99}
+
+\bibitem{Church1936}
+Alonzo Church.
+\newblock An Unsolvable Problem of Elementary Number Theory.
+\newblock \emph{American Journal of Mathematics}, 58(2):345--363, 1936.
+
+\bibitem{Turing1936}
+Alan M. Turing.
+\newblock On Computable Numbers, with an Application to the Entscheidungsproblem.
+\newblock \emph{Proceedings of the London Mathematical Society}, 42(2):230--265, 1936.
+
+\bibitem{Barendregt1984}
+Hendrik P. Barendregt.
+\newblock \emph{The Lambda Calculus: Its Syntax and Semantics}.
+\newblock North-Holland, 1984.
+
+\bibitem{Girard1989}
+Jean-Yves Girard, Yves Lafont, and Paul Taylor.
+\newblock \emph{Proofs and Types}.
+\newblock Cambridge University Press, 1989.
+
+\bibitem{MartinLof1984}
+Per Martin-L\"of.
+\newblock \emph{Intuitionistic Type Theory}.
+\newblock Bibliopolis, 1984.
+
+\bibitem{Pierce2002}
+Benjamin C. Pierce.
+\newblock \emph{Types and Programming Languages}.
+\newblock MIT Press, 2002.
+
+\bibitem{Reynolds1983}
+John C. Reynolds.
+\newblock Types, Abstraction and Parametric Polymorphism.
+\newblock \emph{Information Processing 83}, 513--523, 1983.
+
+\bibitem{Wadler1989}
+Philip Wadler.
+\newblock Theorems for Free!
+\newblock In \emph{Proceedings of the Fourth International Conference on Functional Programming Languages and Computer Architecture}, 1989.
+
+\bibitem{Landin1966}
+Peter J. Landin.
+\newblock The Next 700 Programming Languages.
+\newblock \emph{Communications of the ACM}, 9(3):157--166, 1966.
+
+\bibitem{Backus1978}
+John Backus.
+\newblock Can Programming Be Liberated from the von Neumann Style?
+\newblock \emph{Communications of the ACM}, 21(8):613--641, 1978.
+
+\bibitem{Felleisen1992}
+Matthias Felleisen and Daniel P. Friedman.
+\newblock Control Operators, the SECD Machine, and the Lambda-Calculus.
+\newblock In \emph{Formal Description of Programming Concepts}, 1992.
+
+\bibitem{Plotkin1975}
+Gordon D. Plotkin.
+\newblock Call-by-Name, Call-by-Value and the $\lambda$-Calculus.
+\newblock \emph{Theoretical Computer Science}, 1(2):125--159, 1975.
+
+\bibitem{MacLane1998}
+Saunders Mac Lane.
+\newblock \emph{Categories for the Working Mathematician}.
+\newblock Springer, 1998.
+
+\bibitem{LambekScott1986}
+Joachim Lambek and Philip J. Scott.
+\newblock \emph{Introduction to Higher Order Categorical Logic}.
+\newblock Cambridge University Press, 1986.
+
+\bibitem{Milner1978}
+Robin Milner.
+\newblock A Theory of Type Polymorphism in Programming.
+\newblock \emph{Journal of Computer and System Sciences}, 17(3):348--375, 1978.
+
+\bibitem{Strachey1967}
+Christopher Strachey.
+\newblock Fundamental Concepts in Programming Languages.
+\newblock Oxford University Computing Laboratory Technical Monograph, 1967.
+
+\bibitem{CurryFeys1958}
+Haskell B. Curry and Robert Feys.
+\newblock \emph{Combinatory Logic}.
+\newblock North-Holland, 1958.
+
+\bibitem{MeijerHutton1995}
+Erik Meijer and Graham Hutton.
+\newblock Bananas in Space: Extending Fold and Unfold to Exponential Types.
+\newblock In \emph{Proceedings of the Seventh International Conference on Functional Programming Languages and Computer Architecture}, 1995.
+
+\bibitem{MeijerFokkingaPaterson1991}
+Erik Meijer, Maarten Fokkinga, and Ross Paterson.
+\newblock Functional Programming with Bananas, Lenses, Envelopes and Barbed Wire.
+\newblock In \emph{Functional Programming Languages and Computer Architecture}, 1991.
+
+\bibitem{Meijer1992}
+Erik Meijer.
+\newblock Calculating Compilers.
+\newblock PhD Thesis, University of Nijmegen, 1992.
+
+\bibitem{Meijer2008}
+Erik Meijer.
+\newblock Your Mouse is a Database.
+\newblock ACM Queue, 2008.
+
+\bibitem{Wadler1995}
+Philip Wadler.
+\newblock Monads for Functional Programming.
+\newblock In \emph{Advanced Functional Programming}, 1995.
+
+\bibitem{Moggi1991}
+Eugenio Moggi.
+\newblock Notions of Computation and Monads.
+\newblock \emph{Information and Computation}, 93(1):55--92, 1991.
+
+\bibitem{BirdMeertens1998}
+Richard Bird and Lambert Meertens.
+\newblock Nested Datatypes.
+\newblock In \emph{Mathematics of Program Construction}, 1998.
+
+\bibitem{Knuth1998}
+Donald E. Knuth.
+\newblock \emph{The Art of Computer Programming}, Vol. 1: Fundamental Algorithms.
+\newblock Addison-Wesley, 3rd edition, 1998.
+
+\bibitem{Scott1970}
+Dana Scott.
+\newblock Outline of a Mathematical Theory of Computation.
+\newblock Technical Monograph PRG-2, Oxford University Computing Laboratory, 1970.
+
+\end{thebibliography}
+
+\end{document}
+

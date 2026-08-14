@@ -1,0 +1,45 @@
+**1. Definitions and primitive concepts introduced**
+
+- *COLLAPSE operation*: The process of reducing a class to its minimal repr[4D[K
+representative within the current classification scheme.
+- *Class closure*: The set of all elements that can be reached from an elem[4D[K
+element of the class via the allowable transformations defined for the syst[4D[K
+system.
+
+**2. Mathematical claims and formal structures**
+
+- **Idempotence claim**: Re‑applying COLLAPSE over already identified class[5D[K
+classes yields no further change in class membership, i.e., `collapse(colla[21D[K
+i.e., `collapse(collapse(X)) = collapse(X)` up to closure.
+- This property holds *modulo* class closure, meaning differences that lie [K
+within the closure are not observable as distinct changes.
+
+**3. Mechanisms and processes**
+
+- The mechanism relies on the current implementation’s rejection of success[7D[K
+successive quotient‑level collapses (quotient operations between classes).
+- A dedicated experimental protocol is suggested to enable such collapsed q[1D[K
+quotients, allowing verification of idempotence across multiple collapse it[2D[K
+iterations without discarding intermediate closures.
+
+**4. Connections to concepts named in the running abstract**
+
+- The document references “the current implementation rejects successive qu[2D[K
+quotient-level collapses,” aligning with the note that a *new experimental [K
+protocol* would address this limitation.
+- This directly relates to the unresolved issue highlighted earlier about h[1D[K
+handling repeated COLLAPSE operations over already identified classes.
+
+**5. Unresolved questions or contradictions visible within this chunk**
+
+- **Open status**: No counterexamples have been found, but the claim remain[6D[K
+remains “OPEN,” indicating that a formal proof or further empirical validat[7D[K
+validation is still pending.
+- **Implementation limitation**: The rejection of successive quotient‑level[14D[K
+quotient‑level collapses suggests a potential gap in how COLLAPSE can be co[2D[K
+composed across multiple stages without losing information, which must be r[1D[K
+resolved before broader acceptance.
+
+*No verbatim quotations are available from this chunk to accompany the clai[4D[K
+claims.*
+

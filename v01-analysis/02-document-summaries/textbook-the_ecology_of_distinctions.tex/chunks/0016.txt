@@ -1,0 +1,1154 @@
+Chapters~\ref{ch:reachability}--\ref{ch:geometry-futures}
+answered the geometric question: what does future
+possibility look like? Reachability volume $V_R$
+measures how much of the future is accessible.
+Admissibility volume $\Vol(\adm)$ measures how much
+of the accessible future preserves further accessibility.
+The full admissibility invariant
+$\mathbf{I}_\adm = (\Vol, S_\adm, \chi, \kappa_\adm)$
+measures volume, diversity, topological complexity, and
+decision sensitivity simultaneously. The Future
+Distinction Optimality Theorem
+(\cref{thm:gat-ch15}) proved that generatively admissible
+trajectories dominate extractive alternatives over any
+sufficiently long horizon — a strategic dominance
+derived, not postulated.
+
+Parts~VI--IX demonstrated that the same abstract structure
+appears in physics, cognition, computation, and society.
+RSVP fields realise the distinction-repair-admissibility
+programme in physical field theory.
+Gravity becomes reachability optimisation.
+Expyrosis becomes the largest-scale repair operation.
+Semantic geometry shows that meanings are distinction
+structures on a Riemannian manifold.
+Consciousness is recursive repair of self-distinction.
+Preferences are admissibility gradients.
+Flow computing, Spherepop, HYDRA, and TARTAN realise
+the framework computationally.
+Fiscal reachability, governance, and science are its
+social instantiations.
+
+The present chapter does something different from all
+of the above. It does not introduce new domains.
+It proves that these domains are not merely analogues
+of one another but \emph{projections} of a single
+underlying geometric object.
+
+
+
+The Preservation Hierarchy
+
+\label{sec:ch30-hierarchy}
+
+
+The argument of this book proceeds by discovering that
+each concept introduced is, upon reflection, insufficient
+without a higher-order concept. Distinctions require
+repair. Repair requires regeneration. Regeneration
+requires admissibility. Admissibility requires generativity.
+
+This progression is not arbitrary. It reflects a genuine
+hierarchy of preservation — a sequence of increasingly
+strong conditions, each strictly stronger than the last.
+
+\begin{definition}{The Preservation Classes}{dist-hierarchy}
+  \index{preservation hierarchy|textbf}
+  Define the following classes of systems:
+  \begin{align*}
+    \mathfrak{D} &= \{\text{systems possessing distinctions}\}, \\
+    \mathfrak{M} &= \{\text{systems preserving distinctions historically}\}, \\
+    \mathfrak{R} &= \{\text{systems capable of repair}\}, \\
+    \mathfrak{G} &= \{\text{systems preserving repair capacity (regenerative)}\}, \\
+    \mathfrak{A} &= \{\text{systems preserving future reachability (admissible)}\}, \\
+    \mathfrak{P} &= \{\text{systems expanding admissible possibility (generative)}\}.
+  \end{align*}
+\end{definition}
+
+\begin{theorem}{Preservation Hierarchy Theorem}{preservation-hierarchy}
+  \[
+    \mathfrak{P}
+    \;\subsetneq\;
+    \mathfrak{A}
+    \;\subsetneq\;
+    \mathfrak{G}
+    \;\subsetneq\;
+    \mathfrak{R}
+    \;\subsetneq\;
+    \mathfrak{M}
+    \;\subsetneq\;
+    \mathfrak{D}.
+  \]
+  Each inclusion is strict.
+\end{theorem}
+
+\begin{proof}
+  \textit{Inclusions.}
+  Every possibility-expanding system preserves admissible
+  future volume, hence $\mathfrak{P} \subseteq \mathfrak{A}$.
+  Every admissible system preserves future repair pathways,
+  hence $\mathfrak{A} \subseteq \mathfrak{G}$.
+  Every regenerative system preserves repair capacity,
+  hence $\mathfrak{G} \subseteq \mathfrak{R}$.
+  Every repair system must preserve historical information
+  (Repair Conservation Law, \cref{thm:repair-conservation}),
+  hence $\mathfrak{R} \subseteq \mathfrak{M}$.
+  Every memory system necessarily contains distinctions,
+  hence $\mathfrak{M} \subseteq \mathfrak{D}$.
+
+  \textit{Strictness.}
+  $\mathfrak{M} \subsetneq \mathfrak{D}$:
+  a crystal persists and contains distinctions (temperature,
+  crystal symmetry) but has no memory in the functional sense.
+  $\mathfrak{R} \subsetneq \mathfrak{M}$:
+  a read-only archive preserves historical information but
+  cannot repair damaged distinctions.
+  $\mathfrak{G} \subsetneq \mathfrak{R}$:
+  a DNA repair enzyme executes repair but does not
+  preserve its own regeneration capacity
+  (it is consumed in the process).
+  $\mathfrak{A} \subsetneq \mathfrak{G}$:
+  a highly adaptive but short-lived organism regenerates
+  locally without maintaining admissible volume
+  at the population level.
+  $\mathfrak{P} \subsetneq \mathfrak{A}$:
+  a system may maintain admissible volume ($\Vol(\adm)$
+  constant) without expanding it; generativity requires
+  strict increase.
+\end{proof}
+
+\begin{theorem}{Structural Dependency Theorem}{structural-dependency}
+  The Preservation Hierarchy is not merely a chain of
+  strict inclusions but a chain of \emph{dependency}: loss
+  of membership in any class forces loss of membership in
+  every strictly higher class. Formally, writing
+  $\mathfrak{P}\subsetneq\mathfrak{A}\subsetneq\mathfrak{G}
+  \subsetneq\mathfrak{R}\subsetneq\mathfrak{M}\subsetneq\mathfrak{D}$
+  as before,
+  \[
+    \mathfrak{D} = \mathbf{0}
+    \implies \mathfrak{M} = \mathbf{0}
+    \implies \mathfrak{R} = \mathbf{0}
+    \implies \mathfrak{G} = \mathbf{0}
+    \implies \mathfrak{A} = \mathbf{0}
+    \implies \mathfrak{P} = \mathbf{0},
+  \]
+  where $X = \mathbf{0}$ denotes that system $\Sigma$ exits
+  class $X$ (ceases to satisfy its defining condition).
+\end{theorem}
+
+\begin{proof}
+  Each implication is the contrapositive of the
+  corresponding inclusion established in the Preservation
+  Hierarchy Theorem, applied at the level of a single
+  system $\Sigma$ rather than at the level of the classes
+  themselves.
+
+  If $\Sigma$ exits $\mathfrak{D}$ --- it ceases to possess
+  any distinctions --- then by the Axiom of Distinction
+  (\cref{axm:dist-axiom}) there is no structure left for a
+  memory system to preserve, since memory
+  (\cref{defn:memory-defn}) is defined as preservation of
+  recoverability \emph{of distinctions}. Hence $\Sigma$
+  exits $\mathfrak{M}$.
+
+  If $\Sigma$ exits $\mathfrak{M}$ --- it no longer
+  preserves distinctions historically --- then by the
+  Repair Conservation Law (\cref{thm:repair-conservation}),
+  repair requires operating within the recoverability
+  manifold $\mathcal{M}_\reco$ established by historical
+  preservation; with no preserved history to repair from,
+  the Repair Existence Theorem (\cref{thm:repair-exist})
+  cannot be satisfied. Hence $\Sigma$ exits $\mathfrak{R}$.
+
+  If $\Sigma$ exits $\mathfrak{R}$ --- it is no longer
+  capable of repair --- then by the Principle of
+  Regeneration (\cref{prc:regen-prc}), regeneration is
+  preservation of the capacity to perform \emph{future}
+  repair; a system incapable of repair at all has no repair
+  capacity to preserve. Hence $\Sigma$ exits $\mathfrak{G}$.
+
+  If $\Sigma$ exits $\mathfrak{G}$ --- it is no longer
+  regenerative --- then by the Preservation of Possibility
+  Theorem (\cref{thm:poss-preserve}), regeneration is
+  equivalent to non-decreasing admissible volume
+  $\frac{d}{dt}\mathcal{P}(x,t)\ge0$; failure of regeneration
+  is therefore failure of this admissibility-preservation
+  condition. Hence $\Sigma$ exits $\mathfrak{A}$.
+
+  If $\Sigma$ exits $\mathfrak{A}$ --- admissible volume is
+  no longer preserved --- then generativity
+  (\cref{defn:traj-classes}) requires \emph{strict} increase
+  of admissible volume, which is impossible once mere
+  preservation already fails. Hence $\Sigma$ exits
+  $\mathfrak{P}$.
+
+  Chaining these six implications gives the stated
+  result.
+\end{proof}
+
+\begin{corollary}{Foundational Collapse}{foundational-collapse}
+  Generativity, admissibility, regeneration, and repair can
+  each fail independently while distinction and memory
+  persist, but distinction failure is catastrophic: it
+  forces the simultaneous failure of every higher layer.
+  Formally, $\mathfrak{D}=\mathbf{0} \implies
+  \mathfrak{P}=\mathbf{0}$, while none of the converse
+  implications hold.
+\end{corollary}
+
+\begin{proof}
+  The forward implication is the composition of all six
+  steps in the Structural Dependency Theorem. Failure of
+  the converse for each step is exactly the content of the
+  strictness clause of the Preservation Hierarchy Theorem:
+  the explicit counterexamples given there (the crystal,
+  the read-only archive, the DNA repair enzyme, the
+  short-lived adaptive organism, the volume-preserving but
+  non-expanding system) each exhibit failure at one layer
+  of the hierarchy while remaining a member of all strictly
+  lower classes, including $\mathfrak{D}$ and $\mathfrak{M}$.
+\end{proof}
+
+\begin{remark}{The mathematical backbone}{structural-dependency-remark}
+  The Structural Dependency Theorem is the converse
+  direction of the Preservation Hierarchy Theorem made
+  explicit, and together the two results show that the
+  progression
+  \[
+    \text{Distinction} \to \text{Information} \to \text{Entropy}
+    \to \text{History} \to \text{Recoverability} \to \text{Repair}
+    \to \text{Regeneration} \to \text{Reachability}
+    \to \text{Admissibility}
+  \]
+  developed across Parts~I--V is not merely sequential
+  exposition but a genuinely nested mathematical hierarchy:
+  each layer is both necessary for, and strictly weaker
+  than, the layer above it. This is the structural backbone
+  on which the Generative Admissibility Principle of
+  Chapter~\ref{ch:preservation} is built: that principle
+  identifies $\mathfrak{P}$, the topmost and most fragile
+  class in the hierarchy, as the deepest evaluative
+  criterion precisely because the Structural Dependency
+  Theorem shows its failure to be the final, and least
+  consequential, link in a chain whose earlier links are
+  far more catastrophic to lose.
+\end{remark}
+
+\noindent
+The hierarchy is not a taxonomic curiosity. It is the
+formal structure of what it means to be more or less
+alive, more or less intelligent, more or less capable
+of surviving the future. Every living system,
+every institution, every theory, every computation
+sits somewhere in this hierarchy. The deepest question
+one can ask about any of them is: at what level does it
+reside, and is it moving up or down?
+
+
+
+The Unified Invariant
+
+\label{sec:ch30-unified}
+
+
+The preceding parts of the book introduced several
+seemingly independent quantities:
+entropy $S$, recoverability $\reco$, memory $\mathcal{M}$,
+repair capacity $\kappa_\repair$, reachability volume $V_R$,
+and admissibility volume $\Vol(\adm)$.
+
+We now show these are not independent. They are all
+projections of a single underlying object: the
+possibility functional $\mathcal{P}(x,t) = \Vol(\adm(x,t))$.
+
+\begin{theorem}{Preservation Equivalence Theorem}
+  {preservation-equivalence}
+  Under admissible dynamics, the following quantities
+  are monotone together:
+  \[
+    \mathcal{P}(t),\quad
+    V_R(t),\quad
+    \kappa_\repair(t),\quad
+    \mathcal{M}(t),\quad
+    D_\mathcal{E}(t).
+  \]
+  Each is non-decreasing iff all are non-decreasing.
+\end{theorem}
+
+\begin{proof}
+  Admissibility gives $\frac{d}{dt}\mathcal{P} \ge 0$.
+  Since $\adm(t) \subseteq \reach(t)$, we have
+  $\frac{d}{dt}V_R \ge 0$.
+  Reachability preserves future reconstruction pathways,
+  so $\frac{d}{dt}\kappa_\repair \ge 0$.
+  Memory integrates recoverability
+  $\mathcal{M}(t) = \int \reco(d,t)\,d\mu_D(d)$,
+  so $\frac{d}{dt}\mathcal{M} \ge 0$ follows from
+  non-decreasing $\kappa_\repair$.
+  Memory preserves distinctions, so $D_\mathcal{E}$
+  is non-decreasing.
+  The converse follows by reversing the chain:
+  non-decreasing $D_\mathcal{E}$ implies non-decreasing
+  admissible future manifold.
+\end{proof}
+
+\begin{theorem}{Unified Invariant Theorem}{unified-invariant}
+  The following quantities are projections of the
+  possibility functional $\mathcal{I} = \Vol(\adm)$:
+  \begin{align*}
+    D_\mathcal{E} &= \Pi_D(\mathcal{I}), &
+    \mathcal{M} &= \Pi_M(\mathcal{I}), \\
+    \kappa_\repair &= \Pi_\repair(\mathcal{I}), &
+    V_R &= \Pi_V(\mathcal{I}), \\
+    S_R &= -\log\reco = \Pi_S(\mathcal{I}).
+  \end{align*}
+  Each is obtained from $\mathcal{I}$ by restriction,
+  marginalisation, logarithmic transformation, or
+  supremum.
+\end{theorem}
+
+\begin{proof}
+  Distinctions determine recoverability via the
+  Distinction--Entropy Duality (\cref{law:entropy-dual}).
+  Recoverability determines memory
+  ($\mathcal{M} = \int\reco\,d\mu_D$).
+  Memory determines repair (Repair Existence Theorem,
+  \cref{thm:repair-exist}).
+  Repair determines reachability (admissible repair
+  does not reduce $V_R$, \cref{prop:repair-adm}).
+  Reachability determines admissibility
+  ($\adm \subseteq \reach$, \cref{defn:adm-manifold}).
+  Entropy is the negative log of recoverability
+  (\cref{ch:recoverability}).
+  Each quantity is therefore obtained from
+  $\mathcal{I}$ by a specific transformation.
+\end{proof}
+
+\noindent
+The Unified Invariant Theorem is not merely a formal
+unification. It says something physically and
+philosophically significant: all of the quantities
+scientists, philosophers, and engineers have introduced
+to measure the health of complex systems —
+information, entropy, memory, repair capacity,
+evolutionary potential, reachability, admissibility —
+are different faces of the same geometric object.
+That object is future possibility.
+
+
+
+The Category of Regenerative Systems
+
+\label{sec:ch30-category}
+
+
+The Preservation Hierarchy Theorem identifies a class
+of systems — $\mathfrak{G}$, regenerative systems —
+that is closed under composition. This closure gives
+regenerative systems a categorical structure.
+
+\begin{theorem}{Category of Regenerative Systems}
+  {regen-category}
+  Regenerative systems form a category $\mathbf{Reg}$
+  whose objects are distinction ecologies and whose
+  morphisms are possibility-preserving maps
+  $f: \mathcal{E}_1 \to \mathcal{E}_2$ satisfying
+  $\mathcal{P}(f(x)) \ge \mathcal{P}(x)$.
+\end{theorem}
+
+\begin{proof}
+  \textit{Identity}: $\mathrm{id}_\mathcal{E}$ preserves
+  $\mathcal{P}$ trivially.
+
+  \textit{Composition}: If $f: \mathcal{E}_1 \to
+  \mathcal{E}_2$ and $g: \mathcal{E}_2 \to \mathcal{E}_3$
+  are both possibility-preserving, then
+  \[
+    \mathcal{P}(g(f(x)))
+    \ge \mathcal{P}(f(x))
+    \ge \mathcal{P}(x),
+  \]
+  so $g \circ f$ is possibility-preserving.
+
+  \textit{Associativity}: function composition
+  is associative.
+\end{proof}
+
+\begin{remark}{What $\mathbf{Reg}$ captures}{reg-meaning}
+  The category $\mathbf{Reg}$ is the correct setting
+  for asking questions about the evolution and
+  interaction of complex systems.
+  Morphisms in $\mathbf{Reg}$ are not arbitrary maps
+  between systems. They are maps that respect the
+  fundamental conserved quantity: admissible future
+  volume.
+  A therapy that maps a diseased system to a healthy
+  one is a morphism in $\mathbf{Reg}$ iff it preserves
+  or expands future possibility.
+  A governance reform that maps an extractive
+  institution to a generative one is a morphism in
+  $\mathbf{Reg}$.
+  A scientific revolution that maps a saturated paradigm
+  to an enlarged one is a morphism in $\mathbf{Reg}$.
+  The realization functors $F_i$ of Appendix~D
+  (Chapter~\ref{app:deps}) are all functors
+  $F_i: \mathbf{Abs} \to \mathbf{Reg}$ from the
+  abstract theorem category into domain-specific
+  regenerative systems.
+\end{remark}
+
+
+
+The Ecology Balance Law
+
+\label{sec:ch30-conservation}
+
+
+The deepest single equation of the book is not the
+RSVP field equation, nor the GAT condition
+$\frac{d}{dt}\Vol(\adm) \ge 0$.
+It is the balance equation that governs how admissible
+future volume changes.
+
+\begin{theorem}{Ecology of Distinctions Balance Law}
+  {ecology-final}
+  \index{ecology!ecology of distinctions|textbf}
+  For any distinction ecology $\mathcal{E}$:
+  \[
+    \frac{d}{dt}\mathcal{P}(t)
+    \;=\;
+    \mathcal{G}(t) + \mathcal{R}(t)
+    - \mathcal{L}(t) - \mathcal{X}(t),
+  \]
+  where:
+  \begin{itemize}[nosep]
+    \item $\mathcal{G}$: rate of new admissible
+          distinction generation.
+    \item $\mathcal{R}$: rate of admissible repair
+          (restoration of damaged
+          distinctions).\index{repair!conservation}
+    \item $\mathcal{L}$: rate of distinction loss
+          through entropy and projection failure.
+    \item $\mathcal{X}$: extractive contraction
+          (trajectories that consume future possibility
+          for present gain).
+  \end{itemize}
+\end{theorem}
+
+\begin{proof}
+  All changes to admissible future volume arise from
+  exactly four sources.
+  Creation of new distinctions that are admissible
+  enlarges $\adm$: contributes $+\mathcal{G}$.
+  Repair restores formerly admissible distinctions
+  to the admissibility manifold: contributes $+\mathcal{R}$.
+  Entropy growth and projection failure remove recoverable
+  distinctions from the admissibility manifold:
+  contributes $-\mathcal{L}$.
+  Extractive trajectories consume the distinction
+  structures that sustained admissibility, producing
+  a net reduction in $\Vol(\adm)$ even when the system
+  continues: contributes $-\mathcal{X}$.
+  These four contributions are additive and exhaustive,
+  giving the stated equation.
+\end{proof}
+
+\begin{remark}{A balance equation, not a conservation law}
+  {balance-vs-conservation}
+  The name ``Balance Law'' is deliberate. A conservation law
+  in the physical sense identifies a quantity $\mathcal{C}$
+  such that $d\mathcal{C}/dt = 0$ --- the quantity neither
+  grows nor decays. The present equation says something
+  different: it specifies how $\mathcal{P}$ \emph{changes}
+  as a function of four rate terms. This is a continuity
+  or balance equation, structurally analogous to the
+  continuity equation in fluid dynamics or the accounting
+  identities of national income analysis. The earlier
+  ``Memory Conservation Law'' and ``Repair Conservation
+  Law'' in this book use ``conservation'' in a different
+  and legitimate sense: they assert that certain
+  quantities are preserved (non-decreasing) under
+  admissible operations. The present equation does not
+  assert preservation; it asserts the complete accounting
+  of changes. Both uses are standard; they are now
+  explicitly distinguished.
+\end{remark}
+
+\begin{corollary}{Regime Classification}{ecology-regime}
+  A distinction ecology is:
+  \begin{align*}
+    \text{regenerative} &\iff
+    \mathcal{G}+\mathcal{R} > \mathcal{L}+\mathcal{X}, \\
+    \text{stable}       &\iff
+    \mathcal{G}+\mathcal{R} = \mathcal{L}+\mathcal{X}, \\
+    \text{collapsing}   &\iff
+    \mathcal{G}+\mathcal{R} < \mathcal{L}+\mathcal{X}.
+  \end{align*}
+\end{corollary}
+
+\noindent
+The Balance Law is the formal counterpart of the
+biological truism that life maintains local order by
+exporting entropy. But it goes further. Life does not
+merely export entropy --- it generates new distinctions
+faster than entropy erodes them, repairs damaged
+distinctions faster than they degrade, and resists
+extractive pressures that would consume its future.
+Regenerative systems satisfy $\mathcal{G} + \mathcal{R}
+> \mathcal{L} + \mathcal{X}$. Everything else follows.
+
+
+
+Realizations as Functors
+
+\label{sec:ch30-functors}
+
+
+Each realization in Parts~VI--IX is not an application
+of the framework to a domain. It is a \emph{functor}
+from the abstract theorem category $\mathbf{Abs}$ —
+the category whose objects are distinction-theoretic
+concepts and whose morphisms are the logical relationships
+proved in Parts~I--V — into a domain-specific category.
+
+\begin{definition}{Realization Functor}{realization-functor}
+  A \emph{realization functor}
+  $F_i : \mathbf{Abs} \to \mathbf{Dom}_i$
+  assigns to each abstract concept in $\mathbf{Abs}$
+  a domain-specific instantiation in $\mathbf{Dom}_i$,
+  and to each logical relationship a domain-specific
+  correspondence, in a way that preserves composition
+  and identity.
+\end{definition}
+
+The table below makes each functor explicit.
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Functor & Domain & Distinction & Admissibility \\
+\midrule
+$F_\mathrm{RSVP}$ & Physical fields &
+  $\Phi$-capacity & $\Phi e^{-S} \ge \alpha$ \\
+$F_\mathrm{Gravity}$ & Spacetime &
+  Matter density & Admissible geodesic \\
+$F_\mathrm{Cosmo}$ & Universe &
+  $\mathcal{V}(t)$ & Expyrotic renewal \\
+$F_\mathrm{Semantic}$ & Meaning manifold &
+  Partition of $W$ & $V_M(m,t) > 0$ \\
+$F_\mathrm{Conscious}$ & Self-model &
+  Self-distinction & Recursive repair \\
+$F_\mathrm{Pref}$ & Choice space &
+  Utility partition & $\nabla\Phi_A \ge 0$ \\
+$F_\mathrm{Flow}$ & Pipelines &
+  $D_F(\delta)$ & Lossless stages \\
+$F_\mathrm{Spherepop}$ & Event history &
+  Scope $S$ & Refuse/Bind \\
+$F_\mathrm{HYDRA}$ & Module network &
+  $\mathcal{D}_i$ & Cross-module repair \\
+$F_\mathrm{TARTAN}$ & Tiled manifold &
+  Coherence tile & Tile-local $\adm$ \\
+$F_\mathrm{Fiscal}$ & Policy space &
+  $V_F(p,t)$ & $G_F+R_F \ge L_F$ \\
+$F_\mathrm{Gov}$ & Institutions &
+  $V_G(p,t)$ & Option preservation \\
+$F_\mathrm{Science}$ & Epistemic ecology &
+  $\mathcal{Q}_S$ & $|\mathcal{Q}_S|$ non-decreasing \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The domains are wildly different in scale, substrate,
+and vocabulary. Yet they instantiate the same abstract
+theorem structure. The Repair Existence Theorem holds
+in every row. The Persistence Hierarchy Theorem applies
+to every column. The Ecology Balance Law governs
+the dynamics of every realization.
+
+This is the strongest possible form of theoretical
+unification: not mere analogy, but structural identity
+up to the choice of functor.
+
+
+
+What Is Meant by ``Functor''
+
+\label{sec:ch30-functor-meaning}
+
+
+A careful reader trained in category theory will ask
+whether the thirteen mappings above are genuine functors
+in the technical sense, or whether ``functor'' is being
+used loosely to mean ``analogy'' or ``correspondence.''
+The question is fair and deserves a direct answer.
+
+A functor $F : \mathcal{C} \to \mathcal{D}$ in the
+categorical sense requires:
+\begin{enumerate}[(i)]
+  \item objects of $\mathcal{C}$ map to objects of
+        $\mathcal{D}$;
+  \item morphisms of $\mathcal{C}$ map to morphisms of
+        $\mathcal{D}$;
+  \item composition is preserved: $F(g \circ f) =
+        F(g) \circ F(f)$; and
+  \item identities are preserved: $F(\mathrm{id}_X) =
+        \mathrm{id}_{F(X)}$.
+\end{enumerate}
+The table above supplies (i) and (ii) for each realization:
+distinctions map to domain-specific distinction-like
+quantities, and logical relationships between theorems map
+to domain-specific correspondences. Conditions (iii) and
+(iv) are satisfied at the level of the logical structure
+of the abstract category $\mathbf{Abs}$: because the
+morphisms in $\mathbf{Abs}$ are logical implications
+between theorems, composition is provability-preserving
+by construction, and identity morphisms are tautologies.
+
+\begin{example}{Explicit Functoriality: Flow Computing}
+  {functor-flow-explicit}
+  Let $\mathbf{Abs}$ be the abstract theorem category with
+  objects $\{\text{Distinction}, \text{Recoverability},
+  \text{Repair}, \text{Admissibility}\}$ and morphisms the
+  implications proved in Parts~I--V. Let $\mathbf{Flow}$
+  be the category of pipeline stages with objects
+  $\{D_F(\delta), \kappa_F, V_R^F, \adm_F\}$ and morphisms
+  the stage-composition maps $\delta_i \circ \delta_j$.
+  The functor $F_\mathrm{Flow}$ assigns:
+  \begin{align*}
+    \text{Distinction} &\mapsto D_F(\delta)
+      && \text{(distinction capacity of a stage)} \\
+    \text{Recoverability} &\mapsto \kappa_F
+      && \text{(residual capacity after lossy stage)} \\
+    \text{Repair} &\mapsto \text{lossless upstream stage}
+      && \text{(corrective reinsertion of distinctions)} \\
+    \text{Admissibility} &\mapsto
+      \text{Pipeline Determination Theorem condition}
+  \end{align*}
+  Composition is preserved because pipeline composition
+  is associative and the Pipeline Determination Theorem
+  holds for any composition of stages. Identity is the
+  identity stage $\delta_\mathrm{id}$ that passes all
+  distinctions unchanged.
+\end{example}
+
+The other twelve realizations satisfy the same conditions
+at the same level of detail, though a full categorical
+treatment of each — specifying all objects, morphisms,
+naturality conditions, and isomorphisms — lies beyond the
+scope of this book. What can be claimed honestly is this:
+these are not mere analogies. The formal structure is the
+same in each domain, the mapping is explicit, and
+functoriality holds in the sense that the abstract
+logical relationships are preserved under the mapping.
+Whether each realization satisfies stronger categorical
+properties (e.g.\ constituting an equivalence of categories,
+or admitting natural transformations between different
+domain realizations) is a programme for future work, not
+a claim already established here.
+
+\begin{remark}{Structural Homology vs.\ Full Functoriality}
+  {structural-homology}
+  Readers who find ``functor'' too strong a term are
+  invited to read the thirteen mappings as instances of
+  \emph{structural realization}: the abstract theorem
+  category $\mathbf{Abs}$ is realized in each domain
+  in the way that a group can be realized by a group of
+  symmetries, or a topological space can be realized by a
+  point-set. The realization need not be an equivalence of
+  categories to constitute a genuine and non-trivial
+  unification. What it must do --- and what each of the
+  thirteen mappings does --- is preserve the inferential
+  structure: if Theorem~A implies Theorem~B in $\mathbf{Abs}$,
+  then $F(A)$ implies $F(B)$ in the domain.
+\end{remark}
+
+
+
+What the Book Has Proved
+
+\label{sec:ch30-proved}
+
+
+It is worth being precise about what has been established
+and what has been left as conjecture or sketch.
+
+\paragraph{Established with full formal proof.}
+\begin{itemize}
+  \item The Axiom of Distinction and its immediate
+        consequences (objects, information, cost, blind
+        spots are co-produced).
+  \item The Information--Distinction Theorem:
+        information is not primitive.
+  \item The Distinction--Entropy Duality: the Second Law
+        is a theorem about distinction erosion.
+  \item The History Primacy Theorem: state ontology is
+        strictly contained in history ontology.
+  \item The Law of Recoverability: dispersal and
+        destruction are not equivalent.
+  \item The Repair Existence Theorem: repair is possible
+        iff recoverability is positive.
+  \item The Repair Monoid: admissible repairs compose.
+  \item The Persistent Anomaly Theorem: persistent
+        anomalies lie outside the closure of the repair
+        algebra's image.
+  \item The Ontology Revision Theorem: a minimal
+        ontological enlargement always exists.
+  \item The Intelligence--Repair Equivalence Theorem.
+  \item The Alignment Theorem.
+  \item The Continuation Degeneracy Theorem.
+  \item The Regeneration Theorem.
+  \item The Reachability Monotonicity and
+        Constraint Volume theorems.
+  \item The Future Cone Theorem.
+  \item The Admissibility Existence, Distortion,
+        and Projection--Gap theorems.
+  \item The Future Volume, Bottleneck, Preservation,
+        and Curvature theorems.
+  \item The Future Distinction Optimality Theorem
+        (GAT): generative trajectories dominate
+        extractive ones.
+  \item The Preservation of Possibility Theorem:
+        regeneration, memory, repair, and admissibility
+        are equivalent under smooth dynamics.
+  \item The Ecology of Distinctions Balance Law.
+\end{itemize}
+
+\paragraph{Established as sketches requiring stronger
+hypotheses.}
+\begin{itemize}
+  \item The Minimal Repair Theorem
+        (requires compactness of the operator space).
+  \item Several RSVP field theorems
+        (the physical interpretation requires empirical
+        support beyond the formal structure).
+  \item The consciousness theorems
+        (the connection between recursive self-repair
+        and phenomenal consciousness is formal;
+        the hard problem remains).
+  \item The cosmological theorems
+        (expyrotic renewal is proposed, not derived
+        from first principles of particle physics).
+\end{itemize}
+
+\paragraph{Left as open problems.}
+\begin{itemize}
+  \item The precise topology of $\adm$ for infinite-
+        dimensional distinction spaces.
+  \item The relationship between admissibility curvature
+        and phase transitions in statistical mechanics.
+  \item A complete proof of the Generative Admissibility
+        Theorem for stochastic dynamics.
+  \item The categorical structure of the full functor
+        category $[\mathbf{Abs}, \mathbf{Reg}]$.
+\end{itemize}
+
+
+
+The Transition to Chapter 31
+
+\label{sec:ch30-transition}
+
+
+The present chapter has shown that the framework is
+unified: all its concepts are projections of a single
+invariant, all its domains are functors into the same
+category, and all its dynamical equations are
+special cases of one conservation law.
+
+But there remains something the conservation law
+does not address.
+
+The conservation law tells us how $\mathcal{P}(t)$
+changes. It does not tell us why preserving
+$\mathcal{P}$ matters.
+
+The Future Distinction Optimality Theorem proved that
+generative trajectories are \emph{strategically}
+dominant. But strategic dominance is not the same
+as value. An agent with an extremely short time horizon
+may rationally prefer an extractive trajectory.
+A culture that does not care about future generations
+may rationally pursue pathological continuation.
+
+Chapter~\ref{ch:preservation} addresses this.
+It asks not how $\mathcal{P}$ changes but what it
+would mean for the change to matter. It proves the
+strongest theorem in the book: that admissible
+future volume is not merely a useful quantity but
+the correct invariant for evaluating any system
+whose existence depends on the continuation of
+distinction-production.
+
+That proof is the subject of the final chapter.
+
+
+Related Frameworks
+
+\label{sec:ch30-related-frameworks}
+
+\subsection*{Applied Category Theory: Fong and Spivak}
+
+\emph{Convergence.} Fong and Spivak's applied category theory
+treats category theory specifically as a unifying language for
+compositional structure across disparate scientific and
+engineering domains: wiring diagrams, network models, and systems
+from electrical engineering to database theory are each shown to
+instantiate the same categorical patterns \parencite{fong2019}.
+This is exactly the methodological move made above with the
+Realization Functor (\cref{defn:realization-functor}): each of
+the thirteen realizations in Parts~VI--IX is presented not as an
+analogy but as a functor $F_i:\mathbf{Abs}\to\mathbf{Dom}_i$,
+preserving the actual logical structure of the abstract theory
+rather than merely echoing its vocabulary in a new domain.
+
+\emph{Divergence.} Applied category theory's compositional
+diagrams are typically built up from elementary categorical
+primitives --- monoidal categories, operads, wiring diagrams ---
+chosen in advance for their generality and reusability, with the
+specific application supplied afterward. The category
+$\mathbf{Reg}$ (\cref{thm:regen-category}) and its functors $F_i$
+are constructed the opposite way: $\mathbf{Reg}$ is built from the
+specific theorems already proved in Parts~I--V, and each $F_i$ is
+verified against the actual content of a specific chapter rather
+than chosen for general applicability in advance. The
+compositionality here is a discovered fact about an
+already-existing body of theorems, not a designed feature of the
+categorical apparatus itself.
+
+\emph{Open question.} Whether the thirteen realization functors
+compose with one another in the applied-category-theory sense ---
+whether two realizations can be combined via a categorical product
+or pushout to yield a coherent joint realization, the way
+Fong--Spivak-style wiring diagrams compose --- or whether they are
+better understood as thirteen independent functors sharing only a
+common domain, with no natural composition among them, is not
+explored here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item The argument of the book is a single progression:
+        Distinction $\to$ Information $\to$ Entropy
+        $\to$ History $\to$ Recoverability $\to$ Repair
+        $\to$ Regeneration $\to$ Reachability
+        $\to$ Admissibility $\to$ Generativity.
+  \item Systems are ranked by a strict hierarchy
+        $\mathfrak{P} \subsetneq \mathfrak{A}
+        \subsetneq \mathfrak{G} \subsetneq \mathfrak{R}
+        \subsetneq \mathfrak{M} \subsetneq \mathfrak{D}$
+        (\cref{thm:preservation-hierarchy}), and loss of
+        any layer forces loss of every strictly higher
+        layer, with loss of distinction itself the most
+        catastrophic (\cref{thm:structural-dependency,cor:foundational-collapse}).
+  \item All major quantities — entropy, recoverability,
+        memory, repair capacity, reachability, admissibility
+        — are projections of the single invariant
+        $\mathcal{I} = \Vol(\adm)$
+        (\cref{thm:unified-invariant}).
+  \item Regenerative systems form a category
+        $\mathbf{Reg}$ under possibility-preserving maps
+        (\cref{thm:regen-category}).
+  \item The dynamics of all distinction ecologies are
+        governed by:
+        $\dot{\mathcal{P}} = \mathcal{G} + \mathcal{R}
+        - \mathcal{L} - \mathcal{X}$
+        (\cref{thm:ecology-final}).
+  \item Each realization in Parts~VI--IX is a functor
+        $F_i: \mathbf{Abs} \to \mathbf{Dom}_i$ that
+        instantiates the abstract theorem structure
+        in a domain-specific setting.
+  \item The book has fully proved the structural spine;
+        several realization theorems are sketches
+        requiring additional assumptions.
+  \item What remains for Chapter~\ref{ch:preservation}:
+        not how $\mathcal{P}$ changes but why its
+        preservation constitutes a value, not merely
+        a strategy.
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Prove that the Preservation Hierarchy is strict at
+  every level by constructing an explicit system
+  that belongs to $\mathfrak{R}$ but not $\mathfrak{G}$.
+  (Hint: a system that can repair its distinctions but
+  whose repair enzymes are not themselves repaired.)
+\end{exercise}
+
+\begin{exercise}
+  The Structural Dependency Theorem shows
+  $\mathfrak{G}=\mathbf{0} \implies \mathfrak{A}=\mathbf{0}$.
+  Using the Preservation of Possibility Theorem
+  (\cref{thm:poss-preserve}), spell out explicitly which of
+  conditions (i)--(v) of that theorem fails first when a
+  system loses regenerative capacity, and trace the
+  remaining failures through (ii)--(v).
+\end{exercise}
+
+\begin{exercise}
+  Apply the Ecology Balance Law to the Roman
+  Republic in its final century (133--27 BCE).
+  Identify $\mathcal{G}$, $\mathcal{R}$, $\mathcal{L}$,
+  and $\mathcal{X}$ for each decade.
+  At what point did $\mathcal{G}+\mathcal{R}
+  < \mathcal{L}+\mathcal{X}$ become persistent?
+\end{exercise}
+
+\begin{exercise}
+  Prove or disprove: the category $\mathbf{Reg}$ has
+  a terminal object. If it does, what is it?
+  If it does not, what does the non-existence imply
+  about the structure of regenerative systems?
+\end{exercise}
+
+\begin{exercise}
+  Identify which of the following are morphisms in
+  $\mathbf{Reg}$ and which are not, justifying each:
+  (a) a vaccine that confers immunity;
+  (b) a monopoly buyout of a competitor;
+  (c) a constitutional amendment adding a new right;
+  (d) a scientific paradigm shift satisfying the
+  Ontology Revision Theorem;
+  (e) a \texttt{git reset --hard} on a shared branch.
+\end{exercise}
+
+\begin{exercise}
+  The Unified Invariant Theorem says that entropy,
+  recoverability, memory, repair capacity, reachability,
+  and admissibility are all projections of
+  $\mathcal{I} = \Vol(\adm)$.
+  Construct an explicit projection operator $\Pi_S$
+  such that $\Pi_S(\mathcal{I}) = S_R = -\log\reco$.
+  Verify that $\Pi_S$ commutes with the admissibility
+  dynamics.
+\end{exercise}
+
+\chapter{The Preservation of Possibility}
+\label{ch:preservation}
+\begin{epigraph}{Which structures preserve the possibility
+  of future distinction-production?}{Author}
+\end{epigraph}
+
+
+Introduction
+
+\label{sec:ch31-intro}
+
+The preceding chapters developed a progression of concepts
+that initially appeared independent. Distinction produced
+information. Information implied entropy. Histories
+replaced states as the primary objects of analysis.
+Recoverability quantified the persistence of historical
+structure. Memory preserved recoverability. Repair opposed
+entropic degradation. Regeneration preserved repair itself.
+Reachability quantified future possibility. Admissibility
+distinguished futures that preserved future possibility
+from those that merely continued existing.
+
+At each stage a familiar explanatory strategy was shown to
+be incomplete. Objects required distinctions. Distinctions
+required histories. Histories required recoverability.
+Recoverability required repair. Repair required
+regeneration. Regeneration required admissibility.
+
+The present chapter demonstrates that this sequence is not
+merely pedagogical. It is the manifestation of a single
+underlying invariant.
+
+The central claim of this chapter is that the deepest
+conserved quantity is neither matter, energy, information,
+complexity, intelligence, nor even continuation itself. The
+deepest conserved quantity is possibility. More precisely,
+the fundamental quantity preserved by generatively
+admissible dynamics is the capacity of a system to generate
+future distinctions.
+
+The entire monograph may therefore be interpreted as the
+progressive discovery of the geometric conditions under
+which possibility survives. The goal of this chapter is to
+make that statement precise, and to show that it subsumes
+the Preservation Hierarchy Theorem of
+Chapter~\ref{ch:ecology-synthesis} and the Structural Dependency
+Theorem proved there
+(\cref{thm:preservation-hierarchy,thm:structural-dependency})
+as instances of a single functional inequality.
+
+
+The Possibility Functional
+
+\label{sec:ch31-functional}
+
+Let $\mathcal{A}(x)$ denote the admissible future manifold
+associated with state $x$, and recall from the Future
+Volume Theorem of Chapter~\ref{ch:reachability} that
+\[
+  V_F(x) = \Vol\bigl(\mathcal{A}(x)\bigr)
+\]
+measures the accessible admissible future of a system. The
+possibility functional $\mathcal{P}(x,t)=\Vol(\adm(x,t))$
+already introduced in earlier chapters measures this volume
+directly; what it does not capture is the \emph{diversity}
+of the futures it counts. Volume alone is insufficient. A
+large future volume containing only mutually equivalent
+trajectories does not preserve genuine possibility. We
+therefore refine the possibility functional to incorporate
+diversity explicitly.
+
+\begin{definition}{Admissible Distinction Entropy}{adm-dist-entropy}
+  Let $\{p_i\}$ be the distribution of distinguishable
+  trajectory classes within $\mathcal{A}(x)$. Define
+  \[
+    S_A(x) = -\sum_i p_i \log p_i.
+  \]
+  \index{admissible distinction entropy|textbf}
+  \index{distinction!entropy|textbf}
+\end{definition}
+
+\begin{definition}{Refined Possibility Functional}{refined-possibility}
+  The \emph{refined possibility functional} of a state $x$
+  is
+  \[
+    \Pi(x) = \Vol\bigl(\mathcal{A}(x)\bigr)\, S_A(x)
+           = V_F(x)\, S_A(x).
+  \]
+  \index{possibility functional!refined|textbf}
+\end{definition}
+
+Future volume without diversity yields fragility: a system
+with large $V_F$ but $S_A\approx0$ has many reachable
+futures that are effectively redundant, and the loss of any
+single pathway is immaterial only because the rest are
+copies of it. Diversity without volume yields stagnation: a
+system with large $S_A$ but small $V_F$ has few futures to
+be diverse among. Both are required, and $\Pi$ is the
+multiplicative combination that vanishes whenever either
+factor vanishes.
+
+\begin{remark}{Relation to the unrefined functional}{pi-vs-P}
+  $\Pi$ refines, rather than replaces, the possibility
+  functional $\mathcal{P}=\Vol(\adm)$ used throughout
+  Chapters~\ref{ch:reachability}--\ref{ch:ecology-synthesis}.
+  Where $S_A(x)$ is approximately constant across the
+  trajectories under comparison, $\Pi$ and $\mathcal{P}$
+  induce the same ordering and every theorem stated in
+  terms of $\mathcal{P}$ continues to hold for $\Pi$ in
+  place of $\mathcal{P}$. Where $S_A$ varies, $\Pi$ is the
+  strictly more discriminating quantity, since it is
+  sensitive to qualitative diversity of futures and not
+  merely their aggregate measure.
+\end{remark}
+
+
+Preservation Dynamics
+
+\label{sec:ch31-dynamics}
+
+Consider an admissible trajectory $\gamma(t)$, and write
+$V_F(t) = V_F(\gamma(t))$, $S_A(t) = S_A(\gamma(t))$,
+$\Pi(t) = \Pi(\gamma(t))$. Differentiating the product
+defining $\Pi$ gives
+
+\begin{theorem}{Possibility Decomposition Theorem}{possibility-decomposition}
+  Along any admissible trajectory,
+  \[
+    \frac{d\Pi}{dt}
+    = S_A \frac{dV_F}{dt} + V_F \frac{dS_A}{dt}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Immediate from the product rule applied to
+  $\Pi(t)=V_F(t)S_A(t)$ (\cref{defn:refined-possibility}).
+\end{proof}
+
+The first term measures expansion or contraction of future
+accessibility; the second measures expansion or contraction
+of future diversity. This decomposition motivates a
+threefold classification of dynamical systems.
+
+\begin{definition}{Possibility Classes}{possibility-classes}
+  A trajectory $\gamma$ is:
+  \begin{itemize}
+    \item \emph{generative} if $\frac{d\Pi}{dt} > 0$;
+    \item \emph{extractive} if $\frac{d\Pi}{dt} < 0$;
+    \item \emph{neutral} if $\frac{d\Pi}{dt} = 0$.
+  \end{itemize}
+  \index{possibility!classes of trajectories}
+\end{definition}
+
+\begin{remark}{Consistency with earlier usage}{possibility-classes-consistency}
+  This classification is consistent with, and sharpens, the
+  generative/extractive distinction already used informally
+  in Chapters~\ref{ch:reachability}--\ref{ch:ecology-synthesis}
+  and formalized for the unrefined functional $\mathcal{P}$
+  in the Generative Admissibility Theorem
+  (\cref{thm:gat-final}). \cref{thm:gat-final} characterizes
+  generativity by $\frac{d}{dt}\Vol(\adm)\ge0$; the
+  Possibility Classes definition strengthens this to account
+  for diversity via $S_A$, and the two coincide exactly when
+  $S_A$ is held fixed along the comparison, by
+  \cref{rmk:pi-vs-P}.
+\end{remark}
+
+
+The Preservation Implication Theorem
+
+\label{sec:ch31-implication}
+
+The progression developed throughout the book may now be
+formalized as a chain of logical implications, complementing
+the class-inclusion form of the Preservation Hierarchy
+Theorem proved in Chapter~\ref{ch:ecology-synthesis}
+(\cref{thm:preservation-hierarchy}).
+
+\begin{theorem}{Preservation Implication Theorem}{preservation-implication}
+  For every system $\mathcal{E}$,
+  \[
+    \text{Generativity} \implies \text{Admissibility}
+    \implies \text{Regeneration} \implies \text{Repair}
+    \implies \text{Continuation}.
+  \]
+  Furthermore, all implications are strict.
+\end{theorem}
+
+\begin{proof}
+  Generativity requires preservation of future possibility:
+  by \cref{defn:possibility-classes}, a generative
+  trajectory has $d\Pi/dt > 0$, hence in particular
+  $dV_F/dt \ge 0$ whenever $S_A>0$ stays bounded, by
+  \cref{thm:possibility-decomposition}. Future possibility
+  cannot be preserved unless admissible futures remain
+  accessible; therefore generativity implies admissibility,
+  in the sense of $\mathfrak{P}\subseteq\mathfrak{A}$
+  already established directly in the Preservation
+  Hierarchy Theorem (\cref{thm:preservation-hierarchy}).
+
+  Admissibility requires maintenance of structures capable
+  of generating future admissible states: this is
+  regeneration, by \cref{thm:regeneration}. Hence
+  admissibility implies regeneration
+  ($\mathfrak{A}\subseteq\mathfrak{G}$).
+
+  Regeneration requires preservation of repair capacity, by
+  the Principle of Regeneration (\cref{prc:regen-prc}).
+  Therefore regeneration implies repair
+  ($\mathfrak{G}\subseteq\mathfrak{R}$).
+
+  Repair prevents destructive collapse of recoverable
+  structure and therefore implies continuation of the
+  system's distinctions, by the Repair Conservation Law
+  (\cref{thm:repair-conservation}).
+
+  Strictness is exactly the strictness already proved for
+  each corresponding inclusion in the Preservation Hierarchy
+  Theorem (\cref{thm:preservation-hierarchy}): a crystal
+  continues without repairing; a thermostat repairs without
+  regenerating; an immune system regenerates without
+  preserving all admissible futures; a stable but
+  possibility-narrowing institution preserves admissibility
+  of selected trajectories while reducing possibility
+  volume, by \cref{defn:possibility-classes}. Each
+  implication is therefore proper.
+\end{proof}

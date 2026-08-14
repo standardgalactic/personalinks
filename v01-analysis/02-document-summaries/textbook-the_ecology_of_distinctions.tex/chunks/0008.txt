@@ -1,0 +1,1194 @@
+\begin{definition}{Constraint Potential}{constraint-potential}
+  Define the \emph{constraint potential}
+  \[
+    U_S = \int_\Omega S \, dV.
+  \]
+\end{definition}
+
+\begin{theorem}{Constraint Accumulation Theorem}{constraint-accumulation-rsvp}
+  Constraint density evolves according to
+  \[
+    \frac{\partial S}{\partial t}
+    = \alpha D - \beta R + \gamma \nabla^2 S,
+  \]
+  where $D$ is the local rate of distinction destruction.
+\end{theorem}
+
+\begin{proof}
+  By the Distinction--Entropy Duality
+  (\cref{law:entropy-dual}), destroyed distinctions
+  contribute positively to hidden multiplicity, here
+  represented by $\alpha D$. Repair reduces constraint at
+  rate $\beta R$, by the Repair--Entropy Theorem
+  (\cref{thm:repair-entropy}). The diffusive term
+  $\gamma\nabla^2 S$ represents the spatial spreading of
+  constraint through the medium, consistent with the
+  Second Law of Distinction Dynamics
+  (\cref{law:second-law-dist}).
+\end{proof}
+
+
+The Reachability Bridge
+
+\label{sec:ch16-bridge}
+
+The next theorem is the central bridge between RSVP and the
+geometric machinery of Part~V.
+
+\begin{theorem}{Reachability Capacity Theorem}{rsvp-reachability}
+  Reachability volume satisfies
+  \[
+    V_R(x,t) \propto \Phi(x,t)\, e^{-S(x,t)}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Increasing capacity $\Phi$ enlarges the set of reachable
+  futures: more stored distinction-producing capacity
+  permits more admissible trajectories. Increasing
+  constraint $S$ reduces reachable futures, by the
+  Constraint Volume Theorem (\cref{thm:constraint-vol}).
+  By Chapter~13, $V_R$ must therefore increase monotonically
+  with $\Phi$ and decrease monotonically with $S$. Among
+  functional forms satisfying both monotonicity conditions
+  together with constraint additivity --- the requirement
+  that two independent regions of constraint $S_1, S_2$
+  combine as $S_1 + S_2$, producing a multiplicative
+  reduction $e^{-S_1}e^{-S_2} = e^{-(S_1+S_2)}$ in
+  reachable volume --- the exponential form
+  \[
+    V_R = K\, \Phi\, e^{-S}
+  \]
+  is the \emph{simplest member} satisfying these
+  conditions. Functions of the form
+  $f(S) = e^{-\lambda S}$ for any $\lambda > 0$ form a
+  family, all satisfying additivity; more complex forms
+  (e.g.\ $e^{-S^2}$ under an appropriate composition rule)
+  are also conceivable. The exponential form with
+  $\lambda = 1$ is adopted as the working hypothesis of
+  the RSVP framework: simple, analytically tractable,
+  and consistent with the constraint-additivity
+  requirement. Whether it is the \emph{unique} such form
+  depends on additional axioms not imposed here; the
+  claim of uniqueness is withdrawn in favour of the
+  weaker claim that this is a natural and minimal choice.
+\end{proof}
+
+\begin{remark}{The most important bridge}{rsvp-bridge-remark}
+  This theorem is arguably the single most important
+  connection between RSVP and the admissibility programme
+  of Part~V. It converts every reachability and
+  admissibility result of Chapters~13--15 into a statement
+  about the physical fields $\Phi$ and $S$.
+\end{remark}
+
+
+The RSVP Action
+
+\label{sec:ch16-action}
+
+\begin{definition}{RSVP Action Functional}{rsvp-action}
+  \[
+    \mathcal{A}
+    = \int \left(
+        \tfrac{1}{2}\Phi|\mathbf{v}|^2
+        - U(\Phi)
+        - \lambda S
+      \right) dV \, dt.
+  \]
+\end{definition}
+
+\begin{theorem}{RSVP Euler--Lagrange Equations}{rsvp-el}
+  Stationary points of $\mathcal{A}$ satisfy
+  \[
+    \frac{\delta\mathcal{A}}{\delta\Phi} = 0,
+    \qquad
+    \frac{\delta\mathcal{A}}{\delta\mathbf{v}} = 0,
+    \qquad
+    \frac{\delta\mathcal{A}}{\delta S} = 0.
+  \]
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+  Standard variational calculus applied to $\mathcal{A}$;
+  the detailed component-wise derivation is given in
+  Appendix~\ref{app:math}.
+\end{proof}
+
+
+Lamphrodyne Relaxation
+
+\label{sec:ch16-lamphrodyne}
+
+\begin{definition}{Lamphrodyne Relaxation}{lamphrodyne-relaxation}
+  A trajectory obeys \emph{lamphrodyne relaxation} if
+  \[
+    \frac{d\Phi}{dt}
+    = -\mu \frac{\partial S}{\partial \Phi}.
+  \]
+  \index{lamphrodyne relaxation|textbf}
+\end{definition}
+
+This gives the geometric mechanism that drives systems
+toward admissible regions: capacity flows so as to reduce
+the local marginal constraint.
+
+\begin{theorem}{Lamphrodyne Stability Theorem}{lamphrodyne}
+  Along a lamphrodyne trajectory,
+  \[
+    \frac{dS}{dt} \le 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Substituting $\frac{d\Phi}{dt} = -\mu\,\partial S/\partial\Phi$
+  into the chain rule,
+  \[
+    \frac{dS}{dt}
+    = \frac{\partial S}{\partial \Phi}\frac{d\Phi}{dt}
+    = -\mu \left(\frac{\partial S}{\partial \Phi}\right)^{\!2}
+    \le 0. \qedhere
+  \]
+\end{proof}
+
+This is essentially the RSVP analogue of gradient descent
+in constraint space, and it furnishes the dynamical
+mechanism underlying gravitational attraction in
+Chapter~\ref{ch:gravity}.
+
+
+RSVP and Admissibility
+
+\label{sec:ch16-admissibility}
+
+\begin{theorem}{RSVP Admissibility Theorem}{rsvp-admissibility}
+  Generatively admissible trajectories satisfy
+  \[
+    \frac{d}{dt}\bigl(\Phi e^{-S}\bigr) \ge 0.
+  \]
+  \index{admissibility!physical|textbf}
+\end{theorem}
+
+\begin{proof}
+  By the Reachability Capacity Theorem
+  (\cref{thm:rsvp-reachability}), $V_R \propto \Phi e^{-S}$.
+  By the Generative Admissibility Principle
+  (\cref{prc:gap-final}), $\frac{dV_R}{dt} \ge 0$ along
+  admissible trajectories. Substitution gives
+  $\frac{d}{dt}(\Phi e^{-S}) \ge 0$.
+\end{proof}
+
+
+Physical Realization
+
+\label{sec:ch16-realization}
+
+\begin{theorem}{Physical Realization Theorem}{rsvp-realization}
+  The RSVP variables $(\Phi, \mathbf{v}, S)$ constitute a
+  physical realization of the distinction, repair,
+  reachability, and admissibility structures developed in
+  Chapters~1--15.
+\end{theorem}
+
+\begin{proof}
+  $\Phi$ encodes distinction capacity in the sense of
+  \cref{defn:dist-capacity}; $\mathbf{v}$ encodes transport
+  of that capacity; $S$ encodes admissible-volume
+  restriction in the sense of Chapter~14. By the
+  Reachability Capacity Theorem and the RSVP Admissibility
+  Theorem, the dynamics of $(\Phi,\mathbf{v},S)$ reproduce
+  the reachability and admissibility structure of
+  Part~V exactly. Hence every abstract theorem of
+  Chapters~1--15 admits a physical instantiation under this
+  triple.
+\end{proof}
+
+At this point Chapters~17--19 may focus on gravity and
+cosmology without re-establishing the entire formal
+structure. Chapter~16 is the bridge from the abstract
+geometry of admissibility to the concrete dynamics of a
+physical universe.
+
+
+Existence, Stability, and Attractors
+
+\label{sec:ch16-existence}
+
+The preceding sections established the RSVP field equations
+and their connection to reachability and admissibility. What
+they have not yet established is whether the coupled system
+$(\Phi,\mathbf{v},S)$ actually admits well-behaved solutions,
+and whether those solutions settle into recognisable
+long-term regimes. This section supplies that missing layer:
+a local well-posedness result, an energy functional with a
+Lyapunov-type decay property, and a characterisation of RSVP
+attractors.
+
+\begin{definition}{RSVP Energy Functional}{rsvp-energy}
+  For a domain $\Omega\subseteq X$, define
+  \[
+    E[\Phi,\mathbf{v},S]
+    = \int_\Omega \left(
+        \alpha|\nabla\Phi|^2
+        + \beta|\mathbf{v}|^2
+        + \gamma S^2
+      \right) dV,
+    \qquad \alpha,\beta,\gamma > 0.
+  \]
+  \index{RSVP!energy functional|textbf}
+\end{definition}
+
+The three terms penalise, respectively, sharp spatial
+variation in capacity, kinetic transport, and constraint
+magnitude. $E$ is non-negative and vanishes only on the
+trivial configuration $\nabla\Phi=\mathbf{v}=S=0$.
+
+\begin{theorem}{Local Well-Posedness Theorem}{rsvp-well-posed}
+  Let $\Omega\subseteq X$ be bounded with smooth boundary,
+  and let $(\Phi_0,\mathbf{v}_0,S_0)$ be initial data with
+  $E[\Phi_0,\mathbf{v}_0,S_0] < \infty$. Then the coupled
+  system consisting of the Capacity Conservation Theorem
+  (\cref{thm:capacity-conservation}), the Constraint
+  Accumulation Theorem
+  (\cref{thm:constraint-accumulation-rsvp}), and lamphrodyne
+  relaxation (\cref{defn:lamphrodyne-relaxation}) admits a
+  unique solution $(\Phi,\mathbf{v},S)$ on some maximal
+  interval $[0,T_{\max})$, depending continuously on the
+  initial data.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+  The continuity equation for $\Phi$ and the
+  reaction--diffusion equation for $S$ are both
+  quasilinear parabolic-type equations once
+  $\mathbf{v}$ is treated as a given coefficient field;
+  standard fixed-point arguments (Banach fixed point on a
+  short time interval, using the finiteness of
+  $E[\Phi_0,\mathbf{v}_0,S_0]$ to bound the relevant
+  Sobolev norms) give local existence and uniqueness for
+  $\Phi$ and $S$ given $\mathbf{v}$. Substituting back into
+  the Euler--Lagrange equation for $\mathbf{v}$
+  (\cref{thm:rsvp-el}) and iterating the fixed point over
+  the triple $(\Phi,\mathbf{v},S)$ yields a contraction on a
+  sufficiently short time interval, by finiteness of $E$ and
+  boundedness of $\Omega$. Continuous dependence on initial
+  data follows from a standard Grönwall estimate applied to
+  the difference of two solutions.
+\end{proof}
+
+\begin{remark}{Global existence is not claimed}{rsvp-global-caveat}
+  The theorem is deliberately local. Whether $T_{\max}=\infty$
+  in general --- global well-posedness --- depends on
+  whether $E$ remains bounded along the flow, which is
+  precisely what the Lyapunov argument below addresses under
+  the additional hypothesis of admissibility.
+\end{remark}
+
+\begin{theorem}{Energy Decay Theorem}{rsvp-energy-decay}
+  Along any trajectory obeying lamphrodyne relaxation
+  (\cref{defn:lamphrodyne-relaxation}) with admissible
+  dynamics, the energy functional is non-increasing:
+  \[
+    \frac{dE}{dt} \le 0.
+  \]
+  \index{Lyapunov function|textbf}
+\end{theorem}
+
+\begin{proof}
+  Differentiating $E$ under the integral sign and applying
+  the Capacity Conservation and Constraint Accumulation
+  equations gives
+  \[
+    \frac{dE}{dt}
+    = \int_\Omega \left(
+        2\alpha\,\nabla\Phi\cdot\nabla\dot\Phi
+        + 2\beta\,\mathbf{v}\cdot\dot{\mathbf{v}}
+        + 2\gamma S\dot S
+      \right) dV.
+  \]
+  By the Lamphrodyne Stability Theorem
+  (\cref{thm:lamphrodyne}), $\dot S$ is driven by
+  $-\mu(\partial S/\partial\Phi)^2 \le 0$ along the
+  relaxation flow, and the transport term
+  $\mathbf{v}\cdot\dot{\mathbf{v}}$ is controlled by the
+  dissipative part of the Euler--Lagrange equations
+  (\cref{thm:rsvp-el}), which by construction extremises
+  $\mathcal{A}$ subject to non-increasing kinetic
+  contribution under admissible boundary conditions.
+  Integrating by parts on the $\nabla\Phi\cdot\nabla\dot\Phi$
+  term and using that boundary flux vanishes for admissible
+  trajectories (no capacity is injected at $\partial\Omega$)
+  leaves a sum of non-positive terms, giving
+  $dE/dt \le 0$.
+\end{proof}
+
+\begin{corollary}{Global Existence Under Bounded Energy}
+  {rsvp-global-exist}
+  If $E[\Phi_0,\mathbf{v}_0,S_0] < \infty$ and the
+  trajectory remains admissible, then $T_{\max} = \infty$:
+  the local solution of \cref{thm:rsvp-well-posed} extends
+  globally in time.
+\end{corollary}
+
+\begin{proof}
+  By \cref{thm:rsvp-energy-decay}, $E$ is non-increasing and
+  bounded below by $0$, hence bounded on
+  $[0,T_{\max})$. Standard continuation criteria for
+  quasilinear parabolic systems state that a local solution
+  fails to extend only if the relevant energy norm blows up
+  in finite time; since $E$ remains bounded, no blow-up
+  occurs, and the solution extends to all $t \ge 0$.
+\end{proof}
+
+\begin{definition}{RSVP Attractor}{rsvp-attractor}
+  An \emph{RSVP attractor} is a non-empty, closed, invariant
+  set $\mathcal{O}\subseteq\{(\Phi,\mathbf{v},S)\}$ of the
+  field flow such that for every trajectory with bounded
+  initial energy, $\mathrm{dist}\bigl((\Phi(t),\mathbf{v}(t),S(t)),\mathcal{O}\bigr)\to0$
+  as $t\to\infty$.
+  \index{RSVP!attractor|textbf}
+\end{definition}
+
+\begin{theorem}{Attractor Convergence Theorem}{rsvp-attractor-conv}
+  Under the hypotheses of \cref{cor:rsvp-global-exist} and
+  bounded entropy production
+  ($\int_0^\infty |\dot S|\,dt < \infty$), every admissible
+  RSVP trajectory converges to an attractor class
+  $\mathcal{O}$ on which $E$ is constant.
+\end{theorem}
+
+\begin{proof}
+  By \cref{thm:rsvp-energy-decay}, $E(t)$ is non-increasing
+  and bounded below, hence converges to a limit
+  $E_\infty \ge 0$. Bounded entropy production implies $S(t)$
+  converges (as a non-increasing-variation function bounded
+  below), and the Lamphrodyne Stability Theorem
+  (\cref{thm:lamphrodyne}) forces
+  $\partial S/\partial\Phi \to 0$ along the flow, so the
+  driving term for further change in $\Phi$ vanishes in the
+  limit. The omega-limit set of any trajectory with these
+  properties is therefore a non-empty, closed, invariant set
+  on which $E \equiv E_\infty$ --- by definition, an
+  attractor $\mathcal{O}$. Standard LaSalle-invariance-type
+  argument (applicable here because $E$ is a genuine
+  Lyapunov function by \cref{thm:rsvp-energy-decay}) gives
+  convergence of the trajectory itself to $\mathcal{O}$.
+\end{proof}
+
+\begin{remark}{Why this matters}{rsvp-attractor-remark}
+  The Attractor Convergence Theorem upgrades RSVP from a
+  system of suggestive field equations to a genuine field
+  theory with a well-posedness and long-time-behaviour
+  package: solutions exist, are unique, depend continuously
+  on data, and --- under the physically motivated hypothesis
+  of bounded entropy production --- settle into classifiable
+  attractor regimes. Chapters~\ref{ch:gravity}--\ref{ch:cosmo-completion}
+  may therefore treat gravitational and cosmological
+  structures as RSVP attractors without further
+  justification of existence.
+\end{remark}
+
+
+Related Frameworks
+
+\label{sec:ch16-related-frameworks}
+
+\subsection*{Dynamical Systems Theory}
+
+\emph{Convergence.} The Attractor Convergence and Lamphrodyne
+Stability Theorems above already deploy the technical apparatus
+of classical dynamical systems theory directly --- Lyapunov
+functions, LaSalle invariance, omega-limit sets, attractors
+\parencite{strogatz2015,smale1967}. This is not analogy: the
+proof of \cref{thm:rsvp-attractor-conv} is a direct application
+of LaSalle's invariance principle, the same tool used throughout
+nonlinear dynamics to establish convergence of dissipative
+systems to invariant sets.
+
+\emph{Divergence.} Classical dynamical systems theory studies
+abstract phase-space flows whose physical content, if any, is
+supplied externally and after the fact --- a Lorenz attractor's
+variables mean whatever a modeller decides they mean. The
+Three-Field Necessity Theorem (\cref{thm:three-field-necessity})
+instead derives the field content itself --- capacity $\Phi$,
+transport $v$, constraint $S$ --- as the unique minimal
+structure able to realise a reachability geometry
+(Chapter~\ref{ch:reachability}) at all. The dynamics here is not
+chosen freely and interpreted afterward; it is constrained from
+the start by what a reachability-respecting field theory
+requires.
+
+\emph{Open question.} Whether RSVP's attractor classes
+$\mathcal{O}$ correspond to the standard taxonomy of
+dynamical-systems attractors --- fixed points, limit cycles,
+strange attractors --- or constitute a genuinely new attractor
+type specific to admissibility-constrained field dynamics, is
+not worked out here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Capacity, transport, and constraint are
+        independently necessary
+        (\cref{thm:three-field-necessity}).
+  \item Capacity obeys a continuity equation
+        (\cref{thm:capacity-conservation}); constraint
+        obeys an accumulation equation
+        (\cref{thm:constraint-accumulation-rsvp}).
+  \item Reachability volume is proportional to
+        $\Phi e^{-S}$ (\cref{thm:rsvp-reachability}) ---
+        the central bridge to Part~V.
+  \item Lamphrodyne relaxation drives systems toward lower
+        constraint (\cref{thm:lamphrodyne}).
+  \item Generative admissibility becomes
+        $\frac{d}{dt}(\Phi e^{-S}) \ge 0$
+        (\cref{thm:rsvp-admissibility}).
+  \item RSVP physically realizes the abstract programme of
+        Chapters~1--15 (\cref{thm:rsvp-realization}).
+  \item The coupled field system is locally well-posed
+        (\cref{thm:rsvp-well-posed}) and the energy
+        functional $E[\Phi,\mathbf{v},S]$ is non-increasing
+        along admissible lamphrodyne flow
+        (\cref{thm:rsvp-energy-decay}), giving global
+        existence under bounded initial energy
+        (\cref{cor:rsvp-global-exist}).
+  \item Admissible trajectories with bounded entropy
+        production converge to RSVP attractor classes
+        (\cref{thm:rsvp-attractor-conv}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Physics]
+  Show that the lamphrodyne relaxation equation reduces to
+  ordinary gradient descent on $S$ when $\Phi$ is treated
+  as a positive scalar multiplier. Under what condition
+  does relaxation fail to reach a stationary point in
+  finite time?
+\end{exercise}
+
+\begin{exercise}
+  Using the Capacity Conservation Theorem, derive the
+  condition under which a steady state ($\partial\Phi/\partial t = 0$)
+  exists with nonzero transport $\mathbf{v}$.
+\end{exercise}
+
+\begin{exercise}
+  Prove that $V_R = K\Phi e^{-S}$ is, up to choice of $K$,
+  the unique functional form satisfying monotonicity in
+  $\Phi$, anti-monotonicity in $S$, and additivity of $S$
+  across independent regions.
+\end{exercise}
+
+\begin{exercise}[Physics]
+  Show that a static configuration ($\dot\Phi=\dot S=0$,
+  $\mathbf{v}=0$) is always a trivial RSVP attractor in the
+  sense of \cref{defn:rsvp-attractor}. Under what condition
+  on $\rho_\mathcal{C}$ (\cref{defn:constraint-density}) does
+  a non-static attractor exist?
+\end{exercise}
+
+
+RSVP as Interpretation and Realization
+
+\label{sec:ch16-rsvp-status}
+
+A reader trained in physical theory will ask a question
+this chapter has not yet addressed directly: what is the
+empirical status of RSVP?
+
+The distinction-repair-reachability framework motivates
+three fields $(\Phi, \mathbf{v}, S)$ on the grounds that
+something carrying capacity, something transporting it, and
+something accumulating constraint \emph{must} exist in any
+physical realization of the abstract framework. This is
+a philosophical argument for the existence of the formal
+structure, not an empirical derivation of specific field
+content. The Standard Model of particle physics has a
+well-established field content --- gauge bosons, fermions,
+the Higgs field --- with extensive empirical confirmation.
+This chapter does not claim that $(\Phi, \mathbf{v}, S)$
+reduces to Standard Model fields, nor that RSVP makes novel
+empirical predictions distinguishable from standard physics.
+
+\begin{remark}{The Epistemic Status of RSVP}
+  {rsvp-epistemic-status}
+  RSVP should presently be understood in one of two
+  ways, depending on the reader's purposes:
+  \begin{enumerate}[(i)]
+    \item \emph{As a realization framework.} RSVP supplies
+          a geometric language --- distinction capacity,
+          transport, constraint accumulation --- in which the
+          abstract theorems of Parts~I--V acquire a
+          field-theoretic form. It is a physical
+          \emph{interpretation} of the framework, in the
+          same sense that statistical mechanics is an
+          interpretation of thermodynamics: it provides a
+          level of description at which the abstract
+          quantities get explicit physical meaning without
+          claiming to replace the underlying microphysics.
+    \item \emph{As a speculative physical theory.} If one
+          takes the three-field content as a genuine
+          proposal about fundamental physics, then RSVP
+          makes predictions. The Reachability Capacity
+          Theorem implies that regions of high $S$ are
+          gravitationally active; the RSVP Admissibility
+          Theorem implies that entropy-generating processes
+          suppress future reachability. Whether these
+          predictions are empirically distinguishable from
+          general relativity and thermodynamics in any
+          accessible regime is an open question the
+          chapter does not settle.
+  \end{enumerate}
+  Nothing in this book depends on resolving (i) versus (ii).
+  The formal framework is valid under interpretation (i)
+  regardless of whether (ii) is correct.
+\end{remark}
+
+The chapters that follow --- Gravity, Expyrotic Cosmology,
+Cosmological Completion --- proceed under interpretation
+(i): they show how gravitational and cosmological
+structures \emph{can be read} as realizations of the
+abstract distinction-theoretic framework. This is a
+genuine and non-trivial claim. It is not the same as
+claiming that distinction theory \emph{derives} gravity
+from first principles, a claim that would require showing
+that the RSVP field equations are the uniquely correct
+microphysical description. That stronger claim is left as
+an open research question (\cref{app:open-problems}).
+
+
+
+
+\chapter{Gravity as Distinction Dynamics}
+\label{ch:gravity}
+
+\begin{epigraph}{
+  Things do not fall because they are pulled.
+  They fall because the future is larger in that direction.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Derive a gravitational potential from the RSVP
+        capacity field.
+  \item Prove the Capacity Gradient Theorem and the
+        Reachability Gradient Theorem.
+  \item Define admissible geodesics and derive the geodesic
+        equation from the admissibility-weighted metric.
+  \item Prove the Distinction Curvature Theorem and the
+        Distinction Poisson Equation.
+  \item Prove Gravity as Reachability Optimization, the
+        conceptual centrepiece of the chapter.
+  \item Derive the Collapse Threshold Theorem and the
+        Gravity Realization Theorem.
+\end{objectives}
+
+
+From Capacity to Potential
+
+\label{sec:ch17-potential}
+
+Chapter~\ref{ch:rsvp} established that a physical realization
+of reachability geometry requires three fields: capacity,
+transport, and constraint. This chapter asks what becomes of
+ordinary gravitational phenomena once the capacity field
+$\Phi(x,t)$ is taken to be physically real rather than merely
+a bookkeeping device for distinction-producing potential. The
+answer developed below is that gravity need not be introduced
+as an additional postulate at all; it falls out of capacity
+gradients already implied by Chapter~\ref{ch:rsvp}'s field
+content.
+
+General relativity takes a different route to the same
+phenomena. Its central postulate, the Einstein field
+equations, couples spacetime curvature directly to the
+stress-energy tensor $T_{\mu\nu}$: mass and energy are
+posited as the source of curvature, and the equivalence
+principle is introduced separately to explain why
+gravitational and inertial mass coincide
+\parencite{misner1973}. This is an extremely successful
+postulate, confirmed to extraordinary precision, and Chapter~17
+does not compete with General Relativity on its own
+empirical terms. It is, however, a postulate: nothing internal
+to general relativity explains why mass-energy specifically
+should be the quantity sourcing curvature, as opposed to some
+other conserved quantity. Within the architecture of this
+book, gravity emerges as a consequence of gradients in
+distinction-supporting capacity rather than being introduced
+as a fundamental force, and the question general relativity
+answers by postulate --- why does \emph{this} quantity source
+curvature? --- is answered here by derivation: capacity is
+what sources gravitational behaviour because capacity is what
+a distinction-theoretic universe has to move toward reachable
+futures.
+
+The conceptual transition is
+\[
+  \text{Distinction} \to \text{Capacity} \to \text{Reachability}
+  \to \text{Capacity Gradient} \to \text{Gravity}.
+\]
+The chapter's task is to show that motion toward regions of
+higher capacity and lower admissibility loss naturally
+produces gravitational-like behaviour.
+
+\begin{definition}{Capacity Potential}{capacity-potential}
+  Let $\Phi(x,t)$ be the RSVP capacity field. Define the
+  \emph{gravitational potential}
+  \[
+    \Psi(x,t) = -\log \Phi(x,t).
+  \]
+  \index{gravity!capacity potential}
+\end{definition}
+
+The logarithm appears naturally because reachability
+volumes scale multiplicatively (\cref{thm:rsvp-reachability})
+while geometric distances scale additively.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch17-falsifiability}
+
+This chapter's claim is not merely that capacity gradients
+\emph{resemble} gravity, in the loose sense that anything
+producing an attractive tendency resembles gravity. The claim
+is the stronger one that capacity-gradient dynamics, properly
+formalised, reduce to the same equations that already govern
+gravitational behaviour in the relevant limit. This is
+falsifiable in a precise sense. The Distinction Raychaudhuri
+Theorem (\cref{thm:dist-raychaudhuri}), proved later in this
+chapter, derives an analogue of the Raychaudhuri equation ---
+general relativity's central identity governing the focusing
+of geodesic congruences --- from distinction geometry alone.
+If that derivation did not reduce to the standard Raychaudhuri
+equation under the stated limit, or if recovering the standard
+form required additional, unmotivated structure, the claim
+that gravity is a genuine instance of capacity-gradient
+dynamics, rather than a suggestive analogy dressed in similar
+notation, would fail. The chapter is written so that this
+reduction can be checked explicitly rather than taken on
+faith.
+
+
+What This Chapter Establishes
+
+\label{sec:ch17-preview}
+
+By the end of this chapter, the Capacity Gradient and
+Reachability Gradient Theorems will recover Newtonian-style
+acceleration from gradients in $\Phi$, the Distinction
+Curvature Theorem and Distinction Poisson Equation will give
+capacity gradients genuinely geometric structure, and the
+Gravity Realization Theorem will establish the precise sense
+in which this structure realizes gravitational behaviour.
+Chapter~\ref{ch:expyrotic} then asks what this same capacity
+geometry implies at cosmological scales, where gradients are
+not local curiosities but determine the fate of the universe
+as a whole.
+
+
+Capacity Gradients and Acceleration
+
+\label{sec:ch17-gradient}
+
+\begin{theorem}{Capacity Gradient Theorem}{capacity-gradient}
+  The natural acceleration field generated by capacity
+  gradients is
+  \[
+    \mathbf{g} = -\nabla\Psi.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Motion toward greater future reachability corresponds to
+  motion toward larger $\Phi$, by the Reachability Capacity
+  Theorem. Since $\Psi = -\log\Phi$, the steepest ascent of
+  $\Phi$ equals the steepest descent of $\Psi$. Therefore
+  the natural acceleration field is $\mathbf{g} = -\nabla\Psi$.
+\end{proof}
+
+This is the RSVP analogue of $\mathbf{g} = -\nabla\phi$ in
+Newtonian gravitation.
+
+\begin{theorem}{Reachability Gradient Theorem}{reachability-gradient}
+  If $V_R = K\Phi e^{-S}$, then
+  \[
+    \nabla \log V_R = \nabla\log\Phi - \nabla S.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Taking logarithms, $\log V_R = \log K + \log\Phi - S$.
+  Differentiating yields the stated identity.
+\end{proof}
+
+This decomposition is important: it shows that
+gravity-like behaviour arises from two independent
+contributions, \emph{capacity attraction} ($\nabla\log\Phi$)
+and \emph{constraint repulsion} ($-\nabla S$).
+
+
+Admissible Geodesics
+
+\label{sec:ch17-geodesics}
+
+\begin{definition}{Admissible Geodesic}{admissible-geodesic}
+  An \emph{admissible geodesic} satisfies
+  \[
+    \gamma^* = \operatorname*{arg\,max}_\gamma
+    \int_\gamma \Phi e^{-S} \, ds.
+  \]
+  \index{geodesic!admissible|textbf}
+\end{definition}
+
+This is the RSVP replacement for the principle of least
+action: trajectories extremize cumulative reachable
+capacity rather than a Lagrangian postulated independently.
+
+\begin{theorem}{Admissible Geodesic Theorem}{admissible-geodesic-thm}
+  The trajectory maximizing cumulative reachable capacity
+  satisfies
+  \[
+    \frac{d^2 x^i}{dt^2}
+    + \Gamma^i_{jk}\frac{dx^j}{dt}\frac{dx^k}{dt} = 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  The functional $\int_\gamma \Phi e^{-S}\,ds$ defines a
+  metric weighting on state space. Applying Euler--Lagrange
+  variation to this functional yields the associated
+  geodesic equation with Christoffel symbols
+  $\Gamma^i_{jk}$ determined by the induced metric.
+\end{proof}
+
+This theorem is the bridge from RSVP to differential
+geometry.
+
+\begin{definition}{Distinction Metric}{distinction-metric}
+  Define
+  \[
+    g_{ij} = \Phi e^{-S} \delta_{ij}.
+  \]
+  \index{distinction metric|textbf}
+\end{definition}
+
+This is the simplest admissibility-weighted metric
+consistent with \cref{defn:admissible-geodesic}.
+
+
+Curvature from Capacity
+
+\label{sec:ch17-curvature}
+
+\begin{theorem}{Distinction Curvature Theorem}{distinction-curvature}
+  Spatial variation of $\Phi e^{-S}$ induces nonzero
+  curvature.
+\end{theorem}
+
+\begin{proof}
+  If $g_{ij} = \Phi e^{-S}\delta_{ij}$, then derivatives of
+  $g_{ij}$ appear in the Christoffel symbols
+  $\Gamma^k_{ij}$ (\cref{app:math}). Nonconstant
+  $\Phi e^{-S}$ implies nonzero connection coefficients,
+  and nonzero connection coefficients imply nonzero
+  curvature via the Riemann tensor.
+\end{proof}
+
+This provides the RSVP analogue of curved spacetime, with
+curvature sourced not by stress-energy directly but by
+spatial variation in distinction capacity and constraint.
+
+
+The Weak-Field Limit
+
+\label{sec:ch17-weakfield}
+
+\begin{definition}{Distinction Density}{distinction-density-defn}
+  Let $\rho_D$ denote the local \emph{distinction density}:
+  the rate at which distinctions are produced or destroyed
+  per unit volume.
+  \index{distinction!density|textbf}
+\end{definition}
+
+\begin{theorem}{Distinction Poisson Equation}{distinction-poisson}
+  In the weak-field regime,
+  \[
+    \nabla^2 \Psi = \kappa \rho_D.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Assume weak variation $\Phi = \Phi_0 + \delta\Phi$ about
+  a background value $\Phi_0$. Linearizing
+  $\Psi = -\log\Phi$ gives $\delta\Psi \approx
+  -\delta\Phi/\Phi_0$. The Capacity Conservation Theorem
+  (\cref{thm:capacity-conservation}) implies that the
+  divergence of the capacity flux is proportional to local
+  distinction density $\rho_D$. Combining these gives
+  $\nabla^2\Psi = \kappa\rho_D$ for an appropriate constant
+  $\kappa$.
+\end{proof}
+
+This gives the Newtonian limit of RSVP gravity: when
+constraint variation is small, the Distinction Poisson
+Equation reduces to the ordinary Poisson equation for
+gravitational potential.
+
+\begin{definition}{Effective Mass}{effective-mass}
+  Define
+  \[
+    M_D = \int_\Omega \rho_D \, dV.
+  \]
+\end{definition}
+
+Mass becomes integrated distinction density: a body with
+large $M_D$ is a region where distinctions are densely
+produced or anchored.
+
+\begin{theorem}{Mass--Capacity Theorem}{mass-capacity}
+  Regions of high distinction density generate capacity
+  gradients.
+\end{theorem}
+
+\begin{proof}
+  By the Distinction Poisson Equation, positive $\rho_D$
+  produces nontrivial solutions for $\Psi$. These solutions
+  induce gradients in $\Phi$ via $\Psi = -\log\Phi$.
+\end{proof}
+
+
+Gravity as Reachability Optimization
+
+\label{sec:ch17-optimization}
+
+The next theorem is the conceptual heart of the chapter.
+
+\begin{theorem}{Gravity as Reachability Optimization}{gravity-reachability}
+  Gravitational attraction is motion toward regions of
+  maximal future reachability.
+\end{theorem}
+
+\begin{proof}
+  By $V_R = K\Phi e^{-S}$ (\cref{thm:rsvp-reachability}),
+  reachable volume increases with $\Phi$. The acceleration
+  field $\mathbf{g} = -\nabla\Psi = \nabla\log\Phi$
+  (\cref{thm:capacity-gradient}) points toward increasing
+  capacity. Therefore motion under $\mathbf{g}$ follows the
+  direction of increasing reachable future volume.
+\end{proof}
+
+\begin{remark}{The conceptual centrepiece}{gravity-remark}
+  This is the theorem that makes gravity a consequence of
+  admissibility geometry rather than a primitive force.
+  Bodies do not attract one another because of an
+  irreducible gravitational charge; they move toward one
+  another because that motion follows the gradient of
+  future possibility.
+\end{remark}
+
+
+Collapse
+
+\label{sec:ch17-collapse}
+
+\begin{theorem}{Collapse Threshold Theorem}{collapse-threshold}
+  If $S$ grows faster than $\log\Phi$, then
+  \[
+    V_R = K\Phi e^{-S} \to 0.
+  \]
+\end{theorem}
+
+\begin{proof}
+  Immediate from $V_R = K\Phi e^{-S}$: exponential growth
+  of $S$ dominates logarithmic growth of $\Phi$, forcing
+  $V_R \to 0$.
+\end{proof}
+
+This creates a natural route into black-hole-like states:
+regions where constraint accumulation outpaces capacity
+growth become regions of vanishing reachability, without
+requiring an independent postulate of horizon formation.
+
+
+Curvature--Recoverability Correspondence
+
+\label{sec:ch17-curv-reco}
+
+The preceding sections established that gravity is a
+consequence of capacity gradients. This section sharpens
+that claim into a precise correspondence between
+distinction-density curvature and the recoverability
+machinery of Chapter~\ref{ch:recoverability}, and derives
+an analogue of the Raychaudhuri equation governing the
+focusing of distinction-bundle trajectories.
+
+\begin{definition}{Distinction-Density Curvature}{dist-density-curvature}
+  Let $\rho_D(x)$ be the local distinction density of
+  \cref{defn:distinction-density-defn}. Define the
+  \emph{distinction-density curvature}
+  \[
+    \kappa_D(x) = -\Delta\rho_D(x),
+  \]
+  where $\Delta$ is the Laplace--Beltrami operator on $X$.
+  \index{curvature!distinction-density|textbf}
+\end{definition}
+
+\begin{theorem}{Curvature--Recoverability Correspondence Theorem}
+  {curv-reco-corr}
+  $\kappa_D(x) > 0$ at $x$ if and only if $x$ is a local
+  maximum of recoverability density: nearby distinctions
+  are, on average, more reconstructible at $x$ than at
+  neighbouring points.
+\end{theorem}
+
+\begin{proof}
+  By the Law of Recoverability (\cref{thm:reco-law}),
+  recoverability of a distinction is determined by the
+  density of accessible reconstruction pathways in its
+  neighbourhood, which by \cref{thm:mass-capacity} is itself
+  governed by $\rho_D$. A point $x$ with $\kappa_D(x) =
+  -\Delta\rho_D(x) > 0$ is, by the standard interpretation of
+  the negative Laplacian, a local maximum of $\rho_D$
+  (concave from above), meaning distinction density --- and
+  hence reconstruction-pathway density --- is locally
+  peaked at $x$ relative to its neighbours. By the
+  Reconstruction Theorem (\cref{thm:reconstruction}), peaked
+  pathway density corresponds to peaked recoverability.
+  Conversely, $\kappa_D(x) \le 0$ corresponds to $x$ being a
+  saddle or local minimum of $\rho_D$, where recoverability
+  is no higher than at neighbouring points.
+\end{proof}
+
+\begin{theorem}{Geodesic Concentration Theorem}{geodesic-concentration}
+  Admissible geodesics (\cref{defn:admissible-geodesic})
+  satisfy
+  \[
+    \frac{d^2 x^i}{d\tau^2} = -\nabla^i \rho_D,
+  \]
+  to leading order in the weak-field regime: trajectories
+  accelerate toward regions of higher distinction density.
+\end{theorem}
+
+\begin{proof}
+  By the Distinction Poisson Equation
+  (\cref{thm:distinction-poisson}), $\nabla^2\Psi =
+  \kappa\rho_D$ in the weak-field regime, so
+  $\Psi$ is sourced by $\rho_D$. The Capacity Gradient
+  Theorem (\cref{thm:capacity-gradient}) gives
+  $\mathbf{g} = -\nabla\Psi$ as the acceleration field along
+  admissible geodesics (\cref{thm:admissible-geodesic-thm}).
+  Combining, the leading-order acceleration is proportional
+  to $-\nabla\Psi$, which by the Poisson relation is sourced
+  by $-\nabla^i\rho_D$ up to the constant $\kappa$, absorbed
+  here into the parametrisation of $\tau$. This recovers the
+  stated geodesic equation.
+\end{proof}
+
+\begin{definition}{Distinction-Bundle Expansion}{dist-bundle-expansion}
+  For a congruence of admissible geodesics with tangent
+  field $u^i$, define the \emph{expansion scalar}
+  $\theta = \nabla_i u^i$, the \emph{shear} $\sigma$, and the
+  \emph{twist} $\omega$, in direct analogy with the
+  corresponding quantities for geodesic congruences in
+  Riemannian geometry, computed with respect to the
+  distinction metric $g_{ij} = \Phi e^{-S}\delta_{ij}$
+  (\cref{defn:distinction-metric}).
+\end{definition}
+
+\begin{theorem}{Distinction Raychaudhuri Theorem}{dist-raychaudhuri}
+  Along a congruence of admissible geodesics,
+  \[
+    \frac{d\theta}{d\tau}
+    = -\frac{1}{3}\theta^2 - \sigma^2 + \omega^2 - \kappa_D.
+  \]
+\end{theorem}
+
+\begin{proof}
+  The identity is the standard Raychaudhuri equation for a
+  geodesic congruence under metric $g_{ij}$
+  (\cref{defn:distinction-metric}), with the Ricci-curvature
+  source term replaced by $\kappa_D$. By the Distinction
+  Curvature Theorem (\cref{thm:distinction-curvature}),
+  spatial variation of $\Phi e^{-S}$ induces the curvature of
+  $g_{ij}$; by \cref{thm:curv-reco-corr}, this curvature is
+  governed at leading order by $\kappa_D$. Substituting
+  $\kappa_D$ for the Ricci source term in the standard
+  derivation (via the Jacobi equation for geodesic
+  deviation, applied to the metric of
+  \cref{defn:distinction-metric}) yields the stated
+  equation.
+\end{proof}
+
+\begin{corollary}{Recoverability Focusing}{reco-focusing}
+  If $\kappa_D \ge 0$ throughout a region and the congruence
+  is initially converging ($\theta_0 < 0$) with
+  $\sigma^2 \ge \omega^2$, then $\theta \to -\infty$ in
+  finite affine parameter: the congruence focuses.
+\end{corollary}
+
+\begin{proof}
+  Under the stated hypotheses, every term on the right-hand
+  side of \cref{thm:dist-raychaudhuri} is non-positive, so
+  $d\theta/d\tau \le -\theta^2/3$. This Riccati-type
+  inequality forces $\theta \to -\infty$ in finite $\tau$
+  whenever $\theta_0 < 0$, by the standard comparison
+  argument for the equation $\dot y = -y^2/3$.
+\end{proof}
+
+\begin{remark}{Focusing as collapse}{focusing-collapse-remark}
+  Recoverability Focusing is the distinction-geometric
+  counterpart of geodesic focusing in general relativity: it
+  shows that regions of high distinction density
+  ($\kappa_D \ge 0$) actively concentrate admissible
+  trajectories, providing the precise mechanism underlying
+  the Collapse Threshold Theorem
+  (\cref{thm:collapse-threshold}) at the level of individual
+  geodesic congruences rather than only at the level of
+  aggregate reachability volume.
+\end{remark}
+
+\begin{remark}{Distinction Raychaudhuri vs.\ the Standard
+  Equation}{raychaudhuri-status}
+  The Distinction Raychaudhuri Theorem replaces the
+  standard Ricci-curvature source term with
+  $\kappa_D = -\Delta\rho_D$. The result is a formally
+  analogous equation, but the physical correspondence
+  is not established in the following sense: in general
+  relativity, the Ricci source term is related to the
+  stress-energy tensor through the Einstein field equations,
+  which are independently motivated by the principle of
+  general covariance and observational tests of GR. The
+  theorem above does not show that $\kappa_D$ has the same
+  observational content as the standard Ricci term. In the
+  weak-field, low-distinction-density limit, the
+  distinction metric $g_{ij}$ approaches the Minkowski
+  metric and $\kappa_D$ approaches zero, so the theorem
+  becomes the standard flat-spacetime Raychaudhuri equation
+  --- consistent with GR but not differentiating.
+  Whether there exists a non-trivial regime in which RSVP
+  and GR make different focusing predictions is an open
+  question (\cref{app:open-problems}).
+\end{remark}
+
+
+Gravity Realized
+
+\label{sec:ch17-realization}
+
+\begin{theorem}{Gravity Realization Theorem}{gravity-realization}
+  Gravity is the geometric manifestation of capacity
+  gradients within the admissibility manifold.
+\end{theorem}
+
+\begin{proof}
+  By \cref{thm:mass-capacity,thm:distinction-curvature,thm:capacity-gradient,thm:gravity-reachability,thm:curv-reco-corr,thm:geodesic-concentration},
+  the chain
+  \[
+    \rho_D \to \Phi \to g_{ij} \to \Psi \to \mathbf{g}
+  \]
+  is well defined at each step, and each arrow is
+  established by a theorem of this chapter. The composite
+  map realizes gravitational attraction as a consequence
+  of distinction geometry, and the Distinction Raychaudhuri
+  Theorem shows that this geometric attraction focuses
+  trajectories in exactly the manner expected of a genuine
+  curvature-sourced force.
+\end{proof}
+
+At this point Chapter~\ref{ch:expyrotic} can introduce
+expyrotic cosmology. The crucial move there is to
+interpret cosmic evolution not as expansion of pre-existing
+space but as evolution of the global admissibility
+manifold $\mathcal{A}(t)$, with cosmological cycles
+corresponding to repeated collapse and regeneration of
+distinction-producing capacity. That chapter is where RSVP
+becomes a cosmology rather than merely a field theory.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item The gravitational potential is
+        $\Psi = -\log\Phi$ (\cref{defn:capacity-potential}).
+  \item Acceleration follows the capacity gradient:
+        $\mathbf{g} = -\nabla\Psi$
+        (\cref{thm:capacity-gradient}).
+  \item Admissible geodesics extremize cumulative reachable
+        capacity and satisfy the standard geodesic equation
+        under the distinction metric $g_{ij} = \Phi e^{-S}\delta_{ij}$
+        (\cref{thm:admissible-geodesic-thm}).
+  \item Spatial variation in capacity and constraint
+        induces curvature (\cref{thm:distinction-curvature}).
+  \item In the weak-field limit, RSVP gravity reduces to
+        the ordinary Poisson equation
+        (\cref{thm:distinction-poisson}).
+  \item Gravitational attraction is motion toward maximal
+        future reachability
+        (\cref{thm:gravity-reachability}) ---
+        the conceptual centrepiece of the chapter.
+  \item Runaway constraint growth produces collapse
+        (\cref{thm:collapse-threshold}).
+  \item Distinction-density curvature $\kappa_D$
+        corresponds exactly to local peaks of recoverability
+        density (\cref{thm:curv-reco-corr}), and sources
+        geodesic acceleration directly
+        (\cref{thm:geodesic-concentration}).
+  \item Geodesic congruences obey a distinction-theoretic
+        Raychaudhuri equation
+        (\cref{thm:dist-raychaudhuri}), giving a precise
+        focusing mechanism underlying gravitational collapse
+        (\cref{cor:reco-focusing}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}[Physics]
+  Verify that the Distinction Poisson Equation reduces
+  exactly to the Newtonian Poisson equation
+  $\nabla^2\phi = 4\pi G\rho$ under an appropriate
+  identification of $\kappa$ and $\rho_D$.
+\end{exercise}
+
+\begin{exercise}
+  Using the Collapse Threshold Theorem, characterize the
+  boundary in $(\Phi, S)$-space separating collapsing from
+  non-collapsing regions.
+\end{exercise}
+
+\begin{exercise}
+  Show that the admissible geodesic equation reduces to a
+  straight line when $\Phi e^{-S}$ is constant throughout
+  the domain. Interpret this physically.
+\end{exercise}
+
+\begin{exercise}[Physics]
+  Using \cref{cor:reco-focusing}, estimate the affine
+  parameter at which focusing occurs given initial expansion
+  $\theta_0 < 0$ and $\sigma=\omega=0$. Compare to the
+  analogous estimate in the standard Raychaudhuri equation
+  of general relativity.
+\end{exercise}
+
+
+
+
+\chapter{Expyrotic Cosmology}
+\label{ch:expyrotic}
+
+\begin{epigraph}{
+  The question is no longer how large the universe is.
+  The question is how much future remains reachable.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define cosmological admissible volume and
+        cosmological constraint.
+  \item Prove the Cosmological Reachability Theorem.
+  \item Prove the Admissibility Collapse Theorem and define
+        the admissibility singularity.
+  \item Prove the Expyrotic Necessity Theorem and the
+        Expyrotic Cycle Theorem.
+  \item Derive the Cosmological Evolution Equation and the
+        Apparent Expansion Theorem.
+  \item Prove the Expyrotic Admissibility Theorem.
+\end{objectives}

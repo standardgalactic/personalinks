@@ -1,0 +1,48 @@
+**confluent(c: Config, ops: List[Operation]) → bool**
+
+*Specification*
+
+```
+confluent(c, [op₁, op₂, …, opₙ]) = true ⇔ 
+   ∃ result such that ∀ permutations π of ops:
+      eval_program(c, π(ops)) = result
+```
+
+**Explanation**
+
+- **Goal**: Determine whether the order in which a list of operations (`ops[5D[K
+(`ops`) is applied to a configuration `c` actually matters.
+- **Outcome**:  
+  - If there exists *any* permutation of the operation list that leads to t[1D[K
+the same final state (or “result”), then the operations are considered conf[4D[K
+confluent for this configuration.  
+  - The specification explicitly requires checking **all** possible permuta[7D[K
+permutations (`∀ π`). Because the number of permutations grows factorially [K
+with the length of `ops` (i.e., O(n!)), the algorithm is computationally ex[2D[K
+expensive, quadratic in complexity relative to the evaluation cost.
+- **Non‑authoritative**: This function *only* checks for equivalence of res[3D[K
+results; it does not modify any state or assert semantic validity. If a non[3D[K
+non‑confluent scenario exists (i.e., some permutation yields a different ou[2D[K
+outcome), `confluent` returns `false`.
+
+**Complexity**
+
+- The worst‑case time complexity is O(n! × T(eval)), where:
+  - *n!* is the factorial growth due to evaluating every possible ordering [K
+of the operations.
+  - *T(eval)* represents the cost of executing an evaluation step (`eval_pr[9D[K
+(`eval_program`) for each permutation.
+
+**Purpose**
+
+- To detect whether a sequence of operations can be applied in any order wi[2D[K
+without affecting the final state, which is crucial for reasoning about fun[3D[K
+functional equivalence and simplification of execution plans.
+
+**Does NOT**
+
+- Authorize or enforce any particular ordering of operations.
+- Modify the underlying configuration `c` or its history.
+- Define what “semantic validity” means; non‑confluence merely indicates a [K
+lack of guarantee that results are independent of order, not an error condi[5D[K
+condition.

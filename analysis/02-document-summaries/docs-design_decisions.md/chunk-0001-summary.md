@@ -1,0 +1,140 @@
+**DDR‑009 – Benchmark Structural Variables Not Wall‑Clock**
+
+| Item | Detail |
+|------|--------|
+| **Date** | 2026‑08‑13 |
+| **Status** | Accepted |
+| **Theory Status** | OVERSOUL §9 (benchmark as a function of structural va[2D[K
+variables, not merely wall‑clock time) |
+| **Context** | Performance benchmarks could be measured in three ways: <br[3D[K
+<br>1. Absolute wall‑clock time with strict pass/fail thresholds.<br>2. Str[3D[K
+Structural scaling \(T(|h|,\;|O|,\;k,\;b)|\) where:<br>   • \(|h|\) = histo[5D[K
+history length<br>• \(|O|\) = option‑space cardinality<br>• \(k\) = observa[7D[K
+observational horizon<br>• \(b\) = branching factor.<br>3. Relative perform[7D[K
+performance vs a baseline run. |
+| **Decision** | Measure *structural scaling* (the function of \(|h|\), \(|[15D[K
+of \(|h|\), \(|O|\), \(k\), \(b\)) rather than raw wall‑clock time, and use[3D[K
+use generous “sanity‑check” thresholds that catch only catastrophic regress[7D[K
+regressions. |
+| **Rationale** | • **OVERSOUL §9** mandates benchmarking by structural var[3D[K
+variables to achieve hardware independence.<br>• Modern hardware yields dif[3D[K
+different clock speeds; a scaling metric reveals algorithmic complexity ind[3D[K
+independent of the machine.<br>• Storing raw wall‑clock times can mislead u[1D[K
+users on slower or faster machines.<br>• Generous thresholds (e.g., 3–5 ms [K
+for 10k options, 2–3 ms for ~100 history ops) ensure only true performance [K
+catastrophes are flagged. |
+| **Alternatives Considered** | 1. **Strict wall‑clock thresholds** (`asser[7D[K
+(`assert time < 100 ms`).<br>   *Rejected*: brittle on different hardware, [K
+CI can become flaky.<br>2. **No threshold at all**: record times only.<br> [K
+  *Rejected*: silent regressions would go unnoticed.<br>3. **Relative to ba[2D[K
+baseline**: compare each run to a previous one.<br>   *Deferred*: requires [K
+baseline storage (Phase A). |
+| **Consequences** | ✓ Reveals where the algorithmic complexity comes from.[5D[K
+from.<br>✓ Provides hardware‑independent insights that are useful for plann[5D[K
+planning and debugging.<br>✗ Does not catch gradual performance degradation[11D[K
+degradation; only catastrophic regressions are detected. |
+| **Documentation** | • **tests/test_performance.py**: comprehensive docstr[6D[K
+docstring explains this approach.<br>• **FUTURE_DIRECTIONS.md**: outlines f[1D[K
+future work (baseline machinery) in Phase A. |
+| **Thresholds (sanity‑check example)** | ```python\n# Sanity checks – only[4D[K
+only catastrophic regressions are flagged:\n# - 10k options REFUSE: ~3–5 ms[7D[K
+~3–5 ms acceptable\n# - 100 history operations: ~2–3 ms acceptable\n``` |
+
+---
+
+### DDR‑010 – Pre‑commit Hooks Exclude Mypy
+
+| Item | Detail |
+|------|--------|
+| **Date** | 2026‑08‑11 |
+| **Status** | Accepted |
+| **Theory Status** | Infrastructure choice (speed vs. safety) |
+| **Context** | Pre‑commit hooks can be used for local checks and CI verifi[6D[K
+verification; deciding where to run mypy is a trade‑off between performance[11D[K
+performance and early error detection. |
+| **Decision** | Run **mypy only in the CI pipeline**, not locally during `[1D[K
+`git commit`. |
+| **Rationale** | • **Speed**: MyPy adds ~3–5 seconds per run; keeping it o[1D[K
+out of pre‑commit keeps commits fast for exploratory work.<br>• **Philosoph[11D[K
+**Philosophy**: Pre‑commit should flag only “obvious local problems” (forma[6D[K
+(formatting, syntax). Type errors are a global consistency check.<br>• **It[4D[K
+**Iteration flexibility**: Local workflow remains unblocked by type‑checkin[12D[K
+type‑checking latency. |
+| **Alternatives Considered** | 1. **Run mypy locally on every commit**.<br[12D[K
+commit**.<br>   *Rejected*: slows down iterative development.<br>2. **Disab[7D[K
+**Disable mypy entirely** (skip static typing).<br>   *Rejected*: type safe[4D[K
+safety is valuable for the core library.<br>3. **Make mypy optional** (user[5D[K
+(user can enable via flag).<br>   *Deferred*: could be added later but not [K
+default now. |
+| **Consequences** | ✓ Fast pre‑commit (< 1 s) → smoother development workf[5D[K
+workflow.<br>✓ Type checking still enforced in CI, guaranteeing only regres[6D[K
+regressions that survive the whole pipeline are merged.<br>⚠ Type errors ma[2D[K
+may be caught later (CI), not immediately during local commits. |
+| **Configuration** | ```yaml\n# .pre-commit-config.yaml\nrepos:\n  - repo:[5D[K
+repo: https://github.com/astral-sh/ruff-pre-commit\n    hooks:\n      - id:[3D[K
+id: ruff\n      - id: ruff-format\n  # NO mypy here – runs in CI\n``` |
+| **CI Workflow** | ```yaml\n# .github/workflows/lint.yml\nname: Type check[5D[K
+check with mypy\ngroup: \u2018Pre‑commit verification\u2019\nrun: make type[4D[K
+type-check\n``` |
+| **Documentation** | • **CONTRIBUTING.md**: explains the pre‑commit vs. CI[2D[K
+CI philosophy.<br>• **.pre-commit-config.yaml**: includes a comment explain[7D[K
+explaining why mypy is omitted from the local phase. |
+
+---
+
+### DDR‑011 – Python 3.12 + 3.13 Both Required
+
+| Item | Detail |
+|------|--------|
+| **Date** | 2026‑08‑11 |
+| **Status** | Accepted |
+| **Theory Status** | Infrastructure choice (future‑ready, modern syntax) |[1D[K
+|
+| **Context** | Decision on which Python versions to support for the proje[5D[K
+project. Options: <br>1. 3.12 only.<br>2. 3.11–3.13 (broad compatibility).<[16D[K
+compatibility).<br>3. Both 3.12 and 3.13 (current stable releases). |
+| **Decision** | Support **Python 3.12 and Python 3.13** – both must pass t[1D[K
+the test matrix in CI to be considered compliant. |
+| **Rationale** | • The project targets a release window around August 2026[11D[K
+August 2026; 3.13 is already stable.<br>• Modern language features (e.g., n[1D[K
+native union syntax `str \| None`) become available only from Python 3.10 o[1D[K
+onward, and the next releases bring additional safety guarantees.<br>• Enab[4D[K
+Enabling both versions in CI ensures that new users with up‑to‑date interpr[7D[K
+interpreters can run all tests without version mismatches. |
+| **Alternatives Considered** | 1. **3.11+ only**: broader compatibility bu[2D[K
+but increases maintenance burden.<br>   *Rejected*: user explicitly wants m[1D[K
+modern Python support, not “any recent”.<br>2. **3.12 only**: simplifies CI[2D[K
+CI matrix.<br>   *Rejected*: would exclude users on the latest stable inter[5D[K
+interpreter and limit test coverage for 3.13‑specific issues (e.g., type‑an[7D[K
+type‑annotation changes). |
+| **Consequences** | ✓ Enables use of new language features in development/[12D[K
+development/testing.<br>✓ Future‑proofs the codebase to avoid deprecation w[1D[K
+warnings later.<br>⚠ Increases CI resource usage (two Python versions must [K
+be built).<br>⚠ Users on older interpreters may need manual environment set[3D[K
+setup. |
+| **pyproject.toml** | ```toml\n[project]\nrequires-python = \">=3.12\"\n``[14D[K
+\">=3.12\"\n``` |
+| **CI Strategy** | ```yaml\nstrategy:\n  matrix:\n    python-version: [\"3[4D[K
+[\"3.12\", \"3.13\"]\n``` |
+| **Documentation** | • **README.md**: Requirements section specifies “Pyth[5D[K
+“Python 3.12+”.<br>• **CONTRIBUTING.md**: Development setup notes that loca[4D[K
+local environments should mirror the CI matrix (e.g., `python -m venv .venv[5D[K
+.venv && source .venv/bin/activate && pip install -r requirements.txt`). |
+
+---
+
+### How to Use These DDRs
+
+1. **Reference** them in relevant README sections or issue templates when d[1D[K
+discussing implementation trade‑offs.
+2. **Update** the status (e.g., from *Proposed* → *Accepted*) only after co[2D[K
+consensus is reached and documented changes are merged into code.
+3. **Maintain** the associated configuration files (`pyproject.toml`, `.pre[5D[K
+`.pre-commit-config.yaml`, workflow YAMLs) to reflect any future policy shi[3D[K
+shifts.
+
+--- 
+
+*All three DDRs represent concrete, high‑impact decisions that have been ve[2D[K
+vetted against project goals (speed, safety, modern compatibility), alterna[7D[K
+alternatives, and their downstream consequences.*

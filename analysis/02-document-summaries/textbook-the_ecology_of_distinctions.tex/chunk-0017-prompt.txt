@@ -1,15 +1,195 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 17 of 22 of a document called
+"textbook-the_ecology_of_distinctions.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Entropy – a geometric view**
 
-TEXT
-====
+Entropy is not merely a thermodynamic quantity; it can be understood as a m[1D[K
+measure of *hidden multiplicity*—the number of unresolved possibilities tha[3D[K
+that remain beneath any given distinction. In this sense, entropy quantifie[9D[K
+quantifies how many underlying states are still compatible with the observa[7D[K
+observable classification we have imposed.
+
+---
+
+### Shannon Entropy
+
+For a finite discrete probability space  
+
+\[
+X=\{x_{1},\dots ,x_{n}\},
+\qquad
+P=(p_{1},\dots ,p_{n}),
+\]
+
+the **Shannon entropy** is defined as  
+
+\[
+H(X)=-\sum_{i=1}^{n} p_i \log p_i .
+\]
+
+The term \(-\log p_i\) (the *surprisal* of outcome \(x_i\)) reflects that r[1D[K
+rare events carry more information because they resolve more uncertainty. H[1D[K
+Hence,
+
+\[
+H(X)=\mathbb{E}\big[-\log P\big],
+\]
+
+i.e., entropy measures the expected amount of distinguishability gained by [K
+observing an outcome.
+
+---
+
+### Uniform Distinction Spaces
+
+If every state is equally likely (\(p_i=1/n\)), the Shannon formula simplif[7D[K
+simplifies:
+
+\[
+H(X)=-n\left(\frac{1}{n}\log\frac{1}{n}\right)=\log n .
+\]
+
+**Maximum‑Entropy Principle:**  
+Among all probability distributions on a set of size \(n\), the uniform dis[3D[K
+distribution maximizes entropy. This explains why entropy is often interpre[8D[K
+interpreted as *uncertainty*: more evenly distributed (less biased) probabi[7D[K
+probabilities correspond to higher uncertainty.
+
+---
+
+### Conditional Entropy
+
+When additional information \(Y\) becomes available, the remaining uncertai[8D[K
+uncertainty about \(X\) is captured by **conditional entropy**:
+
+\[
+H(X|Y)=H(X,Y)-H(Y).
+\]
+
+It measures the hidden multiplicity that persists after observing \(Y\). Ob[2D[K
+Observations reduce hidden structure (information reduces entropy).
+
+---
+
+### Mutual Information
+
+Mutual information quantifies shared distinction structures between two var[3D[K
+variables:
+
+\[
+I(X;Y)=H(X)+H(Y)-H(X,Y).
+\]
+
+Interpretation: it tells how much knowing one variable constrains the other[5D[K
+other—i.e., they share some distinguishable pattern.
+
+**Non‑negativity (Second Law of Information Theory):**
+
+\[
+I(X;Y)\ge 0,
+\]
+
+with equality only when \(P(X,Y)=P(X)P(Y)\). This mirrors the physical Seco[4D[K
+Second Law: information cannot be created by observation alone.
+
+---
+
+### Relative Entropy and Divergence
+
+The **Kullback–Leibler divergence** between distributions \(P\) and \(Q\) i[1D[K
+is
+
+\[
+D_{\mathrm{KL}}(P|Q)=\sum_i P_i \log\frac{P_i}{Q_i}.
+\]
+
+Unlike a true metric, it need not be symmetric or satisfy the triangle ineq[4D[K
+inequality. However, its non‑negativity (the **Gibbs Inequality**) is cruci[5D[K
+crucial:
+
+\[
+D_{\mathrm{KL}}(P|Q)\ge0,
+\qquad
+I(X;Y)=D_{\mathrm{KL}}(P(X,Y)|P(X)P(Y)).
+\]
+
+---
+
+### Boltzmann Entropy
+
+For a macrostate compatible with \(\Omega\) microstates, the **Boltzmann en[2D[K
+entropy** is
+
+\[
+S_B = k_B\log\Omega .
+\]
+
+Here “macrostate” represents a coarse distinction (e.g., temperature), whil[4D[K
+while the hidden microstates capture the *hidden multiplicity* beneath that[4D[K
+that classification. Boltzmann and distinction entropies differ only by int[3D[K
+interpretation—both are logarithmic measures of multiplicity.
+
+---
+
+### Distinction Entropy
+
+Consider a partition \(\{P_1,\dots ,P_n\}\) with cell sizes \(m_i=|P_i|\). [K
+The **distinction entropy** is
+
+\[
+S_D=\sum_{i} p_i \log m_i .
+\]
+
+When all cells are singletons (\(m_i=1\)), \(S_D=0\) (perfect distinguishab[13D[K
+distinguishability), showing that distinction entropy reflects how unresolv[8D[K
+unresolved structure remains hidden.
+
+---
+
+### Entropy Production in Time‑Evolved Systems
+
+For a system where distinctness erodes at rate \(\lambda\),
+
+\[
+\frac{dD}{dt}=-\lambda D \;\Longrightarrow\; D(t)=D_0 e^{-\lambda t}.
+\]
+
+Defining entropy as \(S = -D\) yields the monotonic increase
+
+\[
+\frac{dS}{dt}=+\lambda D > 0 .
+\]
+
+Thus, progressive distinction erosion (or any irreversible process) leads t[1D[K
+to **monotonic entropy production**, embodying a geometric perspective on t[1D[K
+the Second Law of Thermodynamics.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \begin{remark}{Two views of one hierarchy}{two-views-hierarchy}
   The Preservation Hierarchy Theorem of

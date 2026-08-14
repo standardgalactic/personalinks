@@ -1,161 +1,103 @@
 **Foundational Commitments and Stable Terminology**
 
-The material developed in this monograph spans pedagogy, cognitive science,[8D[K
-science, thermodynamics, topology, philosophy of science, and the theory of[2D[K
-of computation. Such breadth invites terminological drift: the same word ac[2D[K
-acquiring subtly different meanings in different chapters, the same concept[7D[K
-concept appearing under different names in different domains, analogies har[3D[K
-hardening imperceptibly into identity claims. The present section is design[6D[K
-designed to prevent that drift. It states, explicitly and in one place, the[3D[K
-the framework’s core ontological commitments, its central distinctions, and[3D[K
-and the precise senses in which its key terms are used. Readers are encoura[7D[K
-encouraged to return to it when later chapters use terms in ways that might[5D[K
-might otherwise seem ambiguous.
-
----
-
-### 1. The Primary Register of Spherepop  
-
-Spherepop is not primarily a notation system, nor primarily a formal calcul[6D[K
-calculus, nor primarily a philosophy of science. It is a **theory of visibl[6D[K
-visible structure**: a systematic account of why constrained systems—physic[14D[K
-systems—physical, cognitive, computational, semantic—become intelligible th[2D[K
+Spherepop is a theory of *visible structure*: it explains how constrained s[1D[K
+systems (physical, cognitive, computational, semantic) become intelligible [K
 through the preservation of navigable relational structure across transform[9D[K
-transformations, and become unintelligible through its erasure.
+transformations, and why erasing that visible structure makes them unintell[8D[K
+unintelligible. The notation, operators, geometric models, action formalism[9D[K
+formalism, and philosophical arguments developed in this monograph are not [K
+separate inventions but local expressions of a single underlying claim:
 
-**Core Claim:**  
-*Meaning, understanding, and computation arise through navigable transforma[10D[K
+> **Meaning, understanding, and computation arise through navigable transfo[7D[K
 transformations within constrained spaces of possibility. Preserving visibl[6D[K
 visible structure across those transformations is essential for genuine int[3D[K
-intelligibility.*
-
-This claim operates simultaneously as a pedagogical principle (visible stru[4D[K
-structure reduces cognitive load), a semantic principle (meaning is relatio[7D[K
-relational and navigational, not atomistic), a computational principle (eva[4D[K
-(evaluation histories contain information that terminal results do not), a [K
-geometric principle (nested scope and dependency are more naturally express[7D[K
-expressed spatially than linearly), and a philosophical principle (modern t[1D[K
-technical systems increasingly optimize prediction at the cost of intelligi[9D[K
-intelligibility and provenance).
-
-No register is primary; each provides evidence for the others.
+intelligibility.**
 
 ---
 
-### 2. Three Kinds of Geometry  
+### Three Kinds of Geometry
 
-The monograph makes extensive use of geometric language: admissibility mani[4D[K
-manifolds, semantic configuration spaces, constraint fields, curvature in s[1D[K
-semantic space, topological scope, etc. It is essential that these uses be [K
-distinguished carefully, because they operate at three different levels.
+1. **Representational geometry** – Visual aids (spatial diagrams, nested bu[2D[K
+bubbles, topological pictures) used solely to make structural relations eas[3D[K
+easier to perceive and remember. This claim rests on empirical observations[12D[K
+observations that spatial representations often support comprehension bette[5D[K
+better than linear ones.
 
-**Representational Geometry:**  
-Geometry as a visualization aid—using spatial diagrams, nested bubbles, and[3D[K
-and topological pictures to make structural relations easier to perceive an[2D[K
-and remember. This is the most conservative claim, requiring no commitment [K
-beyond empirical observation that spatial representations often support com[3D[K
-comprehension better than linear ones.
+2. **Cognitive geometry** – The stronger claim that spatial cognition is st[2D[K
+structurally prior to symbolic cognition in human intelligence; containment[11D[K
+containment, nesting, locality, trajectory, and boundary are among the earl[4D[K
+earliest neurologically robust cognitive structures. This principle is defe[4D[K
+defended in Part II through neuroscience of program comprehension, working [K
+memory, and semantic grouping.
 
-**Cognitive Geometry:**  
-The stronger claim that spatial cognition is structurally prior to symbolic[8D[K
-symbolic cognition in human intelligence: containment, nesting, locality, t[1D[K
-trajectory, and boundary are among the earliest and most neurologically rob[3D[K
-robust cognitive structures, and notation systems grounded in these structu[7D[K
-structures therefore recruit cognitive resources that purely symbolic syste[5D[K
-systems leave unused. This claim is empirical and defended in Part II by ap[2D[K
-appeal to neuroscience of program comprehension, working memory, and semant[6D[K
-semantic grouping.
+3. **Physical geometry** – The claim that relational constraint structure i[1D[K
+is intrinsic to physical law: physics is organized not merely describable g[1D[K
+geometrically but through *constraint manifolds*, admissible trajectories, [K
+symmetries, and variational principles literally, as in thermodynamics, and[3D[K
+and extended by analogy in Parts VII and VIII.
 
-**Physical Geometry:**  
-The claim that relational constraint structure is intrinsic to physical law[3D[K
-law: physics is not merely describable geometrically but is organized throu[5D[K
-through constraint manifolds, admissible trajectories, symmetries, and vari[4D[K
-variational principles in a literal sense. This claim is defended in Part I[6D[K
-Part III (thermodynamics) and extended by structural analogy in Parts VII a[1D[K
-and VIII.
-
-Spherepop’s central geometric claim is that these three levels are deeply c[1D[K
-coupled through shared organizational principles—structural recurrence acro[4D[K
-across scales—but not identical. The reason cognitive geometry works so wel[3D[K
-well is not arbitrary: biological intelligence evolved to navigate a world [K
-that is itself geometrically organized at the physical level. Likewise, the[3D[K
-the reason physical geometry is so productive in thermodynamics is not a co[2D[K
-coincidence: constraint structure is the common language through which both[4D[K
-both physical and cognitive systems become navigable.
-
-Geometry is therefore treated throughout this monograph as **the recurring [K
-structural language through which constrained systems become intelligible**[14D[K
-intelligible**, regardless of whether they operate at a biological, cogniti[7D[K
-cognitive, or purely abstract level.
+Spherepop treats geometry as **the recurring structural language through wh[2D[K
+which constrained systems become intelligible**, regardless of whether the [K
+system operates at a cognitive or physical level. The coupling of these thr[3D[K
+three levels—cognitive, physical, and representational—is what enables cros[4D[K
+cross-domain arguments throughout the monograph.
 
 ---
 
-### 3. Constraint as Primitive  
+### Constraint as Primitive
 
-The word “constraint” appears throughout the monograph in several apparentl[9D[K
-apparently different senses: logical restriction, energetic restriction, se[2D[K
-semantic admissibility, computational tractability, topological obstruction[11D[K
-obstruction, and evaluative boundary. These are not analogies for each othe[4D[K
-other; they are all manifestations of one deeper structure:
+The term *constraint* appears in several seemingly different senses (logica[7D[K
+(logical restriction, energetic restriction, semantic admissibility, comput[6D[K
+computational tractability, topological obstruction, evaluative boundary). [K
+**In Spherepop, all these are manifestations of a single deeper structure: [K
+constraint is primitive.**
 
 **Definition:**  
 A *constraint* on a system \(X\) is any condition that restricts the set of[2D[K
-of admissible transitions from the current state of \(X\). The *admissibili[12D[K
-*admissibility set* \(\sadm(\mathcal{C})\) of a constraint configuration \([2D[K
-\(\mathcal{C}\) is the subset of all states accessible from the current sta[3D[K
-state that satisfy all constraints in \(\mathcal{C}\). Constraints may be l[1D[K
-logical (valid inference rules), energetic (conservation laws), semantic (c[2D[K
-(coherent interpretation conditions), computational (type constraints, scop[4D[K
-scope rules), or topological (boundary conditions on evaluation regions).
+of admissible transitions from its current state. The *admissibility set* \[1D[K
+\(\mathcal{C}^\text{adm}(\mathcal{C})\) for a configuration \(\mathcal{C}\)[15D[K
+\(\mathcal{C}\) includes only those states reachable while satisfying all c[1D[K
+constraints in \(\mathcal{C}\). Constraints may be logical, energetic (cons[5D[K
+(conservation laws), semantic (coherent interpretation conditions), computa[7D[K
+computational (type constraints, scope rules), or topological (boundary con[3D[K
+conditions on evaluation regions).
 
-The unification of these senses under a single primitive is not an arbitrar[8D[K
-arbitrary metaphor. It makes the monograph’s cross-domain arguments possibl[7D[K
-possible because it leverages the shared underlying principle that all type[4D[K
-types of restriction—whether logical, physical, or semantic—are instances o[1D[K
-of limiting the admissibility set.
-
----
-
-### 4. The Ontology of a Spherepop Object  
-
-A **Spherepop object** is not a state, value, symbol, or expression; it is [K
-an *admissible historical trajectory through a structured possibility space[5D[K
-space*. This is the monograph’s primary ontological commitment, with conseq[6D[K
-consequences that run through every subsequent chapter.
-
-The ontology is layered and non‑arbitrary:
-
-- **Region:** A structured possibility space defining which transformations[15D[K
-transformations are admissible. Regions constitute the admissibility manifo[6D[K
-manifold \(\mathcal{A}(X)\) of a computation, the phase space of a thermody[8D[K
-thermodynamic system, or the semantic configuration space of an interpretat[11D[K
-interpretation. Geometrically primary.
-
-- **History:** An ordered trajectory \(\gamma = (e_1, e_2, \ldots, e_n)\) t[1D[K
-through a region, recording the sequence of admissible transitions actually[8D[K
-actually traversed. Semantically primary—carrying provenance, evaluation or[2D[K
-order, constraint sequence, and commitment profile that terminal values do [K
-not contain.
-
-- **Process:** The local dynamics generating individual transitions along a[1D[K
-a trajectory: the mechanism by which each step \(e_t\) is produced from the[3D[K
-the current state and constraint configuration. Dynamically primary but not[3D[K
-not the most fundamental; the same process may generate different histories[9D[K
-histories under different constraint configurations.
+This unification is not a metaphor but the foundational commitment that und[3D[K
+underpins cross‑domain arguments: thermodynamic entropy as accessibility vo[2D[K
+volume, Spherepop’s collapse operator akin to coarse‑graining in physics, c[1D[K
+cognitive limits and scope rules both constraint structures governing navig[5D[K
+navigation, and semantic grounding as a constraint satisfaction problem whe[3D[K
+where opacity stems from hidden constraints.
 
 ---
 
-### 5. Summary  
+### The Ontology of a Spherepop Object
 
-By maintaining these foundational commitments, the monograph avoids termino[7D[K
-terminological drift and ensures that terms like “constraint,” “geometry,” [K
-and “Spherepop object” carry consistent meanings across its diverse domains[7D[K
-domains. The framework is built on the idea that intelligibility emerges fr[2D[K
-from preserving navigable relational structure—whether through spatial diag[4D[K
-diagrams (representational geometry), cognitive processes (cognitive geomet[6D[K
-geometry), or physical laws (physical geometry). Constraint is treated as a[1D[K
-a primitive notion, unifying disparate yet analogous uses of the term. Fina[4D[K
-Finally, recognizing the layered ontology of Spherepop objects—region, hist[4D[K
-history, and process—ensures that computational, semantic, and thermodynami[12D[K
-thermodynamic analyses remain conceptually coherent.
+A Spherepop object is **an admissible historical trajectory through a struc[5D[K
+structured possibility space**, not merely a state, value, symbol, or expre[5D[K
+expression. Its ontology is layered:
 
+1. **Region** – A structured possibility space defining which transformatio[13D[K
+transformations are admissible (e.g., the admissibility manifold \(\mathcal[10D[K
+\(\mathcal{A}(X)\) of a computation, thermodynamic phase space, semantic co[2D[K
+configuration space). Regions are primary geometrically.
+
+2. **History** – An ordered trajectory \(\gamma = (e_1, e_2, \ldots, e_n)\)[6D[K
+e_n)\) recording the sequence of admissible transitions actually traversed.[10D[K
+traversed. Histories carry provenance, evaluation order, constraint sequenc[7D[K
+sequences, and commitment profiles—information terminal values lack. Thus h[1D[K
+histories are primary semantically.
+
+3. **Process** – The local dynamics generating individual steps \(e_t\) fro[3D[K
+from current state and constraint configuration. Processes are fundamental [K
+dynamically but subordinate to the combined region‑history framework as the[3D[K
+the most basic objects because the same process can yield different histori[7D[K
+histories under varying constraints.
+
+---
+
+This section establishes the monograph’s core commitments, clarifies termin[6D[K
+terminology across its diverse domains, and grounds each argument in a sing[4D[K
+single underlying principle: intelligibility through preserved navigable st[2D[K
+structure. Readers are encouraged to refer back here when encountering ambi[4D[K
+ambiguous usage later in the text.

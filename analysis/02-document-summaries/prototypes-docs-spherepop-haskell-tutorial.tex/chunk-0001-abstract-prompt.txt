@@ -1,0 +1,49 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+(none yet)
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: prototypes-docs-spherepop-haskell-tutorial.tex
+
+NEW CHUNK
+=========
+
+                                Spherepop in Haskell:
+                              Core and Parallel Variants
+                                            Flyxion
+
+                                       August 13, 2026
+
+
+
+1   Building
+From the haskell directory:
+
+stack build
+stack test
+
+
+2   Core Usage
+import Spherepop.Core
+
+let r1 = Region "a" [1 :: Int]
+    r2 = Region "b" [2 :: Int]
+    out = merge defaultCollapse r1 r2
+
+
+3   Parallel Evaluation
+The module Spherepop.Parallel sketches a one-step parallel reduction strategy. It is intended as
+a starting point for more serious experiments with parallel, confluent evaluation.
+
+
+
+
+                                               1
+

@@ -1,0 +1,103 @@
+**1. Definitions and primitive concepts introduced**
+
+- **Scope \(S_i=(O_i,\tau_i)\)** – each scope consists of a local option sp[2D[K
+space \(O_i\) (set of possible actions) and a characteristic resolution hor[3D[K
+horizon \(\tau_i\).  
+- **Portfolio \(\mathcal{T}=\{(S_i,\tau_i)\}_{i=1}^n\)** – a collection of [K
+scopes operating at different temporal scales, where the horizons satisfy \[1D[K
+\(\tau_1\ll\tau_2\ll\cdots\ll\tau_n\).  
+- **Local expected marginal compression gain (EMCG)** for an action \(a\) i[1D[K
+in scope \(i\) given current operator \(F_t\):  
+
+  \[
+  \mathrm{EMCG}_i(a\mid F_t)=\mathbb{E}_{o(a)}\big[\,|C(H_t)|-|C(H_t\cup\{a[51D[K
+F_t)=\mathbb{E}_{o(a)}\big[\,|C(H_t)|-|C(H_t\cup\{a,o(a)\})|\,\big].
+  \]
+
+**2. Mathematical claims and formal structures**
+
+- **Local saturation**:  
+
+  \[
+  \max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx0.
+  \]
+
+- **Field saturation**:  
+
+  \[
+  \max_i\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\approx0.
+  \]
+
+- **Proposition (Scope‑switch recovery)**: Local saturation in one scope do[2D[K
+does not imply field saturation; a policy that permits switching can still [K
+achieve compression progress.  
+
+- **Proposition (Operator‑drift recovery)**: An action may have near‑zero E[1D[K
+EMCG now but become non‑zero later when the operator updates from \(F_t\) t[1D[K
+to \(F_{t+\Delta t}\).  
+
+- **Proposition (BIND‑as‑progress under long horizons)**: For large \(\tau_[7D[K
+\(\tau_i\), progress need not rely on immediate POP; repeated constraint‑sh[13D[K
+constraint‑shaping events (BIND/REFUSE/COLLAPSE) can enhance continuation q[1D[K
+quality without premature closure.
+
+**3. Mechanisms and processes**
+
+- **Scope dynamics**: Each scope evolves its own EMCG, allowing a portfolio[9D[K
+portfolio to maintain multiple “in‑progress” histories simultaneously.  
+- **Operator drift**: Updating the current operator \(F_t\) over time (via [K
+constraint‑shaping events) can revive previously dormant compression gains [K
+in already saturated scopes.  
+- **Constraint‑shaping events** (BIND/REFUSE/COLLAPSE): These operations mo[2D[K
+modify the resolution horizon or option space without closing the scope, pr[2D[K
+preserving future work opportunities.
+
+**4. Connections to concepts named in the running abstract**
+
+- **Temporal diversification of engagement**: Extends the marginal compress[8D[K
+compression gain formalism from “The Geometry of Boredom” across multiple s[1D[K
+scopes with unequal horizons.  
+- **Local saturation vs. field saturation**: Directly builds on the earlier[7D[K
+earlier notion that local saturation does *not* imply overall (field) satur[5D[K
+saturation, analogous to the paper’s claim about operator drift restoring n[1D[K
+non‑zero gains even within a saturated scope.  
+- **Progressive Optimization Procedure (POP)**: The proposition highlightin[11D[K
+highlighting long horizons shows progress can be achieved without immediate[9D[K
+immediate POP, aligning with the running abstract’s discussion of repeated [K
+constraint‑shaping events enhancing continuation quality.
+
+**5. Unresolved questions or contradictions visible within this chunk**
+
+- **Scope‑switch recovery**: While it states that local saturation does not[3D[K
+not imply field saturation and that switching policies maintain compression[11D[K
+compression progress, no explicit mechanism for how scope switching prevent[7D[K
+prevents “boredom” (i.e., loss of interest) is described.  
+- **Operator‑drift recovery**: The claim that EMCG can reappear after the o[1D[K
+operator updates without any change in the underlying scope’s horizon raise[5D[K
+raises a question about what drives this resurgence—no causal pathway or em[2D[K
+empirical grounding is provided.  
+- **BIND/REFUSE/COLLAPSE as progress**: Although these events are said to i[1D[K
+increase continuation quality under long horizons, the chunk does not speci[5D[K
+specify how they differ from mere “closure” of sub‑problems, leaving an amb[3D[K
+ambiguity about whether they genuinely extend engagement rather than merely[6D[K
+merely postpone resolution.
+
+**Quotations (as required)**  
+
+- *“The expected marginal compression gain formalism … extends naturally fr[2D[K
+from one task to a portfolio of unresolved scopes operating at unequal hori[4D[K
+horizons.”* – captures the extension idea.  
+- *“Local saturation at scope i: \(\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t[3D[K
+F_t)\approx0.\)”* – defines local saturation.  
+- *“Field saturation: \(\max_i\max_{a\in O_i}\mathrm{EMCG}_i(a\mid F_t)\app[8D[K
+F_t)\approx0.\)”* – defines field saturation.  
+- *“Local saturation in one scope does not imply field saturation; a policy[6D[K
+policy that permits scope switching admits continued compression progress w[1D[K
+without requiring external novelty.”* – restates the Scope‑switch recovery [K
+proposition.  
+- *“For long‑horizon scopes (\(\tau_i\) large), progress need not require i[1D[K
+immediate POP. Repeated constraint‑shaping events (BIND/REFUSE/COLLAPSE) ca[2D[K
+can increase continuation quality while the scope remains unresolved, prese[5D[K
+preserving admissible future work without premature closure.”* – restates t[1D[K
+the BIND proposition.
+

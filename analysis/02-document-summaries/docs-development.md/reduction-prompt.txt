@@ -1,0 +1,94 @@
+The following are groundedness-checked analytical summaries of
+consecutive fragments of one research document titled "docs-development.md".
+
+This document's synthesis will feed into: cluster synthesis and cross-corpus synthesis
+
+Reconstruct the document as a unified theoretical object. Produce a
+dense scholarly synthesis covering: thesis, primitives/definitions,
+formalism, mechanisms, major arguments, dependencies between
+concepts, implications, unresolved problems, internal tensions.
+
+Preserve every [source: "..."] citation attached to a claim you keep.
+Remove repetition introduced by chunking. Do not flatten genuine
+distinctions. Do not add any claim that did not appear, with its
+citation, in the fragment summaries below.
+
+FRAGMENT SUMMARIES
+===================
+
+--- chunk-0001-summary.md ---
+**1. Definitions and Primitive Concepts Introduced**
+
+- **Config (σ, h, O, collapse_log)** – The authoritative state of the syste[5D[K
+system; σ is the current *Sphere* expression, h is an immutable append‑only[11D[K
+append‑only log of events, O holds available options (strings or Quotients)[10D[K
+Quotients), and collapse_log records provenance for COLLAPSE operations.  
+- **Operation** – A request to modify state that may fail validation (e.g.,[6D[K
+(e.g., POP, REFUSE).  
+- **Event** – The committed modification recorded in h; only the result of [K
+a successful Operation can become an Event.  
+- **Quotient** – An equivalence class represented as a frozen set of member[6D[K
+members; no privileged representative is stored to ensure equality regardle[8D[K
+regardless of construction order.  
+
+**2. Mathematical Claims and Formal Structures**
+
+- Config is defined algebraically as a tuple \((\sigma, h, O, \text{collaps[13D[K
+\text{collapse\_log})\) where each component preserves the required propert[7D[K
+properties:  
+  - σ uniquely determines the current *Sphere* expression.  
+  - h is an append‑only list of events (no deletion or reordering).  
+  - O is a frozen set allowing only options that have already been declared[8D[K
+declared.  
+  - collapse_log records which COLLAPSE operation produced each Quotient, g[1D[K
+guaranteeing traceability.  
+
+- The four primitives are the *only* allowed modifiers to Config: POP, REFU[4D[K
+REFUSE, BIND, and COLLAPSE. This enforces an immutable, closed algebraic sy[2D[K
+system as described in the original paper.
+
+**3. Mechanisms and Processes**
+
+- **Transition Function**: `transition(config: Config, op: Operation) -> Co[2D[K
+Config` creates a new Config by applying the primitive to σ (e.g., POP remo[4D[K
+removes an element from h).  
+- **Observer Functions**: Read‑only analysis tools such as `confluent(left,[16D[K
+`confluent(left, right, policy)` compare two Config histories using extensi[7D[K
+extensional views without altering state.  
+- **Querying Options**: `BIND` uses a predicate function (`predicate(spec)`[18D[K
+(`predicate(spec)`) to filter members of a Quotient; currently it implement[9D[K
+implements an existential semantics (any member matches).  
+
+**4. Connections to Concepts Named in the Running Abstract**
+
+- The running abstract mentions that only four primitives (POP, REFUSE, BIN[3D[K
+BIND, COLLAPSE) may append to `Config.history`, preserving an immutable, cl[2D[K
+closed algebra from the original paper. This chunk confirms those primitive[9D[K
+primitive concepts and their formal representation as functions in `semanti[8D[K
+`semantics.py`.  
+- Observers are explicitly described as *never* modifying histories, aligni[6D[K
+aligning with the abstract’s emphasis on confluence, divergence, and regret[6D[K
+regret being properties of histories rather than additional operators.
+
+**5. Unresolved Questions or Contradictions Visible**
+
+- The document notes that **BIND currently implements an existential semant[6D[K
+semantics (any member matches)** but acknowledges a *critical*: “Two `Quoti[6D[K
+`Quotient({a, b})` built in different orders must be equal and hash‑equal.”[12D[K
+hash‑equal.” This suggests an unresolved tension between the current implem[6D[K
+implementation’s flexibility versus the requirement for canonical equivalen[9D[K
+equivalence classes.  
+- No explicit contradiction is identified; rather, it highlights that futur[5D[K
+future work (see THEORY_STATUS.md Q3) may explore a universal semantics or [K
+alternative predicate definitions.
+
+**Quotations**
+
+1. “The four primitives (POP, REFUSE, BIND, COLLAPSE) are the ONLY things t[1D[K
+that may append to Config.history.” – matches quote 2.  
+2. “Confluence, divergence, regret are **properties discovered about histor[6D[K
+histories** and are deliberately NOT added as a fifth Operation.” – matches[7D[K
+matches quote 3.  
+3. “Observers (confluent, regretful, etc.) analyze histories but NEVER modi[4D[K
+modify them.” – matches quote 4.
+

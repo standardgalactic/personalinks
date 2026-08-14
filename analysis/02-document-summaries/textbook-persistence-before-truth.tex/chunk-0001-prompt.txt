@@ -1,15 +1,199 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 1 of 10 of a document called
+"textbook-persistence-before-truth.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Recoverability as a Structural Property**
 
-TEXT
-====
+The theorem proved above shows that *recoverability* is invariant under any[3D[K
+any **structure‑preserving isomorphism** \(\Granite\) between two structure[9D[K
+structured domains. In symbols, if  
+
+\[
+(X,\mathcal{T},\mathcal{D},\mathcal{R})
+\quad\text{and}\quad
+(Y,\mathcal{T}',\mathcal{D}',\mathcal{R}')
+\]
+
+are related by an isomorphism \(\Granite\) that preserves:
+
+* **Transformations** (\(\Granite T = T'\)),
+* **Distinctions** (the mapping sends a distinction to another with the sam[3D[K
+same relational character),
+* **Reconstruction operators** (\(\Granite R = R'\)),
+
+then a distinction \(d\in\mathcal D\) being recoverable under some transfor[8D[K
+transformation \(T\in\mathcal T\) implies that its image \(\Granite(d)\) is[2D[K
+is recoverable under \(\Granite(T)\).
+
+*Conversely, the converse argument uses the same steps in reverse, showing [K
+that if a distinction is recoverable after applying an inverse map, it must[4D[K
+must have been recoverable before. Hence recoverability is preserved exactl[6D[K
+exactly by these structure‑preserving transformations.*
+
+Because the notion of *recoverability* depends only on how distinctions, tr[2D[K
+transformations, and reconstruction operators interact (the “structure”), n[1D[K
+not on any particular representation or coordinate system, we can conclude:[9D[K
+conclude:
+
+**Corollary:** Recoverable persistence is a **structural property**, i.e., [K
+it is independent of the specific way the domain is modeled or visualized.
+
+---
+
+### Distinctions: Primary Dynamical Objects
+
+The treatment of distinctions in this framework reverses the conventional h[1D[K
+hierarchy that places sets before partitions. Here, a distinction itself is[2D[K
+is taken as an elementary relational entity:
+
+1. **Basic notion:** A distinction \(d:X\to Y\) separates states by assigni[7D[K
+assigning different elements of \(Y\) to distinguishable subsets of \(X\). [K
+Two states \(x,y\) are equivalent under \(d\) iff \(d(x)=d(y)\).
+
+2. **Quotient perspective:** Each distinction induces a quotient structure [K
+\(X/\!\sim_d\) (the set of equivalence classes) and thus encodes informatio[10D[K
+information loss.
+
+3. **Dual nature:** Distinguishing is both the act of separating *and* the [K
+act of selecting what variations are relevant, making distinctions inherent[8D[K
+inherently perspectival rather than merely static partitions.
+
+4. **Higher‑order collection \(\mathcal{D}\):** The set of all available di[2D[K
+distinctions in a domain forms an algebraic object whose elements represent[9D[K
+represent alternative “views” or organizational schemes (e.g., coarse vs. f[1D[K
+fine classification).
+
+5. **Refinement ordering:** Two distinctions \(d_1\) and \(d_2\) are ordere[6D[K
+ordered by refinement: \(d_2\succ d_1\) iff every distinction made by \(d_1[5D[K
+\(d_1\) is also made by \(d_2\). This yields a partial order on \(\mathcal{[11D[K
+\(\mathcal{D}\), mirroring the lattice of partitions but emphasizing *persp[6D[K
+*perspective* rather than static classification.
+
+6. **Distinction lattices:** The collection of distinctions can be arranged[8D[K
+arranged into a lattice where:
+   - Coarse distinctions lie at lower levels,
+   - More detailed distinctions sit higher,
+   reflecting how complexity and information content evolve with the choice[6D[K
+choice of perspective.
+
+---
+
+### Distinction Dynamics
+
+When a state transformation \(T\) acts on the domain, its effect on distinc[7D[K
+distinctions is expressed via composition:
+
+\[
+(T^*d)(x) = d(T(x)).
+\]
+
+This mapping tells us how the original distinction “looks” under the transf[6D[K
+transformation. **Key observations:**
+
+- *Loss of distinctness*: If several pre‑image states collapse into a singl[5D[K
+single image state, the resulting \(T^*d\) will have fewer distinguishing c[1D[K
+classes (i.e., it may not be recoverable from the transformed data alone).
+- *Generation of new distinctions*: Sometimes adding structure can create g[1D[K
+genuinely new separations that were absent before.
+
+---
+
+### Distinction Generators & Closure
+
+To formalize how knowledge expands, we introduce:
+
+**Definition:** A **distinction generator** \(G:\mathcal{D}^k\to\mathcal{D}[31D[K
+\(G:\mathcal{D}^k\to\mathcal{D}\) produces a new distinction from existing [K
+ones. It is *admissible* if every input distinction in \(\mathcal{D}\) bein[4D[K
+being recoverable guarantees that the output distinction is also recoverabl[10D[K
+recoverable.
+
+**Definition:** The **distinction closure** \(\overline{\mathcal{D}}\) of a[1D[K
+a collection \(\mathcal{D}\) under a family \(\mathcal{G}\) of admissible g[1D[K
+generators is the smallest set containing \(\mathcal{D}\) and closed under [K
+all such generators.
+
+---
+
+### Monotonicity of Distinction Closure
+
+**Proposition:** If every generator in \(\mathcal{G}\) is admissible, then [K
+any distinction that appears in \(\overline{\mathcal{D}}\) (i.e., obtained [K
+by applying one or more admissible generators to elements of \(\mathcal{D}\[14D[K
+\(\mathcal{D}\)) is recoverable whenever the original distinctions in \(\ma[5D[K
+\(\mathcal{D}\) are.
+
+*Proof Sketch:* By induction on the depth of generation:
+- **Base case:** Elements of \(\mathcal{D}\) are assumed recoverable by hyp[3D[K
+hypothesis.
+- **Inductive step:** Suppose \(d_1,\dots,d_k\) are recoverable and \(G\in\[7D[K
+\(G\in\mathcal{G}\) is admissible. Then \(G(d_1,\dots,d_k)\) inherits the p[1D[K
+property of being recoverable because admissibility guarantees that if each[4D[K
+each component distinction can be undone (or reconstructed) by an appropria[9D[K
+appropriate reconstruction operator, so too can their composite.
+
+---
+
+### Philosophical Implications
+
+The observation that *generation* of new distinctions is limited to those f[1D[K
+for which admissibility holds mirrors real‑world phenomena:
+
+- **Entropy & Information Loss:** Transformations often collapse multiple s[1D[K
+states into one, reducing the number of distinguishable classes (e.g., heat[4D[K
+heat flow in thermodynamics).
+- **Irreversibility:** Knowledge acquisition typically preserves coarse str[3D[K
+structures rather than reconstructing every microscopic detail (historical [K
+reconstruction leaves gaps).
+
+Thus, only *well‑designed* processes—those that respect existing recoverabi[10D[K
+recoverability constraints—produce distinctions we can later retrieve. This[4D[K
+This aligns with the principle that scientific theories and measurement dev[3D[K
+devices are tools for preserving certain levels of information while discar[6D[K
+discarding others.
+
+---
+
+**Summary**
+
+- **Recoverable persistence** is a structural invariant: it does not depend[6D[K
+depend on representation but on how transformations, distinctions, and reco[4D[K
+reconstruction operators interact.
+- **Distinctions** are treated as primary dynamical entities, generating hi[2D[K
+hierarchical perspectives (lattices) rather than static partitions.
+- **Distinction dynamics** via generators respects the recoverability struc[5D[K
+structure through admissibility, ensuring that only “legitimate” new distin[6D[K
+distinctions survive transformation.
+
+These ideas set the stage for later chapters where the geometry of persiste[8D[K
+persistence sets—derived from these structural properties—will be explored [K
+in depth.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \documentclass[12pt,oneside]{article}
 

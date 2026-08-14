@@ -1,72 +1,153 @@
-**Expyrotic Cosmology – Chapter Summary**
+**Expyrotic Cosmology – A Summary**
 
-In RSVP (Realized Symmetry Preservation) gravity the fundamental “force’’ i[1D[K
-is not a curvature of spacetime but the concentration of *capacity* within [K
-the admissible manifold.  The following points summarize the key results pr[2D[K
-proved in this chapter:
+In RSVP gravity, spacetime is not a pre‑existing arena that expands or cont[4D[K
+contracts; instead it is the *global admissibility manifold* \(\mathcal{A}([14D[K
+\(\mathcal{A}(t)\).  Distinction density (the “capacity” in RSVP) determine[9D[K
+determines where future‑reachable volume exists.  Below are the core result[6D[K
+results and their physical meaning.
 
-1. **Geometric Origin**  
-   - Gravity arises from gradients in capacity, whose potential is \(\Psi =[1D[K
-= -\log\Granite\) (definition \(\text{defn:capacity-potential}\)).  
-   - Physical acceleration follows directly: \(\mathbf g = -\nabla\Psi\) (t[2D[K
-(theorem \(\text{thm:capacity-gradient}\)).
+---
 
-2. **Admissible Dynamics**  
-   - The equations of motion for admissible trajectories are given by the *[1D[K
-*admissible geodesic theorem* (\(\text{thm:admissible-geodesic-thm}\)): geo[3D[K
-geodesics extremize cumulative reachable capacity while remaining solutions[9D[K
-solutions of ordinary geodesic equations under the distinction metric \(g_{[5D[K
-\(g_{ij}= \Granite e^{-S}\delta_{ij}\).  
+### 1. Cosmological Reachability Theorem  
 
-3. **Curvature from Capacity Variation**  
-   - Spatial variations in capacity and constraint generate curvature, enco[4D[K
-encoded by \(\kappa_D = -\Delta\rho_D\) (theorem \(\text{thm:distinction-cu[35D[K
-(theorem \(\text{thm:distinction-curvature}\)).  This is the RSVP analogue [K
-of Einstein’s field equations.
+**Statement:**  
+The reachable volume at cosmic time \(t\) is given by  
 
-4. **Weak‑Field Limit**  
-   - In low‑density regimes the distinction theory reduces to the familiar [K
-Poisson equation (\(\text{thm:distinction-poisson}\)), showing that RSVP su[2D[K
-subsumes GR as a special case without altering predictions at small scales.[7D[K
-scales.
+\[
+V_{\text{reach}}(t)=\int_{0}^{t}\! \kappa_D(\Phi,\mathbf{x},s)\,dt',
+\]
 
-5. **Collapse and Reversal**  
-   - A runaway buildup of recoverability density leads to *cosmic collapse*[9D[K
-collapse* described by the Collapse Threshold Theorem (\(\text{thm:collapse[21D[K
-(\(\text{thm:collapse-threshold}\)).  The resulting singularity is identifi[8D[K
-identified as an “admissibility singularity’’ (theorem \(\text{thm:expyroti[29D[K
-(theorem \(\text{thm:expyrotic-singularity}\)).
+where \(\kappa_D\) measures the concentration of admissible capacity.  The [K
+integral accumulates only those regions that can later be reached by geodes[6D[K
+geodesics satisfying  
 
-6. **Cyclic Universe**  
-   - The Expyrotic Necessity Theorem (\(\text{thm:expyrotic-necessity}\)) a[1D[K
-and the Expyrotic Cycle Theorem (\(\text{thm:expyrotic-cycle}\)) together i[1D[K
-imply that each collapse regenerates a new admissibility manifold, giving r[1D[K
-rise to a cyclic cosmology.  
+\[
+dV = -\nabla\Psi\cdot d\mathbf{x}\quad\text{(geodesic‑reach condition)} .
+\]
 
-7. **Apparent Expansion**  
-   - Even though no “dark energy’’ or expanding spacetime is required, the [K
-evolution of reachable volume produces an *apparent expansion* (theorem \(\[12D[K
-(theorem \(\text{thm:apparent-expansion}\)), reconciling observations with [K
-RSVP’s static‑but‑evolving framework.
+**Physical interpretation:**  
+If \(\kappa_D>0\) in a region, future observers will eventually inhabit tha[3D[K
+that volume; if it is zero or negative (over‑constrained), the region canno[5D[K
+cannot be reached and effectively disappears from the reachable manifold.
 
-8. **Admissibility Evolution**  
-   - The Cosmological Evolution Equation (\(\text{eq:cosmo-evolution}\)) go[2D[K
-governs how admissible volume evolves over cosmic time, linking capacity ch[2D[K
-changes to the observed redshift–age relation without invoking Hubble expan[5D[K
-expansion.
+---
 
-9. **Key Results Proven in This Chapter**  
-   - Distinction‑Raychaudhuri Theorem (\(\text{thm:dist-raychaudhuri}\)) sh[2D[K
-shows that constraint growth directly concentrates trajectories, analogous [K
-to gravitational focusing (corollary \(\text{cor:reco-focusing}\)).  
-   - Curvature–Recovery Correlation (\(\text{thm:curv-reco-corr}\)) establi[7D[K
-establishes a precise mapping between \(\kappa_D\) and recoverability densi[5D[K
-density.
+### 2. Admissibility Collapse Theorem  
 
-**Conclusion:** RSVP cosmology replaces traditional spacetime curvature wit[3D[K
-with the concentration of capacity as the driver of gravitational phenomena[9D[K
-phenomena.  The cyclic, admissibility‑driven universe described here offers[6D[K
-offers an alternative explanation for observed large‑scale structure while [K
-preserving all low‑density predictions identical to those of General Relati[6D[K
-Relativity.
+**Statement:**  
+Whenever the cumulative capacity exceeds a critical threshold \(C_{\text{cr[13D[K
+\(C_{\text{crit}}(\Phi)\),
 
+\[
+V_{\text{reach}} \;>\; V_{\text{threshold}},
+\]
+
+the admissible region undergoes an *admissibility collapse*: the capacity d[1D[K
+density locally diverges to infinity, producing a spacetime singularity (th[3D[K
+(the “admissibility singularity”).
+
+**Physical implication:**  
+This is analogous to black‑hole formation in GR but driven by over‑concentr[13D[K
+over‑concentration of distinction rather than curvature.  The result signal[6D[K
+signals that the global admissibility manifold cannot sustain itself indefi[6D[K
+indefinitely.
+
+---
+
+### 3. Expyrotic Necessity Theorem  
+
+**Statement:**  
+In RSVP, a universe must evolve toward states with maximal reachable volume[6D[K
+volume; otherwise future observers would lose all access to later epochs—co[9D[K
+epochs—contradicting the notion of universal time progression.
+
+**Proof sketch:**  
+Assume a static state where \(\kappa_D\) is constant and non‑zero.  By the [K
+Cosmological Reachability Theorem, \(V_{\text{reach}}(t)\) would stay bound[5D[K
+bounded while physical entropy (a proxy for distinguishable events) inevita[7D[K
+inevitably grows, leading to an eventual admissibility collapse per the Adm[3D[K
+Admissibility Collapse Theorem.
+
+---
+
+### 4. Expyrotic Cycle Theorem  
+
+**Statement:**  
+The universe undergoes discrete cycles of:
+
+1. **Expansion Phase** – New capacity appears, \(V_{\text{reach}}\) increas[7D[K
+increases.
+2. **Collapse Phase** – Over‑concentration triggers an admissibility singul[6D[K
+singularity, the manifold reorganises (a “reset”).
+3. **Regeneration Phase** – A fresh source of distinction creates a new vac[3D[K
+vacuum state.
+
+These cycles are self‑sustaining because each collapse resets capacity dist[4D[K
+distribution to low densities, allowing another expansion phase without req[3D[K
+requiring external energy input.
+
+---
+
+### 5. Cosmological Evolution Equation  
+
+From the Reachability and Collapse Theorems we derive an effective Friedman[8D[K
+Friedmann‑like equation:
+
+\[
+\left(\frac{\dot V_{\text{reach}}}{V_{\text{reach}}}\right)^2
+= \frac{8\pi G}{3}\,\rho_D - \frac{k}{a^2} + \Delta_C,
+\]
+
+where \(\Delta_C\) is the curvature term arising from over‑concentration (n[2D[K
+(negative contribution).  The negative sign of \(\Delta_C\) mimics cosmic a[1D[K
+acceleration in standard GR, but here it stems from *capacity* rather than [K
+curvature.
+
+---
+
+### 6. Apparent Expansion Theorem  
+
+**Statement:**  
+Observers within a collapsing admissible region measure an effective increa[6D[K
+increase in proper distance to other points due solely to the relative move[4D[K
+movement of reachable volumes across the collapsing front—exactly as if spa[3D[K
+space were expanding, even though no physical expansion occurs at the funda[5D[K
+fundamental level.
+
+**Proof sketch:**  
+Consider two points \(A\) and \(B\).  If point \(C\) lies on a path that is[2D[K
+is being “pinched off” by admissibility collapse, observers in region \(A\)[5D[K
+\(A\) will see distance to \(B\) increase because they must traverse the co[2D[K
+collapsing front.  This appears as an expansion of coordinate distances, in[2D[K
+independent of any metric evolution.
+
+---
+
+### 7. Expyrotic Admissibility Theorem  
+
+**Statement:**  
+The global admissibility manifold \(\mathcal{A}(t)\) is *admissible* if and[3D[K
+and only if every point in the past light cone can be connected by a future[6D[K
+future‑directed geodesic that satisfies the reachability condition.  Equiva[6D[K
+Equivalently, there exists no causal horizon separating reachable from non‑[4D[K
+non‑reachable regions.
+
+**Physical meaning:**  
+This theorem guarantees that RSVP’s “gravity” (the tendency of capacity to [K
+concentrate) always yields observable consequences—unlike GR where horizons[8D[K
+horizons can be hidden behind apparent singularities.
+
+---
+
+### Take‑aways  
+
+- **No pre‑existing space**: The universe is the map of admissible capacity[8D[K
+capacity, not a container expanding.
+- **Collapse = Rebirth**: Singularities are informational resets rather tha[3D[K
+than physical deadends.
+- **Apparent expansion** explains observed redshift without invoking dark e[1D[K
+energy; it’s an emergent effect due to collapsing reachable volumes.
+
+These results provide a framework where cosmic evolution is driven by the *[1D[K
+*geometry of information* (capacity) instead of curvature, offering fresh p[1D[K
+perspectives on cosmology and potential new observational signatures.

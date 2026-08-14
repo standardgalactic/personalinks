@@ -1,0 +1,2786 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Below is a summary‑style overview that captures the main ideas presented [K
+in the document.**
+
+---
+
+### 1. Core Concept – Execution Traces as First‑Class Objects  
+
+* **Spherepop’s central claim:**  
+  - Execution traces (histories) are not disposable artifacts but computati[9D[K
+computational objects of first class status, like variables or functions.  [K
+
+- This unifies previously separate concerns—execution, debugging, verificat[9D[K
+verification, and optimization—all operating on the same persistent history[7D[K
+history.
+
+### 2. Capabilities Enabled by Persistent Histories  
+
+| Capability | What It Enables |
+|------------|-----------------|
+| **Explanation** | Trace back why a particular computation succeeded or fa[2D[K
+failed. |
+| **Repair** | Undo steps, branch to earlier histories, and compare alterna[7D[K
+alternative fixes. |
+| **Optimization** | Analyze the history to guide refactoring, specializati[12D[K
+specialization, learning of new operators. |
+| **Learning** | Use historical data (e.g., repair attempts) to evolve prim[4D[K
+primitives within the system itself. |
+| **Proof Extraction** | Derive formal proofs directly from observed behavi[6D[K
+behavior in the trace. |
+| **Visualization** | Render graphs and histories dynamically for human und[3D[K
+understanding. |
+| **Provenance** | Track lineage of every computational step, ensuring audi[4D[K
+auditability. |
+
+### 3. Philosophical Shift  
+
+- The traditional separation between **execution**, **debugging**, **verifi[8D[K
+**verification**, and **optimization** blurs away because they all read the[3D[K
+the same accumulated history.
+- Human reasoning over raw computational graphs is replaced by richer descr[5D[K
+descriptive systems (variables, functions, packages, etc.) that compress la[2D[K
+large computations into understandable forms.
+
+### 4. Future Directions  
+
+1. **Formal Semantics:** Develop a complete semantics for *history‑preservi[17D[K
+*history‑preserving graph execution*—including proofs of normalization, con[3D[K
+confluence where appropriate, observational equivalence, and correctness of[2D[K
+of graph rewriting.
+2. **Spherepop Virtual Machine:** Build a practical runtime that treats gra[3D[K
+graphs, histories, operators, and schedulers as first‑class objects rather [K
+than embedding them in conventional programming languages.
+3. **Adaptive Operator Libraries:** Since operators are ordinary computatio[10D[K
+computational values, they can be synthesized, optimized, specialized, or l[1D[K
+learned directly from execution histories, enabling systems to extend their[5D[K
+their own primitive computational vocabulary.
+4. **Repair‑Oriented Execution:** Treat repairs as routine parts of computa[7D[K
+computation (not just exceptional error handling) so that the system can br[2D[K
+branch from previous histories, preserve unsuccessful attempts, and accumul[7D[K
+accumulate operational experience over time.
+5. **Computational Ontology:** Argue that graphs and histories provide a si[2D[K
+simpler foundation than syntax, typing, or logical systems; if successful, [K
+this view could unify seemingly unrelated paradigms.
+
+### 5. Appendix – Algebra of Composition Graphs  
+
+- **Definition (Composition Graph):** A quadruple \(G=(N,E,\mathcal O,\ell)[7D[K
+O,\ell)\) where:
+  - \(N\) = set of nodes,
+  - \(E\subseteq N\times N\) = directed edges describing computational depe[4D[K
+dependence,
+  - \(\mathcal O\) = collection of primitive operators,
+  - \(\ell:N\rightarrow\mathcal O\) assigns an operator to each node.
+- **Interfaces:**  
+  - *Input Interface* \(I(G)=\{n\in N:\operatorname{pred}(n)=\varnothing\}\[39D[K
+N:\operatorname{pred}(n)=\varnothing\}\) (nodes with no predecessors).  
+  - *Output Interface* \(O(G)=\{n\in N:\operatorname{succ}(n)=\varnothing\}[38D[K
+N:\operatorname{succ}(n)=\varnothing\}\) (nodes with no successors).
+- **Composition:** For compatible interfaces, the composition of two graphs[6D[K
+graphs is performed by identifying outputs of one graph with inputs of the [K
+other while preserving all remaining edges.  
+- **Associativity & Identity:** Composition is associative and has identity[8D[K
+identity graphs (identity operators on a given interface). This algebraic s[1D[K
+structure underpins higher‑level abstractions such as functions, modules, l[1D[K
+libraries, and programs.
+- **Subgraphs & Boundaries:** A subgraph inherits its operator set from the[3D[K
+the larger graph; its boundary defines how it interacts with surrounding co[2D[K
+computation. Graph equivalence is defined operationally (same observable hi[2D[K
+history for any input).
+- **Rewrite Systems:** Optimization reduces to rewriting graphs via rules \[1D[K
+\((L,R)\) where left‑hand side patterns can be replaced by right‑hand side [K
+configurations.
+
+---
+
+**In essence, Spherepop proposes that the primitive unit of computation sho[3D[K
+should be a *composition graph*—a structure defined solely by its operators[9D[K
+operators and their dependencies—rather than traditional syntactic or logic[5D[K
+logical constructs. This perspective unifies debugging, verification, optim[5D[K
+optimization, learning, proof extraction, visualization, and provenance und[3D[K
+under a single conceptual framework.**
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: textbook-refusal-structures.tex
+
+NEW CHUNK
+=========
+
+\[
+L
+\]
+
+and
+
+\[
+R
+\]
+
+are operationally equivalent subgraphs.
+
+Whenever
+
+\[
+L
+\]
+
+appears inside a larger graph,
+
+it may be replaced by
+
+\[
+R.
+\]
+
+Graphically,
+
+\[
+C[L]
+\Longrightarrow
+C[R],
+\]
+
+where
+
+\[
+C
+\]
+
+denotes the surrounding graph context.
+
+This notation closely resembles term rewriting,
+
+but the rewritten object is now an arbitrary composition graph rather than a symbolic expression.
+
+
+The Locality Principle
+
+
+One of the most important properties of graph rewriting is locality.
+
+Most optimizations modify only a tiny fraction of the graph.
+
+The overwhelming majority of nodes remain untouched.
+
+Formally,
+
+suppose
+
+\[
+G'
+=
+R(G).
+\]
+
+Then typically
+
+\[
+|N(G)\triangle N(G')|
+\ll
+|N(G)|.
+\]
+
+Only a small neighborhood surrounding the rewritten subgraph changes.
+
+This locality has several important consequences.
+
+First,
+
+optimization scales well because only small regions require analysis.
+
+Second,
+
+parallel optimization becomes possible because distant graph regions may be rewritten independently.
+
+Third,
+
+correctness proofs become substantially simpler since only the rewritten neighborhood requires verification.
+
+Locality therefore explains much of the practical success of modern compiler technology.
+
+
+Graph Factorization
+
+
+Repeated computational motifs naturally suggest graph factorization.
+
+Suppose a graph contains several identical subgraphs,
+
+\[
+H_1,
+H_2,
+\ldots,
+H_n,
+\]
+
+with
+
+\[
+H_i
+\simeq
+H_j
+\]
+
+for every pair.
+
+Rather than storing each separately,
+
+one may replace them with a single representative
+
+\[
+H
+\]
+
+together with multiple interface connections.
+
+Operationally,
+
+this is exactly the same principle underlying
+
+functions,
+
+subroutines,
+
+macros,
+
+libraries,
+
+hardware modules,
+
+and object-oriented methods.
+
+All perform graph factorization.
+
+Instead of repeatedly constructing identical computation,
+
+they reuse existing subgraphs.
+
+This observation provides another example of how familiar programming concepts emerge naturally from graph algebra rather than requiring independent semantic foundations.
+
+
+Composition Algebras
+
+
+The collection of all finite composition graphs together with graph composition forms an algebraic structure.
+
+Composition supplies the binary operation.
+
+Identity graphs supply neutral elements.
+
+Operational equivalence partitions graphs into equivalence classes.
+
+Rewrite rules generate transformations within those classes.
+
+Factorization generates reusable graph fragments.
+
+Graph substitution generates hierarchical composition.
+
+Taken together,
+
+these operations constitute an algebra of computation considerably more general than traditional symbolic algebras.
+
+Instead of manipulating equations,
+
+the algebra manipulates computations themselves.
+
+This appendix therefore provides the mathematical foundation for one of the central claims of the essay.
+
+Programs are not fundamentally texts,
+
+trees,
+
+proofs,
+
+or typed expressions.
+
+They are elements of an algebra whose primitive operation is graph composition and whose observable meaning is determined by the histories generated through execution.
+
+
+Execution Histories as Morphisms
+
+
+The graph algebra developed thus far describes the static organization of computation. It remains to describe how execution itself interacts with this structure.
+
+Rather than viewing a graph as a machine that instantaneously transforms inputs into outputs, Spherepop regards execution as the construction of histories.
+
+Consequently, the primary semantic object is not merely the graph
+
+\[
+G,
+\]
+
+but the pair
+
+\[
+(G,H),
+\]
+
+where
+
+\[
+H
+\]
+
+records the operational history generated by executing
+
+\[
+G.
+\]
+
+This distinction separates potential computation from realized computation.
+
+The graph specifies what may occur.
+
+The history records what actually occurred.
+
+
+History Extension
+
+
+Execution proceeds by extending histories.
+
+Let
+
+\[
+H_n
+=
+(e_1,e_2,\ldots,e_n)
+\]
+
+be the current history.
+
+A single execution step produces
+
+\[
+H_{n+1}
+=
+(H_n,e_{n+1}).
+\]
+
+Notice that no previous event is modified.
+
+Histories are monotone.
+
+They grow by extension.
+
+This monotonicity distinguishes histories from mutable program state.
+
+State may appear to change.
+
+Histories never do.
+
+Every previous computation remains available for later inspection.
+
+This property underlies reproducibility,
+
+repair,
+
+provenance,
+
+and explanation.
+
+
+History Composition
+
+
+Just as graphs compose,
+
+histories compose.
+
+Suppose
+
+\[
+H_1
+=
+(e_1,\ldots,e_m),
+\]
+
+and
+
+\[
+H_2
+=
+(e_{m+1},\ldots,e_n).
+\]
+
+Their composition is simply concatenation,
+
+\[
+H_2\circ H_1
+=
+(e_1,\ldots,e_n).
+\]
+
+Operationally,
+
+history composition corresponds to executing one graph after another.
+
+Unlike graph composition,
+
+which combines computational structure,
+
+history composition combines realized computation.
+
+The two notions therefore occupy complementary levels.
+
+Graphs describe possibility.
+
+Histories describe realization.
+
+
+The History Functor
+
+
+Every execution graph naturally generates histories.
+
+This observation may be expressed as a mapping
+
+\[
+\mathcal H
+:
+\mathsf{Graph}
+\longrightarrow
+\mathsf{History},
+\]
+
+assigning to each graph the collection of histories obtainable from its execution.
+
+Composition behaves naturally with respect to this mapping.
+
+Whenever graph composition is defined,
+
+\[
+\mathcal H(G_2\circ G_1)
+=
+\mathcal H(G_2)
+\circ
+\mathcal H(G_1),
+\]
+
+up to observational equivalence.
+
+The significance of this relationship is considerable.
+
+Graph composition predicts history composition.
+
+Operational semantics therefore preserves compositional structure.
+
+Execution does not destroy the algebra developed earlier.
+
+It realizes it.
+
+
+Branching Histories
+
+
+Not every computation produces a single history.
+
+Interactive systems,
+
+probabilistic systems,
+
+symbolic search,
+
+repair,
+
+and speculative execution naturally produce branching histories.
+
+Rather than representing execution by a single sequence,
+
+we obtain a history tree
+
+\[
+T(H).
+\]
+
+Each branch corresponds to an alternative continuation.
+
+Importantly,
+
+all branches share their common prefixes.
+
+Only the divergent suffixes differ.
+
+Repair therefore does not require restarting computation.
+
+It merely extends an existing history along a different branch.
+
+Likewise,
+
+backtracking,
+
+proof search,
+
+constraint solving,
+
+and speculative execution all become special cases of branching history construction.
+
+The runtime therefore requires no separate semantic machinery for these paradigms.
+
+Branching histories already provide the necessary structure.
+
+
+History Metrics
+
+
+Because histories are explicit mathematical objects,
+
+they may be compared quantitatively.
+
+Suppose
+
+\[
+H_1
+\]
+
+and
+
+\[
+H_2
+\]
+
+share a common prefix.
+
+One natural measure of separation is the length of the shortest divergent suffix.
+
+Another compares differing operator events.
+
+Another compares resource consumption.
+
+More generally,
+
+one may introduce a metric
+
+\[
+d_H(H_1,H_2),
+\]
+
+measuring operational distance between histories.
+
+Such metrics support numerous computational tasks.
+
+Repair seeks nearby successful histories.
+
+Optimization seeks histories requiring fewer computational resources.
+
+Debugging seeks the earliest point at which two histories diverge.
+
+Learning seeks recurring history fragments.
+
+Thus history geometry becomes as important as graph geometry.
+
+
+The Duality Between Graphs and Histories
+
+
+A recurring theme of this appendix is the duality between graphs and histories.
+
+Graphs describe static possibility.
+
+Histories describe dynamic realization.
+
+Graphs emphasize dependency.
+
+Histories emphasize temporal development.
+
+Graphs compose spatially.
+
+Histories compose temporally.
+
+Optimization primarily transforms graphs.
+
+Learning often analyzes histories.
+
+Compilation constructs graphs.
+
+Execution constructs histories.
+
+Neither object is sufficient by itself.
+
+A graph without histories never executes.
+
+A history without an underlying graph possesses no computational explanation.
+
+Together they provide complementary descriptions of the same computational process.
+
+This duality is perhaps the most distinctive mathematical feature of Spherepop.
+
+Rather than reducing computation entirely to syntax,
+
+or entirely to state transitions,
+
+or entirely to functions,
+
+it represents computation as the continuous interaction between compositional structure and historical realization.
+
+The remaining appendices build upon this duality by developing the algebra of operator libraries and showing formally how Boolean logic, fuzzy logic, probabilistic computation, symbolic rewriting, and differentiable computation arise as different semantic interpretations over the same compositional substrate.
+
+
+Operator Algebras and Computational Semantics
+
+
+The previous appendix developed the algebra of composition graphs independently of any particular notion of computation. No assumptions were made concerning arithmetic, logic, probability, symbolic manipulation, or machine learning. The purpose of the present appendix is to show that these computational paradigms arise entirely from the choice of operator algebra attached to an otherwise unchanged composition graph.
+
+This separation between graph topology and operator semantics is one of the central mathematical principles of Spherepop.
+
+
+Operator Algebras
+
+
+Let
+
+\[
+\mathcal V
+\]
+
+be a carrier space.
+
+An operator algebra is a pair
+
+\[
+(\mathcal V,\mathcal O),
+\]
+
+where
+
+\[
+\mathcal O
+=
+\{f_i\}
+\]
+
+is a collection of computable mappings
+
+\[
+f_i :
+\mathcal V^{n_i}
+\rightarrow
+\mathcal V.
+\]
+
+The execution engine makes no assumptions concerning the internal structure of
+
+\[
+\mathcal V.
+\]
+
+It may contain
+
+numbers,
+
+Boolean values,
+
+graphs,
+
+proofs,
+
+probability distributions,
+
+functions,
+
+operators,
+
+or arbitrary computational objects.
+
+Likewise,
+
+the runtime imposes no restrictions upon the mathematical interpretation of the operators.
+
+Its only responsibility is to evaluate them once their inputs become available.
+
+
+Semantic Independence
+
+
+The graph
+
+\[
+G
+\]
+
+and the operator algebra
+
+\[
+(\mathcal V,\mathcal O)
+\]
+
+are logically independent.
+
+The graph determines only
+
+\[
+\text{dependency},
+\]
+
+while the operator algebra determines
+
+\[
+\text{transformation}.
+\]
+
+Execution therefore consists of evaluating
+
+\[
+(G,\mathcal O),
+\]
+
+rather than either object individually.
+
+This separation has an important consequence.
+
+The same graph may be evaluated using many different operator algebras without changing its topology.
+
+Conversely,
+
+the same operator algebra may act upon many different graphs.
+
+The runtime therefore decomposes naturally into structural and semantic components.
+
+
+Boolean Operator Algebras
+
+
+Classical digital computation corresponds to the carrier space
+
+\[
+\mathcal V
+=
+\{0,1\},
+\]
+
+together with operators such as
+
+\[
+\land,
+\qquad
+\lor,
+\qquad
+\neg,
+\qquad
+\oplus.
+\]
+
+Each graph node computes one Boolean transformation.
+
+Nothing in the graph itself distinguishes these operators from arithmetic or symbolic operators.
+
+They simply happen to act upon a two-element carrier space.
+
+Consequently,
+
+Boolean computation appears as one point within a much larger family of operator algebras.
+
+
+Arithmetic Operator Algebras
+
+
+Likewise,
+
+ordinary numerical computation chooses
+
+\[
+\mathcal V
+=
+\mathbb R,
+\]
+
+or perhaps
+
+\[
+\mathbb Z,
+\qquad
+\mathbb C,
+\qquad
+M_n(\mathbb R),
+\]
+
+together with familiar operators
+
+\[
++,
+-,
+\times,
+\div,
+\sin,
+\exp,
+\log.
+\]
+
+Again,
+
+the graph topology remains unchanged.
+
+Only the operators differ.
+
+Arithmetic therefore differs from Boolean logic only through its choice of carrier space and primitive transformations.
+
+The execution semantics remain identical.
+
+
+Fuzzy Operator Algebras
+
+
+Fuzzy computation enlarges the Boolean carrier space from
+
+\[
+\{0,1\}
+\]
+
+to
+
+\[
+[0,1].
+\]
+
+Conjunction,
+
+disjunction,
+
+and negation become continuous operators.
+
+For example,
+
+\[
+x\wedge y
+=
+\min(x,y),
+\]
+
+\[
+x\vee y
+=
+\max(x,y),
+\]
+
+\[
+\neg x
+=
+1-x.
+\]
+
+Alternative fuzzy algebras simply replace these local operators.
+
+No graph transformations are required.
+
+The runtime therefore remains entirely unaware that fuzzy reasoning is occurring.
+
+Only the operator library changes.
+
+
+Parameterized Operator Families
+
+
+Many computational systems need not commit to a fixed operator algebra.
+
+Instead,
+
+operators themselves may depend continuously upon parameters.
+
+Suppose
+
+\[
+f_\theta
+:
+\mathcal V^n
+\rightarrow
+\mathcal V,
+\]
+
+where
+
+\[
+\theta
+\]
+
+belongs to some parameter space.
+
+Changing
+
+\[
+\theta
+\]
+
+continuously transforms the computational semantics while preserving graph topology.
+
+Boolean logic,
+
+fuzzy logic,
+
+soft logic,
+
+and differentiable approximations may therefore be viewed as different parameter choices within one continuous operator family.
+
+The graph remains invariant throughout this deformation.
+
+This provides a particularly elegant account of systems that gradually interpolate between discrete and continuous reasoning.
+
+
+Closure Under Composition
+
+
+An operator algebra should be stable under repeated graph construction.
+
+Suppose
+
+\[
+f,g
+\in
+\mathcal O.
+\]
+
+Whenever their interfaces are compatible,
+
+their composition
+
+\[
+g\circ f
+\]
+
+again defines a computable operator.
+
+Repeated graph construction therefore generates progressively richer operators from a comparatively small primitive library.
+
+This closure property explains why practical programming languages require surprisingly few primitive constructs.
+
+Large computational systems emerge through repeated composition rather than through enormous collections of unrelated primitives.
+
+Composition therefore functions as a generator of computational complexity.
+
+The operator algebra supplies only the local building blocks.
+
+The composition graph determines how those blocks interact.
+
+Together they generate every computational behavior considered throughout this essay.
+
+
+Operators Acting on Operators
+
+
+One of the advantages of separating operator algebras from graph topology is that operators themselves become legitimate computational values.
+
+Conventionally,
+
+operators are treated as part of the execution engine.
+
+Spherepop instead regards them as ordinary objects inhabiting the computational universe.
+
+Suppose
+
+\[
+\mathcal O
+\subseteq
+\mathcal V.
+\]
+
+Then an operator may become the input to another operator.
+
+For example,
+
+\[
+M:
+\mathcal O
+\rightarrow
+\mathcal O
+\]
+
+may optimize an operator,
+
+while
+
+\[
+C:
+\mathcal O\times\mathcal O
+\rightarrow
+\mathcal O
+\]
+
+may compose two operators into a single composite operator.
+
+Likewise,
+
+\[
+D:
+\mathcal O
+\rightarrow
+\mathcal O
+\]
+
+may construct the derivative of a differentiable operator,
+
+and
+
+\[
+R:
+\mathcal O
+\rightarrow
+\mathcal O
+\]
+
+may generate a repair transformation.
+
+Nothing special is required from the runtime.
+
+The execution engine merely evaluates another operator.
+
+This recursive treatment eliminates the traditional distinction between programs and meta-programs.
+
+Operators manipulate operators exactly as numerical operators manipulate numbers.
+
+
+Operator Synthesis
+
+
+If operators are ordinary computational values,
+
+they may also be synthesized during execution.
+
+Suppose repeated histories reveal a frequently occurring graph fragment
+
+\[
+H.
+\]
+
+Rather than repeatedly evaluating
+
+\[
+H,
+\]
+
+the runtime may construct a new primitive operator
+
+\[
+f_H
+\]
+
+whose behavior is operationally equivalent to the entire fragment.
+
+Graphically,
+
+many nodes collapse into one.
+
+Operationally,
+
+nothing changes.
+
+The synthesized operator simply encapsulates an existing computation.
+
+This process resembles function extraction,
+
+compiler optimization,
+
+hardware synthesis,
+
+and concept formation simultaneously.
+
+Repeated computational patterns gradually become primitive vocabulary.
+
+The operator algebra therefore evolves together with the execution histories that generated it.
+
+
+Operator Equivalence
+
+
+Different primitive operators need not possess different computational meanings.
+
+Suppose
+
+\[
+f,g
+\in
+\mathcal O.
+\]
+
+We say that
+
+\[
+f
+\equiv
+g
+\]
+
+whenever,
+
+for every admissible collection of input histories,
+
+their observable output histories are operationally equivalent.
+
+Notice that this notion of equivalence is behavioral rather than syntactic.
+
+Two operators may possess entirely different internal implementations while remaining operationally indistinguishable.
+
+This observation plays the same role for operators that observational equivalence played earlier for graphs.
+
+Both emphasize computational behavior rather than representation.
+
+
+Minimal Generating Sets
+
+
+One naturally asks how many primitive operators are actually necessary.
+
+Suppose
+
+\[
+\mathcal G
+\subseteq
+\mathcal O
+\]
+
+is a subset whose closure under composition generates every operator in
+
+\[
+\mathcal O.
+\]
+
+Then
+
+\[
+\mathcal G
+\]
+
+is called a generating set.
+
+Many familiar computational systems possess surprisingly small generating sets.
+
+Boolean circuits may be generated from NAND alone.
+
+Lambda calculus requires only abstraction and application.
+
+Combinatory logic employs only a handful of primitive combinators.
+
+Lisp builds much of its expressive power from repeated applications of
+
+\texttt{cons},
+
+quotation,
+
+and evaluation.
+
+Spherepop suggests that the search for minimal generating sets should focus not upon syntax but upon operator composition.
+
+The expressive power of a computational substrate depends less upon the number of primitives than upon the richness of the compositions they admit.
+
+
+Operator Metrics
+
+
+Once operators become explicit mathematical objects,
+
+they may be compared quantitatively.
+
+Suppose
+
+\[
+f
+\]
+
+and
+
+\[
+g
+\]
+
+act upon the same carrier space.
+
+One may introduce a metric
+
+\[
+d_{\mathcal O}(f,g),
+\]
+
+measuring operational similarity.
+
+Several possibilities naturally arise.
+
+The operators may be compared according to
+
+their observable histories,
+
+their computational cost,
+
+their graph complexity,
+
+their resource usage,
+
+their approximation error,
+
+or the graph distance between their implementations.
+
+Such metrics permit clustering,
+
+library organization,
+
+automatic specialization,
+
+and adaptive synthesis.
+
+The operator algebra therefore acquires its own intrinsic geometry,
+
+complementing the graph geometry developed in Appendix~A.
+
+
+Changing Semantics Without Changing Structure
+
+
+Perhaps the most important mathematical consequence of the operator algebra is the complete separation of computational structure from computational interpretation.
+
+Suppose
+
+\[
+G
+\]
+
+is fixed.
+
+Replacing one operator algebra
+
+\[
+(\mathcal V,\mathcal O_1)
+\]
+
+with another
+
+\[
+(\mathcal W,\mathcal O_2)
+\]
+
+changes only the local transformations performed at each node.
+
+The dependency graph remains identical.
+
+Consequently,
+
+one may execute precisely the same computational structure as
+
+a Boolean circuit,
+
+a fuzzy inference engine,
+
+a probabilistic graphical model,
+
+a symbolic rewrite system,
+
+a neural network,
+
+or a differentiable computational graph
+
+simply by changing the operator library attached to the nodes.
+
+This theorem-like observation is perhaps the strongest formal justification for the graph-first philosophy developed throughout the essay.
+
+Graph topology represents the invariant organizational structure of computation.
+
+Operator algebras determine its semantic realization.
+
+The execution engine mediates between the two without privileging any particular computational paradigm.
+
+The final appendix exploits this separation to develop a formal theory of graph rewriting, showing that compilation, optimization, repair, specialization, and learning may all be understood as different families of admissible graph transformations preserving appropriate notions of observational equivalence.
+
+
+A Calculus of Graph Rewriting
+
+
+The preceding appendices established two complementary mathematical structures. Composition graphs describe the organization of computation, while operator algebras describe the local semantics attached to graph nodes. We now combine these structures into a formal calculus of graph rewriting.
+
+The purpose of this appendix is to show that compilation, optimization, repair, specialization, learning, and program transformation are all instances of a single mathematical operation: the replacement of one composition graph by another while preserving an appropriate notion of operational behavior.
+
+
+Rewrite Rules
+
+
+The primitive object of the calculus is the rewrite rule.
+
+\begin{definition}[Rewrite Rule]
+
+A rewrite rule is an ordered pair
+
+\[
+R=(L,R),
+\]
+
+where
+
+\[
+L
+\]
+
+and
+
+\[
+R
+\]
+
+are composition graphs possessing compatible boundary interfaces.
+
+Whenever
+
+\[
+L
+\]
+
+appears as a subgraph of a larger graph
+
+\[
+G,
+\]
+
+it may be replaced by
+
+\[
+R.
+\]
+
+\end{definition}
+
+The notation is intentionally suggestive.
+
+The left-hand graph specifies the pattern being recognized.
+
+The right-hand graph specifies the replacement.
+
+Unlike ordinary term rewriting,
+
+both objects are arbitrary directed graphs.
+
+
+Matching
+
+
+Before a rewrite may occur,
+
+the runtime must identify an occurrence of the left-hand graph.
+
+\begin{definition}[Matching]
+
+A match of
+
+\[
+L
+\]
+
+inside
+
+\[
+G
+\]
+
+is an injective graph homomorphism
+
+\[
+\phi
+:
+L
+\rightarrow
+G
+\]
+
+preserving
+
+nodes,
+
+edges,
+
+operators,
+
+and boundary interfaces.
+
+\end{definition}
+
+Operationally,
+
+matching is pattern recognition.
+
+The compiler,
+
+optimizer,
+
+or repair engine searches for graph regions possessing the required structure.
+
+Once found,
+
+the rewrite becomes applicable.
+
+This formulation unifies
+
+pattern-based compiler optimization,
+
+rule-based theorem proving,
+
+symbolic simplification,
+
+and hardware synthesis.
+
+Each consists fundamentally of graph matching followed by graph replacement.
+
+
+Replacement
+
+
+Suppose
+
+\[
+\phi
+:
+L
+\rightarrow
+G
+\]
+
+is a successful match.
+
+The rewritten graph
+
+\[
+G'
+\]
+
+is obtained by removing
+
+\[
+\phi(L)
+\]
+
+from
+
+\[
+G
+\]
+
+and inserting a fresh copy of
+
+\[
+R,
+\]
+
+connecting every boundary edge exactly as before.
+
+Interior structure may change completely.
+
+Boundary behavior remains unchanged.
+
+The surrounding graph therefore cannot distinguish the rewritten region except through changes in computational cost or internal organization.
+
+This locality property explains why graph rewriting scales effectively even for very large computational systems.
+
+
+Admissible Rewrites
+
+
+Not every rewrite is computationally meaningful.
+
+A rewrite should preserve the intended operational behavior.
+
+\begin{definition}[Admissible Rewrite]
+
+A rewrite
+
+\[
+L
+\Longrightarrow
+R
+\]
+
+is admissible whenever
+
+\[
+L
+\simeq
+R,
+\]
+
+where
+
+\[
+\simeq
+\]
+
+denotes operational equivalence.
+
+\end{definition}
+
+Different applications require different notions of equivalence.
+
+Compiler optimization usually preserves exact outputs.
+
+Approximate numerical optimization may preserve results within prescribed tolerances.
+
+Probabilistic computation may preserve distributions.
+
+Repair may preserve admissible continuations rather than exact histories.
+
+The rewrite calculus itself remains unchanged.
+
+Only the equivalence relation varies.
+
+
+Confluence
+
+
+Whenever several rewrites are simultaneously applicable,
+
+one naturally asks whether the order of application matters.
+
+Suppose
+
+\[
+G
+\Longrightarrow
+G_1,
+\]
+
+and
+
+\[
+G
+\Longrightarrow
+G_2.
+\]
+
+A desirable property is that both rewrite sequences eventually reconverge.
+
+\begin{definition}[Confluence]
+
+A rewrite system is confluent whenever
+
+\[
+G
+\Longrightarrow
+G_1,
+\qquad
+G
+\Longrightarrow
+G_2
+\]
+
+implies the existence of some graph
+
+\[
+H
+\]
+
+satisfying
+
+\[
+G_1
+\Longrightarrow^*
+H,
+\qquad
+G_2
+\Longrightarrow^*
+H.
+\]
+
+\end{definition}
+
+Confluence guarantees that optimization does not depend upon arbitrary choices made during rewriting.
+
+Many practical rewrite systems intentionally sacrifice global confluence in exchange for efficiency.
+
+Nevertheless,
+
+local confluence remains an important design objective.
+
+
+Termination
+
+
+Repeated rewriting should not continue indefinitely unless intended.
+
+A rewrite system terminates whenever every rewrite sequence eventually reaches a graph to which no further rewrite applies.
+
+One common proof technique assigns each graph a measure
+
+\[
+\mu(G),
+\]
+
+such that every rewrite strictly decreases
+
+\[
+\mu.
+\]
+
+Termination then follows immediately because no infinite descending sequence exists.
+
+Different optimization systems choose different measures.
+
+Some minimize graph size.
+
+Others minimize execution cost.
+
+Others minimize resource usage.
+
+The rewrite calculus itself remains independent of the particular objective.
+
+
+
+Critical Pairs
+
+
+One of the principal difficulties in any rewrite system arises when several rewrite rules may be applied to overlapping regions of the same graph.
+
+Suppose
+
+\[
+R_1
+:
+L_1
+\Longrightarrow
+R_1,
+\]
+
+and
+
+\[
+R_2
+:
+L_2
+\Longrightarrow
+R_2,
+\]
+
+are simultaneously applicable.
+
+If the matched regions are disjoint,
+
+the order of application is irrelevant.
+
+Each rewrite acts independently.
+
+The situation becomes more interesting when the matched subgraphs overlap.
+
+The two rewrites may compete for the same computational region.
+
+\begin{definition}[Critical Pair]
+
+A critical pair consists of two admissible rewrites whose left-hand sides overlap within a common composition graph.
+
+\end{definition}
+
+Critical pairs identify precisely those locations where the rewrite calculus must determine whether different rewrite orders remain operationally equivalent.
+
+Traditional term rewriting systems devote considerable attention to critical pair analysis.
+
+The graph formulation generalizes these ideas from trees to arbitrary directed dependency structures.
+
+
+Commuting Rewrites
+
+
+Many practical optimizations commute naturally.
+
+Suppose
+
+\[
+R_1
+\]
+
+simplifies one subgraph while
+
+\[
+R_2
+\]
+
+optimizes another disjoint region.
+
+Then
+
+\[
+R_1(R_2(G))
+=
+R_2(R_1(G))
+\]
+
+up to graph isomorphism.
+
+Such rewrites are said to commute.
+
+Commutativity has several practical consequences.
+
+Independent compiler passes may execute in parallel.
+
+Distributed optimization becomes possible.
+
+Large graphs may be partitioned into regions optimized simultaneously.
+
+Reasoning about correctness becomes local rather than global.
+
+The scheduler therefore need not serialize every optimization.
+
+Whenever rewrites commute,
+
+their relative order becomes irrelevant.
+
+This property greatly enlarges the available optimization space.
+
+
+Parallel Graph Rewriting
+
+
+The graph-oriented formulation naturally supports parallel rewriting.
+
+Suppose
+
+\[
+G
+=
+G_1
+\cup
+G_2
+\cup
+\cdots
+\cup
+G_n,
+\]
+
+where the regions are pairwise disjoint.
+
+Each region may undergo rewriting independently.
+
+Formally,
+
+\[
+R_i
+:
+G_i
+\Longrightarrow
+G_i',
+\]
+
+for
+
+\[
+i=1,\ldots,n.
+\]
+
+The rewritten graph becomes
+
+\[
+G'
+=
+G_1'
+\cup
+G_2'
+\cup
+\cdots
+\cup
+G_n'.
+\]
+
+Because no dependencies cross the rewritten boundaries,
+
+the resulting graph is observationally equivalent to any sequential application of the same rewrites.
+
+Parallel optimization therefore emerges naturally from graph locality rather than requiring special compiler mechanisms.
+
+
+Repair as Constrained Rewriting
+
+
+Repair theory fits particularly naturally within the rewrite calculus.
+
+Suppose a graph
+
+\[
+G
+\]
+
+produces an inadmissible history.
+
+Rather than abandoning the computation,
+
+one seeks another graph
+
+\[
+G'
+\]
+
+satisfying
+
+\[
+G
+\Longrightarrow^*
+G',
+\]
+
+together with
+
+\[
+\mathcal H(G')
+\in
+\mathcal A,
+\]
+
+where
+
+\[
+\mathcal A
+\]
+
+denotes the collection of admissible histories.
+
+Repair therefore differs from ordinary optimization only through its objective.
+
+Optimization minimizes computational cost.
+
+Repair restores admissibility.
+
+Both employ precisely the same graph rewriting machinery.
+
+This observation provides a formal bridge between the present essay and the broader repair-theoretic framework developed elsewhere.
+
+
+Learning Rewrite Rules
+
+
+Traditional compiler optimizations are designed manually.
+
+Spherepop suggests a more adaptive alternative.
+
+Suppose repeated execution histories reveal that one graph fragment repeatedly transforms into another during successful optimization.
+
+The runtime may infer a candidate rewrite
+
+\[
+L
+\Longrightarrow
+R.
+\]
+
+Subsequent executions test the candidate.
+
+If operational equivalence is preserved,
+
+the rewrite becomes part of the permanent rewrite library.
+
+Learning therefore becomes rewrite discovery.
+
+Rather than merely adjusting numerical parameters,
+
+the computational system gradually expands its algebra of admissible graph transformations.
+
+This viewpoint unifies machine learning,
+
+compiler optimization,
+
+and program synthesis within a common mathematical framework.
+
+
+The Fundamental Graph Rewriting Theorem
+
+
+The preceding development may be summarized by the following principle.
+
+\begin{theorem}[Fundamental Graph Rewriting Theorem]
+
+Let
+
+\[
+G
+\]
+
+be a composition graph,
+
+and let
+
+\[
+\mathcal R
+\]
+
+be a collection of admissible rewrite rules preserving operational equivalence.
+
+Then every finite sequence of rewrites
+
+\[
+G
+\Longrightarrow
+G_1
+\Longrightarrow
+G_2
+\Longrightarrow
+\cdots
+\Longrightarrow
+G_n
+\]
+
+produces a graph satisfying
+
+\[
+G_n
+\simeq
+G.
+\]
+
+Consequently,
+
+compilation,
+
+optimization,
+
+repair,
+
+specialization,
+
+hardware lowering,
+
+operator fusion,
+
+partial evaluation,
+
+and program transformation all remain within the same operational equivalence class.
+
+\end{theorem}
+
+\begin{proof}
+
+Each rewrite individually preserves operational equivalence by definition.
+
+Since operational equivalence is transitive,
+
+the composition of finitely many admissible rewrites also preserves operational equivalence.
+
+Therefore
+
+\[
+G_n
+\simeq
+G.
+\]
+
+\end{proof}
+
+This theorem provides the mathematical justification for viewing graph rewriting as the primitive mechanism underlying an enormous range of computational transformations.
+
+Rather than introducing separate theories for optimization,
+
+compilation,
+
+repair,
+
+and specialization,
+
+one studies a single algebra of admissible graph rewrites.
+
+
+The Graph-Centric View of Computation
+
+
+The three appendices together establish a unified mathematical picture.
+
+Appendix~A introduced the algebra of composition graphs.
+
+Appendix~B separated graph topology from operator semantics through operator algebras.
+
+The present appendix has shown that computation evolves through admissible graph rewriting while preserving observable histories.
+
+The resulting hierarchy is remarkably compact.
+
+Composition generates graphs.
+
+Graphs become executable through operator algebras.
+
+Execution generates histories.
+
+Histories motivate graph rewrites.
+
+Graph rewrites produce repair,
+
+optimization,
+
+learning,
+
+specialization,
+
+and compilation.
+
+Higher-level programming languages,
+
+type systems,
+
+logical calculi,
+
+and proof assistants then emerge as increasingly sophisticated descriptive systems for constructing, constraining, and reasoning about these graphs.
+
+This mathematical hierarchy captures the principal thesis of the essay: computation is fundamentally an evolving algebra of composed operators. Everything traditionally regarded as the foundation of programming languages—including syntax, types, logical systems, and proof calculi—should be understood as progressively richer descriptive organizations of that more primitive compositional substrate.
+
+
+Reference Implementation of the Spherepop Execution Engine
+
+
+The preceding appendices developed the mathematical foundations of Spherepop independently of any particular implementation. The purpose of this appendix is to demonstrate that the corresponding runtime architecture is remarkably small. Nearly all of the expressive power of the system resides in graph composition and operator libraries rather than in the execution engine itself.
+
+The implementation described here is intentionally abstract. It should be viewed as a mathematical specification rather than a particular programming language implementation.
+
+
+Runtime State
+
+
+The complete runtime state consists of the tuple
+
+\[
+\mathcal R
+=
+(G,\mathcal O,H,Q,M),
+\]
+
+where
+
+\[
+G
+\]
+
+is the current composition graph,
+
+\[
+\mathcal O
+\]
+
+is the active operator library,
+
+\[
+H
+\]
+
+is the persistent execution history,
+
+\[
+Q
+\]
+
+is the scheduler queue,
+
+and
+
+\[
+M
+\]
+
+stores reusable graph fragments together with synthesized operators.
+
+No program counter is required.
+
+Execution position is determined entirely by graph dependencies.
+
+Likewise,
+
+there is no evaluation stack in the traditional sense.
+
+Dependency structure replaces sequential nesting.
+
+
+Initialization
+
+
+Execution begins by loading a graph together with one or more operator libraries.
+
+Formally,
+
+\[
+(G,\mathcal O)
+\longmapsto
+\mathcal R_0.
+\]
+
+The scheduler then computes
+
+\[
+Q_0
+=
+I(G),
+\]
+
+where
+
+\[
+I(G)
+\]
+
+is the graph's input interface.
+
+Initially,
+
+only nodes possessing no unresolved predecessors are executable.
+
+Every remaining node becomes executable only after its dependencies have produced histories.
+
+
+The Evaluation Loop
+
+
+The operational heart of the runtime consists of a single loop.
+
+At each iteration,
+
+the scheduler removes one executable node
+
+\[
+n
+\]
+
+from
+
+\[
+Q.
+\]
+
+Suppose
+
+\[
+\ell(n)=f.
+\]
+
+The runtime gathers the values produced by every predecessor,
+
+constructing the tuple
+
+\[
+(v_1,\ldots,v_k).
+\]
+
+Evaluation produces
+
+\[
+v=f(v_1,\ldots,v_k).
+\]
+
+The node output becomes
+
+\[
+v.
+\]
+
+The history is extended,
+
+\[
+H
+\leftarrow
+(H,e),
+\]
+
+where
+
+\[
+e
+=
+(n,f,v).
+\]
+
+Finally,
+
+every successor whose dependencies have become satisfied is inserted into the scheduler.
+
+No additional semantic rules are required.
+
+Every computational paradigm discussed throughout this essay executes through repeated application of this single loop.
+
+
+Refusal During Execution
+
+
+Spherepop differs from conventional runtimes by treating refusal as an ordinary operational outcome.
+
+Suppose an operator determines that continuation is inadmissible.
+
+Instead of producing an ordinary value,
+
+it may produce
+
+\[
+\Refuse(r),
+\]
+
+where
+
+\[
+r
+\]
+
+records the reason for refusal.
+
+The runtime records this event within the history exactly as it records successful evaluation.
+
+Subsequent operators may
+
+repair the refusal,
+
+propagate it,
+
+branch around it,
+
+or terminate execution.
+
+Refusal therefore does not constitute an exceptional failure of the runtime.
+
+It is simply another computational event.
+
+This treatment considerably simplifies implementations supporting constraint solving,
+
+proof search,
+
+interactive reasoning,
+
+or repair-oriented computation.
+
+
+Collapse
+
+
+Many computations accumulate provisional values before committing them.
+
+Spherepop therefore distinguishes evaluation from commitment.
+
+Suppose a node has produced the provisional value
+
+\[
+v.
+\]
+
+The runtime may subsequently perform
+
+\[
+\Collapse(v),
+\]
+
+recording that the value has become part of the committed computational history.
+
+This distinction permits speculative execution,
+
+fuzzy reasoning,
+
+symbolic evaluation,
+
+and repair to coexist naturally.
+
+Evaluation generates possibilities.
+
+Collapse commits to one realization.
+
+The execution history records both stages explicitly.
+
+
+Parallel Execution
+
+
+Parallel execution requires almost no modification of the runtime.
+
+Instead of selecting a single executable node,
+
+the scheduler selects an antichain
+
+\[
+A
+\subseteq
+Q,
+\]
+
+whose members possess no mutual dependencies.
+
+Every node in
+
+\[
+A
+\]
+
+may execute simultaneously.
+
+After all have completed,
+
+their successor nodes are examined exactly as before.
+
+Consequently,
+
+parallelism is not encoded within the language.
+
+It is discovered from graph topology.
+
+The same graph therefore executes sequentially,
+
+in parallel,
+
+or across distributed hardware without changing its operational semantics.
+
+
+Incremental Execution
+
+
+Many practical systems repeatedly modify only small portions of a graph.
+
+Recomputing the entire graph would be wasteful.
+
+Instead,
+
+the runtime marks only those nodes whose dependencies have changed.
+
+Every unaffected region retains its previous histories.
+
+Execution therefore becomes incremental.
+
+Only computational consequences of the modification are reevaluated.
+
+This mechanism naturally supports
+
+interactive programming,
+
+graphical editors,
+
+continuous simulation,
+
+spreadsheet computation,
+
+and reactive user interfaces.
+
+Incrementality emerges from dependency analysis rather than from specialized programming constructs.
+
+
+Summary
+
+
+The reference runtime described in this appendix is intentionally minimal.
+
+Its responsibilities are limited to
+
+maintaining a composition graph,
+
+loading operator libraries,
+
+scheduling executable nodes,
+
+recording persistent histories,
+
+processing refusal and collapse events,
+
+and applying graph rewrites when requested.
+
+Every richer computational phenomenon discussed throughout this essay—typing, theorem proving, compilation, optimization, fuzzy inference, symbolic reasoning, neural computation, repair, and learning—is realized by supplying different operator libraries and graph transformations rather than by enlarging the execution engine itself.
+
+This economy is the principal engineering consequence of the graph-first philosophy. A small, mathematically uniform runtime can support an unexpectedly broad spectrum of computational paradigms because composition, rather than any particular programming language or logical system, is treated as the primitive computational operation.
+
+
+Toward a Composition-First Calculus
+
+
+The previous appendices have developed the operational machinery of Spherepop using graphs, operator algebras, and histories. A natural question now arises: can these ideas themselves be organized into a formal calculus analogous to the lambda calculus or the calculus of constructions?
+
+The answer proposed here is affirmative.
+
+Rather than taking abstraction, application, or typing as primitive, we propose a composition-first calculus whose primitive judgments concern graph construction and history evolution.
+
+
+Primitive Judgments
+
+
+Most formal calculi begin with judgments such as
+
+\[
+\Gamma \vdash t : T,
+\]
+
+or
+
+\[
+\Gamma \vdash P.
+\]
+
+Spherepop instead begins with operational judgments.
+
+The most primitive judgment is
+
+\[
+H
+\vdash
+G
+\Downarrow
+H',
+\]
+
+which should be read as
+
+\begin{quote}
+Executing graph
+\[
+G
+\]
+extends history
+\[
+H
+\]
+into history
+\[
+H'.
+\]
+\end{quote}
+
+Notice what is absent.
+
+There are no variables.
+
+No typing context.
+
+No logical propositions.
+
+Only graphs and histories.
+
+Everything else will eventually be introduced as additional descriptive structure.
+
+
+Primitive Rules
+
+
+The calculus contains remarkably few primitive inference rules.
+
+The identity rule states that the empty graph leaves history unchanged,
+
+\[
+\frac{\ }
+{H
+\vdash
+\operatorname{Id}
+\Downarrow
+H.}
+\]
+
+Composition becomes
+
+\[
+\frac{
+H
+\vdash
+G_1
+\Downarrow
+H_1
+\qquad
+H_1
+\vdash
+G_2
+\Downarrow
+H_2
+}
+{
+H
+\vdash
+G_2\circ G_1
+\Downarrow
+H_2.
+}
+\]
+
+This single rule replaces a large collection of language-specific evaluation rules.
+
+Sequential execution,
+
+function application,
+
+pipeline execution,
+
+module composition,
+
+and hardware composition
+
+all become instances of graph composition.
+
+
+Operator Evaluation
+
+
+Suppose
+
+\[
+n
+\]
+
+is an executable node whose operator is
+
+\[
+f.
+\]
+
+The evaluation rule becomes
+
+\[
+\frac{
+v
+=
+f(v_1,\ldots,v_k)
+}
+{
+H
+\vdash
+n
+\Downarrow
+(H,e),
+}
+\]
+
+where
+
+\[
+e=(n,f,v).
+\]
+
+Unlike ordinary operational semantics,
+
+the output history explicitly records the computational event.
+
+Evaluation therefore constructs history rather than merely producing values.
+
+
+Refusal
+
+
+Constraint systems,
+
+proof assistants,
+
+repair systems,
+
+and interactive reasoning frequently require the ability to reject proposed continuations.
+
+Spherepop treats refusal as an ordinary inference rule.
+
+\[
+\frac{
+r
+\text{ is a refusal reason}
+}
+{
+H
+\vdash
+n
+\Downarrow
+(H,\Refuse(r)).
+}
+\]
+
+Refusal does not terminate the calculus.
+
+Subsequent rules may branch,
+
+repair,
+
+or replace the rejected continuation.
+
+This treatment removes the traditional distinction between successful computation and controlled failure.
+
+Both become ordinary historical events.
+
+
+Collapse
+
+
+Similarly,
+
+the calculus distinguishes evaluation from commitment.
+
+Suppose
+
+\[
+v
+\]
+
+has already been produced.
+
+Commitment becomes
+
+\[
+\frac{
+v
+\text{ evaluated}
+}
+{
+H
+\vdash
+\Collapse(v)
+\Downarrow
+(H,\Collapse(v)).
+}
+\]
+
+This explicit treatment of commitment provides a uniform account of speculative execution,
+
+interactive computation,
+
+symbolic reasoning,
+
+and fuzzy evaluation.
+
+The runtime may evaluate many possibilities while collapsing only selected histories.
+
+
+The Conservativity Principle
+
+
+An important property of the calculus is that richer computational systems extend rather than replace the primitive rules.
+
+Typed systems add typing judgments.
+
+Proof systems add proof judgments.
+
+Dependent type theories add universe judgments.
+
+Program logics add specification judgments.
+
+None of these alters the primitive execution rules developed above.
+
+They merely constrain which graphs are considered admissible.
+
+This observation leads to what may be regarded as the central theorem of the appendix.
+
+\begin{theorem}[Conservativity]
+
+Every extension of the composition-first calculus obtained by adding descriptive judgments while leaving the operational rules unchanged is conservative with respect to execution.
+
+Consequently,
+
+types,
+
+proofs,
+
+logical systems,
+
+and specification languages enrich computation without enlarging its primitive operational semantics.
+
+\end{theorem}
+
+This theorem formalizes one of the principal philosophical claims of the entire essay.
+
+Execution precedes description.
+
+Descriptions constrain execution.
+
+They do not generate it.
+
+
+The Composition-First Thesis
+
+
+The resulting hierarchy may finally be stated in mathematical form.
+
+Primitive operators generate graphs.
+
+Graphs generate histories.
+
+Histories admit composition,
+
+repair,
+
+optimization,
+
+and learning.
+
+Only after these operational structures exist do we introduce
+
+syntax,
+
+grammars,
+
+types,
+
+logical systems,
+
+proof calculi,
+
+dependent universes,
+
+and mathematical foundations.
+
+The resulting direction of explanation is therefore
+
+\[
+\text{composition}
+\Longrightarrow
+\text{graphs}
+\Longrightarrow
+\text{histories}
+\Longrightarrow
+\text{execution}
+\Longrightarrow
+\text{optimization}
+\Longrightarrow
+\text{description}
+\Longrightarrow
+\text{verification}.
+\]
+
+This ordering is deliberately opposite to that adopted by most presentations of programming language theory.
+
+Rather than deriving execution from syntax,
+
+Spherepop derives syntax from execution.
+
+Rather than deriving computation from type theory,
+
+it derives type theory from admissible patterns of composition.
+
+Rather than deriving programs from formal languages,
+
+it derives formal languages from the need to communicate composition graphs efficiently.
+
+The composition-first calculus therefore serves not as a replacement for existing logical foundations, but as a proposed operational substrate beneath them. Lambda calculi, combinatory logic, type theories, proof assistants, and the calculus of constructions can all be interpreted as progressively richer descriptive systems whose common computational core is the composition of operators into persistent histories.
+
+\newpage
+
+\begin{thebibliography}{99}
+
+\bibitem{Aho2007}
+A. V. Aho, M. S. Lam, R. Sethi, and J. D. Ullman.
+\newblock \emph{Compilers: Principles, Techniques, and Tools}.
+\newblock 2nd ed., Addison--Wesley, 2007.
+
+\bibitem{Backus1978}
+J. Backus.
+\newblock Can Programming Be Liberated from the von Neumann Style?
+\newblock \emph{Communications of the ACM}, 21(8):613--641, 1978.
+
+\bibitem{Baader1998}
+F. Baader and T. Nipkow.
+\newblock \emph{Term Rewriting and All That}.
+\newblock Cambridge University Press, 1998.
+
+\bibitem{Barendregt1984}
+H. P. Barendregt.
+\newblock \emph{The Lambda Calculus: Its Syntax and Semantics}.
+\newblock North-Holland, 1984.
+
+\bibitem{Bird1998}
+R. Bird.
+\newblock \emph{Introduction to Functional Programming Using Haskell}.
+\newblock Prentice Hall, 1998.
+
+\bibitem{Bondy1976}
+J. A. Bondy and U. S. R. Murty.
+\newblock \emph{Graph Theory with Applications}.
+\newblock Macmillan, 1976.
+
+\bibitem{Book1984}
+R. V. Book and F. Otto.
+\newblock \emph{String-Rewriting Systems}.
+\newblock Springer, 1984.
+
+\bibitem{Cormen2022}
+T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein.
+\newblock \emph{Introduction to Algorithms}.
+\newblock 4th ed., MIT Press, 2022.
+
+\bibitem{Cousot1977}
+P. Cousot and R. Cousot.
+\newblock Abstract Interpretation.
+\newblock \emph{Proceedings of the ACM Symposium on Principles of Programming Languages}, 1977.
+
+\bibitem{Girard1989}
+J.-Y. Girard, Y. Lafont, and P. Taylor.
+\newblock \emph{Proofs and Types}.
+\newblock Cambridge University Press, 1989.
+
+\bibitem{Gonthier2008}
+G. Gonthier.
+\newblock Formal Proof---The Four-Color Theorem.
+\newblock \emph{Notices of the American Mathematical Society}, 55(11):1382--1393, 2008.

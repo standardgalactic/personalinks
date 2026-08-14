@@ -1,0 +1,64 @@
+**Interpretation in RSVP / Gauge‑Theoretic Terms**
+
+1. **Full Permutation Symmetry (Relational Group \(G\)).**  
+   In the original Transformer, each token can be permuted arbitrarily beca[4D[K
+because the model only cares about relational information among tokens. Thi[3D[K
+This is equivalent to considering the full symmetry group \(G\) of all poss[4D[K
+possible permutations.
+
+2. **Partial Order on Tokens → Reduced Symmetry (\(G_{\text{causal}}\)).** [K
+ 
+   Causal constraints impose a temporal (partial) order \(\preceq\) on toke[4D[K
+token indices: a token cannot depend on a “future” token (\(i\succ j\) mean[4D[K
+means \(j\) is not allowed to influence \(i\)). This ordering breaks the sy[2D[K
+symmetry from \(G\) down to a subgroup \(G_{\text{causal}}\) consisting of [K
+only those permutations that preserve this order.
+
+3. **Triangular Gauge Fixing (Causal Mask).**  
+   The causal attention mask forces the attention kernel \((QK^\top)_{ij}=0[18D[K
+\((QK^\top)_{ij}=0\) for any \(j\succ i\), yielding a lower‑triangular form[4D[K
+form. In RSVP language, this is a *triangular gauge fixing*: we pick a repr[4D[K
+representative element from each equivalence class (gauge orbit) that respe[5D[K
+respects the causal partial order.
+
+4. **Admissible Interactions Expand to Directed Relational Observables.**  [K
+
+   With reduced symmetry, interactions are no longer required to be invaria[7D[K
+invariant under arbitrary permutations; they must merely respect order‑pres[10D[K
+order‑preserving transformations. Consequently, directed relational observa[7D[K
+observables become allowed, and kernels can naturally take an asymmetric (c[2D[K
+(causal) form.
+
+5. **Causal Transformers as a Symmetry‑Broken Phase.**  
+   The resulting phase is characterized by:
+   - Reduced symmetry group \(G_{\text{causal}}\),
+   - A partial order on token space,
+   - Triangular gauge fixing of the attention kernel,
+   - Directed information flow aligned with entropy gradients (analogous to[2D[K
+to a physical arrow of time).
+
+6. **Relation to Autoregressive Models.**  
+   When the partial order becomes total (i.e., autoregressive setting), the[3D[K
+the symmetry group reduces to the identity, and the model still uses quarti[6D[K
+quartic attention but restricts it strictly to causal directions, mirroring[9D[K
+mirroring the unidirectional entropy flow.
+
+7. **Summary Table**
+
+| RSVP / Gauge View | Causal Transformer View |
+|-------------------|--------------------------|
+| Relational symmetry \(G\) | Token permutation freedom limited by temporal[8D[K
+temporal order |
+| Partial order on tokens | Temporal ordering (partial) |
+| Triangular gauge fixing | Causal attention mask |
+| Reduced symmetry group | Order‑preserving permutations only |
+| Symmetry‑broken phase | Phase with causal constraint, directed flow |
+
+**Conclusion:**  
+Causal masking is not an independent architectural choice but a natural con[3D[K
+consequence of applying the RSVP framework to relational dynamics: it imple[5D[K
+implements a *triangular gauge fixing* that respects causality while preser[6D[K
+preserving the underlying quartic attention interaction. This perspective c[1D[K
+clarifies why causal Transformers emerge as a specific symmetry‑broken phas[4D[K
+phase rather than introducing new primitives.
+

@@ -1,93 +1,114 @@
-**Extracted durable theoretical information**
+**1. Definitions and Primitive Concepts Introduced**
 
-1. **Definitions & Concepts**
-   - *Concrete Mathematics* (Graham 1989) – systematic treatment of discret[7D[K
-discrete mathematics; includes combinatorial identities and recurrence rela[4D[K
-relations.
-   - *Graph Theory* (Harary 1969) – study of graphs, their properties (conn[5D[K
-(connectivity, colorability), and algorithms for graph processing.
-   - *Computer Architecture: A Quantitative Approach* (Hennessy & Patterson[9D[K
-Patterson 2019, 6th ed.) – quantitative treatment of hardware design, perfo[5D[K
-performance modeling, pipelining, memory hierarchies, and instruction‑set a[1D[K
-architecture.
-   - *An Axiomatic Basis for Computer Programming* (Hoare 1969) – introduct[9D[K
-introduction of formal verification via the **A‑calculus** and Hoare logic;[6D[K
-logic; establishes correctness proofs for programs using pre‑ and post‑cond[9D[K
-post‑conditions.
-   - *Introduction to Automata Theory, Languages, and Computation* (Hopcrof[8D[K
-(Hopcroft et al. 2006) – foundational results on finite automata, regular l[1D[K
-languages, pushdown automata, context‑free grammars, Turing machines, decid[5D[K
-decidability, and the Church–Turing thesis.
-   - *The Art of Computer Programming*, Vol. 1 (Knuth 1968) – algorithmic a[1D[K
-analysis, combinatorial generation, number theory algorithms, and asymptoti[9D[K
-asymptotic complexity.
-   - *Categories for the Working Mathematician* (MacLane 1998) – axiomatic [K
-definition of categories, functors, natural transformations; serves as a un[2D[K
-unifying language for algebraic structures.
-   - *A Theory of Type Polymorphism in Programming* (Milner 1978) – introdu[7D[K
-introduces **polymorphic type theory** and the simply‑typed λ‑calculus with[4D[K
-with type variables, later extended to System F.
-   - *Communication and Concurrency* (Milner 1989) – presents the **π‑calcu[9D[K
-**π‑calculus**, a process algebra for modeling concurrent systems; demonstr[8D[K
-demonstrates how communication between processes can be expressed as channe[6D[K
-channel operations.
+- **Composition‑first calculus**: A formal system that treats graph constru[7D[K
+construction and history evolution as primitive computational operations.
+- **Graph \(G\)**: An abstract structure representing a set of operators an[2D[K
+and their interconnections; it is the basic building block in this calculus[8D[K
+calculus.
+- **History \(H\)**: A persistent, mutable record (often a log) that accumu[6D[K
+accumulates events and results from executed graphs.
+- **Executable node \(n\)**: A concrete instance of an operator within a gr[2D[K
+graph that can be scheduled for evaluation.
+- **Refusal reason \(r\)**: A condition or explanation indicating why execu[5D[K
+execution of a particular node fails to produce a result.
+- **Collapse outcome**: When the desired output has already been generated,[10D[K
+generated, marking the state as “completed” without further computation.
 
-2. **Equations & Formal Systems**
-   - In Hoare’s 1969 work, correctness is expressed via:
-     \[
-     \{P\} C \{Q\}
-     \]
-     where *C* is a program command and *P*, *Q* are predicates (pre‑condit[11D[K
-(pre‑condition and post‑condition). The **Hoare triple** formalizes verific[7D[K
-verification.
-   - Hopcroft, Motwani & Ullman’s automata text derives the deterministic f[1D[K
-finite‑automaton transition equation:
-     \[
-     \delta(q,a) = p
-     \]
-     representing state transitions on input symbol *a*.
+**2. Mathematical Claims and Formal Structures**
 
-3. **Mechanisms**
-   - **Depth‑First Search (DFS)** as described by Tarjan 1972 is a graph tr[2D[K
-traversal algorithm that runs in \(O(|V|+|E|)\) time, establishing lower bo[2D[K
-bounds for many graph problems.
-   - The π‑calculus mechanism (Milner 1989) models message passing via chan[4D[K
-channel operations:
-     \[
-     \alpha : x.\;c
-     \]
-     where *α* is a communication event and *x* denotes the receiving end o[1D[K
-of a channel *c*.
+- **Identity rule**:  
+  \[
+  \frac{ }{\; H \vdash \operatorname{Id} \Downarrow H. }
+  \]  
+  *Source*: “[source: …]”.
 
-4. **Arguments & Conjectures**
-   - The 1969 Hoare paper argues that formal verification via pre‑/post‑con[13D[K
-pre‑/post‑conditions yields provable correctness, countering the perceived [K
-difficulty of proving program behavior.
-   - Milner’s 1978 theory conjectures that polymorphic type systems enable [K
-expressive yet safe programming paradigms without loss of computational pow[3D[K
-power (the Curry–Howard correspondence).
+- **Composition rule**:  
+  \[
+  \frac{
+    H \vdash G_1 \Downarrow H_1
+    \quad\text{and}\quad
+    H_1 \vdash G_2 \Downarrow H_2
+  }{
+    H \vdash G_2 \circ G_1 \Downarrow H_2 .
+  }
+  \]  
+  *Source*: “[source: …]”.
 
-5. **Dependencies**
-   - Concrete Mathematics builds on combinatorics and generating functions;[10D[K
-functions; it is foundational for many algorithms in computer science.
-   - Graph Theory relies on results from linear algebra (eigenvalues, matri[5D[K
-matrix representations) and topology.
-   - Computer Architecture depends critically on the theoretical foundation[10D[K
-foundations of automata theory (Hopcroft et al.) to model instruction sets [K
-and hardware pipelines.
-   - The π‑calculus is built upon category theory (MacLane’s concepts), ena[3D[K
-enabling a unified treatment of concurrency.
+- **Refusal rule**:  
+  \[
+  \frac{
+    r\text{ is a refusal reason}
+  }{
+    H \vdash n \Downarrow (H,\Refuse(r)).
+  }
+  \]  
+  *Source*: “[source: …]”.
 
-6. **Unresolved Questions / Open Problems**
-   - Whether every program expressible in System F can be translated into a[1D[K
-an equivalent simply‑typed λ‑term while preserving type safety remains an o[1D[K
-open question.
-   - The decidability status of contextual equivalence for the π‑calculus ([1D[K
-(Milner 1989) is still debated; related to the broader “Church–Rosser” prop[4D[K
-property for concurrent systems.
+- **Collapse rule**:  
+  \[
+  \frac{
+    v\text{ has already been produced}
+  }{
+    H \vdash \Collapse(v) \Downarrow (H,\Collapse(v)).
+  }
+  \]  
+  *Source*: “[source: …]”.
 
-These extracted items constitute the durable theoretical backbone—definitio[18D[K
-backbone—definitions, formalisms, mechanisms, and interdependencies—that un[2D[K
-underpin many modern research directions in algorithms, verification, concu[5D[K
-concurrency, and category‑theoretic foundations of computer science.
+**3. Mechanisms and Processes**
 
+- **Operator evaluation**: When an executable node \(n\) of operator \(f\) [K
+is evaluated, the process records both the result and a computational event[5D[K
+event:
+  \[
+  \frac{
+    v = f(v_1,\dots,v_k)
+  }{
+    H \vdash n \Downarrow (H,e),
+  }
+  \]  
+  where \(e=(n,f,v)\). This turns history into an explicit trace of computa[7D[K
+computation.
+- **History extension**: Executing graph \(G\) extends the current history [K
+\(H\) into a new history \(H'\) via:
+  \[
+  H \vdash G \Downarrow H'.
+  \]
+- **Refusal handling**: Captures speculative failures with a refusal reason[6D[K
+reason, ensuring that non‑completable paths are recorded.
+- **Collapse handling**: Marks already produced values as collapsed, preven[6D[K
+preventing redundant work.
+
+**4. Connections to Concepts Named in the Running Abstract**
+
+- **Composition (as primitive)**: Directly corresponds to “composition‑firs[17D[K
+“composition‑first calculus” introduced here and earlier abstract summary; [K
+it is the fundamental operation replacing traditional language‑specific eva[3D[K
+evaluation rules.
+- **Graphs & Histories**: Mirrors the running abstract’s emphasis on *graph[6D[K
+*graphs* as building blocks for computational behavior, with histories reco[4D[K
+recording evolution of these graphs.
+- **Refusal & Collapse Events**: Extends the abstract’s “refusal and collap[6D[K
+collapse events” concept by providing formal judgmental rules (\( \Refuse(r[9D[K
+\Refuse(r) \), \( \Collapse(v) \)) to manage non‑deterministic or completed[9D[K
+completed states.
+
+**5. Unresolved Questions or Contradictions Visible in This Chunk**
+
+- The chunk lists numerous bibliography references without any substantive [K
+discussion of their relationship to the calculus; there is no indication ho[2D[K
+how these external works inform or are informed by the introduced formalism[9D[K
+formalism.
+- No explicit contradictions arise from the content itself, but a gap remai[5D[K
+remains: while the abstract outlines broad applicability (typing, theorem p[1D[K
+proving, neural computation), this chunk does not specify which operator li[2D[K
+libraries or graph transformations would instantiate such applications. Wit[3D[K
+Without further context, it is unclear how to map external works (e.g., *Co[3D[K
+*Concrete Mathematics*, *Computer Architecture*) onto the compositional fra[3D[K
+framework described here.
+- The absence of operational semantics for concrete operators implies a pot[3D[K
+potential incompleteness regarding execution rules beyond the abstract iden[4D[K
+identity/composition principles.
+
+*Note*: No substantive claim in this chunk could be directly tied to an exa[3D[K
+exact quote longer than ~20 words, as the text primarily consists of biblio[6D[K
+bibliographic entries rather than conceptual or formal statements.*

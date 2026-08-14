@@ -1,0 +1,221 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+Below is an analysis of the content you provided, organized by each major s[1D[K
+section. I’ve broken it down into its constituent parts and highlighted key[3D[K
+key themes, definitions, and conclusions where applicable.
+
+---
+
+### Overview
+
+The document appears to be a formal treatment in the realm of distributed s[1D[K
+systems, information theory, and category theory—likely inspired by ideas f[1D[K
+from computer science (e.g., CAP theorem) combined with mathematical rigor.[6D[K
+rigor. It discusses several interrelated concepts:
+
+1. **Lossless Merge** – A property for merge operations that preserves inje[4D[K
+injectivity.
+2. **Entropy Increase Under Merge** – States that any nontrivial merge must[4D[K
+must increase entropy, reflecting the second law of thermodynamics in a sem[3D[K
+semantic context.
+3. **Sheaf-Theoretic Semantics and Obstruction** – Uses sheaves to model co[2D[K
+contextual states and identifies conditions under which global coherence (a[2D[K
+(a global section) is impossible due to local conflicts.
+4. **Event-Historical Computation and State Projection** – Examines how his[3D[K
+history and projection affect the interpretation of systems over time, noti[4D[K
+noting non-uniqueness of projections.
+5. **Semantic CAP and Distributed Limitation Theorems** – Formalizes a limi[4D[K
+limitation (possibly analogous to the CAP theorem) stating that no system c[1D[K
+can simultaneously achieve global semantic consistency, local availability,[13D[K
+availability, partition tolerance, and constraint preservation.
+
+---
+
+### Detailed Analysis
+
+#### 1. Lossless Merge
+- **Definition**: A merge $M$ is lossless if there exists an injective map [K
+$\iota : S \times S \hookrightarrow S$ such that $M = \pi \circ \iota$ for [K
+some projection $\pi$.  
+- **Implication**: This ensures no information is lost during merging, but [K
+the impossibility theorem later suggests this condition conflicts with othe[4D[K
+other desirable properties (e.g., reversibility).
+
+#### 2. Entropy Increase Under Merge
+- **Proposition**: For any nontrivial merge $M$ and admissible states $s_1,[5D[K
+$s_1, s_2$, entropy production $\Delta S(M, (s_1,s_2)) > 0$.  
+- **Interpretation**: This aligns with the idea that merging inherently inc[3D[K
+increases uncertainty or information loss in semantic contexts.
+
+#### 3. Sheaf-Theoretic Semantics and Obstruction
+- **Context Poset**: Organizes semantic contexts as a partially ordered set[3D[K
+set, where ordering reflects contextual refinement.
+- **Semantic Presheaf**: Assigns states to contexts and respects restrictio[10D[K
+restriction maps (a categorical structure).
+- **Compatible Sections & Sheaf Condition**: Ensures local-to-global consis[6D[K
+consistency; if sections are incompatible on some overlap, no global sectio[6D[K
+section exists—reflecting the obstruction theorem.
+
+#### 4. Event-Historical Computation and State Projection
+- **Event Definition**: An ordered pair of time and transformation (akin to[2D[K
+to operations in distributed systems).
+- **History**: Sequence of events where each state transition is traceable.[10D[K
+traceable.
+- **Projection Operator**: Maps a history to a semantic state, wh[2D[K
+which may be non-unique—illustrating that projections depend on the chosen [K
+operator.
+
+#### 5. Semantic CAP and Distributed Limitation Theorems
+- **Semantic System $\Sigma$**: Comprises nodes, states, transformations, c[1D[K
+constraints, and satisfaction relations.
+- **Local Availability & Global Consistency**: Trade-offs similar to the CA[2D[K
+CAP theorem (Consistency, Availability, Partition tolerance).
+- **Partition Tolerance & Constraint Preservation**: Additional constraints[11D[K
+constraints that further limit attainability of all three properties simult[6D[K
+simultaneously.
+
+#### Key Theorems
+
+1. **Impossibility of Perfect Merge**  
+   No merge can be lossless, reversible, fully automated, and constraint-pr[13D[K
+constraint-preserving for all admissible states.
+
+2. **Cohomological Obstruction**  
+   Nonvanishing cohomology classes indicate irreducible semantic conflicts [K
+that prevent global coherence.
+
+3. **Undecidability of Optimal Semantic Merge**  
+   Determining if a merge minimizing entropy while preserving constraints i[1D[K
+is possible is undecidable, reflecting the complexity inherent in such prob[4D[K
+problems.
+
+4. **Local Sufficiency Proposition**  
+   For bounded interaction radius $r$, local semantic consistency implies o[1D[K
+operational coherence within that radius.
+
+---
+
+### Summary
+
+The document systematically explores fundamental limitations and trade-offs[10D[K
+trade-offs in designing distributed systems with semantic integrity:
+
+- **Lossless merges** are impossible to achieve alongside other desirable p[1D[K
+properties (reversibility, constraint preservation).
+- **Entropy production** is a necessary consequence of merging.
+- **Sheaf-theoretic semantics** provide a framework for understanding globa[5D[K
+global vs. local consistency issues through obstruction theory.
+- The **Semantic CAP theorem** highlights analogous trade-offs in distribut[9D[K
+distributed systems: you cannot simultaneously guarantee semantic consisten[9D[K
+consistency, availability, and tolerance to partition without sacrificing o[1D[K
+one property.
+
+These insights underscore the inherent challenges of building robust, self-[5D[K
+self-consistent distributed information systems while maintaining performan[9D[K
+performance and fault-tolerance goals.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: computation-as-semantic-maintenance.tex
+
+NEW CHUNK
+=========
+
+
+
+\begin{thebibliography}{99}
+
+
+\bibitem{HidalgoInfiniteAlphabet}
+C.~A.~Hidalgo.
+\newblock \emph{The Infinite Alphabet and the Loss of Knowledge}.
+\newblock Penguin Random House, New York, 2025.
+
+\bibitem{HidalgoHausmann}
+C.~A.~Hidalgo and R.~Hausmann.
+\newblock The building blocks of economic complexity.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 106(26):10570--10575, 2009.
+
+\bibitem{Landauer}
+R.~Landauer.
+\newblock Irreversibility and heat generation in the computing process.
+\newblock \emph{IBM Journal of Research and Development}, 5(3):183--191, 1961.
+
+\bibitem{Bennett}
+C.~H.~Bennett.
+\newblock Logical reversibility of computation.
+\newblock \emph{IBM Journal of Research and Development}, 17(6):525--532, 1973.
+
+\bibitem{Moore}
+G.~E.~Moore.
+\newblock Cramming more components onto integrated circuits.
+\newblock \emph{Electronics}, 38(8), 1965.
+
+\bibitem{PolanyiTacit}
+M.~Polanyi.
+\newblock \emph{The Tacit Dimension}.
+\newblock University of Chicago Press, Chicago, 1966.
+
+\bibitem{SimonArchitecture}
+H.~A.~Simon.
+\newblock The architecture of complexity.
+\newblock \emph{Proceedings of the American Philosophical Society}, 106(6):467--482, 1962.
+
+\bibitem{Suchman}
+L.~A.~Suchman.
+\newblock \emph{Plans and Situated Actions}.
+\newblock Cambridge University Press, Cambridge, 1987.
+
+\bibitem{Weick}
+K.~E.~Weick.
+\newblock \emph{Sensemaking in Organizations}.
+\newblock Sage Publications, Thousand Oaks, 1995.
+
+\bibitem{Ostrom}
+E.~Ostrom.
+\newblock \emph{Governing the Commons}.
+\newblock Cambridge University Press, Cambridge, 1990.
+
+\bibitem{Scott}
+J.~C.~Scott.
+\newblock \emph{Seeing Like a State}.
+\newblock Yale University Press, New Haven, 1998.
+
+\bibitem{Brooks}
+F.~P.~Brooks.
+\newblock No silver bullet: Essence and accidents of software engineering.
+\newblock \emph{Computer}, 20(4):10--19, 1987.
+
+\bibitem{GellMann}
+M.~Gell-Mann.
+\newblock \emph{The Quark and the Jaguar}.
+\newblock W.\,H.~Freeman, New York, 1994.
+
+\bibitem{Barandes}
+J.~Barandes.
+\newblock Unistochastic quantum theory.
+\newblock \emph{Foundations of Physics}, 51:1--30, 2021.
+
+\bibitem{FlyxionRSVP}
+F.~Guimond.
+\newblock Relativistic scalar--vector plenum theory: Entropy, coherence, and structure without expansion.
+\newblock Preprint, 2024.
+
+\bibitem{FlyxionSpherepop}
+F.~Guimond.
+\newblock Spherepop: Event-historical computation and semantic locality.
+\newblock Working manuscript, 2025.
+
+
+\end{thebibliography}
+
+
+
+\end{document}
+

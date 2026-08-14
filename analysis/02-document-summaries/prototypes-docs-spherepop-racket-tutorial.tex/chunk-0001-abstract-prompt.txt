@@ -1,0 +1,51 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+(none yet)
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: prototypes-docs-spherepop-racket-tutorial.tex
+
+NEW CHUNK
+=========
+
+                                  Spherepop in Racket:
+                                    A Short Tutorial
+                                             Flyxion
+
+                                        August 13, 2026
+
+
+
+1    Getting Started
+Assuming the collection is available on your Racket path, you can require it as follows:
+
+#lang racket
+(require spherepop-lib)
+
+   This gives you access to the core region type, merge and collapse, and the tiny sp surface
+syntax.
+
+
+2    First Examples
+(define s default-collapse-strategy)
+(define a (make-region "a" ’(1)))
+(define b (make-region "b" ’(2)))
+(define t (sp (a b)))
+(define r (eval-term s t))
+
+
+3    Further Work
+[Extend this document with more examples, invariants, and exercises.]
+
+
+
+
+                                                 1
+

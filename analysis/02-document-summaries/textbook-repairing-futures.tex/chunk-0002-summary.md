@@ -1,129 +1,67 @@
-**Definitions**
+**Summary**
 
-1. **Admissibility Engine (Definition)**  
-   For a domain \(\W\) an *admissibility engine* \(\mathcal{E}\) is a map  [K
+The paper on PHYSIFORMER demonstrates that neural physical simulation can b[1D[K
+be viewed as a *learned repair operator* acting on the manifold of admissib[8D[K
+admissible physical histories. This interpretation unifies several theoreti[8D[K
+theoretical frameworks:
 
+1. **State‑centric vs. History‑centric Simulation**  
+   - Traditional models treat physics as evolving from full state knowledge[9D[K
+knowledge, but PHYSIFORMER shows that prediction works by reconstructing tr[2D[K
+trajectories (histories) directly from partial witnesses.
 
-   \[
-   \mathcal{E}:\; \W_0\times\Omega \;\longrightarrow\; \H,
-   \]
+2. **Historical Simplicity Theorem**  
+   - Histories precede states; not every history generator must factor thro[4D[K
+through a local Markov transition operator. PHYSIFORMER provides the first [K
+large‑scale empirical evidence of a non‑Markovian trajectory generator, con[3D[K
+confirming that histories can be repaired iteratively from incomplete infor[5D[K
+information.
 
-   where \(\W_0\) denotes the space of admissible initial conditions,  
-   \(\Omega\) a probability space for randomness, and the output
-   \(\mathcal{E}(w,\omega)\) lies in the set of *admissible continuations* [K
- 
+3. **Diffusion as Iterative Repair**  
+   - The diffusion process in PHYSIFORMER functions as an *iterative repair[6D[K
+repair* on the admissible history manifold: each forward step denoises nois[4D[K
+noise away from inadmissible regions until convergence to a physically plau[4D[K
+plausible trajectory is achieved. This aligns with repair‑theory where the [K
+denoiser acts as a “repair operator” rather than merely adding randomness.
 
-   \[
-   \A(w)=\{\text{all physically allowed histories starting from }w\}.
-   \]
+4. **Witness Adequacy and Objecthood**  
+   - Initial conditions serve as *witnesses* whose adequacy \(\Lambda(w)\) [K
+quantifies how tightly they constrain future evolution. The diversity of ge[2D[K
+generated trajectories reflects high witness adequacy, indicating the model[5D[K
+model learns to detect coherent histories (object classes) rather than memo[4D[K
+memorizing fixed states.
 
-2. **Optionality Field (Definition)**  
-   Let a reference measure \(\mu\) be defined on the admissibility manifold[8D[K
-manifold
-   \(\H\). The *optionality field* is  
+5. **Admissibility Field Extension**  
+   - The *optionality field* \(\Omega(x,t)\) extends the outputs beyond raw[3D[K
+raw coordinates by providing a geometric measure of future constraint at ea[2D[K
+each moment, reinforcing that prediction is about navigating a constrained [K
+admissible manifold.
 
-   \[
-   \Omega:\mathcal{S}\times[0,T]\to[0,\infty),\qquad 
-   \Omega(x,t)=\log\mu\!\bigl(\{\,H\in\A : H_t=x\,\}\bigr),
-   \]
+**Thesis**
 
-   measuring how many distinct admissible futures pass through a given
-   state \(x\) at time \(t\).
+Taken together, these insights form a coherent thesis: **PHYSIFORMER embodi[6D[K
+embodies a learned repair operator on admissible physical histories**, embo[4D[K
+embodying the broader principle that *worlds are best understood as persist[7D[K
+persistently evolving histories whose futures can be reconstructed and repa[4D[K
+repaired from partial witnesses*. This perspective shifts focus away from s[1D[K
+static state representations toward dynamic, constraint‑driven prediction.
 
-**Equations & Distinctions**
+**Implications**
 
-- **Admissibility Constraint (Proposition)**  
-  If stronger physical constraints \(\Granite'\) imply weaker constraints
-  \(\Granite\) (\(\Phi' \supset \Granite\)), then for any state‑time pair  [K
+- **Predictive Power**: By learning to repair admissible trajectories, PHYS[4D[K
+PHYSIFORMER achieves realistic physical simulation even with incomplete ini[3D[K
+initial conditions.
+- **Scalability & Generalization**: Its ability to generalize unseen object[6D[K
+object counts (e.g., a cube vs. a bunny) demonstrates it learns coherence c[1D[K
+classes rather than predefined objects.
+- **Limitations Acknowledged**: The model still struggles with high‑curvatu[12D[K
+high‑curvature contact regions, indicating that perfect convergence to the [K
+full admissible manifold remains an open challenge.
 
+**Conclusion**
 
-  \[
-  \Omega'(x,t)\le\Omega(x,t).
-  \]
-
-  This follows because a larger admissible set (more constraints) reduces
-  the logarithmic measure of histories through that point.
-
-- **Objecthood vs. State**  
-  *Objecthood* is defined by historical coherence (\([i]_H\) for history \([10D[K
-history \(H\)),
-  not by primitive labels such as “cube” or “bunny”. A model trained on
-  admissibility learns to identify the underlying coherent continuation,
-  explaining why a cube and a teapot (different geometric objects) are trea[4D[K
-treated
-  identically.
-
-**Mechanisms**
-
-1. **Iterative Repair (PHYSIFORMER)**  
-   The diffusion‑based denoiser acts as an *iterative repair* operator on t[1D[K
-the
-   manifold \(\Mca\) of admissible trajectories: each forward step graduall[8D[K
-gradually
-   aligns noisy intermediate states toward a physically consistent path,
-   converging when no further violations exist.
-
-2. **Persistence → Recoverability → Repairability**  
-   The core principle is that coherent histories occupy a low‑dimensional
-   submanifold \(\Mca\) of the ambient space; thus prediction reduces to
-   recovering a point on this manifold from partial witnesses (initial
-   positions and velocities).
-
-3. **Contact as High‑Curvature Region**  
-   Interpenetrations, orientation jumps at contacts indicate where
-   reconstruction fails—these are precisely the high‑curvature patches of
-   \(\Mca\) that require stronger constraint satisfaction.
-
-**Key Insights & Limitations**
-
-- The architecture implicitly demonstrates that *prediction need not rely o[1D[K
-on
-  explicit law encoding*; learning to repair admissible trajectories suffic[6D[K
-suffices.
-- Current limitations (e.g., orientation discontinuities, fixed trajectory [K
-length)
-  highlight where the manifold’s curvature becomes intractable and suggest [K
-future
-  work toward more expressive physics encodings.
-
-**References**
-
-1. Chen, Y., Lan, Y., & Vedaldi, A. *PHYSIFORMER*: Learning to Simulate Mec[3D[K
-Mechanics
-   in World Space (arXiv:2606.27364, 2026).
-
-2. Battaglia, P. W., Pascanu, R., Lai, M., Rezende, D. J., & Kavukcuoglu,
-   K. *Interaction Networks for Learning about Objects, Relations and Physi[5D[K
-Physics*
-   (NeurIPS 2016).
-
-3. Pfaff, T., Fortunato, M., Sanchez‑Gonzalez, A., & Battaglia, P.
-   *Learning Mesh-Based Simulation with Graph Networks* (ICML 2021).
-
-4. Sanchez‑Gonzalez, A., Godwin, J., Pfaff, T., Ying, R., Leskovec,
-   J., & Battaglia, P. *Learning to Simulate Complex Physics with Graph
-   Networks* (ICLR 2020).
-
-5. Shao, Y., & Xie, S. *Scalable Diffusion Models with Transformers*
-   (NeurIPS 2022).
-
-6. Lipman, Y., Chen, R. T. Q., Ben‑Hamu, H., Nickel, M., & Le,
-   M. *Flow Matching for Generative Modeling* (arXiv:2210.02747, 2022).
-
-7. Ho, J., Jain, A., & Abbeel, P. *Denoising Diffusion Probabilistic
-   Models* (NeurIPS 2020).
-
-8. Todorov, E., Erez, T., & Tassa, Y. *MuJoCo*: A Physics Engine for Model‑[6D[K
-Model‑Based Control*
-   (ICRA 2012).
-
-9. Allen, K. R., Rubanova, Y., Lopez‑Guevara, T., Whitney,
-   W., Sanchez‑Gonzalez, A., Battaglia, P., & Pfaff, T.
-   *Learning Rigid Dynamics with Face Interaction Graph Networks* (arXiv:22[9D[K
-(arXiv:2212.03574,
-   2022).
-
-10. Kabsch, W. *A Solution for the Best Rotation to Relate Two Sets of Vect[4D[K
-Vectors*
-    (Acta Crystallographica 32B, 1976).
-
+The paper’s contribution is not merely technical (better simulation archite[7D[K
+architecture) but conceptual: it validates a fundamental view of physical p[1D[K
+prediction—*as reconstruction from partial witnesses via repair operators*—[11D[K
+operators*—and sets up further research into extending these ideas to more [K
+complex, high‑curvature interactions.

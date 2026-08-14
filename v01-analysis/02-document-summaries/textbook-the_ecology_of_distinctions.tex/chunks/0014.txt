@@ -1,0 +1,1016 @@
+To make the collapse explicit, normalize the town's fiscal
+reachability volume to $V_F(1880) = 100$ and let
+$\tau = t - 1880$ denote years since founding. Two forces erode
+$V_F$ steadily across the 1880s: the slow foreclosure of
+alternatives described above (an exponential term, since each
+year of specialization compounds the last) and the linear
+accumulation of fixed claims --- rent, company-store debt, and
+deferred maintenance obligations --- against a wage base that is
+not growing to match them:
+\[
+  V_F(\tau) = 100\,e^{-0.04\tau} - 1.5\tau,
+  \qquad 0 \le \tau \le 13.
+\]
+This gives a smooth, unremarkable-looking decline across the
+town's first thirteen years:
+\[
+  \begin{array}{c|cccc}
+    \text{Year} & 1880 & 1885 & 1890 & 1893 \\
+    \tau & 0 & 5 & 10 & 13 \\
+    V_F(\tau) & 100.0 & 74.4 & 52.0 & 40.0
+  \end{array}
+\]
+Nothing in this trajectory up to 1893 looks like an emergency.
+$V_F$ is declining, but slowly, and the company's own
+projection $\hat{P}$ --- tracking revenue and the contractual
+return on housing --- shows no comparable deterioration, since
+none of $\hat{P}$'s tracked quantities are the ones actually
+eroding.
+
+The 1893 wage cut is a discrete shock layered onto this baseline,
+and its effect is disproportionate to its nominal size precisely
+because rent is a fixed claim against a shrinking wage. Consider
+a representative worker earning $10$ units before the cut, paying
+a fixed rent of $2$ units, leaving $8$ units of discretionary
+reach. A twenty-five percent wage cut reduces the wage to $7.5$;
+with rent unchanged, discretionary reach falls to $5.5$ --- a
+contraction of $31.25\
+the shock. Applying this amplification factor to the town-level
+trajectory:
+\[
+  V_F(1894) = V_F(13) \times \frac{5.5}{8} \approx 40.0 \times 0.6875
+  \approx 27.5.
+\]
+By the Boundary Exhaustion Theorem (\cref{thm:boundary-exhaust}),
+this matters more than the raw number suggests. Fiscal boundary
+proximity $\beta_F(p,t)$ (\cref{defn:fiscal-boundary}) was
+already small after thirteen years of steady erosion; the 1894
+shock pushes the town toward $\beta_F \to 0$, the regime in which
+small further disturbances produce disproportionately large
+reductions in $V_F$ and the system's sensitivity to initial
+conditions diverges.
+
+
+Collapse
+
+
+The disproportionate-sensitivity prediction is not abstract here.
+The proximate trigger for the 1894 strike was not a policy
+announcement but the dismissal of three members of a grievance
+committee on May 10 --- a single administrative action,
+small by any ordinary measure. By May 11 the shops were empty.
+By July, federal troops occupied the town, the strike had been
+broken, and the American Railway Union that had carried it
+beyond Pullman's gates nationally was effectively destroyed
+\parencite{lindsey1942}. Exactly as the Boundary Exhaustion
+Theorem predicts, a disturbance with no special magnitude of its
+own produced an outcome --- a national rail strike, federal
+military intervention, dozens of deaths --- entirely
+disproportionate to its size, because it landed on a system
+already at $\beta_F \approx 0$.
+
+In the narrowest sense the company won: workers returned on the
+company's terms, wages were not restored. But the Governance
+Capacity Theorem (\cref{thm:gov-capacity}) is stated over
+$\liminf_{t\to\infty}$, not over any single negotiation, and on
+that horizon the town did not survive. The State of Illinois sued
+in August 1894, arguing the company had no charter right to
+operate a town; the Illinois Supreme Court agreed in October
+1898 and ordered the company to divest every non-industrial
+holding, a process not completed until 1907
+\parencite{buder1967}. George Pullman died in 1897, a year before
+the ruling that dissolved his model town as a going concern.
+
+
+What \texorpdfstring{$G_F + R_F \ge L_F$
+{GF + RF >= LF} Would Have Required}
+
+The Governance Capacity Theorem states that long-run viability
+requires option generation plus institutional repair to keep pace
+with constraint accumulation. Pullman's town violated this on
+both terms simultaneously, not one. $G_F$ was suppressed by
+design: no competing employer, landlord, or retailer was ever
+permitted to enter the reachable set. $R_F$ was suppressed by
+capture: a town government existed in name, its offices filled
+by company loyalists, contributing nothing to genuine institutional
+repair when the crisis came. Against this, $L_F$ --- rent fixed
+against a return target, wages cut without renegotiation, debt
+accumulating at the company store --- proceeded unopposed. No
+version of this chapter's formalism requires a company town to
+fail; it requires only that $G_F + R_F \ge L_F$ eventually, which
+is a claim about the existence of working repair and option-
+generating mechanisms, not about the prosperity of the firm
+funding them. Pullman's town had neither, by the same design
+choices that made it, for thirteen quiet years, look like a
+model.
+
+
+A Caution About the Reconstruction
+
+
+This worked example uses real dates, real figures, and a real
+documented outcome, but the closed-form trajectory
+$V_F(\tau) = 100e^{-0.04\tau} - 1.5\tau$ is an illustrative
+fit chosen to produce a clean, legible curve, not a quantity
+recovered from archival data. No contemporary source reports a
+``fiscal reachability volume'' for Pullman, Illinois, because the
+concept did not exist in 1894. What the historical record does
+support, without qualification, is the qualitative shape the toy
+trajectory is built to display: steady, low-visibility erosion
+of optionality; a fixed claim that amplifies a shock rather than
+absorbing it; an administrative projection blind to the exact
+quantity collapsing; and a small disturbance landing on an
+exhausted boundary to produce an outcome wildly disproportionate
+to its own size. The arithmetic is illustrative. The pattern is
+not.
+
+
+Empirical Estimation and Proxy Variables
+
+\label{sec:ch27-proxies}
+
+The formal variables $G_F$, $R_F$, $L_F$, and $V_F$ are
+well-defined within the framework. A practitioner will ask
+how to estimate them for a real jurisdiction. No proxy is
+exact, but the framework is empirically approachable: each
+variable maps to observable fiscal quantities that track
+the same structure the formal variable represents.
+
+\paragraph{Capacity field $\Phi$ and productive capacity.}
+$\Phi(x,t)$ measures stored distinction-producing capacity
+at position $x$ and time $t$. In fiscal terms, the closest
+observable is \emph{broad economic capacity}: GDP per capita,
+tax-base breadth, diversification of revenue sources, and
+capital-stock quality. Jurisdictions with concentrated
+revenue bases (a single dominant industry, a single large
+employer) have low $\Phi$ relative to their nominal income.
+Proxy: revenue concentration index, sectoral diversity of
+the tax base.
+
+\paragraph{Constraint field $S$ and administrative complexity.}
+$S(x,t)$ measures accumulated constraint on future fiscal
+options. The closest observable is \emph{mandatory
+expenditure burden}: fixed debt-service obligations, unfunded
+pension liabilities, constitutionally or legally mandated
+spending floors. These function exactly like $S$: they
+accumulate over time, are not easily reversed, and reduce
+the set of feasible future budget allocations without
+appearing on any single-year balance sheet as an emergency.
+Proxy: fixed-obligation ratio (mandatory spending as share
+of revenue), debt-service coverage ratio.
+
+\paragraph{Reachability volume $V_F$ and scenario count.}
+$V_F(p,t,\tau)$ is the admissible policy space accessible
+within horizon $\tau$. The closest operational analogue is
+\emph{fiscal scenario breadth}: the number of budget
+allocations satisfying all binding constraints and
+maintaining a primary balance path consistent with debt
+sustainability. This can be estimated by scenario
+simulation: for a given jurisdiction and horizon, enumerate
+feasible combinations of tax rates, spending levels, and
+borrowing within legal and market constraints. The volume
+of this set --- the number of feasible scenarios --- is
+a proxy for $V_F$.
+
+\paragraph{Flow variables $G_F$, $R_F$, $L_F$.}
+\begin{itemize}[nosep]
+  \item $G_F$ (option generation): growth in tax-base
+        breadth, new revenue instruments available,
+        increase in institutional flexibility (e.g.\
+        new borrowing facilities, expanded tax authority).
+  \item $R_F$ (repair capacity): debt-restructuring
+        access, reserve fund levels, credit-market
+        access, and the presence of independent fiscal
+        institutions capable of revising policy without
+        political capture.
+  \item $L_F$ (option loss): growth in fixed-obligation
+        liabilities, reduction in credit ratings,
+        constitutional spending mandates added,
+        narrowing of politically feasible budget space.
+\end{itemize}
+
+\begin{remark}{Proxy limitations}{proxy-limits}
+  These proxies capture the formal variables
+  approximately. A jurisdiction with high GDP but a
+  single-commodity revenue base has high nominal $\Phi$
+  but low structural $\Phi$; a jurisdiction with low
+  nominal debt but high pension liabilities has low
+  $S$ on the balance sheet but high effective $S$ in
+  the framework's terms. The right proxies depend on
+  data availability and the specific failure modes being
+  diagnosed. The framework provides the conceptual
+  structure; the mapping to observables requires
+  domain knowledge and judgment.
+\end{remark}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Fiscal reachability volume $V_F$ is the primary
+        measure of a government's future policy space.
+  \item Constraint accumulation without institutional
+        expansion monotonically reduces $V_F$
+        (\cref{thm:fiscal-reach-thm}).
+  \item Administrative projections produce blind spots
+        and systematic overestimates of true fiscal
+        reachability (\cref{thm:admin-blind}).
+  \item Governments near their reachability boundary
+        exhibit critical instability: small shocks
+        produce large $V_F$ reductions and the
+        admissible repair set contracts
+        (\cref{thm:boundary-exhaust}).
+  \item Long-term fiscal viability requires
+        $G_F + R_F \ge L_F$: new option generation
+        and institutional repair must keep pace with
+        constraint accumulation
+        (\cref{thm:gov-capacity}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+\begin{exercise}
+  Model a government that finances current consumption
+  by selling state assets as a Continuation Degeneracy
+  (\cref{defn:continuation-degeneracy}).
+  Identify what reachability volume is being consumed
+  and at what rate.
+  Under what conditions does the trajectory become
+  generatively admissible again?
+\end{exercise}
+\begin{exercise}
+  Define the \emph{fiscal admissibility fraction}
+  $\rho_F = V_F / V_R$ — the proportion of reachable
+  policy states that are also admissible.
+  Prove that $\rho_F$ decreases when extractive fiscal
+  policy is pursued, and give three historical examples.
+\end{exercise}
+\begin{exercise}
+  Apply the Administrative Blind Spot Theorem to
+  a central bank's monetary policy model.
+  Identify the full policy space $P$, the represented
+  space $\hat{P}$, and three specific blind spots
+  that contributed to the 2008 financial crisis.
+\end{exercise}
+
+
+
+
+\chapter{Governance as Future Preservation}
+\label{ch:governance}
+
+\begin{epigraph}{
+  The function of government is not to tell us what to do.
+  It is to ensure that the space of things we can
+  collectively choose to do does not collapse.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define governance as a distinction ecology
+        operating on collective policy space.
+  \item Prove the Governance Threshold Theorem.
+  \item Prove the Option Preservation Theorem.
+  \item Prove the Institutional Repair Theorem.
+  \item Prove the Democratic Reachability Theorem.
+  \item Apply the framework to institutional decay,
+        constitutional design, and democratic backsliding.
+\end{objectives}
+
+
+Governance and Future Possibility
+
+
+The standard economic account of government concerns
+the correction of market failures: public goods,
+externalities, information asymmetries. This account
+is important but structurally incomplete. It treats
+governance as a set of interventions into an otherwise
+functioning system of private choices. It does not
+address the prior question of what makes that system
+of private choices coherent, stable, and reversible.
+
+Institutional economics comes closer. Treating institutions
+as the rules of the game that structure human interaction
+already moves past pure market-failure correction toward
+something resembling this chapter's concerns
+\parencite{north1990}. What it does not provide is a
+geometry: a way of measuring, rather than only qualitatively
+describing, how much a given set of rules expands or
+contracts the space of futures still reachable from where a
+polity currently stands.
+
+The distinction-theoretic account begins elsewhere.
+Governance is the set of institutions, norms, and
+processes that preserve the collective ability to make
+and revise choices. Its primary function is not to
+make choices but to maintain the space within which
+choices remain meaningful. A government that achieves
+a particular policy outcome by eliminating the
+possibility of future policy revision has not governed
+well — it has extracted from the future.
+
+This reframing makes governance a special case of
+the Generative Admissibility Principle
+(\cref{prc:gap-ch15}): governance is valuable insofar
+as it preserves the admissible volume of collective
+future possibility.
+
+
+Governance as Preservation of Reachable Futures
+
+\label{sec:ch28-preservation}
+
+Governance is frequently understood, implicitly, as
+optimisation toward a predetermined objective: a five-year
+plan, a target growth rate, a fixed policy programme to be
+implemented as faithfully as possible. Under conditions of
+deep uncertainty this understanding is not merely incomplete
+but unworkable, because the objective itself may later
+require revision in light of information that does not yet
+exist. A government that optimises hard toward a fixed target
+chosen today has, by the same act, committed itself to
+ignoring whatever the future turns out to actually require.
+
+A government therefore faces a higher-order task than
+optimisation toward any single objective:
+\[
+  \mathcal{G}^* = \arg\max_{\mathcal{G}} \Vol(R_t),
+\]
+where $R_t$ is the future reachable policy space and the
+maximisation is over governance structures $\mathcal{G}$
+rather than over policies within a fixed structure. The
+quality of governance, on this reading, is not measured
+solely by current policy outcomes but by the preservation of
+the capacity to choose well once more is known. This is why
+institutional capacity, information-gathering infrastructure,
+distributed expertise, and flexible rather than rigidly
+pre-committed authority recur as priorities across
+well-functioning governance systems: each is an investment in
+$\Vol(R_t)$ rather than in any particular predicted outcome,
+exactly as Chapter~\ref{ch:fiscal}'s treatment of $G_F$ and
+$R_F$ already formalises for the fiscal case specifically.
+
+
+What Would Falsify This Realization
+
+\label{sec:ch28-falsifiability}
+
+The Institutional Repair Theorem, proved later in this
+chapter (\cref{thm:inst-repair}), characterises generative
+admissibility for an institution by three conditions ---
+coverage, meta-repair, and admissibility of individual
+repairs --- and its proof derives each condition directly
+from general machinery: the Regeneration Theorem, the
+Regenerative Expansion Theorem, and the repair-admissibility
+condition of Chapter~\ref{ch:repair}. This is falsifiable
+against a specific test: if governing institutions required a
+repair criterion not already implied by this general
+machinery --- some condition special to collective political
+life that the abstract theory of repair could not have
+anticipated --- the claim that governance realizes
+Chapter~\ref{ch:repair}'s repair theory, rather than applying
+its vocabulary to a domain it does not actually fit, would
+fail. The proof given later introduces no such condition.
+
+
+What This Chapter Establishes
+
+\label{sec:ch28-preview}
+
+By the end of this chapter, governance will have been defined
+as a distinction ecology over collective policy space, the
+Governance Threshold and Option Preservation Theorems will
+characterise when governance structures are generatively
+admissible, and the Institutional Repair Theorem will identify
+institutional health with the same repair conditions developed
+in general in Chapter~\ref{ch:repair}. Chapter~\ref{ch:science-regen}
+then turns from governance in general to one institution in
+particular: the scientific enterprise, whose capacity to
+revise its own foundational commitments is among the clearest
+real-world instances of the meta-repair condition this chapter
+identifies as the hardest to satisfy.
+
+\begin{definition}{Governance Ecology}{gov-ecology}
+  \index{admissibility!social}
+  A \emph{governance ecology} is a distinction ecology
+  $\mathcal{G} = (\mathcal{D}_G, \mathcal{L}_G,
+  \mathcal{R}_G)$ where:
+  \begin{itemize}[nosep]
+    \item $\mathcal{D}_G$ is the set of institutional
+          distinctions: the categories, norms, roles,
+          and procedures that structure collective action.
+    \item $\mathcal{L}_G$ is the dependency relation
+          among institutional distinctions.
+    \item $\mathcal{R}_G$ is the repair algebra:
+          the set of reform, revision, and correction
+          mechanisms available to the polity.
+  \end{itemize}
+\end{definition}
+
+\begin{distinctionaside}{The Form That Creates the Problem It
+  Measures}
+A government agency introduces a reporting requirement to
+monitor compliance.
+
+The reporting requirement generates administrative work. The
+administrative work produces errors and delays. The errors
+and delays look, on a dashboard, like a compliance problem.
+
+The compliance problem justifies a new reporting requirement.
+
+Nobody designed this loop. Nobody benefits from it
+especially. The measurement apparatus is reproducing itself,
+one justified requirement at a time --- another instance of
+the rule-doubling dynamic from Chapter~\ref{ch:distinction-ecology}'s
+bureaucratic growth, now run by the institution on itself.
+\end{distinctionaside}
+
+
+The Governance Threshold Theorem
+
+
+\begin{theorem}{Governance Threshold Theorem}{gov-threshold}
+  A governance ecology $\mathcal{G}$ has positive
+  long-term collective reachability iff
+  the rate of institutional distinction generation
+  and repair exceeds the rate of institutional erosion:
+  \[
+    \liminf_{t\to\infty}
+    V_G(p_G, t) > 0
+    \;\iff\;
+    G_G(t) + R_G(t) \ge L_G(t)
+    \quad \text{eventually},
+  \]
+  where $V_G$ is the collective reachability volume in
+  policy space, $G_G$ is institutional innovation,
+  $R_G$ is institutional repair, and $L_G$ is
+  institutional erosion.
+\end{theorem}
+
+\begin{proof}
+  The governance ecology is a special case of the
+  distinction ecology of Chapter~\ref{ch:distinction-ecology}.
+  By the Regenerative Ecology Theorem
+  (\cref{thm:regen-ecology-thm}), positive long-term
+  viability requires $G_G + R_G \ge L_G$ eventually.
+  The Universal Regeneration Theorem
+  (\cref{thm:universal-regen}) then gives the
+  equivalence with $\liminf V_G > 0$.
+\end{proof}
+
+\begin{remark}{What institutional erosion looks like}
+  {inst-erosion}
+  Institutional erosion $L_G$ includes: regulatory
+  capture (distinctions between public interest and
+  private interest collapse); norm erosion (distinctions
+  between acceptable and unacceptable conduct become
+  ambiguous); administrative degradation (distinctions
+  between competent and incompetent public service
+  disappear); and constitutional hollowing
+  (formal institutional distinctions remain but
+  the repair mechanisms that enforce them atrophy).
+  In each case the mechanism is the same:
+  a distinction that once structured collective action
+  loses its recoverability.
+\end{remark}
+
+
+The Option Preservation Theorem
+
+
+\begin{theorem}{Option Preservation Theorem}{option-preserve}
+  A governance action $a: P \to P$ is \emph{option-preserving}
+  iff
+  \[
+    V_G(a(p), t) \;\ge\; V_G(p, t).
+  \]
+  Among all governance actions achieving the same
+  immediate policy outcome $a(p) = q$, the
+  option-preserving action dominates all extractive
+  alternatives over sufficiently long horizons.
+\end{theorem}
+
+\begin{proof}
+  By the Future Preservation Theorem
+  (\cref{thm:future-preserve}), among all trajectories
+  achieving equal immediate reward, those with
+  non-decreasing $V_G$ dominate extractive alternatives
+  for any reward function non-decreasing in $V_G$.
+  Policy outcomes that citizens value are, in any
+  plausible social welfare function, non-decreasing
+  in collective reachability volume (since reachability
+  volume bounds the set of achievable future outcomes).
+  Therefore option-preserving governance actions
+  dominate extractive ones over long horizons.
+\end{proof}
+
+\begin{example}{Constitutional Entrenchment vs.\ Flexibility}
+  {constitutional}
+  Constitutional design involves a tradeoff between
+  entrenchment and flexibility.
+  Fully entrenched constitutions constrain future
+  majorities but also constrain future repair.
+  Fully flexible constitutions permit repair but also
+  permit erasure of options.
+
+  The Option Preservation Theorem provides a formal
+  criterion: a constitutional provision is justified
+  by option preservation iff it protects against
+  extractive actions that would otherwise reduce $V_G$,
+  and does not itself reduce $V_G$ below the level
+  achievable without the provision.
+  Rights that protect minority distinctions (linguistic,
+  religious, cultural) are typically option-preserving:
+  they prevent majority erasure of distinction diversity.
+  Rights that entrench current majority preferences
+  (e.g.\ constitutional property protection for
+  existing concentrations) are potentially option-reducing.
+\end{example}
+
+
+Premature Collapse and Regulatory Projection
+
+\label{sec:ch28-projection}
+\index{collapse!institutional collapse|textbf}
+
+A specific and recurring failure mode of option-reducing
+governance deserves its own treatment: regulation written in
+anticipation of an uncertain future technology or practice,
+before that future has actually arrived. The regulator does
+not observe the future technological state space $X$
+directly. It observes a projection of it, $\pi(X)$ ---
+a simplified, present-day model of what the technology will
+become, built from current trends, current incentives, and
+whatever experts are willing to commit to in testimony. This
+is projection in exactly the sense of
+Chapter~\ref{ch:distinction}: a partition of a richer space
+collapsed onto a coarser one, with the Blind Spot Theorem's
+guarantee that some genuine distinctions in $X$ are not
+visible in $\pi(X)$ at all.
+
+The danger specific to regulation is that policy is then
+optimised against $\pi(X)$ rather than against $X$ itself,
+and --- unlike most projections, which are merely descriptive
+--- regulatory projections are typically written into binding
+rules. The resulting distortion can be measured directly in
+this chapter's terms:
+\[
+  D_A(\pi)
+  = d\bigl(\adm(X), \adm(\pi(X))\bigr),
+\]
+the distance between the admissibility manifold the actual
+future technology would support and the admissibility
+manifold the regulator's simplified projection supports.
+Where $D_A(\pi)$ is large, future admissible trajectories ---
+uses of the technology that would have remained open under
+accurate foresight --- become inaccessible not because they
+were judged and rejected, but because the regulatory
+framework was built around a projection that never
+distinguished them from something else.
+
+This is the formal content behind a familiar complaint about
+anticipatory regulation: that committing early to a rigid
+framework for an uncertain technology tends to entrench the
+assumptions of the moment the framework was written, at
+exactly the moment those assumptions are least reliable. The
+Option Preservation Theorem's criterion applies directly.
+A regulatory provision justified by $\pi(X)$ alone, without
+independent verification that $D_A(\pi)$ is small, has no
+guarantee of being option-preserving with respect to the $X$
+that actually arrives --- and the Administrative Blind Spot
+Theorem of Chapter~\ref{ch:fiscal} shows this is not a
+correctable oversight but a structural property of governing
+by projection at all.
+
+
+The Institutional Repair Theorem
+
+
+\begin{theorem}{Institutional Repair Theorem}{inst-repair}
+  An institution $\mathcal{I}$ is generatively
+  admissible iff its internal repair mechanisms
+  $\mathcal{R}_\mathcal{I}$ satisfy:
+  \begin{enumerate}[(i)]
+    \item \emph{Coverage}: every distinction in
+          $\mathcal{D}_\mathcal{I}$ is within the
+          repair capacity of $\mathcal{R}_\mathcal{I}$.
+    \item \emph{Meta-repair}: $\mathcal{R}_\mathcal{I}$
+          can repair itself — the institution has
+          mechanisms for reforming its reform mechanisms.
+    \item \emph{Admissibility}: every repair in
+          $\mathcal{R}_\mathcal{I}$ preserves or
+          increases $V_G$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  By the Regeneration Theorem (\cref{thm:regeneration}),
+  a system is regenerative iff it preserves repair
+  capacity and repair is continuously exercisable.
+  (i) Coverage ensures no distinction falls outside
+  the repair capacity.
+  (ii) Meta-repair is the Regenerative Expansion Theorem
+  (\cref{thm:regen-expansion}) applied to $\mathcal{R}$:
+  it ensures the repair algebra itself can grow when
+  novel anomalies arise.
+  (iii) Admissibility of individual repairs is the
+  condition of \cref{prop:repair-adm}: repair does not
+  reduce reachability volume.
+  Together these three conditions are necessary and
+  sufficient for generative admissibility of
+  $\mathcal{I}$.
+\end{proof}
+
+\begin{remark}{Why (ii) is the hardest condition}{meta-repair}
+  The meta-repair condition (ii) is routinely violated
+  by institutions that encounter persistent anomalies
+  in their own functioning but cannot revise their
+  reform mechanisms. A legislature that cannot reform
+  its own procedures, a court that cannot update its
+  interpretive frameworks, a bureaucracy that cannot
+  restructure its own incentives — all satisfy (i)
+  and (iii) for existing distinctions but fail (ii)
+  when those distinctions generate persistent anomalies.
+  The Scientific Revolution Theorem
+  (\cref{thm:sci-rev-thm}) applies directly:
+  institutional saturation plus deep persistent
+  anomalies requires ontological enlargement of the
+  institutional distinction manifold.
+\end{remark}
+
+
+Institutional Regeneration
+
+\label{sec:ch28-inst-regen}
+
+The meta-repair condition is worth isolating as a quantity in
+its own right, since it is precisely what distinguishes an
+institution that merely survives from one that regenerates.
+Define the \emph{institutional regenerative capacity}
+\[
+  \Gamma_\mathcal{I}
+  = \frac{d}{dt} \Vol(R_\mathcal{I}),
+\]
+where $R_\mathcal{I}$ is the institution's future reachable
+policy space. An institution with $\Gamma_\mathcal{I} \ge 0$
+is regenerative in the sense of Chapter~\ref{ch:regeneration};
+an institution with $\Gamma_\mathcal{I} < 0$ is consuming its
+own future optionality, regardless of how well it is
+currently performing against any present-day metric.
+
+This sharpens a distinction easy to blur in practice: between
+an institution that survives by avoiding disruptive change ---
+mere incrementalism, holding $R_\mathcal{I}$ roughly constant
+by attempting nothing --- and one that actively invests in
+expanding $R_\mathcal{I}$. The Regenerative Expansion Theorem
+(\cref{thm:regen-expansion}) already establishes that
+$\kappa_\Sigma$ does not grow by default; it grows only under
+specific conditions on available resources and repair
+diversity. The institutional case is the same. An institution
+that merely avoids breaking things is not thereby regenerating
+its meta-repair capacity, and an institution that survives
+this way for a long time can still be quietly converging on
+$\Gamma_\mathcal{I} = 0$ or below, with the shortfall invisible
+until a persistent anomaly arrives that its frozen reform
+mechanisms cannot accommodate. Regeneration, here as in
+Chapter~\ref{ch:regeneration}, is something an institution
+must actively do, not a default state preserved by inaction.
+
+
+The Democratic Reachability Theorem
+
+
+\begin{theorem}{Democratic Reachability Theorem}{dem-reach}
+  Among governance systems with equal decision-making
+  efficiency, democracy maximises long-term collective
+  reachability volume $V_G$ iff it satisfies:
+  \begin{enumerate}[(i)]
+    \item \emph{Distinction diversity}: it maintains
+          multiple independent institutional distinction
+          systems (parties, courts, press, civil society).
+    \item \emph{Repair accessibility}: the repair
+          algebra $\mathcal{R}_G$ is accessible to
+          all members of the polity, not only incumbents.
+    \item \emph{Meta-repair preservation}: the
+          mechanisms for revising governance structures
+          are themselves protected from extraction
+          by current majorities.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  By the Diversity--Repair Theorem
+  (\cref{thm:diversity-repair}), (i) maximises repair
+  capacity by providing independent pathways for
+  distinction restoration.
+
+  By the Repair Existence Theorem
+  (\cref{thm:repair-exist}), repair is possible only
+  when recoverability is positive. (ii) ensures that
+  recoverability is distributed: if repair is
+  accessible only to incumbents, the recoverability of
+  distinctions disadvantageous to incumbents may be
+  driven to zero.
+
+  By the Institutional Repair Theorem, (iii) is
+  necessary for generative admissibility.
+
+  Together (i)--(iii) maximise $V_G$ over time:
+  (i) generates the widest repair capacity; (ii) ensures
+  that capacity is exercised across the full distinction
+  space; (iii) prevents the repair algebra from being
+  captured and narrowed by incumbent actors.
+  No governance system with fewer of these properties
+  can maintain equivalent $V_G$ under the same
+  shock distribution.
+\end{proof}
+
+\begin{remark}{The theorem's conditional scope}{dem-reach-scope}
+  The Democratic Reachability Theorem is a conditional
+  result. It states what conditions a governance system
+  must satisfy to maximise collective reachability volume
+  under the stated assumptions --- not that democracy as
+  any particular historical institution necessarily
+  satisfies these conditions, nor that reachability
+  maximisation is the uniquely correct criterion for
+  governance. The three conditions (distinction diversity,
+  repair accessibility, meta-repair preservation) are
+  structural requirements. Whether a given polity calling
+  itself democratic actually satisfies them is an
+  empirical question, and the theorem does not prejudge
+  it. Governance systems that are formally democratic
+  but have substantially violated (ii) or (iii) may
+  have lower $V_G$ than systems with different formal
+  names that satisfy all three conditions in practice.
+  The theorem provides criteria, not a verdict.
+\end{remark}
+
+\begin{remark}{Democratic backsliding as reachability collapse}
+  {backsliding}
+  Democratic backsliding is the process by which
+  condition (iii) is progressively violated: incumbents
+  use their current majority to modify the meta-repair
+  mechanisms (electoral rules, judicial independence,
+  press freedom, civil society regulation) in ways that
+  reduce the repair accessibility of future minorities.
+
+  The Boundary Exhaustion Theorem
+  (\cref{thm:boundary-exhaust}) applies: as backsliding
+  proceeds, $\beta_G \to 0$. Small additional steps
+  produce disproportionate reductions in $V_G$. The
+  admissible repair set contracts toward the empty set.
+  At the limit, the polity has passed its governance
+  semantic horizon: the repair distinctions that would
+  permit reversal have crossed into irrecoverability.
+\end{remark}
+
+
+Related Frameworks
+
+\label{sec:ch28-related-frameworks}
+
+\subsection*{Von Foerster: Second-Order Cybernetics}
+
+\emph{Convergence.} Chapter~\ref{ch:repair} engaged cybernetics
+through Wiener's feedback regulation and
+Chapter~\ref{ch:regeneration} through Ashby's ultrastability;
+this chapter's concern is closer to von Foerster's second-order
+move. Von Foerster insists that any observer or regulator is
+itself embedded in, and inseparable from, the system it observes
+and regulates --- a cybernetics of observing systems, not a
+cybernetics of systems observed from a neutral outside
+\parencite{foerster1960}. This is precisely the structure of this
+chapter's regulatory projection problem: a regulator does not
+stand outside the technological state space $X$ producing a
+neutral description of it; its projection $\pi(X)$ is itself
+drawn from within the system being governed, and that projection
+then becomes binding on the system's own future evolution.
+
+\emph{Divergence.} Von Foerster's framework is principally
+diagnostic: it identifies observer-embeddedness as a ubiquitous
+feature of regulatory and cognitive systems without offering a
+way to measure how costly a given act of self-involved
+observation turns out to be. The regulatory distortion measure
+introduced above, $D_A(\pi) = d(\adm(X), \adm(\pi(X)))$
+(\cref{sec:ch28-projection}), supplies exactly this missing
+quantity: a concrete, computable distance between the
+admissibility manifold the real system supports and the one the
+regulator's self-involved projection supports, turning von
+Foerster's qualitative warning into an operational diagnostic.
+
+\emph{Open question.} Whether $D_A(\pi)$ is bounded below by some
+general property of self-referential observation in von
+Foerster's sense --- whether second-order embeddedness implies a
+nonzero minimum projection distortion for any regulator that is
+itself part of the regulated system --- or whether $D_A(\pi)$ can
+in principle be driven to zero by sufficiently careful
+institutional design, is not settled here.
+
+\subsection*{Luhmann: Law and Politics as Closed Subsystems}
+
+\emph{Convergence.} Chapter~\ref{ch:distinction-ecology} engaged
+Luhmann on operational closure in general; this chapter's concern
+is his more specific treatment of law and politics as
+functionally differentiated, operationally closed subsystems of
+society, each reproducing itself through its own code --- the
+legal system through legal/illegal, the political system through
+government/opposition --- with neighbouring subsystems able only
+to perturb, not directly determine, each other's internal
+operations \parencite{luhmann1990}. This matches the Governance
+Ecology defined above (\cref{defn:gov-ecology}), which likewise
+treats governance as having its own internal dynamics rather than
+serving as a passive transmission mechanism for economic or
+technical inputs.
+
+\emph{Divergence.} For Luhmann, operational closure is close to
+absolute: the legal system cannot be directly steered by
+political will or economic incentive, only perturbed, because law
+processes only legal communications. The Institutional Repair
+Theorem and the Democratic Reachability Theorem
+(\cref{thm:inst-repair,thm:dem-reach}) instead treat governance as
+continuous with the rest of the distinction-ecology framework: an
+institution's regenerative capacity $\Gamma_\mathcal{I}$
+(\cref{sec:ch28-inst-regen}) is measured in exactly the same units
+and by exactly the same apparatus as the regenerative capacity of
+any other distinction ecology in this book, with no special
+operational-closure boundary erected around the legal or
+political subsystem.
+
+\emph{Open question.} Whether Luhmann's strong closure claim is
+compatible with, or actually contradicted by, the Democratic
+Reachability Theorem's treatment of governance ecologies as
+porous to the reachable-policy spaces of the economic and
+technological systems they regulate, is not resolved here.
+
+
+\section{Extended Example: The Newspaper That Optimized Itself to
+Death}
+\label{sec:ch28-newspaper}
+
+The pattern this chapter formalizes --- institutional erosion
+proceeding unopposed by repair, meta-repair specifically
+disabled, and an institution that continues to exist in every
+formal sense while its capacity to do the thing it exists for
+quietly disappears --- has a documented, dated, and unusually
+self-aware instance: the American newspaper industry's collapse
+between roughly 2006 and 2018, and within it, the particular and
+closely chronicled case of \emph{The Denver Post} under the
+ownership of Alden Global Capital.
+
+
+The Backdrop: An Industry-Wide Loss of \texorpdfstring{$G_G$
+{GG}}
+
+Some of what happened to American newspapers in this period is
+not institutional failure in this chapter's sense at all --- it
+is straightforward loss of revenue that no governance structure
+could fully repair. Industry-wide advertising revenue, the
+traditional source of $G_G$ for most newspapers, fell from
+roughly forty-nine billion dollars in 2006 to fourteen billion
+dollars in 2018, as classified and display advertising migrated
+first to Craigslist and then to programmatic platforms
+\parencite{pew2019newspapers}. This decline sets the stage but
+does not by itself explain what follows. A revenue collapse of
+this magnitude forces institutions to shrink; it does not by
+itself determine \emph{how} they shrink, nor whether the
+shrinking institution retains the capacity defined by the
+Institutional Repair Theorem (\cref{thm:inst-repair}) to revise
+its own response as conditions change. That question is
+answered by ownership and governance structure, not by the
+revenue line alone --- which is exactly why two newspapers
+facing the same advertising collapse can end up in very
+different places.
+
+
+The Governance Ecology of a Newsroom
+
+
+Cast as a governance ecology $\mathcal{G} = (\mathcal{D}_G,
+\mathcal{L}_G, \mathcal{R}_G)$ (\cref{defn:gov-ecology}), a
+newsroom's institutional distinctions $\mathcal{D}_G$ are its
+beats: the city-hall reporter who knows which council aide
+actually returns calls, the courts reporter with a standing
+relationship to the clerk's office, the investigative team with
+the legal review process needed to publish safely. The
+dependency relation $\mathcal{L}_G$ is steep: a beat is not a
+headcount, it is accumulated, largely non-transferable local
+knowledge built over years, and a newly hired reporter does not
+restore a beat's distinction capacity merely by filling its
+title. The repair algebra $\mathcal{R}_G$ is hiring, training,
+mentorship, and editorial-independence norms that let the
+newsroom revise its own coverage priorities as the city changes.
+None of this shows up as a separate line on a balance sheet; all
+of it is what $V_G$ is actually tracking.
+
+
+2010--2013: A Newsroom That Still Worked
+
+
+In 2010, Alden Global Capital, a New York hedge fund, acquired a
+controlling interest in MediaNews Group, the parent of Digital
+First Media and, through it, \emph{The Denver Post}
+\parencite{npr2018denverpost}. For the next several years the
+newsroom kept functioning by the most visible test available: in
+2013, a 142-person newsroom photographed together after the
+paper won a Pulitzer Prize for its coverage of the 2012 Aurora
+theater shooting --- the paper's ninth Pulitzer since its 1892
+founding. By any present-day metric available in 2013, the
+institution looked healthy.
+
+
+Constitutional Hollowing
+
+
+What happened next is close to a textbook instance of the
+erosion this chapter calls \emph{constitutional hollowing}: formal
+institutional distinctions remain in place while the repair
+mechanisms that enforce them atrophy (\cref{rmk:inst-erosion}).
+The newspaper's name did not change. Its masthead did not
+change. It published every day. Its 1892 founding date and nine
+Pulitzers remained, undiminished, part of its public identity.
+What changed was the newsroom inside that identity: from more
+than 250 staff in the years before Alden's acquisition, to fewer
+than 100 by early 2018, to roughly 70 after a further round of
+about 30 layoffs that April \parencite{npr2018denverpost}. Every
+one of these reductions was an elimination of specific beats ---
+specific accumulated, non-transferable distinctions in
+$\mathcal{D}_G$ --- not a proportional thinning of an undifferentiated
+mass. A beat eliminated this way does not return when conditions
+improve; the reporter who held the relationships is gone, and
+the relationships do not transfer to whoever is left.
+
+\subsection{Reachability Collapse and Admissibility Collapse,
+Distinguished}
+
+It is worth separating two things this chapter treats as
+related but distinct. The newspaper's \emph{reachability}
+collapsed in the straightforward sense that specific futures ---
+a long-form investigation into a state agency, sustained
+coverage of a school district, an editor with enough institutional
+memory to recognize that this year's story rhymes with one from
+a decade ago --- became unreachable once the staff and
+relationships that would have produced them were gone.
+Separately, the newspaper's \emph{admissibility} collapsed in the
+precise sense of the Option Preservation Theorem
+(\cref{thm:option-preserve}): each round of layoffs was, in this
+theorem's terms, an extractive action rather than an
+option-preserving one, since each reduced $V_G(a(p), t)$ relative
+to less aggressive alternatives available at the same
+revenue target. The theorem does not claim extractive actions
+are never taken; it claims they are dominated by option-preserving
+alternatives over sufficiently long horizons, and identifies
+exactly the quantity --- future reachable reporting capacity ---
+that the extractive path was spending down.
+
+
+Why the Institutional Repair Theorem Fails on All Three Conditions
+
+
+The Institutional Repair Theorem (\cref{thm:inst-repair})
+requires coverage, meta-repair, and admissibility together.
+\emph{The Denver Post} under this ownership failed all three, not
+just one. Coverage failed directly: as specific beats were
+eliminated rather than redistributed, specific distinctions in
+$\mathcal{D}_\mathcal{I}$ fell entirely outside the remaining
+staff's repair capacity --- nobody was left to notice what was no
+longer being covered, which is itself a blind spot in exactly the
+sense of \cref{thm:admin-blind}, here operating on the
+institution's own coverage rather than on government finances.
+Admissibility failed by the argument above. Meta-repair, the
+hardest condition (\cref{rmk:meta-repair}), failed most visibly: when
+the newsroom's own staff attempted, through public criticism, to
+revise the ownership's strategy in response to a clearly
+persistent anomaly, the attempt was suppressed rather than
+incorporated, as the next section describes. An institution that
+cannot revise its own reform mechanism when that mechanism is
+the thing producing the anomaly is, by this theorem, no longer
+generatively admissible, regardless of whether it continues to
+publish.
+
+
+April 2018: An Attempt at Meta-Repair
+
+
+On April 6, 2018, the day before another round of layoffs, the
+Post's own editorial board published an editorial accusing its
+owners of deliberately shrinking what the paper offered while
+raising what it charged readers for the privilege, despite the
+parent company remaining profitable, and calling on Alden to
+sell the paper to an owner who would invest in it
+\parencite{npr2018denverpost}. This was, in the chapter's terms, an
+attempt at exactly the kind of internal, self-directed correction
+the meta-repair condition requires: the institution recognizing
+a persistent anomaly in its own functioning and trying to revise
+the mechanism producing it. It failed. Within days, editorial
+page editor Chuck Plunkett resigned after a follow-up piece was
+blocked, telling colleagues he had been informed he was
+``biting the hand that fed'' the newspaper. Three other senior
+figures --- former owner Dean Singleton, and editors Dana
+Coffield and Larry Ryckman --- resigned within the same stretch
+of days. The repair mechanism had identified the failure
+correctly and was overruled by the same ownership structure it
+was trying to repair, which is precisely the failure mode
+condition (ii) of the Institutional Repair Theorem is built to
+detect.
+
+
+\texorpdfstring{$\Gamma_\mathcal{I
+$}{Gamma\_I} Negative While Every Visible Metric Held}

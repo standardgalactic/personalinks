@@ -1,0 +1,1167 @@
+Analyze this fragment of a larger Spherepop document.
+
+Extract the durable theoretical information from it.
+
+Preserve definitions, equations, distinctions, mechanisms,
+arguments, conjectures, dependencies, and unresolved questions.
+
+Do not waste space describing prose style or saying that this is
+only a fragment.
+
+TEXT
+====
+
+\emph{Convergence.} Wiener's cybernetics defines control as
+negative feedback correcting deviation from a reference signal,
+and Ashby's Law of Requisite Variety formalises how much
+internal variety a regulator must possess to successfully
+counteract the variety of disturbances acting on the system it
+regulates \parencite{wiener1948,ashby1956}. Both anticipate this
+chapter's basic claim: that systems persist by actively
+counteracting perturbation, not merely by being left undisturbed.
+
+\emph{Divergence.} Wiener and Ashby model regulation as
+real-time correction relative to a fixed reference signal or
+goal state, given in advance and external to the analysis. This
+chapter's Repair Existence Theorem (\cref{thm:repair-exist})
+presupposes no such reference: repair is defined relative to a
+damaged distinction's own recoverability, $\reco(d) > 0$,
+succeeding or failing according to the structure of the
+distinction space itself rather than a pre-specified setpoint.
+Requisite variety is also a purely quantitative bound on a
+regulator's capacity; it says nothing about how individual
+corrective actions relate to one another. The Repair Monoid
+(\cref{cor:repair-monoid}) supplies exactly that further
+structure, showing that admissible repairs compose
+associatively --- an algebraic fact with no counterpart in
+Ashby's variety-counting framework.
+
+\emph{Open question.} Whether every regulator satisfying
+requisite variety automatically admits monoid structure on its
+corrective actions --- whether composability is a free
+consequence of having enough variety, or an independent
+requirement --- is not established here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Repair is the third primitive: irreducible to
+        distinction and entropy.
+  \item Repair exists iff $\reco>0$
+        (\cref{thm:repair-exist}).
+  \item Admissible repairs form a monoid
+        (\cref{thm:repair-closure,cor:repair-monoid}).
+  \item Repair is reconstruction, not creation
+        (\cref{thm:repair-conservation}).
+  \item Repair exports entropy globally
+        (\cref{thm:repair-entropy}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Show that if $\reco(D)=0$ then no repair operator
+  $\repair$ exists such that $\repair(D)=D^*$.
+\end{exercise}
+
+\begin{exercise}
+  Prove that the composition of two admissible repair
+  operators is itself a repair operator.
+\end{exercise}
+
+\begin{exercise}
+  Construct an example of a damaged distinction that
+  admits multiple minimal repairs and determine whether
+  the resulting repair algebra is commutative.
+\end{exercise}
+
+\begin{exercise}
+  Let repair cost be
+  \[
+    C(\repair) = \sum_i c_i.
+  \]
+  Determine conditions under which a minimum-cost repair
+  is unique.
+\end{exercise}
+
+\begin{exercise}
+  Show that optimisation can be represented as repair only
+  when the objective function preserves the original
+  distinction structure.
+\end{exercise}
+
+\begin{exercise}[Bridge to Regeneration]
+  Show that a repair process which consumes its own repair
+  capacity cannot satisfy the Principle of Regeneration
+  introduced in Chapter~\ref{ch:regeneration}
+  (\cref{prc:regen-prc}).
+\end{exercise}
+
+
+\chapter{The Geometry of Failure}
+\label{ch:geometry-failure}
+\begin{epigraph}{It is the peculiarity of a problem of the
+  first importance that it is almost insoluble except in
+  hindsight.}
+  {Barbara Tuchman, \textit{The Guns of August}}
+\end{epigraph}
+
+\begin{objectives}
+  \item Formalise failure as a geometric object.
+  \item Define persistent anomalies and failure manifolds.
+  \item Relate failure curvature to projection loss.
+  \item Analyse projection failure and ontology revision.
+  \item Connect scientific revolutions to geometric repair.
+\end{objectives}
+
+
+Why Some Failures Resist All Repair
+
+\label{sec:ch8-why-failures-resist}
+
+Not every failure is alike. A scratch on a table can be
+sanded away. A miscalculation can be corrected. A damaged
+limb can, within limits, be healed. The preceding chapter
+established that persistence depends upon a steady supply
+of repair: distinctions degrade, and repair restores them,
+whenever the Repair Existence Theorem's condition
+$\reco(d)>0$ is met (\cref{thm:repair-exist}). For most
+failures encountered by most systems, this picture is
+sufficient. Repair operates, the failure closes, and the
+system continues largely unchanged.
+
+But some failures behave differently. No matter how much
+repair effort is applied, no matter how skilled the repair
+operator becomes, certain anomalies refuse to close. A
+scientific theory accumulates an observation it cannot
+accommodate, and refinement after refinement fails to
+absorb it. An organism encounters a pathogen its existing
+immune repertoire cannot neutralise. An institution faces a
+circumstance no existing procedure was designed to handle.
+In each case the system is not lacking effort, skill, or
+resources. It is lacking the right kind of space in which
+the failure could even be described as solved.
+
+This is the puzzle this chapter takes up. If repair, as
+defined in the previous chapter, is powerful enough to
+restore any distinction with positive recoverability, why
+do some failures persist indefinitely under unlimited
+repair? The answer developed here is that such failures are
+not failures of degree. They are failures of geometry. The
+anomaly does not lie outside the system's current effort; it
+lies outside the system's current ontology --- the space of
+distinguishable states the system is even capable of
+producing. No amount of repair within a fixed space can
+resolve an anomaly that requires a larger space to exist.
+
+This reframing has a specific target. Most existing
+treatments of failure --- reliability engineering's failure
+rate, statistics' error term, machine learning's loss value
+--- represent failure as a scalar: a single number,
+$\epsilon$ or $L$, to be driven toward zero. A scalar
+representation is well suited to failures that differ only
+in degree, where less of the same number is simply better.
+It is poorly suited to the failures this chapter is
+concerned with, where the question is not how large the
+number is but whether the number can be driven down at all
+within the space currently available. Treating an anomaly as
+a point on a one-dimensional error axis hides the very
+question this chapter exists to ask: whether the failure
+lies inside or outside the closure of what repair, operating
+within the current ontology, can reach. That question has no
+scalar answer. It is a question about the topology of a
+space, not the magnitude of a number, and the failure
+manifold $\mathcal{F}(d^*,\mathcal{R})$ defined below is this
+chapter's replacement for the scalar error term.
+
+
+Common Misinterpretations of Failure
+
+\label{sec:ch8-misinterpretations}
+
+It is tempting to treat persistent anomalies as simply
+difficult instances of ordinary failure --- as though enough
+computation, enough data, or enough patience would
+eventually close the gap. This chapter shows why that
+intuition fails. A persistent anomaly is not a hard case
+within the existing distinction structure; it lies outside
+the closure of everything that structure can produce,
+however long the repair process runs. Difficulty is a matter
+of degree. Persistence, in the technical sense developed
+here, is a matter of topology.
+
+A second misinterpretation treats failure as equivalent to
+noise or measurement error. Noise is the ordinary, expected
+variability that repair routinely absorbs. A persistent
+anomaly is not noisy; it is stable, reproducible, and
+stubbornly resistant to every refinement attempted within
+the existing framework. Its stability is precisely what
+marks it as significant rather than incidental.
+
+A third misinterpretation treats ontological enlargement ---
+the formal response to persistent anomaly developed below
+--- as equivalent to acquiring more information within an
+unchanged framework. Enlargement is not the accumulation of
+additional facts. It is the introduction of a new
+coordinate, a new distinguishing capacity that did not
+previously exist. A telescope with a longer exposure time
+gathers more information. A telescope sensitive to a
+previously unobserved wavelength enlarges the ontology.
+
+Finally, it is tempting to read scientific revolutions, and
+their institutional and biological analogues, as a failure
+of rationality, will, or character --- a refusal to accept
+evidence already available. The framework developed here
+suggests something more structural. Revolutionary change
+becomes necessary not because reasoners are irrational but
+because the repair algebra available to them has saturated:
+every accessible refinement has been tried, and a deep
+anomaly remains. The transition that follows is not a lapse
+in reasoning. It is the only route by which reasoning,
+operating honestly within a saturated space, can proceed.
+
+By the end of this chapter, the failure manifold will have
+been defined precisely, the Ontology Revision Theorem will
+guarantee that a minimal enlargement resolving every
+persistent anomaly always exists, and the Scientific
+Revolution Theorem will characterise exactly when a paradigm
+must undergo such an enlargement rather than continue
+refining within its current bounds.
+Chapter~\ref{ch:repair-intelligence} then asks what
+distinguishes a system capable of performing this
+enlargement from one that is not --- and argues that the
+answer is what this book means by intelligence.
+
+
+Formal Development
+
+\label{sec:ch8-formal}
+
+\begin{definition}{Persistent Anomaly}{persistent-anomaly}
+  Anomaly $o$ is \emph{persistent} relative to
+  $(\repair,d^*)$ if
+  $\lim_{n\to\infty}\delta_\mathrm{obs}(o,\repair^n(d^*))>0$.
+  \index{anomaly!persistent|textbf}
+\end{definition}
+
+\begin{theorem}{Persistent Anomaly Theorem}
+  {persistent-anomaly-thm}
+  $o$ is persistent iff
+  $o\notin\overline{\repair(\mathcal{D})}$.
+\end{theorem}
+\begin{proof}
+  ($\Rightarrow$) If $o\notin\overline{\repair(\mathcal{D})}$,
+  some $\eta>0$ separates $o$ from all repaired
+  distinctions; no repair sequence closes the gap.
+  ($\Leftarrow$) If $o\in\overline{\repair(\mathcal{D})}$,
+  a sequence $r_n\to o$ exists; $o$ is not persistent.
+\end{proof}
+
+\begin{definition}{Failure Manifold}{failure-manifold}
+  $\mathcal{F}(d^*,\mathcal{R})=\{o\in\mathcal{O}:
+  o\text{ persistent relative to }(\mathcal{R},d^*)\}$.
+  \index{failure manifold|textbf}
+\end{definition}
+
+\begin{theorem}{Projection Failure Theorem}{proj-fail-thm}
+  Every persistent anomaly is a projection failure:
+  $\exists\tilde{X}\supset X$ in which $o$ is resolvable
+  but not in $X$.
+\end{theorem}
+\begin{proof}
+  Construct $\tilde{X}=X\times\{0,1\}$ with projection
+  onto first component. The new coordinate distinguishes
+  previously collapsed states; $o$ is resolved in
+  $\tilde{X}$. \parencite{kuhn1962structure}
+\end{proof}
+
+\begin{definition}{Ontological Enlargement}{ont-enlarge}
+  $(\tilde{\mathcal{D}},\tilde\delta)$ with embedding
+  $\iota:\mathcal{D}\hookrightarrow\tilde{\mathcal{D}}$ is
+  an enlargement if (i)~$\tilde\delta(\iota(d),\iota(d'))
+  =\delta(d,d')$; (ii)~$\tilde{\mathcal{D}}\setminus
+  \iota(\mathcal{D})\ne\emptyset$;
+  (iii)~every persistent anomaly resolves in
+  $\tilde{\mathcal{D}}$.
+  \index{ontological enlargement|textbf}
+\end{definition}
+
+\begin{theorem}{Ontology Revision Theorem}{ont-revision}
+  If $\mathcal{F}\ne\emptyset$, there exists a minimal
+  ontological enlargement resolving all anomalies
+  while preserving all existing
+  distinctions.\index{ontology revision!definition|textbf}
+\end{theorem}
+\begin{proof}
+  Define $\tilde{\mathcal{D}}=\mathcal{D}\cup
+  \{d_o:o\in\mathcal{F}\}$; extend $\tilde\delta$ via
+  a path metric; conditions (i)--(iii) hold by
+  construction; minimality by taking the closure under
+  the repair algebra.
+\end{proof}
+
+\begin{definition}{Repair Saturation}{repair-sat}
+  The repair algebra is \emph{saturated} if
+  $\frac{d}{dt}|\mathcal{F}|\ge0$ and
+  $\frac{d}{dt}\mathrm{Cost}(\repair,d^*)\ge0$.
+  \index{repair!saturation}
+\end{definition}
+
+\begin{theorem}{Scientific Revolution Theorem}{sci-rev-thm}
+  A paradigm undergoes revolutionary change iff its repair
+  algebra saturates and $\mathcal{F}$ contains a deep
+  anomaly (low failure curvature).
+  \parencite{kuhn1962structure,lakatos1978}
+\end{theorem}
+\begin{proof}
+  Saturation plus deep anomaly makes local repair
+  insufficient. \cref{thm:ont-revision} guarantees
+  minimal enlargement, constituting a topological
+  transition in the distinction manifold.
+\end{proof}
+
+\begin{corollary}{Ontology Revision is Generatively
+  Admissible}{ont-rev-adm}
+  Successful ontology revision increases
+  $\Vol(\adm(t))$.\index{ontology revision!generative admissibility of|textbf}
+\end{corollary}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Persistent anomalies lie outside
+        $\overline{\repair(\mathcal{D})}$
+        (\cref{thm:persistent-anomaly-thm}).
+  \item Every persistent anomaly is a projection failure
+        (\cref{thm:proj-fail-thm}).
+  \item Minimal ontological enlargement always exists
+        (\cref{thm:ont-revision}).
+  \item Scientific revolutions require saturation plus deep
+        anomaly (\cref{thm:sci-rev-thm}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Compute the failure manifold $\mathcal{F}(d^*,\mathcal{R})$
+  for a partition consisting of three observationally
+  indistinguishable states under a repair algebra
+  $\mathcal{R}$ that can resolve at most two of the three
+  pairwise confusions.
+\end{exercise}
+
+\begin{exercise}
+  Using the Scientific Revolution Theorem
+  (\cref{thm:sci-rev-thm}), argue informally why a deep
+  anomaly --- one whose resolution requires
+  ontological enlargement rather than local repair --- is
+  harder to eliminate by increasing repair effort alone than
+  a shallow one. What would it mean, in terms of
+  \cref{defn:repair-sat}, for the repair algebra to saturate
+  against such an anomaly?
+\end{exercise}
+
+\begin{exercise}
+  Construct an ontology containing a persistent anomaly and
+  determine the minimum revision, in the sense of the
+  Ontology Revision Theorem (\cref{thm:ont-revision}),
+  required to remove it.
+\end{exercise}
+
+\begin{exercise}
+  Show that a theory may possess arbitrarily low prediction
+  error while remaining topologically distant from an
+  admissible ontology. (Hint: consider a theory whose
+  observational predictions are accurate but whose
+  $\mathcal{F}(d^*,\mathcal{R})$ is nonetheless nonempty.)
+\end{exercise}
+
+\begin{exercise}
+  Consider two competing repair strategies for the same
+  anomaly set $\mathcal{F}$. Using the Repair Saturation
+  definition (\cref{defn:repair-sat}), propose a criterion
+  for determining which strategy reaches saturation first,
+  and discuss whether reaching saturation first is always
+  preferable.
+\end{exercise}
+
+\begin{exercise}[Bridge to Regeneration]
+  Using the Ontology Revision is Generatively Admissible
+  Corollary (\cref{cor:ont-rev-adm}), show that successful
+  ontology revision is compatible with, but does not by
+  itself establish, the Principle of Regeneration of
+  Chapter~\ref{ch:regeneration} (\cref{prc:regen-prc}). What
+  additional condition on repeated revisions would be
+  needed?
+\end{exercise}
+
+
+\chapter{Repair and Intelligence}
+\label{ch:repair-intelligence}
+\begin{epigraph}{To understand is to perceive patterns.
+  To learn is to find the repair.}
+  {Attributed to Isaiah Berlin, \textit{apocryphal}}
+\end{epigraph}
+
+\begin{objectives}
+  \item Understand intelligence as repair capacity.
+  \item Derive the Intelligence--Repair Equivalence
+        Theorem.
+  \item Analyse optimisation limits in the presence of
+        persistent anomalies.
+  \item Formalise alignment as admissible repair.
+  \item Connect ontology revision (Chapter~\ref{ch:geometry-failure})
+        to the expansion of reachable repair strategies.
+\end{objectives}
+
+
+Why Intelligence Is Not Optimisation
+
+\label{sec:ch9-why-not-optimisation}
+
+A thermostat regulates temperature. A search algorithm finds
+shortest paths. A trained classifier assigns labels with
+high accuracy. Each of these systems optimises: each
+repeatedly adjusts its behaviour to better satisfy a fixed
+objective within a fixed space of possibilities. None of
+them would ordinarily be called intelligent, yet each
+performs, within its narrow domain, at a level that any
+unaided human would envy.
+
+What is missing from optimisation that intelligence appears
+to require? The previous chapter offers a clue without yet
+supplying the answer. The Ontology Revision Theorem
+(\cref{thm:ont-revision}) showed that persistent anomalies
+--- failures that cannot be resolved by adjustment within a
+fixed ontology, however thoroughly that adjustment is
+pursued --- always admit a minimal enlargement that resolves
+them. Optimisation, by construction, operates entirely
+within a fixed ontology: it searches the space of solutions
+the objective function is already capable of representing. A
+system confined to optimisation alone will perform admirably
+until it meets a persistent anomaly, at which point no
+further adjustment helps. It does not get worse. It simply
+stops getting better, indefinitely, while the anomaly
+remains.
+
+This suggests that intelligence is not better optimisation.
+It is the capacity to repair the space in which optimisation
+occurs --- including, critically, the capacity to repair the
+system's own repair capacity when that too becomes degraded.
+A system that can only act within a fixed distinction
+structure, however well it acts, is bounded by the
+persistent anomalies of that structure. A system that can
+revise the structure itself is not.
+
+\section{Common Misinterpretations of Intelligence and
+  Alignment}
+\label{sec:ch9-misinterpretations}
+
+It is natural to treat raw predictive accuracy, processing
+speed, or parameter count as proxies for intelligence. The
+Prediction Limitation Theorem developed below shows why
+accuracy alone is an unreliable proxy: prediction is bounded
+by recoverability, and a system may predict extremely well
+within a stable regime while possessing no capacity
+whatsoever to repair itself when that regime shifts.
+Intelligence, in the sense developed here, is a property of
+repair capacity, not of forecast quality in isolation.
+
+A related misinterpretation equates intelligence with the
+absence of error. A highly intelligent system, on this
+account, is one that gets things right far more often than
+not. But the Optimisation Cannot Resolve Persistent
+Anomalies Proposition shows that an extremely low error rate
+is compatible with total blindness to a deep anomaly the
+system has not been built, or has not built itself, to
+detect. Few errors and many unresolved anomalies are not in
+tension; a system can excel along every metric currently in
+use and still possess no mechanism by which a fundamentally
+new kind of failure would be recognised, let alone repaired.
+
+Perhaps the most consequential misinterpretation in this
+chapter concerns the relationship between capability and
+alignment. It is tempting to assume that a sufficiently
+capable system will, more or less automatically, act in ways
+favourable to the systems around it --- that capability and
+benevolence travel together. The Capability Without
+Alignment Corollary states the opposite: the two properties
+are logically independent. A highly capable system optimises
+whatever objective it has been given, or has acquired, with
+great effectiveness; nothing about that effectiveness
+constrains the objective itself to preserve the admissible
+future of the ecology in which the system is embedded.
+Alignment, on this account, is not a byproduct of
+capability. It is a separate geometric condition that must
+be established on its own terms.
+
+By the end of this chapter, intelligence will have been
+defined formally as repair capacity, including self-repair,
+and the Intelligence--Repair Equivalence Theorem will show
+that this definition orders systems the same way ordinary
+judgements of generalisation, transfer, and adaptive capacity
+already do. This completes Part~III's treatment of repair as
+a primitive operation. Chapter~\ref{ch:beyond-continuation}
+opens the next part by asking a question repair alone cannot
+settle: granting that a system can restore what it has lost,
+what should count as \emph{success} for a system over time
+--- mere continuation, or something more demanding?
+
+
+Formal Development
+
+\label{sec:ch9-formal}
+
+\begin{definition}{Intelligence}{intelligence}
+  $\mathcal{I}(\Sigma)
+  =\kappa(\Sigma,\mathcal{D}_\Sigma)
+  \cdot\kappa(\Sigma,\mathcal{D}_{\repair_\Sigma})$
+  where $\kappa(\Sigma,\mathcal{D})
+  =\sup_{d,\reco(d)>0}
+  \eta(\repair_\Sigma,d)/\delta(d,d^*)$.
+  \index{intelligence!as repair capacity|textbf}
+  \index{repair!intelligence as|textbf}
+  \index{ontology revision!meta-learning connection}
+\end{definition}
+
+\begin{theorem}{Intelligence--Repair Equivalence}
+  {intel-repair}
+  $\Sigma$ is more intelligent than $\Sigma'$ iff
+  $\mathcal{I}(\Sigma)>\mathcal{I}(\Sigma')$.
+\end{theorem}
+\begin{proof}
+  Superior generalisation, transfer, and adaptation all
+  correspond to higher $\kappa$ over broader $\mathcal{D}$.
+  Self-improvement requires
+  $\kappa(\Sigma,\mathcal{D}_\repair)>0$.
+  The converse follows symmetrically.
+\end{proof}
+
+\begin{centauraside}{The Expense Form}
+The computer cannot determine whether your expense was
+legitimate. You can.
+
+Therefore the system asks you to classify the expense
+according to forty-seven categories. The machine remains
+simple. The human becomes complicated.
+
+This is a reverse centaur.
+\end{centauraside}
+
+\begin{centauraside}{Customer Support}
+The chatbot answers incorrectly. The customer rephrases. The
+chatbot answers incorrectly again. The customer rephrases
+again.
+
+Eventually the human performs the translation work.
+
+The intelligence was not automated. It was outsourced.
+\end{centauraside}
+
+\begin{theorem}{Prediction Limitation Theorem}{prediction-limit}
+  $\delta(x_\mathrm{pred}(t+\tau),x(t+\tau))
+  \ge(1-\reco_\tau(x(t)))\cdot
+  \delta(x_\mathrm{worst},x(t+\tau))$.
+\end{theorem}
+\begin{proof}
+  Repair recovers at most fraction $\reco_\tau$;
+  the remainder is irrecoverable.
+\end{proof}
+
+\begin{definition}{Explanation}{explanation-defn}
+  Explanation of $o$ is $d$ satisfying:
+  (E1)~$\delta_\mathrm{obs}(o,d)<\epsilon$;
+  (E2)~$d\in\adm(\mathcal{D},t)$;
+  (E3)~$d$ reduces expected future repair cost.
+\end{definition}
+
+\begin{theorem}{Explanation Improvement Theorem}
+  {expl-improve}
+  A good explanation (satisfying E1--E3) reduces expected
+  future repair cost:
+  $\mathcal{C}_\repair(t\mid d)\le
+  \mathcal{C}_\repair(t\mid\neg d)$.
+\end{theorem}
+
+\begin{proposition}{Optimisation Cannot Resolve Persistent
+  Anomalies}{opt-limit}
+  Closed optimisation within $(\mathcal{D},\mathcal{R})$
+  cannot resolve any $o\in\mathcal{F}$.
+\end{proposition}
+\begin{proof}
+  By \cref{thm:persistent-anomaly-thm},
+  $o\notin\overline{\repair(\mathcal{D})}$.
+  Optimisation finds elements of $\mathcal{D}$; none
+  resolves $o$.
+\end{proof}
+
+\begin{theorem}{Alignment Theorem}{alignment-thm}
+  $\Sigma$ is aligned with ecology $\mathcal{E}$ iff
+  $\frac{d}{dt}\Vol(\adm_\mathcal{E}(\Sigma(t),t))\ge0$.
+  \index{alignment!theorem|textbf}
+\end{theorem}
+\begin{proof}
+  Alignment means all repairs are admissible
+  (\cref{prop:repair-adm}); the Future Volume Theorem
+  then gives non-decreasing $\Vol(\adm_\mathcal{E})$,
+  and conversely.
+  \parencite{amodei2016,russell2019}
+\end{proof}
+
+\begin{corollary}{Capability Without Alignment}
+  {capability-misalign}
+  High $\mathcal{I}(\Sigma)$ and alignment with
+  $\mathcal{E}$ are logically independent.
+  \index{alignment!and capability}
+\end{corollary}
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Intelligence is repair capacity including
+        self-repair (\cref{thm:intel-repair}).
+  \item Prediction is bounded by future recoverability
+        (\cref{thm:prediction-limit}).
+  \item Good explanation reduces future repair cost~(E3).
+  \item Optimisation cannot resolve persistent anomalies
+        (\cref{prop:opt-limit}).
+  \item Alignment is generative admissibility
+        w.r.t.\ the ecology (\cref{thm:alignment-thm}).
+  \item Intelligence and alignment are independent
+        (\cref{cor:capability-misalign}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Show that a system capable only of prediction --- with no
+  repair operator acting on $\mathcal{D}$ --- cannot resolve
+  a persistent anomaly, using the Optimisation Cannot
+  Resolve Persistent Anomalies Proposition
+  (\cref{prop:opt-limit}).
+\end{exercise}
+
+\begin{exercise}
+  Construct a simple optimisation process that converges
+  (in the sense of reaching a fixed point of its update
+  rule) while remaining misaligned with the underlying
+  repair objective, in the sense of the Alignment Theorem
+  (\cref{thm:alignment-thm}).
+\end{exercise}
+
+\begin{exercise}
+  Using the Intelligence definition
+  (\cref{defn:intelligence}), determine conditions on
+  $\kappa(\Sigma,\mathcal{D}_\Sigma)$ and
+  $\kappa(\Sigma,\mathcal{D}_{\repair_\Sigma})$ under which
+  $\mathcal{I}(\Sigma)$ is bounded above.
+\end{exercise}
+
+\begin{exercise}
+  Using the Ontology Revision Theorem of
+  Chapter~\ref{ch:geometry-failure}
+  (\cref{thm:ont-revision}), prove that a system permitted
+  to revise its own ontology --- in addition to repairing
+  within a fixed one --- has strictly greater reachable
+  repair capacity than one confined to its original
+  $\mathcal{D}$, whenever $\mathcal{F}\ne\emptyset$.
+\end{exercise}
+
+\begin{exercise}
+  Provide an example where increasing $\mathcal{I}(\Sigma)$
+  decreases alignment with $\mathcal{E}$, according to the
+  definitions of this chapter. Relate your example to the
+  Capability Without Alignment Corollary
+  (\cref{cor:capability-misalign}).
+\end{exercise}
+
+\begin{exercise}[Bridge to Regeneration]
+  Show that a repair process which consumes its own repair
+  capacity --- in the sense that
+  $\kappa(\Sigma,\mathcal{D}_{\repair_\Sigma})$ strictly
+  decreases with each application of $\repair_\Sigma$ ---
+  cannot satisfy the Principle of Regeneration introduced
+  in Chapter~\ref{ch:regeneration} (\cref{prc:regen-prc}).
+\end{exercise}
+
+
+
+\part{Regeneration}
+
+
+
+
+
+
+
+
+
+
+
+\chapter{Beyond Continuation}
+\label{ch:beyond-continuation}
+
+\begin{epigraph}{The fact that something persists does not
+  tell us whether it ought to persist. Persistence alone is
+  silent about its own conditions of possibility.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Distinguish continuation from regeneration.
+  \item Demonstrate the insufficiency of persistence as a
+        criterion of value.
+  \item Define continuation spaces and continuation
+        trajectories.
+  \item Prove the Continuation Equivalence Theorem.
+  \item Prove the Continuation Degeneracy Theorem.
+  \item Establish the necessity of second-order continuation.
+  \item Prepare the transition from repair to regeneration.
+\end{objectives}
+
+
+The Problem of Persistence
+
+\label{sec:ch10-persistence}
+
+The previous chapters established that distinctions are not
+self-maintaining. Entropy erodes them, recoverability
+measures whether they remain reconstructible, and repair
+restores them when sufficient information survives. The
+Intelligence--Repair Equivalence Theorem
+(\cref{thm:intel-repair}) went further, identifying
+intelligence itself with repair capacity. At first glance
+one might therefore suppose that the central problem has
+been solved. If distinctions can be repaired, and repair
+capacity is what intelligence amounts to, then perhaps the
+highest objective is simply to ensure that repair continues
+indefinitely. Yet this conclusion proves premature. A system
+may preserve itself while simultaneously destroying the
+conditions that made its preservation possible. A structure
+may continue while reducing the possibility of future
+structures. A process may survive by consuming the very
+distinction resources upon which survival depends.
+
+This observation reveals a subtle but fundamental
+inadequacy in continuation itself. Persistence appears
+attractive because it opposes extinction. Repair appears
+attractive because it opposes degradation. Yet neither
+concept by itself distinguishes healthy persistence from
+pathological persistence. Neither concept explains why some
+continuations appear constructive while others appear
+destructive. The mere fact that a trajectory remains
+defined tells us nothing about the quality of that
+trajectory.
+
+The difficulty can be stated in a particularly simple form.
+A bureaucracy can continue. A monopoly can continue. A
+cancer can continue. An ecosystem can continue. A
+civilisation can continue. Continuation alone assigns these
+trajectories equal status. Intuition strongly rejects this
+equivalence. The source of the rejection cannot be
+continuation itself, because all examples satisfy that
+condition. Some additional property must therefore
+distinguish desirable continuation from undesirable
+continuation.
+
+This is a direct challenge to a habit of evaluation that
+recurs across many fields under many names: survival as the
+mark of fitness in evolutionary biology, persistence of an
+institution as evidence of its legitimacy in political
+theory, an organism's continued existence as the baseline
+criterion of biological success. Each tradition is right that
+continuation is a necessary condition for anything else to
+matter --- a system that ceases to exist cannot subsequently
+do anything valuable. The error is treating it as a
+sufficient condition. This chapter's task is to show
+formally why it is not, and what must be added.
+
+\section{Common Misinterpretations of Continuation's
+  Insufficiency}
+\label{sec:ch10-misinterpretations}
+
+A first misreading takes this chapter to be arguing that
+persistence does not matter, or that systems should be
+indifferent to their own continuation. Neither follows.
+Continuation remains necessary throughout this book's
+framework; the Continuation Equivalence Theorem proved below
+does not dissolve the value of persisting, it merely shows
+that persistence alone cannot distinguish trajectories that
+intuition clearly ranks differently. Continuation is a floor,
+not a ceiling.
+
+A second misreading assumes that because continuation is
+insufficient, the remedy must be some additional fixed
+target the system should continue \emph{toward} --- a final
+state, a terminal goal. The Continuation Degeneracy Theorem
+shows why this substitution fails in essentially the same way
+continuation alone failed: any fixed target can be approached
+by trajectories that differ enormously in whether they
+preserve or destroy the conditions for further valuable
+trajectories afterward. Replacing ``keep existing'' with
+``reach state $X$'' does not solve the problem; it relocates
+it.
+
+A third misreading supposes that the distinction this chapter
+is building toward --- between continuation and something
+more demanding --- must already be a moral distinction,
+smuggled in ahead of its formal justification. It is not, or
+not yet. The present chapter stays at the level of
+trajectories and continuation spaces; it identifies a
+structural gap in continuation as an evaluative criterion
+without yet saying what should fill it. That is the task of
+the chapters that follow.
+
+By the end of this chapter, continuation will have been given
+a precise formal treatment as a property of trajectories in a
+continuation space, the Continuation Equivalence Theorem will
+show exactly which trajectories continuation alone cannot
+distinguish, and the Continuation Degeneracy Theorem will
+extend that result to fixed-target variants of the same
+criterion. Chapter~\ref{ch:regeneration} then proposes the
+missing ingredient: not a target to continue toward, but a
+capacity --- regeneration --- that continuation by itself
+fails to track.
+
+
+Continuation Space
+
+\label{sec:ch10-space}
+
+\begin{definition}{Continuation Space}{continuation-space}
+  A \emph{continuation space} is a pair $(X,\Gamma)$ where
+  $X$ is a state space and $\Gamma$ is the set of
+  trajectories
+  \[
+    \gamma : [t_0,\infty) \to X
+  \]
+  defined for all future times.
+  \index{continuation space|textbf}
+\end{definition}
+
+Continuation therefore concerns existence of trajectories
+rather than their structure. A trajectory belongs to
+$\Gamma$ if it remains dynamically defined. No condition is
+imposed regarding complexity, adaptability, repairability,
+or future possibility.
+
+This minimality is both the strength and weakness of the
+concept. Continuation captures something undeniably
+important. Extinction is impossible without loss of
+continuation. Collapse necessarily implies failure of
+continuation. Any adequate theory of persistence must
+therefore include continuation as a special case. Yet
+because the definition is intentionally weak, many radically
+different futures become indistinguishable.
+
+
+The Continuation Equivalence Theorem
+
+\label{sec:ch10-equivalence}
+
+\begin{theorem}{Continuation Equivalence Theorem}{continuation-equivalence}
+  Let $\gamma_1,\gamma_2\in\Gamma$ be trajectories defined
+  for all future times. Then continuation alone cannot
+  distinguish between them.
+\end{theorem}
+
+\begin{proof}
+  Continuation is a binary property. Either a trajectory
+  exists for all future times or it does not. If both
+  trajectories belong to $\Gamma$, they satisfy the
+  continuation criterion equally. Any distinction between
+  them must therefore arise from additional structure not
+  contained in the definition of continuation.
+\end{proof}
+
+The significance of this result is philosophical rather
+than mathematical. The theorem demonstrates that
+continuation possesses insufficient discriminatory power.
+It is incapable of distinguishing flourishing from
+stagnation, adaptation from rigidity, creativity from
+repetition, or regeneration from consumption.
+
+
+Pathological Continuation
+
+\label{sec:ch10-pathological}
+
+The simplest examples of pathological continuation occur in
+biology. Cancer cells continue. Indeed, they often continue
+more effectively than the tissues from which they arise.
+Their replication machinery functions exceptionally well.
+Their local persistence may exceed that of healthy cells.
+Yet this success comes at the expense of the larger
+ecological system in which they are embedded.
+
+The same pattern appears in institutions. An organisation
+may preserve itself by eliminating dissent, suppressing
+innovation, and reducing adaptability. Such measures may
+increase short-term continuation while reducing long-term
+resilience. The organisation survives by consuming the
+diversity required for future repair.
+
+Economic systems display analogous dynamics. Resource
+extraction can increase present productivity while reducing
+future productive capacity. The resulting trajectory
+exhibits continuation but not sustainability. It survives
+by narrowing its future.
+
+These examples reveal a common structure. Pathological
+continuations preserve themselves by reducing the
+possibility space surrounding them.
+
+
+The Continuation Degeneracy Theorem
+
+\label{sec:ch10-degeneracy}
+
+\begin{definition}{Continuation Degeneracy}{continuation-degeneracy}
+  A continuation trajectory is \emph{degenerate} if
+  continuation is achieved through irreversible reduction
+  of future reachability volume.
+  \index{continuation!degeneracy|textbf}
+\end{definition}
+
+\begin{theorem}{Continuation Degeneracy Theorem}{continuation-degeneracy-thm}
+  There exist continuation trajectories whose long-term
+  continuation requires monotonic reduction of future
+  reachability volume. Formally, there exist
+  $\gamma_1,\gamma_2\in\Gamma$ such that
+  $V_R(\gamma_1(t),t)\ge V_R(\gamma_1(t_0),t_0)$ for all
+  $t$, while $V_R(\gamma_2(t),t)\to0$ as $t\to\infty$.
+\end{theorem}
+
+\begin{proof}
+  Let $X=[0,1]$ with Lebesgue measure. Define
+  $\gamma_1(t)\equiv x_0$, a stationary trajectory, hence
+  in $\Gamma$ with constant reachability volume. Define
+  $\gamma_2$ as a trajectory consuming a non-renewable
+  resource: at each step $t$ it occupies $[0,e^{-\lambda t}]$
+  for $\lambda>0$, so $V_R(\gamma_2(t),t)=e^{-\lambda t}\to0$
+  while $\gamma_2$ remains defined for all $t$. Both belong
+  to $\Gamma$; continuation does not distinguish them.
+  Cancer, monopolies, and extractive economies exemplify
+  $\gamma_2$ \parencite{ostrom1990,meadows2008}.
+\end{proof}
+
+The theorem establishes that continuation and future
+preservation are independent properties. One may occur
+without the other.
+
+
+Second-Order Continuation
+
+\label{sec:ch10-second-order}
+
+The failure of continuation as a sufficient criterion
+suggests a deeper question. Rather than asking whether a
+trajectory continues, one may ask whether the trajectory
+preserves the conditions that make continuation possible.
+
+This question introduces a recursive structure. A
+first-order continuation preserves itself. A second-order
+continuation preserves the mechanisms that preserve itself.
+A third-order continuation preserves the mechanisms that
+preserve those mechanisms.
+
+The sequence immediately resembles the progression from
+distinction to repair. Repair restores distinctions.
+Regeneration restores repair. Each level moves upward one
+layer in the hierarchy of preservation.
+
+The crucial insight is that preservation becomes more
+robust as one ascends this hierarchy. Systems that merely
+continue remain vulnerable to any disruption of their
+continuation mechanism. Systems that preserve the
+continuation mechanism itself remain resilient against a
+broader class of perturbations.
+
+
+The Necessity of Regeneration
+
+\label{sec:ch10-necessity}
+
+At this point regeneration appears not as an optional
+refinement but as a logical necessity. If continuation
+alone is too weak, and if repair merely restores existing
+distinctions, then one must eventually address the
+maintenance of repair itself.
+
+A repair system that cannot repair its repair mechanisms
+eventually fails. A learning system that cannot improve its
+learning eventually stagnates. A civilisation that cannot
+preserve its adaptive institutions eventually collapses. A
+theory that cannot revise its methods eventually becomes
+incapable of recognising its own anomalies.
+
+In every case the central problem is identical. The system
+survives only so long as its capacity for repair survives.
+The object requiring preservation has shifted. It is no
+longer the distinction. It is no longer even the repair
+operator. It is the capacity to generate repair. This shift
+marks the conceptual transition from continuation to
+regeneration.
+
+
+Continuation as a Limiting Case
+
+\label{sec:ch10-limiting}
+
+Continuation does not disappear within the regenerative
+framework. Instead it becomes a limiting case.
+
+\begin{proposition}{Regeneration Strictly Implies Continuation}
+  {regen-implies-cont}
+  $\mathrm{Regeneration}\subsetneq\mathrm{Continuation}$:
+  every regenerative trajectory is a continuation
+  trajectory, but not conversely.
+\end{proposition}
+
+\begin{proof}
+  A regenerative system (Chapter~\ref{ch:regeneration})
+  preserves repair capacity and is continuously exercised,
+  hence it remains defined for all future times and belongs
+  to $\Gamma$. The converse fails by the Continuation
+  Degeneracy Theorem: degenerate continuations belong to
+  $\Gamma$ but are not regenerative.
+\end{proof}
+
+Continuation therefore occupies the same conceptual
+position that reachability later occupies relative to
+admissibility. Reachability is necessary but insufficient.
+Admissibility introduces additional structure. Likewise
+continuation is necessary but insufficient. Regeneration
+introduces additional structure. The distinction appears
+repeatedly across domains because it reflects a deep
+asymmetry between survival and preservation of possibility.
+
+
+Toward Regenerative Systems
+
+\label{sec:ch10-toward}
+
+The central result of this chapter is therefore negative.
+Continuation cannot serve as the deepest criterion for
+evaluating trajectories. It lacks the expressive power
+required to distinguish healthy persistence from
+pathological persistence. Any framework built entirely upon
+continuation ultimately treats ecosystems, monopolies,
+scientific traditions, cancers, civilisations, and
+dictatorships as equivalent whenever they survive.
+
+The inadequacy of this conclusion forces a transition
+toward a richer concept. The next chapter develops that
+concept. Regeneration will be defined not as persistence,
+nor as repair, but as preservation of repair capacity
+itself. The resulting framework transforms continuation
+from an endpoint into a special case of a more general
+theory of future preservation.
+
+
+Related Frameworks
+
+\label{sec:ch10-related-frameworks}
+
+\subsection*{Whitehead: Perishing and Objective Immortality}
+
+\emph{Convergence.} Chapter~\ref{ch:history} engaged Whitehead's
+process philosophy on the question of state versus history; this
+chapter's concern is different. Whitehead holds that no actual
+occasion endures unchanged: each one ``perpetually perishes''
+upon completing its process of becoming, achieving only
+\emph{objective immortality} --- survival as data inherited by
+successor occasions, never as a persisting substance
+\parencite{whitehead1929}. This anticipates this chapter's
+central negative result, that bare persistence of a system,
+unchanged, is not what should be valued, and that something more
+demanding than mere continuation is required for genuine
+flourishing.
+
+\emph{Divergence.} For Whitehead, perpetual perishing is a
+universal metaphysical fact, true of every actual occasion
+without exception: in the strictest sense, nothing endures, full
+stop. This chapter's Continuation Degeneracy Theorem
+(\cref{thm:continuation-degeneracy-thm}) makes a narrower and
+more usable claim: among systems that do persist in the ordinary
+sense, some are regenerative and some are merely, degenerately,
+continuing, and the difference is a checkable formal property of
+their distinction dynamics rather than a universal condition
+holding of all process whatsoever. Where Whitehead dissolves the
+distinction between healthy and pathological persistence into a
+single claim that nothing genuinely persists, this chapter needs,
+and supplies, a way to tell the two apart among things that
+plainly do persist.
+
+\emph{Open question.} Whether Whitehead's objective immortality
+--- survival as inherited data for a successor occasion --- is
+the same relation this book calls regeneration, preservation of
+a single system's own future repair capacity, or a structurally
+different relation of inheritance across distinct entities, is
+not settled here.
+
+\section*{Chapter Summary}
+\begin{chapsummary}
+  \item Continuation cannot distinguish flourishing from
+        pathological persistence
+        (\cref{thm:continuation-equivalence}).
+  \item Degenerate continuations shrink $V_R$ to zero
+        while remaining defined for all future times
+        (\cref{defn:continuation-degeneracy,thm:continuation-degeneracy-thm}).
+  \item Pathological continuation preserves itself by
+        consuming the possibility space surrounding it.
+  \item Second-order continuation --- preserving the
+        preservation mechanism itself --- is the conceptual
+        bridge to Chapter~\ref{ch:regeneration}.
+  \item Regeneration is strictly stronger than continuation
+        (\cref{prop:regen-implies-cont}).
+\end{chapsummary}
+
+\subsection*{Exercises}
+
+\begin{exercise}
+  Give three examples of pathological continuation from
+  different domains (biological, institutional,
+  computational). For each, identify what reachability
+  volume is being consumed.
+\end{exercise}
+
+\begin{exercise}
+  Construct a formal model in which a system maximises
+  continuation probability at each step while minimising
+  long-run reachability volume. What does this resemble in
+  evolutionary biology?
+\end{exercise}
+
+\begin{exercise}
+  Prove or disprove: a system with constant reachability
+  volume ($V_R(\gamma(t),t) = V_R(x,t_0)$ for all $t$) is
+  necessarily regenerative in the sense of
+  Chapter~\ref{ch:regeneration}.
+\end{exercise}
+
+
+
+
+\chapter{Regenerative Systems}
+\label{ch:regeneration}
+
+\begin{epigraph}{A thing that merely survives remains
+  dependent upon the circumstances that permitted its
+  survival. A thing that regenerates recreates those
+  circumstances.}
+  {Author}
+\end{epigraph}
+
+\begin{objectives}
+  \item Define regeneration formally.
+  \item Distinguish repair from regeneration.
+  \item Define repair-capacity spaces.
+  \item Prove the Regeneration Theorem.
+  \item Prove the Regenerative Stability Theorem.
+  \item Prove the Regenerative Expansion Theorem.
+  \item Establish regeneration as the bridge between repair
+        and admissibility.
+\end{objectives}
+
+
+Repair Is Not Enough
+
+\label{sec:ch11-not-enough}

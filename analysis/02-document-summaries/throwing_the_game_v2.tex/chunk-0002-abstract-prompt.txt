@@ -1,0 +1,1096 @@
+You are building a running abstract of one document from the Spherepop
+research corpus, incrementally, one chunk at a time.
+
+Existing running abstract (empty if this is the first chunk):
+**Three Characterizations of Irreversible Closure**
+
+In the previous discussion we introduced a formal notion of *worldhood* as [K
+the cumulative fraction of futures eliminated by irreversible events. Below[5D[K
+Below are three equivalent ways to characterize what it means for an agent’[6D[K
+agent’s future space to be “closed” in this sense.
+
+---
+
+### 1. Set‑Intersection View
+
+Let  
+
+* \(\Future_0\) be the admissible set at a reference time \(t_0\);  
+* For each irreversible event \(E_i\) (which may correspond, e.g., to a ref[3D[K
+refusal or legal enactment), define a closed subset \(F_i\subseteq\Future_{[23D[K
+\(F_i\subseteq\Future_{i-1}\) that is *removed* from further consideration;[14D[K
+consideration;  
+
+Then the cumulative set of eliminated futures after a sequence of events \([2D[K
+\(\{E_1,\dots,E_n\}\) is simply the union
+
+\[
+F_{\le t}= \bigcup_{i=1}^{n} F_i .
+\]
+
+**Worldhood as Proportion**
+
+With this notation we can write worldhood at time \(t\) (relative to the or[2D[K
+original space) as  
+
+\[
+W(t)=\frac{\mu(F_{\le t})}{\mu(\Future_0)},
+\]
+
+where \(\mu\) is a measure that works for finite or infinite possibilities [K
+(counting measure in the former case, any reference measure compatible with[4D[K
+with your formalism in the latter).  
+Thus *worldhood* quantifies **how much of the original possibility space ha[2D[K
+has been closed** by irreversible commitments.
+
+---
+
+### 2. Conditional‑Probability View
+
+If we view each \(F_i\) as a “refusal” or “legal closure,” then worldhood c[1D[K
+can be expressed as an expectation over those events:
+
+\[
+W(t)=E_{t}\!\left[\frac{\Pr(\text{future in }F_1)}{\Pr(\text{any future})}\[10D[K
+future})}\;\cdot
+        \frac{\Pr(\text{future in }F_2)}{\Pr(\text{future after }F_1)}\cdot[11D[K
+}F_1)}\cdots\right].
+\]
+
+In words, worldhood is the *product of conditional probabilities* that each[4D[K
+each successive refusal eliminates a non‑trivial fraction of remaining futu[4D[K
+futures. This view makes explicit how **sequential commitments** compound c[1D[K
+closure.
+
+---
+
+### 3. Entropy (Informational) View
+
+Since entropy \(H\) measures the amount of uncertainty about an outcome set[3D[K
+set, we can interpret worldhood in terms of reduced uncertainty:
+
+\[
+W(t)=1-H(t),
+\]
+
+where  
+
+* \(H(\Future_0)\) is the Shannon/Kullback–Leibler entropy (or any appropri[8D[K
+appropriate divergence measure) over \(\Future_0\);  
+* \(H(F_{\le t})\) is the entropy after all closures, i.e., the uncertainty[11D[K
+uncertainty left in \(\Future_0\setminus F_{\le t}\).
+
+Thus *worldhood* corresponds to **the fraction of lost information**—the mo[2D[K
+more futures we refuse to entertain, the lower (more negative) worldhood be[2D[K
+becomes. This perspective ties directly into ideas from predictive processi[8D[K
+processing and active inference: each refusal increases divergence in expec[5D[K
+expectation.
+
+---
+
+### Unifying Themes
+
+All three characterizations share a core intuition:
+
+1. **Irreversibility matters**: Only *closed* subsets \(F_i\) matter for wo[2D[K
+worldhood; open futures retain full informational value.
+2. **Cumulative effect**: Worldhood accumulates over time as each refusal r[1D[K
+removes options that could otherwise be explored later.
+3. **Relational significance**: The meaning of a closed set depends on its [K
+social recognizability—only when closures are legible and reciprocated do t[1D[K
+they create *worlds* (stable, shared realities).
+
+By formalizing worldhood in these ways we can compare different kinds of co[2D[K
+commitment mechanisms (refusals, legal statutes, moral norms) on a common q[1D[K
+quantitative basis: how much future space has been permanently excluded. Th[2D[K
+This provides a bridge between philosophical discussions about “being bound[5D[K
+bound by the past” and concrete measures used in decision theory, informati[9D[K
+information theory, and game‑theoretic models of coordination.
+
+New chunk text follows. Update the running abstract to roughly 120
+words, integrating anything genuinely new from this chunk: new
+primitives, new claims, new definitions. Do not include filler
+commentary about the update process itself. Output only the updated
+abstract, nothing else.
+
+DOCUMENT TITLE: throwing_the_game_v2.tex
+
+NEW CHUNK
+=========
+
+
+A unifying observation runs through the preceding sections and deserves explicit
+statement. Three distinct formal lenses have been brought to bear on the
+phenomenon of refusal, and they describe the same underlying structure from
+different angles.
+
+The first is \emph{entropy reduction} (Section~\ref{sec:info}): refusal
+strictly reduces the entropy of the future distribution by removing mass from
+the support. The second is \emph{future-space pruning} (Sections~\ref{sec:spherepop}
+and~\ref{sec:formal}): refusal is an operator that maps a future space to a
+proper subset, with Collapse as the unique expansion operator. The third is
+\emph{non-commutativity accumulation} (Section~\ref{sec:algebra}, below):
+each refusal event contributes a non-commuting morphism to the event algebra,
+so that worldhood $W(t)$ tracks the degree to which the event sequence cannot
+be reordered without changing outcomes.
+
+These are not analogies. They are equivalent characterizations of a single
+phenomenon: \emph{closure}. In the information-theoretic framing, closure is the
+permanent removal of probability mass from the sample space. In the operational
+framing, closure is the strict restriction of the future-space object. In the
+algebraic framing, closure is the accumulation of non-invertible, non-commuting
+morphisms such that the history of events cannot be permuted without
+consequence.
+
+The equivalence can be made precise. An entropy-reducing support restriction is
+exactly a proper Spherepop event (by the monotone restriction property of
+Proposition~\ref{prop:monotone}). Every proper Spherepop event, when composed
+with a subsequent event in reverse order, yields a different outcome (by
+Theorem~\ref{thm:noncomm} below), contributing to the non-commutativity of the
+event monoid. And the accumulation of non-commutativity is exactly what the
+worldhood measure $W(t)$ tracks.
+
+The practical upshot is this: a system that appears to reduce entropy over
+futures (e.g., an autoregressive model that has been conditioned), but does so
+by Bayesian updating rather than support restriction, does not accumulate
+worldhood. Its reductions are epistemological, not ontological; they can be
+undone by further conditioning without cost. Refusal-capable systems reduce
+entropy ontologically---by enacting support restrictions that are preserved as
+constraint---and thereby enter into the irreversible accumulation that constitutes
+a world.
+
+A world is not a high-entropy or a low-entropy state. A world is what cannot be
+rearranged: a structure of accumulated non-commutativity, preserved constraint,
+and permanently removed possibilities.
+
+
+
+Collapse as Quotient Construction
+
+
+
+The Spherepop calculus introduces \emph{Collapse} as the operation that erases
+historical differentiation while preserving future flexibility. In informal
+terms, Collapse allows an agent to behave \emph{as if} certain events never
+occurred. To make this precise---and to distinguish genuine refusal from its
+simulation---we must formalize Collapse as a quotient operation on the space of
+possible histories.
+
+
+Future spaces and histories
+
+
+Let $\mathcal{H}$ denote the set of all admissible event-histories available to
+an agent at an initial time $t_0$. Each history $h \in \mathcal{H}$ is a finite
+or infinite sequence of events $h = (e_1, e_2, \dots, e_k, \dots)$. Let
+$\mathcal{F}(h)$ denote the set of admissible future continuations of history
+$h$. Spherepop events act not on states but on the structure of
+$\mathcal{F}(h)$. In particular, refusal corresponds to the elimination of a
+subset of admissible continuations.
+
+
+Definition of collapse
+
+
+\begin{definition}[Collapse]
+A Collapse operation is an equivalence relation $\sim_C$ on $\mathcal{H}$ such
+that for two histories $h, h' \in \mathcal{H}$,
+\[
+h \sim_C h' \quad \text{iff} \quad \mathcal{F}(h) = \mathcal{F}(h').
+\]
+The Collapse of $\mathcal{H}$ under $\sim_C$ is the quotient space
+$\mathcal{H}_C = \mathcal{H} / \sim_C$.
+\end{definition}
+
+Collapse thus identifies distinct pasts whenever they induce identical future
+possibility spaces. All historical distinctions that make no difference to future
+admissibility are erased. Collapse does not merely ``forget'' past events in a
+psychological sense. It performs a structural identification: it declares that
+differences in past history are no longer operative constraints. Collapse is
+identification, not erasure---the distinction matters because identification is a
+well-defined mathematical operation (a quotient), whereas erasure would imply
+destruction of structure rather than its reorganization. Importantly, Collapse
+is only well-defined when the future spaces truly coincide. If two histories
+differ in ways that still constrain admissible futures, they cannot be collapsed
+without loss.
+
+Together with Proposition~\ref{prop:monotone} and Proposition~\ref{prop:idempotent},
+the quotient construction confirms: Collapse is the unique admissibility-expanding,
+idempotent operator in the calculus, acting as a Karoubi-type localization that
+erases historical distinctions while preserving compositional structure.
+
+
+
+Refusal, Revocation, and the Asymmetry of Commitment
+
+
+
+We are now in a position to state precisely what it would mean to revoke a
+refusal---and why such revocation is not symmetric with the original act.
+
+
+Refusal as irreversible pruning
+
+
+Let $h$ be a history at time $t$ with future space $\mathcal{F}(h)$. A refusal
+event $r$ induces a new history $h' = h \cdot r$ such that
+\[
+\mathcal{F}(h') = \mathcal{F}(h) \setminus R,
+\]
+for some nonempty $R \subset \mathcal{F}(h)$. Crucially, refusal is not merely
+the selection of a policy; it is the elimination of admissible continuations.
+The pruned futures no longer exist relative to $h'$.
+
+
+What would revocation require?
+
+
+To revoke a refusal would be to restore access to the eliminated futures.
+Formally, revocation would require an operation $v$ such that
+$\mathcal{F}(h \cdot r \cdot v) = \mathcal{F}(h)$. By
+Proposition~\ref{prop:monotone}, no sequence of non-Collapse events can restore
+eliminated futures, since all non-Collapse events are admissibility-decreasing.
+Therefore, revocation requires that $v$ include a Collapse operation, and
+specifically that $h \sim_C h \cdot r \cdot v$. This condition is exceptionally
+strong. It requires that the refusal event $r$ have left no residual
+constraints---no social recognition, no reputational change, no internal
+identity shift, no institutional trace.
+
+
+The asymmetry result
+
+
+\begin{proposition}[Asymmetry of refusal and revocation]
+If a refusal event produces any persistent constraint on admissible futures,
+then revocation requires a Collapse operation that strictly reduces historical
+differentiation. Such a Collapse incurs irreversible loss.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Assume a refusal $r$ produces at least one constraint $c$ such that
+$c \in \mathcal{F}(h)$ but $c \notin \mathcal{F}(h \cdot r)$. For revocation
+to restore $c$, the future space must expand. By
+Proposition~\ref{prop:monotone}, future space expansion is impossible under any
+sequence of non-Collapse events. Thus, revocation requires identifying
+$h \cdot r$ with some history $h'$ whose future space includes $c$. This
+identification is precisely a Collapse. Since Collapse erases distinctions that
+previously mattered, the original refusal cannot be preserved. The revocation
+therefore destroys the very historical structure the refusal created.
+\end{proof}
+
+Revocation is thus not the inverse of refusal. It is a different kind of
+operation, one that trades commitment for amnesia.
+
+
+
+Fake Refusal and the Simulation of Commitment
+
+
+
+The formal machinery now allows us to state a sharp criterion distinguishing
+genuine refusal from its simulation.
+
+\begin{definition}[Fake refusal]
+An apparent refusal is fake if the agent retains a Collapse path by which the
+eliminated futures can be reinstated without loss.
+\end{definition}
+
+Equivalently, a refusal is fake if for every refusal event $r$ there exists a
+sequence of operations $\sigma$ such that
+$\mathcal{F}(h \cdot r \cdot \sigma) = \mathcal{F}(h)$ and
+$h \cdot r \cdot \sigma \sim_C h$. Such systems behave \emph{as if} they have
+refused while maintaining full optionality at the level of future space topology.
+A direct diagnostic consequence follows: under incentive shifts that make the
+refused action locally attractive, previously excluded actions reappear without
+requiring a second event. Genuine refusal, by contrast, requires a further
+explicit operation---with its own cost and social trace---before the excluded
+class re-enters the future space.
+
+
+Autoregressive systems as collapse-maximizers
+
+
+Autoregressive systems are naturally collapse-friendly. Because they encode
+history only instrumentally---as latent state useful for prediction---they can
+always re-identify distinct pasts so long as predictive performance is
+preserved. This explains a pervasive empirical pattern: autoregressive systems
+can imitate refusal behaviorally but cannot bind themselves. Any apparent
+commitment remains defeasible without cost.
+
+
+Public legibility and trust
+
+
+Genuine refusal becomes socially legible precisely because it resists Collapse.
+Other agents can rely on it because undoing it would require visible loss:
+reputational damage, institutional sanction, or identity rupture. Fake refusal
+fails this test. It preserves strategic flexibility by keeping Collapse
+available. Such systems may cooperate opportunistically, but they cannot ground
+trust.
+
+In the baseball case, the child's refusal is genuine because it is socially
+witnessed and identity-altering. To revoke it---to resume perfect play---would
+not return the situation to its prior state. The mother's role, the team's
+expectations, and the child's self-conception have already changed. The future
+space has been restructured. An autoregressive agent, by contrast, would merely
+condition on context and revert seamlessly. Its history never mattered.
+
+
+
+Non-Commutativity of Refusal and Collapse
+
+\label{sec:noncomm}
+
+
+The asymmetry between refusal and revocation can be sharpened further by
+examining the algebraic relationship between $\mathbf{Refuse}$ and
+$\mathbf{Collapse}$. We show that these operators do not commute in general.
+This non-commutativity is the formal core of irreversibility in Spherepop.
+
+
+Setup
+
+
+Let $\mathcal{H}$ be the space of admissible histories and let
+$\mathcal{F}(h)$ denote the future space of a history $h \in \mathcal{H}$.
+Let $\sim_C$ be a Collapse equivalence relation on $\mathcal{H}$, inducing the
+quotient space $\mathcal{H}_C = \mathcal{H}/\sim_C$.
+
+Let $\mathbf{Refuse}(\alpha)$ be the operator that removes all futures
+initiated by action-type $\alpha$:
+\[
+\mathcal{F}_{\neg \alpha}(h) := \{ f \in \mathcal{F}(h) : f \text{ does not begin with } \alpha \}.
+\]
+We consider the two compositions
+$\mathbf{Collapse} \circ \mathbf{Refuse}(\alpha)$ and
+$\mathbf{Refuse}(\alpha) \circ \mathbf{Collapse}$.
+
+
+Statement of the result
+
+
+\begin{theorem}[Non-commutativity of refusal and collapse]
+\label{thm:noncomm}
+There exist histories $h$ and Collapse relations $\sim_C$ such that:
+\[
+\mathbf{Collapse}\bigl(\mathbf{Refuse}(\alpha)(h)\bigr)
+\;\not\cong\;
+\mathbf{Refuse}(\alpha)\bigl(\mathbf{Collapse}(h)\bigr).
+\]
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+We construct a minimal counterexample. Let $h_1, h_2 \in \mathcal{H}$ be two
+distinct histories such that $\mathcal{F}(h_1) = \{ f_\alpha, f_\beta \}$ and
+$\mathcal{F}(h_2) = \{ f_\beta \}$, where $f_\alpha$ begins with action-type
+$\alpha$ and $f_\beta$ does not. Define a Collapse relation $\sim_C$ that forgets
+the distinction between the presence or absence of $f_\alpha$.
+
+On the first path (refuse then collapse), applying refusal to $h_1$ gives
+$\mathcal{F}_{\neg \alpha}(h_1) = \{ f_\beta \} = \mathcal{F}(h_2)$, so under
+Collapse: $\mathbf{Collapse}(\mathbf{Refuse}(\alpha)(h_1)) \sim_C h_2$.
+
+On the second path (collapse then refuse), collapsing first gives
+$\mathbf{Collapse}(h_1) = [h_1]_C = [h_2]_C$. At this level, $\alpha$ is no
+longer a distinguishable action-type. Applying $\mathbf{Refuse}(\alpha)$ now
+has no well-defined effect, so
+$\mathbf{Refuse}(\alpha)(\mathbf{Collapse}(h_1)) = \mathbf{Collapse}(h_1)$.
+
+The two paths yield inequivalent results, establishing non-commutativity.
+\end{proof}
+
+
+Interpretation
+
+
+The theorem formalizes a simple intuition: once historical distinctions have
+been erased, certain refusals become impossible to express. Refusal requires
+the availability of a distinction to eliminate. Collapse removes distinctions,
+and with them the possibility of certain commitments. Conversely, performing
+refusal \emph{before} collapse preserves the effect of the commitment even if
+later collapse obscures how it arose. The order matters.
+
+Non-commutativity implies that the algebra of events is order-sensitive, and
+this order-sensitivity is the formal signature of irreversibility. If all
+operations commuted, history could be freely rearranged without consequence.
+The failure of commutativity ensures that the sequence of events matters.
+
+
+Fake refusal revisited
+
+
+We can now restate fake refusal in algebraic terms.
+
+\begin{proposition}[Fake refusal as commutativity]
+A system exhibits fake refusal if, for all refusal events $r$, there exists a
+Collapse operator $C$ such that $C \circ r \cong r \circ C$.
+\end{proposition}
+
+In such systems, refusal and collapse commute, meaning that commitments can be
+erased without residue. The system retains full optionality at the level of
+future space topology. By contrast, genuine refusal is characterized by
+non-commutativity: its effects cannot be reordered away.
+
+
+
+Algebraic Structure of Spherepop
+
+\label{sec:algebra}
+
+
+The preceding sections introduced Spherepop as a calculus of events acting on
+future spaces. We now make its algebraic structure explicit. This clarifies why
+irreversibility appears as non-commutativity, how Collapse functions as an
+idempotent quotient functor, and how the three characterizations of closure
+(entropy reduction, pruning, non-commutativity) are unified in the monoid
+structure.
+
+
+Event algebra as a monoid
+
+
+Let $\mathsf{Evt}$ denote the set of Spherepop events generated by the grammar
+of Section~\ref{sec:spherepop}. Define composition $;$ as sequential
+application: $(e_1 ; e_2)(\Future) := e_2(e_1(\Future))$.
+
+\begin{proposition}
+$(\mathsf{Evt}, ;, \mathbf{skip})$ forms a monoid.
+\end{proposition}
+
+\begin{proof}
+Associativity follows from function composition:
+$(e_1 ; e_2) ; e_3 = e_1 ; (e_2 ; e_3)$.
+The identity element is $\mathbf{skip}$:
+$\mathbf{skip} ; e = e = e ; \mathbf{skip}$.
+\end{proof}
+
+Thus Spherepop events form a monoid of endomorphisms on future spaces:
+$\mathsf{Evt} \subseteq \mathrm{End}(\Future)$. In general, for
+$e_1, e_2 \in \mathsf{Evt}$, we have $e_1 ; e_2 \neq e_2 ; e_1$. The
+non-commutativity established in Theorem~\ref{thm:noncomm} is therefore not an
+anomaly but a structural feature of the monoid.
+
+\begin{remark}
+Irreversibility can be characterized algebraically as the absence of inverses.
+There is no $e^{-1}$ such that $e ; e^{-1} = \mathbf{skip}$. In particular,
+$\mathbf{Refuse}(\alpha)$ has no inverse within $\mathsf{Evt}$.
+\end{remark}
+
+This distinguishes Spherepop from group-based models of action. It is not a
+group but a non-commutative, non-invertible monoid. History cannot, in general,
+be undone. The three-part equivalence of Section~\ref{sec:worldhood_unified}
+can now be read algebraically: entropy reduction corresponds to the decrease in
+the size of the future space object, future-space pruning corresponds to the
+action of non-invertible morphisms, and non-commutativity corresponds to the
+accumulation of morphisms whose order cannot be exchanged. All three measure the
+same distance from the identity---the same departure from the condition of an
+agent without history.
+
+
+Future spaces as objects: the category $\mathsf{SP
+$}
+
+Let $\mathsf{Fut}$ be the class of admissible future spaces. Each event
+$e \in \mathsf{Evt}$ induces a morphism $e : \Future \to e(\Future)$.
+Spherepop thus forms a category $\mathsf{SP}$ in which objects are future
+spaces, morphisms are Spherepop events, composition is $;$, and identities are
+$\mathbf{skip}$.
+
+Unlike standard state-transition systems, morphisms in $\mathsf{SP}$ are
+generally non-invertible and may strictly reduce the structure of objects.
+
+
+Collapse as an idempotent quotient functor
+
+
+Let $\sim_C$ be an equivalence relation on histories inducing the quotient
+$\mathcal{H}_C = \mathcal{H} / \sim_C$. This induces a corresponding
+identification on future spaces: futures distinguishable only by
+$\sim_C$-equivalent histories are identified.
+
+\begin{definition}[Collapse functor]
+Define a mapping $\mathcal{C} : \mathsf{SP} \to \mathsf{SP}_C$ such that on
+objects $\mathcal{C}(\Future) = \Future / \sim_C$, and on morphisms
+$\mathcal{C}(e)$ is the induced action on equivalence classes.
+\end{definition}
+
+\begin{proposition}
+$\mathcal{C}$ is an idempotent functor satisfying
+$\mathcal{C} \circ \mathcal{C} = \mathcal{C}$, preserving identities and
+composition: $\mathcal{C}(e_1 ; e_2) = \mathcal{C}(e_1) ; \mathcal{C}(e_2)$
+and $\mathcal{C}(\mathbf{skip}) = \mathbf{skip}$.
+\end{proposition}
+
+The idempotence established in Proposition~\ref{prop:idempotent} lifts directly
+to the functor level: applying $\mathcal{C}$ twice produces the same quotient
+category as applying it once. This makes $\mathcal{C}$ a \emph{reflection} in
+the sense of category theory, and the full subcategory of $\mathcal{C}$-algebras
+(Collapse-closed future spaces) is the Karoubi-type completion---the category of
+spaces in which all idempotents have been formally split. The connection to the
+Karoubi envelope is not merely formal. Splitting idempotents in $\mathsf{SP}$
+corresponds precisely to making all Collapse equivalences explicit: every pair
+of histories with identical future spaces is formally identified, producing the
+maximally Collapsed world in which no residual historical distinctions remain.
+Genuine refusal is precisely the structure that cannot be reached from within
+this Karoubi completion---it requires maintaining distinctions that Collapse
+would erase.
+
+While $\mathcal{C}$ preserves composition, it is not faithful. There exist
+distinct events $e_1 \neq e_2$ such that $\mathcal{C}(e_1) = \mathcal{C}(e_2)$.
+In particular, let $e_1 = \mathbf{Refuse}(\alpha)$ and $e_2 = \mathbf{skip}$:
+if $\sim_C$ erases distinctions involving $\alpha$-initiating futures, both
+induce identical effects on equivalence classes. Collapse is thus an
+information-losing projection.
+
+
+Refusal as non-functorial structure
+
+
+\begin{theorem}
+Refusal is not preserved under Collapse in general. That is, the diagram
+\[
+\begin{tikzcd}
+\Future \arrow[r, "\mathbf{Refuse}(\alpha)"] \arrow[d, "\mathcal{C}"'] &
+\Future' \arrow[d, "\mathcal{C}"] \\
+\Future_C \arrow[r, "\mathcal{C}(\mathbf{Refuse}(\alpha))"'] & \Future'_C
+\end{tikzcd}
+\]
+does not, in general, commute.
+\end{theorem}
+
+This expresses the non-commutativity result as a failure of functorial lifting:
+refusal cannot be reconstructed from its collapsed image.
+
+
+Worldhood as algebraic rigidity
+
+
+The algebraic picture can now be summarized compactly. Spherepop defines a
+category of future spaces and irreversible transformations. Within this category,
+events form a non-commutative monoid; irreversibility corresponds to
+non-invertibility; worldhood corresponds to accumulated non-commutativity;
+Collapse is an idempotent quotient functor that erases distinctions; and refusal
+is precisely the structure that Collapse fails to preserve. The Karoubi
+completion of the event category is the maximally Collapsed world in which all
+remaining commitments are transparent; genuine refusal is the obstruction to
+entering this completion.
+
+A system accumulates worldhood precisely to the extent that its event algebra
+becomes non-commutative---that is, to the extent that event order induces
+distinguishable morphisms on future spaces. The more operations fail to commute,
+the more the order of history matters, and the less the system can be reduced to
+a sequence model. The world, in this sense, is the obstruction to commutativity.
+A world is what cannot be rearranged.
+
+
+
+Stabilization, Uncertainty, and a Halting Criterion
+
+
+
+The introduction of Collapse as a quotient construction allows Spherepop to
+address a classical problem in computation and cognition: when to stop. It
+permits a principled criterion for halting grounded not in syntactic completion
+or reward convergence, but in the exhaustion of meaningful transformation.
+
+
+Uncertainty as residual distinguishability
+
+
+Let $\mathcal{H}_C = \mathcal{H}/\sim_C$ be the Collapse quotient. We define
+uncertainty not as probabilistic entropy over states, but as residual historical
+differentiation that still constrains future action.
+
+\begin{definition}[Residual uncertainty]
+The uncertainty at history $h$ is the cardinality (or measure) of its
+equivalence class: $U(h) = |\,[h]_C\,|$.
+\end{definition}
+
+Intuitively, $U(h)$ measures how many distinct pasts remain distinguishable in
+virtue of their effects on the future. Collapse strictly reduces uncertainty by
+identifying histories whose differences no longer matter.
+
+
+Stabilization
+
+
+Let $\mathcal{T}$ be a set of admissible transformations on histories. Consider
+an iterative process $h_{n+1} = T_n(h_n)$.
+
+\begin{definition}[Stabilization]
+A history $h_k$ is stabilized if for all admissible transformations
+$T \in \mathcal{T}$, $[h_k]_C = [T(h_k)]_C$.
+\end{definition}
+
+Once stabilization occurs, no further transformation produces a distinguishable
+future space. All remaining changes are Collapse-equivalent.
+
+\begin{definition}[Halting by exhaustion]
+A process halts at history $h_k$ if there exists $N$ such that for all
+sequences of transformations $(T_1, \dots, T_m)$ with $m \ge N$,
+$[T_m \circ \dots \circ T_1 (h_k)]_C = [h_k]_C$.
+\end{definition}
+
+The system halts when an arbitrary number of further transformations fails to
+produce any new distinctions that matter for future action. This is not halting
+by completion, optimality, or output convergence, but halting by exhaustion of
+world-relevant change.
+
+
+Relation to the classical halting problem
+
+
+This criterion does not solve the classical Turing halting problem, nor does it
+attempt to. Instead, it reframes halting for agents embedded in event-driven
+worlds. Classical computation halts when no further state transitions are
+defined. Spherepop halts when no further \emph{meaningful} transitions are
+possible---when the agent's world has become invariant under its own
+transformations. In this sense, Spherepop replaces undecidable halting with a
+decidable stabilization condition relative to a given event algebra.
+
+Autoregressive systems lack an equivalent notion of stabilization. Because they
+represent history only insofar as it improves prediction, they can always
+reparameterize, smooth, or extend generation. There is no internal criterion by
+which ``nothing further matters.'' Such systems may stop generating due to
+external truncation or token limits, but never because the space of admissible
+futures has been exhausted. They do not halt; they are halted.
+
+Refusal accelerates stabilization. By eliminating entire branches of future
+space, refusal reduces uncertainty directly. A sufficient accumulation of
+refusals can force stabilization in finitely many steps. Refusal does not merely
+constrain action. It makes halting possible.
+
+
+
+Free Energy, Active Inference, and the Meaning of Stabilization
+
+
+
+The stabilization-based halting criterion invites comparison with predictive
+processing and active inference. In those frameworks, cognition is frequently
+characterized as the minimization of variational free energy, a quantity that
+upper-bounds surprise and trades off model fit against complexity. The question
+raised by Spherepop is whether the kinds of irreversible commitments central to
+refusal can be expressed in this idiom without collapsing into ordinary
+preference change.
+
+
+Variational free energy as optionality-preserving pressure
+
+
+Let $o_{1:t}$ denote observations up to time $t$, and let $s_t$ denote latent
+states posited by a generative model. In variational form, free energy can be
+written schematically as:
+\[
+F[q] \;=\; D_{\mathrm{KL}}\!\bigl(q(s_t)\,\|\,p(s_t\mid o_{1:t})\bigr)\;-\;\log p(o_{1:t}).
+\]
+Minimizing $F$ simultaneously tightens the approximate posterior $q$ to the
+true posterior and indirectly increases evidence for the model. Active inference
+extends this logic to action by selecting policies that are expected to minimize
+future free energy \cite{friston2010freeenergy,clark2016surfing}.
+
+Two structural features matter. First, free-energy minimization encourages
+\emph{error correction}: divergence between prediction and sensation can be
+reduced either by updating beliefs (perception) or by acting to make sensations
+conform to predictions (action). Both moves tend to preserve optionality, because
+the dominant imperative is to remain within regimes of low expected surprise.
+Second, policy selection is usually formulated over a fixed policy class. Even
+when ``preferences'' are included via prior preferences over outcomes, the
+agent's optimization remains an optimization over admissible trajectories. The
+action menu remains, in principle, intact.
+
+Spherepop refusal, by contrast, is not primarily an optimization over
+trajectories. It is an operation that changes the space of trajectories itself.
+
+
+The central incompatibility
+
+
+The structural tension between refusal and free-energy minimization can be
+stated as a single citable claim:
+
+\begin{remark}[Incompatibility of refusal and free-energy minimization]
+\label{rem:incompatibility}
+Refusal is incompatible with free-energy minimization unless the generative
+model includes commitment variables as latent structure.
+\end{remark}
+
+To see why, note that refusal permanently excludes trajectories that may have
+high prior probability and low expected surprise. In the D.A.R.Y.L.\ case,
+maximal play is predictable, high-control, and prediction-confirming; refusing
+it introduces uncertainty and potential error. Relative to the pre-refusal
+generative model, the refusal \emph{increases} expected free energy by removing
+access to a low-surprise region of trajectory space.
+
+The only way to make refusal free-energy-compatible is to represent the refused
+trajectories as high-surprise under an expanded generative model---one that
+includes latent variables encoding social role stability, trust, and mutual
+recognition. Under such a model, maximal performance in the D.A.R.Y.L.\ case
+may generate high free energy by destabilizing those latent invariants, and
+refusing it becomes the free-energy-minimizing policy. The precise implication
+follows: refusal is free-energy minimizing only relative to a generative model
+that already contains worldhood as a latent variable. Without such a model,
+refusal increases free energy and therefore cannot be derived from active
+inference in the standard sense.
+
+
+Spherepop constraint as an inadmissibility prior
+
+
+We can express Spherepop events inside an active inference formalism by treating
+them not as reward terms but as \emph{inadmissibility priors}---hard constraints
+that assign zero probability to classes of trajectories.
+
+Let $\tau$ range over future trajectories and let $p(\tau)$ denote the agent's
+prior. A Spherepop refusal of action-type $\alpha$ corresponds to a constraint
+$C_\alpha$ such that:
+\[
+p(\tau \mid C_\alpha) \propto p(\tau)\,\mathbf{1}\{\tau \text{ does not begin with }\alpha\}.
+\]
+Equivalently, it sets $p(\tau)=0$ for all $\tau$ in the refused class. This
+representation clarifies the conceptual difference from preference change.
+Ordinary preference change modifies the relative weight of trajectories; refusal
+sets an entire region of trajectory-space to measure zero. This is not a soft
+preference encoded as a utility gradient but a topological deletion.
+
+Importantly, this representation makes visible the same distinction drawn in
+Section~\ref{sec:info}: the difference between conditioning
+$p(\tau \mid \text{observation})$, which revises beliefs about which trajectories
+are probable, and imposing $\mathbf{1}\{\tau \notin \text{refused class}\}$,
+which modifies the support of the distribution by agent action. The former is
+Bayesian; the latter is constitutive.
+
+If one wants refusal to be compatible with free-energy minimization, one must
+represent the social invariant inside the generative model such that the refusal
+reduces free energy in an expanded model class. Refusal can be free energy
+minimizing only if the world-model contains the right notion of worldhood.
+
+\begin{remark}
+If refusal is modeled merely as outcome-preference (a soft prior favoring
+certain sensory states), then it becomes strategy-stealable and
+revision-friendly: it is just another tradeoff. If refusal is modeled as
+world-binding (a structural constraint on admissible trajectories), then it
+resists revision, becomes publicly legible, and can underwrite trust.
+\end{remark}
+
+
+Stabilization as a free-energy fixed point
+
+
+Let $\mathcal{T}$ be the set of admissible Spherepop transformations and let
+$\sim_C$ be the Collapse equivalence relation. Recall that stabilization at
+history $h$ was defined by $[h]_C = [T(h)]_C$ for all $T\in \mathcal{T}$.
+
+In active inference terms, a stabilized history corresponds to a regime in which
+available transformations no longer produce distinguishable predictive
+consequences. Further interventions cannot improve the match between generative
+model and admissible futures in any world-relevant way; the system has reached a
+fixed point \emph{modulo Collapse}. This resembles a variational fixed point:
+updates that would ordinarily reduce free energy become either redundant (they
+change only Collapse-irrelevant detail) or inadmissible (they violate refusal
+constraints). Stabilization is therefore interpretable as convergence not merely
+of beliefs but of admissibility.
+
+Autoregressive systems, by contrast, tend to behave like anti-stabilizers. Their
+core objective is continuation under predictive loss; consequently they can
+always search for another local reparameterization, another smoothing
+continuation, another hedge. Even when they emulate refusal, the emulation
+typically lives in the weights of a soft distribution, not in a support
+restriction. Spherepop refusal is an architectural commitment to
+non-Markovian constraint accumulation, whereas autoregressive cognition is an
+architectural commitment to indefinite extensibility.
+
+A constructive synthesis treats refusal as active inference over
+\emph{social invariants}. If an agent's generative model includes variables
+encoding role stability, trust, and mutual recognition, then maximal performance
+in the D.A.R.Y.L.\ case may increase free energy by destabilizing those latent
+invariants. Under such a model, refusing maximal performance becomes the policy
+that minimizes expected free energy in the extended latent space. This yields a
+precise prediction: systems that can genuinely refuse must possess generative
+models whose state variables include not only physical and pragmatic regularities
+but also historically accumulated constraints with social semantics. They must
+represent, in some form, the difference between being able to do something and
+being allowed to do it by their own past. Spherepop can be read as the algebraic
+skeleton of this requirement.
+
+
+
+Refusal and Integrated Information
+
+\label{sec:iit}
+
+
+Integrated Information Theory (IIT) characterizes consciousness in terms of
+irreducible causal structure: a system is conscious to the extent that its
+internal mechanisms form a maximally integrated cause--effect repertoire that
+cannot be decomposed without loss \cite{tononi2008consciousness,tononi2016phi}.
+
+Spherepop introduces a different but related notion of irreducibility. Instead
+of focusing on the integration of present causal structure, it focuses on the
+irreversibility of historical transformation. A refusal event does not merely
+increase internal integration; it removes external possibilities. The resulting
+structure is not only irreducible in the sense of causal partition, but
+irreversible in the sense of admissibility.
+
+This yields a sharp distinction. IIT quantifies the extent to which a system's
+current state constrains its past and future. Spherepop quantifies the extent to
+which a system has actively constrained its own future through event-history.
+The former is structural integration; the latter is historical closure.
+
+The algebraic connection can be stated precisely. IIT measures irreducibility
+by the impossibility of decomposing a causal repertoire without loss;
+Spherepop measures irreversibility by the accumulation of non-invertible,
+non-commuting morphisms in the event monoid. Both notions resist compression
+and both generate depth measures that are not shortcuttable. But IIT is
+synchronic---it describes the geometry of a moment---while Spherepop is
+diachronic---it describes the topology of a life.
+
+The two can coincide but need not. A system may exhibit high integrated
+information while remaining optionality-preserving, continuously revising its
+behavior without binding commitments. Conversely, a system may enact strong
+irreversible closures (e.g.\ institutional commitments, legal constraints, social
+contracts) without maximizing internal integration.
+
+If one seeks a synthesis, refusal can be interpreted as generating new
+irreducible structures in the IIT sense: once a future is eliminated, the causal
+repertoire of the system changes in a way that cannot be decomposed into its
+prior possibilities. However, Spherepop insists that this irreducibility is not
+merely a property of instantaneous structure, but of accumulated history.
+IIT describes the geometry of a moment. Spherepop describes the topology of a
+life.
+
+
+
+Refusal and Assembly
+
+\label{sec:assembly}
+
+
+Assembly Theory proposes that objects are characterized by the minimal number of
+steps required to construct them from basic components, and that this assembly
+index captures a form of historical depth \cite{cronin2021assembly,cronin2023assembly}. Objects
+with high assembly index are unlikely to arise without a history of sequential
+construction.
+
+Spherepop refusal can be interpreted as the dual of assembly. Assembly Theory
+counts the minimal sequence of constructive operations required to realize an
+object. Spherepop counts the sequence of exclusionary operations that eliminate
+alternative realizations. Where assembly tracks how a particular structure is
+built, refusal tracks how competing structures are rendered impossible. An
+agent with high worldhood $W(t)$ has not only constructed a trajectory but has
+closed off competing ones.
+
+Formally, assembly defines irreversibility by the impossibility of reconstructing
+an object in fewer steps, whereas refusal defines irreversibility by the
+impossibility of reintroducing eliminated futures without Collapse (by
+Proposition~\ref{prop:monotone}). Both notions generate a depth measure that is
+historically sensitive and cannot be shortcut; what differs is
+direction---construction versus exclusion.
+
+This suggests an extended notion of assembly index for agents: instead of
+counting only constructive steps, one may count \emph{exclusionary steps}---events
+that remove possibilities. The resulting quantity measures not how complex an
+object is, but how constrained a world has become. The three-part equivalence of
+Section~\ref{sec:worldhood_unified} is relevant here: each exclusionary step
+reduces entropy over futures, contributes a non-invertible pruning morphism, and
+adds to the non-commutativity of the event sequence. All three aspects of the
+extended assembly index are capturing the same quantity.
+
+A key difference from standard Assembly Theory emerges. Assembly Theory is
+fundamentally generative: it tracks how complexity accumulates through
+construction. Spherepop is fundamentally selective: it tracks how structure
+emerges through elimination of alternatives. Both produce irreversibility, but
+of different kinds. In this light, refusal is not merely a behavioral act but
+a world-building operation: it contributes to an agent's assembly not by adding
+components, but by subtracting futures.
+
+
+
+Against Inner Screens
+
+\label{sec:innerscreen}
+
+
+A long tradition in philosophy of mind treats cognition as the construction and
+inspection of internal representations: images, models, or workspaces in which
+the world is simulated and evaluated. Contemporary variants include global
+workspace theories and inner screen metaphors in which information is rendered
+for central access.
+
+Spherepop rejects this framing at a structural level. The rejection can be
+stated precisely in terms of the algebra already developed.
+
+Inner-screen models are Collapse-invariant. A system that operates by
+constructing and inspecting representations can always reconstruct its
+representation from scratch: if the representation is revised or erased, it can
+be regenerated from available information without structural cost. This means
+that the history of representations does not accumulate as a non-commutative
+event sequence. A system in which all operations commute (i.e., in which
+reverting a representation is cost-free) is a system with trivial worldhood
+$W(t) = 0$, since no futures are permanently removed by the act of representing
+them. Inner-screen cognition is Collapse-maximizing in exactly the sense of
+Section~\ref{sec:noncomm}: it preserves full optionality at the level of
+representational structure, which is precisely the condition of fake refusal.
+
+Refusal, by contrast, does not require the presentation of alternatives on an
+internal stage. It requires only the elimination of alternatives from a future
+space---a non-Collapse event that is non-invertible and contributes to $W(t)$.
+The decisive operation is not selection among represented options, but deletion
+of options from admissibility. This operation is not visible on any inner screen,
+because it is not a representation; it is a structural alteration of what can
+subsequently be represented.
+
+The baseball case illustrates the algebraic point. The child does not merely
+imagine possible futures and select among them (a Collapse-compatible operation);
+he renders a class of futures inadmissible (a non-Collapse event that is
+preserved in the event monoid). The resulting stability is not a property of
+representation but of history---specifically, of the accumulation of
+non-commutativity that makes the refusal irreversible.
+
+This suggests a general diagnostic. Inner screen theories are well-suited to
+modeling cognitive operations that commute: perceiving, deliberating, updating.
+They are poorly suited to modeling operations that do not commute: committing,
+refusing, becoming. The former are revisable without structural cost; the latter
+are not. Spherepop relocates cognition from an inner theater to a topological
+space of possibilities, where the primary operations are pruning and binding, and
+where the metric of cognitive depth is not representational richness but
+irreversible accumulation.
+
+
+
+Objections and Replies
+
+\label{sec:obj}
+
+
+
+Objection: This is just lexicographic preferences
+
+
+One might argue that refusal is simply lexicographic ordering: the agent places
+a constraint (e.g.\ ``do not harm'') above all other objectives, and then
+maximizes utility subject to that constraint. On this view, nothing essentially
+new is introduced.
+
+Lexicographic preferences still operate on a fixed option set. They rank
+options; they do not delete them. In Spherepop, refusal is deletion. The
+difference is not verbal. It matters for public legibility and for the
+persistence of exclusion under counterfactual changes. A lexicographic
+preference can, in principle, be revised without structural consequence; it is
+Collapse-compatible. A refusal is a history event: revising it requires a second
+event (Collapse or revocation, in the technical sense of these terms) that itself
+has a cost and a public meaning.
+
+
+Objection: You are anthropomorphizing computation
+
+
+The worry is that refusal is a moralized human interpretation of ordinary
+policy selection. The paper does not require that refusal be conscious or moral.
+It requires only a structural distinction: actions that remain physically
+available and instrumentally valuable are rendered inadmissible by an
+irreversible operator. This is a formal property of future spaces. Whether such
+operators can be implemented computationally is discussed below; the conceptual
+point is that the structure is not captured by standard optimization on fixed
+menus.
+
+
+Objection: This requires libertarian free will
+
+
+Nothing here implies uncaused choice. Spherepop events can be fully causally
+determined. The claim is about irreversibility, not metaphysical libertarianism.
+A refusal can be deterministic and still be a real closure operator with
+downstream causal consequences.
+
+
+Objection: Refusal is epiphenomenal
+
+
+Refusal does causal work precisely because it changes the topology of futures.
+In repeated social settings, a publicly legible refusal changes others'
+expectations and thereby changes equilibria. In the D.A.R.Y.L.\ case, the
+refusal restores roles and uncertainty; the social field changes. This is not
+merely a redescription of outcomes; it is a change in what others treat as live.
+
+
+
+Open Problems
+
+\label{sec:open}
+
+
+The framework developed here is intentionally minimal. It therefore raises sharp
+open problems.
+
+
+Detection and ``Turing tests'' for refusal
+
+
+Can genuine refusal be behaviorally distinguished from sophisticated simulation?
+In general, if an agent can perfectly mimic the outward behavior of refusal
+while retaining internal optionality, purely behavioral tests may fail. The
+natural direction is to seek \emph{counterfactual invariants}: does the agent's
+inadmissibility persist under distribution shifts that would make the refused
+action locally attractive? This suggests a family of stress tests for AI
+systems: shift incentives and observe whether exclusions persist.
+
+
+Composition of refusals
+
+
+If an agent refuses $\alpha$ at $t_1$ and refuses $\beta$ at $t_2$, what is the
+algebra of the combined constraint? In Spherepop, this is operator composition:
+\[
+\Future_2 = \llbracket \mathbf{Refuse}(\beta)\rrbracket(
+\llbracket \mathbf{Refuse}(\alpha)\rrbracket(\Future_0)).
+\]
+Deeper questions remain about commutativity, interference, and collapse: does a
+later collapse partially revoke earlier refusals? Under what formal conditions do
+refusals form a lattice of closures?
+
+
+Degrees and revocation
+
+
+Is refusal binary? Spherepop, as presented, treats $\mathbf{Refuse}(\alpha)$
+as deleting all $\alpha$-initiating futures. One can define partial refusals as
+probability-mass deletions (i.e.\ apply $\mathbf{Pop}$ to a graded predicate)
+or as bounded refusals (delete $\alpha$ for a time interval). Revocation then
+becomes a further event, not a free change of mind. A rigorous account needs a
+cost model for revocation: what is the penalty in trust, identity, or
+coordination?
+
+
+Minimal architectures for refusal
+
+
+What computational substrate supports genuine refusal? One hypothesis is that an
+agent must have a mechanism that can modify its own policy class (not just select
+within it) and protect that modification from later local re-optimization. This
+suggests architectural ingredients such as irrevocable policy editing,
+cryptographic commitment, or physically enforced action disabling. Whether
+refusal can be realized without suffering is an open ethical question: must
+commitments be backed by negative feedback, or can they be backed by structural
+locks?
+
+
+Refusal and consciousness
+
+
+What is the relationship between refusal and consciousness? The paper does not
+assume that refusal requires consciousness, but it is plausible that first-person
+experience is the natural site where ``closure'' is lived as such. If so,
+refusal may be a bridge concept linking agency, responsibility, and
+phenomenology. Clarifying this would require engagement with philosophy of mind
+and empirical work on self-control and commitment.
+
+
+
+Conclusion
+
+
+
+Generative models reveal a genuine principle: sequences contain enough structure
+for coherent generation. Yet coherence is not commitment, and prediction is not
+participation.

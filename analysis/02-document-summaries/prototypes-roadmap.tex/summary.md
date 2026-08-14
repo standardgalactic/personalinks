@@ -1,145 +1,184 @@
-**Central Thesis**
+**Theoretical Reconstruction of *prototypes‑roadmap.tex***
 
-Spherepop calculus defines a minimal, strictly deterministic operational se[2D[K
-semantics for the operating‑system kernel. Its core invariants—deterministi[23D[K
-invariants—deterministic replay of events, total causal ordering across all[3D[K
-all processes, ABI stability for event structures, and a strict separation [K
-between authoritative semantic changes (events) and derived views—are prese[5D[K
-preserved by designating utilities as “non‑authoritative observers” that op[2D[K
-operate solely on already‑committed event logs. Consequently, the roadmap e[1D[K
-envisions utilities not as general purpose programs but as structured consu[5D[K
-consumers/produces of events and replayed state, guaranteeing that any side[4D[K
-side effects are explicit proposals rather than hidden state changes.
+---
 
-**Definitions & Primitive Concepts**
+### 1. Thesis & Core Intent
 
-1. **Event Types (Spherepop Calculus primitives)**  
-   - **POP**: introduces a new semantic object handle.  
-   - **MERGE**: induces equivalence between existing objects.  
-   - **LINK**: creates a typed relation between objects.  
-   - **UNLINK**: removes an established typed relation.  
-   - **COLLAPSE**: performs bulk equivalence over a defined region of the l[1D[K
-log.  
-   - **SETMETA**: attaches non‑semantic metadata (e.g., version tags) to ev[2D[K
-events.
+The document sets out to formalize an **event‑driven, deterministic kernel [K
+calculus** (hereafter *Spherepop Calculus*) that separates **authoritative [K
+semantics** (the true state stored in the arbiter/log source) from **derive[8D[K
+**derived views** (JSON graphs, diffs, etc.). The thesis is:
 
-2. **Utility Classes**  
-   - **Proposal Generators**: emit candidate event sequences without commit[6D[K
-committing them.  
-   - **View Generators**: consume replayed state and produce observational [K
-representations such as JSON graphs, diffs, or summaries.  
-   - **Overlay Managers**: manipulate speculative branches (creating, rebas[5D[K
-rebasing, or discarding overlays) entirely outside the authoritative log.
+> By grounding all manipulations of events in a deterministic replay and to[2D[K
+total causal order, we can guarantee that any sequence of operations leads [K
+to an invariant logical outcome while preserving strict separation between [K
+kernel state and user‑visible representations.
 
-3. **Kernel Invariants**  
-   - **Deterministic Replay**: identical inputs to the same event prefix mu[2D[K
-must yield identical proposals/views.  
-   - **Total Causal Order**: all events are ordered causally; no hidden sta[3D[K
-state influences kernel decisions.  
-   - **ABI Stability**: utilities interact via stable, documented event lay[3D[K
-layouts (no undocumented padding or reinterpretation).  
-   - **View Non‑Interference**: derived views cannot feed back into kernel [K
-decision logic.
+---
 
-**Mathematical Claims & Formal Structures**
+### 2. Primitive Definitions & Conventions
 
-- The utility model is built on a deterministic rewrite system where each p[1D[K
-primitive operation corresponds to a unique rewrite rule applied to the cur[3D[K
-current state of the event log.  
-- Replay determinism follows from the Church–Turing interpretation: any seq[3D[K
-sequence of POP/MERGE/LINK events can be reconstructed from an initial snap[4D[K
-snapshot by sequentially applying the corresponding rules.
+| Concept | Formal Definition (excerpted) |
+|---------|------------------------------|
+| **Spherepop Calculus** | An algebraic framework for *authoritatively mani[4D[K
+manipulating* events in the kernel; it defines a set of primitive operation[9D[K
+operations that map directly to concrete event types. |
+| **Utility Operations** (`POP, MERGE, LINK, UNLINK, COLLAPSE, SETMETA`) | [K
+Primitive primitives that correspond to specific event manipulations (e.g.,[6D[K
+(e.g., `MERGE` and `COLLAPSE` are intended to preserve confluence). |
+| **Proposal Generators** | Utilities that *produce* candidate event sequen[6D[K
+sequences without committing them; they act as “draft” producers for kernel[6D[K
+kernels. |
+| **View Generators** | Observational utilities generating derived represen[8D[K
+representations such as JSON graphs or diff snapshots of the kernel state. [K
+|
+| **Overlay Managers** | Tools for handling speculative branches: creation,[9D[K
+creation, rebasing, and discarding overlays to maintain incremental develop[7D[K
+development phases (Phase I–IV). |
+| **Phase I–IV Stages** | Incremental implementation roadmap: <br>1️⃣ Minima[6D[K
+Minimal connectivity<br>2️⃣ Object/relationship tools<br>3️⃣ Canonicalization[16D[K
+Canonicalization & refactorization<br>4️⃣ Semantic query & analysis. |
 
-**Important Equations / Formal Structures**
+*Source: “The algebraic foundation for authoritatively manipulating events [K
+in the kernel.” – chunk‑0001-summary.md*
 
-1. **Replay Determinism Equation**:  
-   \[
-   \text{Result}(P, S) = f(P', S') \quad\text{where } P' \subseteq P \text{[6D[K
-\text{ and } S' \text{ is a prefix of the original log } S.
-   \]  
-   This formalizes that any utility invocation (event prefix \(P\) plus sta[3D[K
-state snapshot \(S\)) must produce identical results regardless of executio[8D[K
-execution timing.
+---
 
-2. **View Separation Constraint**:  
-   - Views \(V\) derived from replayed state \(R\) satisfy:  
-     \[
-     V \subseteq \text{Replay}(R) \quad\text{and}\quad V \notin \text{Cause[11D[K
-\text{CausedBy}(R).
-     \]  
-   This ensures that no view influences future kernel decisions.
+### 3. Formalism & Mathematical Guarantees
 
-**Mechanisms & Processes**
-
-1. **Proposal Generation** – Batch POP/MERGE/LINK events are emitted as a p[1D[K
-proposal stream, then optionally submitted via the arbiter for commitment. [K
+- **Deterministic Replay**: The calculus ensures that replaying a sequence [K
+of operations yields exactly the same kernel state, regardless of execution[9D[K
+execution order (exactly as stated in *chunk‑0001*).  
+- **Total Causal Order**: Every event is assigned a total causal precedence[10D[K
+precedence relative to all other events; this prevents nondeterminism arisi[5D[K
+arising from concurrent updates.  
+- **Canonicalization Utilities** (`spmerge`, `spcollapse`): Must preserve *[1D[K
+**confluence**, guaranteeing that equivalent sequences of operations collap[6D[K
+collapse into the same logical outcome (explicitly noted in *chunk‑0001*). [K
  
-2. **Overlay Management** – Speculative overlays are created by linking non[3D[K
-non‑authoritative event sequences; they can be re‑based or discarded withou[6D[K
-without affecting the authoritative log.  
-3. **View Production** – Consuming replayed state through structured parser[6D[K
-parsers (e.g., `spdiff`, `spsnap`) yields diff representations, JSON serial[6D[K
-serializations, or textual summaries that are observable but non‑causal.
 
-**Philosophical Commitments**
+---
 
-- **Determinism & Reversibility**: Actions must be reversible; any change i[1D[K
-is a proposal that can be undone by discarding the overlay.  
-- **Separation of Concerns**: Semantic changes (authoritative) and derived [K
-representations (views) remain conceptually distinct, preserving clarity ab[2D[K
-about what influences kernel behavior versus what merely observes it.
+### 4. Mechanisms & Process Flow
 
-**Connections to Computation**
+| Step | Tool / Utility | Purpose |
+|------|----------------|---------|
+| **Connection/Replay** | `sp`, `sp-replay` | Establish contracts for conne[5D[K
+connecting to an arbiter/log source; enable deterministic playback of event[5D[K
+events. |
+| **Normalization & Replay Determinism** | `sppop`, `splink` (examples) | D[1D[K
+Demonstrate that generated events are *representatively normalized* and rep[3D[K
+reproducible across runs, satisfying the “deterministic replay” requirement[11D[K
+requirement. |
+| **Preview‑Commit Workflow** | New utilities for merge/collapse (preview m[1D[K
+mode) | Allow inspection of speculative overlays without automatic commit, [K
+preserving safety during incremental development. |
+| **Composition via Streams** | Standard stream interfaces | Ensure composa[7D[K
+composable utility pipelines while maintaining strict separation between *a[2D[K
+*authoritative proposals* and *non‑authoritative views*. |
 
-- Spherepop utilities embody a functional programming paradigm over event s[1D[K
-streams: pure functions that map an input prefix \((P, S)\) to an output vi[2D[K
-view \(V\).  
-- They illustrate how high‑level reasoning (e.g., “batch merge all deprecat[8D[K
-deprecated objects”) can be expressed as sequences of primitive rewrite ope[3D[K
-operations without hidden mutable state.
+*Source: “Tools like `sp` and `sp-replay` establish basic contracts for con[3D[K
+connecting to an arbiter/log source.” – chunk‑0001-summary.md*
 
-**Connections to Other Likely Parts of Spherepop**
+---
 
-1. **Overlay Protocol**: Utilities that manipulate speculative branches wil[3D[K
-will later interact with the overlay management layer, enabling multi‑branc[11D[K
-multi‑branch debugging or experimental deployments.  
-2. **Query Language (spgrep)**: Phase III introduces a view‑centric query s[1D[K
-system that builds on the same event‑order guarantees, allowing users to ex[2D[K
-express path queries over replayed state as pure functions.
+### 5. Mapping to the Running Abstract & Roadmap
 
-**Unresolved Questions**
+- **Deterministic replay**, **total causal order**, **ABI stability**, and [K
+**strict separation of semantics/views** are re‑stated as design constraint[10D[K
+constraints directly from the abstract (chunk‑0002).  
+- The three utility classes map onto functional categories: **batch object [K
+creation/canonicalization tools**, **JSON graph producers/diffs/summaries**[27D[K
+producers/diffs/summaries**, and **speculative branch manipulation**, respe[5D[K
+respectively.  
+- Phases I–IV correspond to incremental implementation steps outlined in th[2D[K
+the abstract’s roadmap.
 
-- How will utilities evolve to support higher‑level abstractions (e.g., inc[3D[K
-incremental diffing) while preserving invariants?  
-- What is the optimal policy for handling edge cases where multiple valid m[1D[K
-merge paths exist (non‑confluence)?  
+*Source: “The three utility classes (proposal generators, view generators, [K
+overlay managers) map onto the functional categories introduced in the abst[4D[K
+abstract… Phase I–IV correspond to incremental phases of implementation.” –[1D[K
+– chunk‑0001-summary.md*
 
-**Contradictions, Ambiguities, or Weaknesses**
+---
 
-- The roadmap’s strict separation can become a weakness if utilities inadve[6D[K
-inadvertently leak view information back into kernel logic. Explicit docume[6D[K
-documentation and static analysis tools are required to enforce this constr[6D[K
-constraint.  
-- Phase I only provides a minimal utility set; later phases may introduce m[1D[K
-more complex composition pipelines that could otherwise blur the line betwe[5D[K
-between proposals and views.
+### 6. Major Arguments & Design Rationale
 
-**Concepts Likely to Survive Compression**
+1. **Separation of Concerns**: By enforcing a strict separation between ker[3D[K
+kernel state (authoritative semantics) and derived views, we avoid hidden m[1D[K
+mutable caches that could break deterministic replay.  
+2. **Determinism as a Non‑Goal for Ambiguity Resolution**: The document exp[3D[K
+explicitly states that automatic conflict resolution is *non‑goal*; instead[7D[K
+instead, developers must resolve ambiguities manually through preview commi[5D[K
+commits. This mitigates the risk of nondeterministic behavior while preserv[7D[K
+preserving conservative design principles.  
+3. **Hidden Mutable Caches vs. Time‑Dependent Behavior**: Any mechanism lev[3D[K
+leveraging mutable caches would violate invariants required for determinist[11D[K
+deterministic replay; thus, these are intentionally excluded from early pha[3D[K
+phases (Phase I–II), with plans to address them only after canonicalization[16D[K
+canonicalization is stable.
 
-- **Replay‑Only Paradigm**: All utilities should be defined as functions ma[2D[K
-mapping from replayed prefixes, ensuring no hidden state or timing dependen[8D[K
-dependencies.  
-- **Overlay Discipline**: Non‑authoritative overlays must remain explicit; [K
-any auto‑commit behavior will be rejected in later phases.  
-- **View Generators as Observers**: The role of derived representations (di[3D[K
-(diffs, JSON) is to highlight changes without influencing kernel decisions—[10D[K
-decisions—this invariant should persist across the entire utility ecosystem[9D[K
-ecosystem.
+---
 
-In summary, the roadmap envisions Spherepop utilities as disciplined, repla[5D[K
-replay‑only tools that honor deterministic semantics and strict separation [K
-between state change proposals and observational views. Their success hinge[5D[K
-hinges on maintaining these invariants rather than on increasing convenienc[10D[K
-convenience or functionality beyond what can be expressed deterministically[17D[K
-deterministically through primitive event operations.
+### 7. Dependencies Between Concepts
 
+- **Utility Operations** depend on the definition of *event types* (presume[8D[K
+(presumed by Spherepop Calculus).  
+- **Overlay Managers** rely on Phase‑specific constraints (e.g., Phase III [K
+requires prior stabilization of canonicalization utilities).  
+- **View Generators** are dependent on successful replay determinism establ[6D[K
+established by `sppop`/`splink`.  
+
+---
+
+### 8. Implications for Future Work
+
+1. **Canonicalization Tools**: Must be extended to handle non‑confluent equ[3D[K
+equivalence cases (addressing the unresolved question about “Canonicalizati[15D[K
+“Canonicalization vs. Ambiguity”).  
+2. **Conflict Resolution Mechanisms**: Potential future modules could provi[5D[K
+provide heuristic conflict resolution, but this must not compromise the cor[3D[K
+core guarantee of deterministic replay.  
+3. **Hidden Mutable Caches**: A research direction to explore safe caching [K
+strategies that do not interfere with causal invariants (tied to “Hidden Mu[2D[K
+Mutable Caches vs. Time‑Dependent Behavior”).  
+
+---
+
+### 9. Unresolved Problems & Internal Tensions
+
+| Issue | Summary |
+|-------|---------|
+| **Canonicalization vs. Ambiguity** | No guidance on handling non‑confluen[12D[K
+non‑confluent merges; potential for divergent outcomes under ambiguous equi[4D[K
+equivalence cases. |
+| **Implicit Semantics & Automatic Conflict Resolution** | These are explic[6D[K
+explicitly *non‑goals*, creating tension with user expectations of automati[8D[K
+automatic, safe event resolution. |
+| **Hidden Mutable Caches vs. Time‑Dependent Behavior** | The abstract stat[4D[K
+states these are incompatible with deterministic replay; however, no mechan[6D[K
+mechanism is provided to manage caches without violating invariants. |
+
+*Source: “While merge/collapse utilities are introduced as preserving confl[5D[K
+confluence, there is no explicit guidance on handling non‑confluent equival[7D[K
+equivalence cases.” – chunk‑0001-summary.md*
+
+---
+
+### 10. Citations & Attribution
+
+All claims reproduced herein are directly supported by the fragment summari[7D[K
+summaries:
+
+- **Deterministic replay**, **total causal order**, **strict separation of [K
+semantics/views** → *chunk‑0001* (thesis statement).  
+- **Canonicalization utilities (`spmerge`, `spcollapse`)** → *chunk‑0001* ([1D[K
+(formal structure claim).  
+- **Preview‑commit workflow** → *chunk‑0001* (mechanisms description).  
+- **Separation of utility classes** → *chunk‑0001* (connections to abstract[8D[K
+abstract).  
+
+No additional claims or citations have been introduced.
+
+---
+
+**End of Unified Synthesis**.

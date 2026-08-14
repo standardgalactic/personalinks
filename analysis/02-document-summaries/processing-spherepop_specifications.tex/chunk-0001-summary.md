@@ -1,214 +1,200 @@
-**Explanation of the Design**
-
-The code you see is a compact, strongly‑typed representation of a **commitm[9D[K
-**commitment log** used to manage an evolving “world state” (denoted by Ω) [K
-while preserving **historical replayability**, **abstraction safety**, and [K
-**type‑level guarantees**.
+Below is a concise, high‑level summary of the key concepts and data structu[7D[K
+structures described in the provided verbatim text. Each section focuses on[2D[K
+on one major component or feature:
 
 ---
 
-### 1. Core Concepts
+### 1. EventKind Enumeration
 
-| Concept | Role |
-|---------|------|
-| **EventKind** (`Pop`, `Refuse`, `Bind`, `Collapse`) | Flags the *semantic[9D[K
-*semantic* meaning of a transaction on H (the history). Each kind is immuta[6D[K
-immutable – no new kinds can be introduced without breaking ABI stability. [K
-|
-| **State** | Encapsulates the current world state: which objects are still[5D[K
-still optional (∊Ω), which have been popped, bindings that couple two objec[5D[K
-objects (optionally labelled), refused targets with reasons, and observed c[1D[K
-collapses under specific rules. All fields of `State` are additive; unknown[7D[K
-unknown fields in an older version can be safely ignored. |
-| **History** | A linear sequence of `Event`s. It is the only source of tru[3D[K
-truth for the order of operations on H. The static method `replay()` walks [K
-this ordered list, applying each event to a fresh copy of `State`. |
+The `EventKind` enum defines four possible event types that can occur withi[5D[K
+within the system:
+
+| Kind | Description |
+|------|-------------|
+| **Pop**      | Removes an element `x` from the option space (Ω). |
+| **Refuse**   | Documents inadmissibility of `x` with a rationale. |
+| **Bind**     | Couples two elements `(a, b)` optionally labeled with a re[2D[K
+relation. |
+| **Collapse** | Observes a specific collapse rule being applied to an elem[4D[K
+element. |
+
+These kinds are fixed by Theorem \ref{thm:completeness} and ensure ABI stab[4D[K
+stability.
 
 ---
 
-### 2. Replay & Validation
+### 2. State Struct
+
+Represents the current state of the system:
 
 ```rust
-impl History {
-    pub fn replay(&self, omega_0: &std::collections::HashSet<ObjectId>) -> [K
-State {
-        let mut s = State { option_space: omega_0.clone(), ..State::default[16D[K
-..State::default() };
-        for e in &self.events {
-            apply(&mut s, e);
-        }
-        s
-    }
+pub struct State {
+    pub option_space: std::collections::HashSet<ObjectId>, // Current Ω
+    pub committed:    std::collections::HashSet<ObjectId>, // Elements popp[4D[K
+popped from Ω
+    pub bound:        std::collections::HashSet<(ObjectId, ObjectId, String[6D[K
+String)>,
+    pub refused:      Vec<(LogPos, ObjectId, String)>,
+    pub observed:     Vec<(LogPos, RuleId)>,   // Audit trail of Collapse e[1D[K
+events only
 }
+```
 
+Key points:
+
+- **Option Space**: The set of elements currently in Ω.
+- **Committed**: Elements removed from Ω by `Pop`.
+- **Bound**: Stores all bindings created via `Bind` events.
+- **Refused**: Records all refusal attempts with their rationale.
+- **Observed**: Tracks observations made during `Collapse`.
+
+---
+
+### 3. History Struct
+
+Holds the ordered sequence of events:
+
+```rust
+pub struct History {
+    events: Vec<Event>,
+}
+```
+
+The primary method is:
+
+```rust
+fn replay(&self, omega_0: &std::collections::HashSet<ObjectId>) -> State {
+    // Replays history from an initial option space `omega_0`
+}
+```
+
+---
+
+### 4. apply Function
+
+A pure function that updates the state based on a single event:
+
+```rust
 fn apply(s: &mut State, e: &Event) {
     match e.kind {
-        EventKind::Pop => …,
-        EventKind::Refuse => …,
-        EventKind::Bind => …,
-        EventKind::Collapse => …,
+        EventKind::Pop => s.option_space.remove(&e.a.unwrap());
+        EventKind::Refuse => s.refused.push((e.pos, e.a.unwrap(), e.reason.[9D[K
+e.reason.clone().unwrap_or_default()));
+        EventKind::Bind => s.bound.insert((e.a.unwrap(), e.b.unwrap(), e.ta[4D[K
+e.tag.clone().unwrap_or_default()));
+        EventKind::Collapse => s.observed.push((e.pos, e.rule.unwrap()));
     }
 }
 ```
 
-* `replay()` starts from a fresh snapshot of the *option space* (`omega_0`)[11D[K
-(`omega_0`) and walks through every event in order, mutating only **structu[9D[K
-**structural** state (no values like $c(H)$).  
-* This guarantees that any client can reproduce H’s evolution without ever [K
-needing to know which collapse rule was actually applied—exactly Requiremen[10D[K
-Requirement \texttt{req:view}.
+Observations:
+
+- **Pop** removes an element from the option space.
+- **Refuse** logs inadmissibility without affecting Ω.
+- **Bind** records a coupling between two elements with optional labeling.
+- **Collapse** only records that an observation occurred under a registered[10D[K
+registered rule.
 
 ---
 
-### 3. Collapse Rules
+### 5. Collapse Rules
 
-Collapse rules are pure functions of the **History** object:
+Three predefined functions for different collapse semantics:
 
 ```rust
-fn collapse_quotient(h: &History) -> UnionFind { /* O_c */ }
-fn collapse_meta(h: &History)          -> HashMap<ObjectId, Vec<(String,Str[15D[K
-Vec<(String,String)>> {}
-fn collapse_identity(h: &History)      -> &[Event] { h.as_slice() }
+fn collapse_quotient(h: &History) -> UnionFind {
+    // Groups bound objects into Merge-equivalence classes
+}
+
+fn collapse_meta(h: &History) -> std::collections::HashMap<ObjectId, Vec<(S[6D[K
+Vec<(String, String)>> {
+    // Maps meta‑bound objects to their tags for SetMeta-sugar realization
+}
+
+fn collapse_identity(h: &History) -> &[Event] { h.as_slice() }
 ```
 
-* `collapse_quotient` merges all objects bound together by any `Bind` event[5D[K
-event into equivalence classes (Merge‑sugar).  
-* `collapse_meta` extracts special metadata bindings (e.g., `__meta__`).  
-* `collapse_identity` returns the proposal unchanged, representing the “no [K
-collapse” rule.
-
-Only events with a **registered** (`RuleId`) and admissibility‑certified bi[2D[K
-binding are allowed to be committed. This prevents runtime errors on untrus[6D[K
-untrusted proposals while still preserving type safety (matching Requiremen[10D[K
-Requirement \texttt{req:validate}).
+**Invariant**: Only Collapse events with registered rules can be committed.[10D[K
+committed. This satisfies Requirement \ref{req:view}.
 
 ---
 
-### 4. Arbiter & Proposals
+### 6. Arbiter Struct
+
+Manages proposal validation and history commitment:
 
 ```rust
-pub struct Proposal { events: Vec<Event> } // Positions are filled in at co[2D[K
-commit time.
+pub struct Proposal {
+    pub events: Vec<Event>, // Events without positions (filled at commit)
+}
 
 pub struct Arbiter {
     history: History,
-    rules:   HashSet<RuleId>, // Registry of admissible collapse rules.
-}
-
-impl Arbiter {
-    pub fn submit(&mut self, p: Proposal, omega_0: &HashSet<ObjectId>) -> R[1D[K
-Result<Vec<LogPos>, Error> {
-        self.validate(&p.events, omega_0)?;
-        let mut positions = Vec::new();
-        for e in p.events {
-            let pos = history.len() as LogPos;
-            e.pos   = pos;
-            history.push(e);
-            positions.push(pos);
-        }
-        Ok(positions)
-    }
-
-    fn validate(&self, events: &[Event], omega_0: &HashSet<ObjectId>) -> Re[2D[K
-Result<(), Error> {
-        if !validate_state(events) { return Err(Error::PopOutsideOptionSpac[31D[K
-Err(Error::PopOutsideOptionSpace); }
-        for e in events {
-            match e.kind {
-                EventKind::Collapse => {
-                    if !self.rules.contains(&e.rule.unwrap()) {
-                        return Err(Error::UncertifiedCollapseRule);
-                    }
-                }
-                // Pop checks against the current option space.
-            }
-        }
-        Ok(())
-    }
+    rules:   std::collections::HashSet<RuleId>,
 }
 ```
 
-* `submit()` enforces three invariants before committing:
-  1. **Pop** must be inside the existing optional set (`option_space`).  
-  2. **Collapse** events may only reference a rule that has been *registere[10D[K
-*registered* (ensuring type safety).  
-  3. All other event kinds are structurally valid.
+**Key Methods**:
 
-Only through this interface can new histories be appended, guaranteeing **s[3D[K
-**single‑source‑of‑truth** and preventing accidental replay of invalid oper[4D[K
-operations.
+- **state(omega_0)**: Returns the current state given an initial option spa[3D[K
+space.
+- **submit(p, omega_0)**: Validates a proposal and appends it to `History`.[10D[K
+`History`.
+  - Errors:
+    - **PopOutsideOptionSpace**: Attempted pop of non‑existent element.
+    - **UncertifiedCollapseRule**: Collapse event uses unregistered rule.
+    - **StaleOverlay**: (Not detailed here) Likely related to outdated over[4D[K
+overlays.
+
+**validate(events, omega_0)**:
+
+- Checks structural compliance without computing any collapse results (`c(H[5D[K
+(`c(H)`), ensuring Requirement \ref{req:view} is met.
 
 ---
 
-### 5. Overlay Management & Preview
+### 7. Overlay and Preview
+
+Used for non‑authoritative state modifications:
 
 ```rust
 pub struct Overlay {
     base_len: usize,
-    pending: Proposal,
+    pending:  Proposal,
 }
 
-pub struct OverlayManager<'a> { arbiter: &'a mut Arbiter; }
-
 impl<'a> OverlayManager<'a> {
-    pub fn create(&self, pending: Proposal) -> Overlay {
-        Overlay { base_len: self.arbiter.len(), pending }
-    }
+    pub fn create(&self, pending: Proposal) -> Overlay { ... }
 
-    pub fn preview(&self, o: &Overlay, omega_0: &HashSet<ObjectId>) -> Stat[4D[K
-State {
-        let mut speculative = self.arbiter.history_clone();
-        for e in o.pending.events.clone() {
-            speculative.push(e);
-        }
-        speculative.replay(omega_0)
+    pub fn preview(&self, o: &Overlay, omega_0: &std::collections::HashSet<[27D[K
+&std::collections::HashSet<ObjectId>) -> State {
+        // Replays history + overlay without altering the original History
     }
 }
 ```
 
-* An **overlay** captures a proposal *as it was at creation time*. It lets [K
-you examine the future state of H without permanently committing anything. [K
- 
-* `preview()` demonstrates replayability: given an initial optional set, we[2D[K
-we can reconstruct what H would look like after applying all events in the [K
-overlay—exactly what Requirement \texttt{req:view} demands.
+**Purpose**: Allows testing of proposals (`preview`) before committing chan[4D[K
+changes permanently.
 
 ---
 
-### 6. Why This Design Satisfies Its Requirements
+### Summary
 
-| Requirement | How It Is Enforced |
-|-------------|--------------------|
-| **ABI Stability** (no removal/reordering) | The enum `EventKind` and all [K
-state fields are additive; new fields cannot be added to existing versions.[9D[K
-versions. Decoders simply ignore unknown bits, preserving forward compatibi[9D[K
-compatibility. |
-| **View Preservation** (`req:view`) | State construction uses only structu[7D[K
-structural invariants of H (e.g., which objects exist in Ω). No collapse va[2D[K
-values $c(H)$ ever appear in `State`. The public API never touches such val[3D[K
-values; they are computed *dynamically* outside this module. |
-| **Collapse Rule Certification** (`req:validate`) | Collapse events check [K
-against the registry of registered rules during submission, preventing runt[4D[K
-runtime panics on unregistered or malformed rules. |
-| **Replayability & Undo** (via `preview`) | History is immutable; overlay [K
-manager provides a pure function to walk forward without altering the origi[5D[K
-original log, satisfying audit and debugging needs. |
+The specification defines a strictly typed and ABI‑stable system for managi[6D[K
+managing events, states, and historical modifications. Core features includ[6D[K
+include:
 
----
+- **EventKind** constraints ensuring only four valid event types exist.
+- **State** encapsulates the current logical state without storing observed[8D[K
+observed values (`c(H)`).
+- **History + apply** provide a replayable, immutable log of operations tha[3D[K
+that updates `State` deterministically.
+- **Collapse Rules** enable different semantics for observations (quotient,[10D[K
+(quotient, meta, identity) while enforcing rule registration.
+- **Arbiter** ensures only validated proposals are committed, adhering to s[1D[K
+safety requirements.
+- **Overlay & Preview Manager** support non-destructive proposal testing.
 
-### 7. Summary
-
-The module gives you:
-
-* A **type‑safe, stable API** for managing commitments (`Pop`, `Bind`, `Col[4D[K
-`Collapse`).  
-* An **explicit registration model** for collapse rules (`RuleId`), guarant[7D[K
-guaranteeing that only admissible operations are ever committed.  
-* A **replayable snapshot mechanism** via `preview()` and a full history re[2D[K
-replay through `State::replay()`.  
-
-All of this is achieved without mutating external state or leaking the actu[4D[K
-actual outcome of any collapse rule, thereby satisfying both ABI stability [K
-and view‑preservation requirements while remaining open to future extension[9D[K
-extensions only by adding new kinds (which would be versioned separately).
-
+This structure supports the principles of immutability, type safety, and re[2D[K
+replayability essential for decentralized or distributed systems where stat[4D[K
+state consistency across versions is critical.

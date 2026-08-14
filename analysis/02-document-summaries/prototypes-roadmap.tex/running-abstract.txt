@@ -1,0 +1,31 @@
+A conservative implementation roadmap for building user‑facing utilities at[2D[K
+atop the Spherepop OS kernel emphasizes preserving core invariants: determi[7D[K
+deterministic replay, total causal order, ABI stability, and strict separat[7D[K
+separation between authoritative semantics and derived views. Utilities are[3D[K
+are treated as structured consumers and producers of events and views, not [K
+as stateful programs with implicit side effects. Design constraints require[7D[K
+require that utilities do not mutate kernel state directly (all changes mus[3D[K
+must be proposed events), rely on hidden or timing‑dependent state, violate[7D[K
+violate ABI definitions, or interfere with view production. The Spherepop c[1D[K
+calculus serves as the substrate for utility operations, mapping primitives[10D[K
+primitives such as POP (introduce object handles), MERGE (induce equivalenc[10D[K
+equivalence), LINK (create typed relations), UNLINK (remove relations), COL[3D[K
+COLLAPSE (perform bulk equivalence), and SETMETA (attach metadata) directly[8D[K
+directly to event types. Utilities fall into three classes: proposal genera[6D[K
+generators (e.g., batch object creation, canonicalization tools), view gene[4D[K
+generators (e.g., JSON graph producers, diffs, summaries), and overlay mana[4D[K
+managers (speculative branch manipulation). Phase I focuses on minimal util[4D[K
+utilities like connection/replay tools (sp, sp‑replay), POP/LINK/UNLINK pri[3D[K
+primitives, diff/snapshot inspection tools. Phase II introduces canonicaliz[11D[K
+canonicalization/refactoring utilities such as merge/collapse operations th[2D[K
+that preserve confluence and replay equivalence. Phase III adds semantic qu[2D[K
+query and analysis tools (e.g., spgrep for relation queries, sppath for pat[3D[K
+path exploration) limited to producing non‑authoritative views. Non‑goals i[1D[K
+include implicit inference of semantics, automatic conflict resolution, hid[3D[K
+hidden mutable caches, and time‑dependent behavior; utilities must reduce s[1D[K
+semantic ambiguity rather than increase it. The ecosystem is compared to GN[2D[K
+GNU-style tooling in composability but fundamentally differs by operating o[1D[K
+over semantic time via controlled rewrite proposals applied to a canonical [K
+log. Success is measured by preserving kernel invariants through explicit, [K
+low‑ambiguity utility implementations.
+

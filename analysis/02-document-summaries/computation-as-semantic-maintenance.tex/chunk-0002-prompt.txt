@@ -1,15 +1,146 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 2 of 3 of a document called
+"computation-as-semantic-maintenance.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+Below is an analysis of the content you provided, organized by each major s[1D[K
+section. I’ve broken it down into its constituent parts and highlighted key[3D[K
+key themes, definitions, and conclusions where applicable.
 
-TEXT
-====
+---
+
+### Overview
+
+The document appears to be a formal treatment in the realm of distributed s[1D[K
+systems, information theory, and category theory—likely inspired by ideas f[1D[K
+from computer science (e.g., CAP theorem) combined with mathematical rigor.[6D[K
+rigor. It discusses several interrelated concepts:
+
+1. **Lossless Merge** – A property for merge operations that preserves inje[4D[K
+injectivity.
+2. **Entropy Increase Under Merge** – States that any nontrivial merge must[4D[K
+must increase entropy, reflecting the second law of thermodynamics in a sem[3D[K
+semantic context.
+3. **Sheaf-Theoretic Semantics and Obstruction** – Uses sheaves to model co[2D[K
+contextual states and identifies conditions under which global coherence (a[2D[K
+(a global section) is impossible due to local conflicts.
+4. **Event-Historical Computation and State Projection** – Examines how his[3D[K
+history and projection affect the interpretation of systems over time, noti[4D[K
+noting non-uniqueness of projections.
+5. **Semantic CAP and Distributed Limitation Theorems** – Formalizes a limi[4D[K
+limitation (possibly analogous to the CAP theorem) stating that no system c[1D[K
+can simultaneously achieve global semantic consistency, local availability,[13D[K
+availability, partition tolerance, and constraint preservation.
+
+---
+
+### Detailed Analysis
+
+#### 1. Lossless Merge
+- **Definition**: A merge $M$ is lossless if there exists an injective map [K
+$\iota : S \times S \hookrightarrow S$ such that $M = \pi \circ \iota$ for [K
+some projection $\pi$.  
+- **Implication**: This ensures no information is lost during merging, but [K
+the impossibility theorem later suggests this condition conflicts with othe[4D[K
+other desirable properties (e.g., reversibility).
+
+#### 2. Entropy Increase Under Merge
+- **Proposition**: For any nontrivial merge $M$ and admissible states $s_1,[5D[K
+$s_1, s_2$, entropy production $\Delta S(M, (s_1,s_2)) > 0$.  
+- **Interpretation**: This aligns with the idea that merging inherently inc[3D[K
+increases uncertainty or information loss in semantic contexts.
+
+#### 3. Sheaf-Theoretic Semantics and Obstruction
+- **Context Poset**: Organizes semantic contexts as a partially ordered set[3D[K
+set, where ordering reflects contextual refinement.
+- **Semantic Presheaf**: Assigns states to contexts and respects restrictio[10D[K
+restriction maps (a categorical structure).
+- **Compatible Sections & Sheaf Condition**: Ensures local-to-global consis[6D[K
+consistency; if sections are incompatible on some overlap, no global sectio[6D[K
+section exists—reflecting the obstruction theorem.
+
+#### 4. Event-Historical Computation and State Projection
+- **Event Definition**: An ordered pair of time and transformation (akin to[2D[K
+to operations in distributed systems).
+- **History**: Sequence of events where each state transition is traceable.[10D[K
+traceable.
+- **Projection Operator**: Maps a history to a semantic state, wh[2D[K
+which may be non-unique—illustrating that projections depend on the chosen [K
+operator.
+
+#### 5. Semantic CAP and Distributed Limitation Theorems
+- **Semantic System $\Sigma$**: Comprises nodes, states, transformations, c[1D[K
+constraints, and satisfaction relations.
+- **Local Availability & Global Consistency**: Trade-offs similar to the CA[2D[K
+CAP theorem (Consistency, Availability, Partition tolerance).
+- **Partition Tolerance & Constraint Preservation**: Additional constraints[11D[K
+constraints that further limit attainability of all three properties simult[6D[K
+simultaneously.
+
+#### Key Theorems
+
+1. **Impossibility of Perfect Merge**  
+   No merge can be lossless, reversible, fully automated, and constraint-pr[13D[K
+constraint-preserving for all admissible states.
+
+2. **Cohomological Obstruction**  
+   Nonvanishing cohomology classes indicate irreducible semantic conflicts [K
+that prevent global coherence.
+
+3. **Undecidability of Optimal Semantic Merge**  
+   Determining if a merge minimizing entropy while preserving constraints i[1D[K
+is possible is undecidable, reflecting the complexity inherent in such prob[4D[K
+problems.
+
+4. **Local Sufficiency Proposition**  
+   For bounded interaction radius $r$, local semantic consistency implies o[1D[K
+operational coherence within that radius.
+
+---
+
+### Summary
+
+The document systematically explores fundamental limitations and trade-offs[10D[K
+trade-offs in designing distributed systems with semantic integrity:
+
+- **Lossless merges** are impossible to achieve alongside other desirable p[1D[K
+properties (reversibility, constraint preservation).
+- **Entropy production** is a necessary consequence of merging.
+- **Sheaf-theoretic semantics** provide a framework for understanding globa[5D[K
+global vs. local consistency issues through obstruction theory.
+- The **Semantic CAP theorem** highlights analogous trade-offs in distribut[9D[K
+distributed systems: you cannot simultaneously guarantee semantic consisten[9D[K
+consistency, availability, and tolerance to partition without sacrificing o[1D[K
+one property.
+
+These insights underscore the inherent challenges of building robust, self-[5D[K
+self-consistent distributed information systems while maintaining performan[9D[K
+performance and fault-tolerance goals.
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 This instability follows directly from treating correction as a stateless
 optimization problem. Each correction decision is made by maximizing local

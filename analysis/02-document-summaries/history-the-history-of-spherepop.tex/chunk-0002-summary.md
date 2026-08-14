@@ -1,240 +1,89 @@
-**Spherepop – Core Semantics**
+**Interpretation**
 
-In Spherepop an *expression* is a nested labeling that encodes the current [K
-state of knowledge:
+The passage you provided is a formal exposition about *Spherepop*, a theore[6D[K
+theoretical model for representing agency and decision‑making in which:
 
-```
-Expr ::= Value | Sphere
-Sphere ::= ( Label : Expr* )
-```
+* **Meaningful acts** are not limited to “choosing among alternatives.”  
+  - Some actions involve **refusal of certain paths**, i.e., rejecting futu[4D[K
+future possibilities.  
+  - Other actions bind the system’s future by imposing shared constraints ([1D[K
+(the notion of *binding*).
 
-A *history* is simply a sequence of events, each of which is one of the fou[3D[K
-four primitive actions:
+* These acts are treated as **first‑class, irreversible events** that shape[5D[K
+shape possibility rather than instantly select a terminal state.
 
-| Event type | Formal signature | Role in semantics |
-|------------|------------------|--------------------|
-| **Pop**    | pop( Label )     | Removes (abandons) a sphere from the curr[4D[K
-current expression. |
-| **Collapse** | collapse( Label, Equiv ) | Explicitly identifies two histo[5D[K
-histories as equivalent via an equivalence relation `Equiv = { (v₁~v₂), … }[1D[K
-}`. This is a *semantic merge* that can be undone only by later events. |
-| **Refusal**| refuse( Label, Set ) | Declares a set of future options (the[4D[K
-(the predicate “refused”) as unavailable from this point onward. It bounds [K
-the option space without removing anything already committed to. |
-| **Binding**| bind( Label, Predicate ) | Links a later commitment (label) [K
-to a condition expressed by `Predicate = Identifier`. This creates forward [K
-constraints that can be revisited or re‑interpreted. |
+* Together with *pop*, *collapse*, and *binding*, they form a minimal algeb[5D[K
+algebraic structure for handling historical constraint. Every history can b[1D[K
+be viewed as a finite sequence of monotone transformations on option spaces[6D[K
+spaces (i.e., narrowing, structuring, or compressing future possibilities).[15D[K
+possibilities).
 
-A *configuration* couples an expression with its authoritative history:
+**Key Concepts**
 
-```
-Config ::= < Expr , History >
-```
+| Concept | Meaning in Spherepop |
+|---------|----------------------|
+| **Confluence** | A family of histories \(\{h_i\}\) is confluent if a sing[4D[K
+single collapse policy \(C\) can make them equivalent at horizon 0. It capt[4D[K
+captures the idea that distinct paths may eventually be identified without [K
+losing any admissible future events. |
+| **Divergence** | The failure of confluence; no collapse policy exists tha[3D[K
+that preserves all futures while making histories identical. This reflects [K
+incompatibility of commitments and permanent differences in reachable optio[5D[K
+option spaces. |
+| **Regret** | A property of a single history: if a later history \(h'\) ha[2D[K
+has a strictly larger option space than the current one, the original path [K
+exhibits regret (the “I wish I had done something else” feeling). Regret is[2D[K
+is not an error but a recognition that irreversible commitments have limite[6D[K
+limited future flexibility. |
 
-Evaluation is the relation `< Config => New Config >` produced by applying [K
-**one** event to a configuration.
+**Why These Concepts Matter**
 
----
+- **Correctness:** In Spherepop, correctness is judged by whether histories[9D[K
+histories remain coherent rather than by reaching a specific terminal state[5D[K
+state. Divergence or regret simply indicate tighter constraints, not failur[6D[K
+failures.
+- **Learning & Adaptation:** Since evaluation always appends events (no bac[3D[K
+backtracking), systems evolve by acting coherently in light of past commitm[7D[K
+commitments, aligning with the idea that “the past is part of what shapes t[1D[K
+the future.”
+- **Historical Constraint Algebra:** The combination of pop, collapse, refu[4D[K
+refusal, and binding yields a minimal algebraic framework for modeling how [K
+histories evolve through irreversible decisions.
 
-### Key Semantic Themes
+**Relation to Appendix Content**
 
-1. **Refusal ≠ Undoing**  
-   Refusal merely shrinks the set of admissible future events; it does not [K
-delete anything already present in the expression or history.
+The appendix (F) formalizes these ideas by defining:
 
-2. **Collapse = Explicit Identification**  
-   When histories diverge (they cannot be merged without violating monotoni[8D[K
-monotonicity), a *collapse* event makes them equivalent for practical purpo[5D[K
-purposes, creating an *implicit merge* that can later be revisited by furth[5D[K
-further events.
+1. **Confluence & Divergence** on the category \(\mathcal{H}\) of histories[9D[K
+histories, using extensional equivalence up to horizon \(k\).
+2. **Regret** as a property of an individual history where later reachable [K
+extensions have strictly larger option spaces.
 
-3. **Regret as a Property of History**  
-   A history exhibits *regret* if it becomes strictly more constrained than[4D[K
-than another reachable history from the same prefix:
-   \[
-   O_h \prec O_{h'}
-   \]
-   Regret is not an error; it signals that irreversible commitments have na[2D[K
-narrowed possibilities beyond what could be achieved earlier.
+These definitions replace classical notions (e.g., “correctness” = absence [K
+of error) with *constraint‑based* correctness: whether the remaining space [K
+aligns with agent/system goals.
 
-4. **Meaning Arises From Sequences, Not Terminal States**  
-   The meaning of a Spherepop system emerges from the *order* and *type* of[2D[K
-of events (refusals, bindings, collapses) rather than any single final expr[4D[K
-expression or configuration.
+The Appendix G provides a **minimal BNF grammar** for Spherepop expressions[11D[K
+expressions, events, and histories. It captures:
 
----
+- **Expressions/Spheres:** Labeled enclosures that nest to create scopes.
+- **Events:** Pop, Collapse (with an equivalence relation), Refusal (reject[7D[K
+(rejecting paths), Binding (imposing constraints).
+- **Histories:** Finite sequences of such events; evaluation is the appendi[7D[K
+appending of a single event to produce a new configuration.
 
-### Formal Confluence & Divergence
+Together, these formal pieces demonstrate how Spherepop treats decision‑mak[12D[K
+decision‑making as a dynamic shaping process rather than instantaneous sele[4D[K
+selection.
 
-Let \(\mathcal{H}\) be the category of histories. Two histories \(h_1, h_2\[4D[K
-h_2\) are **extensionally equivalent at horizon \(k\)** if their induced op[2D[K
-option spaces agree up to length‑\(k\) extensions:
+**Conclusion**
 
-\[
-h_1 \approx_k h_2 \;\Longleftrightarrow\;
-\{\text{length}-k\text{-extensions of }h_1\}
-= 
-\{\text{length}-k\text{-extensions of }h_2\}.
-\]
-
-**Confluence**: A family \(\{h_i\}_{i\in I}\) is confluent if there exists [K
-a history \(h_c\) and a collapse policy \(C\) such that for every \(i\),
-
-\[
-h_i \cdot C \approx_0 h_c .
-\]
-
-Thus confluence does **not** require histories to be identical; it only req[3D[K
-requires they can be made equivalent by an explicit act of identification ([1D[K
-(the `collapse` event).
-
-**Divergence**: If no such collapse policy exists, the set diverges. This r[1D[K
-reflects incompatibility of commitments that cannot be compressed without l[1D[K
-losing some admissible futures.
-
----
-
-### Regret as a Descriptive Property
-
-A history \(h\) exhibits **regret** when there is a reachable prefix \(p\) [K
-and histories
-
-\[
-h = p \cdot e_1 \dots e_n,\qquad
-h' = p \cdot e'_1 \dots e'_m,
-\]
-
-with option spaces satisfying
-
-\[
-O_h \prec O_{h'} .
-\]
-
-Regret is a natural consequence of irreversible commitments; it signals tha[3D[K
-that the sequence has become more constrained than an alternative reachable[9D[K
-reachable from the same prefix.
-
----
-
-### Evaluation Model Without Backtracking
-
-In Spherepop:
-
-* **Evaluation** = appending events to a configuration.
-* **Correctness** ≠ “no divergence or regret.” It simply means the remainin[8D[K
-remaining option space aligns with the agent’s goals.
-* **Improvement** occurs by *acting coherently* in light of past commitment[10D[K
-commitments, not by undoing them.
-
-Thus Spherepop replaces classical notions of correctness and failure with a[1D[K
-a richer view where histories themselves are judged on their capacity to be[2D[K
-be merged or regretted rather than merely “being wrong.”
-
----
-
-### Minimal BNF Grammar for Expressions
-
-```
-<Identifier> ::= letter (letter | digit | "_")*
-<Value>      ::= <Identifier> | <Number>
-<Number>     ::= digit+
-
-<Expr>       ::= <Value>
-            | <Sphere>
-
-<Sphere>     ::= "(" <Label> ":" <Expr>* ")"
-
-<Event>      ::= <Pop>
-               | <Collapse>
-               | <Refusal>
-               | <Binding>
-
-<Pop>        ::= "pop" "(" <Label> ")"
-<Collapse>  ::= "collapse" "(" <Label> "," <Equiv> ")"
-<Refusal>   ::= "refuse" "(" <Label> "," <Set> ")"
-<Binding>   ::= "bind" "(" <Label> "," <Predicate> ")"
-
-<Equiv>     ::= "{" <Pair> ("," <Pair>)* "}"
-<Pair>      ::= <Value> "~" <Value>
-
-<Set>       ::= "{" <Value> ("," <Value>)* "}"
-
-<Predicate> ::= <Identifier>
-```
-
-- **Expressions** are nested spheres that may contain zero or more sub‑expr[8D[K
-sub‑expressions.
-- **Events** are the only means to change state; they never modify an exist[5D[K
-existing expression in place but produce a new configuration via evaluation[10D[K
-evaluation.
-
----
-
-### Bibliography
-
-\begin{thebibliography}{99}
-
-\bibitem{Wittgenstein1953}
-L. Wittgenstein.
-\emph{Philosophical Investigations}.
-Blackwell Publishing, Oxford, 1953.
-
-\bibitem{Church1936}
-A. Church.
-\emph{An unsolvable problem of elementary number theory}.
-American Journal of Mathematics, 58(2):345--363, 1936.
-
-\bibitem{Turing1936}
-A. M. Turing.
-\emph{On computable numbers, with an application to the Entscheidungsproble[19D[K
-Entscheidungsproblem}.
-Proceedings of the London Mathematical Society, 42(2):230--265, 1936.
-
-\bibitem{Fant1995}
-K. Fant.
-\emph{Computer Science Reconsidered: The Challenge of Computers and the Min[3D[K
-Mind}.
-Addison-Wesley, Reading, MA, 1995.
-
-\bibitem{Needham1997}
-T. Needham.
-\emph{Visual Complex Analysis}.
-Oxford University Press, Oxford, 1997.
-
-\bibitem{Meijer2012}
-E. Meijer.
-\newblock Your mouse is a database.
-In \emph{Proceedings of the ACM SIGMOD International Conference on Manageme[8D[K
-Management of Data}, 2012.
-
-\bibitem{Meijer2011}
-E. Meijer.
-\newblock The duality of computation.
-Communications of the ACM, 54(5):41--47, 2011.
-
-\bibitem{MacLane1971}
-S. Mac Lane.
-\emph{Categories for the Working Mathematician}.
-Springer-Verlag, New York, 1971.
-
-\bibitem{Turing1936}
-A. M. Turing.
-\emph{On computable numbers, with an application to the Entscheidungsproble[19D[K
-Entscheidungsproblem}.
-Proceedings of the London Mathematical Society, 42(2):230--265, 1936.
-
-\bibitem{Stonebraker2018}
-M. Stonebraker and A. Pavlo.
-\newblock What goes around comes around.
-Communications of the ACM, 61(1):16--18, 2018.
-
-\end{thebibliography}
-
---- 
-
-*Spherepop’s design deliberately separates *state* (expressions) from *hist[5D[K
-*history*, treating histories as first‑class objects that can be merged or [K
-regretted. This shift eliminates reliance on backtracking and error handlin[7D[K
-handling while preserving a coherent notion of correctness through confluen[8D[K
-confluence, divergence, and regret.*
-
+The passage and accompanying appendices constitute a rigorous formalization[13D[K
+formalization of agency in Spherepop. It emphasizes that meaning emerges fr[2D[K
+from the *sequence* of irreversible events (refusal, binding) shaping possi[5D[K
+possibility spaces, not solely from any terminal configuration. Confluence,[11D[K
+Confluence, divergence, and regret become descriptive properties of histori[7D[K
+histories, guiding how systems adapt without resorting to traditional error[5D[K
+error‑handling mechanisms like backtracking or normalization. This approach[8D[K
+approach aligns with modern computational thinking where state changes are [K
+observed as part of a coherent trajectory rather than isolated fixes.

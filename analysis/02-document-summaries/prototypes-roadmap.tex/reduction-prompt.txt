@@ -1,0 +1,89 @@
+The following are groundedness-checked analytical summaries of
+consecutive fragments of one research document titled "prototypes-roadmap.tex".
+
+This document's synthesis will feed into: cluster synthesis and cross-corpus synthesis
+
+Reconstruct the document as a unified theoretical object. Produce a
+dense scholarly synthesis covering: thesis, primitives/definitions,
+formalism, mechanisms, major arguments, dependencies between
+concepts, implications, unresolved problems, internal tensions.
+
+Preserve every [source: "..."] citation attached to a claim you keep.
+Remove repetition introduced by chunking. Do not flatten genuine
+distinctions. Do not add any claim that did not appear, with its
+citation, in the fragment summaries below.
+
+FRAGMENT SUMMARIES
+===================
+
+--- chunk-0001-summary.md ---
+**1. Definitions and Primitive Concepts Introduced**
+
+- **Spherepop Calculus**: The algebraic foundation for authoritatively mani[4D[K
+manipulating events in the kernel.
+- **Utility Operations**: Specific primitive operations (POP, MERGE, LINK, [K
+UNLINK, COLLAPSE, SETMETA) that map directly to event types.
+- **Proposal Generators**: Utilities that produce candidate event sequences[9D[K
+sequences without committing them.
+- **View Generators**: Observational utilities producing derived representa[10D[K
+representations such as JSON graphs or diffs.
+- **Overlay Managers**: Tools for manipulating speculative branches (creati[7D[K
+(creating, rebasing, discarding overlays).
+- **Phase I–IV Stages**: Incremental development stages focusing on minimal[7D[K
+minimal connectivity, object/relationship tools, canonicalization/refactori[26D[K
+canonicalization/refactoring, and semantic query/analysis.
+
+**2. Mathematical Claims and Formal Structures**
+
+- The calculus preserves **deterministic replay**, **total causal order**, [K
+and maintains a strict separation between **authoritative semantics** (kern[5D[K
+(kernel state) and **derived views**.
+- Canonicalization utilities (`spmerge`, `spcollapse`) must preserve **conf[6D[K
+**confluence** and ensure that equivalent sequences of operations lead to t[1D[K
+the same logical outcome.
+
+**3. Mechanisms and Processes**
+
+- **Connection/Replay**: Tools like `sp` and `sp-replay` establish basic co[2D[K
+contracts for connecting to an arbiter/log source.
+- **Normalization & Replay Determinism**: Utility examples (`sppop`, `splin[6D[K
+`splink`) must demonstrate representative normalization, ensuring that gene[4D[K
+generated events are reproducible across re-runs.
+- **Preview‑Commit Workflow**: New utilities (e.g., merge/collapse) should [K
+support a preview mode where speculative overlays can be inspected without [K
+auto‑committing.
+- **Composition via Streams**: Utilities must be composable through standar[7D[K
+standard streams while preserving the distinction between authoritative pro[3D[K
+proposals and non‑authoritative views.
+
+**4. Connections to Concepts Named in Running Abstract**
+
+- **Deterministic replay**, **total causal order**, **ABI stability**, and [K
+**strict separation of semantics/views** are directly re‑stated as design c[1D[K
+constraints.
+- The three utility classes (proposal generators, view generators, overlay [K
+managers) map onto the functional categories introduced in the abstract: ba[2D[K
+batch object creation/canonicalization tools, JSON graph producers/diffs/su[18D[K
+producers/diffs/summaries, and speculative branch manipulation respectively[12D[K
+respectively.
+- Phase I–IV correspond to incremental phases of implementation outlined in[2D[K
+in the abstract’s roadmap.
+
+**5. Unresolved Questions or Contradictions Visible Within This Chunk**
+
+- **Canonicalization vs. Ambiguity**: While merge/collapse utilities are in[2D[K
+introduced as preserving confluence, there is no explicit guidance on handl[5D[K
+handling non‑confluent equivalence cases.
+- **Implicit Semantics & Automatic Conflict Resolution**: These remain expl[4D[K
+explicitly listed as *non‑goals*, suggesting a tension between desired tool[4D[K
+tool capabilities and the conservative design philosophy.
+- **Hidden Mutable Caches vs. Time‑Dependent Behavior**: The abstract state[5D[K
+states these are incompatible with deterministic replay, yet no mechanism i[1D[K
+is provided for safely managing hidden caches or timing dependencies withou[6D[K
+without violating invariants.
+
+No new substantive claims beyond those extracted from the chunk; each claim[5D[K
+claim is directly supported by verbatim excerpts (e.g., “Utilities may not [K
+mutate kernel state directly. All authoritative changes must be expressed a[1D[K
+as proposed events submitted to the arbiter.”).
+

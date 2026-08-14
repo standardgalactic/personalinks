@@ -1,0 +1,21 @@
+The document describes **spmerge**, a utility for the Spherepop operating s[1D[K
+system that proposes semantic equivalence between existing objects by gener[5D[K
+generating explicit **MERGE** or **COLLAPSE** events. It is not a kernel co[2D[K
+component, does not mutate authoritative state, nor performs any inference;[10D[K
+inference; instead, it operates entirely through event proposals. The tool [K
+accepts user‑provided object identifiers that must already exist in the rep[3D[K
+replayed kernel state and supports modes such as pairwise merge, batch merg[4D[K
+merge (forming a spanning tree), and region collapse to explicitly declare [K
+equivalence and representative selection. Determinism is guaranteed given a[1D[K
+a fixed event log prefix and invocation; it operates only on replayed state[5D[K
+state without external dependencies. It provides preview workflows for visu[4D[K
+visualizing derived states but commits no events unless the user submits th[2D[K
+them. Error conditions include non‑existent identifiers, redundant merges, [K
+or empty target sets, all of which result in failure fast. The utility’s ex[2D[K
+explicit non‑goals are to avoid inference from structure, heuristic auto‑me[7D[K
+auto‑merging, log optimization, and automatic object collapse without instr[5D[K
+instruction, preserving semantic clarity and kernel invariants. Future exte[4D[K
+extensions could include interactive previews, structured justification ann[3D[K
+annotations, and batch refactoring workflows while maintaining replay deter[5D[K
+determinism and non‑interference.
+

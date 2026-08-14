@@ -1,0 +1,52 @@
+**Summary**
+
+The essay argues that in quantum mechanics what really matters is not the s[1D[K
+specific algebraic symbols we use—such as complex numbers—but rather the ge[2D[K
+geometric (rotation) structure they encode. It draws an analogy with the hi[2D[K
+historical development of complex numbers, showing how rotation and scaling[7D[K
+scaling in the plane were initially lost when complex analysis became a pow[3D[K
+powerful computational tool.
+
+Key points include:
+
+1. **Witness Sufficiency:** Operational witnesses (e.g., expectation values[6D[K
+values or interference patterns) are invariant under gauge transformations;[16D[K
+transformations; therefore they reveal which distinctions are real (geometr[8D[K
+(geometric) versus merely representational.
+
+2. **Admissibility Quotient:** The quotient of the state space by the equiv[5D[K
+equivalence relation (∼A) isolates only those properties that survive all p[1D[K
+possible representations, making physical ontology dependent solely on this[4D[K
+this invariant structure.
+
+3. **Philosophical Conclusion:** Physical reality in quantum mechanics does[4D[K
+does not require complex numbers per se; a real description (using rotation[8D[K
+rotation matrices JF) is equivalent to the complex formulation and yields i[1D[K
+identical experimental predictions.
+
+4. **Logical Architecture (Figure 7):**  
+   - *Rotation* → *Equivalence* → *Admissibility* shows how geometric opera[5D[K
+operations survive changes in coordinates, highlighting that only invariant[9D[K
+invariant structures underpin physical reality.  
+   - The essay bridges geometry (rotation), algebraic encoding, and the quo[3D[K
+quotient to demonstrate that distinctions like complex vs. real numbers are[3D[K
+are largely representational rather than ontological.
+
+5. **Novel Contribution:** Unlike earlier work on rotations being equivalen[9D[K
+equivalent to complex numbers, this essay extends the idea by applying it t[1D[K
+through an admissibility framework, providing a principled reason why the q[1D[K
+quotient—not just a convenience—is where physical reality resides.
+
+**References**
+
+The references (e.g., Needham 1997; Barrios et al. 2026) provide foundation[10D[K
+foundational and recent works that support these arguments, ranging from hi[2D[K
+historical studies of complex numbers to contemporary formulations in real [K
+Hilbert spaces. These sources collectively illustrate the interplay between[7D[K
+between algebraic structure and geometric content in quantum mechanics.
+
+---
+
+This summary encapsulates the main thesis—real rotations underlie complex q[1D[K
+quantum mechanics—and highlights how the admissibility quotient formalizes [K
+what is truly physical versus merely representational.

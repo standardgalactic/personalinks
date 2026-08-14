@@ -1,0 +1,57 @@
+**1. Definitions & Primitive Concepts Introduced**
+
+- **POP, REFUSE, BIND, COLLAPSE**: These are the closed primitive operation[9D[K
+operations identified as part of semantic purity (✓ P = {POP, REFUSE, BIND,[5D[K
+BIND, COLLAPSE}).  
+- **Strata separation**: The condition \(S \cap X = S \cap I = \emptyset\) [K
+enforces that different strata do not overlap.  
+- **Observer non‑authority**: A principle ensuring the observer’s role is d[1D[K
+distinct from authority in decision making.
+
+**2. Mathematical Claims & Formal Structures**
+
+- **18 structural tests** are defined by a test suite \(T(|h|,|O|,k,b)\) co[2D[K
+covering various dimensions (size, order, cost, behavior).  
+- **73.89 % coverage rate** indicates that out of 214 total tests, the curr[4D[K
+current implementation achieves this percentage for property, regression, a[1D[K
+and performance aspects.
+
+**3. Mechanisms & Processes**
+
+- **Automated CI/CD pipelines via GitHub Actions**: Provides continuous int[3D[K
+integration and delivery across Python versions (3.12, 3.13).  
+- **Design Decision Records (DDR)**: Eleven documented design decisions to [K
+track rationale behind architectural choices.  
+- **Benchmark Baselines** and **Coverage Gap Filling**: Future admissible c[1D[K
+continuations for improving test coverage.
+
+**4. Connections to Concepts Named in Running Abstract**
+
+- **Infrastructure completeness** (README, Benchmarks, Extended Documentati[11D[K
+Documentation) directly corresponds to the “infrastructure” section of the [K
+running abstract.  
+- **Testing metrics** (73.89 % coverage, 80.8 % task completion) align with[4D[K
+with the “testing” and “metrics” items mentioned earlier.  
+- **Semantic purity preservation** mirrors the notion of maintaining semant[6D[K
+semantic integrity highlighted in the running abstract.
+
+**5. Unresolved Questions or Contradictions Visible**
+
+- **Q1c (Plan B convergence)** – remains unresolved by design.  
+- **Q2b (COLLAPSE composition)** – unresolved, indicating a dependency on f[1D[K
+further research into how COLLAPSE interacts with other operations.  
+- **Q3 (Quotient predicates)** – unresolved, suggesting gaps in the theoret[7D[K
+theoretical foundation for quotient logic.  
+- **Q6 (Regret alternatives)** – unresolved, implying uncertainty about alt[3D[K
+alternative approaches to regret or decision-making.
+
+**Verbatim Quotations from the New Chunk**
+
+- “✓ P = {POP, REFUSE, BIND, COLLAPSE} remains closed” [source: "semantic p[1D[K
+purity"].  
+- “\(S \cap X = S \cap I = \emptyset\) (strata separated)” [source: "docume[7D[K
+"documentation"].  
+- “‘Don’t turn an unanswered semantic question into an implementation defau[5D[K
+default and then mistake the default for theory.’” [source: “prime directiv[8D[K
+directive”].
+

@@ -1,0 +1,175 @@
+**Spherepop: A Categorical Framework for Commitment‑Based Computations**
+
+---
+
+### B.3 A Category of Constructions  
+
+**Objects:**  
+- **Typed interfaces (Ω, A)** where Ω is an *option space* (a set of possib[6D[K
+possible future choices) and A is the carrier of observable states.
+
+**Morphisms:**  
+- From (Ω, A) → (Ω′ , B), a morphism must be a **well‑typed Spherepop const[5D[K
+construction** that maps states over Ω to states over Ω′ while preserving a[1D[K
+a *compatible reconstruction* into B.  
+- The essential idea is that each program is viewed as a structured constru[7D[K
+construction built from **typed commitment operations** (Bind, Pop) and the[3D[K
+the collapse of histories.
+
+**Composition:**  
+- Morphisms are composed by ordinary function composition: if \(f : (Ω,A)\t[7D[K
+(Ω,A)\to(Ω′ ,B)\) and \(g : (Ω′ ,B)\to(Ω″ ,C)\), then their composite is \([2D[K
+\(g∘f\).  
+
+**Identity:**  
+- The identity morphism on \((Ω,A)\) leaves both the option space Ω and the[3D[K
+the historical record unchanged.
+
+This category captures the notion that Spherepop programs are **assembled c[1D[K
+constructions** rather than simple state transformations, emphasizing the r[1D[K
+role of history in computation.
+
+---
+
+### C Logic Gates as Spherepop Constructions  
+
+| Gate | Input(s) | Binding Function \(f_b\) | Pop Symbol | Collapse Result[6D[K
+Result |
+|------|----------|---------------------------|-------------|--------------|------|----------|---------------------------|-------------|-----------------|
+| **NOT** | \(b ∈ \{0,1\}\) | \(f(b)=\{\text{set}(1-b)\}\) | \(\text{Pop}_{[14D[K
+\(\text{Pop}_{(1-b)}\) | yields \(1-b\) (since T_{set0}(s)=0, T_{set1}(s)=1[13D[K
+T_{set1}(s)=1) |
+| **AND** | \(p,q ∈ \{0,1\}\) | \(f(p,q)=\{\text{set1}\} \iff p=q=1,\; \{\t[4D[K
+\{\text{set0}\}\) otherwise | \(\text{Pop}_{p∧q}\) | yields 1 if both input[5D[K
+inputs are 1, else 0 |
+| **OR**   | \(p,q ∈ \{0,1\}\) | \(f(p,q)=\{\text{set1}\} \iff p=1\) or \(q[3D[K
+\(q=1,\; \{\text{set0}\}\) otherwise | \(\text{Pop}_{p∨q}\) | yields 1 if a[1D[K
+at least one input is 1, else 0 |
+| **XOR**  | \(p,q ∈ \{0,1\}\) | \(f(p,q)=\{\text{set1}\} \iff p≠q,\; \{\te[5D[K
+\{\text{set0}\}\) otherwise | \(\text{Pop}_{p⊕q}\) | yields 1 if inputs dif[3D[K
+differ, else 0 |
+
+**Mechanism:**  
+- **Admissibility restriction** narrows the option space to a single allowa[6D[K
+allowable commitment (e.g., set 1 or set 0).  
+- A **single Pop** commits permanently to that choice.  
+- The collapse operation reconstructs the observable value from the history[7D[K
+history, not merely its extensional truth.
+
+---
+
+### D Memory Devices and Counters  
+
+Because histories are *append‑only*, counting naturally emerges as a functi[6D[K
+function of commitment sequences:
+
+#### Unary Counter  
+
+1. **Tick Symbol:** `tick` (a single commitment).  
+2. **Operation:** Append one tick per increment → `Poptick`.  
+3. **Collapse:** `Collapse([tick, …, tick]) = n`, where \(n\) is the number[6D[K
+number of ticks.
+
+#### Binary Counter  
+
+- Use an observable state space \(B_{ink}=\{0,1\}^{k}\) (binary k‑digit rep[3D[K
+representation).  
+- Define a binary successor function \(T_{tick}: B_{2k}×B_{2k}\to B_{2k}\) [K
+that increments modulo \(2^k\).  
+- For history length \(n\): `Collapse([tick,…,tick]) = T_{tick}(0,\dots ,0)[3D[K
+,0)` yields the count as a binary integer.
+
+#### One‑Bit Latch  
+
+1. **Commitment Symbols:** `write0`, `write1`, `hold`.  
+2. **Transformations:**  
+   - \(T_{write0}(m)=0\) (writes 0).  
+   - \(T_{write1}(m)=1\).  
+   - \(T_{hold}(m)=m\) (keeps current value).  
+
+3. **Latch Step:** Use `Bind` to restrict admissible actions based on contr[5D[K
+control inputs, then perform a corresponding `Pop`.  
+4. **Collapse** reconstructs the stored bit by replaying the sequence of wr[2D[K
+writes.
+
+These constructions illustrate that *memory* in Spherepop is not mutable st[2D[K
+storage but a **derived summary of past commitments**, preserving causal hi[2D[K
+history rather than overwriting it.
+
+---
+
+### E Histories as a Free Monoid Object  
+
+The set \(\Omega^{*}\) (all finite ordered sequences over Ω) forms a monoid[6D[K
+monoid under concatenation “·” with identity \(ε=[ ]\).  
+
+**Proposition:**  
+Given any monoid \(M\) and map \(\phi:\Omega\to M\), there exists a *unique[7D[K
+*unique* monoid homomorphism \(\phi^{b}:\Omega^{*}\to M\) extending \(\phi\[7D[K
+\(\phi\) such that \(\phi([a]_{1},…,[a_n])=\phi(a_1)\cdot\phi(a_2)\cdots\ph[56D[K
+\(\phi([a]_{1},…,[a_n])=\phi(a_1)\cdot\phi(a_2)\cdots\phi(a_n)\).  
+
+**Interpretation:**  
+- Collapse \(C: \Omega^{*}\to S\) is this homomorphism, where each generati[8D[K
+generating edge \(a\in\Omega\) corresponds to transformation \(T_a:S\to S\)[3D[K
+S\).  
+- The observable state space \(S\) thus emerges as the image of the *free h[1D[K
+history monoid*, preserving the full path structure rather than collapsing [K
+histories into equivalence classes (as conventional semantics does).
+
+---
+
+### F The Free History Category as a Path Category  
+
+The **free history category** \(H(\Omega)\) is exactly the *path category* [K
+generated by the free monoid \(\Omega^{*}\).  
+
+- **Objects:** A single object \(*\).  
+- **Morphisms:** Homomorphism set \(Hom(*,*)=\Omega^{*}\); composition of p[1D[K
+paths corresponds to concatenation.  
+- This mirrors a directed graph where each element \(a\in\Omega\) is a dire[4D[K
+directed edge \(*\to *\).  
+
+**Implication:**  
+A history \(H=[x_1,\dots,x_n]\) maps to the composite path:
+
+```
+* —x1—> * —x2—> … —xn—> *
+```
+
+Appending a new commitment extends the path by one more edge, enforcing the[3D[K
+the append‑only nature of histories.  
+
+**Collapse Functor:**  
+\(C: H(G)\to S\) assigns each generating edge \(a\in\Omega\) to transformat[11D[K
+transformation \(T_a:S\to S\). Functoriality ensures that concatenation of [K
+paths yields composition of transformations.
+
+Thus, Spherepop semantics are captured as a **functor from the free path ca[2D[K
+category** (preserving all histories) rather than collapsing them into an e[1D[K
+equivalence class as traditional models do. This preserves causality and tr[2D[K
+traceability in computations.
+
+---
+
+### References  
+
+1. Saunders Mac Lane. *Categories for the Working Mathematician*. Springer,[9D[K
+Springer, 1998.  
+2. André Joyal, Ross Street, Dominic Verity. *Traced Monoidal Categories*. [K
+Math. Proc. Cambridge Philos. Soc., 119(3):447–468, 1996.  
+3. Samson Abramsky & Achim Jung. *Domain Theory*. In *Handbook of Logic in [K
+Computer Science*, Vol. 3, Oxford University Press, 1994.  
+4. Glynn Winskel & Mogens Nielsen. *Models for Concurrency*. Handbook of Lo[2D[K
+Logic in Computer Science, Vol. 4, Oxford University Press, 1995.  
+5. Leslie Lamport. *Time, Clocks, and the Ordering of Events in a Distribut[9D[K
+Distributed System*. ACM Syst. Res., 21(7):558–565, 1978.  
+6. Martin Fowler. *Event Sourcing*. *martinfowler.com*, 2005.  
+7. Marc Shapiro, Nuno Preguica, Carlos Baquero, Marek Zawirski. *Conflict‑f[11D[K
+*Conflict‑free Replicated Data Types*. In *Stabilization, Safety, and Secur[5D[K
+Security of Distributed Systems* (SSS), 2011.  
+
+--- 
+
+**End of Document**
+

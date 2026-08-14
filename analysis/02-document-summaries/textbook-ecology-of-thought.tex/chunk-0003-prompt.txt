@@ -1,15 +1,95 @@
-Analyze this fragment of a larger Spherepop document.
+You are analyzing chunk 3 of 7 of a document called
+"textbook-ecology-of-thought.tex", part of a large theoretical/computational research
+repository called Spherepop.
 
-Extract the durable theoretical information from it.
+This chunk's summary will feed into: cluster synthesis and cross-corpus synthesis
 
-Preserve definitions, equations, distinctions, mechanisms,
-arguments, conjectures, dependencies, and unresolved questions.
+Running abstract of the document so far (built from earlier chunks;
+use it for context, but summarize ONLY the new chunk below — do not
+re-summarize material already captured in the running abstract):
 
-Do not waste space describing prose style or saying that this is
-only a fragment.
+**Exploration under Partial Observability**
 
-TEXT
-====
+When an observer navigates a graph that is only partially observed (i.e., i[1D[K
+its current knowledge \(\mathcal{F}_n\) reflects only part of the true conn[4D[K
+connectivity), the value of any step must be judged by how much uncertainty[11D[K
+uncertainty it removes about the surrounding network. This epistemic‑value [K
+perspective leads to several important consequences:
+
+1. **History‑Dependent Value** – The expected increase in reachable opportu[7D[K
+opportunity, \(\mathbb{E}[\Delta\Omega(v) \mid \mathcal{F}_n]\), is not a p[1D[K
+property of \(v\) alone but depends on the accumulated set \(R_n\). A verte[5D[K
+vertex that appears “interesting” early (when many neighborhoods are still [K
+unknown) may have negligible marginal value later when its neighborhood has[3D[K
+has already been explored.
+
+2. **No Global Ranking** – Because \(\Delta\Omega(v)\) varies with \(R_n\),[8D[K
+\(R_n\), there cannot be a universal ordering of vertices independent of th[2D[K
+the traversal history. Proposition [Context Dependence] proves that any fix[3D[K
+fixed ranking would ignore this dependence and therefore fails to capture o[1D[K
+optimal exploration behavior.
+
+3. **Community Saturation** – For any finite community \(C\) (a set of vert[4D[K
+vertices with dense internal connectivity), after traversing enough members[7D[K
+members, every additional vertex contributes less new reachable opportunity[11D[K
+opportunity than a vertex outside the saturated region. This captures the i[1D[K
+intuition that “exploring inside a fully‑explored bubble yields diminishing[11D[K
+diminishing returns.”
+
+4. **Optimization as Information Gain** – The optimal exploration policy \([2D[K
+\(\pi\) is obtained by maximizing expected information gain:
+   \[
+   \pi^* = \arg\max_v \mathbb{E}\!\left[\Delta\Omega(v) \mid \mathcal{F}_n\[14D[K
+\mathcal{F}_n\right],
+   \]
+   i.e., at each step the observer should choose a vertex that is most like[4D[K
+likely to expand \(R_n\) and reduce entropy of the observed topology.
+
+5. **Frontier Dominance** – For large enough \(n\), Theorem [Frontier Domin[5D[K
+Dominance] tells us that opportunity expansion is governed by the size of t[1D[K
+the frontier \(\partial R_n\) times the probability \(\bar p_{\text{novel}}[16D[K
+p_{\text{novel}}\) that a frontier vertex connects to unexplored territory.[10D[K
+territory. Once interior vertices are fully explored, they contribute negli[5D[K
+negligibly to future reachability.
+
+**Implications**
+
+- **Dynamic Policies**: Exploration strategies must adapt continuously; sta[3D[K
+static heuristics (e.g., “always visit the highest‑degree node”) become sub[3D[K
+suboptimal as history evolves.
+- **Resource Allocation**: Prioritizing frontier edges or low‑degree bridge[6D[K
+bridges between otherwise disconnected communities maximizes future navigat[7D[K
+navigational information, aligning with the idea that sparse connections of[2D[K
+often hold large marginal opportunity.
+- **Risk of Saturation**: Communities can “saturate” after a threshold numb[4D[K
+number of visits, prompting the algorithm to shift focus toward previously [K
+unexplored regions.
+
+In summary, under partial observability the objective is not merely to trav[4D[K
+traverse all vertices but to systematically reduce uncertainty about reacha[6D[K
+reachable territory. This drives the use of frontier‑oriented policies and [K
+explains why optimal traversal cannot be defined without reference to the a[1D[K
+accumulated history \(R_n\).
+
+For the NEW CHUNK below, extract:
+
+1. definitions and primitive concepts introduced here;
+2. mathematical claims and formal structures;
+3. mechanisms and processes;
+4. connections to concepts named in the running abstract above;
+5. unresolved questions or contradictions visible within this chunk.
+
+CRITICAL — groundedness requirement:
+For every substantive claim, append a short verbatim quotation from
+this chunk in the form [source: "..."] immediately after the claim,
+using an exact quote no longer than ~20 words. If a claim cannot be
+tied to an exact quote from this chunk, do not include it.
+
+Do not invent claims absent from this chunk. Do not describe prose
+style. Do not say "this is only a fragment."
+
+NEW CHUNK
+=========
 
 \begin{proof}
 A linear order imposes a total ordering on artifacts. In a graph with branching structure, any total ordering necessarily separates some vertices that are adjacent in the original topology. Specifically, consider a vertex $v_j$ with two neighbors $v_i$ and $v_k$ that are not adjacent to each other. In any linear order, either $v_i$ precedes $v_j$ precedes $v_k$, or vice versa. In the first case, $v_i$ and $v_k$ appear on opposite sides of $v_j$; in the second, the same holds. In neither case is the original adjacency structure preserved. The document can reference both relationships, but the references are explicit additions rather than preserved spatial structure. The topology is therefore projected, not preserved.
